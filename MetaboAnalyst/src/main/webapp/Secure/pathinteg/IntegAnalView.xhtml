@@ -1,0 +1,74 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_anal_template.xhtml">
+    <ui:define name="metaInfo">
+        <f:event type="preRenderView" listener="#{sessionBean1.registerPage('Set parameter')}"/> 
+    </ui:define>
+    <ui:define name="content">
+        <h:form id="formW">
+            <h:panelGrid style="padding: 30px 20px 20px 30px; font-size: 12px">
+                <p:fieldset legend="Enrichment Analysis" style="line-height: 140%;  margin-bottom: 10px" >
+                    <h:panelGrid cellpadding="10"> 
+                        <h:panelGroup>
+                            Enrichment analysis aims to evaluate whether the observed genes and metabolites in 
+                            a particular pathway are significantly enriched (appear more than expected by 
+                            random chance) within the dataset. You can choose over-representation analysis 
+                            (ORA) based on either hypergeometric analysis or Fisher's exact method.
+                        </h:panelGroup>
+                        <h:panelGrid style="margin-left: 20px;">
+                            <p:selectOneRadio value="#{integResBean.enrichOpt}"                                                
+                                              layout="pageDirection">  
+                                <f:selectItems value="#{integResBean.enrichOpts}"/>  
+                            </p:selectOneRadio>   
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </p:fieldset>
+                <p:fieldset legend ="Topology Analysis"  style="line-height: 140%;  margin-bottom: 10px">
+                    <h:panelGrid cellpadding="10"> 
+                        The topology analysis aims to evaluate whether a given gene or metabolite plays 
+                        an important role in a biological response based on its <b>position</b> within a pathway. 
+                        <u>Degree Centrality</u> measures the number of links that connect to a node 
+                        (representing either a gene or metabolite) within a pathway; <u>Closeness Centrality</u> measures 
+                        the overall distance from a given node to all other nodes in a pathway; <u>Betweenness Centrality</u> 
+                        measures the number of shortest paths from all nodes to all the others that pass through a given node
+                        within a pathway.
+                        <h:panelGrid style="margin-left: 20px;">
+                            <p:selectOneRadio value="#{integResBean.topoOpt}" layout="pageDirection">  
+                                <f:selectItems value="#{integResBean.topoOpts}"/>  
+                            </p:selectOneRadio>   
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </p:fieldset>
+                <p:fieldset legend ="Pathway Databases"  style="line-height: 150%;  margin-bottom: 10px">
+                    <h:panelGrid cellpadding="10"> 
+                        Users can choose one of three different modes of pathways: - the gene-metabolite mode (default) allows 
+                        joint-analysis and visualization of both significant genes and metabolites; while the gene-centric 
+                        or metabolite-centric mode allows users to identify enriched pathways driven by significant genes 
+                        or metabolites, respectively. 
+                        <h:panelGrid style="margin-left: 20px;">
+                            <p:selectOneRadio value="#{integResBean.pathDBOpt}" layout="pageDirection">  
+                                <f:selectItem itemLabel="Gene-metabolite pathways" itemValue="integ"/> 
+                                <f:selectItem itemLabel="Gene-centric pathways" itemValue="genetic"/> 
+                                <f:selectItem itemLabel="Metabolite-centric pathways" itemValue="metab"/> 
+                            </p:selectOneRadio>   
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </p:fieldset>
+                <h:panelGrid style="width: 100%; text-align: center">
+                    <p:commandButton value="Submit" id="nextBn" 
+                                     onclick="PF('statusDialog').show()" 
+                                     oncomplete="PF('statusDialog').hide()" 
+                                     icon="ui-icon ui-icon-arrowthick-1-e" 
+                                     action="#{integResBean.doIntegPathwayAnanlysis()}"/> 
+                </h:panelGrid>
+            </h:panelGrid>
+        </h:form>
+    </ui:define>
+</ui:composition>
+
+

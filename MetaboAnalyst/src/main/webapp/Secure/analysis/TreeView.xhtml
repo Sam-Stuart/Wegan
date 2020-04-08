@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_anal_template.xhtml">
+    <ui:define name="metaInfo">
+        <f:event type="preRenderView" listener="#{analBean.performDefaultAnalysis('Dendrogram')}"/> 
+    </ui:define>
+    <ui:define name="content">
+        <h:form id="form1">
+            <h:panelGrid style="padding:20px 40px 20px 40px; font-size: 12px; line-height: 23px; width:100%">
+                <h:panelGrid columns="2">
+                    <h:panelGrid columns="2" style="padding: 2px 20px 10px 20px; line-height: 30px; width: 480px">
+                        <h:outputLabel style="font-weight: bold" value="Distance Measure:"/>
+                        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{clusterBean.clustDistOpt}">
+                            <f:selectItems value="#{applicationBean1.clustDistOpts}" />
+                        </p:selectOneMenu>
+                        <h:outputLabel style="font-weight: bold" value="Clustering Algorithm:"/>
+                        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{clusterBean.clustMethodOpt}">
+                            <f:selectItems value="#{applicationBean1.clustMethodOpts}" />
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                    <p:commandButton value="Submit" 
+                                     onclick="PF('statusDialog').show()"
+                                     oncomplete="PF('statusDialog').hide()"
+                                     update=":form1:treePane  :cmdPane" 
+                                     actionListener="#{clusterBean.treeButton_action()}"/>   
+                </h:panelGrid>
+                <hr style="height: 12px; border: 0;box-shadow: inset 0 12px 12px -12px rgba(0, 0, 0, 0.5); width:100%; min-width: 1000px"/>
+                <h:panelGrid id="treePane" style="text-align: center; width: 100%;">
+                    <h:panelGrid style="text-align: right; padding-left: 700px; width: 760px;">
+                        <p:commandLink actionListener="#{sessionBean1.graphicsLnk_action('tree')}" 
+                                       oncomplete="PF('graphDialog').show()"
+                                       title="Customize the graphics output">
+                            <img src="#{facesContext.externalContext.requestContextPath}/resources/images/imgcenter.png"/>
+                        </p:commandLink>
+                    </h:panelGrid>
+                    <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('tree')}" alt="Dendrogramimage"/>
+                </h:panelGrid>  
+            </h:panelGrid> 
+        </h:form>
+    </ui:define>
+</ui:composition>

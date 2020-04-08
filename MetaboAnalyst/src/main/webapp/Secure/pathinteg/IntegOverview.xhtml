@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_anal_template.xhtml">
+    <ui:define name="metaInfo">
+        <f:event type="preRenderView" listener="#{sessionBean1.registerPage('Overview')}"/> 
+    </ui:define>
+    <ui:define name="myscript">
+        <script type="text/javascript">
+            function start() {
+                PF('statusDialog').show();
+            }
+            function stop() {
+                PF('statusDialog').hide();
+            }
+
+            function ext() {
+                this.cfg.axes.xaxis.tickOptions = {
+                    show: false
+                };
+            }
+
+            function exportChart() {
+                //export image 
+                $('#output').empty().append(PF('mychart').exportAsImage());
+                //show the dialog  
+                PF('dlg').show();
+            }
+        </script>
+    </ui:define>
+    <ui:define name="content">
+        <h:panelGrid style="width:100%; padding: 40px 20px 10px 30px; font-size: 13px">
+            <p:outputLabel value="The stacked bars below show a summary of the joint evidence from enrichment analysis and topology analysis. "/>
+            <h:panelGrid style="padding: 20px;">
+                <p:chart type="bar" id="stacked"  widgetVar="mychart" model="#{integResBean.categoryModel}" 
+                         style="width:800px; height:630px"/> 
+            </h:panelGrid>
+            <h:form id="form3"> 
+                <h:panelGrid  columns="2" style="width:100%; text-align: center; padding: 20px">
+                    <p:commandButton type="button" value="Export Image" style="width:150px" icon="ui-icon-extlink" onclick="exportChart()"/>  
+                    <p:commandButton value="View Details" style="width:150px"  ajax="false" 
+                                     onclick="PF('statusDialog').show()" 
+                                     oncomplete="PF('statusDialog').hide()" 
+                                     icon="ui-icon ui-icon-arrowthick-1-e" 
+                                     action="#{integResBean.setupResTable()}"/> 
+                </h:panelGrid>
+            </h:form>
+        </h:panelGrid>
+        <p:dialog widgetVar="dlg" appendTo="@(body)" showEffect="fade" modal="true" header="Chart as an Image">  
+            <p:outputPanel id="output" layout="block" style="width:720px;height:700px"/>  
+        </p:dialog> 
+    </ui:define>
+</ui:composition>
+
+

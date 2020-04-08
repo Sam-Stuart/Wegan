@@ -1,0 +1,111 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_anal_template.xhtml">
+    <ui:define name="myscript">
+        <script type="text/javascript">
+            function renderPath(pathname) {
+                document.getElementById('pathFrame').contentWindow.renderInmexImage(pathname, 1);
+            }
+            ;
+            function initIntegPath() {
+                document.getElementById('pathFrame').contentWindow.initIntegPathwayViewer();
+            }
+            if (window.attachEvent)
+            {
+                window.attachEvent('onload', initIntegPath);
+            } else if (window.addEventListener)
+            {
+                window.addEventListener('load', initIntegPath, false);
+            } else
+            {
+                document.addEventListener('load', initIntegPath, false);
+            }
+        </script>
+    </ui:define> 
+    <ui:define name="metaInfo">
+        <f:event type="preRenderView" listener="#{sessionBean1.registerPage('View result')}"/> 
+    </ui:define>
+    <ui:define name="content">
+        <h:inputHidden id="mydir" value="#{sessionBean1.getJsonDir('integ_pathway.json')}" />
+        <h:inputHidden id="myurl" value="#{applicationBean1.domainURL}" />
+        <h:panelGrid style="width:100%; padding: 30px 20px 10px 20px; font-size: 13px">
+            <p:lightBox style="padding-left: 80px; height:600px; width:800px;">
+                <iframe frameborder="0" id="pathFrame" src="../viewer/_integ_viewer_v1.7.html?userID=#{sessionBean1.currentUser.name}" 
+                        style="border-width: 0px; border-style: solid; 
+                        border-color: rgb(0, 0, 0) rgb(0, 0, 0) rgb(0, 0, 0) rgb(0, 0, 0); 
+                        height: 600px; width: 800px"/>
+            </p:lightBox>
+            <div>
+                The matched nodes are highlighted in different colors - red (up-regulated), yellow (unknown), green (down-regulated) based on 
+                fold change (FC) values. <u>Click on a node</u> to show more details.
+            </div>
+            <h:form id="form3"> 
+                <p:dataTable var="resBean" value="#{integResBean.resBeans}" 
+                             paginator="true" rows="20" paginatorPosition="bottom">  
+                    <p:column headerText="Pathway">  
+                        <h:outputText escape="false" value="#{resBean.name}"/>  
+                    </p:column> 
+                    <p:column headerText="Total" sortBy="#{resBean.setSize}">  
+                        <h:outputText escape="false" value="#{resBean.setSize}"/>  
+                    </p:column> 
+                    <p:column headerText="Expected" sortBy="#{resBean.expected}">  
+                        <h:outputText escape="false" value="#{resBean.expected}"/>  
+                    </p:column> 
+                    <p:column headerText="Hits" sortBy="#{resBean.hit}">  
+                        <h:outputText escape="false" value="#{resBean.hit}"/>  
+                    </p:column> 
+                    <p:column headerText="P.Value" sortBy="#{resBean.pval}">  
+                        <h:outputText escape="false" value="#{resBean.pval}"/>  
+                    </p:column> 
+                    <p:column headerText="Topology" sortBy="#{resBean.topoVal}">  
+                        <h:outputText escape="false" value="#{resBean.topoVal}"/>  
+                    </p:column> 
+                    <p:column headerText="View">  
+                        <p:commandLink value="View" update=":pathName :cmdPane" 
+                                       onclick="PF('statusDialog').show(); renderPath('#{resBean.ID}')" 
+                                       oncomplete="PF('statusDialog').hide();" 
+                                       /> 
+                    </p:column> 
+                </p:dataTable>
+                <h:panelGrid  style="width:100%; padding-left: 60%;">
+                    <h:panelGrid columns="5" style="width:100%; text-align: right; padding-right: 30px">
+                        <h:outputLabel style="font-weight: bolder;" value="Export Result Table As: "/>
+                        <p:spacer width="30px"/>
+                        <h:outputText style="font-weight: bolder; color: blue" escape="false" value="#{integResBean.getDownloadPathwayFile()}" />   
+                    </h:panelGrid>
+                </h:panelGrid>
+            </h:form>
+        </h:panelGrid>
+        <p:dialog widgetVar="msetDialog" dynamic="true" modal="true" appendTo="@(body)" 
+                  hideEffect="explode" resizable="true"> 
+            <h:panelGrid id="detailView" style="width:500px; font-size: 13px; padding: 20px">
+                <h:outputText escape="false" value="Matched metabolites: "/>
+                <h:form id="summaryForm">
+                    <p:dataTable style="width:100%; font-size: 12px" var="set" 
+                                 value="#{integResBean.currentPathSet}">
+                        <p:column headerText="Pathway">  
+                            <h:outputText escape="false" value="#{set.name}"/>  
+                        </p:column>  
+                        <p:column headerText="Genes">  
+                            <h:outputText escape="false" value="#{set.geneMembers}"/>
+                        </p:column>   
+                        <p:column headerText="Metabolites">  
+                            <h:outputText escape="false" value="#{set.metaboliteMembers}"/>
+                        </p:column>   
+                    </p:dataTable> 
+                    <h:panelGrid style="width:100%; text-align: center">
+                        <p:commandButton value="OK" onclick="PF('msetDialog').hide()"/>
+                    </h:panelGrid>
+                </h:form>
+            </h:panelGrid> 
+        </p:dialog>
+        <h:inputHidden id="pathName" value="#{integResBean.selectedPathName}" />
+    </ui:define>
+</ui:composition>
+
+

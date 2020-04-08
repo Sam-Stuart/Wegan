@@ -1,0 +1,128 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_doc_template.xhtml">
+    <ui:define name="content">
+        <h:panelGrid style="padding: 30px 40px 20px 40px; width: 100%; font-size: 13px; line-height: 23px;">
+            <h2>Tutorial:</h2>
+            <p>
+                The web interfaces of MetaboAnalyst are designed to be self-explanatory. Most steps are documented on the 
+                top of the corresponding pages. In cases of limited space, mouse-over balloon helps are available. 
+                The following tutorials are meant to complement the aforementioned information by providing step-by-step 
+                instructions for several of the most common tasks. The analysis reports are the PDF reports automatically generated 
+                by MetaboAnalyst following these steps.
+            </p>
+            <p> 
+                <font style="color:  purple ">
+                    Please note, due to the rapid evolution and frequent updates of MetaboAnalyst, many screenshot illustrations are 
+                    outdated. Therefore, we ask that users do not take those steps verbatim. Instead, users should focus on the 
+                    the analysis steps and the workflow for metabolomics data analysis using this tool. 
+                </font>  
+            </p>
+            <table style="padding: 20px; width: 100%;">
+                <tr>
+                    <td><img src="#{facesContext.externalContext.requestContextPath}/resources/images/pdf.png"/></td>
+                    <td>
+                        <a style="text-decoration: none" target="_blank" href="#{facesContext.externalContext.requestContextPath}/resources/data/tutorial5.pdf">Overview of new features in version 4</a>
+                        <img src="#{facesContext.externalContext.requestContextPath}/resources/images/new.gif"></img>
+                    </td>
+                    <td>A detailed screenshot overview of the three new modules introduced</td>    
+                </tr>
+                <tr>
+                    <td><img src="#{facesContext.externalContext.requestContextPath}/resources/images/pdf.png"/></td>
+                    <td>
+                        <a style="text-decoration: none" target="_blank" href="#{facesContext.externalContext.requestContextPath}/resources/data/tutorial6.pdf">Biomarker Meta-Analysis Tutorial</a>
+                        <img src="#{facesContext.externalContext.requestContextPath}/resources/images/new.gif"></img>
+                    </td>
+                    <td>
+                        <a style="text-decoration: none" target="_blank" href="#{facesContext.externalContext.requestContextPath}/resources/data/reportMA.pdf">Biomarker Meta-Analysis Analysis Report</a><br/>
+                    </td>
+                </tr>
+                <tr>
+                    <td><img src="#{facesContext.externalContext.requestContextPath}/resources/images/pdf.png"/></td>
+                    <td>
+                        <a style="text-decoration: none" target="_blank" href="#{facesContext.externalContext.requestContextPath}/resources/data/tutorial7.pdf">MS Peaks to Pathways Tutorial</a>
+                        <img src="#{facesContext.externalContext.requestContextPath}/resources/images/new.gif"></img>
+                    </td>
+                    <td>
+                        <a style="text-decoration: none" target="_blank" href="#{facesContext.externalContext.requestContextPath}/resources/data/reportmum.pdf">MS Peaks to Pathways Analysis Report</a><br/>
+                    </td>
+                </tr>
+                <tr>
+                    <td><img src="#{facesContext.externalContext.requestContextPath}/resources/images/pdf.png"/></td>
+                    <td>
+                        <a style="text-decoration: none" target="_blank" href="#{facesContext.externalContext.requestContextPath}/resources/data/tutorial8.pdf">Network Explorer Tutorial</a>
+                        <img src="#{facesContext.externalContext.requestContextPath}/resources/images/new.gif"></img>
+                    </td>
+                    <td>
+                        <a style="text-decoration: none" target="_blank" href="#{facesContext.externalContext.requestContextPath}/resources/data/reportnet.pdf">Network Explorer Analysis Report</a><br/>
+                    </td>
+                </tr>
+                <tr>
+                    <td><img src="#{facesContext.externalContext.requestContextPath}/resources/images/chapter.jpeg"/></td> 
+                    <td><a style="text-decoration: none" href="http://dx.doi.org/10.1002/cpbi.11">Current Protocols In Bioinformatics (v2015) </a></td> 
+                    <td>A comprehensive step-by-step tutorial (91 pages &amp; 88 figures)</td>       
+                </tr>
+                <tr>
+                    <td><img src="#{facesContext.externalContext.requestContextPath}/resources/images/ppt.png"/></td> 
+                    <td><a style="text-decoration: none" href="../resources/data/metabolomics_xcms_xia.ppt">Raw Spectra Processing using R and XCMS</a></td> 
+                    <td>Step-by-step tutorial to processing LC-MS spectra for MetaboAnalyst</td>     
+                </tr>
+                <tr>
+                    <td><img src="#{facesContext.externalContext.requestContextPath}/resources/images/chapter.jpeg"/></td> 
+                    <td><a style="text-decoration: none" href="http://dx.doi.org/10.1002/0471250953.bi1410s34">Current Protocols In Bioinformatics (v2011)</a></td> 
+                    <td>A comprehensive step-by-step tutorial (48 pages &amp; 51 figures)</td>     
+                </tr>
+                <tr>
+                    <td><img src="#{facesContext.externalContext.requestContextPath}/resources/images/npg.jpg"/></td> 
+                    <td><a style="text-decoration: none" href="http://dx.doi.org/10.1038/nprot.2011.319">Nature Protocols on MetaboAnalyst</a></td> 
+                    <td>Detailed explanations of major functions of MetaboAnalyst</td> 
+                </tr>
+                <tr>
+                    <td><img src="#{facesContext.externalContext.requestContextPath}/resources/images/ppt.png"/></td> 
+                    <td><a style="text-decoration: none" href="#{facesContext.externalContext.requestContextPath}/resources/data/metabolomics2012_xia.ppt">Metabolomics data analysis IV</a></td> 
+                    <td>Presentation on Metabolomics Conference 2012</td> 
+                </tr>
+                <tr>
+                    <td><img src="#{facesContext.externalContext.requestContextPath}/resources/images/ppt.png"/></td> 
+                    <td><a style="text-decoration: none" href="#{facesContext.externalContext.requestContextPath}/resources/data/metabolomics2011_xia.ppt">Metabolomics data analysis III</a></td> 
+                    <td>Presentation on Metabolomics Conference 2011 </td> 
+                </tr>
+                <tr>
+                    <td><img src="#{facesContext.externalContext.requestContextPath}/resources/images/ppt.png"/></td> 
+                    <td><a style="text-decoration: none" href="#{facesContext.externalContext.requestContextPath}/resources/data/metabolomics2010_xia.ppt">Metabolomics data analysis II</a></td> 
+                    <td>Presentation on Metabolomics Conference 2010</td> 
+                </tr>
+                <tr>
+                    <td><img src="#{facesContext.externalContext.requestContextPath}/resources/images/ppt.png"/></td> 
+                    <td><a style="text-decoration: none" href="#{facesContext.externalContext.requestContextPath}/resources/data/metabolomics2009_xia.ppt">Metabolomics data analysis I</a></td> 
+                    <td>Presentation on Metabolomics Conference 2009</td> 
+                </tr>
+                <tr>
+                    <td><img src="#{facesContext.externalContext.requestContextPath}/resources/images/pdf.png"/></td>
+                    <td><a style="text-decoration: none" href="#{facesContext.externalContext.requestContextPath}/resources/data/tutorial1.pdf">Identification of significant features</a></td>
+                    <td><a style="text-decoration: none" href="#{facesContext.externalContext.requestContextPath}/resources/data/report1.pdf">Analysis report</a></td>
+                </tr>
+                <tr>
+                    <td><img src="#{facesContext.externalContext.requestContextPath}/resources/images/pdf.png"/></td> 
+                    <td><a style="text-decoration: none" href="#{facesContext.externalContext.requestContextPath}/resources/data/tutorial2.pdf">Two-group classification</a></td> 
+                    <td><a style="text-decoration: none" href="#{facesContext.externalContext.requestContextPath}/resources/data/report2.pdf">Analysis report</a></td> 
+                </tr>
+                <tr>
+                    <td><img src="#{facesContext.externalContext.requestContextPath}/resources/images/pdf.png"/></td> 
+                    <td><a style="text-decoration: none" href="#{facesContext.externalContext.requestContextPath}/resources/data/tutorial3.pdf">MS spectra processing and annotation</a></td> 
+                    <td><a style="text-decoration: none" href="#{facesContext.externalContext.requestContextPath}/resources/data/report3.pdf">Analysis report</a></td> 
+                </tr>
+                <tr>
+                    <td><img src="#{facesContext.externalContext.requestContextPath}/resources/images/pdf.png"/></td> 
+                    <td><a style="text-decoration: none" href="#{facesContext.externalContext.requestContextPath}/resources/data/tutorial4.pdf">Paired (two time-points) analysis</a></td> 
+                    <td><a style="text-decoration: none" href="#{facesContext.externalContext.requestContextPath}/resources/data/report4.pdf">Analysis report</a> </td> 
+                </tr>
+            </table>
+        </h:panelGrid>
+    </ui:define>
+</ui:composition>

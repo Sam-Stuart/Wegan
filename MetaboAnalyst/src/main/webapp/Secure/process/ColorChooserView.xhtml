@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_anal_template.xhtml">
+    <ui:define name="metaInfo">
+        <f:event type="preRenderView" listener="#{sessionBean1.registerPage('Image options')}"/> 
+        <f:event type="preRenderView" listener="#{styleBean.setupColorPicker()}"/> 
+    </ui:define>
+    <ui:define name="content">
+        <h:form>
+            <h:panelGrid style="padding-left: 40px; padding-top: 30px; font-size: 13px; line-height: 24px">
+                <h2>Please specify a color and shape for each group. Note: </h2>   
+                <ul>
+                    <li>
+                        This setting will only affect those graphics with group-specific color scheme
+                    </li>
+                    <li>
+                        The <b>shape</b> option currently only affects <u>scores plots</u> in PCA and PLS-DA. 
+                    </li>
+                    <li>
+                        Use shape code <b>0</b> will set it to default shapes. 
+                    </li>
+                </ul>
+                <h:panelGrid columns="2" style="width:100%">
+                    <h:panelGrid>
+                        <p:dataTable id="colTbl" style="padding-top: 8px; width:320px;" var="colorBean" value="#{styleBean.colorBeanLists}">  
+                            <p:column headerText="Group" style="width:200px">  
+                                <h:outputLabel value="#{colorBean.grpName}" />  
+                            </p:column>  
+                            <p:column headerText="Set Color" style="width:120px">  
+                                <p:colorPicker value="#{colorBean.colorPopup}"/>
+                            </p:column>  
+                            <p:column headerText="Set Shape*" style="width:120px">  
+                                <p:inputText style="width:60px" value="#{colorBean.shapeType}"/>
+                            </p:column> 
+                        </p:dataTable>
+                        <h:panelGrid>
+                            <h3>*Shape Code: </h3>
+                            <img src="#{facesContext.externalContext.requestContextPath}/resources/images/symbols.png" alt="Symbols"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid style="width: 100%; text-align: center">
+                        <p:commandButton value="Submit" update=":cmdPane" actionListener="#{styleBean.updateColorScheme()}"/>
+                    </h:panelGrid> 
+                </h:panelGrid>
+            </h:panelGrid>
+        </h:form>
+    </ui:define>
+</ui:composition>

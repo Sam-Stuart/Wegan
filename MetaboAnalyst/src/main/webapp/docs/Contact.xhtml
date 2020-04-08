@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_doc_template.xhtml">
+    <ui:define name="content">
+        <h:panelGrid style="padding: 40px 40px 20px 40px; font-size: 13px; line-height: 25px; width: 100%">
+            <h2>Please read the tips/instructions below:</h2>
+            <p>
+                <ul>
+                    <li>
+                        <b>Have you read the <b>FAQs</b>, <b>Data Format</b> and <b>Tutorials</b>?</b> <br/>
+                        These resources provides detailed explanations for common questions received from users. 
+                        Please first go through these resources as listed on the left bar. 
+                    </li>  
+                    <li>
+                        <b>Have you tried our example data to see if the issue still exists?</b><br/>
+                        Most of the time, the issue is related to improper data format. Although we try to give informative 
+                        error messages during data uploading, there are always exceptions. Here are three tips: 
+                        <ol>
+                            <li>
+                                Open your file  in a <b>text editor</b> (not a spreadsheet program) to see the details - are these values comma separated (.csv) or tab separated (.txt)?
+                            </li>
+                            <li>
+                                You may need to search "How to save my file as a .csv format" to get more detailed instructions; 
+                            </li>
+                            <li>
+                                We offered a wide variety of example datasets, please choose the one that matches your data type to see if the issue still appears. Download and open 
+                                the data in a text editor for details.  
+                            </li>
+                        </ol>
+                    </li>
+                    <li>
+                        <b>Did you provide enough details so that the issue can be reproduced?</b><br/>
+                        Remote troubleshooting requires more information in order to figure out the exact cause of the issue. 
+                        Please indicate which example data you used or provide a copy of your data, as well, please document every step 
+                        you have performed that will lead to the issue. Sometimes screenshots may be necessary. 
+                    </li>
+                    <li>
+                        <b>Support for local installation</b><br/>
+                        The installation of MetaboAnalyst on Mac or Linux server is very straightforward following our <a href="/MetaboAnalyst/faces/docs/Resources.xhtml" target="_blank">instructions</a>. 
+                        However, we do not provide support for Window's server installation. In such a scenario, we recommend you 
+                        install a Linux Virtual Machine (VM) on your windows OS and give the VM at least 4G RAM, then you can install 
+                        MetaboAnalyst on the VM.                     
+                    </li>
+                    <li>
+                        <b>Support for new features</b><br/>
+                        Bugs are usually dealt with immediately (or within 48 hours) once we have received and validated the bug report. New features 
+                        will be evaluated based on the overall feedback from other users. Top ranked features will be added as minor release 
+                        (3-month or 6-month period) depending on the available resources. 
+                    </li>
+                </ul>
+                <div style="background-color: yellow; padding: 5px 10px 5px 10px">
+                    If you still need help, please send your email with the required information to: <font style='color: #011CA2'><b>jasmine.chong [at] mail.mcgill.ca</b></font> or <font style='color: #011CA2'><b>jeff.xia [at] mcgill.ca</b></font>.
+                    Make sure your question is <u>specific to MetaboAnalyst</u>. Asking for statistical consultations or very general questions (i.e. how to analyze your data) will be ignored, 
+                    due to limited time availablity.
+                </div>
+            </p>  
+        </h:panelGrid>
+    </ui:define>
+</ui:composition>

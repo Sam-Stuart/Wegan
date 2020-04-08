@@ -1,0 +1,308 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_doc_template.xhtml">
+    <ui:define name="content">
+        <h:panelGrid style="padding: 30px 40px 20px 40px; font-size: 13px; line-height: 23px; width: 100%">
+            <h2>Data Formats:</h2>
+            <p>
+                <b>Example datasets available for download, including : </b></p>
+            <UL>
+                <LI>
+                    Compound concentration data - cow, four groups (<a href="#{facesContext.externalContext.requestContextPath}/resources/data/cow_diet.csv">download</a>)
+                </LI>
+                <LI>
+                    Compound concentration data - human, two groups (<a href="#{facesContext.externalContext.requestContextPath}/resources/data/human_cachexia.csv">download</a>)
+                </LI>
+                <LI>
+                    Binned NMR/MS spectra data  (<a href="#{facesContext.externalContext.requestContextPath}/resources/data/nmr_bins.csv">download</a>)
+                </LI>
+                <LI>
+                    Processed peak intensity table  (<a href="#{facesContext.externalContext.requestContextPath}/resources/data/lcms_table.csv">download</a>)
+                </LI>
+                <LI>
+                    Time-series peak intensity data  (<a href="#{facesContext.externalContext.requestContextPath}/resources/data/cress_time.csv">download</a>)
+                </LI>
+                <LI>
+                    MS peak list to pathway (3 columns - mass,  p value, and t-score) (<a href="#{facesContext.externalContext.requestContextPath}/resources/data/mummichog_mzs.txt">download</a>)
+                </LI>
+            </UL>
+            <p><b>Zipped files (.zip) format datasets, including : </b></p>
+            <UL>
+                <LI>
+                    NMR peak lists (2 columns - chemical shift and intensity) (<a href="#{facesContext.externalContext.requestContextPath}/resources/data/nmr_peaks.zip">download</a>)
+                </LI>
+                <LI>
+                    MS peak lists (2 columns - mass and intensity) (<a href="#{facesContext.externalContext.requestContextPath}/resources/data/lcms_peaks_2col.zip">download</a>)
+                </LI>
+                <LI>
+                    MS peak lists (3 columns - mass, retention time, and intensity) (<a href="#{facesContext.externalContext.requestContextPath}/resources/data/lcms_3col_peaks.zip">download</a>)
+                </LI>
+                <LI>
+                    LC/GC - MS spectra (NetCDF, mzDATA, or mzXML)   (<a href="#{facesContext.externalContext.requestContextPath}/resources/data/lcms_netcdf.zip">download</a>)
+                </LI>
+            </UL>
+            <i>Note: please refer to detailed instructions and screenshots listed below.</i>
+
+            <p:tabView id="ac" style="width:100%; border: none; font-size: 12px;"> 
+                <p:tab title ="General">
+                    <h3>Comma Separated Values (.csv) or Tab Delimited Text (.txt): </h3>
+                    These two formats are used for <U>concentration data</U>, <U>peak intensity table</U>, and 
+                    <U>MS/NMR spectral bins</U>. Samples can be in either rows or columns. Note, 
+                    <OL>
+                        <li> 
+                            Both sample or feature names must be unique and consist of a combination of common English letters, underscores 
+                            and numbers for naming purpose. <b>Latin/Greek letters are not supported.</b>
+                        </li>
+                        <li> 
+                            Class labels must immediately follow sample names; for two-factor and time series data, 
+                            there must be two class labels corresponding to the two factors.
+                        </li>
+                        <li> 
+                            For time-series data, the time-point group must be named as <b>Time</b>. In addition, the samples collected from the 
+                            same subjects at different time points should be consecutive (See the screenshots demo for "Two-factor / Time series")
+                        </li>
+                        <li>
+                            Data values (concentrations, bins, peak intensities) should contain only numeric and positive values (<u>using empty or NA for 
+                                missing values</u>).
+                        </li>
+                    </OL>
+                    <h3>Zipped files (.zip)</h3>
+                    <p>
+                        For <U>NMR/MS peak list files</U> and <U>GC/LC-MS spectra</U> data, users need to upload a
+                        zipped folder containing data files from different groups under study (<b>one file per spectrum and one 
+                            sub-folder for each group </b>). For paired comparison, users need to upload a separate text file 
+                        specifying the paired information.  
+                    </p>
+                    <p>
+                        GC/LC-MS spectra must be in either <U>NetCDF</U>, <U>mzXML</U>, or <U>mzDATA</U> format. The spectra 
+                        should be stored in two separate folders according to their class labels then compressed into zip files. <b>Please note, the program 
+                            is not compatible with the most recent WinZip (v12.0) with default option. Make sure to select <U> the Legacy compression 
+                                (Zip 2.0 compatible) for compressing files</U></b>. No space is allowed in either the folder names or the spectra names. The size 
+                        limit for each uploaded zip file is <U> 50M</U>. Please contact the author if you wish to upload a bigger data size. 
+                    </p>
+                    <p>
+                        The peak list data is composed of peak list files organized into separate folders named by their class labels.  
+                        For example, if your data contains three groups, the peak list files should be organized into three folders accordingly.
+                        Compress these folders into a single zip file then upload them to MetaboAnalyst. 
+                    </p>
+                    <p>
+                        NMR peak list files should contain two comma separated columns with the 1st column for peak 
+                        positions (ppm) and the 2nd column for peak intensities; MS peak list files can be in either two-column (mass and intensities) 
+                        or three-column format (mass, retention time and intensities), but not a mixture of both. The first line of each peak list file is reserved for 
+                        column labels. The file must be saved in comma separated values (.csv) format.
+                    </p>
+                </p:tab>
+                <p:tab  title="One-factor / Paired">  
+                    <h3>Samples in rows (unpaired)</h3>
+                    <p>
+                        Each row represents data from a sample. The class label is in the second column. 
+                        For unpaired comparisons, the class label can either be numeric (i.e. 0/1) or character (i.e. Healthy/Disease). 
+                    </p>
+                    <img src="#{facesContext.externalContext.requestContextPath}/resources/images/conc_row.png"/>
+                    <h3>Samples in rows (paired)</h3>
+                    <p>
+                        For paired comparison, there must be an even (2n) number of samples. 
+                        The class labels are required to be the numeric integers between -1 and -n/2 
+                        and between 1 and n/2. Samples with class labels of the same absolute values are considered to be pairs. 
+                        In the example below, <i>Patient1_d0</i> and <i>Patient1_d3</i> are a pair.
+                    </p>
+                    <img src="#{facesContext.externalContext.requestContextPath}/resources/images/conc_paired.png"/>
+                    <h3>Samples in columns (unpaired)</h3>
+                    <p>
+                        Samples can also be in columns and where each row represents a measured variable. The class label must be in the 
+                        second row. The requirements for class label is the same as that for samples in rows for both paired and unpaired 
+                        comparisons. The screenshot below shows the unpaired case. 
+                    </p>
+                    <img src="#{facesContext.externalContext.requestContextPath}/resources/images/conc_col.png"/>
+                    <h3>Samples in columns (paired)</h3>
+                    <p>
+                        The screenshot below shows a subset of binned NMR spectra data (bin width 0.04 ppm). In
+                        this table, the samples from controls (e.g. Contr_1) are paired with the samples from the 
+                        subjects in disease (Disease_1) based on some criteria (i.e. age, weight, gender). Each sample 
+                        occupies a column and the second row is used for sample labels.
+                    </p>
+                    <img src="#{facesContext.externalContext.requestContextPath}/resources/images/nmrbin_pair.png"/>
+                    <h3>Peak intensity table</h3>
+                    <p>
+                        The screenshot below is a LC-MS peak intensity table. Each column represents peaks from a sample. These peaks 
+                        are grouped and identified by their retention time and mass. The class labels are in the second row 
+                        immediately following the sample names.    
+                    </p>
+                    <img src="#{facesContext.externalContext.requestContextPath}/resources/images/peakint_table.png"/>
+                </p:tab>
+                <p:tab title="Two-factor / Time-series">
+                    <h3>Time-series data only (samples can be in rows or columns)</h3>
+                    <p>
+                        This design requires two factors: the time points row must be labeled as <b>Time</b>;
+                        the other label is <b>Subject</b> containing subject IDs across different time points.
+                        <ul>
+                            <li>
+                                Samples measured from the same subjects measured at different time points must 
+                                appear consecutively ordered by their time points. 
+                            </li>
+                            <li>
+                                Samples should be balanced (i.e. no missing time points for any subject). 
+                            </li>
+                        </ul>
+                        A screenshot of an example data with samples in rows is shown below.  
+                    </p>
+                    <img src="#{facesContext.externalContext.requestContextPath}/resources/images/time_0.jpeg"/>
+                    <h3>Time-series + one experimental factor (samples in rows)</h3>
+                    <p>
+                        The screenshot illustrates the appropriate structure of a time-series data table.
+                        In this example, there are three time points (the second column) 
+                        and two experimental conditions (the third column). The data shown contains 
+                        12 samples measured at three time points from 4 subjects. 
+                        Two subjects are wild type (WT). The other two subjects are mutant type (MT). 
+
+                        There are two special requirements for time series data: 
+                        <OL>
+                            <LI>
+                                Subjects are sampled only once at each given time point; 
+                            </LI>
+                            <LI>
+                                Subjects are under the same experimental conditions during the time series. Namely, 
+                                the time series should be either "control time-series" or "treatment time-series".  
+                            </LI>
+                            <LI>
+                                <b>Samples measured from the same subjects measured at different time points 
+                                    must appear consecutively ordered by their time points</b>. <br/>
+                                For instance, samples S1WT1, S1T2, S1T3 are samples 
+                                measured at three time points (1, 2, 3) from Subject 1. They will be treated as repeated 
+                                measures from the same subjects when using certain methods (i.e. within-subjects ANOVA).  
+                            </LI>
+                            <LI>
+                                The time points column must be labeled as <b>Time</b>.
+                            </LI>
+                        </OL>
+                    </p>
+                    <img src="#{facesContext.externalContext.requestContextPath}/resources/images/time_series_row.png"/>
+                    <h3>Time-series + one experimental factor (samples in columns)</h3>
+                    <p>
+                        This is the same data saved in a transposed form. Note, all samples measured from the same subjects must 
+                        appear <b>consecutively and ordered by the time points</b>.The time points row must be labeled as <b>Time</b>. 
+                        More detailed explanations can be obtained from the example above.  
+                    </p>
+                    <img src="#{facesContext.externalContext.requestContextPath}/resources/images/time_series_col.png"/>
+                    <h3>Two-factor independent samples (samples in rows)</h3>
+                    <p>The screenshot below is a compound concentration table. Note,  
+                        the two factors (Phenotype and Gender) follow immediately after the sample names. </p>
+                    <img src="#{facesContext.externalContext.requestContextPath}/resources/images/two_factor_row.png"/>
+                    <h3>Two-factor independent samples (samples in columns)</h3>
+                    <p>
+                        The screenshot below is a compound concentration table. 
+                        Note, the two factors (Phenotype and Gender) follow immediately 
+                        after the sample names. 
+                    </p>
+                    <img src="#{facesContext.externalContext.requestContextPath}/resources/images/two_factor_col.png"/>
+                </p:tab>
+                <p:tab title="Peak lists / Spectra">
+                    <p>
+                        For <U>NMR/MS peak list files</U> and <U>GC/LC-MS spectra</U> data, users need to upload a
+                        zipped folder containing data files from different groups under study (<b>one file per spectrum and one 
+                            sub-folder for each group </b>). For paired comparison, users need to upload a separate text file 
+                        specifying the paired information.  
+                    </p>
+                    <p>
+                        GC/LC-MS spectra must be in either <U>NetCDF</U>, <U>mzXML</U>, or <U>mzDATA</U> format. The spectra 
+                        should be stored in two separate folders according to their class labels then compressed into zip files. <b>Please note, 
+                            the program is not compatible with the most recent WinZip (v12.0) with its default option. Make sure to select 
+                            <U> the Legacy compression (Zip 2.0 compatible) for compressing data files</U></b>. No spaces are allowed in either the folder names 
+                        or the spectra names. The size limit for each uploaded zip file is <U> 50M</U>. For larger datasets, we recommend the 
+                        <a href="https://xcmsonline.scripps.edu" target="_blank">XCMS Online</a> service for raw spectra processing. 
+                    </p>
+                    <p>
+                        The peak list data is composed of peak list files organized into separate folders named by their class labels.  
+                        For example, if your data contains three groups, the peak list files should be organized into three folders accordingly.
+                        Compress these folders into a single zip file and then upload it to MetaboAnalyst. 
+                    </p>
+                    <p>
+                        NMR peak list files should contain two comma separated columns with the 1st column for peak 
+                        positions (ppm) and the 2nd column for peak intensities; MS peak list files can be in either two-column (mass and intensities) 
+                        or three-column format (mass, retention time and intensities), but not a mixture of both. The first line of each peak list file is reserved for 
+                        column labels. The file must be saved in comma separated values (.csv) format.
+                    </p>
+                    <p>
+                        The paired sample information is encoded by using both sample names (<i>without suffix</i>) separated by a colon "<b>:</b>"
+                        with one pair per line, and uploaded as a text file (.txt). The screen shot below illustrates the data 
+                        structure for peak list data as well as the specifications of paired samples:
+                    </p>    
+                    <img src="#{facesContext.externalContext.requestContextPath}/resources/images/peaklist_data.png"/>
+                </p:tab>
+                <p:tab  title="Biomarker">  
+                    <h3>Exploratory biomarker analysis</h3>
+                    <p>
+                        The data format is same as the one-factor data with samples in rows or columns, followed immediately by class labels. 
+                        Please note, ROC curve-based biomarker analysis is only defined for two-group analysis. If your data contains 
+                        multiple groups, you need to specify which two groups you want to investigate. 
+                    </p>
+                    <h3>Creating biomarker models to predict new samples</h3>
+                    <p>
+                        You can create biomarker models to predict new samples (with unknown class) using the 
+                        <b>ROC Tester</b>. To do this, you need to upload a data that contains both the samples with class labels  
+                        and the samples whose class label need to be predicted (<b>leave their sample labels empty</b>). A screenshot is shown below.
+                    </p>
+                    <img src="#{facesContext.externalContext.requestContextPath}/resources/images/biomarker_data.png"/>
+
+                </p:tab>
+                <p:tab  title="Meta-analysis">  
+                    <p>
+                        The data format is the same as the one-factor data with samples in rows or columns, followed immediately by class labels. 
+                        Before uploading your data to the module, please make sure that the names of your features (compound names, spectral bins, peaks) 
+                        are consistent between the individual studies. At least 25% of the features must match between the studies. Also make sure that 
+                        the group labels are also consistent between the studies, i.e. Cancer and Healthy. Finally, all uploaded sample identifiers must 
+                        be unique. 
+                    </p>
+                    <p>
+                        A screenshot example is shown below:
+                    </p>
+                    <img src="#{facesContext.externalContext.requestContextPath}/resources/images/biomarker_metaanal_data.png"/>
+                </p:tab>
+                <p:tab  title="Mummichog">  
+                    <p>
+                        Upload your data in either a tab-deliminted (.txt) format. 
+                        Make sure that the uploaded table contains three columns with these exact names: m.z, p.value, and t.score.
+                        Each feature should be in a row.
+                    </p>
+                    <p>
+                        If p-values have not yet been calculated for their data, users can use the exploratory statistical analysis module
+                        to upload their raw peak tables, process the data, perform t-tests or fold-change analysis, and then upload these 
+                        results into the module. An example dataset is shown below:
+                    </p>
+
+                    <img src="#{facesContext.externalContext.requestContextPath}/resources/images/mspeaks_data.png"/>
+
+                </p:tab>
+                <p:tab  title="Network">  
+                    <h3>Data format overview</h3>
+                    <p>
+                        Metabolite or gene list data: a list of metabolite or gene IDs with optional fold-changes. Each feature should be in 
+                        in a row. Please refer to the example data for further details. 
+                    </p>    
+                    <h3>Metabolite/Gene list labels</h3>
+                    <p>
+                        It is critical for your data to be properly labeled so they can be uploaded into the Joint Pathway Analysis or Network Explorer module. 
+                        The following common metabolite and gene IDs are supported:
+                        <OL>
+                            <li>
+                                Metabolite list: Common compound names, HMDB IDs, or KEGG compound IDs as metabolite identifiers. 
+                            </li>
+                            <li> 
+                                Genelist: Entrez IDs, Ensembl Gene IDs, official gene symbols, or KEGG orthologs (KOs) are currently supported. 
+                            </li>
+                        </OL>
+                    </p>    
+                    <p> 
+                        An example of what your data should look like in any text editor (WordPad, TextEdit) is shown in the screenshot below.     
+                    </p>    
+                    <img src="#{facesContext.externalContext.requestContextPath}/resources/images/network_data.png"/>
+                </p:tab>
+            </p:tabView>  
+        </h:panelGrid>
+    </ui:define>
+</ui:composition>

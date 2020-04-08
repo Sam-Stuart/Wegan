@@ -1,0 +1,156 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_doc_template.xhtml">
+    <ui:define name="metaInfo">
+        <f:event type="preRenderView" listener="#{sessionBean1.registerPage('Home')}"/> 
+    </ui:define>
+    <ui:define name="content">
+        <p:layout id="layout">  
+            <p:layoutUnit position="north" style="margin:0px; padding:0px;" gutter="0">
+
+               
+                
+            </p:layoutUnit>
+            
+            <p:layoutUnit position="center" style="margin:0px; padding:0px;" gutter="0">
+                
+
+                <h:panelGrid style="padding: 2px 60px 20px 40px; font-size: 12px; line-height: 20px;">
+                    <h:panelGrid style="border: 1px dotted maroon; padding: 10px 15px 2px 20px; line-height: 23px; background-color: rgb(255, 255, 255); width:100%;">
+                        <h:outputLabel style="color: rgb(74, 91, 112); font-size: 14px; font-weight: bold" value="Welcome to Wegan!"/>
+                        <ul style="margin-top: 0.2em; margin-bottom: 0.2em; font-size: 13px; color:green;">
+                            
+                        </ul> 
+                        <h:panelGrid style="width:100%; text-align: left; padding-right: 20px">
+                            <a href="#{facesContext.externalContext.requestContextPath}/faces/docs/UpdateHistory.xhtml"></a>
+                            <div class="ui-fieldset-content" style="padding:10px"> 
+                            Wegan is a web based front end for the Vegan R package for community ecology. 
+                            
+                        </div>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    
+                    
+                <h:panelGrid styleClass="panelColumns" columns="3" style="width:100%; padding-left: 30px; padding-top:12px; line-height:23px; font-size:12px; text-align: left" cellpadding="5px">
+                
+                <h:panelGrid style="width:400px">
+                    <fieldset class="ui-fieldset ui-widget ui-widget-content ui-corner-all ui-fieldset-toggleable">
+                        <legend class="ui-fieldset-legend ui-corner-all ui-state-default">
+                            <span class="ui-icon ui-icon-circle-arrow-e" style="display: inline-block; margin-bottom: -2px"/>
+                            <span><a class="changeBlue" href="#{facesContext.externalContext.requestContextPath}/faces/upload/NMDSUpload.xhtml">Non-metric Multi-dimensional Scaling  </a></span>
+                        </legend>
+                        <div class="ui-fieldset-content" style="padding:10px"> 
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+                            Proin non leo eget enim volutpat rutrum. Etiam bibendum dignissim tempus. 
+                            Sed bibendum urna vel dolor hendrerit, ut facilisis justo rhoncus. Suspendisse potenti. 
+                            Nam non ornare nunc, a consectetur turpis. 
+                        </div>
+                        
+                        <img src="#{facesContext.externalContext.requestContextPath}/resources/images/DuneRplot.png" height="200px" alt="Logo"/>
+                    </fieldset>
+                </h:panelGrid> 
+                    
+                <h:panelGrid style="width:400px">
+                    <fieldset class="ui-fieldset ui-widget ui-widget-content ui-corner-all ui-fieldset-toggleable">
+                        <legend class="ui-fieldset-legend ui-corner-all ui-state-default">
+                            <span class="ui-icon ui-icon-circle-arrow-e" style="display: inline-block; margin-bottom: -2px"/>
+                            <span><a class="changeBlue" href="#{facesContext.externalContext.requestContextPath}/faces/upload/CaUploadView.xhtml">Correspondence Analysis</a></span>
+                        </legend>
+                        <div class="ui-fieldset-content" style="padding:10px"> 
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+                            Proin non leo eget enim volutpat rutrum. Etiam bibendum dignissim tempus. 
+                            Sed bibendum urna vel dolor hendrerit, ut facilisis justo rhoncus. Suspendisse potenti. 
+                            Nam non ornare nunc, a consectetur turpis. 
+                        </div>
+                        <img src="#{facesContext.externalContext.requestContextPath}/resources/images/DuneRplot.png" height="200px" alt="Logo"/>
+                    </fieldset>
+                </h:panelGrid> 
+                
+                
+                <h:panelGrid style="width:400px">
+                    <fieldset class="ui-fieldset ui-widget ui-widget-content ui-corner-all ui-fieldset-toggleable">
+                        <legend class="ui-fieldset-legend ui-corner-all ui-state-default">
+                            <span class="ui-icon ui-icon-circle-arrow-e" style="display: inline-block; margin-bottom: -2px"/>
+                            <span><a class="changeBlue" href="#{facesContext.externalContext.requestContextPath}/faces/upload/DCAUploadView.xhtml">Detrended Correspondence Analysis</a></span>
+                        </legend>
+                        <div class="ui-fieldset-content" style="padding:10px"> 
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+                            Proin non leo eget enim volutpat rutrum. Etiam bibendum dignissim tempus. 
+                            Sed bibendum urna vel dolor hendrerit, ut facilisis justo rhoncus. Suspendisse potenti. 
+                            Nam non ornare nunc, a consectetur turpis. 
+                            
+                        </div>
+                        <img src="#{facesContext.externalContext.requestContextPath}/resources/images/DuneRplot.png" height="200px" alt="Logo"/>
+                        
+                    </fieldset>
+                </h:panelGrid>
+                
+                
+
+                
+                
+                <h:panelGrid style="width:400px">
+                    <fieldset class="ui-fieldset ui-widget ui-widget-content ui-corner-all ui-fieldset-toggleable">
+                        <legend class="ui-fieldset-legend ui-corner-all ui-state-default">
+                            <span class="ui-icon ui-icon-circle-arrow-e" style="display: inline-block; margin-bottom: -2px"/>
+                            <span><a class="changeBlue" href="#{facesContext.externalContext.requestContextPath}/faces/upload/PeakUploadView.xhtml">MS Peaks to Pathway Activities</a></span>
+                        </legend>
+                        <div class="ui-fieldset-content" style="padding:8px"> 
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+                            Proin non leo eget enim volutpat rutrum. Etiam bibendum dignissim tempus. 
+                            Sed bibendum urna vel dolor hendrerit, ut facilisis justo rhoncus. Suspendisse potenti. 
+                            Nam non ornare nunc, a consectetur turpis.  
+                        </div>
+                    </fieldset>
+                </h:panelGrid>
+                
+                
+                <h:panelGrid style="width:400px">
+                    <fieldset class="ui-fieldset ui-widget ui-widget-content ui-corner-all ui-fieldset-toggleable">
+                        <legend class="ui-fieldset-legend ui-corner-all ui-state-default">
+                            <span class="ui-icon ui-icon-circle-arrow-e" style="display: inline-block; margin-bottom: -2px"/>
+                            <span><a class="changeBlue" href="#{facesContext.externalContext.requestContextPath}/faces/upload/TimeUploadView.xhtml">Time-series/Two-factor Analysis</a></span>
+                        </legend>
+                        <div class="ui-fieldset-content" style="padding:10px"> 
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+                            Proin non leo eget enim volutpat rutrum. Etiam bibendum dignissim tempus. 
+                            Sed bibendum urna vel dolor hendrerit, ut facilisis justo rhoncus. Suspendisse potenti. 
+                            Nam non ornare nunc, a consectetur turpis.  
+                        </div>
+                    </fieldset>
+                </h:panelGrid>
+                
+                
+                <h:panelGrid style="width:400px">
+                    <fieldset class="ui-fieldset ui-widget ui-widget-content ui-corner-all ui-fieldset-toggleable">
+                        <legend class="ui-fieldset-legend ui-corner-all ui-state-default">
+                            <span class="ui-icon ui-icon-circle-arrow-e" style="display: inline-block; margin-bottom: -2px"/>
+                            <span><a class="changeBlue" href="#{facesContext.externalContext.requestContextPath}/faces/upload/EnrichUploadView.xhtml">Enrichment Analysis</a></span>
+                        </legend>
+                        <div class="ui-fieldset-content" style="padding:10px"> 
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+                            Proin non leo eget enim volutpat rutrum. Etiam bibendum dignissim tempus. 
+                            Sed bibendum urna vel dolor hendrerit, ut facilisis justo rhoncus. Suspendisse potenti. 
+                            Nam non ornare nunc, a consectetur turpis.   
+                        </div>
+                    </fieldset>
+                </h:panelGrid>
+                
+                
+                
+                
+                
+            </h:panelGrid>
+                    <h:panelGrid style="width:100%; border: 2px groove gray; padding: 2px 15px 2px 20px; background-color: rgb(255, 255, 255);">
+                        
+                    </h:panelGrid>
+                </h:panelGrid>
+            </p:layoutUnit>  
+        </p:layout>
+    </ui:define>
+</ui:composition>

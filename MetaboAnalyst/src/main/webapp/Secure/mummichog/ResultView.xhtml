@@ -1,0 +1,94 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_anal_template.xhtml">
+    <ui:define name="metaInfo">
+        <f:event type="preRenderView" listener="#{sessionBean1.registerPage('View result')}"/> 
+        <f:event type="preRenderView"  listener="#{sessionBean1.addNaviTrack('Result Table', '/faces/Secure/mummichog/ResultView.xhtml')}"/> 
+    </ui:define>
+    <ui:define name="content">
+        <h:form>
+            <h:panelGrid style="padding:20px; font-family: 'Arial','Helvetica',sans-serif; font-size: 13px; line-height: 21px; width:100%;">
+                <h3>Predicted pathway activity profiles based on mummichog</h3>
+                <h:panelGrid columns="2" style="width:100%; text-align: right;">
+                    <h:panelGrid style="width:100%; min-width: 420px"/>
+                    <h:panelGrid columns="5" style="width:540px; text-align: right">
+                        <p:commandButton value="Pathway Hits" ajax="false" 
+                                         style="width: 140px;"
+                                         onclick="PrimeFaces.monitorDownload(start, stop);"   
+                                         icon="ui-icon-arrowthickstop-1-s">  
+                            <p:fileDownload value="#{sessionBean1.getDownloadFile('mummichog_pathway_enrichment.csv')}" />  
+                        </p:commandButton> 
+                        <p:spacer style="width:20px"/>
+                        <p:commandButton value="Compound Hits" ajax="false" 
+                                         style="width: 140px;"
+                                         onclick="PrimeFaces.monitorDownload(start, stop);"   
+                                         icon="ui-icon-arrowthickstop-1-s">  
+                            <p:fileDownload value="#{sessionBean1.getDownloadFile('mummichog_matched_compound_all.csv')}" />  
+                        </p:commandButton> 
+                        <p:spacer style="width:20px"/>
+                        <p:commandButton value="Explore Results in Network" ajax="false" 
+                                         style="width: 200px; border: orange"
+                                         onclick="PF('statusDialog').show()" 
+                                         oncomplete="PF('statusDialog').hide()"                              
+                                         action="#{mummiBean.prepareNetView()}"/>
+                    </h:panelGrid>
+                </h:panelGrid>
+                <p:dataTable rows="20" paginator="true" id="resTbl" style="width:100%;" var="mb" value="#{mummiBean.mummiBeans}">  
+                    <p:column headerText="Pathway Name">  
+                        <p:outputLabel value="#{mb.setName}"/>
+                    </p:column>  
+                    <p:column headerText="Total" sortBy="#{mb.setNum}">  
+                        <h:outputText escape="false" value="#{mb.setNum}"/>
+                    </p:column> 
+                    <p:column headerText="Hits (all)" sortBy="#{mb.refNum}">  
+                        <h:outputText escape="false" value="#{mb.refNum}"/>
+                    </p:column> 
+                    <p:column headerText="Hits (sig.)" sortBy="#{mb.hitNum}">  
+                        <h:outputText escape="false" value="#{mb.hitNum}"/>
+                    </p:column> 
+                    <p:column headerText="Fisher's P" sortBy="#{mb.fisherP}">  
+                        <h:outputText escape="false" value="#{mb.fisherP}"/>
+                    </p:column>  
+                    <p:column headerText="EASE Score" sortBy="#{mb.easeP}">  
+                        <h:outputText escape="false" value="#{mb.easeP}"/>
+                    </p:column>    
+                    <p:column headerText="Gamma P" sortBy="#{mb.gammaP}">  
+                        <h:outputText escape="false" value="#{mb.gammaP}"/>
+                    </p:column>  
+                    <p:column headerText="Details">  
+                        <p:commandLink value="View" update=":detailView" oncomplete="PF('msetDialog').show()">  
+                            <f:setPropertyActionListener value="#{mb.setName}" target="#{mummiBean.currentPathName}" />  
+                        </p:commandLink>
+                    </p:column>  
+                </p:dataTable> 
+            </h:panelGrid> 
+        </h:form>
+        <p:dialog widgetVar="msetDialog" dynamic="true" modal="true" appendTo="@(body)" 
+                  hideEffect="explode" resizable="true"> 
+            <h:panelGrid id="detailView" style="width:540px; font-size: 12px; padding: 10px">
+                <p>
+                    The colored compounds indicate potential matches from the user's input, 
+                    with red colors indicating significant hits and blue colors indicating non-significant hits. 
+                </p>
+                <h:form id="summaryForm">
+                    <p:dataTable var="set" value="#{mummiBean.currentPathSet}">
+                        <p:column headerText="Pathway">  
+                            <h:outputText escape="false" value="#{set.name}"/>  
+                        </p:column>  
+                        <p:column headerText="Metabolites">  
+                            <h:outputText escape="false" value="#{set.members}"/>
+                        </p:column>   
+                    </p:dataTable> 
+                    <h:panelGrid style="width:100%; text-align: center">
+                        <p:commandButton value="OK" onclick="PF('msetDialog').hide()"/>
+                    </h:panelGrid>
+                </h:form>
+            </h:panelGrid> 
+        </p:dialog>
+    </ui:define>
+</ui:composition>

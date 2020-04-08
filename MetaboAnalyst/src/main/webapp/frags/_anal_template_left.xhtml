@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_template.xhtml">
+    <ui:define name="centerpane">
+        <p:layout>
+            <p:layoutUnit style="margin:0px; padding:0px" gutter="0" position="west" size="220" collapsible="true" styleClass="myColorLayoutStyle">
+                <div id="navi" style="line-height: 23px; font-family: Arial, Helvetica, Geneva; margin: 0; padding: 0">
+                    <h:form id="treeForm">
+                        <h:panelGrid style="padding: 20px 10px 10px 20px; font-size: 13px;">
+                            <h:panelGrid style="padding-left: 20px;">
+                                <h:commandLink id="homelnk" action="Exit">
+                                    <p:graphicImage id="home" 
+                                                    url="/resources/images/home.png"
+                                                    width="28" height="28"/>
+                                </h:commandLink>
+                                <p:tooltip for="homelnk" style="font-size: 11px;" value="Exit and return the Home page" />
+                            </h:panelGrid>
+                            <p:tree style="border: 3px rgb(177, 208, 238) ridge; width: 165px" 
+                                    value="#{sessionBean1.naviTree}" var="node" selectionMode="single">
+                                <p:ajax update=":treeForm" 
+                                        onstart="PF('statusDialog').show()"  
+                                        onerror="PF('statusDialog').hide()"
+                                        event="select" 
+                                        listener="#{sessionBean1.onNodeSelect}" />  
+                                <p:treeNode>
+                                    <h:outputText style="color: #011CA2;" value="#{node}" />
+                                </p:treeNode>
+                            </p:tree>         
+                        </h:panelGrid>
+                    </h:form>
+                </div>
+            </p:layoutUnit>
+            <p:layoutUnit style="margin:0px; padding:0px"  collapsible="true" gutter="0" position="center" styleClass="myAnalColorLayoutStyle">
+                <div style="clear: both; margin: 0; padding: 0; max-width: 1100px">
+                    <ui:insert name="content"> 
+                    </ui:insert>
+                </div>
+            </p:layoutUnit>
+            <p:layoutUnit header="R Command History" style="margin:0px; padding:0px" size="280" 
+                          collapsible="true" closable="true" gutter="0" position="east" styleClass="myUILayout"> 
+                <h:form> 
+                    <h:panelGrid style="width:100%; text-align: right">
+                        <p:commandButton value="Save" ajax="false" style="float:right;"
+                                         onclick="PrimeFaces.monitorDownload(start, stop);" 
+                                         icon="ui-icon-disk">
+                            <p:fileDownload value="#{sessionBean1.getRCmdFile()}" />
+                        </p:commandButton>
+                    </h:panelGrid>
+                </h:form>   
+                <h:dataTable id="cmdPane" var="cmdBean" value="#{sessionBean1.cmdVec}"
+                             styleClass="panelColumns" 
+                             style="font-size: 11px; font-family:monospace;">
+                    <h:column>
+                       <h:outputText style="font-weight:bold" value="#{cmdBean.step}."/>
+                    </h:column>
+                    <h:column>
+                        <h:outputText styleClass="fixedWidthClass" value="#{cmdBean.cmd}"/>        
+                    </h:column>
+                </h:dataTable>
+            </p:layoutUnit>
+        </p:layout>
+    </ui:define>
+</ui:composition>

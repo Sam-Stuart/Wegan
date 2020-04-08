@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_anal_template.xhtml"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <ui:define name="metaInfo">
+        <f:event type="preRenderView" listener="#{timeBean.doDefaultAnalysis('Heatmap2')}"/> 
+    </ui:define>
+    <ui:define name="content">
+        <h:form id="form1">
+            <h:panelGrid style="padding-top: 20px; padding-left: 20px; font-size: 13px; line-height: 23px; width:100%;">
+                <h3>Heatmap Visualization:</h3>
+                <h:panelGrid columns="2" style="width:85%; padding-left: 20px;">
+                    <h:panelGrid columns="2" style="padding: 10px; width:600px;">
+                        <h:outputLabel style="font-weight: bold" value="Distance Measure:"/>
+                        <p:selectOneMenu styleClass="menu" panelStyleClass="panel"  value="#{timeBean.distOpt}">
+                            <f:selectItem itemLabel="Euclidean" itemValue="euclidean"/> 
+                            <f:selectItem itemLabel="Pearson" itemValue="correlation"/> 
+                            <f:selectItem itemLabel="Minkowski" itemValue="minkowski"/>                         
+                        </p:selectOneMenu>
+                        <h:outputLabel style="font-weight: bold" value="Clustering Algorithm:"/>
+                        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{timeBean.clusterOpt}">
+                            <f:selectItems value="#{applicationBean1.clustMethodOpts}" />
+                        </p:selectOneMenu>
+                        <h:outputLabel style="font-weight: bold" value="Color Contrast:"/>
+                        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{timeBean.colorOpt}">
+                            <f:selectItems value="#{applicationBean1.colorContrastOpts}" />
+                        </p:selectOneMenu>
+                        <h:outputLabel style="font-weight: bold" value="Sample Arrangement:"/>
+                        <p:selectOneMenu styleClass="menu" panelStyleClass="panel"  value="#{timeBean.smplSortOpt}">
+                            <f:selectItem itemLabel="By Factor 1" itemValue="1" /> 
+                            <f:selectItem itemLabel="By Factor 2" itemValue="2" />                               
+                        </p:selectOneMenu>
+                        <h:outputLabel style="font-weight: bold" value="View Mode :"/>
+                        <p:selectOneRadio value="#{timeBean.viewOpt}" layout="pageDirection">
+                            <f:selectItem itemLabel="Overview" itemValue="overview" /> 
+                            <f:selectItem itemLabel="Detail View (&lt; 2000 features)" itemValue="detail" /> 
+                        </p:selectOneRadio>
+                        <h:outputLabel style="font-weight: bold" value="Use only sig. features (ANOVA2)"/>
+                        <p:selectBooleanCheckbox value ="#{timeBean.useAnovaFeature}"/>
+                        <h:outputLabel style="font-weight: bold" value="Show cell borders"/>
+                        <p:selectBooleanCheckbox value="#{timeBean.drawBorders}" /> 
+                    </h:panelGrid>
+                    <p:commandButton value="Submit" 
+                                     onclick="PF('statusDialog').show()"
+                                     oncomplete="PF('statusDialog').hide()"                                      
+                                     update=":form1:hmPane  :cmdPane" 
+                                     actionListener="#{timeBean.hm2Bn_action()}"/>  
+                </h:panelGrid> 
+                               <hr style="height: 12px; border: 0;box-shadow: inset 0 12px 12px -12px rgba(0, 0, 0, 0.5); width:100%; min-width: 1000px"/>
+                <h:panelGrid id="hmPane" style="text-align: center; width: 100%;">
+                    <h:panelGrid style="text-align: right; padding-left: 700px; width: 760px;">
+                        <p:commandLink actionListener="#{sessionBean1.graphicsLnk_action('heatmap2')}" 
+                                       oncomplete="PF('graphDialog').show()"
+                                       title="Customize the graphics output">
+                            <img src="#{facesContext.externalContext.requestContextPath}/resources/images/imgcenter.png"/>
+                        </p:commandLink>
+                    </h:panelGrid>
+                    <p:scrollPanel mode="native" style="width:780px;height:700px">
+                        <img onerror='this.style.display="none"' src="#{timeBean.hm2Img}" alt="Heatmapimage"/>
+                    </p:scrollPanel>
+                </h:panelGrid>  
+            </h:panelGrid>
+        </h:form>
+    </ui:define>
+</ui:composition>

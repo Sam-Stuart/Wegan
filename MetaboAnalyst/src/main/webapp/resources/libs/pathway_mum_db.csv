@@ -1,0 +1,918 @@
+name,kegg,biocyc,smdb,other
+"(<i>r,r</i>)-butanediol biosynthesis",,,,
+"(<i>s,s</i>)-butanediol biosynthesis",,,,
+"(r,r)-butanediol degradation",,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY3O-246"" target='_blank'>BioCyc Link</a>",,
+"(s,s)-butanediol degradation",,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-6388"" target='_blank'>BioCyc Link</a>",,
+(s)-reticuline biosynthesis ii,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-6133"" target='_blank'>BioCyc Link</a>",,
+&alpha;-tocopherol degradation,,,,"<a href=""https://www.pathwaycommons.org/pc/record2.do?id=505898"" target='_blank'>Other Link</a>"
+&beta;-alanine betaine biosynthesis,,,,"<a href=""https://metacyc.org/META/new-image?type=PATHWAY&object=PWY-4021"" target='_blank'>Other Link</a>"
+&beta;-alanine biosynthesis iii,,,,"<a href=""https://metacyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-5155"" target='_blank'>Other Link</a>"
+&beta;-alanine biosynthesis iv,,"<a href=""https://biocyc.org/META/NEW-IMAGE?object=Beta-Alanine-Biosynthesis"" target='_blank'>BioCyc Link</a>",,
+&beta;-alanine degradation i,,"<a href=""https://biocyc.org/META/NEW-IMAGE?object=Beta-Alanine-Degradation"" target='_blank'>BioCyc Link</a>",,
+&gamma;-linolenate biosynthesis ii (animals),,,,"<a href=""https://metacyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-6000"" target='_blank'>Other Link</a>"
+<i>myo</i>-inositol biosynthesis,,,,
+<i>n</i>-acetylglucosamine degradation i,,,,
+<i>s</i>-adenosyl-l-methionine cycle,,"<a href=""https://biocyc.org/META/new-image?object=PWY-6151"" target='_blank'>BioCyc Link</a>",,
+<i>s</i>-methyl-5-thio-&alpha;-d-ribose 1-phosphate degradation,,"<a href=""https://biocyc.org/META/new-image?object=PWY-4361"" target='_blank'>BioCyc Link</a>",,
+<i>s</i>-methyl-5'-thioadenosine degradation,,"<a href=""https://biocyc.org/META/NEW-IMAGE?object=Methylthioadenosine-Degradation"" target='_blank'>BioCyc Link</a>",,
+<i>s</i>-methyl-5'-thioadenosine degradation ii,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-6756"" target='_blank'>BioCyc Link</a>",,
+"<i>trans, trans</i>-farnesyl diphosphate biosynthesis",,,,"<a href=""https://metacyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-5123"" target='_blank'>Other Link</a>"
+1- and 2-methylnaphthalene degradation,,,,"<a href=""http://web.kuicr.kyoto-u.ac.jp/supp/kadowaki/FigureS1/map00624.html"" target='_blank'>Other Link</a>"
+"1,2-dichloroethane degradation",,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=12DICHLORETHDEG-PWY"" target='_blank'>BioCyc Link</a>",,
+"1,25-dihydroxyvitamin d<sub>3</sub> biosynthesis",,,,
+"1,4-dichlorobenzene degradation",,,,"<a href=""https://metacyc.org/META/NEW-IMAGE?type=PATHWAY&object=14DICHLORBENZDEG-PWY"" target='_blank'>Other Link</a>"
+"1d-<i>myo</i>-inositol hexakisphosphate biosynthesis i  (from ins(1,4,5)p3)",,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-6361&detail-level=%203"" target='_blank'>BioCyc Link</a>",,
+1d-<i>myo</i>-inositol hexakisphosphate biosynthesis ii (mammalian),,"<a href=""https://biocyc.org/META/new-image?object=PWY-6362"" target='_blank'>BioCyc Link</a>",,
+"1d-<i>myo</i>-inositol hexakisphosphate biosynthesis v (from ins(1,3,4)p3)",,"<a href=""https://biocyc.org/META/new-image?object=PWY-6361"" target='_blank'>BioCyc Link</a>",,
+2-<i>o</i>-&alpha;-mannosyl-d-glycerate degradation,,"<a href=""https://biocyc.org/META/new-image?object=PWY0-1300"" target='_blank'>BioCyc Link</a>",,
+2-amino-3-carboxymuconate semialdehyde degradation to glutaryl-coa,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-5652"" target='_blank'>BioCyc Link</a>",,
+2-ketoglutarate dehydrogenase complex,,"<a href=""https://biocyc.org/META/new-image?object=CPLX66-42"" target='_blank'>BioCyc Link</a>",,
+2-methylbutyrate biosynthesis,,,,
+2-oxoglutarate decarboxylation to succinyl-coa,,"<a href=""https://biocyc.org/ECOLI/NEW-IMAGE?type=PATHWAY&object=PWY-5084"" target='_blank'>BioCyc Link</a>",,
+2-oxoisovalerate decarboxylation to isobutanoyl-coa,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-5046"" target='_blank'>BioCyc Link</a>",,
+"2,4-dichlorobenzoate degradation",,,,"<a href=""https://gordonlab.wustl.edu/metaview/ippolito/CR2Signature/map-nolabel/map00623.html"" target='_blank'>Other Link</a>"
+3-chloroacrylic acid degradation,,,,"<a href=""http://www.bi.up.ac.za/clotilde/RES_METABO/map00641_org.html"" target='_blank'>Other Link</a>"
+3-dehydroquinate biosynthesis,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-6164"" target='_blank'>BioCyc Link</a>",,
+3-oxo-10r-octadecatrienoate beta-oxidation,,,,"<a href=""http://metafishnet.appspot.com/humanpathway/103"" target='_blank'>Other Link</a>"
+3-phosphoinositide biosynthesis,,"<a href=""https://biocyc.org/HUMAN/NEW-IMAGE?type=PATHWAY&object=PWY-6352"" target='_blank'>BioCyc Link</a>",,
+3-phosphoinositide degradation,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-6368"" target='_blank'>BioCyc Link</a>",,
+4-amino-2-methyl-5-diphosphomethylpyrimidine biosynthesis,,,,"<a href=""https://metacyc.org/META/NEW-IMAGE?type=NIL&object=PWY-7282"" target='_blank'>Other Link</a>"
+4-aminobenzoate biosynthesis,,"<a href=""https://biocyc.org/META/new-image?object=PWY-6543"" target='_blank'>BioCyc Link</a>",,
+4-aminobutyrate degradation,,"<a href=""https://biocyc.org/HUMAN/NEW-IMAGE?type=PATHWAY&object=PWY-6535"" target='_blank'>BioCyc Link</a>",,
+4-aminobutyrate degradation i,,"<a href=""https://biocyc.org/HUMAN/NEW-IMAGE?type=PATHWAY&object=PWY-6535"" target='_blank'>BioCyc Link</a>",,
+4-hydroxy-2-nonenal detoxification,,"<a href=""https://biocyc.org/HUMAN/new-image?type=PATHWAY&object=PWY-7112"" target='_blank'>BioCyc Link</a>",,
+4-hydroxybenzoate biosynthesis,,,,
+4-hydroxybenzoate biosynthesis i (eukaryotes),,"<a href=""https://metacyc.org/META/new-image?type=PATHWAY&object=PWY-5754"" target='_blank'>BioCyc Link</a>",,
+4-hydroxybenzoate biosynthesis ii (bacteria and fungi),,,,"<a href=""https://metacyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-5755"" target='_blank'>Other Link</a>"
+4-hydroxyphenylpyruvate biosynthesis,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-5886"" target='_blank'>BioCyc Link</a>",,
+4-hydroxyproline degradation i,,,,
+5-aminoimidazole ribonucleotide biosynthesis i,,"<a href=""https://biocyc.org/META/new-image?object=PWY-6121"" target='_blank'>BioCyc Link</a>",,
+6-hydroxymethyl-dihydropterin diphosphate biosynthesis i,,,,"<a href=""http://mousecyc.jax.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-6147&detail-level=2"" target='_blank'>Other Link</a>"
+abc transporters,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?02010"" target=_new>KEGG</a>",,,
+acetaldehyde biosynthesis,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-6333"" target='_blank'>BioCyc Link</a>",,
+acetate conversion to acetyl-coa,,"<a href=""https://biocyc.org/META/new-image?object=PWY0-1313"" target='_blank'>BioCyc Link</a>",,
+acetate formation from acetyl-coa ii,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY0-1312"" target='_blank'>BioCyc Link</a>",,"<a href=""https://metacyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-5535"" target='_blank'>Other Link</a>"
+acetoin biosynthesis i,,,,"<a href=""https://pathway.yeastgenome.org/YEAST/NEW-IMAGE?type=PATHWAY&object=PWY3O-335"" target='_blank'>Other Link</a>"
+acetoin biosynthesis iii,,,,"<a href=""https://pathway.yeastgenome.org/YEAST/NEW-IMAGE?type=PATHWAY&object=PWY3O-335"" target='_blank'>Other Link</a>"
+acetone degradation i (to methylglyoxal),,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-5451"" target='_blank'>BioCyc Link</a>",,
+acetyl-coa biosynthesis (from citrate),,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-5172"" target='_blank'>BioCyc Link</a>",,
+acetyl-coa biosynthesis (from pyruvate),,,,
+acetyl-coa biosynthesis iii (from citrate),,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-5172"" target='_blank'>BioCyc Link</a>",,
+acyl carrier protein metabolism,,,,"<a href=""https://metacyc.org/META/NEW-IMAGE?type=NIL&object=PWY-6012"" target='_blank'>Other Link</a>"
+acyl-coa hydrolysis,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-5148"" target='_blank'>BioCyc Link</a>",,
+adenine and adenosine salvage i,,"<a href=""https://biocyc.org/META/new-image?object=P121-PWY"" target='_blank'>BioCyc Link</a>",,
+adenine and adenosine salvage iii,,"<a href=""https://biocyc.org/META/new-image?object=PWY-6609"" target='_blank'>BioCyc Link</a>",,
+adenine and adenosine salvage iv,,,,"<a href=""http://mousecyc.jax.org:1555/META/NEW-IMAGE?type=PATHWAY&object=PWY-6610"" target='_blank'>Other Link</a>"
+adenine and adenosine salvage vi,,"<a href=""https://biocyc.org/META/new-image?object=PWY-6619"" target='_blank'>BioCyc Link</a>",,
+adenosine nucleotides <i>de novo</i> biosynthesis,,"<a href=""https://biocyc.org/META/new-image?object=PWY-7219"" target='_blank'>BioCyc Link</a>",,
+adenosine nucleotides degradation ii,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=SALVADEHYPOX-PWY"" target='_blank'>BioCyc Link</a>",,
+aerobic respiration,,,,
+aerobic respiration -- electron donor ii,,,,
+aerobic respiration -- electron donors reaction list,,,,
+aerobic respiration (linear view),,"<a href=""https://biocyc.org/YEAST/NEW-IMAGE?type=PATHWAY&object=PWY3O-188"" target='_blank'>BioCyc Link</a>",,
+african trypanosomiasis,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?05143"" target=_new>KEGG</a>",,,
+alanine and aspartate metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00250"" target=_new>KEGG</a>",,,"<a href=""https://www.wikipathways.org/index.php/Pathway:WP106"" target='_blank'>Other Link</a>"
+alanine biosynthesis,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=ALANINE-VALINESYN-PWY"" target='_blank'>BioCyc Link</a>",,"<a href=""https://pathway.yeastgenome.org/YEAST/NEW-IMAGE?object=ALANINE-SYN2-PWY"" target='_blank'>Other Link</a>"
+alanine biosynthesis ii,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=ALANINE-SYN2-PWY"" target='_blank'>BioCyc Link</a>",,
+alanine biosynthesis iii,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY0-1021"" target='_blank'>BioCyc Link</a>",,
+alanine degradation iii,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=ALANINE-DEG3-PWY"" target='_blank'>BioCyc Link</a>",,
+"alanine, aspartate and glutamate metabolism","<a href=""http://www.genome.jp/kegg-bin/show_pathway?00250"" target=_new>KEGG</a>",,,
+alkaloid biosynthesis ii,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00960"" target=_new>KEGG</a>",,,"<a href=""http://www1.biologie.uni-hamburg.de/b-online/kegg/kegg/Classes/dblinks_java/map/map00960.html"" target='_blank'>Other Link</a>"
+all-<i>trans</i>-decaprenyl diphosphate biosynthesis,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-5806"" target='_blank'>BioCyc Link</a>",,
+allantoin degradation to ureidoglycolate i (urea producing),,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-5697"" target='_blank'>BioCyc Link</a>",,
+allantoin degradation to ureidoglycolate ii (ammonia producing),,"<a href=""https://biocyc.org/login.html?redirect=https%3A%2F%2Fbiocyc.org%2FMETA%2Fnew-image%3Fobject%3DPWY-5698"" target='_blank'>BioCyc Link</a>",,
+alpha-linolenic acid metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00592"" target=_new>KEGG</a>",,,
+amino sugar and nucleotide sugar metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00520"" target=_new>KEGG</a>",,,
+aminoacyl-trna biosynthesis,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00970"" target=_new>KEGG</a>",,,
+aminobenzoate degradation,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00627"" target=_new>KEGG</a>",,,
+aminosugars metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00520"" target=_new>KEGG</a>",,,"<a href=""http://metafishnet.appspot.com/pathway/106"" target='_blank'>Other Link</a>"
+ammonia assimilation cycle i,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-6963"" target='_blank'>BioCyc Link</a>",,
+anandamide degradation,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY6666-1"" target='_blank'>BioCyc Link</a>",,
+androgen and estrogen biosynthesis and metabolism,,,,"<a href=""http://metafishnet.appspot.com/pathway/107"" target='_blank'>Other Link</a>"
+androgen biosynthesis,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY66-378"" target='_blank'>BioCyc Link</a>",,
+anthocyanin biosynthesis,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00942"" target=_new>KEGG</a>",,,
+arachidonic acid metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00590"" target=_new>KEGG</a>",,"<a href=""http://www.smpdb.ca/view/SMP00004"""" target=_new>SMP</a>",
+arginine and proline metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00330"" target=_new>KEGG</a>",,"<a href=""http://www.smpdb.ca/view/SMP00006"""" target=_new>SMP</a>",
+arginine biosynthesis,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00220"" target=_new>KEGG</a>",,,
+arginine biosynthesis iv,,,,"<a href=""https://metacyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-7400"" target='_blank'>Other Link</a>"
+arginine degradation i (arginase pathway),,"<a href=""https://biocyc.org/META/new-image?object=ARGASEDEG-PWY"" target='_blank'>BioCyc Link</a>",,
+arginine degradation vi (arginase 2 pathway),,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=ARG-PRO-PWY"" target='_blank'>BioCyc Link</a>",,
+arginine degradation x (arginine monooxygenase pathway),,,,"<a href=""https://metacyc.org/META/NEW-IMAGE?type=PATHWAY&object=ARGDEG-V-PWY"" target='_blank'>Other Link</a>"
+arsenate detoxification i (glutaredoxin),,"<a href=""https://biocyc.org/META/new-image?object=PWY-4202"" target='_blank'>BioCyc Link</a>",,
+ascorbate (vitamin c) and aldarate metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00053"" target=_new>KEGG</a>",,,"<a href=""http://metafishnet.appspot.com/pathway/110"" target='_blank'>Other Link</a>"
+ascorbate and aldarate metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00053"" target=_new>KEGG</a>",,,
+ascorbate recycling (cytosolic),,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-6370"" target='_blank'>BioCyc Link</a>",,
+asparagine biosynthesis,,,,"<a href=""https://humancyc.org/HUMAN/NEW-IMAGE?type=PATHWAY&object=ASPARAGINE-BIOSYNTHESIS"" target='_blank'>Other Link</a>"
+asparagine biosynthesis i,,"<a href=""https://biocyc.org/META/new-image?object=ASPARAGINE-BIOSYNTHESIS"" target='_blank'>BioCyc Link</a>",,
+asparagine biosynthesis iii,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY490-4"" target='_blank'>BioCyc Link</a>",,
+asparagine degradation,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=ASPARAGINE-DEG1-PWY"" target='_blank'>BioCyc Link</a>",,
+asparagine degradation i,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=ASPARAGINE-DEG1-PWY"" target='_blank'>BioCyc Link</a>",,
+asparaginyl-trna<sup>asn</sup> biosynthesis via transamidation,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY490-4"" target='_blank'>BioCyc Link</a>",,
+aspartate and asparagine metabolism,,,,"<a href=""http://metafishnet.appspot.com/humanpathway/111"" target='_blank'>Other Link</a>"
+aspartate biosynthesis,,,,"<a href=""https://www.wikipathways.org/index.php/Pathway:WP1518"" target='_blank'>Other Link</a>"
+aspartate degradation ii,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=MALATE-ASPARTATE-SHUTTLE-PWY"" target='_blank'>BioCyc Link</a>",,
+atrazine degradation,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00791"" target=_new>KEGG</a>",,,
+bacterial secretion system,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?03070"" target=_new>KEGG</a>",,,
+basal transcription factors,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?03022"" target=_new>KEGG</a>",,,
+base excision repair,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?03410"" target=_new>KEGG</a>",,,
+benzoate degradation,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00362"" target=_new>KEGG</a>",,,
+benzoate degradation via coa ligation,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00362"" target=_new>KEGG</a>",,,"<a href=""http://database.chgc.sh.cn/pathway/MAC/pathway/ko00632.html"" target='_blank'>Other Link</a>"
+benzoate degradation via hydroxylation,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00362"" target=_new>KEGG</a>",,,"<a href=""https://www.wikipathways.org/index.php/Pathway:WP1627"" target='_blank'>Other Link</a>"
+beta-alanine biosynthesis,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-3981"" target='_blank'>BioCyc Link</a>",,
+beta-alanine metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00410"" target=_new>KEGG</a>",,"<a href=""http://www.smpdb.ca/view/SMP00007"""" target=_new>SMP</a>",
+beta-carboline biosynthesis,,,,
+beta-lactam resistance,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?01501"" target=_new>KEGG</a>",,,
+betanidin degradation,,,,
+betaxanthin biosynthesis (via dopamine),,,,
+bile acid biosynthesis,,,"<a href=""http://www.smpdb.ca/view/SMP00012"""" target=_new>SMP</a>","<a href=""http://metafishnet.appspot.com/pathway/115"" target='_blank'>Other Link</a>"
+"bile acid biosynthesis, neutral pathway",,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-6061"" target='_blank'>BioCyc Link</a>",,
+biopterin metabolism,,,,"<a href=""http://metafishnet.appspot.com/pathway/116"" target='_blank'>Other Link</a>"
+biosynthesis of siderophore group nonribosomal peptides,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?01053"" target=_new>KEGG</a>",,,
+biosynthesis of unsaturated fatty acids,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?01040"" target=_new>KEGG</a>",,,
+biotin biosynthesis from 7-keto-8-aminopelargonate,,,,
+biotin metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00780"" target=_new>KEGG</a>",,"<a href=""http://www.smpdb.ca/view/SMP00015"""" target=_new>SMP</a>",
+biotin-carboxyl carrier protein assembly,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY0-1264"" target='_blank'>BioCyc Link</a>",,
+bisphenol a degradation,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00363"" target=_new>KEGG</a>",,,
+bisphenol degradation,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00363"" target=_new>KEGG</a>",,,
+blood group biosynthesis,,,,"<a href=""http://metafishnet.appspot.com/pathway/117"" target='_blank'>Other Link</a>"
+bmp signalling pathway,,,,
+branched-chain &alpha;-keto acid dehydrogenase complex,,,,"<a href=""https://metacyc.org/META/NEW-IMAGE?type=ENZYME&object=CPLX-7050"" target='_blank'>Other Link</a>"
+brassinosteroid biosynthesis,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00905"" target=_new>KEGG</a>",,,
+bupropion degradation,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY66-241"" target='_blank'>BioCyc Link</a>",,
+butanediol biosynthesis,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-5951"" target='_blank'>BioCyc Link</a>",,
+butanoate metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00650"" target=_new>KEGG</a>",,,
+c21-steroid hormone biosynthesis and metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00140"" target=_new>KEGG</a>",,,
+c5-branched dibasic acid metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00660"" target=_new>KEGG</a>",,,
+caffeine metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00232"" target=_new>KEGG</a>",,"<a href=""http://www.smpdb.ca/view/SMP00016"""" target=_new>SMP</a>",
+calcium transport i,,,,"<a href=""http://rgd.mcw.edu/rgdweb/pathway/pathwayRecord.html?acc_id=PW:0001139"" target='_blank'>Other Link</a>"
+caprolactam degradation,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00930"" target=_new>KEGG</a>",,,
+carbazole degradation,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-6550"" target='_blank'>BioCyc Link</a>",,
+carbon fixation,,,,"<a href=""http://metafishnet.appspot.com/humanpathway/121"" target='_blank'>Other Link</a>"
+carbon fixation in photosynthetic organisms,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00720"" target=_new>KEGG</a>",,,
+cardiolipin biosynthesis,,"<a href=""https://biocyc.org/HUMAN/NEW-IMAGE?type=PATHWAY&object=PWY-5269"" target='_blank'>BioCyc Link</a>",,
+cardiolipin biosynthesis ii,,"<a href=""https://biocyc.org/META/new-image?object=PWY-5269"" target='_blank'>BioCyc Link</a>",,
+carnitine shuttle,,,,"<a href=""http://metafishnet.appspot.com/pathway/122"" target='_blank'>Other Link</a>"
+carotenoid biosynthesis,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00906"" target=_new>KEGG</a>",,,
+catecholamine biosynthesis,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY66-301"" target='_blank'>BioCyc Link</a>","<a href=""http://www.smpdb.ca/view/SMP00017"""" target=_new>SMP</a>",
+cdp-diacylglycerol biosynthesis,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-5667"" target='_blank'>BioCyc Link</a>",,
+cdp-diacylglycerol biosynthesis i,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY0-1319"" target='_blank'>BioCyc Link</a>",,
+ceramide biosynthesis,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY3DJ-12"" target='_blank'>BioCyc Link</a>",,
+ceramide degradation,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-6483"" target='_blank'>BioCyc Link</a>",,
+chitin degradation to ethanol,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-7118"" target='_blank'>BioCyc Link</a>",,
+chitosan biosynthesis,,,,"<a href=""https://pathway.yeastgenome.org/YEAST/NEW-IMAGE?type=PATHWAY&object=PWY3O-70"" target='_blank'>Other Link</a>"
+chloroalkane and chloroalkene degradation,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00625"" target=_new>KEGG</a>",,,
+chlorocyclohexane and chlorobenzene degradation,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00361"" target=_new>KEGG</a>",,,
+choline biosynthesis,,"<a href=""https://biocyc.org/login.html?redirect=https%3A%2F%2Fbiocyc.org%2FMETA%2FNEW-IMAGE%3Ftype%3DPATHWAY%26object%3DPWY-3385"" target='_blank'>BioCyc Link</a>",,
+choline biosynthesis iii,,"<a href=""https://metacyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-3561"" target='_blank'>BioCyc Link</a>",,
+choline degradation i,,"<a href=""https://metacyc.org/META/new-image?type=PATHWAY&object=CHOLINE-BETAINE-ANA-PWY"" target='_blank'>BioCyc Link</a>",,
+chondroitin and dermatan biosynthesis,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00532"" target=_new>KEGG</a>",,,
+chondroitin sulfate biosynthesis,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-6569"" target='_blank'>BioCyc Link</a>",,
+chondroitin sulfate biosynthesis (late stages),,,,"<a href=""https://humancyc.org/HUMAN/NEW-IMAGE?type=PATHWAY&object=PWY-6567"" target='_blank'>Other Link</a>"
+chondroitin sulfate degradation,,,,"<a href=""http://metafishnet.appspot.com/pathway/123"" target='_blank'>Other Link</a>"
+chondroitin sulfate degradation (metazoa),,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-6573"" target='_blank'>BioCyc Link</a>",,
+citrate cycle (tca cycle),"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00020"" target=_new>KEGG</a>",,,
+citrulline biosynthesis,,,,"<a href=""https://pathway.yeastgenome.org/YEAST/NEW-IMAGE?type=NIL&object=CITRUL-BIO2-PWY&redirect=T"" target='_blank'>Other Link</a>"
+citrulline degradation,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=CITRULLINE-DEG-PWY"" target='_blank'>BioCyc Link</a>",,
+citrulline-nitric oxide cycle,,"<a href=""https://biocyc.org/HUMAN/NEW-IMAGE?type=PATHWAY&object=PWY-4983"" target='_blank'>BioCyc Link</a>",,
+cmp-<i>n</i>-acetylneuraminate biosynthesis i (eukaryotes),,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-6138"" target='_blank'>BioCyc Link</a>",,
+cmp-kdo biosynthesis i,,,,"<a href=""http://mousecyc.jax.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-1269"" target='_blank'>Other Link</a>"
+coa catabolism,,,,"<a href=""http://metafishnet.appspot.com/pathway/124"" target='_blank'>Other Link</a>"
+coenzyme a biosynthesis,,,,"<a href=""https://metacyc.org/META/new-image?type=PATHWAY&object=COA-PWY"" target='_blank'>Other Link</a>"
+copper transport ii,,,,
+creatine-phosphate biosynthesis,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-6158"" target='_blank'>BioCyc Link</a>",,
+cyanoamino acid metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00460"" target=_new>KEGG</a>",,,
+cysteine and methionine metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00270"" target=_new>KEGG</a>",,,
+cysteine biosynthesis ii,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-6308"" target='_blank'>BioCyc Link</a>",,
+cysteine biosynthesis/homocysteine degradation,,"<a href=""https://biocyc.org/HUMAN/NEW-IMAGE?type=PATHWAY&object=HOMOCYSDEGR-PWY"" target='_blank'>BioCyc Link</a>",,
+"d-<i>myo</i>-inositol (1,3,4)-trisphosphate biosynthesis",,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-6364&detail-level=%25203"" target='_blank'>BioCyc Link</a>",,
+"d-<i>myo</i>-inositol (1,4,5,6)-tetrakisphosphate biosynthesis",,"<a href=""https://biocyc.org/META/new-image?object=PWY-6366"" target='_blank'>BioCyc Link</a>",,
+"d-<i>myo</i>-inositol (1,4,5)-trisphosphate biosynthesis",,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-6351"" target='_blank'>BioCyc Link</a>",,
+"d-<i>myo</i>-inositol (1,4,5)-trisphosphate degradation",,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-6363"" target='_blank'>BioCyc Link</a>",,
+"d-<i>myo</i>-inositol (3,4,5,6)-tetrakisphosphate biosynthesis",,,,"<a href=""https://metacyc.org/META/NEW-IMAGE?type=NIL&object=PWY-6365&redirect=T"" target='_blank'>Other Link</a>"
+d-<i>myo</i>-inositol-5-phosphate metabolism,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-6367&orgids=(AAEO224324%20ECOLI)"" target='_blank'>BioCyc Link</a>",,
+d-alanine metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00473"" target=_new>KEGG</a>",,,
+d-arginine and d-ornithine metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00472"" target=_new>KEGG</a>",,"<a href=""http://www.smpdb.ca/view/SMP00020"""" target=_new>SMP</a>",
+d-glucuronate degradation i,,"<a href=""https://biocyc.org/META/new-image?object=PWY-5525"" target='_blank'>BioCyc Link</a>",,
+d-glutamine and d-glutamate metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00471"" target=_new>KEGG</a>",,,
+d-mannose degradation,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=MANNCAT-PWY"" target='_blank'>BioCyc Link</a>",,
+d4&e4-neuroprostanes formation,,,,"<a href=""http://metafishnet.appspot.com/pathway/125"" target='_blank'>Other Link</a>"
+de novo biosynthesis of pyrimidine deoxyribonucleotides,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-7184"" target='_blank'>BioCyc Link</a>",,
+de novo biosynthesis of pyrimidine ribonucleotides,,"<a href=""https://biocyc.org/HUMAN/NEW-IMAGE?type=PATHWAY&object=PWY0-162"" target='_blank'>BioCyc Link</a>",,
+de novo fatty acid biosynthesis,,,,"<a href=""http://metafishnet.appspot.com/pathway/126"" target='_blank'>Other Link</a>"
+degradation of purine ribonucleosides,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY0-1296"" target='_blank'>BioCyc Link</a>",,
+degradation of pyrimidine deoxyribonucleosides,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-7181"" target='_blank'>BioCyc Link</a>",,
+degradation of pyrimidine ribonucleosides,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY0-1295"" target='_blank'>BioCyc Link</a>",,
+"dehydro-d-arabinono-1,4-lactone biosynthesis",,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY3O-6"" target='_blank'>BioCyc Link</a>",,
+dermatan sulfate biosynthesis (late stages),,"<a href=""https://biocyc.org/HUMAN/NEW-IMAGE?type=PATHWAY&object=PWY-6571"" target='_blank'>BioCyc Link</a>",,
+dermatan sulfate degradation (metazoa),,"<a href=""https://biocyc.org/HUMAN/NEW-IMAGE?type=NIL&object=PWY-6576&redirect=T"" target='_blank'>BioCyc Link</a>",,
+di-unsaturated fatty acid beta-oxidation,,,,"<a href=""http://metafishnet.appspot.com/pathway/127"" target='_blank'>Other Link</a>"
+dimethyl-branched-chain fatty acid mitochondrial beta-oxidation,,,,"<a href=""http://metafishnet.appspot.com/pathway/128"" target='_blank'>Other Link</a>"
+dioxin degradation,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00621"" target=_new>KEGG</a>",,,
+diphthamide biosynthesis,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-7546"" target='_blank'>BioCyc Link</a>",,
+diterpenoid biosynthesis,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00904"" target=_new>KEGG</a>",,,
+dna replication,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?03030"" target=_new>KEGG</a>",,,
+dolichol and dolichyl phosphate biosynthesis,,"<a href=""https://biocyc.org/HUMAN/new-image?type=PATHWAY&object=PWY-6129"" target='_blank'>BioCyc Link</a>",,
+dolichyl glucosyl phosphate biosynthesis,,,,"<a href=""https://pathway.yeastgenome.org/YEAST/new-image?type=PATHWAY&object=PWY3O-1565&detail-level=2"" target='_blank'>Other Link</a>"
+dolichyl phosphate d-mannose biosynthesis,,"<a href=""https://biocyc.org/YEAST/NEW-IMAGE?type=PATHWAY&object=PWY3O-123"" target='_blank'>BioCyc Link</a>",,
+dolichyl-diphosphooligosaccharide biosynthesis,,"<a href=""https://biocyc.org/HUMAN/NEW-IMAGE?type=PATHWAY&object=MANNOSYL-CHITO-DOLICHOL-BIOSYNTHESIS"" target='_blank'>BioCyc Link</a>",,
+dopamine degradation,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY6666-2"" target='_blank'>BioCyc Link</a>",,
+dorso-ventral axis formation,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?04320"" target=_new>KEGG</a>",,,
+drug metabolism - cytochrome p450,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00982"" target=_new>KEGG</a>",,,
+drug metabolism - other enzymes,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00983"" target=_new>KEGG</a>",,,
+dtmp <i>de novo</i> biosynthesis,,,,
+dtmp <i>de novo</i> biosynthesis (mitochondrial),,,,
+dynorphin metabolism,,,,"<a href=""http://metafishnet.appspot.com/pathway/129"" target='_blank'>Other Link</a>"
+ecm-receptor interaction,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?04512"" target=_new>KEGG</a>",,,
+eicosapentaenoate biosynthesis ii (metazoa),,,,"<a href=""https://humancyc.org/HUMAN/NEW-IMAGE?type=PATHWAY&object=PWY-7049"" target='_blank'>Other Link</a>"
+electron transport chain,,,,"<a href=""http://metafishnet.appspot.com/pathway/130"" target='_blank'>Other Link</a>"
+endocytosis,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?04144"" target=_new>KEGG</a>",,,
+epoxysqualene biosynthesis,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-5670"" target='_blank'>BioCyc Link</a>",,
+ergosterol biosynthesis,,,,"<a href=""https://pathway.yeastgenome.org/YEAST/new-image?type=PATHWAY&object=ERGOSTEROL-SYN-PWY"" target='_blank'>Other Link</a>"
+estrogen biosynthesis,,,,
+ethanol degradation i,,"<a href=""https://biocyc.org/META/new-image?object=ETOH-ACETYLCOA-ANA-PWY"" target='_blank'>BioCyc Link</a>",,
+ethanol degradation ii,,,,"<a href=""https://metacyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY66-21"" target='_blank'>Other Link</a>"
+ethanol degradation iv,,"<a href=""https://biocyc.org/META/new-image?object=PWY66-162"" target='_blank'>BioCyc Link</a>",,
+ether lipid metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00565"" target=_new>KEGG</a>",,,
+ethylbenzene degradation,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00642"" target=_new>KEGG</a>",,,
+ethylene biosynthesis,,,,
+eumelanin biosynthesis,,,,"<a href=""http://mousecyc.jax.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-6498&detail-level=1"" target='_blank'>Other Link</a>"
+fanconi anemia pathway,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?03460"" target=_new>KEGG</a>",,,
+fatty acid &alpha;-oxidation,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-2501"" target='_blank'>BioCyc Link</a>",,
+fatty acid &alpha;-oxidation ii,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY66-387"" target='_blank'>BioCyc Link</a>",,
+fatty acid &alpha;-oxidation iii,,,,"<a href=""https://metacyc.org/META/new-image?type=PATHWAY&object=PWY66-388"" target='_blank'>Other Link</a>"
+fatty acid &beta;-oxidation i,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=NIL&object=FAO-PWY"" target='_blank'>BioCyc Link</a>",,
+fatty acid &beta;-oxidation ii (core pathway),,"<a href=""https://biocyc.org/PLASMO/NEW-IMAGE?type=PATHWAY&object=PWY-5136"" target='_blank'>BioCyc Link</a>",,
+"fatty acid &beta;-oxidation iii (unsaturated, odd number)",,"<a href=""https://biocyc.org/META/new-image?object=PWY-5137"" target='_blank'>BioCyc Link</a>",,
+fatty acid activation,,,,"<a href=""http://metafishnet.appspot.com/pathway/132"" target='_blank'>Other Link</a>"
+fatty acid biosynthesis,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00061"" target=_new>KEGG</a>",,,
+fatty acid biosynthesis (concise),,,,"<a href=""https://pathway.yeastgenome.org/YEAST/NEW-IMAGE?type=PATHWAY&object=PWY-5970"" target='_blank'>Other Link</a>"
+fatty acid biosynthesis initiation,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-4381"" target='_blank'>BioCyc Link</a>",,
+fatty acid biosynthesis initiation ii,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-5966"" target='_blank'>BioCyc Link</a>",,
+fatty acid degradation,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00071"" target=_new>KEGG</a>",,,
+fatty acid elongation,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00062"" target=_new>KEGG</a>",,,
+fatty acid elongation -- saturated,,"<a href=""https://biocyc.org/META/new-image?object=FASYN-ELONG-PWY"" target='_blank'>BioCyc Link</a>",,
+fatty acid elongation in mitochondria,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00062"" target=_new>KEGG</a>",,"<a href=""http://www.smpdb.ca/view/SMP00021"""" target=_new>SMP</a>",
+fatty acid metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?01212"" target=_new>KEGG</a>",,"<a href=""http://www.smpdb.ca/view/SMP00023"""" target=_new>SMP</a>",
+fatty acid oxidation,,,,"<a href=""http://metafishnet.appspot.com/pathway/133"" target='_blank'>Other Link</a>"
+fatty acid oxidation (non-cyclic),,,,
+fatty acid oxidation- peroxisome,,"<a href=""https://biocyc.org/META/new-image?object=PWY-5136"" target='_blank'>BioCyc Link</a>",,"<a href=""http://metafishnet.appspot.com/pathway/134"" target='_blank'>Other Link</a>"
+"fatty acid oxidation, peroxisome",,"<a href=""https://biocyc.org/META/new-image?object=PWY-5136"" target='_blank'>BioCyc Link</a>",,"<a href=""http://metafishnet.appspot.com/pathway/134"" target='_blank'>Other Link</a>"
+fatty acids biosynthesis (yeast),,,,"<a href=""https://metacyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-5970"" target='_blank'>Other Link</a>"
+flavin biosynthesis iii (fungi),,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-6168&detail-level=2"" target='_blank'>BioCyc Link</a>",,
+flavin biosynthesis iv (mammalian),,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY66-366"" target='_blank'>BioCyc Link</a>",,
+flavone and flavonol biosynthesis,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00944"" target=_new>KEGG</a>",,,
+flavonoid biosynthesis,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00941"" target=_new>KEGG</a>",,,
+fluorene degradation,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=FLUORENE-DEG-9-ONE-PWY"" target='_blank'>BioCyc Link</a>",,
+fluorobenzoate degradation,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00364"" target=_new>KEGG</a>",,,
+folate biosynthesis,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00790"" target=_new>KEGG</a>",,,
+folate interconversions,,,,"<a href=""https://pathway.yeastgenome.org/YEAST/NEW-IMAGE?type=PATHWAY&object=PWY3O-697"" target='_blank'>Other Link</a>"
+folate polyglutamylation,,"<a href=""https://biocyc.org/META/new-image?object=PWY-2161"" target='_blank'>BioCyc Link</a>",,
+folate polyglutamylation i,,,,"<a href=""https://pmn.plantcyc.org/PLANT/NEW-IMAGE?type=PATHWAY&object=PWY-2161"" target='_blank'>Other Link</a>"
+folate polyglutamylation ii,,,,"<a href=""https://pmn.plantcyc.org/PLANT/NEW-IMAGE?type=PATHWAY&object=PWY-2161B-PMN"" target='_blank'>Other Link</a>"
+folate transformations,,,,"<a href=""https://metacyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-2201"" target='_blank'>Other Link</a>"
+folate transformations i,,,,"<a href=""https://metacyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-2201"" target='_blank'>Other Link</a>"
+formaldehyde oxidation ii (glutathione-dependent),,,,"<a href=""https://metacyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-1801"" target='_blank'>Other Link</a>"
+formaldehyde oxidation v (tetrahydrofolate pathway),,"<a href=""https://biocyc.org/10403S_RAST/NEW-IMAGE?type=PATHWAY&object=PWY-1722"" target='_blank'>BioCyc Link</a>",,
+formylthf biosynthesis i,,"<a href=""https://biocyc.org/10403S_RAST/NEW-IMAGE?type=PATHWAY&object=1CMET2-PWY"" target='_blank'>BioCyc Link</a>",,
+foxo signaling pathway,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?04068"" target=_new>KEGG</a>",,,
+fructose 1-phosphate degradation,,,,
+fructose and mannose metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00051"" target=_new>KEGG</a>",,,
+fructose degradation,,,,"<a href=""https://pathway.yeastgenome.org/YEAST/new-image?type=PATHWAY&object=PWY3O-0&detail-level=2"" target='_blank'>Other Link</a>"
+galactose degradation i (leloir pathway),,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-6317"" target='_blank'>BioCyc Link</a>",,
+galactose metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00052"" target=_new>KEGG</a>",,"<a href=""http://www.smpdb.ca/view/SMP00024"""" target=_new>SMP</a>",
+gamma-hexachlorocyclohexane degradation,,"<a href=""https://biocyc.org/META/new-image?type=PATHWAY&object=GAMMAHEXCHLORDEG-PWY"" target='_blank'>BioCyc Link</a>",,
+gdp-d-rhamnose biosynthesis,,,,"<a href=""https://metacyc.org/META/new-image?type=PATHWAY&object=GDPRHAMSYN-PWY"" target='_blank'>Other Link</a>"
+gdp-glucose biosynthesis,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-5661"" target='_blank'>BioCyc Link</a>",,
+gdp-l-fucose biosynthesis i (from gdp-d-mannose),,"<a href=""https://biocyc.org/META/new-image?object=PWY-66"" target='_blank'>BioCyc Link</a>",,
+gdp-l-fucose biosynthesis ii (from l-fucose),,"<a href=""https://biocyc.org/META/new-image?object=PWY-6"" target='_blank'>BioCyc Link</a>",,
+gdp-mannose biosynthesis,,"<a href=""https://biocyc.org/META/new-image?object=PWY-5659"" target='_blank'>BioCyc Link</a>",,
+gdp-mannose biosynthesis ii,,"<a href=""https://biocyc.org/VCHO/NEW-IMAGE?type=PATHWAY&object=PWY-5659"" target='_blank'>BioCyc Link</a>",,
+gdp-mannose metabolism,,,,"<a href=""http://www.pseudomonas.com:1555/PSEUDO/NEW-IMAGE?object=MANGDPMET-PWY"" target='_blank'>Other Link</a>"
+geraniol degradation,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00281"" target=_new>KEGG</a>",,,
+geranylgeranyldiphosphate biosynthesis,,"<a href=""https://biocyc.org/HUMAN/NEW-IMAGE?type=PATHWAY&object=PWY-5120"" target='_blank'>BioCyc Link</a>",,
+glucocorticoid biosynthesis,,,,
+gluconeogenesis,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00010"" target=_new>KEGG</a>",,"<a href=""http://www.smpdb.ca/view/SMP00027"""" target=_new>SMP</a>","<a href=""https://pathway.yeastgenome.org/YEAST/new-image?type=PATHWAY&object=GLUCONEO-PWY"" target='_blank'>Other Link</a>"
+gluconeogenesis i,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=GLUCONEO-PWY&detail-level=2"" target='_blank'>BioCyc Link</a>",,
+glucose and glucose-1-phosphate degradation,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=GLUCOSE1PMETAB-PWY"" target='_blank'>BioCyc Link</a>",,
+glucose-6-phosphate biosynthesis,,,,"<a href=""https://pathway.yeastgenome.org/YEAST/new-image?type=PATHWAY&object=PWY3O-3827&detail-level=2"" target='_blank'>Other Link</a>"
+glucosinolate biosynthesis,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00966"" target=_new>KEGG</a>",,,
+glutamate biosynthesis from ammonia,,,,"<a href=""https://pathway.yeastgenome.org/YEAST/NEW-IMAGE?type=PATHWAY&object=GLUNH3-PWY"" target='_blank'>Other Link</a>"
+glutamate biosynthesis from glutamine,,,,"<a href=""https://pathway.yeastgenome.org/YEAST/new-image?type=PATHWAY&object=GLUGLNSYN-PWY&detail-level=2"" target='_blank'>Other Link</a>"
+glutamate biosynthesis i,,"<a href=""https://biocyc.org/META/new-image?object=GLUTSYN-PWY"" target='_blank'>BioCyc Link</a>",,
+glutamate biosynthesis ii,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=GLUTAMATE-SYN2-PWY"" target='_blank'>BioCyc Link</a>",,
+glutamate biosynthesis iii,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=GLUTSYNIII-PWY"" target='_blank'>BioCyc Link</a>",,
+glutamate degradation i,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=GLUTAMATE-DEG1-PWY"" target='_blank'>BioCyc Link</a>",,
+glutamate degradation ii,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=GLUTDEG-PWY"" target='_blank'>BioCyc Link</a>",,
+glutamate degradation iii (via 4-aminobutyrate),,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY0-1305"" target='_blank'>BioCyc Link</a>",,
+glutamate degradation x,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-5766"" target='_blank'>BioCyc Link</a>",,
+glutamate dependent acid resistance,,,,"<a href=""http://mousecyc.jax.org/META/NEW-IMAGE?type=PATHWAY&object=PWY0-1305&detail-level=3%27A"" target='_blank'>Other Link</a>"
+glutamate metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00250"" target=_new>KEGG</a>",,"<a href=""http://www.smpdb.ca/view/SMP00028"""" target=_new>SMP</a>","<a href=""http://metafishnet.appspot.com/pathway/138"" target='_blank'>Other Link</a>"
+glutamate removal from folates,,"<a href=""https://biocyc.org/META/new-image?object=PWY-2161B"" target='_blank'>BioCyc Link</a>",,
+glutamine biosynthesis,,"<a href=""https://biocyc.org/META/new-image?object=GLNSYN-PWY"" target='_blank'>BioCyc Link</a>",,"<a href=""https://pathway.yeastgenome.org/YEAST/NEW-IMAGE?object=GLNSYN-PWY"" target='_blank'>Other Link</a>"
+glutamine biosynthesis i,,"<a href=""https://biocyc.org/META/new-image?object=GLNSYN-PWY"" target='_blank'>BioCyc Link</a>",,
+glutamine degradation i,,"<a href=""https://biocyc.org/META/new-image?object=GLUTAMINDEG-PWY"" target='_blank'>BioCyc Link</a>",,
+glutamine degradation ii,,"<a href=""https://biocyc.org/META/new-image?type=PATHWAY&object=GLUTAMINEFUM-PWY"" target='_blank'>BioCyc Link</a>",,
+glutaminyl-trna<sup>gln</sup> biosynthesis via transamidation,,,,
+glutaryl-coa degradation,,"<a href=""https://biocyc.org/META/new-image?type=PATHWAY&object=PWY-5177&detail-level=2&ENZORG=ORG-5962"" target='_blank'>BioCyc Link</a>",,
+glutathione biosynthesis,,"<a href=""https://biocyc.org/META/new-image?type=PATHWAY&object=GLUTATHIONESYN-PWY"" target='_blank'>BioCyc Link</a>",,
+glutathione degradation,,,,"<a href=""https://pathway.yeastgenome.org/YEAST/NEW-IMAGE?object=PWYQT-4432"" target='_blank'>Other Link</a>"
+glutathione metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00480"" target=_new>KEGG</a>",,"<a href=""http://www.smpdb.ca/view/SMP00029"""" target=_new>SMP</a>","<a href=""https://humancyc.org/HUMAN/NEW-IMAGE?type=PATHWAY&object=PWY-4081"" target='_blank'>Other Link</a>"
+glutathione redox reactions i,,,,"<a href=""https://biocyc.org/META/new-image?object=GLUT-REDOX-PWY"" target='_blank'>Other Link</a>"
+glutathione redox reactions ii,,,,
+glutathione-glutaredoxin system,,,,"<a href=""https://pathway.yeastgenome.org/server.html/YEAST/NEW-IMAGE?type=PATHWAY&object=PWY3O-592"" target='_blank'>Other Link</a>"
+glutathione-mediated detoxification,,,,"<a href=""https://humancyc.org/HUMAN/NEW-IMAGE?type=PATHWAY&object=PWY-4061"" target='_blank'>Other Link</a>"
+glutathione-mediated detoxification i,,,,"<a href=""https://humancyc.org/HUMAN/NEW-IMAGE?type=PATHWAY&object=PWY-4061"" target='_blank'>Other Link</a>"
+glycerol biosynthesis,,,,"<a href=""https://pathway.yeastgenome.org/YEAST/NEW-IMAGE?type=PATHWAY&object=PWY3O-48"" target='_blank'>Other Link</a>"
+glycerol degradation i,,,,"<a href=""https://metacyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-4261"" target='_blank'>Other Link</a>"
+glycerol-3-phosphate shuttle,,"<a href=""https://biocyc.org/META/new-image?object=PWY-6118"" target='_blank'>BioCyc Link</a>",,
+glycerolipid metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00561"" target=_new>KEGG</a>",,"<a href=""http://www.smpdb.ca/view/SMP00031"""" target=_new>SMP</a>",
+glycerophospholipid metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00564"" target=_new>KEGG</a>",,,
+glycine betaine degradation,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-3661"" target='_blank'>BioCyc Link</a>",,
+glycine biosynthesis from glyoxylate,,,,"<a href=""https://pathway.yeastgenome.org/YEAST/new-image?type=PATHWAY&object=GLYSYN-ALA-PWY"" target='_blank'>Other Link</a>"
+glycine biosynthesis from serine,,,,"<a href=""https://pathway.yeastgenome.org/YEAST/NEW-IMAGE?type=PATHWAY&object=GLYSYN-PWY"" target='_blank'>Other Link</a>"
+glycine biosynthesis from threonine,,,,"<a href=""https://pathway.yeastgenome.org/YEAST/NEW-IMAGE?type=NIL&object=GLYSYN-THR-PWY&redirect=T"" target='_blank'>Other Link</a>"
+glycine biosynthesis i,,"<a href=""https://biocyc.org/META/new-image?object=GLYSYN-PWY"" target='_blank'>BioCyc Link</a>",,
+glycine biosynthesis ii,,"<a href=""https://biocyc.org/META/new-image?object=GLYCINE-SYN2-PWY"" target='_blank'>BioCyc Link</a>",,
+glycine biosynthesis iii,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=GLYSYN-ALA-PWY"" target='_blank'>BioCyc Link</a>",,
+glycine biosynthesis iv,,"<a href=""https://biocyc.org/META/new-image?object=GLYSYN-THR-PWY"" target='_blank'>BioCyc Link</a>",,
+glycine cleavage,,"<a href=""https://biocyc.org/META/new-image?object=GLYCLEAV-PWY"" target='_blank'>BioCyc Link</a>",,
+glycine cleavage complex,,"<a href=""https://biocyc.org/META/new-image?object=CPLX-7302"" target='_blank'>BioCyc Link</a>",,
+glycine degradation (creatine biosynthesis),,"<a href=""https://biocyc.org/META/new-image?object=GLYCGREAT-PWY"" target='_blank'>BioCyc Link</a>",,
+glycine- serine- alanine and threonine metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00260"" target=_new>KEGG</a>",,,"<a href=""http://metafishnet.appspot.com/pathway/142"" target='_blank'>Other Link</a>"
+"glycine, serine and threonine metabolism","<a href=""http://www.genome.jp/kegg-bin/show_pathway?00260"" target=_new>KEGG</a>",,"<a href=""http://www.smpdb.ca/view/SMP00032"""" target=_new>SMP</a>",
+"glycine, serine, alanine and threonine metabolism",,,,"<a href=""http://metafishnet.appspot.com/pathway/142"" target='_blank'>Other Link</a>"
+glycoaminoglycan-protein linkage region biosynthesis,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-6557"" target='_blank'>BioCyc Link</a>",,
+glycogen biosynthesis,,,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=GLYCOGENSYNTH-PWY"" target='_blank'>Other Link</a>"
+glycogen biosynthesis ii (from udp-d-glucose),,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-5067"" target='_blank'>BioCyc Link</a>",,
+glycogen degradation,,"<a href=""https://biocyc.org/YEAST/NEW-IMAGE?type=PATHWAY&object=PWY-5941"" target='_blank'>BioCyc Link</a>",,"<a href=""http://rgd.mcw.edu/rgdweb/pathway/pathwayRecord.html?acc_id=PW:0000534"" target='_blank'>Other Link</a>"
+glycogen degradation i,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=GLYCOCAT-PWY"" target='_blank'>BioCyc Link</a>",,
+glycogen degradation ii,,,,"<a href=""https://metacyc.org/META/NEW-IMAGE?type=NIL&object=PWY-5941&redirect=T"" target='_blank'>Other Link</a>"
+glycolysis,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00010"" target=_new>KEGG</a>",,"<a href=""http://www.smpdb.ca/view/SMP00034"""" target=_new>SMP</a>","<a href=""https://pathway.yeastgenome.org/YEAST/new-image?type=PATHWAY&object=GLYCOLYSIS"" target='_blank'>Other Link</a>"
+glycolysis and gluconeogenesis,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00010"" target=_new>KEGG</a>",,,"<a href=""http://metafishnet.appspot.com/pathway/143"" target='_blank'>Other Link</a>"
+glycolysis i,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00010"" target=_new>KEGG</a>",,,"<a href=""https://pathway.yeastgenome.org/YEAST/new-image?type=PATHWAY&object=GLYCOLYSIS"" target='_blank'>Other Link</a>"
+glycolysis ii,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-5484"" target='_blank'>BioCyc Link</a>",,
+glycolysis iii (glucokinase),,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=ANAGLYCOLYSIS-PWY"" target='_blank'>BioCyc Link</a>",,
+glycolysis iii (thermotoga),,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=ANAGLYCOLYSIS-PWY"" target='_blank'>BioCyc Link</a>",,
+glycolysis or gluconeogenesis,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00010"" target=_new>KEGG</a>",,,
+glycosaminoglycan biosynthesis - chondroitin sulfate,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00532"" target=_new>KEGG</a>",,,
+glycosaminoglycan biosynthesis - chondroitin sulfate / dermatan sulfate,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00532"" target=_new>KEGG</a>",,,
+glycosaminoglycan biosynthesis - heparan sulfate,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00534"" target=_new>KEGG</a>",,,
+glycosaminoglycan biosynthesis - heparan sulfate / heparin,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00534"" target=_new>KEGG</a>",,,
+glycosaminoglycan degradation,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00531"" target=_new>KEGG</a>",,,
+glycosphingolipid biosynthesis - ganglio series,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00604"" target=_new>KEGG</a>",,,
+glycosphingolipid biosynthesis - ganglioseries,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00604"" target=_new>KEGG</a>",,,"<a href=""http://metafishnet.appspot.com/pathway/144"" target='_blank'>Other Link</a>"
+glycosphingolipid biosynthesis - globo series,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00603"" target=_new>KEGG</a>",,,
+glycosphingolipid biosynthesis - globoseries,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00603"" target=_new>KEGG</a>",,,"<a href=""http://metafishnet.appspot.com/pathway/145"" target='_blank'>Other Link</a>"
+glycosphingolipid biosynthesis - lacto and neolacto series,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00601"" target=_new>KEGG</a>",,,
+glycosphingolipid biosynthesis - lactoseries,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00601"" target=_new>KEGG</a>",,,"<a href=""http://metafishnet.appspot.com/pathway/146"" target='_blank'>Other Link</a>"
+glycosphingolipid biosynthesis - neolactoseries,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00601"" target=_new>KEGG</a>",,,"<a href=""http://metafishnet.appspot.com/pathway/147"" target='_blank'>Other Link</a>"
+glycosphingolipid metabolism,,,,"<a href=""http://metafishnet.appspot.com/pathway/148"" target='_blank'>Other Link</a>"
+glycosylphosphatidylinositol(gpi)-anchor biosynthesis,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00563"" target=_new>KEGG</a>",,,
+glyoxylate and dicarboxylate metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00630"" target=_new>KEGG</a>",,,
+glyoxylate cycle,,"<a href=""https://biocyc.org/META/new-image?object=GLYOXYLATE-BYPASS"" target='_blank'>BioCyc Link</a>",,
+guanine and guanosine salvage i,,,,"<a href=""https://metacyc.org/META/new-image?type=PATHWAY&object=PWY-6620"" target='_blank'>Other Link</a>"
+guanosine nucleotides degradation iii,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-6608"" target='_blank'>BioCyc Link</a>",,
+hedgehog signaling pathway,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?04340"" target=_new>KEGG</a>",,,
+heme biosynthesis,,,,"<a href=""https://www.wikipathways.org/index.php/Pathway:WP561"" target='_blank'>Other Link</a>"
+heme biosynthesis from uroporphyrinogen-iii i,,"<a href=""https://biocyc.org/PLASMO/NEW-IMAGE?type=PATHWAY&object=HEME-BIOSYNTHESIS-II"" target='_blank'>BioCyc Link</a>",,
+heme biosynthesis ii,,"<a href=""https://biocyc.org/PLASMO/NEW-IMAGE?type=PATHWAY&object=HEME-BIOSYNTHESIS-II"" target='_blank'>BioCyc Link</a>",,
+heme degradation,,"<a href=""https://biocyc.org/HUMAN/NEW-IMAGE?type=PATHWAY&object=PWY-5874"" target='_blank'>BioCyc Link</a>",,
+heparan sulfate biosynthesis,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-6564"" target='_blank'>BioCyc Link</a>",,
+heparan sulfate biosynthesis (late stages),,"<a href=""https://biocyc.org/HUMAN/NEW-IMAGE?type=PATHWAY&object=PWY-6558"" target='_blank'>BioCyc Link</a>",,
+heparan sulfate degradation,,,,"<a href=""http://metafishnet.appspot.com/pathway/152"" target='_blank'>Other Link</a>"
+heptaprenyl diphosphate biosynthesis,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-5807"" target='_blank'>BioCyc Link</a>",,
+hexaprenyl diphosphate biosynthesis,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=HEXPPSYN-PWY"" target='_blank'>BioCyc Link</a>",,
+hexose phosphorylation,,,,"<a href=""http://metafishnet.appspot.com/pathway/153"" target='_blank'>Other Link</a>"
+high-mannose type n-glycan biosynthesis,,,,
+histamine biosynthesis,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-6173"" target='_blank'>BioCyc Link</a>",,
+histamine degradation,,"<a href=""https://biocyc.org/META/new-image?type=PATHWAY&object=PWY-6181"" target='_blank'>BioCyc Link</a>",,
+histidine biosynthesis,,,,"<a href=""https://pathway.yeastgenome.org/YEAST/new-image?type=PATHWAY&object=HISTSYN-PWY&detail-level=2"" target='_blank'>Other Link</a>"
+histidine degradation iii,,"<a href=""https://biocyc.org/META/new-image?object=PWY-5030"" target='_blank'>BioCyc Link</a>",,
+histidine degradation vi,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=HISHP-PWY"" target='_blank'>BioCyc Link</a>",,
+histidine metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00340"" target=_new>KEGG</a>",,"<a href=""http://www.smpdb.ca/view/SMP00035"""" target=_new>SMP</a>",
+homocysteine and cysteine interconversion,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-801"" target='_blank'>BioCyc Link</a>",,"<a href=""https://www.wikipathways.org/index.php/Pathway:WP128"" target='_blank'>Other Link</a>"
+homocysteine biosynthesis,,,,"<a href=""https://pathway.yeastgenome.org/YEAST/NEW-IMAGE?type=PATHWAY&object=PWY-5344"" target='_blank'>Other Link</a>"
+homocysteine degradation,,,,
+homologous recombination,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?03440"" target=_new>KEGG</a>",,,
+homoserine biosynthesis,,,,"<a href=""https://pathway.yeastgenome.org/YEAST/NEW-IMAGE?type=NIL&object=HOMOSERSYN-PWY&redirect=T"" target='_blank'>Other Link</a>"
+hyaluronan metabolism,,,,"<a href=""http://metafishnet.appspot.com/pathway/155"" target='_blank'>Other Link</a>"
+hydroxymethylpyrimidine salvage,,"<a href=""https://biocyc.org/ECOLI/NEW-IMAGE?type=PATHWAY&object=PWY-6910"" target='_blank'>BioCyc Link</a>",,
+hypusine biosynthesis,,"<a href=""https://biocyc.org/META/new-image?type=PATHWAY&object=PWY-5905"" target='_blank'>BioCyc Link</a>",,
+indole alkaloid biosynthesis,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00901"" target=_new>KEGG</a>",,,
+indole-3-acetate biosynthesis v (bacteria and fungi),,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-5026"" target='_blank'>BioCyc Link</a>",,
+inosine-5'-phosphate biosynthesis,,"<a href=""https://biocyc.org/META/new-image?type=PATHWAY&object=PWY-6123&detail-level=2&ENZORG=NONE"" target='_blank'>BioCyc Link</a>",,
+inosine-5'-phosphate biosynthesis ii,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-6124"" target='_blank'>BioCyc Link</a>",,
+inositol phosphate biosynthesis,,,,"<a href=""https://pathway.yeastgenome.org/YEAST/NEW-IMAGE?type=PATHWAY&object=PWY3O-402"" target='_blank'>Other Link</a>"
+inositol phosphate metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00562"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+inositol pyrophosphates biosynthesis,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-6369"" target='_blank'>BioCyc Link</a>",,
+insect hormone biosynthesis,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00981"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+isoleucine biosynthesis,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00290"" target=_new>KEGG</a>",,,"<a href=""https://pathway.yeastgenome.org/YEAST/NEW-IMAGE?type=PATHWAY&object=ILEUSYN-PWY"" target='_blank'>Other Link</a>"
+isoleucine biosynthesis from threonine,,"<a href=""https://biocyc.org/META/new-image?object=ILEUSYN-PWY"" target='_blank'>BioCyc Link</a>",,
+isoleucine degradation,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00280"" target=_new>KEGG</a>",,,"<a href=""https://pathway.yeastgenome.org/YEAST/NEW-IMAGE?object=PWY3O-4109"" target='_blank'>Other Link</a>"
+isoleucine degradation i,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00280"" target=_new>KEGG</a>","<a href=""https://biocyc.org/META/new-image?object=ILEUDEG-PWY"" target='_blank'>BioCyc Link</a>",,
+isoleucine degradation ii,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00280"" target=_new>KEGG</a>",,,"<a href=""https://pathway.yeastgenome.org/YEAST/NEW-IMAGE?object=PWY3O-4109"" target='_blank'>Other Link</a>"
+isoquinoline alkaloid biosynthesis,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00950"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+itaconate degradation,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-5749"" target='_blank'>BioCyc Link</a>",,
+jak-stat signaling pathway,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?04630"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+keratan sulfate biosynthesis,,,,"<a href=""http://metafishnet.appspot.com/pathway/156"" target='_blank'>Other Link</a>"
+keratan sulfate degradation,,,,"<a href=""http://metafishnet.appspot.com/pathway/157"" target='_blank'>Other Link</a>"
+ketogenesis,,,,"<a href=""https://metacyc.org/META/new-image?type=PATHWAY&object=PWY66-367"" target='_blank'>Other Link</a>"
+ketolysis,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY66-368"" target='_blank'>BioCyc Link</a>",,
+l-carnitine biosynthesis,,"<a href=""https://biocyc.org/META/new-image?type=PATHWAY&object=PWY-6100&detail-level=2&ENZORG=NONE"" target='_blank'>BioCyc Link</a>",,
+l-cysteine degradation i,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=CYSTEINE-DEG-PWY"" target='_blank'>BioCyc Link</a>",,
+l-cysteine degradation ii,,"<a href=""https://biocyc.org/META/new-image?type=PATHWAY&object=LCYSDEG-PWY"" target='_blank'>BioCyc Link</a>",,
+l-cysteine degradation iii,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-5329"" target='_blank'>BioCyc Link</a>",,
+l-dopa degradation,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-6334"" target='_blank'>BioCyc Link</a>",,
+l-dopachrome biosynthesis,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-6481"" target='_blank'>BioCyc Link</a>",,
+l-glutamine biosynthesis ii (trna-dependent),,"<a href=""https://biocyc.org/MGEN243273/NEW-IMAGE?type=PATHWAY&object=PWY-5921"" target='_blank'>BioCyc Link</a>",,
+l-serine degradation,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=SERDEG-PWY"" target='_blank'>BioCyc Link</a>",,
+lactose degradation iii,,"<a href=""https://biocyc.org/HUMAN/NEW-IMAGE?type=PATHWAY&object=BGALACT-PWY"" target='_blank'>BioCyc Link</a>",,
+lanosterol biosynthesis,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-6132"" target='_blank'>BioCyc Link</a>",,
+leucine biosynthesis,,,,"<a href=""https://pathway.yeastgenome.org/YEAST/NEW-IMAGE?type=PATHWAY&object=LEUSYN-PWY"" target='_blank'>Other Link</a>"
+leucine degradation,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=LEU-DEG2-PWY"" target='_blank'>BioCyc Link</a>",,
+leucine degradation i,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=LEU-DEG2-PWY"" target='_blank'>BioCyc Link</a>",,
+leucine degradation iii,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-5076&orgids=AAEO224324"" target='_blank'>BioCyc Link</a>",,
+leukotriene biosynthesis,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY66-375"" target='_blank'>BioCyc Link</a>",,
+leukotriene metabolism,,,,"<a href=""http://metafishnet.appspot.com/pathway/158"" target='_blank'>Other Link</a>"
+limonene and pinene degradation,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00903"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+linoleate metabolism,,,,"<a href=""http://metafishnet.appspot.com/pathway/160"" target='_blank'>Other Link</a>"
+linoleic acid metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00591"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+lipoate biosynthesis and incorporation i,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY0-501"" target='_blank'>BioCyc Link</a>",,
+lipoate biosynthesis and incorporation ii,,"<a href=""https://biocyc.org/META/new-image?object=PWY0-1275"" target='_blank'>BioCyc Link</a>",,
+lipoate metabolism,,,,"<a href=""http://metafishnet.appspot.com/pathway/161"" target='_blank'>Other Link</a>"
+lipoate salvage and modification,,,,"<a href=""http://mousecyc.jax.org/MOUSE/NEW-IMAGE?type=PATHWAY&object=PWY0-522"" target='_blank'>Other Link</a>"
+lipoate salvage i,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY0-522"" target='_blank'>BioCyc Link</a>",,
+lipoic acid metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00785"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+lipopolysaccharide biosynthesis,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00540"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+lysine biosynthesis,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00300"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+lysine degradation,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00310"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>","<a href=""http://www.smpdb.ca/view/SMP00036"""" target=_new>SMP</a>",
+lysine degradation ii,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY66-425"" target='_blank'>BioCyc Link</a>",,
+lysine metabolism,,,,"<a href=""http://metafishnet.appspot.com/pathway/162"" target='_blank'>Other Link</a>"
+lysosome,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?04142"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+malaria,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?05144"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+mannose degradation,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=MANNCAT-PWY"" target='_blank'>BioCyc Link</a>",,
+map kinase cascade,,"<a href=""https://biocyc.org/HUMAN/NEW-IMAGE?type=NIL&object=PWY66-14"" target='_blank'>BioCyc Link</a>",,
+melatonin degradation i,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-6398"" target='_blank'>BioCyc Link</a>",,
+melatonin degradation ii,,"<a href=""https://biocyc.org/HUMAN/new-image?type=PATHWAY&object=PWY-6399"" target='_blank'>BioCyc Link</a>",,
+melatonin degradation iii,,"<a href=""https://biocyc.org/HUMAN/NEW-IMAGE?type=PATHWAY&object=PWY-6400"" target='_blank'>BioCyc Link</a>",,
+melibiose degradation,,"<a href=""https://biocyc.org/ECOLI/NEW-IMAGE?type=PATHWAY&object=PWY0-1301"" target='_blank'>BioCyc Link</a>",,
+metabolism of xenobiotics by cytochrome p450,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00980"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+methane metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00680"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+methionine and cysteine metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00270"" target=_new>KEGG</a>",,,"<a href=""http://metafishnet.appspot.com/pathway/163"" target='_blank'>Other Link</a>"
+methionine biosynthesis,,,,"<a href=""https://pathway.yeastgenome.org/YEAST/NEW-IMAGE?type=PATHWAY&object=PWY3O-238"" target='_blank'>Other Link</a>"
+methionine degradation i (to homocysteine),,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=MANNCAT-PWY"" target='_blank'>BioCyc Link</a>",,
+methionine salvage ii (mammalia),,,,"<a href=""http://mousecyc.jax.org/META/NEW-IMAGE?type=PATHWAY&object=ADENOSYLHOMOCYSCAT-PWY"" target='_blank'>Other Link</a>"
+methionine salvage pathway,,,,"<a href=""https://pathway.yeastgenome.org/YEAST/NEW-IMAGE?type=PATHWAY&object=PWY3O-64"" target='_blank'>Other Link</a>"
+methyl parathion degradation,,"<a href=""https://biocyc.org/META/new-image?type=PATHWAY&object=PWY-5489"" target='_blank'>BioCyc Link</a>",,
+methyl-coenzyme m reduction to methane,,,,"<a href=""http://mousecyc.jax.org/META/NEW-IMAGE?type=PATHWAY&object=METHFORM-PWY&detail-level=1&orgids=(HUMAN%20MOUSE)"" target='_blank'>Other Link</a>"
+methylglyoxal catabolism,,,,"<a href=""https://pathway.yeastgenome.org/YEAST/NEW-IMAGE?type=PATHWAY&object=PWY-901"" target='_blank'>Other Link</a>"
+methylglyoxal degradation i,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-5386"" target='_blank'>BioCyc Link</a>",,
+methylglyoxal degradation iii,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-5453"" target='_blank'>BioCyc Link</a>",,
+methylglyoxal degradation vi,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=MGLDLCTANA-PWY"" target='_blank'>BioCyc Link</a>",,
+methylmalonyl pathway,,,,
+methylthiopropionate biosynthesis,,"<a href=""https://biocyc.org/META/new-image?object=PWY-5389"" target='_blank'>BioCyc Link</a>",,
+mevalonate degradation,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-5074"" target='_blank'>BioCyc Link</a>",,
+mevalonate pathway,,,,"<a href=""https://biocyc.org/META/new-image?object=PWY-922"" target='_blank'>Other Link</a>"
+mevalonate pathway i,,"<a href=""https://biocyc.org/META/new-image?object=PWY-922"" target='_blank'>BioCyc Link</a>",,
+mineralocorticoid biosynthesis,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY66-382"" target='_blank'>BioCyc Link</a>",,
+mismatch repair,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?03430"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+mitochondrial l-carnitine shuttle pathway,,,,"<a href=""https://metacyc.org/META/new-image?type=PATHWAY&object=PWY-6111"" target='_blank'>Other Link</a>"
+molybdenum cofactor biosynthesis,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-6823&show-citations=NIL"" target='_blank'>BioCyc Link</a>",,
+mono-unsaturated fatty acid beta-oxidation,,,,"<a href=""http://metafishnet.appspot.com/pathway/164"" target='_blank'>Other Link</a>"
+monoterpenoid biosynthesis,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00902"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+morphine biosynthesis,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-5270"" target='_blank'>BioCyc Link</a>",,
+mrna surveillance pathway,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?03015"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+mtor signaling pathway,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?04150"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+mucin type o-glycan biosynthesis,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00512"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+n-acetylglucosamine degradation,,"<a href=""https://biocyc.org/HUMAN/NEW-IMAGE?type=PATHWAY&object=GLUAMCAT-PWY"" target='_blank'>BioCyc Link</a>",,
+n-glycan biosynthesis,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00510"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+n-glycan degradation,,,,"<a href=""http://metafishnet.appspot.com/pathway/165"" target='_blank'>Other Link</a>"
+nad biosynthesis from 2-amino-3-carboxymuconate semialdehyde,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-5653"" target='_blank'>BioCyc Link</a>",,
+nad biosynthesis iii,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=NAD-BIOSYNTHESIS-III"" target='_blank'>BioCyc Link</a>",,
+nad phosphorylation and dephosphorylation,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=NADPHOS-DEPHOS-PWY"" target='_blank'>BioCyc Link</a>",,
+nad salvage pathway,,,,"<a href=""https://www.wikipathways.org/index.php/Pathway:WP171"" target='_blank'>Other Link</a>"
+nad salvage pathway iii,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=NAD-BIOSYNTHESIS-II"" target='_blank'>BioCyc Link</a>",,
+nadh repair,,"<a href=""https://biocyc.org/HUMAN/NEW-IMAGE?type=PATHWAY&object=PWY-6938"" target='_blank'>BioCyc Link</a>",,
+naphthalene and anthracene degradation,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00626"" target=_new>KEGG</a>","<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-5427"" target='_blank'>BioCyc Link</a>",,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-7620"" target='_blank'>Other Link</a>"
+naphthalene degradation,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00626"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+neuroactive ligand-receptor interaction,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?04080"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+nicotinamide riboside salvage pathway i,,,,"<a href=""https://pathway.yeastgenome.org/YEAST/NEW-IMAGE?type=PATHWAY&object=PWY3O-4106"" target='_blank'>Other Link</a>"
+nicotinamide riboside salvage pathway ii,,"<a href=""https://biocyc.org/DGEO319795/NEW-IMAGE?type=PATHWAY&object=NAD-BIOSYNTHESIS-II"" target='_blank'>BioCyc Link</a>",,
+nicotinate and nicotinamide metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00760"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>","<a href=""http://www.smpdb.ca/view/SMP00037"""" target=_new>SMP</a>",
+nicotinate riboside salvage pathway i,,,,"<a href=""https://pathway.yeastgenome.org/YEAST/NEW-IMAGE?type=PATHWAY&object=PWY3O-224"" target='_blank'>Other Link</a>"
+nicotinate riboside salvage pathway ii,,,,"<a href=""https://pathway.yeastgenome.org/YEAST/new-image?type=PATHWAY&object=PWY3O-236&detail-level=2"" target='_blank'>Other Link</a>"
+nicotine degradation iii,,,,"<a href=""https://humancyc.org/HUMAN/NEW-IMAGE?type=PATHWAY&object=PWY66-221"" target='_blank'>Other Link</a>"
+nicotine degradation iv,,,,"<a href=""https://humancyc.org/HUMAN/NEW-IMAGE?type=PATHWAY&object=PWY66-201"" target='_blank'>Other Link</a>"
+nitrogen metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00910"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+nitrotoluene degradation,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00633"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+non-homologous end-joining,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?03450"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+noradrenaline and adrenaline degradation,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-6342&detail-level=2"" target='_blank'>BioCyc Link</a>",,
+notch signaling pathway,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?04330"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+novobiocin biosynthesis,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00401"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+nucleotide excision repair,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?03420"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+nucleotide sugar metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00520"" target=_new>KEGG</a>",,,"<a href=""http://metafishnet.appspot.com/pathway/168"" target='_blank'>Other Link</a>"
+o-glycan biosynthesis,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00514"" target=_new>KEGG</a>",,,
+oleate &beta;-oxidation,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY0-1337"" target='_blank'>BioCyc Link</a>",,
+oleate biosynthesis,,"<a href=""https://biocyc.org/HUMAN/NEW-IMAGE?type=PATHWAY&object=PWY-5996"" target='_blank'>BioCyc Link</a>",,
+oleate biosynthesis ii (animals),,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-5996"" target='_blank'>BioCyc Link</a>",,
+omega-3 fatty acid metabolism,,,,"<a href=""http://metafishnet.appspot.com/pathway/170"" target='_blank'>Other Link</a>"
+omega-6 fatty acid metabolism,,,,"<a href=""http://metafishnet.appspot.com/pathway/171"" target='_blank'>Other Link</a>"
+one carbon pool by folate,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00670"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>","<a href=""http://www.smpdb.ca/view/SMP00039"""" target=_new>SMP</a>",
+other glycan degradation,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00511"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+other types of o-glycan biosynthesis,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00514"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+oxidative ethanol degradation i,,,,
+oxidative ethanol degradation iii,,,,
+oxidative phosphorylation,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00190"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+oxidized gtp and dgtp detoxification,,,,"<a href=""https://metacyc.org/META/new-image?type=PATHWAY&object=PWY-6502&detail-level=2&ENZORG=ALL"" target='_blank'>Other Link</a>"
+p-aminobenzoate biosynthesis,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00627"" target=_new>KEGG</a>","<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-6543"" target='_blank'>BioCyc Link</a>",,
+palmitate biosynthesis,,,,"<a href=""https://metacyc.org/META/NEW-IMAGE?object=Palmitate-Biosynthesis"" target='_blank'>Other Link</a>"
+palmitate biosynthesis i (animals),,"<a href=""https://biocyc.org/META/new-image?object=PWY-5994"" target='_blank'>BioCyc Link</a>",,
+palmitoleate biosynthesis,,"<a href=""https://biocyc.org/ECOLI/NEW-IMAGE?type=PATHWAY&object=PWY-6282"" target='_blank'>BioCyc Link</a>",,
+pantothenate and coa biosynthesis,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00770"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>","<a href=""http://www.smpdb.ca/view/SMP00040"""" target=_new>SMP</a>",
+paraoxon degradation,,,,
+parathio degradation,,,,"<a href=""http://metafishnet.appspot.com/pathway/172"" target='_blank'>Other Link</a>"
+penicillin and cephalosporin biosynthesis,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00311"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+pentose and glucuronate interconversions,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00040"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+pentose phosphate pathway,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00030"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>","<a href=""http://www.smpdb.ca/view/SMP00043"""" target=_new>SMP</a>",
+pentose phosphate pathway (non-oxidative branch),,,,"<a href=""https://pathway.yeastgenome.org/YEAST/NEW-IMAGE?object=PENTOSE-P-PWY"" target='_blank'>Other Link</a>"
+pentose phosphate pathway (oxidative branch),,,,"<a href=""https://pathway.yeastgenome.org/YEAST/NEW-IMAGE?object=PENTOSE-P-PWY"" target='_blank'>Other Link</a>"
+pentose phosphate pathway (partial),,,,"<a href=""https://pathway.yeastgenome.org/YEAST/NEW-IMAGE?object=PENTOSE-P-PWY"" target='_blank'>Other Link</a>"
+peptidoglycan biosynthesis,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00550"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+periplasmic nad degradation,,,,"<a href=""https://pathway.yeastgenome.org/YEAST/new-image?object=PERIPLASMA-NAD-DEGRADATION"" target='_blank'>Other Link</a>"
+peroxisome,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?04146"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+phagosome,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?04145"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+phenylalanine biosynthesis,,,,"<a href=""https://pathway.yeastgenome.org/YEAST/NEW-IMAGE?type=PATHWAY&object=PWY3O-4153"" target='_blank'>Other Link</a>"
+phenylalanine degradation,,,,"<a href=""https://www.wikipathways.org/index.php/Pathway:WP573"" target='_blank'>Other Link</a>"
+phenylalanine degradation i,,"<a href=""https://biocyc.org/META/NEW-IMAGE?object=PHENYLALANINE-DEG"" target='_blank'>BioCyc Link</a>",,
+phenylalanine degradation i (aerobic),,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PHENYLALANINE-DEG1-PWY"" target='_blank'>BioCyc Link</a>",,
+"phenylalanine degradation iv (mammalian, via side chain)",,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-6318&detail-level=2"" target='_blank'>BioCyc Link</a>",,
+phenylalanine metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00360"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+"phenylalanine, tyrosine and tryptophan biosynthesis","<a href=""http://www.genome.jp/kegg-bin/show_pathway?00400"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+phenylethanol biosynthesis,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-5751"" target='_blank'>BioCyc Link</a>",,
+phenylethylamine degradation i,,,,"<a href=""https://metacyc.org/META/NEW-IMAGE?type=PATHWAY&object=2PHENDEG-PWY"" target='_blank'>Other Link</a>"
+phenylpropanoid biosynthesis,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00940"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+phosphatidate biosynthesis i (the dihydroxyacetone pathway),,,,"<a href=""https://metacyc.org/META/new-image?type=PATHWAY&object=PWY-7411"" target='_blank'>Other Link</a>"
+phosphatidate biosynthesis ii (the glycerol-3-phosphate pathway),,,,"<a href=""https://pathway.yeastgenome.org/YEAST/new-image?type=PATHWAY&object=PWY3O-6499&detail-level=2"" target='_blank'>Other Link</a>"
+phosphatidyl-ethanolamine biosynthesis,,,,
+phosphatidylcholine biosynthesis,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY3O-450"" target='_blank'>BioCyc Link</a>",,
+phosphatidylcholine biosynthesis i,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY3O-450"" target='_blank'>BioCyc Link</a>",,
+phosphatidylcholine biosynthesis v,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-6825"" target='_blank'>BioCyc Link</a>",,
+phosphatidylethanolamine biosynthesis i,,,,"<a href=""https://metacyc.org/META/NEW-IMAGE?type=NIL&object=PWY-5669"" target='_blank'>Other Link</a>"
+phosphatidylethanolamine biosynthesis ii,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY4FS-6"" target='_blank'>BioCyc Link</a>",,
+phosphatidylethanolamine biosynthesis iii,,"<a href=""https://biocyc.org/META/new-image?object=PWY4FS-3"" target='_blank'>BioCyc Link</a>",,
+phosphatidylinositol phosphate biosynthesis,,"<a href=""https://biocyc.org/YEAST/NEW-IMAGE?type=PATHWAY&object=PWY3O-242"" target='_blank'>BioCyc Link</a>",,
+phosphatidylinositol phosphate metabolism,,,,"<a href=""http://metafishnet.appspot.com/pathway/175"" target='_blank'>Other Link</a>"
+phosphatidylinositol signaling system,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?04070"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+phospholipases,,"<a href=""https://biocyc.org/HUMAN/NEW-IMAGE?type=PATHWAY&object=LIPASYN-PWY"" target='_blank'>BioCyc Link</a>",,
+phospholipid biosynthesis (kennedy pathway),,,,"<a href=""https://pathway.yeastgenome.org/YEAST/NEW-IMAGE?type=PATHWAY&object=PWY3O-450"" target='_blank'>Other Link</a>"
+phospholipid biosynthesis ii (kennedy pathway),,,,"<a href=""https://pathway.yeastgenome.org/YEAST/NEW-IMAGE?type=PATHWAY&object=PWY3O-450"" target='_blank'>Other Link</a>"
+phospholipids degradation,,,,"<a href=""https://pathway.yeastgenome.org/YEAST/NEW-IMAGE?type=PATHWAY&object=LIPASYN-PWY-1"" target='_blank'>Other Link</a>"
+phosphonate and phosphinate metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00440"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+phosphopantothenate biosynthesis i,,"<a href=""https://biocyc.org/HUMAN/NEW-IMAGE?type=PATHWAY&object=LIPASYN-PWY"" target='_blank'>BioCyc Link</a>",,
+photosynthesis,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00195"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+photosynthesis - antenna proteins,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00196"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+phytanic acid peroxisomal oxidation,,,,"<a href=""http://metafishnet.appspot.com/pathway/176"" target='_blank'>Other Link</a>"
+polycyclic aromatic hydrocarbon degradation,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00624"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+polyketide sugar unit biosynthesis,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00523"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+polyunsaturated fatty acid biosynthesis,,,,"<a href=""http://metafishnet.appspot.com/pathway/177"" target='_blank'>Other Link</a>"
+porphyrin and chlorophyll metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00860"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+porphyrin metabolism,,,"<a href=""http://www.smpdb.ca/view/SMP00044"""" target=_new>SMP</a>","<a href=""http://metafishnet.appspot.com/pathway/178"" target='_blank'>Other Link</a>"
+pregnenolone biosynthesis,,,,
+primary bile acid biosynthesis,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00120"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+proline biosynthesis,,,,"<a href=""https://pathway.yeastgenome.org/YEAST/NEW-IMAGE?object=PROSYN-PWY"" target='_blank'>Other Link</a>"
+proline biosynthesis i,,"<a href=""https://biocyc.org/META/new-image?object=PROSYN-PWY"" target='_blank'>BioCyc Link</a>",,
+proline biosynthesis ii,,,,
+proline biosynthesis ii (from arginine),,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-4981"" target='_blank'>BioCyc Link</a>",,
+proline biosynthesis iii,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-3341"" target='_blank'>BioCyc Link</a>",,
+proline degradation,,,,"<a href=""https://pathway.yeastgenome.org/YEAST/NEW-IMAGE?object=PROLINE-DEG"" target='_blank'>Other Link</a>"
+proline degradation i,,,,"<a href=""https://metacyc.org/META/new-image?type=PATHWAY&object=PROUT-PWY"" target='_blank'>Other Link</a>"
+proline degradation ii,,,,"<a href=""https://metacyc.org/META/new-image?type=PATHWAY&object=PROUT-PWY"" target='_blank'>Other Link</a>"
+propanoate metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00640"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>","<a href=""http://www.smpdb.ca/view/SMP00046"""" target=_new>SMP</a>",
+prostaglandin formation from arachidonate,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?07035"" target=_new>KEGG</a>",,,"<a href=""http://metafishnet.appspot.com/pathway/180"" target='_blank'>Other Link</a>"
+prostaglandin formation from dihomo gama-linoleic acid,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?07035"" target=_new>KEGG</a>",,,"<a href=""http://metafishnet.appspot.com/pathway/181"" target='_blank'>Other Link</a>"
+prostanoid biosynthesis,,,,
+proteasome,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?03050"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+protein citrullination,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-4921"" target='_blank'>BioCyc Link</a>",,
+protein export,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?03060"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+protein processing in endoplasmic reticulum,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?04141"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+proteoglycan biosynthesis,,,,"<a href=""http://metafishnet.appspot.com/pathway/182"" target='_blank'>Other Link</a>"
+prpp biosynthesis,,"<a href=""https://biocyc.org/META/new-image?object=PWY0-662"" target='_blank'>BioCyc Link</a>",,
+prpp biosynthesis i,,"<a href=""https://biocyc.org/META/new-image?object=PWY0-662"" target='_blank'>BioCyc Link</a>",,
+purine deoxyribonucleosides degradation,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY0-1297"" target='_blank'>BioCyc Link</a>",,
+purine metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00230"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>","<a href=""http://www.smpdb.ca/view/SMP00048"""" target=_new>SMP</a>",
+purine ribonucleosides degradation to ribose-1-phosphate,,"<a href=""https://biocyc.org/HUMAN/new-image?type=PATHWAY&object=PWY0-1296"" target='_blank'>BioCyc Link</a>",,
+putative anti-inflammatory metabolites formation from epa,,,,"<a href=""http://metafishnet.appspot.com/pathway/184"" target='_blank'>Other Link</a>"
+putrescine biosynthesis,,"<a href=""https://biocyc.org/META/NEW-IMAGE?object=Putrescine-Biosynthesis"" target='_blank'>BioCyc Link</a>",,
+putrescine biosynthesis iii,,"<a href=""https://biocyc.org/META/new-image?object=PWY-46"" target='_blank'>BioCyc Link</a>",,
+putrescine degradation iii,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-0"" target='_blank'>BioCyc Link</a>",,
+pyridoxal 5'-phosphate salvage pathway,,,,"<a href=""https://pathway.yeastgenome.org/YEAST/NEW-IMAGE?object=PLPSAL-PWY"" target='_blank'>Other Link</a>"
+pyrimidine deoxyribonucleotides <i>de novo</i> biosynthesis,,"<a href=""https://biocyc.org/HUMAN/NEW-IMAGE?type=PATHWAY&object=PWY-7184"" target='_blank'>BioCyc Link</a>",,
+pyrimidine deoxyribonucleotides <i>de novo</i> biosynthesis i,,"<a href=""https://biocyc.org/META/new-image?object=PWY-7184"" target='_blank'>BioCyc Link</a>",,
+pyrimidine metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00240"" target=_new>KEGG</a>",,"<a href=""http://www.smpdb.ca/view/SMP00050"""" target=_new>SMP</a>",
+pyrimidine ribonucleosides degradation ii,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-7209"" target='_blank'>BioCyc Link</a>",,
+pyrimidine ribonucleotides interconversion,,"<a href=""https://biocyc.org/ARA/NEW-IMAGE?type=PATHWAY&object=PWY-5687"" target='_blank'>BioCyc Link</a>",,
+pyruvate decarboxylation to acetyl coa,,,,"<a href=""https://metacyc.org/META/new-image?type=PATHWAY&object=PYRUVDEHYD-PWY"" target='_blank'>Other Link</a>"
+pyruvate dehydrogenase complex,,,,
+pyruvate fermentation to ethanol ii,,,,"<a href=""https://metacyc.org/META/new-image?type=PATHWAY&object=PWY-5486"" target='_blank'>Other Link</a>"
+pyruvate fermentation to lactate,,,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-5481"" target='_blank'>Other Link</a>"
+pyruvate metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00620"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>","<a href=""http://www.smpdb.ca/view/SMP00051"""" target=_new>SMP</a>",
+r group synthesis,,,,"<a href=""http://metafishnet.appspot.com/pathway/187"" target='_blank'>Other Link</a>"
+rapoport-luebering glycolytic shunt,,,,"<a href=""https://metacyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-6405"" target='_blank'>Other Link</a>"
+regulation of autophagy,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?04140"" target=_new>KEGG</a>",,,
+removal of superoxide radicals,,,,"<a href=""https://pathway.yeastgenome.org/YEAST/new-image?type=PATHWAY&object=DETOX1-PWY"" target='_blank'>Other Link</a>"
+retinoate biosynthesis i,,,,"<a href=""https://metacyc.org/META/new-image?type=PATHWAY&object=PWY-6872"" target='_blank'>Other Link</a>"
+retinoate biosynthesis ii,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-6875"" target='_blank'>BioCyc Link</a>",,
+retinol biosynthesis,,,,"<a href=""https://metacyc.org/META/new-image?type=PATHWAY&object=PWY-6857"" target='_blank'>Other Link</a>"
+retinol metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00830"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>","<a href=""http://www.smpdb.ca/view/SMP00053"""" target=_new>SMP</a>",
+riboflavin metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00740"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>","<a href=""http://www.smpdb.ca/view/SMP00054"""" target=_new>SMP</a>",
+ribosome,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?03010"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+ribosome biogenesis in eukaryotes,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?03008"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+rna degradation,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?03018"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+rna polymerase,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?03020"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+rna transport,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?03013"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+ros detoxification,,,,"<a href=""http://metafishnet.appspot.com/pathway/188"" target='_blank'>Other Link</a>"
+s-adenosyl-l-methionine biosynthesis,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=SAM-PWY"" target='_blank'>BioCyc Link</a>",,
+s-adenosylmethionine biosynthesis,,,,"<a href=""https://pathway.yeastgenome.org/YEAST/NEW-IMAGE?type=PATHWAY&object=SAM-PWY"" target='_blank'>Other Link</a>"
+"salvage pathways of adenine, hypoxanthine and their nucleosides",,,,"<a href=""https://pathway.yeastgenome.org/YEAST/NEW-IMAGE?type=PATHWAY&object=PWY3O-2220"" target='_blank'>Other Link</a>"
+"salvage pathways of adenine, hypoxanthine, and their nucleosides",,,,"<a href=""https://pathway.yeastgenome.org/YEAST/NEW-IMAGE?type=PATHWAY&object=PWY3O-2220"" target='_blank'>Other Link</a>"
+"salvage pathways of guanine, xanthine and their nucleosides",,,,"<a href=""https://pathway.yeastgenome.org/YEAST/NEW-IMAGE?type=PATHWAY&object=PWY3O-743"" target='_blank'>Other Link</a>"
+"salvage pathways of guanine, xanthine, and their nucleosides",,,,"<a href=""https://pathway.yeastgenome.org/YEAST/NEW-IMAGE?type=PATHWAY&object=PWY3O-743"" target='_blank'>Other Link</a>"
+salvage pathways of pyrimidine deoxyribonucleotides,,"<a href=""https://biocyc.org/ECOLI/NEW-IMAGE?type=PATHWAY&object=PWY0-181"" target='_blank'>BioCyc Link</a>",,
+salvage pathways of pyrimidine ribonucleotides,,"<a href=""https://biocyc.org/ECOLI/NEW-IMAGE?type=PATHWAY&object=PWY0-163"" target='_blank'>BioCyc Link</a>",,
+saturated fatty acids beta-oxidation,,,,"<a href=""http://metafishnet.appspot.com/pathway/189"" target='_blank'>Other Link</a>"
+secondary bile acid biosynthesis,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00121"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+selenoamino acid metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00450"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>","<a href=""http://www.smpdb.ca/view/SMP00058"""" target=_new>SMP</a>",
+selenocompound metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00450"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+selenocysteine biosynthesis ii (archaea and eukaryotes),,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-6281"" target='_blank'>BioCyc Link</a>",,
+serine biosynthesis,,"<a href=""https://biocyc.org/META/new-image?object=SERSYN-PWY"" target='_blank'>BioCyc Link</a>",,
+serine biosynthesis from 3-phosphoglycerate,,,,"<a href=""https://pathway.yeastgenome.org/YEAST/new-image?type=PATHWAY&object=SERSYN-PWY&detail-level=2"" target='_blank'>Other Link</a>"
+serine biosynthesis from glyoxylate,,,,"<a href=""https://pathway.yeastgenome.org/YEAST/NEW-IMAGE?type=NIL&object=PWY3O-230&redirect=T"" target='_blank'>Other Link</a>"
+serine racemization,,,,"<a href=""http://mousecyc.jax.org:1555/META/NEW-IMAGE?type=PATHWAY&object=PWY-6196"" target='_blank'>Other Link</a>"
+serotonin and melatonin biosynthesis,,"<a href=""https://biocyc.org/META/new-image?type=PATHWAY&object=PWY-6030&detail-level=3&ENZORG=NONE"" target='_blank'>BioCyc Link</a>",,
+serotonin degradation,,"<a href=""https://biocyc.org/META/new-image?object=PWY-6313"" target='_blank'>BioCyc Link</a>",,
+sialic acid metabolism,,,,"<a href=""http://metafishnet.appspot.com/pathway/191"" target='_blank'>Other Link</a>"
+siroheme biosynthesis,,"<a href=""https://biocyc.org/META/new-image?type=PATHWAY&object=PWY-5194&detail-level=2&ENZORG=TAX-1404"" target='_blank'>BioCyc Link</a>",,
+snare interactions in vesicular transport,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?04130"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+sorbitol degradation,,"<a href=""https://biocyc.org/META/new-image?object=PWY-4101"" target='_blank'>BioCyc Link</a>",,
+sorbitol degradation i,,"<a href=""https://biocyc.org/META/new-image?object=PWY-4101"" target='_blank'>BioCyc Link</a>",,
+sorbitol utilization,,,,
+spermidine and methylthioadenosine biosynthesis,,,,"<a href=""https://pathway.yeastgenome.org/YEAST/NEW-IMAGE?type=PATHWAY&object=BSUBPOLYAMSYN-PWY"" target='_blank'>Other Link</a>"
+spermidine biosynthesis,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=BSUBPOLYAMSYN-PWY"" target='_blank'>BioCyc Link</a>",,
+spermidine biosynthesis i,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=BSUBPOLYAMSYN-PWY"" target='_blank'>BioCyc Link</a>",,
+spermine and methylthioadenosine biosynthesis,,,,
+spermine and spermidine degradation i,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-6117"" target='_blank'>BioCyc Link</a>",,
+spermine biosynthesis,,,,
+sphingolipid biosynthesis,,,,"<a href=""https://metacyc.org/META/new-image?type=PATHWAY&object=PWY-7277"" target='_blank'>Other Link</a>"
+sphingolipid metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00600"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>","<a href=""http://www.smpdb.ca/view/SMP00059"""" target=_new>SMP</a>",
+sphingolipid recycling and degradation (yeast),,"<a href=""https://biocyc.org/YEAST/NEW-IMAGE?type=PATHWAY&object=PWY-7119"" target='_blank'>BioCyc Link</a>",,
+sphingomyelin metabolism,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&"" target='_blank'>BioCyc Link</a>",,
+sphingosine and sphingosine-1-phosphate metabolism,,"<a href=""https://biocyc.org/HUMAN/NEW-IMAGE?type=PATHWAY&object=PWY3DJ-11470"" target='_blank'>BioCyc Link</a>",,
+spliceosome,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?03040"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+squalene and cholesterol biosynthesis,,,,"<a href=""http://metafishnet.appspot.com/pathway/193"" target='_blank'>Other Link</a>"
+starch and sucrose metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00500"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>","<a href=""http://www.smpdb.ca/view/SMP00060"""" target=_new>SMP</a>",
+stearate biosynthesis,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-5972"" target='_blank'>BioCyc Link</a>",,
+stearate biosynthesis i (animals),,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-5972"" target='_blank'>BioCyc Link</a>",,
+steroid biosynthesis,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00100"" target=_new>KEGG</a>",,"<a href=""http://www.smpdb.ca/view/SMP00063"""" target=_new>SMP</a>",
+steroid hormone biosynthesis,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00140"" target=_new>KEGG</a>",,,
+"stilbenoid, diarylheptanoid and gingerol biosynthesis","<a href=""http://www.genome.jp/kegg-bin/show_pathway?00945"" target=_new>KEGG</a>",,,
+streptomycin biosynthesis,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00521"" target=_new>KEGG</a>",,,
+styrene degradation,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00643"" target=_new>KEGG</a>",,,
+sucrose degradation,,,,"<a href=""https://metacyc.org/META/new-image?type=PATHWAY&object=SUCUTIL-PWY"" target='_blank'>Other Link</a>"
+sucrose degradation v (mammalian),,"<a href=""https://biocyc.org/HUMAN/new-image?type=PATHWAY&object=PWY66-373"" target='_blank'>BioCyc Link</a>",,
+sulfate activation for sulfonation,,,,"<a href=""https://metacyc.org/META/new-image?type=PATHWAY&object=PWY-5340"" target='_blank'>Other Link</a>"
+sulfite oxidation iv,,,,"<a href=""https://metacyc.org/META/NEW-IMAGE?object=Sulfite-Oxidation"" target='_blank'>Other Link</a>"
+sulfur metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00920"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+sulfur relay system,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?04122"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+superoxide radicals degradation,,"<a href=""https://biocyc.org/META/new-image?object=DETOX1-PWY"" target='_blank'>BioCyc Link</a>",,
+superpathway of gluconate degradation,,,,
+superpathway of of purine nucleotides de novo biosynthesis,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-841"" target='_blank'>BioCyc Link</a>",,
+synthesis and degradation of ketone bodies,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00072"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+taurine and hypotaurine metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00430"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>","<a href=""http://www.smpdb.ca/view/SMP00065"""" target=_new>SMP</a>",
+taurine biosynthesis,,"<a href=""https://biocyc.org/META/new-image?object=PWY-5331"" target='_blank'>BioCyc Link</a>",,
+tca cycle,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00020"" target=_new>KEGG</a>",,,"<a href=""http://metafishnet.appspot.com/pathway/195"" target='_blank'>Other Link</a>"
+tca cycle ii (eukaryotic),,,,"<a href=""https://www.wikipathways.org/index.php/Pathway:WP434"" target='_blank'>Other Link</a>"
+tca cycle variation iii (eukaryotic),,,,"<a href=""https://metacyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY66-398"" target='_blank'>Other Link</a>"
+"tca cycle, aerobic respiration",,,,
+terpenoid backbone biosynthesis,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00900"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+tetrahydrobioprein biosynthesis i,,,,"<a href=www.pathwaycommons.org/pc/record2.do?id=505712"" target='_blank'>Other Link</a>"
+tetrahydrobioprein biosynthesis ii,,,,"<a href=www.pathwaycommons.org/pc/record2.do?id=505713"" target='_blank'>Other Link</a>"
+tetrahydrobiopterin biosynthesis i,,,,"<a href=www.pathwaycommons.org/pc/record2.do?id=505712"" target='_blank'>Other Link</a>"
+tetrahydrobiopterin biosynthesis ii,,,,"<a href=www.pathwaycommons.org/pc/record2.do?id=505713"" target='_blank'>Other Link</a>"
+tetrahydrofolate biosynthesis,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-6614"" target='_blank'>BioCyc Link</a>",,
+"tetrahydrofolate salvage from 5,10-methenyltetrahydrofolate",,,,"<a href=""https://metacyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-6613"" target='_blank'>Other Link</a>"
+tetrapyrrole biosynthesis,,"<a href=""https://biocyc.org/HUMAN/new-image?type=PATHWAY&object=PWY-5189"" target='_blank'>BioCyc Link</a>",,"<a href=""https://www.wikipathways.org/index.php/Pathway:WP2950"" target='_blank'>Other Link</a>"
+tetrapyrrole biosynthesis ii,,,,"<a href=""http://mousecyc.jax.org/MOUSE/NEW-IMAGE?type=PATHWAY&object=PWY-5189"" target='_blank'>Other Link</a>"
+tgf-beta signaling pathway,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?04350"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+the visual cycle i (vertebrates),,,,"<a href=""https://humancyc.org/HUMAN/NEW-IMAGE?type=PATHWAY&object=PWY-6861"" target='_blank'>Other Link</a>"
+thiamin diphosphate biosynthesis iv (eukaryotes),,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-6908"" target='_blank'>BioCyc Link</a>",,
+thiamin salvage iii,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-6898"" target='_blank'>BioCyc Link</a>",,
+thiamine metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00730"" target=_new>KEGG</a>",,"<a href=""http://www.smpdb.ca/view/SMP00066"""" target=_new>SMP</a>",
+thiazole biosynthesis iii (eukaryotes),,"<a href=""https://biocyc.org/META/new-image?type=PATHWAY&object=PWY-6909"" target='_blank'>BioCyc Link</a>",,
+thio-molybdenum cofactor biosynthesis,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-5963"" target='_blank'>BioCyc Link</a>",,
+thioredoxin pathway,,"<a href=""https://biocyc.org/HUMAN/NEW-IMAGE?type=PATHWAY&object=THIOREDOX-PWY"" target='_blank'>BioCyc Link</a>",,
+thioredoxin system,,,,"<a href=""https://pathway.yeastgenome.org/YEAST/new-image?type=PATHWAY&object=THIOREDOX-PWY"" target='_blank'>Other Link</a>"
+thiosulfate disproportionation iii (rhodanese),,"<a href=""https://biocyc.org/HUMAN/NEW-IMAGE?type=PATHWAY&object=PWY-5350"" target='_blank'>BioCyc Link</a>",,
+threonine biosynthesis from homoserine,,,,"<a href=""https://ecocyc.org/ECOLI/NEW-IMAGE?type=PATHWAY&object=HOMOSER-THRESYN-PWY"" target='_blank'>Other Link</a>"
+threonine degradation,,"<a href=""https://biocyc.org/META/new-image?object=PWY-5437"" target='_blank'>BioCyc Link</a>",,
+threonine degradation ii,,"<a href=""https://biocyc.org/META/new-image?object=THREONINE-DEG2-PWY"" target='_blank'>BioCyc Link</a>",,
+threonine degradation iv,,"<a href=""https://biocyc.org/META/new-image?object=PWY-5436"" target='_blank'>BioCyc Link</a>",,
+thymine degradation,,"<a href=""https://biocyc.org/META/new-image?object=PWY-6430"" target='_blank'>BioCyc Link</a>",,
+thyroid hormone biosynthesis,,"<a href=""https://biocyc.org/META/new-image?object=PWY-6241"" target='_blank'>BioCyc Link</a>",,
+thyroid hormone metabolism i (via deiodination),,"<a href=""https://biocyc.org/META/new-image?object=PWY-6260"" target='_blank'>BioCyc Link</a>",,
+thyroid hormone metabolism ii (via conjugation and/or degradation),,"<a href=""https://biocyc.org/HUMAN/NEW-IMAGE?type=PATHWAY&object=PWY-6261"" target='_blank'>BioCyc Link</a>",,
+thyronamine and iodothyronamine metabolism,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-6688"" target='_blank'>BioCyc Link</a>",,
+toluene and xylene degradation,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00623"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+toluene degradation,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00623"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+"trans,trans-farnesyl diphosphate biosynthesis",,"<a href=""https://biocyc.org/META/new-image?object=PWY-5123"" target='_blank'>BioCyc Link</a>",,
+trehalose biosynthesis,,,,"<a href=""https://pathway.yeastgenome.org/YEAST/NEW-IMAGE?type=PATHWAY&object=TRESYN-PWY"" target='_blank'>Other Link</a>"
+trehalose biosynthesis i,,,,"<a href=""https://pathway.yeastgenome.org/YEAST/NEW-IMAGE?type=PATHWAY&object=TRESYN-PWY"" target='_blank'>Other Link</a>"
+trehalose degradation ii (trehalase),,"<a href=""https://biocyc.org/META/new-image?object=PWY0-1182"" target='_blank'>BioCyc Link</a>",,
+triacylglycerol biosynthesis,,"<a href=""https://biocyc.org/META/new-image?object=TRIGLSYN-PWY"" target='_blank'>BioCyc Link</a>",,
+triacylglycerol degradation,,,,"<a href=""https://metacyc.org/META/new-image?type=PATHWAY&object=LIPAS-PWY"" target='_blank'>Other Link</a>"
+triglyceride biosynthesis,,,,"<a href=""https://pathway.yeastgenome.org/YEAST/NEW-IMAGE?object=TRIGLSYN-PWY"" target='_blank'>Other Link</a>"
+trihydroxycoprostanoyl-coa beta-oxidation,,,,"<a href=""http://metafishnet.appspot.com/pathway/196"" target='_blank'>Other Link</a>"
+trinitrotoluene degradation,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-6051&detail-level=2"" target='_blank'>BioCyc Link</a>",,
+trna charging,,"<a href=""https://biocyc.org/META/new-image?object=TRNA-CHARGING-PWY"" target='_blank'>BioCyc Link</a>",,
+trna charging pathway,,"<a href=""https://biocyc.org/META/new-image?object=TRNA-CHARGING-PWY"" target='_blank'>BioCyc Link</a>",,
+trna splicing,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-6689"" target='_blank'>BioCyc Link</a>",,
+"tropane, piperidine and pyridine alkaloid biosynthesis","<a href=""http://www.genome.jp/kegg-bin/show_pathway?00960"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+tryptophan biosynthesis,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00400"" target=_new>KEGG</a>",,,"<a href=""https://metacyc.org/META/new-image?type=PATHWAY&object=TRPSYN-PWY"" target='_blank'>Other Link</a>"
+tryptophan degradation i (via anthranilate),,,,"<a href=""https://metacyc.org/META/NEW-IMAGE?type=PATHWAY&object=TRPCAT-PWY"" target='_blank'>Other Link</a>"
+tryptophan degradation to 2-amino-3-carboxymuconate semialdehyde,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-5651&detail-level=2"" target='_blank'>BioCyc Link</a>",,
+tryptophan degradation viii (to tryptophol),,,,"<a href=""https://metacyc.org/META/new-image?type=PATHWAY&object=PWY-5081"" target='_blank'>Other Link</a>"
+"tryptophan degradation x (mammalian, via tryptamine)",,"<a href=""https://biocyc.org/META/new-image?object=PWY-6307"" target='_blank'>BioCyc Link</a>",,
+tryptophan metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00380"" target=_new>KEGG</a>",,"<a href=""http://www.smpdb.ca/view/SMP00070"""" target=_new>SMP</a>",
+two-component system,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?02020"" target=_new>KEGG</a>",,,
+tyrosine biosynthesis,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00400"" target=_new>KEGG</a>","<a href=""https://biocyc.org/META/new-image?object=TYRSYN"" target='_blank'>BioCyc Link</a>",,
+tyrosine biosynthesis iv,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-6134"" target='_blank'>BioCyc Link</a>",,
+tyrosine degradation,,"<a href=""https://biocyc.org/META/new-image?object=TYRFUMCAT-PWY"" target='_blank'>BioCyc Link</a>",,
+tyrosine degradation i,,"<a href=""https://biocyc.org/META/new-image?object=TYRFUMCAT-PWY"" target='_blank'>BioCyc Link</a>",,
+tyrosine metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00350"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>","<a href=""http://www.smpdb.ca/view/SMP00072"""" target=_new>SMP</a>",
+ubiquinol-10 biosynthesis (eukaryotic),,,,"<a href=""https://metacyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-5872"" target='_blank'>Other Link</a>"
+ubiquinol-6 biosynthesis (eukaryotic),,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-7235"" target='_blank'>BioCyc Link</a>",,
+ubiquinone and other terpenoid-quinone biosynthesis,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00130"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+ubiquinone biosynthesis,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00130"" target=_new>KEGG</a>",,"<a href=""http://www.smpdb.ca/view/SMP00074"""" target=_new>SMP</a>","<a href=""http://metafishnet.appspot.com/pathway/199"" target='_blank'>Other Link</a>"
+ubiquitin mediated proteolysis,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?04120"" target=_new>KEGG</a>","<a href="" target='_blank'>BioCyc Link</a>",,
+udp-<i>n</i>-acetyl-d-galactosamine biosynthesis i,,"<a href=""https://biocyc.org/HUMAN/new-image?type=PATHWAY&object=PWY-5512"" target='_blank'>BioCyc Link</a>",,
+udp-<i>n</i>-acetyl-d-galactosamine biosynthesis ii,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-5514"" target='_blank'>BioCyc Link</a>",,
+udp-<i>n</i>-acetyl-d-glucosamine biosynthesis ii,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=UDPNACETYLGALSYN-PWY"" target='_blank'>BioCyc Link</a>",,
+udp-d-xylose and udp-d-glucuronate biosynthesis,,,,"<a href=""https://humancyc.org/HUMAN/NEW-IMAGE?type=PATHWAY&object=PWY-4821"" target='_blank'>Other Link</a>"
+udp-galactose biosynthesis (salvage pathway from galactose using udp-glucose),,,,"<a href=""http://mousecyc.jax.org/MOUSE/NEW-IMAGE?type=PATHWAY&object=GALACTMETAB-PWY"" target='_blank'>Other Link</a>"
+udp-n-acetylglucosamine biosynthesis,,"<a href=""https://biocyc.org/YEAST/NEW-IMAGE?type=PATHWAY&object=UDPNAGSYN-YEAST-PWY"" target='_blank'>BioCyc Link</a>",,
+uracil degradation ii (reductive),,,,"<a href=www.pathwaycommons.org/pc/record2.do?id=505658"" target='_blank'>Other Link</a>"
+urate biosynthesis,,,,
+urate biosynthesis/inosine 5'-phosphate degradation,,"<a href=""https://biocyc.org/SCO/NEW-IMAGE?type=PATHWAY&object=PWY-5695"" target='_blank'>BioCyc Link</a>",,
+urate degradation to allantoin,,"<a href=""https://biocyc.org/META/new-image?object=PWY-5691"" target='_blank'>BioCyc Link</a>",,
+urea cycle,,,"<a href=""http://www.smpdb.ca/view/SMP00075"""" target=_new>SMP</a>",
+urea cycle/amino group metabolism,,,,"<a href=""http://metafishnet.appspot.com/pathway/200"" target='_blank'>Other Link</a>"
+urea degradation,,,,
+uridine-5'-phosphate biosynthesis,,"<a href=""https://biocyc.org/MCOL/NEW-IMAGE?type=PATHWAY&object=PWY-5686"" target='_blank'>BioCyc Link</a>",,
+valine biosynthesis,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00290"" target=_new>KEGG</a>","<a href=""https://biocyc.org/login.html?redirect=https%3A%2F%2Fbiocyc.org%2FMETA%2Fnew-image%3Fobject%3DVALSYN-PWY"" target='_blank'>BioCyc Link</a>",,
+valine degradation,,"<a href=""https://biocyc.org/META/new-image?object=VALDEG-PWY"" target='_blank'>BioCyc Link</a>",,
+valine degradation i,,,,"<a href=""https://metacyc.org/META/NEW-IMAGE?type=PATHWAY&object=VALDEG-PWY"" target='_blank'>Other Link</a>"
+valine- leucine and isoleucine degradation,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00280"" target=_new>KEGG</a>",,,"<a href=""http://metafishnet.appspot.com/pathway/201"" target='_blank'>Other Link</a>"
+"valine, leucine and isoleucine biosynthesis","<a href=""http://www.genome.jp/kegg-bin/show_pathway?00290"" target=_new>KEGG</a>",,,
+"valine, leucine and isoleucine degradation","<a href=""http://www.genome.jp/kegg-bin/show_pathway?00280"" target=_new>KEGG</a>",,"<a href=""http://www.smpdb.ca/view/SMP00076"""" target=_new>SMP</a>",
+very long chain fatty acid biosynthesis,,"<a href=""https://biocyc.org/META/new-image?object=PWY-5080"" target='_blank'>BioCyc Link</a>",,
+vitamin a (retinol) metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00830"" target=_new>KEGG</a>",,,"<a href=""http://metafishnet.appspot.com/pathway/202"" target='_blank'>Other Link</a>"
+vitamin b1 (thiamin) metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00730"" target=_new>KEGG</a>",,,"<a href=""http://metafishnet.appspot.com/pathway/203"" target='_blank'>Other Link</a>"
+vitamin b12 (cyanocobalamin) metabolism,,,,"<a href=""http://metafishnet.appspot.com/pathway/204"" target='_blank'>Other Link</a>"
+vitamin b2 (riboflavin) metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00740"" target=_new>KEGG</a>",,,"<a href=""http://metafishnet.appspot.com/pathway/205"" target='_blank'>Other Link</a>"
+vitamin b3 (nicotinate and nicotinamide) metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00760"" target=_new>KEGG</a>",,,"<a href=""http://metafishnet.appspot.com/pathway/206"" target='_blank'>Other Link</a>"
+vitamin b5 - coa biosynthesis from pantothenate,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00770"" target=_new>KEGG</a>",,,"<a href=""http://metafishnet.appspot.com/pathway/207"" target='_blank'>Other Link</a>"
+vitamin b6 (pyridoxine) metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00750"" target=_new>KEGG</a>",,,"<a href=""http://metafishnet.appspot.com/pathway/208"" target='_blank'>Other Link</a>"
+vitamin b6 metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00750"" target=_new>KEGG</a>",,"<a href=""http://www.smpdb.ca/view/SMP00128"""" target=_new>SMP</a>",
+vitamin b9 (folate) metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00790"" target=_new>KEGG</a>",,,"<a href=""http://metafishnet.appspot.com/pathway/209"" target='_blank'>Other Link</a>"
+vitamin d,,,,"<a href=""http://metafishnet.appspot.com/pathway/210"" target='_blank'>Other Link</a>"
+vitamin d3 (cholecalciferol) metabolism,,,,"<a href=""http://metafishnet.appspot.com/pathway/211"" target='_blank'>Other Link</a>"
+vitamin e metabolism,,,,"<a href=""http://metafishnet.appspot.com/pathway/212"" target='_blank'>Other Link</a>"
+vitamin h (biotin) metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00780"" target=_new>KEGG</a>",,,"<a href=""http://metafishnet.appspot.com/pathway/213"" target='_blank'>Other Link</a>"
+vitamin k metabolism,,,,"<a href=""http://metafishnet.appspot.com/pathway/214"" target='_blank'>Other Link</a>"
+wax esters biosynthesis ii,,"<a href=""https://biocyc.org/META/NEW-IMAGE?type=PATHWAY&object=PWY-5885"" target='_blank'>BioCyc Link</a>",,
+wnt signaling pathway,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?04310"" target=_new>KEGG</a>",,,
+wound-induced proteolysis i,,,,"<a href=""http://mousecyc.jax.org:1555/META/NEW-IMAGE?type=PATHWAY&object=PWY-5988"" target='_blank'>Other Link</a>"
+xanthine and xanthosine salvage,,,,"<a href=""http://mousecyc.jax.org/META/NEW-IMAGE?type=PATHWAY&object=SALVPURINE2-PWY&orgids=(HUMAN%20MOUSE)"" target='_blank'>Other Link</a>"
+xenobiotics metabolism,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00980"" target=_new>KEGG</a>",,,"<a href=""http://metafishnet.appspot.com/pathway/215"" target='_blank'>Other Link</a>"
+xylitol degradation,,,,"<a href=""https://metacyc.org/META/NEW-IMAGE?type=NIL&object=LARABITOLUTIL-PWY&redirect=T"" target='_blank'>Other Link</a>"
+xylose degradation i,,,,"<a href=""https://metacyc.org/META/NEW-IMAGE?type=PATHWAY&object=XYLCAT-PWY"" target='_blank'>Other Link</a>"
+xylose metabolism,,"<a href=""https://biocyc.org/YEAST/NEW-IMAGE?type=PATHWAY&object=PWY3O-8"" target='_blank'>BioCyc Link</a>",,
+xylulose degradation,,,,"<a href=""https://pathway.yeastgenome.org/YEAST/NEW-IMAGE?type=PATHWAY&object=PWY3O-5"" target='_blank'>Other Link</a>"
+zeatin biosynthesis,"<a href=""http://www.genome.jp/kegg-bin/show_pathway?00908"" target=_new>KEGG</a>",,,
+zymosterol biosynthesis,,,,"<a href=""https://metacyc.org/META/new-image?type=PATHWAY&object=PWY-6074"" target='_blank'>Other Link</a>"
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,
+,,"<a href="" target='_blank'>BioCyc Link</a>",,

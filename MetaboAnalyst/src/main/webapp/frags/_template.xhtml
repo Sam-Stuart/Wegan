@@ -1,0 +1,231 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:head>
+        <f:facet name="first">
+            <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+            <title>WEGAN</title>
+        </f:facet>
+
+        <f:metadata> 
+            <ui:insert name="metaInfo"> 
+            </ui:insert>
+        </f:metadata> 
+        <ui:insert name="myscript"> 
+        </ui:insert>
+        
+        
+        <script type="text/javascript">
+            (function (i, s, o, g, r, a, m) {
+                i['GoogleAnalyticsObject'] = r;
+                i[r] = i[r] || function () {
+                    (i[r].q = i[r].q || []).push(arguments)
+                }, i[r].l = 1 * new Date();
+                a = s.createElement(o),
+                        m = s.getElementsByTagName(o)[0];
+                a.async = 1;
+                a.src = g;
+                m.parentNode.insertBefore(a, m)
+            })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+            ga('create', 'UA-9654671-1', 'auto');
+            ga('send', 'pageview');
+
+            function delayShow() {
+                setTimeout("PF('statusDialog').show()", 100);
+            }
+
+            function delayHide() {
+                setTimeout("PF('statusDialog').hide()", 100);
+            }
+
+            var startFrom = 1800;//#{session.maxInactiveInterval};  // Total session time out setting eg 10 sec, Real implementation assign from session
+            var loopTill = 20;//#{systemController.getSessionTimeoutAlertDuration()};  //Count down degins from 6 sec and starts after 4 sec ie 10-6
+            var reduce = 1;
+            var handleDialog = null;
+            var redirectPage = "#{facesContext.externalContext.requestContextPath}/faces/home.xhtml";
+            var countDownDiv = "dialog-countdown";
+
+            function resetPageTimer() {
+                PF('timeoutDialog').hide();
+                startPageTimer(startFrom, loopTill);
+                clearInterval(handleDialog);
+            }
+
+            function startDialogTimer(wCounter, timeOutPage) {
+                var e = null;
+                if (!e)
+                    e = document.getElementById(countDownDiv);
+                e.innerHTML = wCounter;
+                handleDialog = setInterval(function () {
+                    if (wCounter === 0) {
+                        clearInterval(handleDialog);
+                        window.location.href = timeOutPage;
+                    } else {
+                        wCounter -= reduce;
+                        e.innerHTML = wCounter;
+                    }
+                }, reduce * 1000);
+            }
+
+            function start() {
+                PF('statusDialog').show();
+            }
+
+            function stop() {
+                PF('statusDialog').hide();
+            }
+
+            function mystop() {
+                PF('statusDialog').hide();
+            }
+
+            function ext() {
+                this.cfg.axes.xaxis.tickOptions = {
+                    formatString: '%d'
+                };
+            }
+
+            function startPageTimer(wFrom, wReach) {
+                var handle = null;
+                handle = setInterval(function () {
+                    if (wFrom === wReach) {
+                        clearInterval(handle);
+                        PF('timeoutDialog').show();
+                        startDialogTimer(loopTill, redirectPage);
+                    } else {
+                        wFrom -= reduce;
+                    }
+                }, reduce * 1000);
+            }
+            startPageTimer(startFrom, loopTill);
+        </script>
+        
+        
+        <link type="text/css" rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/resources/css/default.css" />
+    </h:head>
+    <h:body>
+        <p:layout style="margin:0px; padding:0px; font-size: 13px " fullPage="true">
+            <p:layoutUnit style="margin:0px; padding:0px" collapsible="true" gutter="0" position="north">
+                <ui:insert name="header">
+                    <div id="header" style="clear: both; margin: 0; padding: 0;" class="ui-widget ui-widget-header ui-corner-all">
+                        <h:panelGrid columns="3" style="width:100%; padding: 0px 0px 0px 36px; margin: 0px">
+                            <img src="#{facesContext.externalContext.requestContextPath}/resources/images/Wegan_logo.png" height="118px" alt="Logo"/>
+                            <h:panelGrid  style="position: absolute; left:220px; top:42px; height: 60px; border-left: 3px solid #FFAE20;"/>
+                            <h:panelGrid  columns="2" style="padding-left:40px; padding-bottom: 8px">
+                                <h:outputLabel styleClass="headerH2" value="Wegan"/>
+                                <h:panelGrid styleClass="subhead">
+                                    - Web based interface for VEGAN R package of community ecology tools 
+                                </h:panelGrid>
+                                
+                            
+                        <h:form>
+                                                      
+                        <!-- ALL THESE STILL REFERENCE METABOANALYST LINKS  -->
+                        <!--
+                        <h:panelGrid columns = "10" style="padding: 0px 0px 0px 0px; line-height: 28px; font-size: 15px; height: 30px; text-align: left; float: botto; ">
+                            <p:commandLink ajax="false" action="Exit" style="padding: 4px 10px 10px 10px;">  
+                                <h:outputText value="Home" />  
+                            </p:commandLink>  
+                            <p:commandLink ajax="false" action="Overview" style="padding: 4px 10px 10px 10px;">  
+                                <h:outputText value="Overview" />  
+                            </p:commandLink>  
+                            <p:commandLink ajax="false" action="Format" style="padding: 4px 10px 10px 10px;">  
+                                <h:outputText value="Data Formats" />  
+                            </p:commandLink>  
+                            <p:commandLink ajax="false" action="Faqs" style="padding: 4px 10px 10px 10px;">  
+                                <h:outputText value="FAQs" />  
+                            </p:commandLink>  
+                            <p:commandLink ajax="false" action="Tutorials" style="padding: 4px 10px 10px 10px;">  
+                                <h:outputText value="Tutorials" />  
+                            </p:commandLink>  
+                            <p:commandLink ajax="false" action="Contact" style="padding:4px 10px 10px 10px;">  
+                                <h:outputText value="Troubleshooting" />  
+                            </p:commandLink>
+                            
+                            <p:commandLink ajax="false" action="Resources" style="padding: 4px 10px 10px 10px;">  
+                                <h:outputText value="Resources" />  
+                            </p:commandLink>
+                            <p:commandLink ajax="false" action="History" style="padding: 4px 10px 10px 10px;">  
+                                <h:outputText value="Update History" />  
+                            </p:commandLink>  
+                            <p:commandLink ajax="false" action="UserStats" style="padding: 4px 10px 10px 10px;">  
+                                <h:outputText value="User Stats" />  
+                            </p:commandLink> 
+                            <p:commandLink ajax="false" action="About" style="padding: 4px 10px 10px 10px;">  
+                                <h:outputText value="About" />  
+                            </p:commandLink>   
+                            
+                            
+                        </h:panelGrid>-->
+                    </h:form>
+                            </h:panelGrid>
+                            
+                        </h:panelGrid>
+                    </div>
+                </ui:insert>
+                <p:messages severity="error" showDetail="true" escape="false" closable="true"  style="width:800px; padding-left: 280px">
+                    <p:autoUpdate/>
+                </p:messages>
+                <p:growl id="growl" severity="info, warn" showDetail="true" globalOnly="true" escape="false" sticky="true">
+                    <p:autoUpdate/>
+                </p:growl> 
+            </p:layoutUnit>
+            
+            
+            <p:layoutUnit style="margin:0px; padding:0px"  collapsible="true" gutter="0" position="center">
+                <ui:insert name="centerpane"> 
+                </ui:insert>
+            </p:layoutUnit>
+            
+            
+            <p:layoutUnit style="margin:0px; padding:0px" gutter="0" position="south" collapsible="true">
+                <div id="footer" style="clear: both; margin: 0; padding: 0;" class="ui-widget ui-widget-header ui-corner-all">
+                    <ui:include src="/frags/_footer.xhtml" />
+                </div>
+            </p:layoutUnit>
+        </p:layout> 
+
+        <p:dialog modal="true" widgetVar="statusDialog" 
+                  style="width: 200px; height:120px; padding:20px;" 
+                  appendTo="@(body)" header="Processing .... "
+                  draggable="false" closable="true" resizable="false"> 
+            <h:outputLabel value="This may take a while to complete, please be patient...."/>
+            <h:panelGrid style="width: 100%; text-align: center;">
+                <p:graphicImage value="/resources/images/ajax-loader.gif" /> 
+            </h:panelGrid>
+        </p:dialog>
+
+        <p:dialog header="Your session is about to expire!"
+                  widgetVar="timeoutDialog" 
+                  showEffect="fade" 
+                  hideEffect="fade" 
+                  modal="true"
+                  width="420"
+                  height="160"
+                  closable="false"
+                  draggable="false"
+                  resizable="false"   
+                  appendTo="@(body)">              
+            <h:panelGrid  style="width:400px; line-height: 150%; padding: 10px; font-size: 13px">
+                <p>
+                    <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 50px 0;"></span>
+                    <div>You will be logged off in <span id="dialog-countdown" style="font-weight:bold"></span> seconds.</div>
+                </p>
+                <p>Do you want to continue your session?</p>   
+            </h:panelGrid>
+            <h:form>
+                <h:panelGrid columns="2" style="width: 100%; text-align: center">
+                    <p:commandButton style="width:180px; font-size: 14px" value="Yes, keep working" oncomplete="resetPageTimer()"/>
+                    <p:commandButton style="width:160px; font-size: 14px" value="No, log off" onclick="PF('timeoutDialog').hide()" action="#{sessionBean1.doLogout()}"/>   
+                </h:panelGrid>
+            </h:form>
+        </p:dialog> 
+    </h:body>
+</html>
+
+

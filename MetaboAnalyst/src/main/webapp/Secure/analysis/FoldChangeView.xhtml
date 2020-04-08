@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_anal_template.xhtml">
+    <ui:define name="metaInfo">
+        <f:event type="preRenderView" listener="#{analBean.performDefaultAnalysis('Fold change')}"/> 
+    </ui:define>
+    <ui:define name="content">
+        <h:panelGrid style="padding:20px; font-size: 13px; line-height: 23px; width:100%">
+            <h:form id="form1">
+                <p>
+                    The goal of fold change (FC) analysis is to compare the absolute value of change between two group means. 
+                    Since column-wise normalization (i.e. log transformation, mean-centering) will significantly change absolute values, 
+                    FC is calculated as the ratio between two group means using data before column-wise normalization was applied.
+                </p>
+                <p>
+                    For paired analysis, the program first counts the number of pairs with consistent change above the given
+                    FC threshold. If this number exceeds a given count threshold, the variable will be reported as significant.
+                </p>     
+                <h:panelGrid columns="2">
+                    <h:panelGrid columns="2" style="padding: 2px 20px 10px 20px; line-height: 25px">
+                        <h:outputLabel style="font-weight: bold" value="Analysis type:"/>
+                        <p:selectOneMenu disabled ="#{!sessionBean1.paired}" styleClass="menu" panelStyleClass="panel" value="#{univBean.pairedFcAnal}">
+                            <f:selectItems value="#{applicationBean1.pairAnalOpts}" />
+                        </p:selectOneMenu>
+                        <h:outputLabel style="font-weight: bold" value="Fold change threshold:"/>
+                        <p:inputText style="width:50px" value="#{univBean.fcThresh}"/>                                 
+                        <h:outputLabel style="font-weight: bold" value="Comparison type:"/>
+                        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{univBean.cmpType}">
+                            <f:selectItems value="#{univBean.cmpOpts}" />
+                        </p:selectOneMenu>
+                        <h:outputLabel style="font-weight: bold" value="Significant count threshold (paired only):"/>
+                        <h:panelGroup>
+                            <p:inputText style="width:50px" disabled ="#{!sessionBean1.paired}" value="#{univBean.countThresh}"/> 
+                            <p:outputLabel value=" %"/> 
+                        </h:panelGroup>
+                    </h:panelGrid>
+                    <p:commandButton value="Submit" update="form1:fcPane  :cmdPane" actionListener="#{univBean.fcButton_action()}"/>   
+                </h:panelGrid>
+                <h:panelGrid id="fcPane" style="text-align: center; width: 100%;">
+                    <h:panelGrid columns="2" style="text-align: right; padding-left: 700px; width: 760px;">
+                        <p:commandLink action="#{sessionBean1.detailsLnk_action('fc')}" title="View the detailed data table">
+                            <img src="#{facesContext.externalContext.requestContextPath}/resources/images/table.png"/>
+                        </p:commandLink>
+                        <p:commandLink actionListener="#{sessionBean1.graphicsLnk_action('fc')}" 
+                                       oncomplete="PF('graphDialog').show()"
+                                       title="Customize the graphics output">
+                            <img src="#{facesContext.externalContext.requestContextPath}/resources/images/imgcenter.png"/>
+                        </p:commandLink>
+                    </h:panelGrid>
+                    <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('fc')}" alt="FCimage"/>
+                </h:panelGrid>        
+            </h:form>
+        </h:panelGrid> 
+    </ui:define>
+</ui:composition>

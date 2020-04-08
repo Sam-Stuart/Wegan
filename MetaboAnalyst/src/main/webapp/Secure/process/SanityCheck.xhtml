@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_anal_template.xhtml">
+    <ui:define name="metaInfo">
+        <f:event type="preRenderView" listener="#{sessionBean1.registerPage('Data check')}"/> 
+        <f:event type="preRenderView" listener="#{procBean.performSanityCheck()}"/>
+        <f:event type="preRenderView"  listener="#{sessionBean1.addNaviTrack('Data Check', '/faces/Secure/process/SanityCheck.xhtml')}"/> 
+    </ui:define>
+    <ui:define name="content">
+        <h:form>
+            <h:panelGrid style="padding:20px 20px 20px 50px; font-size: 12px; line-height: 23px">
+                <h2>Data Integrity Check:</h2>
+                <ol>
+                    <li>
+                        Checking the class labels - at least three replicates are required in each class.
+                    </li>
+                    <li>
+                        If the samples are paired, the pair labels must conform to the specified format.
+                    </li>
+                    <li>
+                        The data (except class labels) must not contain non-numeric values.
+                    </li>
+                    <li>
+                        The presence of missing values or features with constant values (i.e. all zeros)                
+                    </li>
+                </ol>
+                <h:panelGrid style="border: 1px dashed black; padding: 10px; background-color: #F9F9FB; width: 100%">
+                    <h:outputLabel value="#{procBean.msgText}" escape="false"/>
+                </h:panelGrid>
+                <h:panelGrid rendered="#{not (procBean.bnDisabled or sessionBean1.analType eq 'mummichog')}" columns="2" columnClasses="ui-grid-col-7, ui-grid-col-5" style="width: 500px; text-align: center">
+                    <p:commandButton value="Missing value estimation" ajax="false" 
+                                     onclick="PF('statusDialog').show()"
+                                     action="#{procBean.imputeButton_action()}"/>    
+                    <p:commandButton value="Skip" ajax="false" 
+                                     onclick="PF('statusDialog').show()"
+                                     disabled="#{procBean.bnDisabled}"
+                                     action="#{procBean.skipButton_action()}"/>    
+                </h:panelGrid> 
+                <h:panelGrid rendered="#{sessionBean1.analType eq 'mummichog'}" columns="2" style="width: 500px; text-align: center">   
+                    <p:commandButton value="Analysis Options" ajax="false" rendered="false"
+                                     onclick="PF('statusDialog').show()"
+                                     action="#{peakcBean.customButton_action()}"/>
+                    <p:commandButton value="Proceed" ajax="false" 
+                                     onclick="PF('statusDialog').show()"
+                                     disabled="#{procBean.bnDisabled}"
+                                     action="#{procBean.skipButton_action()}"/>    
+                </h:panelGrid> 
+            </h:panelGrid> 
+        </h:form>
+    </ui:define>
+</ui:composition>

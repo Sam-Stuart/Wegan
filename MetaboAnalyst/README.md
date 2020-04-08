@@ -1,0 +1,2 @@
+# My project's README
+* PlotProbView and PlotProbViewTest should be a single funciton (as in v3.0), 95% of the code are the same. This will be issue for both maintanence and performance =>maybe introduce a new parameter?

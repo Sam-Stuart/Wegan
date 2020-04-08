@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_anal_template_top.xhtml">
+    <ui:define name="header"/>
+    <ui:define name="metaInfo">
+        <f:event type="preRenderView" listener="#{sessionBean1.registerPage('Metabolic network')}"></f:event> 
+        <f:event type="preRenderView" listener="#{sessionBean1.addNaviTrack('Metabolic network', '/faces/Secure/mummichog/MummiNetView.xhtml')}"/>
+        <f:event type="preRenderView" listener="#{sessionBean1.addNaviTrack('Download', '/faces/Secure/details/DownloadView.xhtml')}"/>
+    </ui:define>
+    <ui:define name="content">
+        <h:inputHidden id="myurl" value="#{applicationBean1.domainURL}" />
+        <p:lightBox style="width: 100%; height:100%; margin: 0; padding: 0">
+            <iframe style="position: absolute; width: 100%; height:100%; margin: 0; padding: 0" frameborder="0"
+                    src="../viewer/_mummichog_viewer.html?userID=#{sessionBean1.currentUser.name}"/>
+        </p:lightBox>
+    </ui:define>
+</ui:composition>
+
+

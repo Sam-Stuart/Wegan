@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_anal_template.xhtml">
+    <ui:define name="metaInfo">
+        <f:event type="preRenderView" listener="#{sessionBean1.registerPage('Data filter')}"/> 
+    </ui:define>
+    <ui:define name="content">
+        <h:form>
+            <h:panelGrid style="padding:20px 40px 20px 50px; font-size: 12px; line-height: 23px">
+                <h2>Data Filtering:</h2>
+                <p>
+                    The purpose of the data filtering is to identify and remove variables that are unlikely to be of use 
+                    when modeling the data. No phenotype information are used in the filtering process, so the result 
+                    can be used with any downstream analysis. This step is strongly recommended for untargeted metabolomics 
+                    datasets (i.e. spectral binning data, peak lists) with large number of variables, many of them are from
+                    baseline noises. Filtering can usually improve the results. For details, please refer to the paper by  
+                    <a href='http://www.biomedcentral.com/1471-2105/10/11' target='_blank'>Hackstadt, et al</a>.
+                </p>
+                <p>
+                    Non-informative variables can be characterized in three groups: 1) variables of <b>very small values</b> (close to baseline or detection limit) - these 
+                    variables can be detected using mean or median; 2) variables that are <b>near-constant values</b> throughout the experiment 
+                    conditions (housekeeping or homeostasis) - these variables can be detected using standard deviation (SD); or the robust estimate 
+                    such as interquantile range (IQR); and 3) variables that show <b>low repeatability</b> - this can be measured using QC samples using the 
+                    relative standard deviation(RSD = SD/mean). Features with high percent RSD should be removed from the subsequent analysis (the suggested 
+                    threshold is 20% for LC-MS and 30% for GC-MS). For data filtering based on the first two categories, the following empirical rules are applied during data filtering: 
+                    <ul>
+                        <li>
+                            <b>Less than 250 variables</b>: 5% will be filtered;
+                        </li>
+                        <li>
+                            <b> Between 250 - 500 variables</b>: 10% will be filtered;
+                        </li>
+                        <li>
+                            <b> Between 500 - 1000 variables</b>: 25% will be filtered;
+                        </li>
+                        <li>
+                            <b> Over 1000 variables</b>: 40% will be filtered;
+                        </li>
+                    </ul>
+                    Please note, in order to reduce the computational burden to the server, the <b>None</b> option is only 
+                    for less than 4000 features. Over that, if you choose None, the IQR filter will still be applied. In addition,
+                    the maximum allowed number of variables is 8000. If over 8000 variables were left after filtering, only the 
+                    top 8000 will be used in the subsequent analysis.
+                </p>
+                <h:panelGrid style="border: 1px dashed black; padding: 10px; background-color: #F9F9FB; 
+                             width: 100%; font:Arial,sans-serif; font-size: 13px">
+                    <h:panelGrid columns="8">
+                        <p:selectBooleanCheckbox value="#{procBean.doQCFiltering}"/> 
+                        <h:outputLabel value="Filtering features if their RSDs are &gt;"/> 
+                        <p:slider for="txt2" minValue="10" maxValue="40" style="width:100px" />
+                        <p:inputText id="txt2" value="#{procBean.qcCutoff}" style="width:30px" /> 
+                        <h:outputLabel value="% in QC samples"/> 
+                    </h:panelGrid>
+                    <p:selectOneRadio layout="pageDirection" value="#{procBean.filterOpt}" style="font:Arial,sans-serif; font-size: 13px">
+                        <f:selectItem itemLabel="None (less than 5000 features)" itemValue="none" /> 
+                        <f:selectItem itemLabel="Interquantile range (IQR)" itemValue="iqr" /> 
+                        <f:selectItem itemLabel="Standard deviation (SD)" itemValue="sd" /> 
+                        <f:selectItem itemLabel="Median absolute deviation (MAD)" itemValue="mad" /> 
+                        <f:selectItem itemLabel="Relative standard deviation (RSD = SD/mean)" itemValue="rsd" /> 
+                        <f:selectItem itemLabel="Non-parametric relative standard deviation (MAD/median)" itemValue="nrsd" /> 
+                        <f:selectItem itemLabel="Mean intensity value" itemValue="mean" /> 
+                        <f:selectItem itemLabel="Median intensity value" itemValue="median" /> 
+                    </p:selectOneRadio>
+                </h:panelGrid>
+                <h:panelGrid columns="2" style="width: 100%; text-align: center">
+                    <p:commandButton value="Submit" 
+                                     onclick="PF('statusDialog').show()"
+                                     oncomplete="PF('statusDialog').hide()"   
+                                     update=":cmdPane"
+                                     actionListener="#{procBean.filterButton_action()}"/>   
+                    <p:commandButton value="Proceed" ajax="false" action="Normalization"/>    
+                </h:panelGrid> 
+            </h:panelGrid> 
+        </h:form>
+    </ui:define>
+</ui:composition>

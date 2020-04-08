@@ -1,0 +1,139 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_anal_template.xhtml"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <ui:define name="metaInfo">
+        <f:event type="preRenderView" listener="#{timeBean.doDefaultAnalysis('ASCA')}"/> 
+    </ui:define>
+    <ui:define name="content">
+        <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
+            <p:tabView id="ac" style="width:100%; border: none; background: none; font-size: 13px;">
+                <p:tab title ="Component Selection">
+                    <h2>
+                        Please specify the number of components for each model:
+                    </h2>
+                    <h:form id="form1">
+                        <h:panelGroup style="padding: 2px 20px 10px 20px; line-height: 25px; width: 100%">
+                            <p:outputLabel value="The number given should be less than the components displayed below for each corresponding model. "/>
+                            <h:panelGrid columns="2">
+                                <h:panelGrid columns="2" style="width: 400px; padding-left: 20px">
+                                    <h:outputLabel style="font-weight: bold" value="Model A:"/>
+                                    <p:inputText style="width:60px" value="#{timeBean.mdlANum}"/>
+                                    <h:outputLabel style="font-weight: bold" value="Model B:"/>
+                                    <p:inputText style="width:60px" value="#{timeBean.mdlBNum}"/>
+                                    <h:outputLabel style="font-weight: bold" value="Model AB:"/>
+                                    <p:inputText style="width:60px" value="#{timeBean.mdlABNum}"/>
+                                    <h:outputLabel style="font-weight: bold" value="Model Residuals:"/>
+                                    <p:inputText style="width:60px" value="#{timeBean.mdlResNum}"/>
+                                    <h:outputLabel style="font-weight: bold" value="Use grey color:"/>
+                                    <p:selectBooleanCheckbox value="#{timeBean.useGreyCol}"/>
+                                </h:panelGrid>
+                                <p:commandButton value="Update" 
+                                                 update=":ac:form1:pairPane :ac:screePane  :cmdPane" 
+                                                 onclick="PF('statusDialog').show()"
+                                                 oncomplete="PF('statusDialog').hide()"
+                                                 actionListener="#{timeBean.mdlBtn_action()}"/> 
+                            </h:panelGrid>
+                        </h:panelGroup>
+                                        <hr style="height: 12px; border: 0;box-shadow: inset 0 12px 12px -12px rgba(0, 0, 0, 0.5); width:100%; min-width: 1000px"/>
+                        <h:panelGrid id="pairPane" style="text-align: center; width: 100%;">
+                            <h:outputLabel style="font-weight: bold" value="The variabilities associated with each factor are given in the round brackets"/>
+                            <img onerror='this.style.display="none"' src="#{timeBean.ascaScreeImg}" alt="ASCAScreeImage"/>
+                        </h:panelGrid>        
+                    </h:form>
+                </p:tab>
+                <p:tab title ="Major Patterns">
+                    <h:panelGrid id="screePane" style="padding: 20px">
+                        <img onerror='this.style.display="none"' src="#{timeBean.ascaFacAImg}"/>
+                        <img onerror='this.style.display="none"' src="#{timeBean.ascaFacBImg}"/>
+                        <img onerror='this.style.display="none"' src="#{timeBean.ascaFacABImg}"/>
+                    </h:panelGrid>     
+                </p:tab>
+                <p:tab title ="Model Validation">
+                    <h:form id="form3">
+                        <h:panelGrid columns="2" style="padding: 2px 20px 10px 20px; line-height: 25px">
+                            <h:panelGrid columns="2" style="width:420px; padding-left: 20px">
+                                <h:outputLabel style="font-weight: bold" value="Select number of permutations:"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel"  value="#{timeBean.permNum}">
+                                    <f:selectItem itemLabel="20" itemValue="20" /> 
+                                    <f:selectItem itemLabel="100" itemValue="100" /> 
+                                    <f:selectItem itemLabel="1000" itemValue="1000" /> 
+                                </p:selectOneMenu>
+                            </h:panelGrid>
+                            <p:commandButton value="Submit" 
+                                             onclick="PF('statusDialog').show()"
+                                             oncomplete="PF('statusDialog').hide()"
+                                             update=":ac:form3:permPane  :cmdPane" 
+                                             actionListener="#{timeBean.permBn_action()}"/>   
+                        </h:panelGrid>
+                        <h:panelGrid id="permPane" style="text-align: center; width: 100%;">
+                            <img onerror='this.style.display="none"' src="#{timeBean.ascaPermImg}" alt="AscaPermImage"/>
+                        </h:panelGrid>  
+                    </h:form>
+                </p:tab>
+                <p:tab title ="Sig. Features">
+                    <h:form id="form4">
+                        <h:panelGrid columns="2" style="padding: 2px 20px 10px 20px; line-height: 25px">
+                            <h:panelGrid columns="2" style="width:420px; padding-left: 20px">
+                                <h:outputLabel style="font-weight: bold" value="Leverage threshold:"/>
+                                <p:inputText style="width:50px" value="#{timeBean.lvlThresh}"/> 
+                                <h:outputLabel style="font-weight: bold" value="Alpha threshold:"/>
+                                <p:inputText style="width:50px" value="#{timeBean.alphaThresh}"/>      
+                            </h:panelGrid>
+                            <p:commandButton value="Submit" update=":ac:form4:impPane  :cmdPane" actionListener="#{timeBean.sigBn_action()}"/>   
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" id="impPane" style="width: 100%;">
+                            <img onerror='this.style.display="none"' src="#{timeBean.ascaImpAImg}" alt="SigAImage"/>
+                            <h:panelGrid style="padding-left: 20px;">
+                                <p:commandLink actionListener="#{sessionBean1.graphicsLnk_action('asca_impa')}" 
+                                               oncomplete="PF('graphDialog').show()"
+                                               title="Image Options">
+                                    <img src="#{facesContext.externalContext.requestContextPath}/resources/images/imgcenter.png">Image Options</img>
+                                </p:commandLink>
+                                <p:commandLink action="#{sessionBean1.detailsLnk_action('asca.sigA')}"  title="Sig. Features">
+                                    <img src="#{facesContext.externalContext.requestContextPath}/resources/images/table.png">Sig. Features</img>
+                                </p:commandLink>
+                                <p:commandLink action="#{sessionBean1.detailsLnk_action('asca.outA')}" title="Outliers">
+                                    <img src="#{facesContext.externalContext.requestContextPath}/resources/images/table.png">Outliers</img>
+                                </p:commandLink>                                
+                            </h:panelGrid>
+                            <img onerror='this.style.display="none"' src="#{timeBean.ascaImpBImg}" alt="SigBImage"/>
+                            <h:panelGrid style="padding-left: 20px;">
+                                <p:commandLink actionListener="#{sessionBean1.graphicsLnk_action('asca_impb')}" 
+                                               oncomplete="PF('graphDialog').show()"
+                                               title="Image Options">
+                                    <img src="#{facesContext.externalContext.requestContextPath}/resources/images/imgcenter.png">Image Options</img>
+                                </p:commandLink>
+                                <p:commandLink action="#{sessionBean1.detailsLnk_action('asca.sigB')}"  title="Sig. Features">
+                                    <img src="#{facesContext.externalContext.requestContextPath}/resources/images/table.png">Sig. Features</img>
+                                </p:commandLink>
+                                <p:commandLink action="#{sessionBean1.detailsLnk_action('asca.outB')}" title="Outliers">
+                                    <img src="#{facesContext.externalContext.requestContextPath}/resources/images/table.png">Outliers</img>
+                                </p:commandLink>                                
+                            </h:panelGrid>
+                            <img onerror='this.style.display="none"' src="#{timeBean.ascaImpABImg}" alt="SigABImage"/>
+                            <h:panelGrid style="padding-left: 20px;">
+                                <p:commandLink actionListener="#{sessionBean1.graphicsLnk_action('asca_impab')}"
+                                               oncomplete="PF('graphDialog').show()"
+                                               title="Image Options">
+                                    <img src="#{facesContext.externalContext.requestContextPath}/resources/images/imgcenter.png">Image Options</img>
+                                </p:commandLink>
+                                <p:commandLink action="#{sessionBean1.detailsLnk_action('asca.sigAB')}" title="Sig. Features">
+                                    <img src="#{facesContext.externalContext.requestContextPath}/resources/images/table.png">Sig. Features</img>
+                                </p:commandLink>
+                                <p:commandLink action="#{sessionBean1.detailsLnk_action('asca.outAB')}" title="Outliers">
+                                    <img src="#{facesContext.externalContext.requestContextPath}/resources/images/table.png">Outliers</img>
+                                </p:commandLink>                                
+                            </h:panelGrid>
+                        </h:panelGrid>  
+                    </h:form>
+                </p:tab>
+            </p:tabView> 
+        </h:panelGrid> 
+    </ui:define>
+</ui:composition>

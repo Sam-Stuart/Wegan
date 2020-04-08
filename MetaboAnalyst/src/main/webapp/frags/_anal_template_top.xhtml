@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_template.xhtml">
+    <ui:define name="centerpane">
+        <p:layout>
+            <p:layoutUnit style="margin:0px; padding:0px" gutter="0" position="north">
+                <h:form id="traceForm">
+                    <p:breadCrumb id="traceNavi" styleClass="mybreadcrumb" model="#{sessionBean1.simpleMenuModel}"/>
+                </h:form>
+            </p:layoutUnit>
+            <p:layoutUnit style="margin:0px; padding:0px"  collapsible="true" gutter="0" position="center">
+                <div style="clear: both; margin: 0; padding: 0; max-width: 1100px">
+                    <ui:insert name="content"> 
+                    </ui:insert>
+                </div>
+            </p:layoutUnit>
+        </p:layout>
+    </ui:define>
+</ui:composition>

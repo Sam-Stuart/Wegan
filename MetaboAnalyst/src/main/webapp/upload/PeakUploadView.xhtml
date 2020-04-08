@@ -1,0 +1,103 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_anal_template.xhtml">
+    <ui:define name="metaInfo">
+        <f:event type="preRenderView" listener="#{sessionBean1.setAnalType('mummichog')}"/> 
+        <f:event type="preRenderView" listener="#{sessionBean1.registerPage('Upload')}"/> 
+        <f:event type="preRenderView"  listener="#{sessionBean1.addNaviTrack('Upload', '/faces/upload/PeakUploadView.xhtml')}"/> 
+    </ui:define>
+    <ui:define name="content">
+        <h:panelGrid style="padding-top:20px; padding-left: 40px; font-size: 12px; width:100%">
+            <h:form id="form2" enctype="multipart/form-data">
+                <h:panelGrid style="padding: 10px 10px 10px 20px; padding-left: 40px; width: 100%; line-height: 23px">
+                    <h:panelGrid columns="2" style="padding-top:10px">
+                        <p:outputLabel style="font-size: 14px; font-weight: bold" value="Upload a peak list profile"/> 
+                        <p:graphicImage id="formatIcon" url="../../resources/images/ui-help.png" alt="help"/>
+                    </h:panelGrid>
+                    <p:tooltip for="formatIcon" styleClass="helpTip">
+                        <p>
+                            Upload your data in a tab-delimited text file (.txt) format.
+                            The table must contain three columns with specific names - m.z, p.value, and t.score. Note, you can use 
+                            fold change values instead of t.scores. A small example data is shown below:
+                            <pre>
+m.z	p.value t.score	
+304.2979	1.0153771115e-10	14.7179316191
+177.1024	1.61647122234e-10	14.2666000207
+345.0277	1.71651483296e-10	-14.2091952724
+491.0325	1.83359804763e-10	-14.1463478332
+258.0048	2.16851438688e-10	-13.987636322
+483.1205	2.21510885538e-10	-13.9676335843
+694.9937	2.81091747637e-10	-13.7451720928
+270.9767	3.26786548614e-10	13.6060704804
+                            </pre>
+                        </p>
+                    </p:tooltip>
+                    <p:tooltip for="msIcon" styleClass="helpTip">
+                        <p>
+                            Please select or specify the mass accuracy in <b>ppm</b> closest to your instrument. 
+                        </p>
+                    </p:tooltip>
+                    <h:panelGrid columns="2" style="width:500px; padding-bottom: 10px; padding-left: 40px">
+                        <p:outputLabel style="font-size:13px; font-weight: bold" value="Mass Accuracy (ppm):"/>
+                        <h:panelGroup>
+                            <p:selectOneMenu value="#{peakLoader.instrumentOpt}" editable="true">
+                                <f:selectItem itemLabel="10" itemValue="10" />
+                                <f:selectItem itemLabel="5" itemValue="5" />
+                                <f:selectItem itemLabel="3" itemValue="3" />
+                                <f:selectItem itemLabel="1" itemValue="1" />
+                                <f:selectItem itemLabel="0.1" itemValue="0.1" />
+                            </p:selectOneMenu> 
+                            <h:outputText style="color:grey; padding-left: 5px" value="(editable)"/>
+                            <p:graphicImage id="msIcon" style="padding-left: 5px" url="../../resources/images/ui-help.png" alt="help"/>
+                        </h:panelGroup>
+                        <p:outputLabel style="font-size:13px; font-weight: bold" value="Analytical Mode:"/>
+                        <p:selectOneRadio value="#{peakLoader.msModeOpt}">
+                            <f:selectItem itemLabel="Positive Mode" itemValue="positive" />
+                            <f:selectItem itemLabel="Negative Mode" itemValue="negative" />
+                        </p:selectOneRadio> 
+                        <p:outputLabel style="font-size:13px; font-weight: bold" value="P-value Cutoff:"/>
+                        <h:panelGroup>
+                            <p:selectOneMenu value="#{peakLoader.pvalCutoff}" effect="fold" editable="true">
+                                <f:selectItem itemLabel="0.2" itemValue="0.2" />
+                                <f:selectItem itemLabel="0.1" itemValue="0.1" />
+                                <f:selectItem itemLabel="0.05" itemValue="0.05" />
+                                <f:selectItem itemLabel="0.01" itemValue="0.01" />
+                                <f:selectItem itemLabel="0.005" itemValue="0.005" />
+                                <f:selectItem itemLabel="0.001" itemValue="0.001" />
+                                <f:selectItem itemLabel="0.0001" itemValue="0.0001" />
+                            </p:selectOneMenu> 
+                            <h:outputText style="color:grey; padding-left: 5px" value="(editable)"/>
+                        </h:panelGroup>
+                        <p:outputLabel style="font-size:13px; font-weight: bold" value="Choose Data File:"/>
+                        <p:fileUpload value="#{peakLoader.peakFile}" mode="simple"/>
+                    </h:panelGrid>
+
+                    <h:panelGrid columns="2" style="width: 500px; padding-top: 10px; border-top: thin gray dashed">
+                        <h:panelGrid style="width:50px">
+                            <p:selectBooleanCheckbox value="#{peakLoader.usePeakDataExample}"/>
+                        </h:panelGrid>
+                        <p:outputLabel style="font-size:13px; font-weight: bold; padding-top: 6px" value="Use the example data"/>
+
+                        <a target="_blank" href="#{facesContext.externalContext.requestContextPath}/resources/data/mummichog_mzs.txt">Dataset</a>
+                        <h:panelGrid>
+                            An example peak list data obtained from untargeted metabolomics of human monocyte-derived dendritic cells (moDC) under
+                            stimulation by a strain of yellow fever virus (YF17D, vaccine strain) collected using Orbitrap LC-MS 
+                            (positive mode, human samples, p.value cutoff: 0.0001).
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid style="width: 540px; padding-top: 10px; padding-bottom: 10px; text-align: center">
+                        <p:commandButton value="Submit" ajax="false" 
+                                         onclick="PF('statusDialog').show()" 
+                                         oncomplete="PF('statusDialog').hide()"   
+                                         action="#{peakLoader.handleMassAllUpload}"/>  
+                    </h:panelGrid>
+                </h:panelGrid>
+            </h:form>
+        </h:panelGrid>
+    </ui:define>
+</ui:composition>

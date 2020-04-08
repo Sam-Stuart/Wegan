@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_anal_template.xhtml">
+    <ui:define name="metaInfo">
+        <f:event type="preRenderView" listener="#{analBean.performDefaultAnalysis('SOM')}"/> 
+    </ui:define>
+    <ui:define name="content">
+        <h:form id="form1">
+            <h:panelGrid style="padding:20px 40px 20px 40px; font-size: 12px; line-height: 23px; width:100%">
+                <p>
+                    Please note: only cluster members will be calculated  if the total  cluster number (xdim*ydim) &gt; 20. 
+                    The blue lines represent the median intensities of each cluster. 
+                </p>
+                <h:panelGrid columns="2">
+                    <h:panelGrid columns="2" style="padding: 2px 20px 10px 20px; line-height: 30px; width: 480px">
+                        <h:outputLabel style="font-weight: bold" value="X dimension:"/>
+                        <p:inputText style="width:50px" value="#{clusterBean.somXdim}"/>
+                        <h:outputLabel style="font-weight: bold" value="Y dimension:"/>
+                        <p:inputText style="width:50px" value="#{clusterBean.somYdim}"/>
+                        <h:outputLabel style="font-weight: bold" value="Initialization:"/>
+                        <p:selectOneMenu styleClass="menu" panelStyleClass="panel"  value="#{clusterBean.somInitOpt}">
+                            <f:selectItem itemLabel="Linear" itemValue="linear" /> 
+                            <f:selectItem itemLabel="Random" itemValue="random" /> 
+                            <f:selectItem itemLabel="Sample" itemValue="sample" />                                 
+                        </p:selectOneMenu>
+                        <h:outputLabel style="font-weight: bold" value="Neighbourhood:"/>
+                        <p:selectOneMenu styleClass="menu" panelStyleClass="panel"  value="#{clusterBean.somNbOpt}">
+                            <f:selectItem itemLabel="Gaussian" itemValue="gaussian" /> 
+                            <f:selectItem itemLabel="Bubble" itemValue="bubble" />                               
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                    <p:commandButton value="Submit" update=":form1:somPane  :cmdPane" actionListener="#{clusterBean.somButton_action()}"/>   
+                </h:panelGrid>
+                <h:panelGrid id="somPane" style="text-align: center; width: 100%;">
+                    <h:panelGrid columns="2" style="text-align: right; padding-left: 700px; width: 760px;">
+                        <p:commandLink onclick="PF('detailDialog').show()" title="View the detailed data table">
+                            <img src="#{facesContext.externalContext.requestContextPath}/resources/images/table.png"/>
+                        </p:commandLink>
+                        <p:commandLink actionListener="#{sessionBean1.graphicsLnk_action('som')}" 
+                                       oncomplete="PF('graphDialog').show()"
+                                       title="Customize the graphics output">
+                            <img src="#{facesContext.externalContext.requestContextPath}/resources/images/imgcenter.png"/>
+                        </p:commandLink>
+                    </h:panelGrid>
+                    <img onerror='this.style.display="none"' src="#{clusterBean.somImg}" alt="SOMimage"/>
+                    <p:dialog widgetVar="detailDialog" dynamic="true" modal="true" appendTo="@(body)" width="500" height="400"
+                              hideEffect="explode" resizable="true"> 
+                        <h:panelGrid id="detailView" style="width:500px; padding: 20px; font-size: 12px">
+                            <h:outputText escape="false" value="#{clusterBean.somTxt}"/>
+                        </h:panelGrid> 
+                    </p:dialog>
+                </h:panelGrid>  
+            </h:panelGrid> 
+        </h:form>
+    </ui:define>
+</ui:composition>

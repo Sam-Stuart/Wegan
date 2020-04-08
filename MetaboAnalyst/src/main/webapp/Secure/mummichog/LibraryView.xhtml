@@ -1,0 +1,150 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_anal_template.xhtml">
+    <ui:define name="metaInfo">
+        <f:event type="preRenderView" listener="#{sessionBean1.registerPage('Set parameter')}"/> 
+        <f:event type="preRenderView" listener="#{sessionBean1.addNaviTrack('Library', '/faces/Secure/mummichog/LibraryView.xhtml')}"/> 
+    </ui:define>
+    <ui:define name="content">
+        <h:form>
+            <h:panelGrid style="padding: 30px; font-size: 13px; width: 720px">
+                <p:outputLabel style="font-size: 16px; font-weight: bold" value="Please select a pathway library:"/>
+                <p:selectOneRadio id="customRadio" value="#{mummiBean.pathDBOpt}" layout="custom">  
+                    <f:selectItems value="#{applicationBean1.massLibOpts}"/>    
+                </p:selectOneRadio>
+                <h:panelGrid style="border: 1px solid teal; width: 100%; background-color: #F9F9FB; padding-top: 6px;
+                             font-family: 'Arial','Helvetica',sans-serif; margin-left: 30px">
+                    <h:panelGrid columns="2" style="border-bottom: solid white 1px;">
+                        <h:panelGrid style="height: 100%; padding-left: 50px; width: 250px">
+                            <p:outputLabel style="color: orange; font-family: Arial,Helvetica,sans-serif; font-size: 14px" value="Mammals"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" style="font-size: 12px; padding-left: 20px;">
+                            <p:radioButton for="customRadio" itemIndex="0"/>
+                            <p:outputLabel value="Homo sapiens (human) [MFN]"/>
+                            <p:radioButton for="customRadio" itemIndex="1"/>
+                            <p:outputLabel value="Homo sapiens (human) [BioCyc]"/>
+                            <p:radioButton for="customRadio" itemIndex="2"/>
+                            <p:outputLabel value="Homo sapiens (human) [KEGG]"/>
+                            <p:radioButton for="customRadio" itemIndex="3"/>
+                            <p:outputLabel value="Mus musculus (mouse) [BioCyc]"/>
+                            <p:radioButton for="customRadio" itemIndex="4"/>
+                            <p:outputLabel value="Mus musculus (mouse) [KEGG]"/>
+                            <p:radioButton for="customRadio" itemIndex="5"/>
+                            <p:outputLabel value="Rattus norvegicus (rat) [KEGG]"/>
+                            <p:radioButton for="customRadio" itemIndex="6"/>
+                            <p:outputLabel value="Bos taurus (cow) [KEGG]"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2" style="border-bottom: solid white 1px;">
+                        <h:panelGrid style="height: 100%; padding-left: 50px; width: 250px">
+                            <p:outputLabel style="color: orange; font-family: Arial,Helvetica,sans-serif; font-size: 14px" value="Birds"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" style="font-size: 12px; padding-left: 20px;">
+                            <p:radioButton for="customRadio" itemIndex="7"/>
+                            <p:outputLabel value="Gallus gallus (chicken) [KEGG]"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2" style="border-bottom: solid white 1px;">
+                        <h:panelGrid style="height: 100%; padding-left: 50px; width: 250px">
+                            <p:outputLabel style="color: orange; font-family: Arial,Helvetica,sans-serif; font-size: 14px" value="Fish"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" style="font-size: 12px; padding-left: 20px;">
+                            <p:radioButton for="customRadio" itemIndex="8"/>
+                            <p:outputLabel value="Danio rerio (zebrafish) [KEGG]"/>
+                            <p:radioButton for="customRadio" itemIndex="9"/>
+                            <p:outputLabel value="Danio rerio (zebrafish) [MTF]"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2" style="border-bottom: solid white 1px;">
+                        <h:panelGrid style="height: 100%; padding-left: 50px; width: 250px">
+                            <p:outputLabel style="color: orange; font-family: Arial,Helvetica,sans-serif; font-size: 14px" value="Insects"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" style="font-size: 12px; padding-left: 20px;">
+                            <p:radioButton for="customRadio" itemIndex="10"/>
+                            <p:outputLabel value="Drosophila melanogaster (fruit fly) [KEGG]"/>
+                            <p:radioButton for="customRadio" itemIndex="11"/>
+                            <p:outputLabel value="Drosophila melanogaster (fruit fly) [BioCyc]"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2" style="border-bottom: solid white 1px;">
+                        <h:panelGrid style="height: 100%; padding-left: 50px; width: 250px">
+                            <p:outputLabel style="color: orange; font-family: Arial,Helvetica,sans-serif; font-size: 14px" value="Nematodes"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" style="font-size: 12px; padding-left: 20px;">
+                            <p:radioButton for="customRadio" itemIndex="12"/>
+                            <p:outputLabel value="Caenorhabditis elegans (nematode) [KEGG]"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2" style="border-bottom: solid white 1px;">
+                        <h:panelGrid style="height: 100%; padding-left: 50px; width: 250px">
+                            <p:outputLabel style="color: orange; font-family: Arial,Helvetica,sans-serif; font-size: 14px" value="Fungi"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" style="font-size: 12px; padding-left: 20px;">
+                            <p:radioButton for="customRadio" itemIndex="13"/>
+                            <p:outputLabel value="Saccharomyces cerevisiae (yeast) [KEGG]"/>
+                            <p:radioButton for="customRadio" itemIndex="14"/>
+                            <p:outputLabel value="Saccharomyces cerevisiae (yeast) [BioCyc]"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2" style="border-bottom: solid white 1px;">
+                        <h:panelGrid style="height: 100%; padding-left: 50px; width: 250px">
+                            <p:outputLabel style="color: orange; font-family: Arial,Helvetica,sans-serif; font-size: 14px" value="Plants"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" style="font-size: 12px; padding-left: 20px;">
+                            <p:radioButton for="customRadio" itemIndex="15"/>
+                            <p:outputLabel value="Oryza sativa japonica (Japanese rice) [KEGG]"/>
+                            <p:radioButton for="customRadio" itemIndex="16"/>
+                            <p:outputLabel value="Arabidopsis thaliana (thale cress) [KEGG]"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2" style="border-bottom: solid white 1px;">
+                        <h:panelGrid style="height: 100%; padding-left: 50px; width: 250px">
+                            <p:outputLabel style="color: orange; font-family: Arial,Helvetica,sans-serif; font-size: 14px" value="Parasites"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" style="font-size: 12px; padding-left: 20px;">
+                            <p:radioButton for="customRadio" itemIndex="17"/>
+                            <p:outputLabel value="Schistosoma mansoni [KEGG]"/>
+                            <p:radioButton for="customRadio" itemIndex="18"/>
+                            <p:outputLabel value="Plasmodium falciparum 3D7 (Malaria) [KEGG]"/>
+                            <p:radioButton for="customRadio" itemIndex="19"/>
+                            <p:outputLabel value="Trypanosoma brucei [KEGG]"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2">
+                        <h:panelGrid style="height: 100%; padding-left: 50px; width: 250px">
+                            <p:outputLabel style="color: orange; font-family: Arial,Helvetica,sans-serif; font-size: 14px" value="Prokaryotes"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" style="font-size: 12px; padding-left: 20px;">
+                            <p:radioButton for="customRadio" itemIndex="20"/>
+                            <p:outputLabel value="Escherichia coli K-12 MG1655 [KEGG]"/>
+                            <p:radioButton for="customRadio" itemIndex="21"/>
+                            <p:outputLabel value="Bacillus subtilis [KEGG]"/>
+                            <p:radioButton for="customRadio" itemIndex="22"/>
+                            <p:outputLabel value="Pseudomonas putida KT2440 [KEGG]"/>
+                            <p:radioButton for="customRadio" itemIndex="23"/>
+                            <p:outputLabel value="Staphylococcus aureus N315 (MRSA/VSSA) [KEGG]"/>
+                            <p:radioButton for="customRadio" itemIndex="24"/>
+                            <p:outputLabel value="Thermotoga maritima [KEGG]"/>
+                            <p:radioButton for="customRadio" itemIndex="25"/>
+                            <p:outputLabel value="Synechococcus elongatus PCC7942 [KEGG]"/>
+                            <p:radioButton for="customRadio" itemIndex="26"/>
+                            <p:outputLabel value="Mesorhizobium loti [KEGG]"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </h:panelGrid>
+
+                <h:panelGrid style="width: 100%; text-align: center">
+                    <p:commandButton value="Submit" ajax="false" 
+                                     onclick="PF('statusDialog').show()" 
+                                     oncomplete="PF('statusDialog').hide()"                              
+                                     action="#{mummiBean.paBn_action()}"/>
+                </h:panelGrid> 
+            </h:panelGrid>
+        </h:form>
+    </ui:define>
+</ui:composition>

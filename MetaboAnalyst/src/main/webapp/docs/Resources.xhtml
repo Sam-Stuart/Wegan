@@ -1,0 +1,142 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_doc_template.xhtml">
+    <ui:define name="content">
+        <h:panelGrid style="padding: 30px 40px 20px 40px; width: 100%; font-size: 13px; line-height: 23px">
+            <h3 style="font-size: 16px; font-weight: bold">Resources &amp; Downloads</h3>
+
+            <table style="width:1000px; padding: 16px; font-size: 14px; text-align: left" >
+                <tr style="font-size: 15px">
+                    <th>Type</th>
+                    <th>Platform</th>
+                    <th>Resource</th>
+                </tr>
+                <tr>
+                    <td>
+                        Public Web Server
+                    </td>
+                    <td>
+                        Google Cloud
+                    </td>
+                    <td>
+                        <ul>
+                            <li>
+                                <b>V4+</b>: <a href="http://www.metaboanalyst.ca" target="_blank"> http://www.metaboanalyst.ca</a>
+                            </li>
+                            <li>
+                                <b>V3.98</b>: <a href="http://old.metaboanalyst.ca" target="_blank">http://old.metaboanalyst.ca</a>
+                            </li>
+                        </ul> 
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Local Web Server
+                    </td>
+                    <td>
+                        Your Platform
+                    </td>
+                    <td>
+                        <ul>
+                            <li>
+                                <b>Docker</b>: <a href="https://github.com/xia-lab/MetaboAnalyst_Docker" target="_blank">https://github.com/xia-lab/MetaboAnalyst_Docker</a>
+                            </li>
+                            <li>
+                                <b>Direct Installation*</b>: scroll down for detailed instructions
+                            </li>
+                        </ul> 
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        R Package
+                    </td>
+                    <td>
+                        Your Platform
+                    </td>
+                    <td>
+                        <ul>
+                            <li>
+                                <b>MetaboAnalystR</b>: <a href="https://github.com/xia-lab/MetaboAnalystR" target="_blank">https://github.com/xia-lab/MetaboAnalystR</a>
+                            </li>
+                        </ul> 
+                    </td>
+                </tr>
+            </table>
+            <hr style="height: 12px; border: 0; box-shadow: inset 0 12px 12px -12px rgba(0, 0, 0, 0.5); width:100%; min-width: 1000px"/>
+            <h3>Direct Installation*</h3>
+            <p>
+                Please note, <b style="color:darkblue">some basic computer skills are required.</b> If you have difficulties to follow these steps, please find a bioinformatician or IT supporting staff in your department 
+                for help.  
+            </p>
+            <p>
+                <b><u>System Requirements:</u></b>
+                <OL>
+                    <LI>
+                        OS: Mac OS X, Linux (i.e. Redhat Fedora, Ubuntu)
+                    </LI>
+                    <LI>
+                        Memory: >= 4G
+                    </LI>
+                    <LI>
+                        Java:  1.7
+                    </LI>
+                    <LI>
+                        R: (version >3.4) with the following packages installed:<br/>
+                        <i>"Rserve", "ellipse", "scatterplot3d","pls", "caret", "lattice", 
+                            "Cairo", "randomForest", "e1071","gplots", "som", "xtable", 
+                            "RColorBrewer", "xcms","impute", "pcaMethods","siggenes",
+                            "globaltest", "GlobalAncova", "Rgraphviz","KEGGgraph",
+                            "preprocessCore", "genefilter", "pheatmap", "igraph", "RJSONIO", 
+                            "SSPA", "caTools", "ROCR", "pROC", "sva"
+                        </i><br/>
+                        <UL>
+                            <li>
+                                <b>XCMS</b> requires <u>netcdf</u> library to be installed on the system;
+                            </li>
+                            <li>
+                                <b>RGraphviz</b> requires <u>imagemagick</u> and <u>graphviz</u> library to be installed on the system;
+                            </li>
+                        </UL>   
+                    </LI>
+                    <LI>
+                        Application Server: Glassfish v4+ or Payara v4+.
+                    </LI>
+                </OL>
+            </p>
+            <p>
+                <b><u>Local Installation:</u></b>
+                <OL>
+                    <LI> Download the MetaboAnalyst Web Application Resource (.war) file</LI>
+                    <ul>
+                        <li>
+                            MetaboAnalyst 4.0 <a target="_blank" href="https://www.dropbox.com/s/adkps7jq810dyl4/MetaboAnalyst-4.09.war?dl=0"> download </a>
+                        </li>
+                        <li>
+                            MetaboAnalyst 3.0 <a target="_blank" href="https://www.dropbox.com/s/klbtvns5z0cr6mv/MetaboAnalyst-3.98.war?dl=0"> download </a>
+                        </li>
+                    </ul>
+
+                    <LI> 
+                        Start Rserve from a terminal
+                        > R CMD Rserve <br/>
+                        Note: the permission of the web deployment folder must be set properly to give Rserver to Read/Write. 
+                        It is best to leave the Rserve terminal open. Many R related messages
+                        (i.e. progress, exceptions or errors) will be displayed there.
+                    </LI>
+                    <LI> Start the Glassfish/Payara application server.</LI>
+                    <LI> Deploy the war file via the GUI admin console.</LI>
+                    <LI>
+                        Access your local copy of MetaboAnalyst at:
+                        http://localhost:8080/MetaboAnalyst/
+                    </LI>
+                </OL>
+            </p>
+        </h:panelGrid>
+    </ui:define>
+</ui:composition>

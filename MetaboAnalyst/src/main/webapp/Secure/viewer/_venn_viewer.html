@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"></meta>
+        <link rel="stylesheet" type="text/css" href="../../resources/css/easyui.css"></link>
+        <link rel="stylesheet" type="text/css" href="../../resources/css/chord.css"></link>
+        <script type="text/javascript" src="../../resources/jscripts/jquery.min.js"></script>
+        <script type="text/javascript" src="../../resources/jscripts/jquery.easyui.min.js"></script>
+        <script type="text/javascript" src="../../resources/jscripts/raphael-min.js"></script>
+        <script type="text/javascript" src="../../resources/jscripts/jquery.venn.js"></script>
+    </head>
+    <body class="easyui-layout">  
+        <div id="spinner">
+            <h2 style="position:absolute; left:50%; top:50%;margin:-75px 0 0 -135px;">
+                Processing..... please wait ....
+            </h2>
+        </div>
+        <div data-options="region:'east', collapsible:false" style="width:280px;">
+            <div id="all-data">
+                <span id="header-data" class="displayed-data">
+                </span>
+                <div id="selected-data" class="well-dataselect" style="padding: 5px;">
+                    <span id="displayed-data" class="displayed-data"/>
+                </div>
+            </div>
+        </div>
+        <div data-options="region:'center', collapsible:false">
+            <div id="venn-demo" style="margin: 0; width:820px; 
+                 height: 650px; margin-left: 30px; margin-top: 40px"></div>
+            <div style="position: absolute; top: 20px; left: 10px; padding-left: 30px; font-size: 14px;
+                 padding-right: 20px; line-height: 21px">
+                Different regions in the Venn diagram represent all possible comparisons among the data sets. 
+                <ul>
+                    <li>
+                        At most <b>four</b> datasets can be compared at the same time. Datasets without hits will <b>NOT</b> be shown here;
+                    </li>
+                    <li>
+                        The <u>area</u> of the region does <b>NOT</b> relate to the number of features;
+                    </li>
+                    <li>
+                        <b>Click</b> an area to show the corresponding features on the left panel.
+                    </li>
+                </ul> 
+            </div>
+        </div>
+        <script type="text/javascript">
+            initVenn();
+        </script>
+    </body>  
+</html>

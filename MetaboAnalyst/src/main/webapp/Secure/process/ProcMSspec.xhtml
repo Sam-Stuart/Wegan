@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_anal_template.xhtml">
+    <ui:define name="metaInfo">
+        <f:event type="preRenderView" listener="#{sessionBean1.registerPage('Pre-process')}"/> 
+    </ui:define>
+    <ui:define name="content">
+        <h:form id="form1">
+            <h:panelGrid style="padding:20px 50px 20px 50px; font-size: 12px; line-height: 23px">
+                <h2>Processing MS spectra:</h2>
+                <p>
+                    The (GC/LC)-MS spectra processing is performed using the popular <a href="http://masspec.scripps.edu/xcms/xcms.php">XCMS</a> 
+                    open source package. Raw spectra can be in either NetCDF, mzXML, or mzDATA format. They should be stored
+                    in two separate folders named by their class labels. The program automatically performs the following 
+                    steps: 
+                    <ol>
+                        <li>
+                            Filter and identify peaks    
+                        </li>
+                        <li>
+                            Match peaks across samples 
+                        </li>
+                        <li>
+                            Retention time correction
+                        </li>
+                        <li>
+                            Fill in missing peak data
+                        </li>
+                    </ol>
+                    Peak detection is performed using the matched filtration method. The <b>fwhm</b> is used to 
+                    specify a Gaussian model for peak detection. Depending on the type of chromatography, 
+                    the correct model peak width can be quite different. A commonly used value is 30 (seconds) 
+                    for LC-MS and 4 (seconds) for GC-MS spectra.     
+                </p>
+                <h:panelGrid columns ="2" style="width: 100%">
+                    <h:panelGrid columns ="2" style="width: 80%; padding-left: 20px">
+                        <h:panelGrid style="width: 220px">
+                            <h:outputLabel style="font-weight: bold" value="Full width at half maximum (fwhm):"/>      
+                        </h:panelGrid>   
+                        <p:inputText style="width:50px" value="#{procBean.fwhmThresh}"/> 
+                        <h:outputLabel style="font-weight: bold" value="Profiling method:"/>
+                        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:100px" value="#{procBean.profOpt}">
+                            <f:selectItem itemLabel="bin" itemValue="bin"/> 
+                            <f:selectItem itemLabel="binlin" itemValue="binlin"/> 
+                            <f:selectItem itemLabel="binbase" itemValue="binbase"/> 
+                            <f:selectItem itemLabel="intlin" itemValue="intlin"/> 
+                        </p:selectOneMenu>  
+                        <h:outputLabel style="font-weight: bold" value="Peak Intensity measure"/>
+                        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:260px" value="#{procBean.peakIntOpt}">
+                            <f:selectItem itemLabel="Integrated area of original peak" itemValue="into"/> 
+                            <f:selectItem itemLabel="Integrated area of filtered peak" itemValue="intf"/> 
+                            <f:selectItem itemLabel="Maximum intensity of original peak" itemValue="maxo"/> 
+                            <f:selectItem itemLabel="Maximum intensity of filtered peak" itemValue="maxf"/> 
+                        </p:selectOneMenu>  
+                    </h:panelGrid> 
+                    <p:commandButton value="Submit" 
+                                     onclick="PF('statusDialog').show()"
+                                     oncomplete="PF('statusDialog').hide()"
+                                     update="form1:msgPane form1:nextBn  :cmdPane" 
+                                     actionListener="#{procBean.msSpecBn_action()}" />   
+                </h:panelGrid>
+                             <hr style="height: 12px; border: 0;box-shadow: inset 0 12px 12px -12px rgba(0, 0, 0, 0.5); width:100%; min-width: 1000px"/>
+                <h:panelGrid id="msgPane" style="width: 100%">
+                    <h:outputLabel value="#{procBean.msRtText}" escape="false"/>
+                    <img onerror='this.style.display="none"' src="#{procBean.rtCorImg}" alt="RTCorImage"/>
+                </h:panelGrid>
+                <h:panelGrid  id="nextBn" style="width: 100%; text-align: center">
+                    <p:commandButton value="Next"
+                                     rendered="#{sessionBean1.msSpecAligned}" 
+                                     ajax="false" 
+                                     action="#{procBean.msSpecNextBn_action()}"/>       
+                </h:panelGrid> 
+            </h:panelGrid> 
+        </h:form>
+    </ui:define>
+</ui:composition>

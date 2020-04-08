@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_anal_template.xhtml">
+
+    <ui:define name="metaInfo">     
+        <f:event type="preRenderView" listener="#{sessionBean1.registerPage('Analysis options')}"/> 
+    </ui:define>
+    <ui:define name="content">
+        <style>
+            .ui-picklist .ui-picklist-list{
+                height:400px;
+                width: 280px
+            }
+        </style>
+        <h:form id="add">
+            <h:panelGrid style="padding:20px 40px 0px 40px; font-size: 13px; line-height: 23px">
+                <h2>Adducts and Currency Metabolites Customization:</h2>
+                <p>
+                    Currency metabolites are abundant substances such as water and carbon dioxide known to occur in normal functioning cells and participate in a 
+                    large number of metabolic reactions (<a href="https://www.ncbi.nlm.nih.gov/pubmed/17907676">Huss and Holme, 2007</a>). 
+                    Because of their ubiquitous nature, removing them can greatly improve pathway analysis and visualization.
+                </p>
+                <p>
+                    Raw MS peaks contain significant amount of adducts specific to the MS instrument and analytical mode. The default adduct lists 
+                    used by MetaboAnalyst is given below. Users can further customize the adduct list based on their instrumetation. 
+                </p>
+            </h:panelGrid> 
+            <h:panelGrid columns="2" style="padding-left: 40px; padding-right: 40px; width: 100%">
+                <p:tabView id="ec" style="width:100%; border: none; background: none">
+                    <p:tab title="Edit Currency List">
+                        <h:form>
+                            <h:panelGrid style="padding: 10px; width:100%; font-size: 13px; line-height: 23px"> 
+                                <p:outputLabel style="font-size:13px; font-weight: bold" value="Use the panels below to include metabolites as currency:"/>
+
+                                <p:pickList value="#{peakcBean.currItems}"
+                                            var ="curr" itemValue="#{curr}" itemLabel="#{curr}"
+                                            showSourceFilter="true" showTargetFilter="true">
+                                    <f:facet name="sourceCaption">Available</f:facet>
+                                    <f:facet name="targetCaption">Include</f:facet>
+                                    <p:ajax event="transfer" listener="#{peakcBean.doTransfer(event)}"/>
+                                </p:pickList>
+
+                                <h:panelGrid style="width:100%; text-align: center">
+                                    <p:commandButton value="Submit" style="width:80px" ajax="false"                                               
+                                                     action="#{peakcBean.editCurrency()}"/>
+                                </h:panelGrid>
+                            </h:panelGrid>
+                        </h:form>
+                    </p:tab>
+                    <p:tab title="Edit Adduct List" > 
+                        <h:form id="adductform">
+                            <h:panelGrid columns="3" style="padding-left: 10px; width:300px">
+                                <p:outputLabel value="Ion Mode" />
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{peakcBean.adductMode}">
+                                    <f:selectItem itemLabel="Positive" itemValue="positive"/> 
+                                    <f:selectItem itemLabel="Negative" itemValue="negative"/>
+                                    <p:ajax event="change" update="add:ec:adductform:adductPane"/>
+                                </p:selectOneMenu>
+                           
+
+                            </h:panelGrid>
+
+                             <h:panelGrid style="padding: 10px; width:100%; font-size: 13px; line-height: 23px"> 
+                                <p:outputLabel style="font-size:13px; font-weight: bold" value="Use the panels below to select adducts:"/>
+
+                                <p:pickList id="adductPane" value="#{peakcBean.adductItems}"
+                                            var ="add" itemValue="#{add}" itemLabel="#{add}"
+                                            showSourceFilter="true" showTargetFilter="true">
+                                    <f:facet name="sourceCaption">Available</f:facet>
+                                    <f:facet name="targetCaption">Include</f:facet>
+                                    <p:ajax event="transfer" listener="#{peakcBean.doTransfer(event)}"/>
+                                </p:pickList>
+
+                                <h:panelGrid style="width:100%; text-align: center">
+                                    <p:commandButton value="Submit" style="width:80px" ajax="false"                                               
+                                                     action="#{peakcBean.editCurrency()}"/>
+                                </h:panelGrid>
+                            </h:panelGrid>
+                        </h:form>
+                    </p:tab>
+                </p:tabView>
+            </h:panelGrid>
+        </h:form>
+    </ui:define>
+</ui:composition>
+
+
+
+

@@ -1,0 +1,148 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_anal_template.xhtml">
+    <ui:define name="metaInfo">
+        <f:event type="preRenderView" listener="#{sessionBean1.registerPage('Explorer')}"/> 
+    </ui:define>
+    <ui:define name="content">
+        <h:panelGrid style="padding:20px; font-size: 12px; line-height: 23px; width:100%">
+            <h:panelGrid style="width:100%">
+                <h:panelGrid columns="5" style="margin-left: 20px">
+                    <h:outputLabel style="font-weight: bold" value="Classification method: "/>
+                    <h:outputLabel style="font-weight: bold" value="#{rocAnalBean.clsMethodLabel}"/>
+                    <p:spacer style="width: 40px"/>
+                    <h:outputLabel style="font-weight: bold" value="Feature ranking method: "/>
+                    <h:outputLabel style="font-weight: bold" value="#{rocAnalBean.featRankLabel}"/>
+                </h:panelGrid>
+                <p:tabView id="ac" style="width:100%; border: none; background: none; font-size: 13px;">
+                    <p:tab title ="ROC View">
+                        <h:form id="form1">
+                            <p>
+                                The image below shows the ROC curves based on the cross validation (CV) performance. The default are the ROC 
+                                curves from all models averaged from all CV runs. You can also choose to show ROC curve for a particular model. 
+                                In this case, the 95% confidence interval can be computed for the model.
+                            </p>
+                            <h:panelGrid columns="2" style="width: 100%">
+                                <h:panelGrid columns="2" style="width: 100%">
+                                    <h:outputLabel style="font-weight: bold" value="Select a model "/>
+                                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{rocAnalBean.rocMdlDD}">
+                                        <f:selectItems value="#{rocAnalBean.rocMdlOpts}" />
+                                    </p:selectOneMenu>
+
+                                    <h:outputLabel style="font-weight: bold" value="Compute 95% confidence band"/>
+                                    <h:panelGroup>
+                                        <p:selectBooleanCheckbox value ="#{rocAnalBean.showConf}"/> 
+                                        <h:outputText value=" (for single model only)"/>
+                                    </h:panelGroup>
+                                </h:panelGrid>
+                                <p:commandButton value="Update" update=":ac:form1:rocPane  :cmdPane" 
+                                                 onclick="PF('statusDialog').show()" 
+                                                 oncomplete="PF('statusDialog').hide()" 
+                                                 actionListener="#{rocAnalBean.updateMultiROC()}"/>  
+                            </h:panelGrid>
+                            <h:panelGrid id="rocPane" style="text-align: center; width: 100%;">
+                                <h:panelGrid style="text-align: right; padding-left: 700px; width: 760px;">
+                                    <p:commandLink actionListener="#{sessionBean1.graphicsLnk_action('cls_roc')}" 
+                                                   oncomplete="PF('graphDialog').show()"
+                                                   title="Customize the graphics output">
+                                        <img src="#{facesContext.externalContext.requestContextPath}/resources/images/imgcenter.png"/>
+                                    </p:commandLink>
+                                </h:panelGrid>
+                                <img onerror='this.style.display="none"' src="#{rocAnalBean.rocImg}" alt="ROCImage"/>
+                            </h:panelGrid>        
+                        </h:form>
+                    </p:tab>
+                    <p:tab title ="Prob. View">
+                        <p>
+                            The image below shows the predicted class probabilities (average of the cross-validation) for each sample 
+                            using the best classifier (based on AUC). You can manually select other models as listed. As  
+                            a balanced subsampling approach is used for model training, the classification boundary is always at the center 
+                            (x = 0.5, the dotted line). The <b>confusion matrix</b> is also provided below the image.
+                        </p>
+                        <h:form id="form2">
+                            <h:panelGrid columns="2" style="width: 90%">
+                                <h:panelGrid columns="2">
+                                    <h:outputLabel style="font-weight: bold" value="Select a model: "/>
+                                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{rocAnalBean.rocMdlDD}">
+                                        <f:selectItems value="#{rocAnalBean.mdlOpts}" />
+                                    </p:selectOneMenu>
+                                    <p:selectBooleanCheckbox value ="#{rocAnalBean.showMisCls}"/>
+                                    <h:outputLabel style="font-weight: bold" value="Label samples classified to the wrong groups"/>
+                                </h:panelGrid>
+                                <p:commandButton value="Update" 
+                                                 update=":ac:form2:screePane  :cmdPane" 
+                                                 onclick="PF('statusDialog').show()"
+                                                 oncomplete="PF('statusDialog').hide()" 
+                                                 actionListener="#{rocAnalBean.updateProbView()}"/>   
+
+                            </h:panelGrid>
+                            <h:panelGrid id="screePane" style="width: 100%;">
+                                <h:panelGrid style="text-align: right; padding-left: 650px; width: 760px;">
+                                    <h:panelGrid columns="2" style="width:120px; text-align: right;">
+                                        <p:commandLink actionListener="#{sessionBean1.graphicsLnk_action('cls_prob')}" 
+                                                       oncomplete="PF('graphDialog').show()"
+                                                       title="Customize the graphics output">
+                                            <img src="#{facesContext.externalContext.requestContextPath}/resources/images/imgcenter.png"/>
+                                        </p:commandLink>
+                                        <h:outputText escape="false" value="#{rocAnalBean.probDownloadLink}"/>
+                                    </h:panelGrid>
+                                </h:panelGrid>
+                                <h:panelGrid columns="2">
+                                    <img onerror='this.style.display="none"' src="#{rocAnalBean.probImg}" alt="ProbImage"/>
+                                    <h:outputLabel style="font-weight: bold" escape="fasle" value="#{rocAnalBean.confMat}"/>
+                                </h:panelGrid>
+                            </h:panelGrid>     
+                        </h:form>
+                    </p:tab>
+                    <p:tab title ="Pred. View">
+                        <h:panelGrid id="score2dPane" style="text-align: center; width: 100%;">
+                            <h:panelGrid style="text-align: right; padding-left: 700px; width: 760px;">
+                                <p:commandLink actionListener="#{sessionBean1.graphicsLnk_action('cls_accu')}" 
+                                               oncomplete="PF('graphDialog').show()"
+                                               title="Customize the graphics output">
+                                    <img src="#{facesContext.externalContext.requestContextPath}/resources/images/imgcenter.png"/>
+                                </p:commandLink>
+                            </h:panelGrid>
+                            <img onerror='this.style.display="none"' src="#{rocAnalBean.predImg}" alt="PredImage"/>
+                        </h:panelGrid>  
+                    </p:tab>
+                    <p:tab title ="Sig. Features">
+                        <h:form id="form4">
+                            <h:panelGrid columns="2" style="width:100%;">
+                                <h:panelGrid columns="2" style="padding-bottom: 10px">
+                                    <h:outputLabel style="font-weight: bold" value="Select a model: "/>
+                                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{rocAnalBean.rocMdlDD}">
+                                        <f:selectItems value="#{rocAnalBean.mdlOpts}" />
+                                    </p:selectOneMenu>
+                                    <h:outputLabel style="font-weight: bold" value="Rank features by: "/>
+                                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{rocAnalBean.rankMeasure}">
+                                        <f:selectItem itemLabel="Frequencies of being selected" itemValue="freq" />
+                                        <f:selectItem itemLabel="Mean importance measure" itemValue="imp" />
+                                    </p:selectOneMenu>
+                                    <h:outputLabel value="Display features of top:"/>
+                                    <p:inputText style="width: 50px" value="#{rocAnalBean.featNum}"/>
+                                </h:panelGrid>
+                                <p:commandButton value="Update" update=":ac:form4:impPane  :cmdPane" actionListener="#{rocAnalBean.updateImpView()}"/>   
+                            </h:panelGrid>
+                            <h:panelGrid id="impPane" style="text-align: center; width: 100%;">
+                                <h:panelGrid style="text-align: right; padding-left: 700px; width: 760px;">
+                                    <p:commandLink actionListener="#{sessionBean1.graphicsLnk_action('cls_imp')}" 
+                                                   oncomplete="PF('graphDialog').show()"
+                                                   title="Customize the graphics output">
+                                        <img src="#{facesContext.externalContext.requestContextPath}/resources/images/imgcenter.png"/>
+                                    </p:commandLink>
+                                </h:panelGrid>
+                                <img onerror='this.style.display="none"' src="#{rocAnalBean.impImg}" alt="ROCImpImage"/>
+                            </h:panelGrid>  
+                        </h:form>
+                    </p:tab>
+                </p:tabView> 
+            </h:panelGrid> 
+        </h:panelGrid> 
+    </ui:define>
+</ui:composition>

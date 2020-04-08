@@ -1,0 +1,74 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_doc_template.xhtml">
+    <ui:define name="content">
+        <h:panelGrid style="padding: 40px 40px 20px 40px; font-size: 13px; line-height: 24px; width: 100%">
+
+            <h2>MetaboAnalyst Roadmap:</h2>
+            <table class="myTable">
+                <tr>
+                    <th width="100">Version</th>
+                     <th width="200">Key Feature</th>
+                     <th>Details</th>
+                </tr>
+                <tr>
+                    <td>1.0</td>
+                    <td>Statistics</td>
+                    <td>
+                        Focused on data processing, normalization and statistical analysis of metabolomics data;
+                     </td>
+                </tr>
+                <tr>
+                    <td>2.0</td> 
+                    <td>Functions</td> 
+                    <td>
+                    Incorporated metabolite set enrichment analysis (MSEA) and metabolic pathway analysis, 
+                    as well as advanced two-factor and time-series analyses. 
+                    </td>
+                </tr>
+                <tr>
+                    <td>3.0</td> 
+                    <td>Performance</td> 
+                    <td>
+                        Completed updated the underlying web framework for improved performance, with 
+                        support for biomarker analysis, power analysis, and joint-pathway analysis.
+                    </td>
+                </tr>
+                <tr>
+                    <td>4.0</td> 
+                    <td>Integration</td> 
+                    <td>
+                    Completely revamped web interface, with three new modules (MS Peaks to Pathways, 
+                    Biomarker Meta-analysis, and Network Explorer), together with a companion R package (MetaboAnalystR)
+                    </td>
+                </tr>
+            </table>
+            <p>
+                MetaboAnalyst is currently updated and maintained by 
+                <a href="http://xialab.ca" target="_blank">Xia Lab</a> at McGill Univeristy.
+            </p>  
+            <h2>Implementation:</h2>
+            <p>
+                MetaboAnalyst was implemented using PrimeFaces library (v6.1) based on the JavaServer Faces Technology. The majority 
+                of the backend computations and visualization are carried out by over 600 functions written in R (v3.4.3). 
+                The communication between Java and R is established through TCP/IP using the Rserve program. 
+            </p>
+            <h2>Software License:</h2>
+            <pre>
+"This program is free software; you can redistribute it and/or modify it under the terms of the 
+GNU General Public License as published by the Free Software Foundation; either version 2 of 
+the License, or (at your option) any later version.
+ 
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
+even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+<a href="http://www.gnu.org/licenses/" target="_blank">GNU General Public License</a> for more details."
+            </pre>
+            <br/><br/><br/><br/><br/><br/>
+        </h:panelGrid>
+    </ui:define>
+</ui:composition>

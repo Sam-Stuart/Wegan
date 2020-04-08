@@ -1,0 +1,143 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_anal_template.xhtml">
+    <ui:define name="metaInfo">
+        <f:event type="preRenderView" listener="#{sessionBean1.setAnalType('network')}"/> 
+        <f:event type="preRenderView" listener="#{sessionBean1.registerPage('Upload')}"/> 
+        <f:event type="preRenderView" listener="#{sessionBean1.addNaviTrack('Upload', '/faces/upload/MnetUploadView.xhtml')}"/> 
+    </ui:define>
+    <ui:define name="content">
+        <h:form id="form" enctype="multipart/form-data">
+            <h:panelGrid style="padding:20px; line-height: 21px; width:100%; font-size: 14px;">
+                <h:panelGroup>
+                    <h:outputText value="Upload a list of human genes or KEGG orthologs, (optional) with a list of metabolites
+                                  to explore their relationships. You can also"/>
+                    <p:spacer style="width: 6px"/>
+                    <p:commandLink value="try our example data." onclick="PF('testDataDialog').show();" style="font-weight: bold"/>
+                </h:panelGroup>
+                <h:panelGrid columns="2" style="padding:20px; font-size: 12px; line-height: 21px; width:900px;">
+                    <p:fieldset legend="Gene List" style="width: 400px">
+                        <h:panelGrid style="padding: 10px 10px 10px 20px;">
+                            <p:outputLabel style="font-size:13px; font-weight: bold" value="Gene list with optional fold changes"/>
+                            <h:panelGrid id="genePane">
+                                <h:panelGrid style="padding-left:20px;">
+                                    <p:inputTextarea  autoResize="false" value="#{mnetLoader.geneList}" rows="16" cols="36" />
+                                </h:panelGrid>
+                                <h:panelGrid columns="2" style="width:280px; padding-top: 5px;">
+                                    <p:outputLabel style="font-size:13px; font-weight: bold" value="ID Type: "/>
+                                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:165px" value="#{mnetLoader.geneIDType}">
+                                        <f:selectItem itemLabel="--- Not Specified ---" itemValue="NA" />
+                                        <f:selectItem itemLabel="KEGG Ortholog (KO)" itemValue="kos" />
+                                        <f:selectItem itemLabel="(Human) Entrez ID" itemValue="entrez" />
+                                        <f:selectItem itemLabel="(Human) Ensembl Gene ID" itemValue="embl" />
+                                        <f:selectItem itemLabel="(Human) Official Gene Symbol" itemValue="symbol" />
+                                    </p:selectOneMenu>
+                                </h:panelGrid>
+                            </h:panelGrid>
+                        </h:panelGrid>  
+                    </p:fieldset>
+                    <p:fieldset legend="Metabolite List" style="width: 400px">
+                        <h:panelGrid style="padding: 10px 10px 10px 20px;">
+                            <p:outputLabel style="font-size:13px; font-weight: bold" value="Compound list with optional fold changes"/>
+                            <h:panelGrid id="cmpdPane">
+                                <h:panelGrid style="padding-left:20px;">
+                                    <p:inputTextarea  autoResize="false" value="#{mnetLoader.cmpdList}" rows="16" cols="36" />
+                                </h:panelGrid>
+                                <h:panelGrid columns="2" style="width:280px; padding-top: 5px;">
+                                    <p:outputLabel style="font-size:13px; font-weight: bold" value="ID Type: "/>
+                                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:165px" value="#{mnetLoader.cmpdIDType}">
+                                        <f:selectItems value="#{applicationBean1.pathIDOpts}" />
+                                    </p:selectOneMenu>
+                                </h:panelGrid>
+                            </h:panelGrid>
+                        </h:panelGrid>   
+                    </p:fieldset>
+                </h:panelGrid>
+                <h:panelGrid style="width: 900px; text-align:center;">
+                    <p:commandButton value="Submit" style="font-size: 13px; width: 100px"
+                                     onclick="PF('statusDialog').show()" 
+                                     oncomplete="PF('statusDialog').hide()"
+                                     ajax="false" 
+                                     action="#{mnetLoader.integrityCheck()}"/>  
+                </h:panelGrid>
+            </h:panelGrid>
+        </h:form>
+        <p:dialog modal="true" widgetVar="testDataDialog" 
+                  appendTo="@(body)" style="line-height: 21px;"
+                  draggable="false" closable="true" resizable="true"> 
+            <h:panelGrid style="padding: 20px">
+                Please select one example dataset from below:
+                <h:form>
+                    <p:selectOneRadio id="customRadio" value="#{mnetLoader.exampleInputList}" layout="custom">  
+                        <f:selectItem itemLabel="Metabolites - genes" itemValue="metabogene"/>
+                        <f:selectItem itemLabel="Metabolites - KOs" itemValue="metabometag"/>
+                    </p:selectOneRadio> 
+                    <p:panelGrid style="width: 850px; font-size: 12px">  
+                        <f:facet name="header">  
+                            <p:row>  
+                                <p:column></p:column>  
+                                <p:column>ID Type</p:column>   
+                                <p:column>Data Description</p:column>
+                                <p:column>Instrumentation</p:column>
+                            </p:row>  
+                        </f:facet>  
+                        <p:row>  
+                            <p:column style="font-weight: bold; width:140px; font-size: 12px">
+                                <p:radioButton id="opt0" for="customRadio" itemIndex="0"/>  
+                                Metabolites - genes
+                            </p:column>
+                            <p:column  style="width:180px; font-size: 12px">
+                                <b>Organism</b>: Human<br/>
+                                <b>ID Type</b>: KEGG Compound ID and Official Gene Symbols
+                            </p:column>  
+                            <p:column  style="width:290px; font-size: 12px">
+                                Data from an integrative analysis of the transcriptome and metabolome to identify  
+                                (metabolites/genes) biomarkers of intrahepatic cholangiocarcinoma (ICC) in 16 individuals 
+                                (see <a href="https://doi.org/10.1038/srep16294" target="_blank">Murakami et al</a>).
+                            </p:column>  
+                            <p:column  style="width:270px; font-size: 12px">
+                                Transcriptomics: Agilent Microarrray; <br/>
+                                Metabolomics: CE-TOFMS
+                            </p:column>  
+                        </p:row> 
+                        <p:row>  
+                            <p:column style="font-weight: bold; width:110px; font-size: 12px">
+                                <p:radioButton id="opt1" for="customRadio" itemIndex="1"/>   
+                                Metabolites - KOs
+                            </p:column>
+                            <p:column  style="width:180px; font-size: 12px">
+                                <b>Organism</b>: Human<br/>
+                                <b>ID Type</b>: HMDB ID and KEGG Orthology ID 
+                            </p:column>  
+                            <p:column  style="width:290px; font-size: 12px">
+                                A subset of data from a metagenome-wide association study coupled with serum metabolomics profiling of 200 lean and obese 
+                                young Chinese individuals. (see <a href="https://doi.org/10.1038/nm.4358" target="_blank">Liu et al</a>).
+                            </p:column>  
+                            <p:column  style="width:270px; font-size: 12px">
+                                Metagenomics: Illumina NGS platform; <br/>
+                                Metabolomics: HPLC- MS 
+                            </p:column>  
+                        </p:row>
+                    </p:panelGrid>
+
+                    <h:panelGrid columns="2" style="width:800px; text-align: center; padding-top: 10px; padding-bottom: 20px">
+                        <p:commandButton value="Yes" 
+                                         onclick="PF('testDataDialog').hide();"
+                                         oncomplete="PF('statusDialog').hide();" 
+                                         update=":form:genePane :form:cmpdPane" 
+                                         actionListener="#{mnetLoader.updateListArea()}"/>  
+                        <p:commandButton value="Cancel" 
+                                         onclick="PF('testDataDialog').hide();" 
+                                         oncomplete="PF('statusDialog').hide();" 
+                                         actionListener="#{mnetLoader.setUseExample(false)}"/>
+                    </h:panelGrid> 
+                </h:form>
+            </h:panelGrid>
+        </p:dialog>
+    </ui:define>
+</ui:composition>

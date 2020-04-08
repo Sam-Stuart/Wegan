@@ -1,0 +1,164 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_anal_template.xhtml">
+    <ui:define name="metaInfo">
+        <f:event type="preRenderView" listener="#{sessionBean1.registerPage('Set parameter')}"/> 
+    </ui:define>
+    <ui:define name="content">
+        <h:form>
+            <h:panelGrid style="padding: 30px 30px 20px 40px; font-size: 13px; width: 100%">
+                <h2>Set parameters for enrichment analysis:</h2>
+                <p:selectOneRadio id="msetLib" value="#{msetBean.msetOpt}" layout="custom">  
+                    <f:selectItem itemLabel="Pathway-associated metabolite sets" itemValue="pathway" />
+                    <f:selectItem itemLabel="Disease-associated metabolite sets (Blood)" itemValue="blood" />
+                    <f:selectItem itemLabel="Disease-associated metabolite sets (Urine)" itemValue="urine" />
+                    <f:selectItem itemLabel="Disease-associated metabolite sets (CSF)" itemValue="csf" />
+                    <f:selectItem itemLabel="SNP-associated metabolite sets" itemValue="snp" />
+                    <f:selectItem itemLabel="Predicted metabolite sets" itemValue="predicted" />
+                    <f:selectItem itemLabel="Location-based metabolite sets" itemValue="location" />
+                    <f:selectItem itemLabel="Drug-pathway-associated metabolite sets" itemValue="drug" />
+                    <f:selectItem itemLabel="Self-defined metabolite sets" itemValue="self" />
+                </p:selectOneRadio>
+
+                <p:selectOneRadio id="refLib" value="#{msetBean.libOpt}" layout="custom">  
+                    <f:selectItem itemLabel="Use all the compounds in the selected metabolite set library" itemValue="all" />
+                    <f:selectItem itemLabel="Self-defined metabolome" itemValue="self" />
+                </p:selectOneRadio>
+
+                <h:panelGrid style="padding-left: 20px; width: 100%">
+                    <p:outputLabel style="font-weight: bold; font-size: 14px" value="Please select a metabolite set library"/>
+                    <h:panelGrid columns="2" style="font-size: 13px; line-height: 23px; width: 95%; padding: 20px; 
+                                 border: 1px solid white; padding: 18px 15px 15px 21px; background-color:#F9F9FB">
+                        <p:radioButton for="msetLib" itemIndex="0"/>
+                        <h:outputLabel style="font-weight: bold" value="Pathway-associated metabolite sets"/>
+                        <p:spacer/>
+                        <h:outputText value="This library contains 99 metabolite sets based on normal metabolic pathways."/>
+
+                        <p:radioButton for="msetLib" itemIndex="1"/>
+                        <h:outputLabel style="font-weight: bold" value="Disease-associated metabolite sets (Blood)"/>
+                        <p:spacer/>
+                        <h:outputText value="This library contains 344 metabolite sets reported in human blood."/>
+
+                        <p:radioButton for="msetLib" itemIndex="2"/>
+                        <h:outputLabel style="font-weight: bold" value="Disease-associated metabolite sets (Urine)"/>
+                        <p:spacer/>
+                        <h:outputText value="This library contains 384 metabolite sets reported in human urine."/>
+
+                        <p:radioButton for="msetLib" itemIndex="3"/>
+                        <h:outputLabel style="font-weight: bold" value="Disease-associated metabolite sets (CSF)"/>
+                        <p:spacer/>
+                        <h:outputText value="This library contains 166 metabolite sets reported in human cerebral spinal fluid (CSF)."/>
+
+                        <p:radioButton for="msetLib" itemIndex="4"/>
+                        <h:outputLabel style="font-weight: bold" value="SNP-associated metabolite sets"/>
+                        <p:spacer/>
+                        <h:outputText value="This library contains 4,598 metabolite sets based on their associations with detected single nucleotide polymorphisms (SNPs) loci. "/>
+
+                        <p:radioButton for="msetLib" itemIndex="5"/>
+                        <h:outputLabel style="font-weight: bold" value="Predicted metabolite sets"/>
+                        <p:spacer/>
+                        <h:outputText value="This library contains 912 metabolic sets that are predicted to be changed in the case of dysfunctional enzymes using genome-scale network model of human metabolism."/>
+
+                        <p:radioButton for="msetLib" itemIndex="6"/>
+                        <h:outputLabel style="font-weight: bold" value="Location-based metabolite sets"/>
+                        <p:spacer/>
+                        <h:outputText value="This library contains 73 metabolite sets based on organ, tissue, and subcellular localizations."/>
+                        
+                        <p:radioButton for="msetLib" itemIndex="7"/>
+                        <h:outputLabel style="font-weight: bold" value="Drug-pathway-associated metabolite sets"/>
+                        <p:spacer/>
+                        <h:outputText value="This library contains 461 metabolite sets based on drug pathways."/>
+                        
+                        <p:radioButton for="msetLib" itemIndex="8"/>
+                        <h:outputLabel style="font-weight: bold" value="Self-defined metabolite sets"/>
+                        <p:spacer/>
+                        <p:commandLink value="Click here to upload your own customized metabolite set library" onclick="PF('msetUploadDialog').show()"/>
+                        
+                    </h:panelGrid>
+
+                    <h:panelGrid style="padding-bottom: 10px" columns="3">
+                        <p:selectBooleanCheckbox value="#{msetBean.doMsetFilter}"/>
+                        <p:outputLabel value="Only use metabolite sets containing at least"/>
+                        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{msetBean.minMsetNum}">
+                            <f:selectItem itemLabel="2 compounds" itemValue="2" />
+                            <f:selectItem itemLabel="3 compounds" itemValue="3" />
+                            <f:selectItem itemLabel="4 compounds" itemValue="4" />
+                            <f:selectItem itemLabel="5 compounds" itemValue="5" />
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+
+                    <p:outputLabel style="font-weight: bold; font-size: 14px" value="Please specify a reference metabolome"/>
+                    <h:panelGrid columns="2" style="font-size: 13px; line-height: 23px; width: 95%; padding: 20px; 
+                                 border: 1px solid white; padding: 18px 15px 15px 21px; background-color: #F9F9FB">
+                        <p:radioButton for="refLib" itemIndex="0"/>
+                        <h:outputLabel style="font-weight: bold" value="Use all the compounds in the selected metabolite set library"/>
+
+                        <p:radioButton for="refLib" itemIndex="1"/>
+                        <p:commandLink value="Upload a reference metabolome based on your analytical platform" onclick="PF('libUploadDialog').show()"/>
+                    </h:panelGrid>
+
+                    <h:panelGrid style="width: 95%; text-align: center">
+                        <p:commandButton value="Submit" ajax="false" 
+                                         onclick="PF('statusDialog').show()" 
+                                         oncomplete="PF('statusDialog').hide()"                              
+                                         action="#{msetBean.submitBtn_action()}"/>
+                    </h:panelGrid> 
+                </h:panelGrid>
+            </h:panelGrid>
+        </h:form>
+
+
+        <p:dialog widgetVar="msetUploadDialog" dynamic="true" modal="true" appendTo="@(body)"
+                  hideEffect="explode" resizable="true">
+            <h:panelGrid style="padding:10px 10px 20px 18px; font-size: 13px; line-height: 21px; width:480px;">
+                <h3>Upload your own metabolite set library</h3>
+                <p>
+                    Your metabolite set library can be uploaded in comma separated file format (.csv). 
+                    It must contain two columns: the first column is the metabolite set name, 
+                    and the second column is a list of compound names separated by "; " (a semicolon and a space). 
+                    An example subset of the pathway library can be found 
+                    <a href="#{facesContext.externalContext.requestContextPath}/resources/data/lib_example.csv">here</a>.
+                    The library must be comprehensive in order to get meaningful results.  
+                    Please note: all the metabolites must be using the HMDB compound names. You can use the 
+                    "ID Conversion" program from <b>Other Utilities</b> to stardardize the names.
+                </p>
+                <h:form id="uploadForm" enctype="multipart/form-data">
+                    <p:fileUpload value="#{msetBean.msetLibFile}" mode="simple"/>  
+                    <p:commandButton value="Submit" ajax="false"
+                                     style ="margin-left: 20px"
+                                     onclick="PF('statusDialog').show())"
+                                     oncomplete="PF('statusDialog').hide()"
+                                     actionListener="#{msetBean.msetUploadBn_action()}"/>  
+                </h:form>  
+            </h:panelGrid>
+        </p:dialog>
+
+        <p:dialog widgetVar="libUploadDialog" dynamic="true" modal="true" appendTo="@(body)"
+                  hideEffect="explode" resizable="true">
+            <h:panelGrid style="padding:10px 10px 20px 20px; font-size: 12px; line-height: 23px; width:480px;">
+                <h3>
+                    Upload a reference metabolome based on your analysis platform
+                </h3>
+                <p>
+                    The reference metabolome refers to all the metabolites that can be detected based on your analytical platform. 
+                    They should be uploaded as a single-column HMDB compound names. You can use the "Compound ID Conversion" program 
+                    from "Other Utilities" to perform the name conversion. An example list can be found 
+                    <a href="#{facesContext.externalContext.requestContextPath}/resources/data/hmdb_list.txt">here</a>.
+                </p>
+                <h:form enctype="multipart/form-data">
+                    <p:fileUpload value="#{msetBean.metabolomeFile}" mode="simple"/>  
+                    <p:commandButton value="Submit" ajax="false"
+                                     style ="margin-left: 20px"
+                                     onclick="PF('statusDialog').show())"
+                                     oncomplete="PF('statusDialog').hide()"
+                                     actionListener="#{msetBean.uploadMetabolomeBn_action()}"/>  
+                </h:form>  
+            </h:panelGrid>      
+        </p:dialog>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,519 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_doc_template.xhtml">
+    <ui:define name="content">
+        <h:panelGrid style="padding: 30px 40px 20px 40px; font-size: 13px; line-height: 24px; width: 100%">
+            <h2>Update History:</h2>
+            <UL>
+                <li>
+                    Minor interface enhancement based on user feedback (09/11/2018); 
+                </li>
+                <li>
+                    Fixed the issue with mummichog p value computing (08/03/2018); 
+                </li>
+                <li>
+                    Updated to Primefaces 6.2 (07/13/2018); 
+                </li>
+                <li>
+                    Fixed issue with name mapping in enrichment analysis (06/28/2018); 
+                </li>
+                <li>
+                    Fixed issue with pathway visualization (06/18/2018); 
+                </li>
+                <li>
+                    Enhanced pathway image generation to deal with concurrency issue (06/13/2018); 
+                </li>
+                <li>
+                    Fixed the issues for name mapping and node-click interactions in pathway visualization (06/12/2018); 
+                </li>
+                <li>
+                    Fixed the issue in the downloaded CSV file generated during name mapping (06/10/2018);
+                </li>
+                <li>
+                    Fixed the issue for data editor in biomarker analysis (05/28/2018);
+                </li>
+                <li>
+                    Fixed the issue for sample hold-out analysis in biomarker analysis (04/23/2018); 
+                </li>
+                <li>
+                    Fixed the issue with time-series group ordering based on numeric values (04/19/2018); 
+                </li>
+                <li>
+                    Enhanced support for SVG export for KEGG global network (04/04/2018); 
+                </li>
+                <li>
+                    Updated <a href="/MetaboAnalyst/faces/docs/Resources.xhtml" target="_blank">Resources</a> on various local installation options including <b>Docker</b> (03/10/2018);
+                </li> 
+                <li>
+                    Minor bug fixes and feature enhancements based on user feedback (02/20/2018);
+                </li>  
+                <li>
+                    Updated tutorial and FAQs for the new modules (02/09/2018);
+                </li>
+                <li>
+                    Release of <b>MetaboAnalyst 4.0</b> togehter with a companion R package <a href="https://github.com/xia-lab/MetaboAnalystR" target="_blank">MetaboAnalystR</a>. 
+                    You can still access <a href="http://old.metaboanalyst.ca" target="_blank"><b>version 3.0 here</b></a> (01/29/2018);
+                </li> 
+                <li>
+                    Updated interface for module selection (01/22/2018);
+                </li>    
+                <li>
+                    Updated compound libraries based on the lastest HMDB (v4.0) (01/18/2018);
+                </li>  
+                <li>
+                    Added a new module for network-based integrative analysis for metabolites, genes (including KEGG Orthologs from metagenomics studies) (01/12/2018);
+                </li> 
+                <li>
+                    Added a new module for meta-analysis for multiple metabolomics data sets for robust biomarker identification (01/08/2018);
+                </li>  
+                <li>
+                    Added a new module for pathway enrichment analysis for untargeted metabolomics (mummichog) (12/20/2017);
+                </li>
+                <li>
+                    Minor bug fixes and interface improvements based on user feedback (12/20/2017);
+                </li>
+                <li>
+                    Added support for interactive enrichment network and SVG export (12/15/2017);
+                </li>
+                <li>
+                    Minor bug fixes and interface improvements based on user feedback (12/07/2017);
+                </li>
+                <li>
+                    Enhanced PLS-DA for multiple-group analysis (10/13/2017);
+                </li> 
+                <li>
+                    Fixed the broken link for downloading MetaboAnalyst.war file (09/20/2017);
+                </li> 
+                <li>
+                    Fixed the issue for PLS-DA on paired samples (09/14/2017);
+                </li> 
+                <li>
+                    Enhanced support for Feature Selection for large data in Biomarker Tester (<i>08/12/2017</i>);
+                </li>
+                <li>
+                    The downloaded correlation matrix is now synchronized with current clustering (<i>08/07/2017</i>); 
+                </li>
+                <li>
+                    Fixed the bug for computing ASCA permutation (<i>07/27/2017</i>); 
+                </li>
+                <li>
+                    Doubled the max allowed feature numbers for untargeted metabolomics (<i>06/27/2017</i>); 
+                </li>
+                <li>
+                    Updated random forest methods to control randomness (<i>06/27/2017</i>); 
+                </li>
+                <li>
+                    Fixed bug for ANOVA analysis for multiple groups when peak lists files are uploaded  (<i>06/15/2017</i>); 
+                </li>
+                <li>
+                    Added support for heatmap generation on group averages and correlation analysis for either features or samples (<i>06/10/2017</i>); 
+                </li>
+                <li>
+                    Updated univariate analysis (ANOVA, t-tests, Volcano plot) for FDR-adjusted p values (<i>05/12/2017</i>); 
+                </li>
+                <li>
+                    Code refactoring for better peroformance (<i>04/12/2017</i>); 
+                </li>
+                <li>
+                    Added support for peak filtering based on QC samples for untargeted metabolomics (<i>03/10/2017</i>); 
+                </li>
+                <li>
+                    Added support for "flipping" PCA for cross-study comparison (<i>02/09/2017</i>);
+                </li>
+                <li>
+                    Added support for network summary of enrichment analysis result (<i>02/06/2017</i>);
+                </li>
+                <li>
+                    Fixed the bug in feature table display in Biomarker Tester module (<i>01/05/2017</i>);
+                </li> 
+                <li>
+                    Updated pathway result table to show all pathway compounds (with hits highlighted) (<i>11/25/2016</i>);
+                </li>
+                <li>
+                    Improved Normalization and Data Editor for better user experience (<i>11/15/2016</i>);
+                </li>
+                <li>
+                    Added support for <b>sparse PLS-DA</b> analysis (<i>10/28/2016</i>);
+                </li>
+                <li>
+                    Minor bug fix and performance tuning (<i>09/15/2016</i>);
+                </li>
+                <li>
+                    Fixed the issue for t-tests plotting (<i>09/09/2016</i>);
+                </li>
+                <li>
+                    Added support for quantile normalization (<i>08/29/2016</i>);
+                </li>
+                <li>
+                    Improved name mapping functions for common metabolite names (<i>08/18/2016</i>)
+                </li>
+                <li>
+                    Joint-pathway analysis was back to work (<i>08/01/2016</i>) 
+                </li>
+                <li>
+                    Updated PCA to perform default data centering (<i>07/28/2016</i>) 
+                </li>
+                <li>
+                    Code refactoring to improve memory efficiency (<i>07/20/2016</i>) 
+                </li>
+                <li>
+                    More than <b>1 million jobs</b> have been processed since 06/2015 (<i>06/15/2016</i>) 
+                </li>
+                <li>
+                    Updated <b>Time Series</b> module to support analysis of time-series only data (<i>06/08/2016</i>); 
+                </li>
+                <li>
+                    Added support for Orthogonal PLS-DA (<i>05/16/2016</i>);
+                </li>
+                <li>
+                    Improved support for dealing with special characters and punctuations (<i>05/11/2016</i>);
+                </li>
+                <li>
+                    Added support for batch effect correction for multiple data sets  
+                    (<b>Other Utilities</b> module) (<i>02/22/2016</i>);
+                </li>
+                <li>
+                    Upgraded the web framework for better performance (<i>02/18/2016</i>);
+                </li>
+                <li>
+                    Updated the Google Cloud server for improved performance (<i>10/30/2015</i>);
+                </li>
+                <li>
+                    Added support for detailed ROC curve analysis of individual biomakers (<i>10/29/2015</i>); 
+                </li>
+                <li>
+                    Several feature improvements and bug fixes based on user feedback (<i>10/16/2015</i>); 
+                </li>
+                <li>
+                    Added support for logistic regression in ROC Tester (<i>08/12/2015</i>);
+                </li>
+                <li>
+                    Added support for computing compound ratios in biomarker analysis (<i>08/03/2015</i>);
+                </li>
+                <li>
+                    Minor bug fixes and feature enhancements (data IO, PLS-DA, enrichment analysis) to deal with special cases in user inputs (<i>07/20/2015</i>);
+                </li>
+                <li>
+                    Updated Multivariate Biomarker Analysis module with flexible interface and improved capacity for computing on large datasets (<i>06/05/2015</i>);
+                </li>
+                <li>
+                    MetaboAnalyst now has its logo image (top right)  (<i>05/15/2015</i>)
+                </li>
+                <li>
+                    MetaboAnalyst 3.0 <a href="http://nar.oxfordjournals.org/content/early/2015/04/20/nar.gkv380.full" target='_blank'>paper</a> is now available on the   
+                    2015 NAR web server issue 
+                </li>
+                <li>
+                    Users can now specify symbols in the PCA/PLSDA scores plots (under <b>Image options</b> - previous Color picker) (<i>04/20/2015</i>)
+                </li>
+                <li>
+                    The loading plots in PCA and PLS-DA are now clickable and zoomable (<i>04/02/2015</i>)
+                </li>
+                <li>
+                    T-tests and ANOVA results, as well as volcano plot are now <b>interactive and zoomable</b> (<i>03/31/2015</i>)
+                </li>
+                <li>
+                    Updated heatmaps to support both overview and high resolution details view (<i>03/25/2015</i>)
+                </li>
+                <li>
+                    Users can now upload either tab delimited file (.txt) or csv file (<i>03/20/2015</i>)
+                </li>
+                <li>
+                    Updated data filter to permit feature-specific normalization on low variance features (<i>03/19/2015</i>)
+                </li>
+                <li>
+                    Updated dendrogram for better visualization and minor bug fixes (<i>03/14/2015</i>)
+                </li>
+                <li>
+                    Bug fixes for feature-specific normalization and fold changes analysis (<i>03/13/2015</i>)
+                </li>
+                <li>
+                    Minor bug fixes for two factor and time-series data analysis (<i>03/04/2015</i>)
+                </li>
+                <li>
+                    Enhanced support on <b>building biomarker models for predicting new samples</b> under ROC Tester (<i>02/06/2015</i>); 
+                </li>
+                <li>
+                    Updated the <b>confidence interval</b> graphics for PCA, PLSDA and ROC curves; (<i>01/06/2015</i>)                        
+                </li>
+                <li>
+                    Updated the <b>Heatmaps</b> function for better visualization of large data; (<i>12/22/2014</i>)                        
+                </li>
+                <li>
+                    Added a new module for <b>Integrated Pathway Analysis</b> on genes and metabolites that have changed 
+                    significantly under the same experimental conditions; (<i>12/17/2014</i>)                        
+                </li>
+                <li>
+                    Added a new module for <b>Biomarker Analysis</b>; (<i>12/12/2014</i>)                        
+                </li>
+                <li>
+                    Added sorting and filtering support in the feature details table; (<i>11/12/2014</i>)                        
+                </li>
+                <li>
+                    Fixed a bug on broken functions after missing value imputation; (<i>11/10/2014</i>)                        
+                </li>
+                <li>
+                    PCA and PLSDA 3D plots now are interactive; (<i>10/31/2014</i>)                        
+                </li>
+                <li>
+                    A new module (<u>Power Analysis</u>) is added to support <b>sample size and power analysis</b> 
+                    for pilot metabolomic studies; (<i>10/30/2014</i>)
+                </li>
+                <li>
+                    Added <b>Compound ID conversion</b> support (under <u>Other Utilities</u>); (<i>10/24/2014</i>)
+                </li>
+                <li>
+                    Added support for uploading <b>custom metabolite sets</b> and <b>custom metabolome</b> in 
+                    <u>Enrichment</u> and <u>Pathway</u> analyses; (<i>10/20/2014</i>)
+                </li>                    
+                <li>
+                    Fixed the dialog issue in compound name mapping; (<i>10/17/2014</i>)
+                </li>                   
+                <li>
+                    Added support for labeling PCA/PLSDA loadings plot; (<i>10/09/2014</i>)
+                </li>                    
+                <li>
+                    Added pathway analysis support for <b>Schistosoma mansoni</b>, <b>Malaria</b>, <b>Trypanosoma brucei</b> and 
+                    <b>Synechococcus elongatus</b>; (<i>09/30/2014</i>)
+                </li>
+                <li>
+                    Updated compound name mapping algorithm for improved performance; (<i>09/29/2014</i>)
+                </li>
+                <li>
+                    Updated compound and pathway IDs based on the latest HMDB and SMPDB; (<i>09/12/2014</i>)
+                </li>
+                <li>
+                    Users can now edit or re-order groups under <b>Data Editor</b> page; (<i>08/26/2014</i>)
+                </li>
+                <li>
+                    Updated FAQs for recent changes; (<i>08/08/2014</i>)
+                </li>
+                <li>
+                    Added a new tutorial on <a href="#{facesContext.externalContext.requestContextPath}/resources/data/metabolomics_xcms_xia.ppt"><b>raw spectra processing using XCMS for MetaboAnalyst</b></a>; (<i>08/04/2014</i>)
+                </li>
+                <li>
+                    Completely upgraded the web application framework for better performance and user experience; (<i>07/28/2014</i>)
+                </li>
+                <li>
+                    Fixed color reversing issue with PLS-DA VIP plot; (07/15/2014)
+                </li>   
+                <li>
+                    Updated two-way ANOVA for repeated measures; (<i>06/05/2014</i>)
+                </li> 
+                <li>
+                    Updated VIP plot for supporting black and white colors; (02/05/2014)
+                </li>                    
+                <li>
+                    Added nonparametric version for t-tests and ANOVA, and minor bug fix; (<i>02/22/2013</i>)
+                </li> 
+                <LI>
+                    Added support for heatmaps on grayscale; added link to download the underlying matrix 
+                    for correlation heatmaps. (<i>08/25/2012</i>)
+                </LI>
+                <LI>
+                    Presentation at the 8th Metabolomics Conference at Washington DC is available under <u>Tutorial</u>; (<i>07/04/2012</i>)
+                </LI>
+                <LI>
+                    Updated <b>Data Filtering</b> and <b>Data Normalization</b> procedures; (<i>07/03/2012</i>)
+                </LI>
+                <LI>
+                    Updated compound database; (<i>06/22/2012</i>)
+                </LI>
+                <LI>
+                    Updated correlation heatmap analysis; (<i>05/27/2012</i>)</LI>
+                <LI>
+                    Pathway analysis now supports <i>Mesorhizobium loti</i> and <i>Gallus gallus (chicken)</i>; (<i>05/10/2012</i>) 
+                </LI>
+                <LI>
+                    Minor bug fix and updates; (<i>03/29/2012</i>) 
+                </LI>
+                <LI>
+                    Pathway analysis now supports <i>Gallus gallus (chicken)</i>; (<i>03/18/2012</i>) 
+                </LI>
+                <LI>
+                    Fixed missing link to high-resolution images generated for pathways. (<i>03/03/2012</i>)   
+                </LI>
+                <LI>
+                    Updated correlation heatmaps and some minor bug fixes. (<i>02/16/2012</i>)   
+                </LI>
+                <LI>
+                    Minor update and bug fix; (<i>01/05/2012</i>) 
+                </LI>
+                <LI>
+                    Added a new module for data quality check - available at <u>QC and Other Utilities</u> tab on the data upload 
+                    page(<i>01/02/2012</i>);
+                </LI>
+                <LI>
+                    All important images can be reproduced in high resolution (150/300/600 DPI) in 
+                    PNG, TIFF, PostScript, SVG, or PDF format. Just click the  <img src="#{facesContext.externalContext.requestContextPath}/resources/images/imgcenter.png"></img>  above each image! (<i>12/31/2011</i>); 
+                </LI>
+                <LI>
+                    Updated Bioconductor to the latest version (2.9) and performed compatibility tests(<i>12/17/2011</i>);
+                </LI>
+                <LI>
+                    Upgraded R to the latest version (2.14.0) and some visual enhancement (<i>11/26/2011</i>);
+                </LI>
+                <LI>
+                    Added <b>correlation heatmap</b> visualization feature (under <u>correlation</u> node, <i>10/08/2011</i>); 
+                </LI>
+                <LI>
+                    Enhanced support for <b>univariate analysis</b> and minor bug fixes (<i>09/14/2011</i>); 
+                </LI>
+                <LI>
+                    Minor bug fixes and some visual improvements (<i>08/10/2011</i>);  
+                </LI>
+                <LI>
+                    Updated graphical output for PLS-DA <b>VIP plot</b> (<i>07/23/2011</i>);  
+                </LI>
+                <LI>
+                    Minor bug fixes and some visual improvements (<i>06/23/2011</i>);
+                </LI>
+                <LI>
+                    Added a new module for <b>two-factor </b> and <b> time-series</b> data analysis (<i>05/12/2011</i>);  
+                </LI>
+                <LI>
+                    MetaboAnalyst is featured on <a href="http://dx.doi.org/10.1038/nprot.2011.319">Nature Protocols</a> (<i>05/10/2011</i>)
+                </LI>
+                <LI>
+                    Enhanced support for <b>Heatmap</b> generation (<i>03/03/2011</i>);  
+                </LI>
+                <LI>
+                    Added two normalization methods - <u>normalization to sample median</u> and <u>quantile normalization</u> 
+                    based on recent publications (<i>02/26/2011</i>);
+                </LI>
+                <LI>
+                    Added an <b>Outlier detection</b> tab for data analysis using <u>Random Forest</u> (<i>02/08/2011</i>);
+                </LI>
+                <LI>
+                    Added a <b>Color picker</b> (under <u>Processing</u> node) for setting colors for figures (<i>02/07/2011</i>);  
+                </LI>
+                <LI>
+                    Fixed several broken functions based on user feedback (<i>02/06/2011</i>);  
+                </LI>
+                <LI>
+                    Improved message output and minor bug fix due to some package updates (<i>02/02/2011</i>);  
+                </LI>
+                <LI>
+                    Added a <b>Data filter</b> function for large data with many noisy features (<i>02/02/2011</i>);  
+                </LI>
+                <LI>
+                    All significant features are now available as text files in the <b>Download</b> page (<i>02/01/2011</i>);  
+                </LI>
+                <LI>
+                    Fixed the issue with reading CSV files generated by Miscrosoft Excel (<i>12/6/2010</i>);
+                </LI>
+                <LI>
+                    MetaboAnalyst server has been upgraded, let us know if you experience any problems (<i>12/5/2010</i>); 
+                </LI>
+                <LI>
+                    PLS-DA now calculates R<sup>2</sup> and Q<sup>2</sup> values in the Cross Validation section. (<i>09/28/2010</i>); 
+                </LI>
+                <LI>
+                    Upgraded <b>unzip</b> function to better support files created with WinZip (<i>09/27/2010</i>);  
+                </LI>
+                <LI>
+                    Fixed the image update issue associated with the new server (<i>09/18/2010</i>);  
+                </LI>
+                <LI>
+                    MetaboAnalyst is now hosted on a dedicated new, powerful server (<i>09/12/2010</i>);  
+                </LI>
+                <LI>
+                    Added support for applying a reference metabolome for enrichment analysis and pathway analysis. (<i>09/08/2010</i>); 
+                </LI>
+                <LI>
+                    Added <b>Correlation Analysis</b> to identify significant features with patterns of interests (<i>09/05/2010</i>);  
+                </LI>
+                <LI>
+                    MetaboAnalyst now supports <u>metabolite set enrichment analysis</u> and <u>pathway analysis</u> (<i>09/01/2010</i>); 
+                </LI>
+                <LI>
+                    Updated the error tracking system (<i>07/18/2010</i>); 
+                </LI>
+                <LI>
+                    High resolution (300 dpi) images are available for score or loadings plots from PCA and PLSDA analysis (<i>07/17/2010</i>); 
+                </LI>
+                <LI>
+                    PLSDA permutation test now supports multi-group data  (<i>07/14/2010</i>);
+                </LI>
+                <LI>
+                    Updated the pathway library to use SMPDB (<i>07/13/2010</i>);
+                </LI>
+                <LI>
+                    Improved 3D visualization for PCA and PLSDA results  (<i>07/12/2010</i>);
+                </LI>
+                <LI>
+                    MetaboAnalyst was presented on the the Metabolomics Conference 2010 (Amsterdam, The Netherlands) 
+                    <a href="#{facesContext.externalContext.requestContextPath}/resources/data/metabolomics2010_xia.ppt"> (download slides)</a>(<i>07/09/2010</i>);
+                </LI>
+                <LI>
+                    Fixed the data upload problem encountered for transposed data (samples in columns, features in rows) 
+                    and for paired comparison (<i>07/07/2010</i>) ;
+                </LI>
+                <LI>
+                    Bug fix:  Color inconsistencies b/w the confidence ellipses and sample class labels (used in PCA abd PLS-DA 2D plot)(<i>06/17/2010</i>) ;
+                </LI>
+                <LI>
+                    Updated the interface for <u>zip file upload</u> to support multiple-group analysis of <u> peak lists</u> and <u>spectra data</u> (<i>06/15/2010</i>) ;
+                </LI>
+                <LI>
+                    Introducing <b>Data Editor</b> to support samples/features exclusion (i.e. outliers) during analysis (<i>06/14/2010</i>) ;
+                </LI>
+                <LI>
+                    Updated documentations and reports for multi-group analysis (<i>06/11/2010</i>) ;
+                </LI>
+                <LI>
+                    Added a new function - <b>Analysis of Variance (ANOVA)</b> and associated post-hoc methods for multi-group 
+                    analysis  (<i>06/10/2010</i>) ;
+                </LI>
+                <LI>
+                    Enhanced PLS-DA support for multi-group analysis (<i>06/05/2010</i>); 
+                </LI>
+                <LI>
+                    MetaboAnalyst now supports data analysis for <b>more than two groups</b>.  
+                    (<i>06/01/2010</i>); 
+                </LI>
+                <LI>
+                    For data collected from human or other mammalian species, you may also want to visit our
+                    new web application <a href="http://www.msea.ca"><b>MSEA (http://www.msea.ca)</b></a> for more advanced data analysis. 
+                    (<i>05/11/2010</i>); 
+                </LI>
+                <LI>
+                    Improved graphics for PCA and PLSDA result  (<i>03/21/2010</i>);
+                </LI>
+                <LI>
+                    MetaboAnalyst is now hosted on <b>a new and powerful server</b> (<i>01/31/2010</i>);
+                </LI>
+                <LI>
+                    Fixed t-tests errors on constant values  (<i>01/31/2010</i>);
+                </LI>
+                <LI>
+                    Added functions to plot 2D confidence regions for PCA and PLS-DA scores plots (<i>12/12/2009</i>);
+                </LI>
+                <LI>
+                    MetaboAnalyst tutorial presented  on the Metabolomics Conference 2009 (Edmonton, Canada) 
+                    <a href="#{facesContext.externalContext.requestContextPath}/resources/data/metabolomics2009_xia.ppt"> (download slides)</a>(<i>09/12/2009</i>);
+                </LI>
+                <LI>
+                    MetaboAnalyst is now hosted on Tomcat (<i>02/06/2009</i>);
+                </LI>
+                <LI>
+                    PLS-DA now provides p value based on permutations (<i>20/05/2009</i>);
+                </LI>
+                <LI>
+                    Integrity check added for sample/feature names (<i>28/05/2009</i>);
+                </LI>
+                <LI>
+                    High-resolution images for heatmap and dendrogram are available (<i>15/05/2009</i>);
+                </LI>
+                <LI>
+                    Improved function for unzipping compressed data (.zip) (<i>10/05/2009</i>);
+                </LI>
+            </UL> 
+        </h:panelGrid>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_anal_template.xhtml">
+    <ui:define name="metaInfo">
+        <f:event type="preRenderView" listener="#{analBean.performDefaultAnalysis('PatternHunter')}"/> 
+    </ui:define>
+    <ui:define name="content">
+        <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
+
+            <h:form id="form2">
+                <p>
+                    Correlation analysis can be performed either against a given feature or against a given pattern. 
+                    The pattern is specified as a series of numbers separated by "-". Each number corresponds to the 
+                    expected expression pattern in the corresponding group. For example, a <b>1-2-3-4</b> pattern is 
+                    used to search for features that increase linearly with time in a time-series data with four time 
+                    points (or four groups). The order of the groups is given as the first item in the predefined patterns. 
+                </p>
+                <p:selectOneRadio id="ptnRadio" value="#{univBean.ptnType}" layout="custom">  
+                    <f:selectItems value="#{applicationBean1.ptnOpts}"/> 
+                </p:selectOneRadio>
+                <h:panelGrid columns="2">
+                    <h:panelGrid columns="2" style="padding: 2px 20px 10px 20px; line-height: 25px">
+                        <h:outputLabel style="font-weight: bold" value="Define a pattern using:"/>
+                        <h:panelGrid columns="3" style="padding-bottom: 10px">
+                            <p:radioButton for="ptnRadio" itemIndex="0"/>
+                            <h:outputLabel value="a feature of interest:"/>
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{univBean.ptnFeature}">
+                                <f:selectItems value="#{univBean.normVarNmOpts}" />
+                            </p:selectOneMenu> 
+                            <p:radioButton for="ptnRadio" itemIndex="1"/>
+                            <h:outputLabel value="a predefined profile:"/>
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{univBean.ptnTemplate}">
+                                <f:selectItems value="#{univBean.templatePthOpts}" />
+                            </p:selectOneMenu>
+                            <p:radioButton for="ptnRadio" itemIndex="2"/>
+                            <h:outputLabel value="a custom profile:"/>
+                            <p:inputText style="width:50px" value="#{univBean.usrPtn}"/> 
+                        </h:panelGrid>
+                        <h:outputLabel style="font-weight: bold" value="Choose a distance measure:"/>
+                        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{univBean.ptnDistMeasure}">
+                            <f:selectItems value="#{applicationBean1.distMeasureOpts}" />
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                    <p:commandButton value="Submit" update="form2:ptnPane  :cmdPane" actionListener="#{univBean.ptnBtn_action()}"/>   
+                </h:panelGrid>
+                <hr style="height: 12px; border: 0;box-shadow: inset 0 12px 12px -12px rgba(0, 0, 0, 0.5); width:100%; min-width: 1000px"/>
+                <h:panelGrid id="ptnPane" style="text-align: center; width: 100%;">
+                    <h:panelGrid columns="2" style="text-align: right; padding-left: 700px; width: 760px;">
+                        <p:commandLink action="#{sessionBean1.detailsLnk_action('template')}" title="View the detailed data table">
+                            <img src="#{facesContext.externalContext.requestContextPath}/resources/images/table.png"/>
+                        </p:commandLink>
+                        <p:commandLink actionListener="#{sessionBean1.graphicsLnk_action('ptn')}" 
+                                       oncomplete="PF('graphDialog').show()"
+                                       title="Customize the graphics output">
+                            <img src="#{facesContext.externalContext.requestContextPath}/resources/images/imgcenter.png"/>
+                        </p:commandLink>
+                    </h:panelGrid>
+                    <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('ptn')}" alt="Patternimage"/>
+                </h:panelGrid>  
+            </h:form>
+        </h:panelGrid> 
+    </ui:define>
+</ui:composition>

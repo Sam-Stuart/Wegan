@@ -1,0 +1,1714 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_doc_template.xhtml">
+    <ui:define name="content">
+        <h:panelGrid style="padding: 40px 20px 20px 30px; font-size: 13px; line-height: 21px; width: 100%">
+            <h2>Frequently Asked Questions (FAQs):</h2>
+            <p:tabView id="ac" style="width:100%; border: none; font-size: 13px;"> 
+                <p:tab title ="Data Processing">
+                    <OL style="line-height: 24px;">
+                        <LI>
+                            <a href = "#ma"> When should I use MetaboAnalyst? </a>
+                        </LI>
+                        <LI>
+                            <a href="#input"> What types of input does MetaboAnalyst accept?</a>
+                        </LI>   
+                        <LI>
+                            <a href="#confid">Is the data I uploaded kept confidential? </a> 
+                        </LI>
+                        <LI>
+                            <a href="#spec">What's the recommended way to perform GC/LC-MS spectra analysis? </a>
+                        </LI>  
+                        <LI>
+                            <a href="#specms2">What's the recommended way to perform LC-MS/MS spectra analysis? </a>
+                        </LI>   
+                        <LI>
+                            <a href="#zipformat"> I received a format error when uploading compressed GC/LC-MS spectra (.zip) ?</a>
+                        </LI> 
+                        <LI>
+                            <a href="#missing"> How to deal with missing values?</a>
+                        </LI>
+                        <LI>
+                            <a href="#outlier"> How to identify and deal with outliers?</a>
+                        </LI> 
+                        <LI>
+                            <a href="#baseline"> Why should I filter baseline noises (spectral binning)?</a>
+                        </LI>  
+                        <LI>
+                            <a href="#image"> Some images did not show up after I click the corresponding tab (PCA, PLS-DA)?</a> 
+                        </LI>          
+                        <LI>
+                            <a href="#nogroup"> Can I analyze unlabeled data?</a>
+                        </LI>    
+                        <LI>
+                            <a href="#replic"> How to deal with technical replications?</a> 
+                        </LI>  
+                        <LI>
+                            <a href="#qnorm">How does "normalization by a reference sample" work?</a>
+                        </LI>  
+                        <LI>
+                            <a href="#glog"> What is generalized logarithm transformation? </a>
+                        </LI>   
+                        <LI>
+                            <a href="#cnorm">How does "Auto/Pareto/Range scaling" work?</a>
+                        </LI>   
+                        <LI>
+                            <a href="#editor">When should I use <b>Data editor</b> or <b>Data filter</b> ?</a>  
+                        </LI>   
+                    </OL>
+                    <ol>
+                        <li>
+                            <h4><a name = "ma"> <font face="Arial"> When should I use <i>MetaboAnalyst</i>?</font></a></h4>
+                            <p><font face="Arial">
+                                    The purpose of MetaboAnalyst is to provide a free, user-friendly, and easily accessible tool for analyzing data 
+                                    arising from high-throughput metabolomics data. It is designed to address two common types of problems: 
+                                    1) to identify features that are significantly different between two conditions (biomarker discovery); 
+                                    2) to use the metabolomic data to predict the conditions under study (classification). In addition, MetaboAnalyst
+                                    also provide tools for compound identification and pathway mapping for annotating significant features. 
+                                    <U>Note, MetaboAnalyst is designed for analyzing a large number of samples, very few samples (less than 10) will 
+                                        cause some functions work improperly.</U>
+                                </font></p>
+                        </li>
+                        <li>
+                            <h4><a name = "input"> <font face="Arial">What types of input does <i>MetaboAnalyst</i> accept?</font></a></h4>
+                            <p><font face="Arial">
+                                    MetaboAnalyst accepts data from either targeted profiling (concentration tables) or metabolic fingerprinting
+                                    approaches (spectral bins, peak lists) produced from either NMR, LC-MS, or GC-MS. In addition, GC/LC-MS spectra saved 
+                                    as open data format (NetCDF, mzDATA, mzXML) can also be processed using the XCMS packages. For sample 
+                                    files and format specification, please check "Data Formats" for more details.  
+                                </font></p>
+                        </li>
+                        <li>
+                            <h4><a name = "confid"><font face="Arial"> Is the data I uploaded kept confidential? </font> </a></h4>
+                            Yes. The data files you upload for analysis as well as any analysis results, are not downloaded or examined in any way by 
+                            the administrators, unless required for system maintenance and troubleshooting. All files are deleted from the server after no 
+                            more than 72 hours, and no archives or backups are kept. You are advised to download your results as an zip immediately 
+                            after performing an analysis.
+                        </li>
+                        <li>
+                            <h4><a name = "spec"><font face="Arial">What is the recommended way to perform GC/LC-MS spectra analysis? </font> </a></h4>		
+                            <p>         
+                                <span style="text-decoration: line-through;">MetaboAnalyst supports GC/LC-MS spectra through the popular <a href="http://metlin.scripps.edu/download/">XCMS</a> 
+                                    package. However, limited by the web interface, only the most commonly used procedures and parameters are enabled. 
+                                    The package also offers more advanced options for tuning parameters in peak picking and alignment, as well as other 
+                                    spectra visualization options. These options are either computationally very intensive or requires a lot of user interactions.</span>
+
+                                Therefore, users are encouraged to first perform spectra processing either using the XCMS installed in their local machine 
+                                or using tools provided by the manufacturers, and then upload the processed peak list files (<a href="../resources/data/lcms_3col_peaks.zip">example</a>) or peak intensity table 
+                                (<a href="../resources/data/lcms_table.csv">example</a>) for analysis. 
+                            </p>
+                            <p> 
+                                For a detailed step-by-step instructions on how to use R and the XCMS package to process raw spectra, please 
+                                read the <a href="../resources/data/metabolomics_xcms_xia.ppt">Raw LC-MS spectra processing using R and XCMS</a> on our tutorial page. For web-based tool, we recommend 
+
+                                the <a href="https://xcmsonline.scripps.edu/">XCMS Online</a> service for LC-MS spectra processing;
+                                and the <a href="https://www.metabolome-express.org/">MetabolomeExpress</a> for GC-MS spectra processing. 
+
+                                After you obtain a peaklist table, you can then upload to MetaboAnalyst for statistical analysis. 
+                            </p>
+                        </li>
+                        <li>
+                            <h4><a name = "specms2"><font face="Arial">What's the recommended way to perform LC-MS/MS spectra analysis? </font> </a></h4>		
+                            <p>
+                                MetaboAnalyst currently does not support LC-MS/MS spectra data analysis. For such data, users can try the recent 
+                                <a href="http://msbi.ipb-halle.de/MetFamily/">MetFamily</a> tool. By integrating analysis of MS(1) abundances and MS/MS spectra,
+                                the tool is able to discover regulated metabolite families in untargetted metabolomics studies. For details, please refer to 
+                                their orginal paper <a href="http://www.ncbi.nlm.nih.gov/pubmed/27452369">here </a>
+                            </p>
+                        </li>
+                        <li>
+                            <h4><a name = "zipformat"> <font face="Arial">I received a format error when uploading compressed spectra (.zip)</font></a></h4>
+                            <p><font face="Arial">
+                                    There are two possible reasons when this error happens: 
+                                </font> </p>
+                            <p><font face="Arial">
+                                    The zip files cannot be decompressed by our program. This happens if you used the most recent WinZip (v12.0) with default option for 
+                                    compression. Make sure to <U>selecting the Legacy compression (Zip 2.0 compatible)</U>. 
+                                </font></p>
+                            <p><font face="Arial">
+                                    It can also be caused by the spectra itself. They must be in NetCDF (.CDF) or mzXML format. Also, please note, 
+                                    the program does not handle tandem-MS files. In addition, make sure there are no other files (for example, log file or 
+                                    other parameters files) included in the spectra folder. 
+                                </font></p>
+                        </li>
+                        <li>
+                            <h4><a name = "missing"> <font face="Arial">How to deal with missing values?</font></a></h4>
+                            <p><font face="Arial">
+                                    Depending on the type of experiments, there may be significant amount of missing values present in the data set. 
+                                    Missing values should be presented either as <U>empty values or NA without quotes</U> in order to be accepted by MetaboAnalyst. 
+                                    Any other symbol will be treated as string character and will cause errors during data processing. MetaboAnalyst offers a variety of 
+                                    methods to deal with missing values. By default, the missing values are treated as the result of low signal intensity. They will be 
+                                    replaced by half of the minimum positive values detected in your data. Users can also specify other methods, such as <i>replace by mean/median,
+                                        Probabilistic PCA (PPCA), Bayesian PCA (BPCA) method, or Singular Value Decomposition (SVD) method </i> to impute the missing values
+                                    (<a href="http://www.ncbi.nlm.nih.gov/pubmed/17344241">Stacklies W. et al</a>). 
+                                </font></p>
+                        </li>
+                        <li>
+                            <h4><a name = "outlier"> <font face="Arial">How to detect and deal with outlier?</font></a></h4>
+                            <p><font face="Arial">
+                                    Potential outliers can be identified from PCA or PLS-DA plots. The scores plot can be used to identify sample outliers, 
+                                    while the loadings plot can be used to identify feature outliers. The potential outlier will distinguish itself as 
+                                    the one located far away from the major clusters formed by the remaining.
+                                </font></p>
+                            <p><font face="Arial">
+                                    To deal with outliers, the first is to check if those samples / features are measured properly. In many cases, outliers 
+                                    are the result of operational errors during analytical process. If those values cannot be corrected, they should be 
+                                    removed from analysis. MetaboAnalyst provides <b>DataEditor</b> to enable easy removal of sample/feature outliers. 
+                                    Please note, you may need to re-normalize the data after outlier removal.    
+                                </font></p>
+                        </li>
+                        <li>
+                            <h4><a name = "baseline"><font face="Arial">Why should I filter baseline noises (spectral binning)?</font> </a></h4>
+                            <p><font face="Arial">
+                                    For NMR spectra, there are several regions where no known compounds in biofluids have a resonance peak. The corresponding bins contain
+                                    only baseline noises. In addition, when signal approaches background, the relative errors increases and conclusions based on these data will be questionable.
+                                    Therefore, it is best to first remove these noises before further analysis. The current implementation supports the use of absolute 
+                                    cut-off threshold for acceptable signal values. The default is a percentage based cut-off in which a fixed fraction (default 25%) of 
+                                    the bins is discarded. Users are provided with a visual guidance to select an appropriate value. In future,  the program will estimate the 
+                                    baseline for each spectrum and its standard deviation. Signals less than two standard deviations above the baseline will be excluded.   
+                                </font></p>
+                        </li>
+                        <li>
+                            <h4><a name = "image"><font face="Arial">Some images did not show up after I click the corresponding tab?</font> </a></h4>
+                            <p><font face="Arial">
+                                    This implies MetaboAnalyst failed to execute the command using the given parameters. Users should try to adjust parameter values. 
+                                    We found in most cases, the problem is associated with sample size. In particular, if the sample size is very small (below 10),
+                                    some unpredictable error may happen. For instance, by default PCA and PLSDA will try to generate summary/classification/permutation 
+                                    plot for the top 5 components, if the sample size is too small, it will fail to do so. 
+                                </font></p>
+                        </li>
+                        <li>
+                            <h4><a name = "nogroup"><font face="Arial">Can I analyze unlabeled data?</font> </a></h4>
+                            <p><font face="Arial">
+                                    There are several unsupervised methods (PCA, hierarchical clustering, SOM, K-means) that can be used to detect 
+                                    inherent patterns in unlabeled data. However you need to trick MetaboAnalyst to accept the data by <U> providing 
+                                        dummy two-group labels </U>. In this case, results from feature selection or supervised classification methods 
+                                    will be meaningless.   
+                                </font></p>
+                        </li>
+                        <li>
+                            <h4><a name = "replic"><font face="Arial">How to deal with technical replications?</font> </a></h4>
+                            <p><font face="Arial">
+                                    This depends on the biological questions under investigation. For example, if the purpose of technical replications is to see if 
+                                    there is systematic variance introduced by sample handling or instrumentation, the clustering programs such as PCA or 
+                                    hierarchical clustering can be used to investigate whether the same technical replicates tend to group together. 
+                                </font></p>
+                            <p><font face="Arial">
+                                    After checking the clustering pattern of these technical replicates, if users decide to merge all sample replications 
+                                    (i.e. by averaging them). The processed data can be downloaded and processed with a different program 
+                                    (i.e. spreadsheet). The data can then be re-uploaded to MetaboAnalyst for further data analysis and annotation. 
+                                </font></p>
+                        </li>
+                        <li>
+                            <h4><a name = "qnorm"><font face="Arial">How does "normalization by a reference sample" work? </font> </a></h4>		
+                            <p><font face="Arial">
+                                    Normalization by a reference sample, also known as probabilistic quotient normalization (<a href="http://www.ncbi.nlm.nih.gov/pubmed/16808434">Dieterle F et al </a>), is a robust method 
+                                    to account for different dilution effects of biofluids. This method is based on the calculation of a most probable dilution factor 
+                                    (median) by looking at the distribution of the quotients of the amplitudes of a test spectrum by those of a reference spectrum.
+                                </font></p>
+                        </li>
+                        <li>
+                            <h4><a name = "glog"><font face="Arial">What is generalized logarithm transformation (glog)? </font> </a></h4>		
+                            <p><font face="Arial">
+                                    Generalized logarithm (glog) is a simple variation of ordinary log in order to deal with zero or negative values in the data set.
+                                    It has many desirable features (for details, see <a href="http://www.ncbi.nlm.nih.gov/pubmed/12169537">Durbin BP. et al</a>
+                                    Its formula is shown below: <br/>
+                                    <img src="#{facesContext.externalContext.requestContextPath}/resources/images/glog.png"></img>
+                                    where <b>a</b> is a constant with a default value of 1.
+                                </font></p>
+                        </li>
+                        <li>
+                            <h4><a name = "cnorm"><font face="Arial">How does "Auto/Pareto/Range scaling" work? </font> </a></h4>		
+                            <p><font face="Arial">
+                                    Please see the following summary table by <a href="http://www.ncbi.nlm.nih.gov/pubmed/16762068">van den Berg et al </a>. Here S<sub>i</sub> is standard deviation. 
+                                </font></p>
+                            <img src="#{facesContext.externalContext.requestContextPath}/resources/images/col_norm.png"></img>
+                        </li>
+                        <li>
+                            <h4><a name="editor"><font face="Arial">When should I use <b>Data editor</b> or <b>Data filter</b> ?</font></a></h4>
+                            <p><font face="Arial">
+                                    The purposes of data editor and data filter are to help improve the quality of data for better separation, prediction or interpretation. 
+                                    In particular, user can use data editor to remove outlier(s) which can be visually identified from PCA or PLS-DA scores plots); 
+                                    user can use data filter to remove noisy or uninformative features (i.e. baseline noises, near-constant-features). These features 
+                                    tend to dilute the signal and decrease the performance of most the statistical procedures. Be removing outliers and low-quality features,
+                                    the resulting data will be more consistent and reliable.     
+                                </font></p>
+                        </li>
+                    </ol>
+                </p:tab>
+                <p:tab  title="Statistics">  
+                    <OL style="line-height: 24px;">
+                        <LI>
+                            <a href="#box">What are the different marks in the boxplot based on?</a>
+                        </LI>
+                        <LI>
+                            <a href="#pfold">What's the difference between "fold change" and "paired fold change" analyses?</a>
+                        </LI>
+                        <LI>
+                            <a href="#plsvip">What's the difference between VIP and coefficient - based feature selection (PLS-DA) ? </a>
+                        </LI>
+                        <LI>
+                            <a href="#permut">How to interpret the permutation results (PLS-DA) ? </a>
+                        </LI>
+                        <LI>
+                            <a href="#rank">Why the ranks of important features identified by different methods are different? </a>
+                        </LI>
+                        <LI>
+                            <a href="#sam">How does SAM work? </a>
+                        </LI>
+                        <LI>
+                            <a href="#ebam">Where can I get more information about EBAM? </a>
+                        </LI>
+                        <LI>
+                            <a href="#rf">Where can I get more information about random forest? </a>
+                        </LI>
+                        <LI>
+                            <a href="#rsvm">How does recursive SVM (RSVM) work? </a>
+                        </LI>
+                        <LI>
+                            <a href="#class">Can I use the selected features for classification? </a>
+                        </LI>
+                    </OL>
+                    <ol>
+                        <li> <h4><a name = "box"><font face="Arial">What are the different marks in the boxplot based on? </font> </a></h4>		
+                            <p><font face="Arial">
+                                    In a boxplot, the bottom and top of the box are always the 25th and 75th percentile (the lower and upper quartiles, or Q1 and Q3, respectively), 
+                                    and the band near the middle of the box is always the 50th percentile (the median or Q2). The upper whisker is located at 
+                                    the <u>smaller</u> of the maximum x value and Q3 + 1.5*IQR (Interquantile Range), whereas the lower whisker is located at the 
+                                    <u>larger</u> of the smallest x value and Q1 - 1.5*IQR.
+                                </font></p>
+                        </li>
+                        <li>
+                            <h4><a name = "pfold"><font face="Arial">What's the difference between "fold change" and "paired fold change" analyses? </font> </a></h4>		
+                            <p><font face="Arial">
+                                    The purpose of fold change (FC) analysis is to compare absolute value change between two <U>group averages</U>. In paired fold change analysis, 
+                                    users aim to find some features that are changed <U>consistently</U> (i.e. up-regulated or down-regulated, but not both) between two groups. 
+                                    The consistency is measured as a percentage - (# of pairs with consistent change above a given FC threshold) / (total # of paired samples). 
+                                    Users need to specify two thresholds - fold change threshold and significant counts (the percentage).
+                                </font></p>
+                        </li>
+                        <li>
+                            <h4><a name = "plsvip"><font face="Arial">What's the difference between VIP and coefficient - based feature selection (PLS-DA) ? </font> </a></h4>		
+                            <p><font face="Arial">
+                                    There are two variable importance measures in PLS-DA. The first, Variable Importance in Projection (VIP), 
+                                    is a weighted sum of squares of the PLS loadings taking into account the amount of explained Y-variation,
+                                    in each dimension. Please note, since VIP scores are calculated for each components, when more than components 
+                                    are used to calculate the feature importance, the average of the VIP scores are used. The other importance measure 
+                                    is based on the weighted sum of PLS-regression. The weights are a function of the reduction of the sums of squares 
+                                    across the number of PLS components. Please note, for multiple-group (more than two) analysis, the same number 
+                                    of predictors will be built for each group. Therefore, the coefficient of each feature will be different depending 
+                                    on which group you want to predict. The average of the feature coefficients are used as the overall coefficient-based importance.
+                                </font></p>
+                        </li>
+                        <li>
+                            <h4><a name = "permut"><font face="Arial">How to interpret the permutation result (PLS-DA) ? </font> </a></h4>		
+                            <p><font face="Arial">
+                                    It is well known that when there are too many variables and a small sample size, many supervised classification algorithms 
+                                    tend to overfit the data. That is, even there is no actual difference between the groups, the program will still be able to 
+                                    discriminate them by picking some features that are "different" between these two group by pure chance! Of course,
+                                    the classifier will be useless for new data since the pattern it detected is not real (not significant). 
+                                </font></p>
+                            <p><font face="Arial">
+                                    The purpose of a permutation test is to answer the question - "what is the performance if the groups are formed randomly". 
+                                    The program uses the same data set with its class labels reassigned randomly. It then builds a new classifer, 
+                                    its performance is then evaluated. The process will repeat many times to estimate the distribution of the performace 
+                                    measure (not necessarily follows a normal distribution). By comparing the performance using the original label and 
+                                    the performance based on the randomly labeled data, one can see if the former is significantly 
+                                    different from the latter. For PLS-DA, the performance is measured using <u>prediction accuracy</u> or 
+                                    <u>group separation distance</u> using the "B/W ratio" (as suggested by <a href="http://www.ncbi.nlm.nih.gov/pubmed/16408941">
+                                        Bijlsma et al.</a>).  The further away to the right of the distribution 
+                                    formed by randomly permuted data, the more significant the discrimination.  The p-value is calculated as the proportion of the times 
+                                    that class separation based on randomly labeled sample is at least as good as the one based on the original data (one-sided p value).  
+                                </font></p>
+                        </li>
+                        <li>
+                            <h4><a name = "rank"><font face="Arial">Why the ranks of important features identified by different methods are different ? </font> </a></h4>		
+                            <p><font face="Arial">
+                                    Different methods use different criteria for ranking the features. The choice of method used can greatly affect the set of features 
+                                    that are identified. This can be illustrated in the simple cases such as fold change v.s. t-tests, in which the former is interested in 
+                                    absolute change in concentrations/intensities, while the latter focuses on changes relative to the underlying noises. 
+                                    PLS-DA is based on linear regression; SAM and EBAM usually produce similar results since they are all based 
+                                    on t statistics; both random forests and SVM are quite distinctive from all other methods by using an ensemble of classification trees 
+                                    or projections to hyperplanes, respectively. Therefore, these methods tend to generate different results.   
+                                </font></p>
+                        </li>
+                        <li>
+                            <h4><a name = "sam"><font face="Arial">How does SAM work? </font> </a></h4>		
+                            <p><font face="Arial">
+                                    Significance Analysis of Microarray (SAM) is a robust method designed for identification of statistically significant genes. SAM use 
+                                    moderated t-tests to computes a statistic d<sub>j</sub> for each gene j, which measures the strength of the relationship between gene expression (X)
+                                    and a response variable (Y). This analysis uses non-parametric statistics by repeated permutations of the data to determine if the expression of any gene 
+                                    is significant related to the response. The procedure accounts for correlations in genes and avoids normal assumptions about the distribution of individual genes. 
+                                    More detailed description about about SAM history, features, and instructions can be found <a href="http://www-stat.stanford.edu/~tibs/SAM/">here</a>.   
+                                </font></p>
+                        </li>
+                        <li>
+                            <h4><a name = "ebam"><font face="Arial">Where can I get more information about EBAM? </font> </a></h4>		
+                            <p><font face="Arial">
+                                    Empirical Bayesian Analysis of Microarray (EBAM) is based on empirical Bayes method. Both
+                                    the prior and posterior distributions are estimated from the data. A gene is considered 
+                                    to be differentially expressed if its calculated posterior is larger than or equal to 
+                                    <b>delta</b> and no other genes with a more extreme test score that are not 
+                                    called differentially expressed. The suggested fudge factor <b>a0</b> is chosen that leads to the largest number of 
+                                    differentially expressed genes. More information about empirical Bayes can be found
+                                    (<a href="http://en.wikipedia.org/wiki/Empirical_Bayes_method">here</a>), and detailed description on 
+                                    the EBAM algorithm be found from the original paper by 
+                                    <a href="http://www-stat.stanford.edu/~tibs/ftp/microarrays.ps"> Efron, B., Tibshirani, R. et al</a>. 
+                                </font></p>
+                        </li>
+                        <li>
+                            <h4><a name = "rf"><font face="Arial">Where can I get more information about random forest ? </font> </a></h4>		
+                            <p><font face="Arial">
+                                    A detailed description about how this algorithm works can be found <a href="http://www.stat.berkeley.edu/~breiman/RandomForests/cc_home.htm">here</a>.   
+                                </font></p>
+                        </li>
+                        <li>
+                            <h4><a name = "rsvm"><font face="Arial">How does recursive SVM (RSVM) work ? </font> </a></h4>	
+                            <table cellpadding="8">
+                                <tr>
+                                    <td>
+                                        <img src="#{facesContext.externalContext.requestContextPath}/resources/images/rsvm.png"></img>
+                                    </td>
+                                    <td valign="top">	
+                                        <p><font face="Arial">
+                                                This is the workflow of RSVM algorithm described by <a href="http://www.ncbi.nlm.nih.gov/pubmed/16606446">Zhang X, et al.</a>.
+                                                Recursive SVM uses SVM for both classification and for selecting a subset of relevant genes according to their 
+                                                relative contribution in the classification.  This process is done recursively so that a series of data subsets and classification 
+                                                models can be obtained in a recursive manner, at different levels of feature selection.  The performance of the classification 
+                                                can be evaluated either on an independent test data set or by cross validation on the same data set.  R-SVM also includes 
+                                                an option for permutation experiments to assess the  significance of the performance. Please note, only linear kernel was used for 
+                                                classification, since the information is usually far from sufficient for reliably estimating nonlinear relations for high-dimensional 
+                                                data with a small sample size. First-order approximation will reduce the risk of overfitting in case of limited data.
+                                                CV2 refers to the cross validation embedded with the feature selection procedure as discussed <a href="#class">above</a>. 
+                                            </font></p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </li>
+                        <li>
+                            <h4><a name = "class"><font face="Arial">Can I use the selected features for classification ? </font> </a></h4>		
+                            <p><font face="Arial">
+                                    Cautions must be taken for the practice. If the features are selected based on the background biological knowledge, 
+                                    it's fine to use the selected subset of data for classification. However, it is <b>not proper</b> to use the features 
+                                    selected based on the <u>whole</u> dataset using some supervised methods (methods that utilize the class label information 
+                                    such as t-tests, SAM, PLS-DA or other supervised classification methods). This procedure will introduce selection bias and result in a very optimistic 
+                                    performance based on cross-validation due to "information leak". In order to obtain an objective performance evaluation,
+                                    one should include the feature selection procedure in the cross validation. Alternatively, one can evaluate the classifier using independent 
+                                    dataset not used in the feature selections. These procedures were used by PLS-DA, random forest and R-SVM for feature 
+                                    selection and classification. Currently, MetaboAnalyst does not support feature selection and classification using different 
+                                    algorithms (i.e. SAM for feature selection and PLS-DA for classification). This is going to be our next step. Please refer to 
+                                    paper by <a href="http://www.ncbi.nlm.nih.gov/pubmed/11983868">Ambroise C and McLachlan GJ</a> for a more detailed discussion. 
+                                </font></p>
+                            <p>
+                                However, one can use non-specific filtering (i.e. not using the class labels) to select features. We recently introduced 
+                                the <b>Data filter</b> function under the <b>Data Process</b> category. Users can use this function to remove low 
+                                quanlity features using a variety of criteria.  Additionally, users can also try to remove sample outliers if exists using the 
+                                <b>Data editor</b>. These are <b>safe</b> procedures that can potentially improve the classification performance.
+                            </p>
+                        </li>
+                    </ol>
+                </p:tab>
+                <p:tab title="Enrichment">
+                    <font SIZE="2" FACE="Arial">
+                        <ol style="line-height: 24px;">
+                            <li>
+                                <a href="#set"> What is a metabolite set? </a> 
+                            </li>
+                            <li>
+                                <a href="#def"> What is MSEA? </a> 
+                            </li>
+                            <li>
+                                <a href="#info"> How can I obtain more information about these metabolite sets? </a> 
+                            </li>
+                            <li>
+                                <a href="#input"> What are the <b>data input formats</b> supported by enrichment analysis?</a>
+                            </li>  
+                            <li>
+                                <a href="#ora"> What is over-representation analysis (ORA)? </a> 
+                            </li>
+                            <li>
+                                <a href="#ssp"> What is single sample profiling (SSP)? </a> 
+                            </li>
+                            <li>
+                                <a href="#qea"> What is quantitative enrichment analysis (QEA)? </a> 
+                            </li>
+                            <li>
+                                <a href="#spes"> Can I use MSEA on metabolomics data from other species?</a> 
+                            </li>
+                            <li>
+                                <a href="#mset_ssp"> How to interpret the results from concentration comparisons in SSP ?</a> 
+                            </li>
+                            <li>
+                                <a href="#qstat"> What is <b>Q-statistic</b> (QEA) ?</a> 
+                            </li> 
+                            <li>
+                                <a href="#mset_qea"> How to interpret the <b>metabolite set plot</b> in QEA ?</a> 
+                            </li>
+                            <li>
+                                <a href="#ref"> Should I use a reference metabolome for my enrichment analysis?</a> 
+                            </li>
+                        </ol>
+                    </font>
+                    <ol>
+                        <li>
+                            <h4><a name = "set"> <font face="Arial">What is a metabolite set?</font></a></h4>
+                            <p>
+                                A metabolite set can be any externally defined groups of metabolites that has something in common. For example, 
+                            </p>
+                            <ul>
+                                <li>
+                                    Metabolites that are involved in the same pathways (SMPDB, KEGG, Biocarta);
+                                </li>
+                                <li>
+                                    Metabolites that are changed significantly under the same pathological conditions;
+                                </li>
+                                <li>
+                                    Metabolites that are associated with the genomic variations (i.e. single nucleotide polymorphism or SNPs);
+                                </li>
+                                <li>
+                                    Metabolites that are located in the same cellular compartments;
+                                </li>
+                                <li>
+                                    Other published metabolite signatures, ontology terms, <i>etc.</i>
+                                </li>
+                            </ul>
+                            <p>
+                                Please note that you can define your own metabolite set for functional enrichment analysis using MSEA. 
+                            </p>
+                        </li>
+                        <li>
+                            <h4><a name = "def"> <font face="Arial"> What is <i>MSEA</i>?</font></a></h4>
+                            <p>
+                                MESA or Metabolite Set Enrichment Analysis is a novel way to identify biologically meaningful patterns in metabolite 
+                                concentration changes for quantitative metabolomic studies. In conventional approaches, metabolites are evaluated 
+                                individually for their significance under conditions of study. Those compounds that have passed certain sigificance level 
+                                are then combined to see if any meaningful patterns can be discerned. In contrast, MSEA directly investigates if a 
+                                group of functionally related metabolites are significantly enriched, eliminating the need to preselect compounds 
+                                based on some arbitrary cut-off threshold. It has the potential to identify "subtle but consistent" changes among a 
+                                group of related compounds, which may go undetected with conventional approaches. 
+                            </p>
+                            <p>
+                                Essentially, MSEA is a <i>metabolomic</i> version of the popular GSEA (Gene Set Enrichment Analysis) software, with its 
+                                own collection of metabolite set libraries as well as an implementation of user-friendly web-interfaces. GSEA is 
+                                widely used in genomics data analysis and has proven to be a powerful alternative to conventional approaches. For more 
+                                information, please refer to the original paper by <a href="http://www.ncbi.nlm.nih.gov/pubmed/16199517">Subramanian 
+                                    A</a>, and a nice review paper by <a href="http://www.ncbi.nlm.nih.gov/pubmed/18202032">Nam D, Kim SY</a>.
+                            </p>
+                        </li>
+                        <li>
+                            <h4><a name = "info"> <font face="Arial">  How can I obtain more information about these metabolite sets?</font></a></h4>
+                            <p>
+                                Each metabolite set will have an associated source (Database links, PubMed ID, etc) to help users further track down 
+                                the original source of the information. Please click the "Browse Metabolite Set Libraries" button at the Home page to 
+                                view all the informations.  
+                            </p>
+                            <p>
+                                The SNP-associated metabolite sets were downloaded from the published journal websites, Only metabolites with 
+                                p values less than 1e-3 were retained to reduce false positives. For any given SNP ID, users can visit the <a 
+                                    href="http://www.ncbi.nlm.nih.gov/projects/SNP/">NCBI SNP database</a> to get detailed information about each 
+                                SNP.     
+                            </p>
+                        </li>
+                        <li>
+                            <h4><a name = "input"> <font face="Arial">What types of dataset does <i>MSEA</i> accept?</font></a></h4>
+                            <p><font face="Arial">
+                                    There are three types of inputs MSEA accepts:
+                                </font></p>
+                            <UL>
+                                <LI> <b>A single column data contains a list of compound names</b> for over-representation analysis (ORA). 
+                                    For example, a list of important compounds identified by feature selection or clustering methods;</LI>
+                                <LI> <b>A two-column data separated by tab</b> - the first column contains compound name and the second column is their measured 
+                                    concentrations - for single sample profiling (SSP). This data is essentially a single profiled biological sample. The purpose is to 
+                                    compare the measured values to their reference values to see if some compound concentrations are very high or low. 
+                                    <U>This input is limited to human biofluids (Blood, Urine, CSF)</U> for which reference values exist;</LI> 
+                                <LI> <b>A concentration table</b>. The data contains quantitative metabolomic data of multiple samples 
+                                    measured under different conditions. The data should be uploaded as a <U>comma separated values (.csv)</U> with the 
+                                    each sample per row and each metabolite concentration per column. The first column is sample names and the second column 
+                                    contains sample class labels (discrete or continuous).
+                                </LI>
+                            </UL> 
+                        </li>
+                        <li>
+                            <h4><a name = "ora"> <font face="Arial">What is over-representation analysis (ORA)?</font></a></h4>
+                            <p>
+                                As the name suggests, ORA is to test if certain groups of metabolites are represented more often than expected by chance 
+                                within a given metabolite list. The most common approach to test this statistically is by using the hypergeometric test or 
+                                Fisher’s exact test to calculate the probability of seeing at least a particular number of metabolites containing
+                                the biological term of interest in the given compound list. MSEA calculates hypergeometrics test score 
+                                based on cumulative binominal distribution.
+                            </p>
+                        </li>
+                        <li>
+                            <h4><a name = "ssp"> <font face="Arial">What is single sample profiling (SSP)?</font></a></h4>
+                            <p>
+                                One advantage of metabolomics is that metabolite concentrations in biofluids are tightly regulated through homeostasis 
+                                under normal physiological condition. For common human biofluids such as blood, urine, or cerebral spinal fluids (CSF), 
+                                normal concentration ranges are known for many metabolites. It is often desirable to know whether certain compound 
+                                concentrations from a particular sample are significantly higher or lower compared to their normal ranges. For this purpose, 
+                                we implemented SSP to compare the measured concentrations of compounds to their recorded normal reference range. 
+                                Compounds that are above or below the normal range beyond a user-specified threshold will then be further investigated 
+                                using ORA. Please note, SSP is only applicable to human blood, urine and CSF samples.    
+                            </p>
+                        </li>
+                        <li>
+                            <h4><a name = "qea"> <font face="Arial">What is quantitative enrichment analysis (QEA)?</font></a></h4>
+                            <p>
+                                In ORA, only compound names are used for enrichment analysis. In this case, all compounds in the given list are treated 
+                                equally despite their obvious differences in importance measures (i.e. some are very significant, others only marginally 
+                                significant, based on p values). This is not optimal. In contrast, QEA takes into consideration not only the counts 
+                                (presence/absence), but also the importance measures (<a href="#qstat">Q-statistic</a>) calculated for each compounds for enrichment 
+                                analysis. Therefore, we called <b>quantitative</b> enrichment analysis. In MSEA, QEA was implemented using the 
+                                <a href="http://www.ncbi.nlm.nih.gov/sites/entrez/14693814">globaltest</a> algorithm.  
+                            </p>
+                        </li>
+                        <li>
+                            <h4><a name = "spes"> <font face="Arial">Can I use MSEA on metabolomics data from other species?</font></a></h4>
+                            <p><font face="Arial">
+                                    Yes, but you may have to provide your self-defined metabolite set libraries. The metabolite set libraries are species specific. For example, the pathway library is only valid for mammalian species. While the metabolite 
+                                    sets based on diseases are only applicable for human. However, MSEA allows users to upload their own metabolite set libraries 
+                                    for enrichment analysis. Therefore, if you want to perform enrichment analysis on data from species other than human being, you need to 
+                                    provide two files, one contains metabolite concentration data, the other contains the metabolite set library. 
+                                </font></p>
+                        </li>
+                        <li>
+                            <h4><a name = "mset_ssp"> <font face="Arial"> How to interpret the results from concentration comparisons in single sample profiling (SSP) ?</font></a></h4>
+                            <p><font face="Arial">
+                                    The reference concentrations SSP were mainly collected from literature. In most cases, the measured concentration should be 
+                                    comparable to the literature reported values as shown below. However, users should keep in mind that these concentrations were 
+                                    measured based on heterogeneous analytical platforms. Therefore, it is more suitable to compare with concentrations measured 
+                                    by the similar technologies. It is advisable to refer to the original literature (provided by SSP) if very extreme values are encountered.      
+                                </font></p>
+                            <p>
+                                <table>
+                                    <tr><td>The image below shows the 
+                                            comparisons of the measured <b>urinary Glycine</b> concentration (indicated by a dotted yellow line) to literature reported concentration values. 
+                                            The magenta squares indicate the mean concentration values, and the blue lines indicate the reported ranges. In some cases, 95% 
+                                            confidence intervals are used (2 standard deviations from the mean) if no ranges were provided in the original report. Note the link 
+                                            to the original reference of each study will be provided in a table under each plot during analysis. </td> </tr>
+                                    <tr align="center"><td><img src="#{facesContext.externalContext.requestContextPath}/resources/images/hmdb00123.png"></img></td> </tr>
+                                </table>
+                            </p>
+                        </li>
+                        <li>
+                            <h4><a name = "qstat"> <font face="Arial"> What is <b>Q-statistic</b> (QEA) ?</font></a></h4>
+                            <p><font face="Arial">
+                                    The formula to calculate statistic Q can be obtained from the original publication by (<a href="http://www.ncbi.nlm.nih.gov/sites/entrez/14693814">Goeman
+                                        JJ, et al</a>). Q can be intuitively interpreted as an aggregate of squared covariance between concentration 
+                                    changes and the phenotypes - compounds with large variance have much more influence on the Q than compound with 
+                                    small variance. 
+                                </font></p>
+                        </li>
+                        <li>
+                            <h4><a name = "mset_qea"> <font face="Arial"> How to interpret the <b>metabolite set plot</b> from QEA?</font></a></h4>
+                            <p>
+                                Metabolite set plot shows the detailed influence of individual compound to the total score of the metabolite set. The color of the bar indicates 
+                                positive or negative association with the phenotype (continuous) or positive association with a particular phenotype (discrete). 
+                                The reference line at bottom shows the expected influence if the compound was not associated with the phenotype. High bars 
+                                indicate influential metabolites. The marks on the bars show the standard deviation (SD) of the bar under null 
+                                hypothesis. 
+                            </p>
+                            <p>
+                                <table>
+                                    <tr><td>A typical metabolite set plot is shown below. In this case, the phenotype is discrete with four groups.  
+                                            Among all possible comparisons between the data and null hypotheses, the nine amino acids are 
+                                            <b>most significantly</b> associated with either group 3 and 4 as the color indicated. Please note, if you are interested in the comparison 
+                                            between a particular two groups, you should edit and upload your data with samples from only these two groups</td></tr>
+                                    <tr align="center"><td><img src="#{facesContext.externalContext.requestContextPath}/resources/images/msea_mset.png"></img></td> </tr>
+                                </table>
+                            </p>
+                        </li>
+                        <li>
+                            <h4><a name = "ref"> <font face="Arial"> Should I use a reference metabolome for my enrichment analysis?</font></a></h4>
+                            <p>
+                                Currently, no single analytical technique can simultaneously measure all the metabolites involved in the metabolic 
+                                pathways. Different platforms - NMR, GC-MS, LC-MS, usually have different compound coverage. These differences 
+                                will likely introduce bias during the enrichment analysis, which is not related to the biological questions 
+                                under investigation. To correct for this bias, a reference metabolome should be used.
+                            </p>
+                            <p>
+                                A reference metabolome refers to metabolites that can be measured by the analytical platform. Please note, 
+                                this correction is only necessary when only a list of significant compounds are provided (over-representation analysis). 
+                                When the whole concentration table is provided, all the compounds within the data are used as the reference 
+                                metabolome. It is not necessary to upload separately a compound list as reference metabolome. 
+                            </p>
+                        </li>
+                    </ol>
+                </p:tab>
+                <p:tab title="Pathway">
+                    <ol  style="line-height: 24px;">
+                        <li>
+                            <a href="#pa">What are the important features for pathway analysis?</a> 
+                        </li>  
+                        <li>
+                            <a href="#ora"> What is over-representation analysis? </a> 
+                        </li>
+                        <li>
+                            <a href="#msea"> What is pathway enrichment analysis? </a> 
+                        </li>
+                        <li>
+                            <a href="#topo"> What is pathway topological analysis? </a> 
+                        </li>
+                        <li>
+                            <a href="#dc"> What are the difference between degree centrality and betweenness centrality? </a> 
+                        </li>
+                        <li>
+                            <a href="#ref"> Why should I use a reference metabolome? </a> 
+                        </li>
+                        <li>
+                            <a href="#met"> How to interpret the result overview graph (metabolome view)?</a> 
+                        </li> 
+                        <li>
+                            <a href="#path"> How to interpret the pathway view?</a> 
+                        </li>
+                        <li>
+                            <a href="#cmpd"> How to interpret the compound view?</a> 
+                        </li>
+                    </ol>
+
+                    <ol>
+                        <li>
+                            <h4><a name = "pa"> <font face="Arial">What are the important features for pathay analysis?</font></a></h4>
+                            <p>
+                                There are many commercial pathway analysis software tools, such as 
+                                <a href="http://www.ariadnegenomics.com/products/pathway-studio/">Pathway Studio</a>,
+                                <a href="http://www.genego.com/metacore.php">MetaCore</a>,
+                                <a href="http://www.ingenuity.com/">Ingenuity Pathway Analysis</a>, <i> etc </i>.
+                                Compared to them, the pathway analysis in MetaboAnalystis a free, web-based tool targeting for metabolomics data analysis. 
+                                It uses the high-quality KEGG metabolic pathways as the backend knowledgebase. 
+                                It integrates many well-established (i.e. univariate analysis, over-representation analysis ) methods, 
+                                as well as novel algorithms / concepts (GlobalTest, GlobalAncova, pathway topology analysis)
+                                into pathway analysis. In addition, MetPA implements a Google-Map style interactive visualization system to 
+                                help users understand their analysis results.    
+                            </p>
+                        </li>
+                        <li>
+                            <h4><a name = "ora"> <font face="Arial"> What is over-representation analysis?</font></a></h4>
+                            <p>
+                                Over-representation analysis is to test if a particular group of compounds is represented more 
+                                than expected by chance within the user uploaded compound list. In the context of pathway analysis, 
+                                we are testing if compounds involved in a particular pathway is enriched compared by random hits. 
+                                The most common methods for such analysis is Fishers' exact test and hypergeometric test. Please note, 
+                                the over-representation analysis only consider the count (i.e. the total number of compounds that match 
+                                a particular pathway) and does not consider the magnitude of their concentration changes (not quantitative).
+                                So compound that are changed more significant will be treated the same as compounds that are less significant.    
+                            </p> 
+                        </li>
+                        <li>
+                            <h4><a name = "msea"> <font face="Arial">What is pathway enrichment analysis?</font></a></h4>
+                            <p>
+                                Pathway enrichment analysis usually refers to <u>quantitative</u> enrichment analysis directly based on the compound 
+                                concentration values as compared to the compound lists used by over representation analysis. 
+                                It is usually more sensitive than over-representation analysis and has the potential to 
+                                discover "subtle but consistent" changes among compounds within the same biological pathway. 
+                            </p>
+                            <p>
+                                Many algorithms have been developed in the last decade for this type of enrichment analysis, the most famous
+                                being the <a href="http://www.broadinstitute.org/gsea/">Gene Set Enrichment Analysis</a>. Many new 
+                                and improved methods have since been implemented. The program uses 
+                                <a href="http://bioinformatics.oxfordjournals.org/cgi/content/abstract/23/8/980">GlobalTest</a> and 
+                                <a href="http://bioinformatics.oxfordjournals.org/cgi/content/short/24/1/78">GlobalAncova</a> for pathway 
+                                enrichment analysis when users upload concentration tables. Some important features about these two methods 
+                                include that they support binary, multi-group, as well as continuous phenotypes, and p values can be approximated 
+                                efficiently based on the asymptotic distribution without using permutations, which is critical for developing 
+                                web applications. 
+                            </p>
+                        </li>
+                        <li>
+                            <h4><a name = "topo"> <font face="Arial">What is pathway topological analysis?</font></a></h4>
+                            <p>
+                                The structure of biological pathways represents our knowledge about the complex relationships between 
+                                molecules (activation, inhibition, reaction, etc.). However, neither over-representation analysis or pathway 
+                                enrichment analysis take the pathway structure into consideration when determining which pathways are 
+                                more likely to be involved in the conditions under study. It is obvious that changes in the key positions 
+                                of a network will trigger more severe impact on the pathway than changes on marginal or relatively isolated 
+                                positions. The program uses two well-established node centrality measures to estimate node importance - 
+                                <a href="#rbc">betweenness centrality</a> and <a href="#dc">degree centrality</a>.  
+                                The former focus on node relative to overall pathway structure, while the latter focus on immediate local 
+                                connectivities.
+                            </p>
+                            <p>
+                                Please note, for comparison among different pathways, the node importance values calculated from centrality 
+                                measures are further normalized by the sum of the importance of the pathway. Therefore, <u> the total/maximum 
+                                    importance of each pathway is 1; the importance measure of each metabolite node is actually the percentage w.r.t the 
+                                    total pathway importance, and the pathway impact is the cumulative percentage from the matched metabolite nodes.</u>   
+                            </p>
+                        </li>
+                        <li>
+                            <h4><a name = "dc"> <font face="Arial">What are the difference between degree centrality and betweenness centrality?</font></a></h4>
+                            <table>
+                                <tr>
+                                    <td>
+                                        In a graph network, the degree of a node is the number of connections it has to other nodes , 
+                                        Degree centrality is defined as the number of links occurred upon a node. Nodes with higher node 
+                                        degree act as hubs in a network. For directed graph, there are two types of degree: in-degree for links 
+                                        come from other nodes, and out-degree for links initiated from the current node. Metabolic network 
+                                        is directed graph. Here we only consider the out-degree for node importance measure. It is assumed 
+                                        that nodes in upstream will have regulatory roles for the downstream nodes, not vice versa. In the 
+                                        illustration on the right, the nodes colored in <b>red</b> have high degree centrality. 
+                                    </td>
+                                    <td rowspan="2">
+                                        <img src="#{facesContext.externalContext.requestContextPath}/resources/images/node_imp.png"></img>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        In a graph network, the betweenness centrality measures number of shortest paths going through the node.  
+                                        Therefore, it take into consideration of global network structure, not only immediate neighbour of the current node. 
+                                        For example, nodes that occur between two dense clusters will have a high betweenness centrality, even its degree 
+                                        centrality is not high. Since metabolic network is directed, we use relative betweenness centrality for metabolite 
+                                        importance measure.  In the illustration on the right, the nodes colored in <b>blue</b> have high betweenness 
+                                        centrality. 
+                                    </td>
+                                </tr>
+                            </table>
+                        </li>
+                        <li>
+                            <h4><a name="ref"> Why should I use a reference metabolome?</a></h4> 
+                            <p>
+                                Currently, no single analytical technique can simultaneously measure all the metabolites involved in the 
+                                metabolic pathways. Different platforms - NMR, GC-MS, LC-MS, usually have different compound coverage. 
+                                These difference will likely introduce bias during the enrichment analysis, which is not related to the 
+                                biological questions under investigation.  To correct for this bias, a reference metabolome should be used. 
+                                A reference metabolome refers to metabolites that can be measured by the analytical platform.
+                            </p>
+                            <p>
+                                Please note, this correction is only necessary when only a list of significant compounds are provided 
+                                (over-representation analysis).  When the whole concentration table is provided, the compounds within 
+                                the data are used as the reference metabolome. It is not necessary to upload separetely a compound list 
+                                as reference metabolome. 
+                            </p>
+                        </li>
+                        <li>
+                            <h4><a name="met"> How to interpret the result overview graph (<b>metabolome view</b>)?</a></h4> 
+                            <p>
+                                An example of "metabolome view" is shown below.  It contains all the matched pathways (the metabolome) 
+                                arranged by p values (from pathway enrichment analysis) on Y-axis, and pathway impact values (from pathway topology 
+                                analysis) on X-axis. The node color is based on its p value and the node radius is determined based on their 
+                                pathway impact values. The pathway name is shown as mouse-over tooltip. Click the corresponding node when the 
+                                tool-tip shows will launch the corresponding <a href="#path">pathway view</a>    
+                            </p>
+                            <p> 
+                                <img src="#{facesContext.externalContext.requestContextPath}/resources/images/metaview.png"></img>
+                            </p>
+                        </li>
+                        <li>
+                            <h4><a name="path"> How to interpret the pathway view?</a></h4> 
+                            <p>
+                                An example of "pathway view" is shown below.  It shows the current metabolic pathway after user clicks the corresponding 
+                                node on the "metabolome view". The pathway is essentially a simplified KEGG pathway map shown only chemical compounds.
+                                The default node color is <u>light blue</u>. When a reference metabolome is provided, some compounds will be colored 
+                                in <u>light grey</u> if they are not within the reference metabolome. The matched nodes will show varied <u>heat map colors</u> 
+                                based on their p values. The common compound names can be obtained via mouse over tool-tip. Click on any node will reveal 
+                                more detailed information as well as database links. For matched compounds, it will also include images summarizing the 
+                                concentration distribution of the corresponding compound (see <a href="#cmpd">compound view</a>).  
+                            </p>
+                            <p> 
+                                <img src="#{facesContext.externalContext.requestContextPath}/resources/images/pathview.png"></img>
+                            </p>
+                        </li>
+                        <li>
+                            <h4><a name="cmpd"> How to interpret the compound view?</a></h4> 
+                            <p>
+                                Two examples of "compound view" are shown below.  The box plot image on the left shows the result with discrete 
+                                (binary or multi-group) phenotype labels; the scatter plot image on the right shows the result with continuous 
+                                phenotype labels. The "compound view" is generated from univariate analysis (t-tests, ANOVA or linear regression). 
+                                They show the concentration distributions of the corresponding compounds with regard to the phenotype labels.  
+                            </p>
+                            <p> 
+                                <table width="400" align="center">
+                                    <tr>
+                                        <td><img src="#{facesContext.externalContext.requestContextPath}/resources/images/cmpdview_1.png"></img></td>
+                                        <td><img src="#{facesContext.externalContext.requestContextPath}/resources/images/cmpdview_2.png"></img></td>
+                                    </tr>
+                                </table>
+                            </p>
+                        </li>
+                    </ol>
+                </p:tab>
+                <p:tab title="Time-series">
+                    <OL style="line-height: 24px;">
+                        <LI>
+                            <a href="#pca">How to use and interpret 3D PCA visualization?</a>
+                        </LI>
+                        <LI>
+                            <a href="#hm">How to use and interpret two-way heatmap?</a>
+                        </LI>
+                        <LI>
+                            <a href="#asca">What is ASCA?</a>
+                        </LI>
+                        <LI>
+                            <a href="#Dinteraction">How to detect the presence of interaction?</a>
+                        </LI>
+                        <LI>
+                            <a href="#Iinteraction">How to deal with the interaction?</a>
+                        </LI>
+                        <LI>
+                            <a href="#ascaImp">How to select and (understand) important variables in ASCA?</a>
+                        </LI>
+                        <LI>
+                            <a href="#meba">How to interpret results from multivariate empirical Bayes analysis (MEBA)?</a>
+                        </LI>
+                        <LI>
+                            <a href="#more">Can I analyze data with more than two factors?</a>
+                        </LI>
+                    </OL>
+                    <ol>
+                        <li>
+                            <h4><a name = "pca">How to use and interpret 3D PCA visualization? </a></h4>		
+                            <p>
+                                The interactive PCA visualization summarizes all the data into the the first three principal components (PCs). 
+                                Each data point in the <b>Scores Plot</b> represents a sample. Samples that are close together are more similar to each other. 
+                                The colors of these data points are based on the factor labels. Users can change the colors according to any of the 
+                                two factor labels.  
+                            </p>
+                            <p>
+                                Each data point in the <b>Loadings Plot</b> represents a feature. When Scores plot and Loadings plot are 
+                                viewed from the identical perspective, the direction of separation on the scores plot can be explained by the 
+                                corresponding features on the same directions - i.e. features on the two ends of the direction contribute more
+                                to the pattern of separation. 
+                            </p>
+                        </li>
+                        <li>
+                            <h4><a name = "hm">How to use and interpret two-way heatmap? </a></h4>		
+                            <p>
+                                The two-way heatmap displays the data in the form of matrix with cells colored according to their values. It provides 
+                                an intuitive overview of the overall data points. To facilitate pattern discovery, MetaboAnalyst also performs clustering on the variables.
+                                The samples are sorted by their factor labels. 
+                            </p>
+                            <p>
+                                Users can change the clustering algorithms, the color schema, as well as the order of the samples to suit their 
+                                preferences. When there are too many samples or variables, the high-resolution image can be used in order to get 
+                                a clear view of the results. 
+                            </p>
+                        </li>
+                        <li>
+                            <h4><a name = "asca">What is ASCA? </a></h4>	
+                            <p>
+                                ASCA is a multivariate extension of univariate ANOVA approach. This implementation supports ASCA 
+                                model for two factors with one interaction effect. The algorithm first partitions the overall data variance 
+                                (<b>X</b>) into individual variances induced by each factor (<b>A</b> and <b>B</b>), as 
+                                well as by the interactions (<b>AB</b>). The formula is shown below with (<b>E</b>) indicates the residuals.  
+                                <br/><br/>
+                                <b>X = A + B + AB  + E </b>
+                            </p>
+                            <p>
+                                The SCA part applies PCA to <b>A</b>, <b>B</b>, <b>AB</b> to summarize major variations in each 
+                                partition. Users need to specify the number of components used for each model. 
+                                The maximum allowed number of components of each factor must be less  than the corresponding levels of the factor. 
+                                For example, if the phenotype factor contains two levels (control and disease). Only the top component 
+                                will be extracted. In most cases, users should focus on top one or two components.   
+                            </p>
+                        </li>
+                        <li>
+                            <h4><a name = "interaction">How to detect the presence of interaction?</a></h4>
+                            <p>
+                                It is critical to test the presence of interactions between the two experimental factors in order to 
+                                correctly interpret the data. 
+                            </p>
+                            <p>
+                                For individual variable, the interaction can be assessed by univariate two-way ANOVA. 
+                                Users can view a two-way box plot summary of each variable by clicking the corresponding name 
+                                in the detailed table view of the two-way ANOVA results. 
+                            </p>
+                            <p>
+                                The overall interaction effect can be assessed by ASCA permutation tests (under the "Model Validation"
+                                tab on the ASCA page). It performs unrestricted permutation of observations (Manly's approach) and recalculates 
+                                the total sum of squares (TSS) for each experimental factor and their interactions. If the TSS calculated based 
+                                on the original data is significantly different from those calculated from the permuted data, then the effect 
+                                is significant. For more detailed discussions on this subject, please refer to the paper by  
+                                <a href="http://dx.doi.org/10.1186/1471-2105-8-322">Vis D. J. at. al</a>  
+                            </p>
+                        </li>
+                        <li>
+                            <h4><a name = "Iinteraction">How to deal with the interaction?</a></h4>
+                            <p>
+                                When there are no significant interaction effect being detected, it is advisable to 
+                                analyze the data with regard to each experimental factor separately for simpler and easier interpretation. 
+                            </p>
+                            <p>
+                                When the presence of interactions between the two experimental factors are confirmed, it is critical to 
+                                interpret the data <b>in the context of both experimental conditions </b>. Here I will give two examples to 
+                                illustrate this - one for univariate two-way ANOVA, one for the multivariate ASCA, using the 
+                                example dataset provided by MetaboAnalyst. The study is to investigate the temporal profiles (factor 1: Time) during 
+                                a wounding  process using two different plant lines (factor 2: Phenotype). 
+                            </p>
+                            <table cellpadding="10">
+                                <tr>
+                                    <td>
+                                        <img src="#{facesContext.externalContext.requestContextPath}/resources/images/anova_interact.png"></img>
+                                    </td>
+                                    <td>
+                                        <p>
+                                            The figure on the left shows the peak (1.4087/417) with very different temporal profiles between the  two plant lines. 
+                                            As shown in figure, the baseline (time point 0) of MT is much higher than that of WT group. During a wounding process,
+                                            WT first shows a significant increase, then starts to decrease; while the MT group shows first decrease, followed by 
+                                            slight increase at the third time point, then decrease again. The different response in the wounding time course 
+                                            may suggest the different underlying biological mechanisms involved.  
+                                        </p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <img src="#{facesContext.externalContext.requestContextPath}/resources/images/asca_interact.png"></img>
+                                    </td>
+                                    <td>
+                                        <p>
+                                            The figure on the right shows the major trends associated with MT and WT during the wounding time course. 
+                                            The WT first increase then decrease, while the MT first decrease then increase, indicating very different biological processes involved.   
+                                        </p>
+                                        <p>
+                                            Please note, the interpretations above are based on the objective of the experiment - to compare temporal profiles of 
+                                            different plant lines. It is also possible to compare the difference between two plant lines at each time point. To summarize, 
+                                            <u>when the interaction is present, researchers must explain the result of factor A in the context of factor B 
+                                                (or vice versa), whichever is more convenient or customary.</u>
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </li>
+                        <li>
+                            <h4><a name = "ascaImp">How to select (and understand) important variables in ASCA? </a></h4>
+                            <table>	
+                                <tr>
+                                    <td>
+                                        <img src="#{facesContext.externalContext.requestContextPath}/resources/images/asca_imp.png"></img>
+                                    </td>
+                                    <td valign="middle">	
+                                        <p>
+                                            ASCA identifies the major trends associated with each experimental factor and their interactions. 
+                                            The next step is to identify variables that are closely follow the detected trends 
+                                            as well as those that clearly diverge from the trends. The first ones would represent those variables 
+                                            that most co-coordinately respond in the experimental context; The second ones would be potential outliers. 
+                                            The variable selection strategy is based on the approach described by <a href="http://dx.doi.org/10.1093/bioinformatics/btm251">
+                                                Nueda, M.J. et al</a>.
+                                        </p>
+                                        <p>
+                                            An example figure is shown on the left. Important variables are put into two categories: 'well-modeled' refers 
+                                            to those that change co-coordinately to the major profile(s) depicted in the trajectory plots of the factor, 
+                                            and 'outliers' refer to those with relevant changes but different from the major profile(s). 
+                                            These variables are selected based on the <b>Leverage</b> (a measure of the importance of a variable's 
+                                            contribution to the fitted ASCA-model - <u>higher Leverage means more importance</u>) and <b>SPE</b> 
+                                            (or squared prediction error, an evaluation of the goodness of fit of the model to a particular variable - 
+                                            <u>higher SPE means less fit </u>). The Leverage value (between 0 and 1) is used to select 'well-modeled' 
+                                            variables; while SPE is used to select 'outliers'. SPE is controlled by Alpha (between 0 and 1). Smaller Alpha will lead to 
+                                            higher SPE, which will select variables that diverge more significantly from the general trend. 
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>	
+                        </li>
+                        <li>
+                            <h4><a name = "meba">How to interpret results from multivariate empirical Bayes (MEBA) time-series analysis? </a></h4>		
+                            <p>
+                                The MEBA approach is designed to compare the time-course profiles with regard to different experimental conditions. 
+                                It is based on the <b>timecourse</b> method described by <a href="http://dx.doi.org/10.1214/009053606000000759">YC Tai. et al</a>.
+                                The result is a list of variables that are ranked by their difference in temporal profiles across different biological conditions. 
+                                The <b>Hotelling-T2</b> is used to rank the variables with different temporal profiles between two biological conditions 
+                                under study; And the <b>MB-statistics</b> is used for more than two biological conditions. Higher statistical value indicates 
+                                the time-course profiles are more different across the biological conditions under study. 
+                            </p>
+                        </li>
+                        <li>
+                            <h4><a name = "more">Can I analyze data with more than two factors?</a></h4>
+                            <p>
+                                Although many approaches can be extended to support data with more than two
+                                factors. However, as the number of factors increase, the analysis procedures becomes more complicated and data interpretation more 
+                                difficult. How to present these complicated results in an easy-to-understand form becomes a real challenge for web-based programs 
+                                (and programmers!). Currently, the task is better left to an expert statistician. <b>We would strongly recommend 
+                                    researchers to <u>further stratify their subjects into more homogenous groups to reduce the number of factors</u> before performing the analysis</b>. 
+                                In most cases, researchers should focus on one or two factors for better tool support and easier interpretation.  
+                            </p>
+                        </li>
+                    </ol>
+                </p:tab>
+                <p:tab title="Biomarker">
+                    ﻿<OL style="line-height: 24px;">
+                        <LI>
+                            <a href="#for">What is the main approach of biomarker analysis offered by MetaboAnalyst?</a>
+                        </LI>
+                        <LI>
+                            <a href="#sample">What is the recommended sample size?</a>
+                        </LI>
+                        <LI>
+                            <a href="#roc">How to understand the ROC curve?</a>
+                        </LI>
+                        <LI>
+                            <a href="#optimal">How is the optimal threshold determined in ROC analysis for individual features?</a>
+                        </LI>
+                        <LI>
+                            <a href="#fs">How are important features selected in multivariate ROC exploratory analysis?</a>
+                        </LI>
+                        <LI>
+                            <a href="#auroc">Why is is that sometimes the AUROC from the univariate ROC curve analysis is better than those using multiple features?</a>
+                        </LI>
+                        <LI>
+                            <a href="#impfeat">How to understand the importance measures in multivariate ROC exploratory analysis?</a>
+                        </LI>
+                        <LI>
+                            <a href="#predview">How do I understand the Prob. Overview?</a>
+                        </LI>
+                        <LI>
+                            <a href="#random">Why does the result change slightly each time I re-do the analysis?</a>
+                        </LI>
+                        <LI>
+                            <a href="#overfit">How does the program deal with over-fitting?</a>
+                        </LI>
+                        <LI>
+                            <a href="#ci">How does the program calculate 95% confidence intervals (CIs) for AUC/pAUC?</a>
+                        </LI>
+                        <LI>
+                            <a href="#perm">How to understand the permutation tests result?</a>
+                        </LI>
+                        <LI>
+                            <a href="#logisticReg">How to perform the Logistic Regression analysis?</a>
+                        </LI>
+                    </OL>
+                    <OL> 
+                        <li> 
+                            <h4><a name = "for">What is the main approach of biomarker analysis offered by MetaboAnalyst? </a></h4> 
+                            <p>
+                                Receiver Operating Characteristic (ROC) curve analysis is the method of choice for biomarker identification and performance evaluation. 
+                                However, to perform these two tasks typically requires a good understanding 
+                                of statistics and machine learning concepts, as well as a good knowledge of programming 
+                                language such as Matlab or R. MetaboAnalyst offers, through a user-friendly web interface, 
+                                classical ROC curve analysis, and integration with several well-established algorithms (currently support: PLS-DA, 
+                                Random Forests and SVM) to assist researchers in performing common ROC curve analysis for biomarker discovery 
+                                and performance evaluation in metabolomics studies. 
+                            </p> 
+                        </li>
+                        <li> 
+                            <h4><a name = "sample">What are the recommended sample size? </a></h4> 
+                            <p>
+                                A minimum of 30-40 samples for balanced groups (i.e. at least 15~20 each group) are recommended in order 
+                                to calculate decent ROC curves and AUC evaluations. Note, <u>for unbalanced data, the algorithm uses 
+                                    Monte Carlo random sampling to produce balanced sub-samples for training data</u>. 
+                            </p> 
+                        </li>
+                        <li> 
+                            <h4><a name ="roc">How to understand the ROC curve?</a></h4> 
+                            <p>
+                                The ROC curve is a fundamental tool for diagnostic test evaluation. It 
+                                provides a complete and easily visualized sensitivity/specificity report visualization. In a ROC curve the true 
+                                positive rate (Sensitivity) is plotted in function of the false positive rate (100-Specificity) for 
+                                different cut-off points of a given parameter. Each point on the ROC curve represents a sensitivity/specificity pair corresponding 
+                                to a particular decision threshold. A test with perfect discrimination (no overlap in the two distributions) has a ROC curve that passes 
+                                through the upper left corner (100% sensitivity, 100% specificity). Therefore the closer the ROC curve is to the 
+                                upper left corner, the higher the overall accuracy of the test. The closer the ROC curve to the diagonal line, the poorer 
+                                the diagnostic power of the test. The area under the ROC curve is a measure of how well a parameter can distinguish 
+                                between two diagnostic groups (diseased/normal).
+                            </p>
+                        </li>
+                        <li> 
+                            <h4><a name ="optimal">How is the optimal threshold determined in ROC analysis of individual biomarkers?</a></h4> 
+                            <p>
+                                There are two different approaches to determine the optimal threshold based on ROC curves. In one 
+                                approach (Youden), the optimal cut-off is the threshold that maximizes the distance to the diagonal line. 
+                                The optimality criterion is <b>max(sensitivity + specificity)</b>. The other approach is to find the point 
+                                closest to the top-left part of the ROC plot with perfect sensitivity or specificity. The optimality criterion is 
+                                <b>min((1-sensitivity)^2 + (1-specificity)^2)</b>
+                                <br/>
+                                Please note, a) there might be more than one threshold identified using the above criteria; b) the optimal cutoff 
+                                is only calculated for the ROC curve using the actual data points, not the smoothed one.  
+                            </p>
+                        </li>
+                        <li> 
+                            <h4><a name = "fs">How are important features selected in multivariate ROC exploratory analysis? </a></h4> 
+                            <p>
+                                The algorithm tries to identify important features through repeated random sub-sampling cross validation (CV). 
+                                In each CV, two thirds (2/3) of the samples are used to evaluate the importance of each feature based on VIP scores 
+                                (PLSDA), decreases in accuracy (Random Forest) or weighted coefficients (Linear SVM). The top 2, 3, 5, 10 ...100 (max)
+                                important features are used to build classification/regression models which is validated on the 1/3 the samples that were 
+                                left out.   
+                            </p>
+                        </li>
+                        <li>
+                            <h4><a name="auroc">Why is is that sometimes the AUROC from the univariate ROC curve analysis is better than those using multiple features?</a></h4>
+                            <p>
+                                The ROC curves created (using ROC Explorer or Tester) are based on <b>cross-validation</b> performance of 
+                                multivariate algorithms (SVM, PLS-DA or Random Forests). In contrast, the classical univariate ROC curves are created 
+                                based on the performance measured by testing all possible cutoffs within <b>ALL</b> data points. Therefore, the 
+                                AUROC from cross validated ROC curve is more realistic for prediction purpose, while the AUROC calculated from ROC 
+                                curve created by univariate approach is often too optimistic. In other words, univariate ROC can be considered as an 
+                                indicator of the discriminating "potential" of the feature, not its actual performance.     
+                            </p>
+                        </li>
+                        <li> 
+                            <h4><a name ="impfeat">What's the difference between the importance measures in multivariate ROC exploratory analysis?</a></h4> 
+                            <p>
+                                The most important features are selected from the training data at each cross-validation run. The orders and identities 
+                                of the list could be (slightly) different each time. There are two forms in reporting the most important features. The 
+                                <u>Frequency of being selected</u> shows the <b>stability of the rank</b> of the importance for a given biomarker, 
+                                and the <u>Average importance measure</u> provides a <b>quantitative measure </b> of  the importance for 
+                                a given biomarker. The first measure is more robust and not sensitive to outliers. In most cases, these two approaches 
+                                should produce exactly the same list.   
+                            </p>
+                        </li>
+                        <li> 
+                            <h4><a name ="predview">How do I understand the Prob. Overview?</a></h4> 
+                            <p>
+                                The prediction overview shows the predicted class probabilities (x-axis) of each sample (y-axis). The probability scores are the 
+                                average from the 50 iterations, ranging from 0 ~ 1. For instance, less than 0.5 will belong to group A, more than 0.5 belong to 
+                                group B. In theory, a sample could be located on the 0.5 line, which means the sample has never been selected for testing 
+                                during the iterations.  
+                            </p>
+                            <p>
+                                Users can also use the Pred. Overview to identify potential outliers. For instance, if a sample is always predicted to have 
+                                a high probability in the wrong group, this may indicate that the sample could be labeled incorrectly. Users can check 
+                                "Label samples classified to the wrong groups" to identify these potential outliers. 
+                            </p>
+                        </li>
+                        <li> 
+                            <h4><a name = "random">Why does the result change slightly each time I re-do the analysis? </a></h4> 
+                            <p>
+                                The algorithm uses repeated random sub-sampling cross validation (CV) to evaluate the feature importance as well as 
+                                to test the performance of different models. Every time when user click the "Submit" button to re-do the analysis, a new 
+                                random sampling will be generated. Therefore, the results would be only <u>slightly</u> different. This is the intended 
+                                behavior, users should looking for the "stable core" for more robust results. The procedure is computationally intensive and 
+                                the following rules are used to control the time and resources based on the sample size: 
+                                <ul>
+                                    <li>
+                                        &lt; 100 samples: <b>50 repeats</b>   
+                                    </li>
+                                    <li>
+                                        100 - 200 samples: <b>30 repeats</b>     
+                                    </li>
+                                    <li>
+                                        200 - 500 samples: <b>20 repeats</b>   
+                                    </li>
+                                    <li>
+                                        &gt; 500 samples: <b>10 repeats</b> 
+                                    </li>
+                                </ul>
+                            </p>
+                            <p>
+                                Two other factors can also affect the degree of variation - sample size and presence of outliers. If the sample size is small, 
+                                the traing and testing tend to have high variation. The outliers can also affect the results. Due to the nature of repeated 
+                                sampling in each CV, some samples may be used multiple times and some samples may never be used. If the outlier samples 
+                                are used imbalanced (i.e. never been used in the first analysis but used multiple times in the subsequent analysis), the 
+                                result could change more than "slightly". 
+                            </p>
+                        </li>
+                        <li> 
+                            <h4><a name = "overfit">How does the program deal with over-fitting? </a></h4> 
+                            <p>
+                                The algorithm uses repeated random sub-sampling cross validation (CV) to test the performance of models created with 
+                                different number of features.  At each CV, 2/3 samples are used for feature selection and model training and the 
+                                remaining 1/3 of samples are used for testing. The procedures are repeated 50 times in order to produce a more 
+                                stable estimation. Users can further perform permutation tests to calculate the significance of the model in ROC Tester.
+                                Benchmark testing using different simulated random datasets shows that approach does not overfit. The image 
+                                below shows some results for classification. The performance is evaluated by measuring the area under ROC curves, 
+                                error rates, and permutation tests.    
+                            </p>
+                        </li>
+                        <li>
+                            <h4><a name="ci">How does the program calculate 95% confidence intervals (CIs) of AUC/pAUC?</a></h4>
+                            <p>
+                                The program uses non-parametric re-sampling based approach for calculating the confidence intervals. In either bootstrap (classical) 
+                                or MCCV (multivariate) approach, the data are re-sampled many times, with the AUC/pAUC calculated each time. Confidence 
+                                intervals are then estimated by simply sorting the data and taking the percentiles to our desired confidence interval bounds. 
+                                For instance, in 1000 resampling, 95% CIs will be the 25th and 975th values of the sorted AUC values. For details, please 
+                                refer to the paper by <a href="http://www.ncbi.nlm.nih.gov/pubmed/16198999">T.A. Lasko et al.</a>.  
+                            </p>
+                        </li>
+                        <li>
+                            <h4><a name ="perm">How to understand the permutation tests result?</a></h4> 
+                            <p>
+                                The permutation tests are performed only for the best model (assuming it containing <b>x</b> features) 
+                                using the following procedures:
+                            </p>
+                            <ol type="lower-roman">
+                                <li>
+                                    Re-assign the phenotype labels randomly to each sample; 
+                                </li>
+                                <li>
+                                    Perform random sub-sampling cross validation. Within each CV, perform feature ranking and select the 
+                                    top x features to build a classifier using the 2/3 training data, which is then tested on the 1/3 hold-out data. 
+                                    Note, the procedure is repeated only <b>3</b> times to save computational time. The performance 
+                                    is then recorded
+                                </li>
+                                <li>
+                                    Compare the performance using the original phenotype label and the permuted labels
+                                </li>
+                            </ol>
+                            <br/>
+                            <p>
+                                The performance measures of the permutated data will usually form a normal distribution.If the performance score 
+                                of the original data lies outside the distribution, then the result is significant. An empirical p value is also usually 
+                                given. For instance, in 1000 permutation tests, if none of the results are better than the original one, the p value
+                                will be reported as <b>p &lt; 0.001</b>. 
+                            </p>
+                            <p>
+                                Note, we have noticed that, when the data does not contain good signals (i.e. AUROC is &lt; 0.65), 
+                                or when the sample size is small with outliers, the permutation results could be unstable (change from 
+                                significant to not significant) in different runs. This is unavoidable due to the random subsampling nature of 
+                                the procedure. Users should always check for performance measures and outliers when this happens.
+                            </p>
+                        </li>
+                        <li>
+                            <h4><a name ="logisticReg">How to perform the Logistic Regression analysis?</a></h4>
+
+                            <b>Logistic Regression Model: logit(P) = ln ( P/(1 - P) ) = &alpha; + &beta;X</b>
+                            <br></br>
+                            <p>, where &alpha; is the intercept term, &beta; is the regression coefficient estimated from the sample dataset,
+                                X<sub>i</sub>; is the set of covariate (concentration) values,
+                                and the P = Pr(y=1|x) is the probability of the outcome of interest (e.g. disease case) as the below.
+                                <br></br>
+                                &nbsp;&nbsp;&nbsp;&nbsp; P = Pr(Y=outcome of interest | X=x) = exp ( &alpha; + &beta;x ) / (1 + exp ( &alpha; + &beta;x ) )
+                                <br></br>
+                                The cutoff value of the model will be compared with this predicted probability value if P > cutoff-value,
+                                then the sample can be classified as the interest outcome (usually assigned to 1). The best cutoff value will 
+                                be selected with ROC analysis.                                         
+                            </p>
+                            <p>
+                                The results of logistic regression including plots and tables are generated using MCCV (100-fold cross-validation) as other methods.
+                                In addition, it produces the addition result with 10-fold cross-validation in the "LR model (10-fold CV)" tab.
+                                <br></br>
+                                In order to get the best parsimony model, it may need to try with several combination of compounds/variables,
+                                because sometimes it does not work in automatically. However, the best model can be created
+                                using the statistics (especially, Lasso Frequency) of variable selection (Builder).
+                                The following is the general procedure for building a logistic regression model:
+                            </p>
+                            <ol type="lower-roman">
+                                <li>Select variables which are most significant using the statistics table (feature ranking) in Builder step.
+                                </li>
+                                <li>Perform logistic regression analysis with selected variables and get the modeling results.
+                                </li>
+                                <li>Compare the performance using the accuracy/performance plots and tables (auc, specificity, and sensitivity).
+                                </li>
+                                <li>Repeat these procedures until you find a satisfied model.
+                                </li>
+                            </ol>
+                            <p>
+                                Regarding the class/label of a input data, it is recommended to use the number (0 or 1) instead of string labels.
+                                Usually, 1 is used for the case and 0 is for the control.
+                            </p>
+                            <br/>
+                        </li>
+                    </OL>
+                </p:tab>
+                <p:tab title="Power Analysis">
+                    ﻿<OL style="line-height: 24px;">
+                        <LI>
+                            <a href="#powerdef">What is a power analysis?</a>
+                        </LI>
+                        <LI>
+                            <a href="#powerfac">What are the important factors in determining the power?</a>
+                        </LI>
+                        <LI>
+                            <a href="#powerdiag">How to interpret the diagnostic plots?</a>
+                        </LI>
+                        <LI>
+                            <a href="#powercal">How does MetaboAnalyst compute power?</a>
+                        </LI>
+                    </OL>
+                    <OL> 
+                        <li> 
+                            <h4><a name="powerdef">What is a power analysis? </a></h4> 
+                            <p>
+                                Power is the probability of detecting an effect, given that the effect is really there. 
+                                For instance, if a study comparing the two groups (control vs. disease) has power of 0.8 
+                                and assuming we can conduct the study many times, then 80% of the time, we would get a statistically 
+                                significant difference between the two groups, while 20% of time we run this experiment, 
+                                we will not obtain a statistically significant effect, even though there really is an effect in reality. 
+                                In practice, researchers are most interested in knowing the sample size (number of subjects) required in 
+                                order to obtain sufficient power. Power analysis often refers to <u>calculating the sample size required 
+                                    to detect an effect of a given size with a given degree of confidence</u>. 
+                            </p>
+                        </li>
+                        <li> 
+                            <h4><a name="powerfac">What are the important factors that affect the power? </a></h4> 
+                            <p>
+                                There are three major factors: (a) effect size which is usually defined as the difference of two group means 
+                                divided by the pooled standard deviation. When all others are equal, a larger the effect size will lead to more power;  
+                                (b) degree of confidence which is usually the p value cutoff (alpha) for statistical significance. When all others 
+                                are equal, there will be reduced power if we require a very high degree of confidence; (c) the sample size - more 
+                                samples will in general increase power. In many cases, the sample size is our interest for a given power (i.e. 0.8)
+                            </p>
+                        </li>
+                        <li>
+                            <h4><a name="powerdiag">How to interpret the diagnostic plots?</a></h4>
+                            <p>
+                                The power calculation is based on two assumptions: 1) the effect is indeed present in the data, and 2) the test statistic 
+                                follow a normal or near normal (Students' t) distribution. The diagnostic plot is to help assess whether these two assumptions 
+                                are reasonably met. In particular, the panels on the left shows the distribution of the test statistics (t-stat) as a histogram 
+                                (top panel) and as QQ plot (bottom panel); the panels on the right shows the distribution of the raw p values as histogram (top panel) 
+                                and the bottom panel shows the sorted p values against their ranks. We expect a large proportion of p values will be close to 
+                                zero (indicating strong effect) - i.e. the histogram should be left-shifted and the bottom graph should shift to top left corner. 
+                            </p>
+                            <img src="#{facesContext.externalContext.requestContextPath}/resources/images/power_diag.png"></img>
+                        </li>
+                        <li> 
+                            <h4><a name="powercal">How does MetaboAnalyst compute power?</a></h4> 
+                            <p>
+                                It is not appropriate to directly apply the traditional univariate approach on power analysis to omics datasets which are 
+                                characterized by high dimensions with 100s to 1000s of features and a relative small number of samples. 
+                                Special care needs to be taken in the estimation of effect size as well as the selection of the confidence level.
+                                The power analysis in MetaboAnalyst is based on the R package <a href="http://www.bioconductor.org/packages/release/bioc/html/SSPA.html" target="_blank">
+                                    SSPA</a> that was originally developed for power calculation for gene expression datasets. For a given pilot data, 
+                                the method estimates the average power for a given false discovery rate. For more details, please refer to the original 
+                                publication by <a href="http://www.biomedcentral.com/1471-2164/10/439" target="_blank">M van Iterson et al</a>
+                            </p>
+                        </li>
+                    </OL>
+                </p:tab>
+                <p:tab title="Mummichog">
+                    ﻿<OL style="line-height: 24px;">
+                        <li><a href="#mumworks">How does the pathway analysis for the untargeted metabolomics module work?</a></li>
+                        <li><a href="#mumformat">What format should I upload my data as?</a></li>
+                        <li><a href="#mumlib">What are the libraries to select from for pathway analysis?</a></li>
+                        <li><a href="#mumorg">Why are there several libraries for the same organism?</a></li>
+                        <li><a href="#mumpval">Which p-value cut-off should I use?</a></li>
+                        <li><a href="#mumadjust">How are the p-values adjusted? </a></li>
+                        <li><a href="#mumgamma">Why are the gamma adjusted p-values NaN? </a></li>
+                        <li><a href="#mumms">What mass-spec instrumentation is supported?</a></li>
+                        <li><a href="#mumout">What is the output of this module?</a></li>
+                        <li><a href="#mumnet">How do I interpret the metabolic network visualization for this module?</a></li>
+                        <li><a href="#mumvers">What version of mummichog is included in MetaboAnalyst?</a></li>
+                    </OL>
+                    <OL> 
+                        <li>
+                            <h3><a name="mumworks">How does the pathway analysis for the untargeted metabolomics module work?</a></h3>
+                            <p>
+                                This module is based on the mummichog algorithm (<a target="_blank" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3701697/">Li et al.</a>) to perform pathway analysis of untargeted metabolomics data. 
+                                Briefly, users provide a list of m/z features and a p-value for each feature, highlighting significantly different features between two groups. 
+                                Three lists are then drawn from this initial list, (1)<b> Lsig</b>, which is the list containing only all significant m/z features (determined by the user selected p-value cutoff), (2)<b> Lref</b>, which is  
+                                the list of all m/z features, and (3) <b>Lperm</b>, which is a list of randomly drawn m/z features from Lref, but the same length as Lsig. 
+                                The next steps are as follows:
+                            </p>
+                            <ol>
+                                <li>
+                                    A list of randomly drawn m/z features are drawn from Lref to create Lperm. The m/z features are then mapped to potential metabolites, 
+                                    considering different adducts, protons, etc. 
+                                </li>
+                                <li>
+                                    The list of potential compounds are then mapped to the user’s selected library of pathways, and a p-value is calculated per pathway.
+                                </li>
+                                <li>
+                                    Steps 1 and 2 are repeated many times to compute the null distribution of p-values (modeled as a gamma distribution).
+                                </li>
+                                <li>
+                                    The Lsig is mapped to potential metabolites for pathway enrichment analysis, and the resulting p-values (Fisher’s or Hypergeometric, and EASE scores) 
+                                    per pathway for the Lsig compounds are then adjusted for the null-distribution. 
+                                </li>
+                            </ol>
+                        </li>
+                        <li>
+                            <h3><a name="mumformat">What format should I upload my data as?</a></h3>
+                            <p>
+                                Upload your data in either a tab-deliminted text file (txt) or a comma separated value file (csv) format. The uploaded table must contain                                
+                                three columns with these exact names: m.z, p.value, and t.score. Users have the option to change the third column t.score to 
+                                fold.change. 
+                            </p>
+                        </li>
+                        <li>
+                            <h3><a name="mumlib">What are the libraries to select from for pathway analysis?</a></h3>
+                            <p>
+                                This module contains both genome-scale metabolic models from the original mummichog python package, KEGG pathway 
+                                libraries for 21 different organisms, and soon SMPDB pathway libraries for 8 organisms. The genome-scale metabolic model of <i>Danio rerio</i> was 
+                                manually curated using the KEGG zebrafish model, as well as the human BiGG and Edinburgh Models, and is designated with a [MFN] at the end of its name (<a target="_blank" href="https://www.ncbi.nlm.nih.gov/pubmed/21114829">Li et al. 2010</a>). 
+                                The human genome-scale metabolic model was also manually curated and originates from a number of sources (KEGG, BiGG, and Edinburgh Model) and has [MTF] at the end of its name. 
+                                The remaining four genome-scale metabolic models were directly derived from BioCyc, denoted with [BioCyc]. 
+                                The KEGG pathway libraries are designated with [KEGG], and the SMPDB pathway libraries will be designated with [SMPDB].
+                                Please select the library closest to your organism. 
+                            </p>
+                        </li>
+                        <li>
+                            <h3><a name="mumorg">Why are there several libraries for the same organism?</a></h3>
+                            <p>
+                                This module contains both genome-scale metabolic models and KEGG pathway libraries, thereby giving users the power to decide which 
+                                library to perform their pathway analysis. For instance, for humans, users can either use the manually curated genome-scale metabolic model [MTF], the BioCyc metabolic model [BioCyc],
+                                or the KEGG pathway library [KEGG].
+                            </p>
+                        </li>
+                        <li>
+                            <h3><a name="mumpval">Which p-value cut-off should I use?</a></h3>
+                            <p>
+                                Users have the freedom to select any p-value cut-off to differentiate between significantly and non-significantly enriched m/z features. In 
+                                general, a cut-off of 0.05 is considered fair, and cut-offs less than 0.05 are considered more stringent. Users should note that their selection of p-value cutoff 
+                                could affect the results of this module. Changing the p-value cutoff may alter which compounds are included in the Lsig and thereby modify the output of the mummichog algorithm. 
+                                We therefore recommend that users explore different p-value cutoff values during their analysis, though the algorithm was shown to be robust in the original manuscript 
+                                (<a target="_blank" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3701697/">Li et al. 2013</a>). 
+                            </p>
+                        </li>
+                        <li>
+                            <h3><a name="mumgamma">Why are the gamma adjusted p-values NaN?</a></h3>
+                            <p>
+                                Users may find that their gamma adjusted p-values are NaN. This is because the permutation p-values could not be Gamma-modeled, and therefore could not be adjusted.
+                                This arises because the number of permutations with significance is too close to zero.
+                            </p>
+                        </li>
+                        <li>
+                            <h3><a name="mumadjust">How are the p-values adjusted?</a></h3>
+                            <p>
+                                The results of this module consists of the total number of hits, the raw p-value (Fisher’s or Hypergeometric), the EASE score, and the Gamma-adjusted p-value (for permutations) per pathway.
+                                The EASE score is a modified Fisher’s exact p-value that removes one hit from the pathway analysis, thereby penalizing pathways with fewer hits (<a target="_blank" href="https://www.ncbi.nlm.nih.gov/pubmed/14519205">Hosack et al., 2003</a>). 
+                                These EASE scores are then adjusted using the cumulative distribution function of the Gamma-modeled permutation p-values (step 3 above).
+                            </p>
+                        </li>
+                        <li>
+                            <h3><a name="mumms">What MS instrumentation is supported?</a></h3>
+                            <p>
+                                The mummichog algorithm is performed based on the mass accuracy of the instrument (i.e. is not platform specific). 
+                                However, we recommend that users use high-resolution MS (such as Orbitrap or other Fourier transform mass spectrometry family), which will significantly reduce false positives and improve the 
+                                pathway activity predictions. 
+                            </p>    
+                        </li>
+                        <li>
+                            <h3><a name="mumout">What is the output of this module?</a></h3>
+                            <p>
+                                The output of this module first consists of a table identifying the top-pathways that are enriched in your m/z data. The table is ordered from 
+                                the most significant to the least significant and contains the number of hits over the total number of compounds per pathway, the raw p-
+                                value (Fisher’s or Hypergeometric), the EASE score, and the adjusted p-value. A second table is available for download as a link below  
+                                this first table, containing a list of matched metabolites from the user’s uploaded list of m/z features. A third output is the metabolic network 
+                                visualization, which is based on the KEGG global metabolic network (ko01100). 
+                            </p>
+                        </li>
+                        <li>
+                            <h3><a name="mumnet">How do I interpret the metabolic network visualization for this module?</a></h3>
+                            <p>
+                                The metabolic network visualization is based on the KEGG global metabolic network (KEGGscape) and has been manually curated. The 
+                                metabolites are represented as nodes (circles), and their size is based on their associated p-value. More significantly enriched metabolites 
+                                are bigger then less-significantly enriched metabolites. The aim of this visualization is to provide a global metabolic context for the 
+                                significantly enriched mapped metabolites, as well as provide an in-house option for visual exploration of the results from the untargeted 
+                                pathway analysis. Users have the option to colour each specific pathway to their own preference, change the background colour, switch 
+                                the view style, and download the image as a PNG or SVG file. 
+                            </p>
+                        </li>
+                        <li>
+                            <h3><a name="mumvers">What version of mummichog is included in MetaboAnalyst?</a></h3>
+                            <p>
+                                Currently, MetaboAnalyst supports mummichog version 1.0. In the coming time, we will work to 
+                                upgrade to mummichog version 2.0, which will use retention-time in the analysis. 
+                            </p>
+                        </li>
+                    </OL>
+                </p:tab>
+                <p:tab title="Meta-analysis">
+                    <OL style="line-height: 24px;">
+                        <LI>
+                            <a href="#metadef">What is meta-analysis?</a>
+                        </LI>
+                        <LI>
+                            <a href="#metadata">How to prepare data sets for meta-analysis?</a>
+                        </LI>
+                        <LI>
+                            <a href="#metap">What is p-value combination?</a>
+                        </LI>
+                        <LI>
+                            <a href="#metavc">What is vote counting?</a>
+                        </LI>
+                        <LI>
+                            <a href="#metamerge">When should I use direct merge for meta-analysis?</a>
+                        </LI>
+                    </OL>
+
+                    <OL> 
+                        <li> 
+                            <h4><a name="metadef">What is meta-analysis?</a></h4> 
+                            <p>
+                                Meta-analysis is a type of statistical technique used to integrate multiple independent datasets that have been 
+                                collected to study same or similar experimental conditions, in order to obtain more robust biomarkers. 
+                                By combining multiple data sets, the approach can increase statistical power (more samples) and reduce potential 
+                                bias.
+                            </p>
+                            <p>
+                                A key concept in meta-analysis is that it is generally unadvisable to directly combine different independent datasets
+                                (i.e. merge them into a single large table) and analyze them as a single unit. This is due to potential batch effects 
+                                associated with each datasets, which can completely overwhelm the biological effects. This issue has been well-studies in 
+                                microarray experiments generated from different platforms. It is expected the issue could be more severe due to the lack 
+                                of standardization in metabolomics. 
+                            </p>
+                            <p>
+                                Instead, meta-analysis is usually computed based on summary statistics (p values, effect sizes, etc.) to identify 
+                                robust biomarkers. The meta-analysis module in MetaboAnalyst was developed to support these approaches. The results can 
+                                be visualized using heatmap to explore the patters across different studies. 
+                            </p>
+                        </li>
+                        <li> 
+                            <h4><a name="metadata">How to prepare data sets for meta-analysis?</a></h4> 
+                            <p>
+                                Here are some basic rules for data collection for meta-analysis in MetaboAnalyst:
+                                <ol>
+                                    <li>
+                                        These data sets were collected under comparable experimental conditions, 
+                                        and/or the underlying experiments share the same hypothesis or are held to 
+                                        have the same mechanistic underpinnings;
+                                    </li>
+                                    <li>
+                                        Only two-group comparisons are supported at the moment (i.e., control vs disease);
+                                    </li>
+                                    <li>
+                                        These datasets must share the same type of IDs so that the majority of these feature will match;
+                                    </li>   
+                                    <li>
+                                        It is best to keep all data on the same scale or range (i.e. both raw or normalized in the same way). 
+                                        It is generally preferred to compare at log scale. MetaboAnalyst offers boxplots and log normalization 
+                                        to help facilitate this process. 
+                                    </li>
+                                </ol>
+                            </p>
+                        </li>
+                        <li> 
+                            <h4><a name="metap">What is p-value combination?</a></h4> 
+                            <p>
+                                Calculating and combining P-values from multiple studies has long been used in the meta-analysis of microarray data, and 
+                                we are now using these approaches for metabolomics data. These are simple to calculate and flexible to use. Fisher’s method and Stouffer’s method are two popular approaches. 
+                                They have similar levels of performance and can be easily interpreted whereby larger scores reflect greater differential abundance. 
+                                The main difference is that weights (i.e. based on sample sizes) are incorporated into the calculation in Stouffer’s method, 
+                                whereas Fisher’s method is known as a weight-free method. Note that larger sample size does not warrant larger weights, as the quality 
+                                of each study can be variable. Users should choose to apply Stouffer’s method only when all studies are of similar quality.
+                            </p>
+                        </li>
+                        <li> 
+                            <h4><a name="metavc">What is vote counting?</a></h4> 
+                            <p>
+                                Vote counting is the most primitive but simplest and most intuitive method of meta-analysis. In this approach, significant features are first selected 
+                                based on some criteria (e.g. adjusted P &lt; 0.05 and same direction of fold changes) for each data set. 
+                                The vote for each features can then be calculated by counting the total 
+                                number of times it occurs as significant across all data sets. This method is statistically inefficient and should be considered as a last resort in situations when other meta-analysis methods cannot be applied.
+                            </p>
+                        </li>
+                        <li> 
+                            <h4><a name="metamerge">When should I use direct merge for meta-analysis?</a></h4> 
+                            <p>
+                                In this approach, different data sets are merged into a mega-data set and then analyzed as if all data sets were derived from a single experiment. 
+                                This approach ignores the inherent bias and heterogeneity of data sets from different sources. Many other factors (experiment protocols, 
+                                technical platforms, raw data processing procedures and so forth) can potentially contribute to the observed differences. 
+                                This approach should only be used when data sets are very similar (i.e. from the same lab and same platform without batch effects).
+                            </p>
+                        </li>
+                    </OL>
+                </p:tab>
+                <p:tab title="Network Explorer">
+                    ﻿<OL style="line-height: 24px;">
+                        <li><a href="#visstart">How were the networks including metabolite-gene interaction network created?</a></li>
+                        <li><a href="#visdb">Which database is used for creating the network?</a></li>
+                        <li><a href="#vismax">How many nodes can be visualized (network size limit)?</a></li>
+                        <li><a href="#visnode">How do I identify important nodes using degree and betweenness?</a></li>
+                        <li><a href="#queryenrich">Can I perform GO or pathway analysis on my selected genes/metabolites alone?</a></li>
+                        <li><a href="#enrich">How is enrichment analysis performed?</a></li>
+                        <li><a href="#viscolor">How do I interpret the node colors and sizes in the default Topo View?</a></li>
+                        <li><a href="#nodedelete">Can I delete nodes from the network?</a></li>
+                        <li><a href="#hmpath">Can I view all the metabolite/gene members of a pathway within the current graph?</a></li>
+                        <li><a href="#subnetworks">How are the subnetworks generated from my data?</a></li>
+                    </OL>
+                    <OL> 
+                        <li>
+                            <h4><a name="visstart">How were the networks including metabolite-gene interaction network created?</a></h4>
+                            <p>
+                                The networks are generated by first mapping the metabolites, genes or both to the 
+                                underlying gene-metabolite-disease interactions database. A search algorithm is then performed to identify first-order neighbours 
+                                (e.g. metabolites that <b>directly</b> interact with a given metabolite) for each of these mapped metabolites ("seeds"). 
+                                The resulting nodes and their interaction partners are returned to build the subnetworks.
+                            </p>
+                            <img src="#{facesContext.externalContext.requestContextPath}/resources/images/network_eg_faqs.png" height="400" width="500"></img>
+                            <p>
+                                The above figure shows an example of a generated metabolites-genes interaction network.
+                            </p>
+                        </li>
+                        <li>
+                            <h4><a name="visdb">Which database is used for creating the network?</a></h4>
+                            <p>
+                                MetaboAnalyst uses a comprehensive gene-metabolite-disease interaction data based on <a href="http://www.bio-bigdata.com/MetPriCNet/" target="_blank">MetPriCNet</a>. 
+                                The data contains interaction data mainly extracted from published literature. The database currently contains 11,502 genes, 1,900 metabolites,
+                                132 diseases making a total of 139570, 519, and 78200 interactions for gene-metabolite, metabolite-disease and metabolite-metabolite networks respectively in human.
+                                The gene-chemical and chemical-chemical associations for the gene-metabolite and metabolite-metabolite networks, respectively, were extracted from STITCH, such 
+                                that only highly confident interactions are used. Most of associations in STITCH are based on co-mentions highlighted in PubMed abstracts including reactions from similar chemical structures and similar molecular activities.
+                                The associations for the metabolite-disease network were obtained from HMDB. Disease association have been added to HMDB via the Human Metabolome Project’s literature curation team.
+                                The Metabolite-Gene-Disease network is an integration of gene-metabolite, metabolite-disease and gene-disease interaction networks.
+                            </p>
+                        </li>
+                        <li>
+                            <h4><a name="vismax">How many nodes can be visualized (network size limit)?</a></h4>
+                            <p>
+                                The visualization is actually limited by the performance of users' computers and screen resolutions. 
+                                Too many nodes will make the network too dense to visualize and the computer slow to respond. 
+                                We recommend limiting the total number of nodes to between <b>200 ~ 2000</b> for the best experience. 
+                                For very large networks, please make sure you have a decent computer equipped with a modern browser 
+                                (we recommend the latest Google Chrome).  
+                            </p>
+                        </li>
+                        <li>
+                            <h4><a name="visnode">How do I identify important nodes using degree and betweenness?</a></h4>
+                            <p>
+                                Important nodes can be identified based on their position within the network.             
+                                The assumption is that changes in the key positions of a network will have more
+                                impact on the network than changes on marginal or relatively isolated positions. 
+                                MetaboAnalyst provides two well-established node centrality measures to estimate node 
+                                importance - <b>degree centrality</b> and <b>betweenness centrality</b>. 
+                                In a graph network, the degree of a node is the number of connections it has to other nodes. 
+                                Nodes with higher node degree act as hubs in a network. The betweenness centrality measures 
+                                the number of shortest paths going through the node. It takes into consideration 
+                                the global network structure. For example, nodes that occur between two dense 
+                                clusters will have a high betweenness centrality even if their degree centrality values are not high.
+                                Note, you can sort the node table based on either degree or betweenness values by 
+                                <b>double clicking</b> the corresponding column header.
+                            </p>
+                        </li>
+                        <li>
+                            <h4><a name="queryenrich">Can I perform GO or pathway analysis on my selected genes/metabolites alone?</a></h4>
+                            <p>
+                                Yes. For query metabolites, you can test for enriched KEGG pathways. For query genes only,
+                                you can test enriched gene ontologies or pathways (KEGG/Reactome).
+                                To do so, first select and highlight query genes using the <b>Highlight Color</b> toolbar on the top 
+                                left (you may have to highlight twice for upregulated and downregulated genes respectively); or you can use the 
+                                <b>Hub Explorer</b> and select queries from the node table. After that, select a functional catergory 
+                                from the <b>Function Explorer</b> section, and click the <b>Submit</b> button.
+                            </p>
+                        </li>
+                        <li>
+                            <h4><a name="enrich">How is enrichment analysis performed?</a></h4>
+                            <p>
+                                The enrichment analysis is to test whether any functional metabolites/genes from the user selected library 
+                                are significantly enriched among the currently highlighted nodes within the network. MetaboAnalyst uses 
+                                <b>hypergeometric tests</b> to compute the enrichment p values. 
+                            </p>
+                        </li>
+                        <li>
+                            <h4><a name="viscolor">How do I interpret the differences in node colors and sizes in the default network?</a></h4>
+                            <p>
+                                In the default network generated by MetaboAnalyst, the <b>size</b> of the nodes are based on their <b>degree values</b>,
+                                with a big size for large degree values. The <b>color</b> of nodes are proportional to their betweenness centrality values.
+                                When user switches to Expression View, the color will be based on their expression values (if available).
+                            </p>
+                        </li>
+                        <li>
+                            <h4><a name="nodedelete">Can I delete nodes from the network?</a></h4>
+                            <p>
+                                Yes. You can delete nodes (with their associated edges) from the current network. First 
+                                you need to select the nodes from the <b>Node Table</b> in the left pane. Then click the <b>Delete</b> 
+                                button at the top of the node table. A confirmation dialog will appear asking if you really want to 
+                                delete these nodes. Note, this action will trigger network re-arrangement, especially if 
+                                hub nodes are removed. In addition, "orphan" nodes may be produced due to removal. 
+                                These nodes will also be excluded during re-arrangement. 
+                            </p>
+                        </li>            
+                        <li>
+                            <h4><a name="hmpath">Can I view all the metabolite/gene members of a pathway within the current graph?</a></h4>
+                            <p>
+                                Yes, after you have performed functional enrichment analysis, the over-represented themes will be displayed in 
+                                the table below. By <b>double clicking</b> on a pathway name, all metabolite/gene members 
+                                of the pathway will be displayed as highlighted nodes within the current 
+                                network. 
+                            </p>
+                        </li>
+                        <li>
+                            <h4><a name="subnetworks">How are the subnetworks generated from my data?</a></h4>
+                            <p>
+                                The networks are generated by first mapping the genes/metabolites to the underlying gene-metabolite-disease interaction database. A search algorithm is then performed to identify first-order neighbours (proteins that <b>directly</b> interact with a given protein) for each of these mapped proteins ("seeds"). The resulting nodes and their interaction partners are returned to build the subnetworks.
+
+                                The above approach will typically return one giant subnetwork ("continent") with multiple smaller ones ("islands"). Most subsequent analyses are performed on the continent. Note, <b>networks with less than 3 nodes will be excluded</b>.
+                            </p>
+                        </li>
+
+                    </OL>
+                </p:tab>
+            </p:tabView>  
+        </h:panelGrid>
+    </ui:define>
+</ui:composition>

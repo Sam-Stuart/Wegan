@@ -1,0 +1,89 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_anal_template.xhtml">
+    <ui:define name="metaInfo">
+        <f:event type="preRenderView" listener="#{editBean.prepareDataEditor()}"/>         
+        <f:event type="preRenderView" listener="#{sessionBean1.registerPage('Data editor')}"/> 
+    </ui:define>
+    <ui:define name="content">
+        <style>
+            .ui-picklist .ui-picklist-list{
+                height:400px;
+                width: 280px
+            }
+        </style>
+        <h:panelGrid style="padding:20px 20px 20px 20px; font-size: 12px; line-height: 21px; width:100%">
+            <h2>Data Editor</h2>
+            <p>
+                You can use the panels below to <b>exclude</b> particular sample or feature outliers, as well 
+                as to exclude or re-order groups. Note, 
+                <font style="color: orange">you must click the <b>Submit</b> button to complete data editing</font>. 
+                Data need to be re-calibrated after this step. you will be redirected to the <b>Data normalization</b> page 
+                when you click the <b>Submit</b> button. 
+            </p>
+            <p:tabView style="width:100%; border: none; background: none;">
+                <p:tab title ="Edit Samples">
+                    <h:form>
+                        <h:panelGrid>
+                            <p:pickList value="#{editBean.sampleItems}" 
+                                        var="sample" itemValue="#{sample}" itemLabel="#{sample}"
+                                        showSourceFilter="true" showTargetFilter="true">
+                                <f:facet name="sourceCaption">Available</f:facet>
+                                <f:facet name="targetCaption">Exclude</f:facet>
+                                <p:ajax event="transfer" listener="#{editBean.doTransfer}"/>
+                            </p:pickList> 
+                            <h:panelGrid style="width:100%; text-align: center">
+                                <p:commandButton value="Submit" style="width:80px" ajax="false"                                               
+                                                 action="#{editBean.editSamples()}"/>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                    </h:form>                    
+                </p:tab>
+                <p:tab title ="Edit Features">
+                    <h:form>
+                        <h:panelGrid>
+                            <p:pickList value="#{editBean.featureItems}" 
+                                        var="var" itemValue="#{var}" itemLabel="#{var}"
+                                        showSourceFilter="true" showTargetFilter="true">
+                                <f:facet name="sourceCaption">Available</f:facet>
+                                <f:facet name="targetCaption">Exclude</f:facet>
+                                <p:ajax event="transfer" listener="#{editBean.doTransfer}"/>
+                            </p:pickList> 
+                            <h:panelGrid style="width:100%; text-align: center">
+                                <p:commandButton value="Submit" style="width:80px" ajax="false"                                          
+                                                 action="#{editBean.editFeatures()}"
+                                                 />
+                            </h:panelGrid>
+                        </h:panelGrid>
+                    </h:form>
+                </p:tab>
+                <p:tab title ="Edit Groups">
+                    <h:form>
+                        <p>
+                            You can <b>re-order</b> groups for subsequent analysis. 
+                            Note for multi-group data, changing the order of group labels may significantly 
+                            affect the results from regression analysis (i.e. PLS). 
+                        </p>
+                        <h:panelGrid>
+                            <p:pickList value="#{editBean.groupItems}" var="group" itemValue="#{group}" itemLabel="#{group}" 
+                                        showSourceControls="true" showSourceFilter="true" showTargetFilter="true">
+                                <f:facet name="sourceCaption">Available</f:facet>
+                                <f:facet name="targetCaption">Exclude</f:facet>
+                                <p:ajax event="transfer" listener="#{editBean.doTransfer}"/>
+                            </p:pickList>
+                            <h:panelGrid style="width:100%; text-align: center">
+                                <p:commandButton value="Submit" style="width:80px" ajax="false"                                               
+                                                 action="#{editBean.editGroups()}"/>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                    </h:form>                    
+                </p:tab>
+            </p:tabView>
+        </h:panelGrid>
+    </ui:define>
+</ui:composition>

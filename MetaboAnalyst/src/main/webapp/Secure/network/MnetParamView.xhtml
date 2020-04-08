@@ -1,0 +1,69 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_anal_template.xhtml">
+    <ui:define name="metaInfo">
+        <f:event type="preRenderView" listener="#{sessionBean1.registerPage('Set parameter')}"/>
+        <f:event type="preRenderView" listener="#{sessionBean1.addNaviTrack('Set parameter', '/faces/Secure/network/MnetParamView.xhtml')}"/>
+    </ui:define>
+    <ui:define name="content">
+        <h:form>
+            <h:panelGrid style="padding:40px 40px 20px 40px; line-height: 23px; width:870px">
+                <h2>Network Analysis Options :</h2>
+                Users can choose one of five different modes of networks analysis:
+                <h:panelGrid style="border: lightgray thin solid; margin-left: 30px; margin-right: 20px; padding: 20px 20px 10px 25px; background-color: #F9F9FB; font-size: 13px;">
+                    <h:panelGrid style="width: 100%; padding-left: 20px">
+                        <h:commandLink action="#{mnetResBean.doMnetworkAnalysis('static')}" style="font-size: 13px; font-weight: bold" 
+                                       onclick="PF('statusDialog').show()"
+                                       value="KEGG Global Metabolic Network"/>
+                        <h:panelGrid style="padding-left: 20px; padding-bottom: 6px">
+                            Users can map metabolites and enzymes/KOs (KEGG Orthologs), and then visually explore the results in the KEGG global metabolic network (ko01100).
+                            This feature is especially suitable to integrate results from joint <b>metabolomics and metagenomics</b> studies.
+                        </h:panelGrid>
+
+                        <h:commandLink style="font-size: 13px; font-weight: bold" action="#{mnetResBean.doMnetworkAnalysis('metabo_phenotypes')}" 
+                                       onclick="PF('statusDialog').show()"
+                                       value="Metabolite-Disease Interaction Network"/>
+                        <h:panelGrid style="padding-left: 20px; padding-bottom: 6px">
+                            The metabolite-disease interaction network enables exploration of disease-related metabolites. The associations were obtained from HMDB.
+                            Disease association have been added to HMDB via the Human Metabolome Project’s literature curation team.
+                        </h:panelGrid>
+                        
+                        <h:commandLink style="font-size: 13px; font-weight: bold" action="#{mnetResBean.doMnetworkAnalysis('gene_metabolites')}" 
+                                       onclick="PF('statusDialog').show()"
+                                       value="Gene-Metabolite Interaction Network"/>
+                        <h:panelGrid style="padding-left: 20px; padding-bottom: 6px">
+                            The gene-metabolite interaction network enables exploration and visualization of interactions between functionally related 
+                            metabolites and genes. The chemical and human gene associations were extracted from STITCH, such that only highly confident 
+                            interactions are used. Most of associations in STITCH are based on co-mentions highlighted in PubMed Abstracts including
+                            reactions from similar chemical structures and similar molecular activities.
+                        </h:panelGrid>
+
+                        <h:commandLink style="font-size: 13px; font-weight: bold" action="#{mnetResBean.doMnetworkAnalysis('metabo_metabolites')}" 
+                                       onclick="PF('statusDialog').show()"
+                                       value="Metabolite-Metabolite Interaction Network"/>
+                        <h:panelGrid style="padding-left: 20px; padding-bottom: 6px">
+                            The metabolite-metabolite interaction network helps to highlight potential functional relationships between a wide set 
+                            of annotated metabolites. The chemical-chemical associations for the metabolites network were extracted from STITCH, such that only highly confident 
+                            interactions are used. Most of associations in STITCH are based on co-mentions highlighted in PubMed Abstracts including
+                            reactions from similar chemical structures and similar molecular activities.
+                        </h:panelGrid>
+                        <h:commandLink style="font-size: 13px; font-weight: bold" action="#{mnetResBean.doMnetworkAnalysis('global')}" 
+                                       onclick="PF('statusDialog').show()"
+                                       value="Metabolite-Gene-Disease Interaction Network"/>
+                        <h:panelGrid style="padding-left: 20px; padding-bottom: 6px">
+                            The metabolite-gene-disease interaction network provides a global view of potential functional relationships between metabolites, 
+                            connected genes, and target diseases. The network is an integration of gene-metabolite, metabolite-disease and gene-disease interaction networks.
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </h:panelGrid>
+            </h:panelGrid> 
+        </h:form>        
+    </ui:define>
+</ui:composition>
+
+

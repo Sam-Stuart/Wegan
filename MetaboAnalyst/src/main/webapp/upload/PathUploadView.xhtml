@@ -1,0 +1,90 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_anal_template.xhtml">
+    <ui:define name="metaInfo">
+        <f:event type="preRenderView" listener="#{sessionBean1.setAnalType('pathway')}"/> 
+        <f:event type="preRenderView" listener="#{sessionBean1.registerPage('Upload')}"/> 
+    </ui:define>
+    <ui:define name="content">
+        <h:form id="form1" enctype="multipart/form-data">
+            <h:panelGrid style="padding-top:20px; padding-left: 40px; font-size: 12px; line-height: 23px;">
+                <h:panelGrid style="padding: 10px 10px 10px 20px; width: 100%">
+                    <h2>Please enter a one-column compound list: </h2>
+                    <h:panelGrid style="padding-left: 60px;">
+                        <h:panelGrid id="listPane">
+                            <h:panelGrid style="padding-left:20px;">
+                                <p:inputTextarea  autoResize="false" value="#{pathLoader.pathOraList}" rows="16" cols="40" />
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" style="width:360px; padding-top: 5px;">
+                                <p:outputLabel style="font-size:13px; font-weight: bold" value="Input Type: "/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:165px" value="#{pathLoader.oraCmpdIDType}">
+                                    <f:selectItems value="#{applicationBean1.pathIDOpts}" />
+                                </p:selectOneMenu>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2">
+                            <p:selectBooleanCheckbox value="#{pathLoader.usePathListExample}">
+                                <p:ajax update=":form1:listPane" event="change" listener="#{pathLoader.updatePathListArea()}"/>
+                            </p:selectBooleanCheckbox>  
+                            <p:outputLabel style="font-size:13px; font-weight: bold" value="Use our example data"/>
+                        </h:panelGrid>
+                        <h:panelGrid style="width: 100%; text-align: center">
+                            <p:commandButton value="Submit" 
+                                             onclick="PF('statusDialog').show()" 
+                                             oncomplete="PF('statusDialog').hide()"
+                                             ajax="false" 
+                                             action="#{pathLoader.handlePathListUpload()}"/>  
+                        </h:panelGrid>
+                    </h:panelGrid> 
+                </h:panelGrid>
+                <hr/>
+                <h:panelGrid style="padding: 10px 10px 10px 20px; width: 100%">
+                    <h2>Or upload a concentration table (.csv or .txt): </h2>
+                    <h:panelGrid columns="2" style="width:560px; height: 120px">
+                        <p:outputLabel style="font-size:13px; font-weight: bold" value="Group Label:"/>
+                        <p:selectOneRadio value="#{pathLoader.clsOpt}">
+                            <f:selectItems value="#{applicationBean1.clsOpts}" />
+                        </p:selectOneRadio>          
+                        <p:outputLabel style="font-size:13px; font-weight: bold" value="ID Type:"/>
+                        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:165px" value="#{pathLoader.qeaCmpdIDType}">
+                            <f:selectItems value="#{applicationBean1.pathIDOpts}" />
+                        </p:selectOneMenu>
+                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Data Format:"/>
+                        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:165px" value="#{pathLoader.dataFormat}">
+                            <f:selectItems value="#{applicationBean1.rocFormatOpts}" />
+                        </p:selectOneMenu>
+                        <p:outputLabel style="font-size:13px; font-weight: bold" value="Data File:"/>
+                        <p:fileUpload value="#{pathLoader.csvFile}" mode="simple"/>
+                    </h:panelGrid>
+
+                    <h:panelGrid columns="2" style="padding-top: 10px">
+                        <p:selectBooleanCheckbox value="#{pathLoader.usePathDataExample}"/>
+                        <p:outputLabel style="font-size:13px; font-weight: bold; padding-top: 6px" value="Use the example data"/>
+                    </h:panelGrid>  
+                    <h:panelGrid columns="2" style="width: 560px">
+                        <h:panelGrid style="width:50px">
+                            <p:outputLabel style="font-weight: bold" value="Data"/>
+                        </h:panelGrid>       
+                        <p:outputLabel style="font-weight: bold" value="Description"/>
+                        <a href="#{facesContext.externalContext.requestContextPath}/resources/data/human_cachexia.csv">Dataset</a>
+                        <h:panelGrid>
+                            Urinary metabolite concentrations from 77 cancer patients measured by 1H NMR. 
+                            Phenotype: <b>N</b> - cachexic; <b>Y</b> - control
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid style="width: 100%; padding-top: 10px; padding-bottom: 10px; text-align: center">
+                        <p:commandButton value="Submit" ajax="false" 
+                                         onclick="PF('statusDialog').show()" 
+                                         oncomplete="PF('statusDialog').hide()"   
+                                         action="#{pathLoader.pathQeaBn_action}"/>  
+                    </h:panelGrid>
+                </h:panelGrid>
+            </h:panelGrid>
+        </h:form>
+    </ui:define>
+</ui:composition>

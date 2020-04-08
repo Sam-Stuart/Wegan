@@ -1,0 +1,106 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_anal_template.xhtml">
+    <ui:define name="metaInfo">
+        <f:event type="preRenderView" listener="#{sessionBean1.setAnalType('pathinteg')}"/> 
+        <f:event type="preRenderView" listener="#{sessionBean1.registerPage('Upload')}"/> 
+    </ui:define>
+    <ui:define name="content">
+        <h:form id="form" enctype="multipart/form-data">
+            <h:panelGrid style="padding:20px; line-height: 21px; width:100%;">
+                <p>
+                    Please upload a gene list and metabolite list to perform joint pathway analysis.  
+                    Use the <b>Pathway Analysis</b> module, if you only have a metabolite list.
+                </p>
+                <h:panelGrid columns="2" style="padding-left: 20px">
+                    <p:fieldset legend="Gene List" style="width: 420px">
+                        <h:panelGrid style="padding: 10px 10px 10px 20px;">
+                            <p:outputLabel style="font-size:13px; font-weight: bold" value="Gene list with optional fold changes"/>
+                            <h:panelGrid id="genePane">
+                                <h:panelGrid style="padding-left:20px;">
+                                    <p:inputTextarea  autoResize="false" value="#{integLoader.geneList}" rows="16" cols="36" />
+                                </h:panelGrid>
+                                <h:panelGrid columns="2" style="width:280px; padding-top: 5px;">
+                                    <p:outputLabel style="font-size:13px; font-weight: bold" value="ID Type: "/>
+                                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:165px" value="#{integLoader.geneIDType}">
+                                        <f:selectItems value="#{applicationBean1.geneIDOpts}" />
+                                    </p:selectOneMenu>
+                                </h:panelGrid>
+                            </h:panelGrid>
+                        </h:panelGrid>  
+                    </p:fieldset>
+                    <p:fieldset legend="Metabolite List" style="width: 420px">
+                        <h:panelGrid style="padding: 10px 10px 10px 20px;">
+                            <p:outputLabel style="font-size:13px; font-weight: bold" value="Compound list with optional fold changes"/>
+                            <h:panelGrid id="cmpdPane">
+                                <h:panelGrid style="padding-left:20px;">
+                                    <p:inputTextarea  autoResize="false" value="#{integLoader.cmpdList}" rows="16" cols="36" />
+                                </h:panelGrid>
+                                <h:panelGrid columns="2" style="width:280px; padding-top: 5px;">
+                                    <p:outputLabel style="font-size:13px; font-weight: bold" value="ID Type: "/>
+                                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:165px" value="#{integLoader.cmpdIDType}">
+                                        <f:selectItems value="#{applicationBean1.pathIDOpts}" />
+                                    </p:selectOneMenu>
+                                </h:panelGrid>
+                            </h:panelGrid>
+                        </h:panelGrid>   
+                    </p:fieldset>
+                </h:panelGrid>
+                <h:panelGrid style="width: 100%; text-align:center; padding-bottom: 20px; font-size: 12px">
+                    <h:panelGrid style="width: 100%; text-align:left; padding-left: 40px">
+                        <h:panelGrid columns="3">
+                            <p:outputLabel style="font-weight: bold" value="Specify organism: "/>
+                            <p:selectOneMenu id="orgPane" styleClass="menu" panelStyleClass="panel" style="width:165px" value="#{integLoader.integOrg}">
+                                <f:selectItems value="#{applicationBean1.integOrgOpts}" />
+                            </p:selectOneMenu>
+                            <h:panelGrid columns="3" style="padding-top:10px; padding-left: 40px">
+                                <p:selectBooleanCheckbox value="#{integLoader.useExample}">
+                                    <p:ajax update=":form:genePane :form:cmpdPane :form:orgPane" event="change" listener="#{integLoader.updateListArea()}"/>
+                                </p:selectBooleanCheckbox>  
+                                <p:outputLabel style="font-size:13px; font-weight: bold" value="Use our example data"/>
+                                <p:graphicImage id="formatIcon" url="../../resources/images/ui-help.png" alt="help"/>
+                            </h:panelGrid>
+                            <p:tooltip for="formatIcon">
+                                <h:panelGrid columns="3" style="width: 630px; font-size: 12px; line-height: 21px; padding: 10px" 
+                                             styleClass="panelColumns" cellpadding="5px">
+                                    <h:panelGrid style="width:160px">
+                                        <p:outputLabel style="font-weight: bold" value="ID type"/>
+                                    </h:panelGrid>
+                                    <h:panelGrid style="width:240px">
+                                        <p:outputLabel style="font-weight: bold" value="Data Description"/> 
+                                    </h:panelGrid>
+                                    <h:panelGrid style="width:200px">
+                                        <p:outputLabel style="font-weight: bold" value="Instrumentation"/> 
+                                    </h:panelGrid>        
+                                    <h:panelGrid>
+                                        <b>Organism</b>: Human<br/>
+                                        <b>ID Type</b>: KEGG Compound ID and Official Gene Symbols
+                                    </h:panelGrid>  
+                                    <h:panelGrid>
+                                        Data from an integrative transcriptome and metabolome analysis to identify 
+                                        (metabolites/genes) biomarkers of intrahepatic cholangiocarcinoma (ICC) in 16 individuals 
+                                        (see <a href="https://doi.org/10.1038/srep16294" target="_blank">Murakami et al.</a>)
+                                    </h:panelGrid>  
+                                    <h:panelGrid>
+                                        Transcriptomics: Agilent Microarray <br/>
+                                        Metabolomics: CE-TOFMS
+                                    </h:panelGrid>  
+                                </h:panelGrid>
+                            </p:tooltip>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <p:commandButton value="Submit" style="font-size: 13px; width: 120px"
+                                     onclick="PF('statusDialog').show()" 
+                                     oncomplete="PF('statusDialog').hide()"
+                                     ajax="false" 
+                                     action="#{integLoader.integrityCheck()}"/>  
+                </h:panelGrid>
+            </h:panelGrid>
+        </h:form>
+    </ui:define>
+</ui:composition>

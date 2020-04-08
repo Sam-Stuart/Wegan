@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_anal_template.xhtml"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <ui:define name="metaInfo">
+        <f:event type="preRenderView" listener="#{timeBean.doDefaultAnalysis('MEBA')}"/> 
+    </ui:define>
+    <ui:define name="content">
+        <h:form id="form1">
+            <h:panelGrid style="padding: 20px; font-size: 13px; line-height: 23px; width:100%;">
+                <h2>Time-course profiles:</h2>
+                <p>
+                    The table below shows all the features ranked by the corresponding statistics. You can click any 
+                    feature name to view its corresponding time-course profile.
+                    <ul>
+                        <li>
+                            For time-course only data, we are interested in features which <b>change</b> over time;
+                        </li>
+                        <li>
+                            For time-course + one experimental factor, we are interested in features which <b>response differently in different experimental conditions</b> over time;
+                        </li>
+                    </ul>
+                </p>
+                <h:panelGrid columns="2" style="width:100%; font-size: 12px; line-height: 18px;">
+                    <h:panelGrid>
+                        <p:dataTable style="width:360px" rows="20" paginator="true" paginatorPosition="bottom" var="fb" value="#{timeBean.featureBeans}">  
+                            <p:column headerText="Name">  
+                                <p:commandLink value="#{fb.name}" action="#{timeBean.cmpdLnk_action()}" 
+                                               update=":form1:imgPane :cmdPane">  
+                                    <f:setPropertyActionListener value="#{fb.name}" target="#{timeBean.cmpdName}" /> 
+                                </p:commandLink>  
+                            </p:column>  
+                            <p:column headerText="Hotelling-T2">  
+                                <h:outputText value="#{fb.val1}"/>  
+                            </p:column>
+                        </p:dataTable>
+                        <p:outputLabel escape="false" value="#{timeBean.downloadTxt}"/> 
+                    </h:panelGrid>
+                    <h:panelGrid id="imgPane">
+                        <h:panelGrid style="text-align: right; width: 90%;">
+                            <p:commandLink actionListener="#{sessionBean1.graphicsLnk_action('mb')}" 
+                                           oncomplete="PF('graphDialog').show()"  
+                                           title="Customize the graphics output">
+                                <img src="#{facesContext.externalContext.requestContextPath}/resources/images/imgcenter.png"/>
+                            </p:commandLink>
+                        </h:panelGrid>
+                        <img onerror='this.style.display="none"' src="#{timeBean.MEBACmpdImg}" alt="MEBAimage"/>
+                    </h:panelGrid>
+                </h:panelGrid>
+            </h:panelGrid>
+        </h:form>
+    </ui:define>
+</ui:composition>

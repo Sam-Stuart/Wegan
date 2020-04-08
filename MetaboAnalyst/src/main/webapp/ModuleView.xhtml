@@ -1,0 +1,372 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_doc_template.xhtml">
+    <ui:define name="metaInfo">
+        <f:event type="preRenderView" listener="#{sessionBean1.registerPage('Module')}"/> 
+    </ui:define>
+    <ui:define name="content">
+        <h:panelGrid style="padding:30px 30px 10px 40px; font-size:16px;">
+            <h:panelGrid style="padding:0px 0px 4px 0px; color: rgb(74, 91, 112);">
+                <b>Click</b> a module to proceed, or <b>scroll down</b> for more details:
+            </h:panelGrid> 
+            <h:form>
+                <div style="height: 670px; width: 100%; padding-top: 2px">  
+                    <div style="text-align: center; width: 100%">
+                        <div id="my-circle" class="circle-example"/>  
+                    </div>
+                    <h:panelGrid columns="3" style="width: 260px; font-size:14px; position:absolute;top:280px;left:50%;margin-left:-160px;">
+                        <p:spacer width="30px" style="background: #8BC1FF;"/>
+                        <p:spacer width="8px"/>
+                        <p:outputLabel value="Targeted or untargeted metabolomics"/>
+                        <p:spacer width="30px" style="background: #66ffcc"/>
+                        <p:spacer width="8px"/>
+                        <p:outputLabel value="Targeted or annotated metabolomics"/>
+                        <p:spacer width="30px" style="background: #99ffff"/>
+                        <p:spacer width="8px"/>
+                        <p:outputLabel value="Untargeted metabolomics"/>
+                        <p:spacer width="30px" style="background: #8BC1FF; 
+                                  background-image: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,.5) 10px, rgba(255,255,255,.5) 15px);"/>
+                        <p:spacer width="8px"/>
+                        <p:outputLabel value="Multiple metabolomics data"/>
+                        <p:spacer width="30px" style="background: #66ffcc; 
+                                  background-image: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,.5) 10px, rgba(255,255,255,.5) 15px);"/>
+                        <p:spacer width="8px"/>
+                        <p:outputLabel value="Integrating other omics"/>
+                    </h:panelGrid>
+                    <p:commandButton ajax="false" value="Statistical Analysis" 
+                                     action="stat" 
+                                     title="General statistical analysis and visualization"
+                                     styleClass="btnBckg" 
+                                     style="position:absolute;top:77px;left:50%;margin-left:-170px;background: #8BC1FF; color:black;"
+                                     /> 
+                    <p:commandButton ajax="false" value="Enrichment Analysis" 
+                                     action="msea" 
+                                     title="Metabolite set enrichment analysis"
+                                     styleClass="btnBckg" 
+                                     style="position:absolute;top:77px;right:50%;margin-right:-78px;background: #66ffcc; color:black;"
+                                     /> 
+
+                    <p:commandButton ajax="false" value="Biomarker Analysis" 
+                                     action="roc" 
+                                     title="ROC-based biomarker analysis"
+                                     styleClass="btnBckg" 
+                                     style="position:absolute;top:143px;left:50%;margin-left:-283px; background: #8BC1FF; color:black;"
+                                     /> 
+
+                    <p:commandButton ajax="false" value="Pathway Analysis" 
+                                     action="path" 
+                                     title="Metabolic pathway analysis"
+                                     styleClass="btnBckg" 
+                                     style="position:absolute;top:143px;right:50%;margin-right:-191px; background: #66ffcc; color:black;"
+                                     /> 
+
+                    <p:commandButton ajax="false" value="Time-series / Two-factor" 
+                                     action="time" 
+                                     title="Time series data and two-factor analysis"                                                  
+                                     styleClass="btnBckg"                                          
+                                     style="position:absolute;top:256px;left:50%;margin-left:-347px;background: #8BC1FF; color:black;"
+                                     />
+
+                    <p:commandButton ajax="false" value="Joint Pathway Analysis" 
+                                     action="jointpa" 
+                                     title="Map genes and metabolites into pathways"                                               
+                                     styleClass="btnBckg" 
+                                     style="position:absolute;top:256px;right:50%;margin-right:-255px;background: #66ffcc; color:black;
+                                     background-image: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,.5) 10px, rgba(255,255,255,.5) 15px);"
+                                     />
+
+                    <p:commandButton ajax="false" value="Network Explorer" 
+                                     action="net" 
+                                     title="Map genes and metabolites into networks"                                                 
+                                     styleClass="btnBckg" 
+                                     style="position:absolute;top:385px;right:50%;margin-right:-255px; background: #66ffcc; color:black;
+                                     background-image: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,.5) 10px, rgba(255,255,255,.5) 15px);"
+                                     />
+
+                    <p:commandButton ajax="false" value="Biomarker Meta-analysis" 
+                                     action="meta" 
+                                     title="Integrating multiple metabolomic datasets for robust biomarker discovery"                                                 
+                                     styleClass="btnBckg" 
+                                     style="position:absolute;top:498px;left:50%;margin-left:-283px; background: #8BC1FF; color:black;
+                                     background-image: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,.5) 10px, rgba(255,255,255,.5) 15px);"
+                                     />
+                    <p:commandButton ajax="false" value="MS Peaks to Pathways" 
+                                     action="peak" 
+                                     title="LC-MS peaks to pathway activities"                                                   
+                                     styleClass="btnBckg" 
+                                     style="position:absolute;top:498px;right:50%;margin-right:-190px; background: #99ffff; color:black;"
+                                     />
+
+                    <p:commandButton ajax="false" value="Power Analysis" 
+                                     action="power" 
+                                     title="Estimating sample size based on pilot data"                                                  
+                                     styleClass="btnBckg" 
+                                     style="position:absolute;top:385px;left:50%;margin-left:-347px; background:  #8BC1FF; color:black;"
+                                     />
+
+                    <p:commandButton value="Spectral Analysis" 
+                                     onclick="PF('specDialog').show()"
+                                     title="NMR and MS spectra analysis and annotation"                                                 
+                                     styleClass="btnBckg" 
+                                     style="position:absolute;top:563px;left:50%;margin-left:-170px; background: #e2e2e2; color:black;"/>
+
+                    <p:commandButton value="Other Utilities" 
+                                     onclick="PF('utilDialog').show()"
+                                     title="ID conversion and lipidomics analysis"                                                 
+                                     styleClass="btnBckg" 
+                                     style="position:absolute;top:563px;right:50%;margin-right:-78px; background:  #e2e2e2; color:black;"
+                                     />
+                </div>
+            </h:form>
+
+            <hr style="height: 12px; border: 0;box-shadow: inset 0 12px 12px -12px rgba(0, 0, 0, 0.5); width:100%; min-width: 1000px"/>
+            <h:panelGrid styleClass="panelColumns" columns="3" style="width:100%; padding-left: 30px; padding-top:12px; line-height:23px; font-size:12px; text-align: left" cellpadding="5px">
+                
+                
+                <h:panelGrid style="width:400px">
+                    <fieldset class="ui-fieldset ui-widget ui-widget-content ui-corner-all ui-fieldset-toggleable">
+                        <legend class="ui-fieldset-legend ui-corner-all ui-state-default">
+                            <span class="ui-icon ui-icon-circle-arrow-e" style="display: inline-block; margin-bottom: -2px"/>
+                            <span><a class="changeBlue" href="#{facesContext.externalContext.requestContextPath}/faces/upload/StatUploadView.xhtml">Statistical Analysis</a></span>
+                        </legend>
+                        <div class="ui-fieldset-content" style="padding:10px"> 
+                            This module offers various commonly used statistical and machine learning methods including 
+                            t-tests, ANOVA, PCA, PLS-DA and Orthogonal PLS-DA. It also provides clustering and visualization tools to create
+                            dendrograms and heatmaps as well as to classify data based on random forests and SVM. 
+                        </div>
+                    </fieldset>
+                </h:panelGrid> 
+                
+                
+                <h:panelGrid style="width:400px">
+                    <fieldset class="ui-fieldset ui-widget ui-widget-content ui-corner-all ui-fieldset-toggleable">
+                        <legend class="ui-fieldset-legend ui-corner-all ui-state-default">
+                            <span class="ui-icon ui-icon-circle-arrow-e" style="display: inline-block; margin-bottom: -2px"/>
+                            <span><a class="changeBlue" href="#{facesContext.externalContext.requestContextPath}/faces/upload/RocUploadView.xhtml">Biomarker Analysis</a></span>
+                        </legend>
+                        <div class="ui-fieldset-content" style="padding:10px"> 
+                            This module performs various biomarker analyses based on receiver operating characteristic (ROC) curves for a single or 
+                            multiple biomarkers using well-established methods. It also allows users 
+                            to manually specify biomarker models and perform new sample prediction.
+                        </div>
+                    </fieldset>
+                </h:panelGrid>
+                
+                
+                <h:panelGrid style="width:400px">
+                    <fieldset class="ui-fieldset ui-widget ui-widget-content ui-corner-all ui-fieldset-toggleable">
+                        <legend class="ui-fieldset-legend ui-corner-all ui-state-default">
+                            <span class="ui-icon ui-icon-circle-arrow-e" style="display: inline-block; margin-bottom: -2px"/>
+                            <span><a class="changeBlue" href="#{facesContext.externalContext.requestContextPath}/faces/upload/PathUploadView.xhtml">Pathway Analysis (targeted) </a></span>
+                        </legend>
+                        <div class="ui-fieldset-content" style="padding:10px"> 
+                            This module supports pathway analysis (integrating enrichment analysis and 
+                            pathway topology analysis) and visualization for 21 model organisms, including 
+                            Human, Mouse, Rat, Cow, Chicken, Zebrafish, <i>Arabidopsis thaliana</i>, Rice, Drosophila, 
+                            Malaria, <i>S. cerevisae</i>, <i>E.coli</i>, and others species. 
+                        </div>
+                    </fieldset>
+                </h:panelGrid>  
+                
+                
+                <h:panelGrid style="width:400px">
+                    <fieldset class="ui-fieldset ui-widget ui-widget-content ui-corner-all ui-fieldset-toggleable">
+                        <legend class="ui-fieldset-legend ui-corner-all ui-state-default">
+                            <span class="ui-icon ui-icon-circle-arrow-e" style="display: inline-block; margin-bottom: -2px"/>
+                            <span><a class="changeBlue" href="#{facesContext.externalContext.requestContextPath}/faces/upload/PeakUploadView.xhtml">MS Peaks to Pathway Activities</a></span>
+                        </legend>
+                        <div class="ui-fieldset-content" style="padding:8px"> 
+                            This module accepts high-resolution LC-MS spectral peak data 
+                            to perform metabolic pathway enrichment analysis and visual exploration 
+                            based on the well-established <b>mummichog</b> algorithm.  It currently supports 21 organisms 
+                            including Human, Mouse, Zebrafish, <i>C. elegans</i>, and other species. 
+                        </div>
+                    </fieldset>
+                </h:panelGrid>
+                
+                
+                <h:panelGrid style="width:400px">
+                    <fieldset class="ui-fieldset ui-widget ui-widget-content ui-corner-all ui-fieldset-toggleable">
+                        <legend class="ui-fieldset-legend ui-corner-all ui-state-default">
+                            <span class="ui-icon ui-icon-circle-arrow-e" style="display: inline-block; margin-bottom: -2px"/>
+                            <span><a class="changeBlue" href="#{facesContext.externalContext.requestContextPath}/faces/upload/TimeUploadView.xhtml">Time-series/Two-factor Analysis</a></span>
+                        </legend>
+                        <div class="ui-fieldset-content" style="padding:10px"> 
+                            This module supports temporal and two-factor data analysis such as 
+                            two-way ANOVA, empirical Bayes time-series analysis for detecting 
+                            distinctive temporal profiles, as well as ANOVA-simultaneous component analysis (ASCA) 
+                            to identify major patterns associated with each experimental factor. 
+                        </div>
+                    </fieldset>
+                </h:panelGrid>
+                
+                
+                <h:panelGrid style="width:400px">
+                    <fieldset class="ui-fieldset ui-widget ui-widget-content ui-corner-all ui-fieldset-toggleable">
+                        <legend class="ui-fieldset-legend ui-corner-all ui-state-default">
+                            <span class="ui-icon ui-icon-circle-arrow-e" style="display: inline-block; margin-bottom: -2px"/>
+                            <span><a class="changeBlue" href="#{facesContext.externalContext.requestContextPath}/faces/upload/EnrichUploadView.xhtml">Enrichment Analysis</a></span>
+                        </legend>
+                        <div class="ui-fieldset-content" style="padding:10px"> 
+                            This module performs metabolite set enrichment analysis (MSEA) for human and mammalian species based on several 
+                            libraries containing ~6300 groups of metabolite sets. Users can upload either 1) a list 
+                            of compounds, 2) a list of compounds with concentrations, or 3) a concentration table.  
+                        </div>
+                    </fieldset>
+                </h:panelGrid>
+                
+                
+                <h:panelGrid style="width:400px">
+                    <fieldset class="ui-fieldset ui-widget ui-widget-content ui-corner-all ui-fieldset-toggleable">
+                        <legend class="ui-fieldset-legend ui-corner-all ui-state-default">
+                            <span class="ui-icon ui-icon-circle-arrow-e" style="display: inline-block; margin-bottom: -2px"/>
+                            <span><a class="changeBlue" href="#{facesContext.externalContext.requestContextPath}/faces/upload/JointUploadView.xhtml">Joint Pathway Analysis</a></span>
+                        </legend>
+                        <div class="ui-fieldset-content" style="padding:8px"> 
+                            This module performs integrated metabolic pathway analysis on results obtained from combined metabolomics and gene expression 
+                            studies conducted under the same experimental conditions. It currently supports data generated from Human, Mouse and Rat.  
+                        </div>
+                    </fieldset>
+                </h:panelGrid>
+                
+                
+                <h:panelGrid style="width:400px">
+                    <fieldset class="ui-fieldset ui-widget ui-widget-content ui-corner-all ui-fieldset-toggleable">
+                        <legend class="ui-fieldset-legend ui-corner-all ui-state-default">
+                            <span class="ui-icon ui-icon-circle-arrow-e" style="display: inline-block; margin-bottom: -2px"/>
+                            <span><a class="changeBlue" href="#{facesContext.externalContext.requestContextPath}/faces/upload/MnetUploadView.xhtml">Network Explorer</a></span>
+                        </legend>
+                        <div class="ui-fieldset-content" style="padding:8px"> 
+                            This module allows users to upload list(s) of metabolites (metabolomics), genes (transcriptomics) 
+                            or KEGG orthologs (metagenomics), and then visually explore their relationships within the context of five 
+                            different biological networks curated based on their known associations. 
+                        </div>
+                    </fieldset>
+                </h:panelGrid>
+                
+                
+                <h:panelGrid style="width:400px">
+                    <fieldset class="ui-fieldset ui-widget ui-widget-content ui-corner-all ui-fieldset-toggleable">
+                        <legend class="ui-fieldset-legend ui-corner-all ui-state-default">
+                            <span class="ui-icon ui-icon-circle-arrow-e" style="display: inline-block; margin-bottom: -2px"/>
+                            <span><a class="changeBlue" href="#{facesContext.externalContext.requestContextPath}/faces/upload/MetaLoadView.xhtml">Biomarker Meta-analysis</a></span>
+                        </legend>
+                        <div class="ui-fieldset-content" style="padding:8px"> 
+                            This module provides statistical methods to identify robust biomarkers through meta-analysis of multiple independent 
+                            metabolomics data sets obtained under comparable conditions. It currently supports three meta-analysis approaches 
+                            based on p-values, vote counts or direct merging. 
+                        </div>
+                    </fieldset>
+                </h:panelGrid>
+                
+                
+                <h:panelGrid style="width:400px">
+                    <fieldset class="ui-fieldset ui-widget ui-widget-content ui-corner-all ui-fieldset-toggleable">
+                        <legend class="ui-fieldset-legend ui-corner-all ui-state-default">
+                            <span class="ui-icon ui-icon-circle-arrow-e" style="display: inline-block; margin-bottom: -2px"/>
+                            <span><a class="changeBlue" href="#{facesContext.externalContext.requestContextPath}/faces/upload/PowerUploadView.xhtml">Power Analysis</a></span>
+                        </legend>
+                        <div class="ui-fieldset-content" style="padding:10px"> 
+                            This module allows users to upload datasets from small pilot studies or from other similar studies to calculate the 
+                            minimum number of samples required to detect a statistically significant difference between two populations, 
+                            based on a user-specified degree of confidence.
+                        </div>
+                    </fieldset>
+                </h:panelGrid>
+                
+                
+                <h:panelGrid style="width:400px">
+                    <fieldset class="ui-fieldset ui-widget ui-widget-content ui-corner-all ui-fieldset-toggleable">
+                        <legend class="ui-fieldset-legend ui-corner-all ui-state-default">
+                            <span class="ui-icon ui-icon-circle-arrow-e" style="display: inline-block; margin-bottom: -2px"/>
+                            <span><a class="changeBlue" onclick="PF('specDialog').show()">Spectral Analysis</a></span>
+                        </legend>
+                        <div class="ui-fieldset-content" style="padding:8px"> 
+                            Provides links to several web-based tools - <b>Bayesil</b> for compound identification and quantification using 1D 1H NMR spectra; 
+                            <b>GC-AutoFit</b> for automated compound identification and quantification for GC-MS; and <b>XCMSonline</b> for
+                            LC-MS spectral processing and analysis. 
+                        </div>
+                    </fieldset>
+                </h:panelGrid>
+                
+                
+                <h:panelGrid style="width:400px">
+                    <fieldset class="ui-fieldset ui-widget ui-widget-content ui-corner-all ui-fieldset-toggleable">
+                        <legend class="ui-fieldset-legend ui-corner-all ui-state-default">
+                            <span class="ui-icon ui-icon-circle-arrow-e" style="display: inline-block; margin-bottom: -2px"/>
+                            <span><a class="changeBlue" onclick="PF('utilDialog').show()">Other Utilities</a></span>
+                        </legend>
+                        <div class="ui-fieldset-content" style="padding:8px"> 
+                            The <b>Batch effect correction</b> corrects for batch effect without using QC samples. 
+                            The <b>compound ID conversion</b> performs batch conversion between compound names and various database IDs; 
+                            The <b>Lipidomics analysis</b> computes the most probable and uplimit concentrations from lipidomics data. 
+                        </div>
+                    </fieldset>
+                </h:panelGrid>
+                
+                
+            </h:panelGrid>
+        </h:panelGrid>  
+        <p:dialog header="Choose a utility function"
+                  widgetVar="utilDialog" 
+                  showEffect="fade" 
+                  hideEffect="fade" 
+                  modal="true"
+                  closable="false"
+                  draggable="false"
+                  resizable="false"   
+                  appendTo="@(body)">       
+            <h:form>
+                <h:panelGrid  style="width:400px; line-height: 170%; padding: 10px; font-size: 13px">
+                    <p:outputLabel style="font-weight: bold; font-size: 13px" value="Please choose a function below to proceed"/>
+                    <h:panelGrid>
+                        <p:selectOneRadio value="#{utilBean.utilOpt}" layout="pageDirection">  
+                            <f:selectItem itemLabel="Compound ID Conversion" itemValue="convert" />
+                            <f:selectItem itemLabel="Batch Effect Adjustment" itemValue="batch" />
+                            <f:selectItem itemLabel="Lipidomics Profiling" itemValue="lipid" />
+                        </p:selectOneRadio>
+                    </h:panelGrid> 
+                    <h:panelGrid columns="2" style="width: 100%; text-align: center">
+                        <p:commandButton style="width:80px; font-size: 13px" value="OK" onclick="PF('utilDialog').hide(); PF('statusDialog').show()" ajax="false" action="#{utilBean.setUtilOpt()}"/>
+                        <p:commandButton style="width:80px; font-size: 13px" value="Cancel" onclick="PF('utilDialog').hide()"/>   
+                    </h:panelGrid>
+                </h:panelGrid>
+            </h:form>
+        </p:dialog>
+
+        <p:dialog header="Spectra Analysis and Annotation"
+                  widgetVar="specDialog" 
+                  showEffect="fade" 
+                  hideEffect="fade" 
+                  modal="true"
+                  closable="true"
+                  draggable="false"
+                  resizable="false"   
+                  appendTo="@(body)">       
+            <h:form>
+                <h:panelGrid  style="width:480px; line-height: 170%; padding-left: 30px; padding-bottom: 20px; font-size: 13px">
+                    <div>
+                        Raw spectra processing and annotation can be performed using the web-based tools listed below. 
+                        The resulting feature (metabolites or peaks) abundance table can be uploaded to MetaboAnalyst for further analysis. 
+                    </div>
+                    <UL>
+                        <li>
+                            <a href="http://bayesil.ca/" target="_blank">NMR Spectra Annotation (Bayesil) </a>  
+                        </li>
+                        <li>
+                            <a href="http://gc-autofit.wishartlab.com/" target="_blank">GC-MS Spectra Annotation (GC-AutoFit)</a> 
+                        </li>
+                        <li>
+                            <a href="https://xcmsonline.scripps.edu" target="_blank">LC-MS Spectra Annotation (XCMSOnline)</a> 
+                        </li>
+                    </UL>
+                </h:panelGrid>
+            </h:form>
+        </p:dialog>
+    </ui:define>
+</ui:composition>

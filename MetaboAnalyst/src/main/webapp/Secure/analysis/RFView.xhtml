@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_anal_template.xhtml">
+    <ui:define name="metaInfo">
+        <f:event type="preRenderView" listener="#{analBean.performDefaultAnalysis('RandomForest')}"/> 
+    </ui:define>
+    <ui:define name="content">
+        <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
+            <p:tabView id="ac" style="width:100%; border: none; background: none; font-size: 13px;">
+                <p:tab title ="Classification">
+                    <h:form id="form1">  
+                        <h:panelGrid columns="2" style="padding: 2px 20px 10px 20px; line-height: 23px; ">
+                            <h:panelGrid columns="2" style="width: 400px">
+                                <h:outputLabel style="font-weight: bold" value="Number of trees:"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{classBean.treeNum}">
+                                    <f:selectItem itemLabel="500" itemValue="500" /> 
+                                    <f:selectItem itemLabel="1000" itemValue="1000" /> 
+                                    <f:selectItem itemLabel="2000" itemValue="2000" /> 
+                                    <f:selectItem itemLabel="5000" itemValue="5000" /> 
+                                </p:selectOneMenu>
+                                <h:outputLabel style="font-weight: bold" value="Number of predictors:"/>
+                                <p:inputText style="width:80px;" value="#{classBean.tryNum}"/>  
+                                <h:outputLabel style="font-weight: bold" value="Randomness:"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{classBean.rfRandom}">
+                                    <f:selectItem itemLabel="On" itemValue="1" />
+                                    <f:selectItem itemLabel="Fix current random seed" itemValue="0" /> 
+                                    <f:selectItem itemLabel="Use a constant (123456)" itemValue="-1" />
+                                </p:selectOneMenu>
+                            </h:panelGrid>
+                            <p:commandButton value="Update" 
+                                             onclick="PF('statusDialog').show()"
+                                             oncomplete="PF('statusDialog').hide()"
+                                             update=":ac:form1:sumPane  :cmdPane" 
+                                             actionListener="#{classBean.rfBn_action()}"/>   
+                        </h:panelGrid>
+                                     <hr style="height: 12px; border: 0;box-shadow: inset 0 12px 12px -12px rgba(0, 0, 0, 0.5); width:100%; min-width: 1000px"/>
+                        <h:panelGrid id="sumPane">
+                            <h:outputText escape="false" value="#{classBean.confText}"/>
+                            <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('rf_cls')}" alt="RFclass"/>
+                        </h:panelGrid>        
+                    </h:form>
+                </p:tab>
+                <p:tab title ="Var. Importance">
+                    <h:panelGrid id="impPane" style="padding:20px; text-align: center; width: 100%;">
+                        <p>
+                            Features ranked by their contributions to classification accuracy (Mean Dicrease Accuracy)
+                        </p>
+                        <h:panelGrid columns="2" style="text-align: right; padding-left: 700px; width: 760px;">
+                            <p:commandLink action="#{sessionBean1.detailsLnk_action('rf')}" title="View the detailed data table">
+                                <img src="#{facesContext.externalContext.requestContextPath}/resources/images/table.png"/>
+                            </p:commandLink>
+                            <p:commandLink actionListener="#{sessionBean1.graphicsLnk_action('rf_imp')}" 
+                                           oncomplete="PF('graphDialog').show()"
+                                           title="Customize the graphics output">
+                                <img src="#{facesContext.externalContext.requestContextPath}/resources/images/imgcenter.png"/>
+                            </p:commandLink>
+                        </h:panelGrid>
+                        <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('rf_imp')}" alt="RFImp"/>
+                    </h:panelGrid> 
+                </p:tab>
+                <p:tab title ="Outlier Detection">
+                    <h:panelGrid id="outPane" style="padding:20px; text-align: center; width: 100%;">
+                        <p>
+                            Only top 5 potential outliers are labeled
+                        </p>
+                        <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('rf_outlier')}" alt="RFoutlier"/>
+                    </h:panelGrid> 
+                </p:tab>
+            </p:tabView> 
+        </h:panelGrid> 
+    </ui:define>
+</ui:composition>

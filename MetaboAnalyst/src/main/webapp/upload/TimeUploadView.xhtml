@@ -1,0 +1,113 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_anal_template.xhtml">
+    <ui:define name="metaInfo">
+        <f:event type="preRenderView" listener="#{sessionBean1.setAnalType('time')}"/>         
+        <f:event type="preRenderView" listener="#{sessionBean1.registerPage('Upload')}"/> 
+    </ui:define>
+    <ui:define name="content">
+        <h:form enctype="multipart/form-data">
+            <h:panelGrid style="padding: 30px 20px 20px 40px; line-height: 25px; font-size:12px; width: 100%">
+                <h2>Please upload a concentration table (.csv or .txt): </h2>
+                <h:panelGrid columns="2" style="width:720px; padding-left: 20px">
+                    <p:outputLabel style="font-size:12px; font-weight: bold" value="Data Type:"/>
+                    <p:selectOneRadio value="#{timeBean.tsDataType}">
+                        <f:selectItems value="#{applicationBean1.csvOpts}" />
+                    </p:selectOneRadio>   
+                    <p:outputLabel style="font-size:12px; font-weight: bold" value="Study Design:"/>
+                    <h:panelGroup>
+                        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{timeBean.tsDesign}">
+                            <f:selectItems value="#{applicationBean1.designOpts}" />
+                        </p:selectOneMenu> 
+                        <p:graphicImage id="formatIcon" url="../../resources/images/ui-help.png" alt="help"/>
+                        <p:tooltip for="formatIcon" style="padding:10px; font-size:13px; line-height: 21px; width:560px">
+                            <ul>
+                                <lh>
+                                    Time series only  
+                                </lh>
+                                <li>
+                                    Two factors: the time points row must be labeled as <b>Time</b>;
+                                    the other label is <b>Subject</b> containing subject IDs across different time points.
+                                </li>
+                                <li>
+                                    Samples from the same subjects measured at different time points must 
+                                    appear <u>consecutively and ordered by their time points</u>. 
+                                </li>
+                                <li>
+                                    Samples should be balanced (i.e. <u>no missing time points for any subject</u>). 
+                                </li>
+                            </ul>
+                            <ul>
+                                <lh>
+                                    Time series + one experimental factor 
+                                </lh>
+                                <li>
+                                    Two factors: the time points row must be labeled as <b>Time</b>;
+                                    the other factor must contain experimental conditions across different time points.
+                                </li>
+                                <li>
+                                    Samples from the same subjects measured at different time points must 
+                                    appear <u>consecutively and ordered by their time points</u>. 
+                                </li>
+                                <li>
+                                    Samples should be balanced (i.e. <u>no missing time points for any subject</u>). 
+                                </li>
+                            </ul>
+                            More detailed instructions are available at the <b>Data Formats</b> page.
+                        </p:tooltip>
+                    </h:panelGroup>
+                    <p:outputLabel style="font-size:12px; font-weight: bold" value="Data Format:"/>
+                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:165px" value="#{timeBean.tsFormat}">
+                        <f:selectItems value="#{applicationBean1.tsFormatOpts}" />
+                    </p:selectOneMenu>
+                    <p:outputLabel style="font-size:12px; font-weight: bold" value="Data File:"/>
+                    <p:fileUpload value="#{timeBean.csvFile}" mode="simple"/>
+                </h:panelGrid>
+                <h:panelGrid style="width: 720px; padding-top: 10px; padding-bottom: 10px; text-align: center">
+                    <p:commandButton value="Submit" 
+                                     onclick="PF('statusDialog').show()" 
+                                     ajax="false" 
+                                     action="#{timeBean.handleTsDataUpload}"/>  
+                </h:panelGrid>
+                <hr/>
+                <h:panelGrid style="padding-top:10px">
+                    <p:outputLabel style="font-size:14px; font-weight: bold" value="Try our example data"/>
+                </h:panelGrid>
+                <p:selectOneRadio id="timeRadio" value="#{timeBean.timeDataOpt}" layout="custom">  
+                    <f:selectItems value="#{applicationBean1.tsDataOpts}"/> 
+                </p:selectOneRadio> 
+                <h:panelGrid columns="3" style="width: 720px">
+                    <p:spacer style="width:30px"/>
+                    <h:panelGrid style="width:120px">
+                        <p:outputLabel style="font-weight: bold" value="Data"/>
+                    </h:panelGrid>       
+                    <p:outputLabel style="font-weight: bold" value="Description"/>
+                    <p:radioButton for="timeRadio" itemIndex="0"/> 
+                    <a href="#{facesContext.externalContext.requestContextPath}/resources/data/cress_time.csv">Time series + one experimental factor</a>
+                    <h:panelGrid>
+                        LC-MS peak list intensity data collected from <i>Arabidopsis thaliana</i> during a wounding time 
+                        course (four time points). <b>WT</b> - wild type; <b>MT</b> - <i> dde2-2 </i>mutant. Please refer 
+                        to (<a href="http://dx.doi.org/10.1186/1748-7188-3-9">Meinicke P. et al</a>) for more information
+                    </h:panelGrid>
+                    <p:radioButton for="timeRadio" itemIndex="1"/> 
+                    <a href="#{facesContext.externalContext.requestContextPath}/resources/data/time_series_only.csv">Time series only</a>
+                    <h:panelGrid>
+                        LC-MS peak list intensity data collected from only <b>wild type</b> <i>Arabidopsis thaliana</i> during a wounding time 
+                        course (four time points). Please refer to (<a href="http://dx.doi.org/10.1186/1748-7188-3-9">Meinicke P. et al</a>) for more information
+                    </h:panelGrid>
+                </h:panelGrid>
+                <h:panelGrid style="width: 720px; padding-top: 10px; padding-bottom: 10px; text-align: center">
+                    <p:commandButton value="Submit" 
+                                     onclick="PF('statusDialog').show()" 
+                                     ajax="false" 
+                                     action="#{timeBean.handleTestDataUpload}"/>  
+                </h:panelGrid>
+            </h:panelGrid>                    
+        </h:form>
+    </ui:define>
+</ui:composition>

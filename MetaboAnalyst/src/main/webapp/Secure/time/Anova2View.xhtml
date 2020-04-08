@@ -1,0 +1,124 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_anal_template.xhtml"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <ui:define name="metaInfo">
+        <f:event type="preRenderView" listener="#{timeBean.doDefaultAnalysis('ANOVA2')}"/> 
+    </ui:define>
+    <ui:define name="content">
+        <script type="text/javascript">
+            function addBind() {
+                $('#chart').unbind('jqplotDataClick');
+                $('#chart').bind('jqplotDataClick',
+                        function (ev, seriesIndex, pointIndex, data) {
+                            //note, we use the internal index, not point index 
+                            remoteCall([{name: 'cmpdIndex', value: data[0]}]);
+                        });
+            }
+
+            function ext() {
+                this.cfg.seriesColors = ["#c40000", "#6e20c1", "#0085cc"];
+                this.cfg.seriesDefaults = {
+                    lineWidth: 1.0,
+                    linePattern: 'dashed',
+                    showMarker: false,
+                    shadow: false
+                };
+                this.cfg.axes.yaxis.tickOptions = {
+                    formatString: "%#.2f"
+                };
+                this.cfg.axes.xaxis.tickOptions = {
+                    formatString: "%d"
+                };
+            }
+        </script>
+
+        <h:panelGrid style="padding-top: 20px; padding-left: 20px; font-size: 13px; line-height: 23px; width:100%;">
+            <h3>Type of ANOVA:</h3>
+            <ul>
+                <li>
+                    For two-factor independent samples: Two-way (between subjects) ANOVA
+                    <ul>
+                        <li>
+                            Type I and Type III ANOVA are supported, the main difference
+                            is whether the means are weighted (type I) or unweighted (type III).  
+                        </li>
+                        <li>
+                            For unbalanced data, there may be signficant difference between type I and type III. 
+                        </li>
+                    </ul>
+                </li>
+                <li>For time-series only: One-way repeated measures (within subjects) ANOVA</li>  
+                <ul>
+                    <li>
+                        The data must have a balanced design (equal sample sizes) 
+                    </li>
+                </ul>
+                <li>For time-series + one experimental factor: Two-way repeated measures (within subjects) ANOVA. 
+                    <ul>
+                        <li>
+                            By default, the ANOVA model will consider the interaction (<b>Time * Treatment</b>). 
+                        </li>
+                        <li>If your data does not have sufficient residual degrees of freedom to estimate the interactions, you may want to 
+                            leave out the interaction term (<b>Time + Treatment</b>)
+                        </li>
+                    </ul>
+                </li>  
+            </ul>
+            <h:form id="form1">
+                <h:panelGrid columns="2" style="width:95%; padding-left: 20px;">
+                    <h:panelGrid columns="3" style="padding: 10px; width:630px;">
+                        <h:outputLabel style="font-weight: bold" value="Choose ANOVA Type:"/>
+
+                        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{timeBean.aovOpt}">
+                            <f:selectItem itemLabel="Type I" itemValue="1" /> 
+                            <f:selectItem itemLabel="Type III" itemValue="3" /> 
+                        </p:selectOneMenu>
+                        <h:outputText value="(for two-way independent ANOVA)" style="color: gray;"/>
+
+                        <h:outputLabel style="font-weight: bold" value="Consider interactions:"/>
+
+                        <p:selectBooleanCheckbox value ="#{timeBean.useInteract}"/>
+                        <h:outputText value="(for two-way repeated ANOVA)" style="color: gray;"/>
+
+                        <h:outputLabel style="font-weight: bold" value="Adjusted p-value cutoff:"/>
+                        <p:inputText style="width:60px" value="#{timeBean.pthresh}"/>
+                        <p:spacer/>
+                        
+                        <h:outputLabel style="font-weight: bold" value="Multiple testing correction:"/>
+                        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{timeBean.pvalOpt}">
+                            <f:selectItem itemLabel="False discovery rate" itemValue="fdr" /> 
+                            <f:selectItem itemLabel="Bonferroni" itemValue="bonferroni" /> 
+                            <f:selectItem itemLabel="Bonferroni step-down (Holm)" itemValue="holm"/> 
+                            <f:selectItem itemLabel="None" itemValue="none"/> 
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                    <p:commandButton value="Submit" update=":aov2Pane  :cmdPane" 
+                                     onclick="PF('statusDialog').show()"
+                                     oncomplete="PF('statusDialog').hide(); addBind()"                                      
+                                     actionListener="#{timeBean.aov2Bn_action()}"/>
+                </h:panelGrid> 
+            </h:form>
+            <hr style="height: 12px; border: 0;box-shadow: inset 0 12px 12px -12px rgba(0, 0, 0, 0.5); width:100%; min-width: 1000px"/>
+            <h:panelGrid id="aov2Pane" style="text-align: center; width: 100%;">
+                <h:panelGrid columns="3" style="padding-left:630px; text-align: right; width: 200px;">
+                    <p:commandLink action="#{sessionBean1.detailsLnk_action('anova2')}" title="View the detailed data table">
+                        <img src="#{facesContext.externalContext.requestContextPath}/resources/images/table.png"/>
+                    </p:commandLink>
+                    <p:spacer style="width: 20px"/>
+                    <p:commandLink actionListener="#{sessionBean1.graphicsLnk_action('aov2')}" 
+                                   oncomplete="PF('graphDialog').show()"
+                                   title="Customize the graphics output">
+                        <img src="#{facesContext.externalContext.requestContextPath}/resources/images/imgcenter.png"/>
+                    </p:commandLink>
+                </h:panelGrid>
+                <img onerror='this.style.display="none"' src="#{timeBean.aov2Img}" alt="ANOVA2image"/>
+            </h:panelGrid>  
+        </h:panelGrid>
+    </ui:define>
+</ui:composition>

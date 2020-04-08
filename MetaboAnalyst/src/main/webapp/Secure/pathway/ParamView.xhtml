@@ -1,0 +1,215 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_anal_template.xhtml">
+    <ui:define name="metaInfo">
+        <f:event type="preRenderView" listener="#{sessionBean1.registerPage('Set parameter')}"/> 
+    </ui:define>
+    <ui:define name="content">
+        <h:form>
+            <h:panelGrid style="padding: 30px; font-size: 13px; width: 720px">
+                <p:outputLabel style="font-size: 16px; font-weight: bold" value="Please select a pathway library:"/>
+                <p:selectOneRadio id="customRadio" value="#{pathBean.libOpt}" layout="custom">  
+                    <f:selectItems value="#{applicationBean1.pathLibOpts}"/>    
+                </p:selectOneRadio>
+                <h:panelGrid style="border: 1px solid teal; width: 670px; background-color: #F9F9FB; padding-top: 6px;
+                             font-family: 'Arial','Helvetica',sans-serif; margin-left: 30px">
+                    <h:panelGrid columns="2" style="border-bottom: solid white 1px;">
+                        <h:panelGrid style="height: 100%; padding-left: 50px; width: 250px">
+                            <p:outputLabel style="color: orange; font-family: Arial,Helvetica,sans-serif; font-size: 14px" value="Mammals"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" style="font-size: 12px; padding-left: 20px;">
+                            <p:radioButton for="customRadio" itemIndex="0"/>
+                            <p:outputLabel value="Homo sapiens (KEGG) [80]"/>
+                            <p:radioButton for="customRadio" itemIndex="1"/>
+                            <p:outputLabel value="Homo sapiens (SMPDB) [99]"/>
+                            <p:radioButton for="customRadio" itemIndex="2"/>
+                            <p:outputLabel value="Mus musculus (KEGG) [82]"/>
+                            <p:radioButton for="customRadio" itemIndex="3"/>
+                            <p:outputLabel value="Mus musculus (SMPDB) [99]"/>
+                            <p:radioButton for="customRadio" itemIndex="4"/>
+                            <p:outputLabel value="Rattus norvegicus (rat) [81]"/>
+                            <p:radioButton for="customRadio" itemIndex="5"/>
+                            <p:outputLabel value="Bos taurus (cow) [81]"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2" style="border-bottom: solid white 1px;">
+                        <h:panelGrid style="height: 100%; padding-left: 50px; width: 250px">
+                            <p:outputLabel style="color: orange; font-family: Arial,Helvetica,sans-serif; font-size: 14px" value="Birds"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" style="font-size: 12px; padding-left: 20px;">
+                            <p:radioButton for="customRadio" itemIndex="6"/>
+                            <p:outputLabel value="Gallus gallus (chicken) [78]"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2" style="border-bottom: solid white 1px;">
+                        <h:panelGrid style="height: 100%; padding-left: 50px; width: 250px">
+                            <p:outputLabel style="color: orange; font-family: Arial,Helvetica,sans-serif; font-size: 14px" value="Fish"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" style="font-size: 12px; padding-left: 20px;">
+                            <p:radioButton for="customRadio" itemIndex="7"/>
+                            <p:outputLabel value="Danio rerio (zebrafish) [81]"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2" style="border-bottom: solid white 1px;">
+                        <h:panelGrid style="height: 100%; padding-left: 50px; width: 250px">
+                            <p:outputLabel style="color: orange; font-family: Arial,Helvetica,sans-serif; font-size: 14px" value="Insects"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" style="font-size: 12px; padding-left: 20px;">
+                            <p:radioButton for="customRadio" itemIndex="8"/>
+                            <p:outputLabel value="Drosophila melanogaster (fruit fly) [79]"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2" style="border-bottom: solid white 1px;">
+                        <h:panelGrid style="height: 100%; padding-left: 50px; width: 250px">
+                            <p:outputLabel style="color: orange; font-family: Arial,Helvetica,sans-serif; font-size: 14px" value="Nematodes"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" style="font-size: 12px; padding-left: 20px;">
+                            <p:radioButton for="customRadio" itemIndex="9"/>
+                            <p:outputLabel value="Caenorhabditis elegans (nematode) [78]"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2" style="border-bottom: solid white 1px;">
+                        <h:panelGrid style="height: 100%; padding-left: 50px; width: 250px">
+                            <p:outputLabel style="color: orange; font-family: Arial,Helvetica,sans-serif; font-size: 14px" value="Fungi"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" style="font-size: 12px; padding-left: 20px;">
+                            <p:radioButton for="customRadio" itemIndex="10"/>
+                            <p:outputLabel value="Saccharomyces cerevisiae (yeast) [65]"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2" style="border-bottom: solid white 1px;">
+                        <h:panelGrid style="height: 100%; padding-left: 50px; width: 250px">
+                            <p:outputLabel style="color: orange; font-family: Arial,Helvetica,sans-serif; font-size: 14px" value="Plants"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" style="font-size: 12px; padding-left: 20px;">
+                            <p:radioButton for="customRadio" itemIndex="11"/>
+                            <p:outputLabel value="Oryza sativa japonica (Japanese rice) [83]"/>
+                            <p:radioButton for="customRadio" itemIndex="12"/>
+                            <p:outputLabel value="Arabidopsis thaliana (thale cress) [87]"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2" style="border-bottom: solid white 1px;">
+                        <h:panelGrid style="height: 100%; padding-left: 50px; width: 250px">
+                            <p:outputLabel style="color: orange; font-family: Arial,Helvetica,sans-serif; font-size: 14px" value="Parasites"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" style="font-size: 12px; padding-left: 20px;">
+                            <p:radioButton for="customRadio" itemIndex="13"/>
+                            <p:outputLabel value="Schistosoma mansoni [69]"/>
+                            <p:radioButton for="customRadio" itemIndex="14"/>
+                            <p:outputLabel value="Plasmodium falciparum 3D7 (Malaria) [47]"/>
+                            <p:radioButton for="customRadio" itemIndex="15"/>
+                            <p:outputLabel value="Trypanosoma brucei [54]"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2">
+                        <h:panelGrid style="height: 100%; padding-left: 50px; width: 250px">
+                            <p:outputLabel style="color: orange; font-family: Arial,Helvetica,sans-serif; font-size: 14px" value="Prokaryotes"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" style="font-size: 12px; padding-left: 20px;">
+                            <p:radioButton for="customRadio" itemIndex="16"/>
+                            <p:outputLabel value="Escherichia coli K-12 MG1655 [87]"/>
+                            <p:radioButton for="customRadio" itemIndex="17"/>
+                            <p:outputLabel value="Bacillus subtilis [80]"/>
+                            <p:radioButton for="customRadio" itemIndex="18"/>
+                            <p:outputLabel value="Pseudomonas putida KT2440 [89]"/>
+                            <p:radioButton for="customRadio" itemIndex="19"/>
+                            <p:outputLabel value="Staphylococcus aureus N315 (MRSA/VSSA) [73]"/>
+                            <p:radioButton for="customRadio" itemIndex="20"/>
+                            <p:outputLabel value="Thermotoga maritima [57]"/>
+                            <p:radioButton for="customRadio" itemIndex="21"/>
+                            <p:outputLabel value="Synechococcus elongatus PCC7942 [75]"/>
+                            <p:radioButton for="customRadio" itemIndex="22"/>
+                            <p:outputLabel value="Mesorhizobium loti [86]"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </h:panelGrid>
+
+                <br/>
+                <p:outputLabel style="font-size: 16px; font-weight: bold" value="Please specify pathway analysis algorithms:"/>
+                <h:panelGrid style="border: 1px solid teal; width: 670px; padding: 4px 8px 10px 8px; 
+                             background-color: #F9F9FB; font-family: 'Arial','Helvetica',sans-serif; margin-left: 30px">
+                    <h:panelGrid columns="2" rendered="#{sessionBean1.analType eq 'pathora'}" style="border-bottom: solid white 1px;">
+                        <h:panelGrid style="padding-left: 50px; width: 250px">
+                            <p:outputLabel style="color: orange; font-family: Arial,Helvetica,sans-serif; font-size: 14px" 
+                                           value="Over Representation Analysis"/>
+                        </h:panelGrid>
+                        <h:panelGrid style="font-size: 12px; padding-left: 20px;">
+                            <p:selectOneRadio value="#{pathBean.oraStatCode}" layout="pageDirection">
+                                <f:selectItem itemLabel="Hypergeometric Test" itemValue="hyperg"/> 
+                                <f:selectItem itemLabel="Fisher's Exact Test" itemValue="fisher"/> 
+                            </p:selectOneRadio> 
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2" rendered="#{sessionBean1.analType eq 'pathqea'}" style="border-bottom: solid white 1px;">
+                        <h:panelGrid style="padding-left: 50px; width: 250px">
+                            <p:outputLabel style="color: orange; font-family: Arial,Helvetica,sans-serif; font-size: 14px" 
+                                           value="Pathway Enrichment Analysis"/>
+                        </h:panelGrid>
+                        <h:panelGrid  style="font-size: 12px; padding-left: 20px;">
+                            <p:selectOneRadio value="#{pathBean.qeaStatCode}" layout="pageDirection">
+                                <f:selectItem itemLabel="Global Test" itemValue="gt"/> 
+                                <f:selectItem itemLabel="Global Ancova" itemValue="ga"/> 
+                            </p:selectOneRadio> 
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2">
+                        <h:panelGrid style="padding-left: 50px; width: 250px">
+                            <p:outputLabel style="color: orange; font-family: Arial,Helvetica,sans-serif; font-size: 14px" 
+                                           value="Pathway Topology Analysis"/>
+                        </h:panelGrid>
+                        <h:panelGrid style="font-size: 12px; padding-left: 20px;">
+                            <p:selectOneRadio value="#{pathBean.topoCode}" layout="pageDirection">
+                                <f:selectItem itemLabel="Relative-betweeness Centrality" itemValue="rbc"/> 
+                                <f:selectItem itemLabel="Out-degree Centrality" itemValue="dgr"/> 
+                            </p:selectOneRadio> 
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </h:panelGrid>
+                <br/>
+                <p:outputLabel style="font-size: 16px; font-weight: bold" value="Please specify a reference metabolome:"/>
+                <p:selectOneRadio id="customRadio1" value="#{pathBean.refLibOpt}" layout="custom">  
+                    <f:selectItems value="#{applicationBean1.refLibOpts}" />    
+                </p:selectOneRadio>
+                <h:panelGrid columns="2" style="border: 1px solid teal; width: 670px; padding: 10px 8px 12px 18px; 
+                             background-color: #F9F9FB; font-family: 'Arial','Helvetica',sans-serif; margin-left: 30px">
+                    <p:radioButton for="customRadio1" itemIndex="0"/>
+                    <p:outputLabel value="Use all compounds in the selected pathways"/>
+                    <p:radioButton for="customRadio1" itemIndex="1"/>
+                    <p:commandLink onclick="PF('RefUploader').show()"
+                                   value="Upload a reference metabolome based on your technical platform"/>
+                </h:panelGrid>
+                <h:panelGrid style="width: 100%; text-align: center">
+                    <p:commandButton value="Submit" ajax="false" 
+                                     onclick="PF('statusDialog').show()" 
+                                     oncomplete="PF('statusDialog').hide()"                              
+                                     action="#{pathBean.paBn_action()}"/>
+                </h:panelGrid> 
+            </h:panelGrid>
+        </h:form>
+        <p:dialog widgetVar="RefUploader" dynamic="true" modal="true" appendTo="@(body)"
+                  hideEffect="explode" resizable="false"> 
+            <h:panelGrid style="width:560px; font-size: 13px; line-height: 23px; padding:10px 20px 20px 20px">
+                <h2>Upload a reference metabolome based on your analysis platform</h2>
+                <p>
+                    The reference metabolome refers to <b>all</b> the metabolites that can be detected based on your 
+                    analytical platform. They should be uploaded as a single-column <u>KEGG compound IDs</u>.  
+                    You can use the "Compound ID Conversion" program from "Other Utilities" to perform the conversion. 
+                    An example list can be found <a href="#{facesContext.externalContext.requestContextPath}/resources/data/KEGG_list.txt">here</a>.
+                </p>
+                <h:form enctype="multipart/form-data">  
+                    <p:fileUpload value="#{pathBean.refLibFile}" mode="simple"/>  
+                    <p:commandButton value="Submit" ajax="false"  
+                                     style ="margin-left: 20px"
+                                     onclick="PF('statusDialog').show()"
+                                     oncomplete="PF('statusDialog').hide()"
+                                     actionListener="#{pathBean.handleRefLibUpload()}"/>  
+                </h:form>
+            </h:panelGrid>
+        </p:dialog>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,69 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_anal_template.xhtml">
+    <ui:define name="metaInfo">
+        <f:event type="preRenderView" listener="#{detailsBean.setupDetailsTable()}"/> 
+    </ui:define>
+    <ui:define name="content">
+        <h:form id="form1">
+            <h:panelGrid style="padding: 30px 20px 20px 30px; font-size: 13px; line-height: 23px">
+                <h2>Feature Details View</h2>    
+                <p>
+                    Click the feature name to view a graphical summary. The bar plots on the left show the 
+                    original values (mean +/- SD). The box and whisker plots on the right summarize the 
+                    normalized values. Note, positive infinite numbers are represented as 999999, and negative 
+                    infinite numbers -999999.
+                </p>
+                <h:panelGrid id="imgPane" style="text-align: center; width: 100%;">
+                    <h:panelGrid style="text-align: right; padding-left: 700px; width: 760px;">
+                        <p:commandLink actionListener="#{sessionBean1.graphicsLnk_action('cmpd')}" 
+                                       oncomplete="PF('graphDialog').show()"
+                                       title="Customize the graphics output">
+                            <img src="#{facesContext.externalContext.requestContextPath}/resources/images/imgcenter.png"/>
+                        </p:commandLink>
+                    </h:panelGrid>
+                    <img onerror='this.style.display="none"' src="#{sessionBean1.cmpdSummaryImg}" alt="FeatureImage"/>
+                </h:panelGrid>    
+                <h:outputText escape="false" value="#{detailsBean.downloadTxt}"/>
+                <p:dataTable rows="25" paginator="true" style="font-size: 12px; padding-top: 8px;" 
+                             var="fb" value="#{detailsBean.featureBeans}">  
+                    <p:column headerText="Name" sortBy="#{fb.name}">
+                        <p:commandLink value="#{fb.name}" action="#{sessionBean1.viewCmpdSummary(fb.name)}" update=":form1:imgPane  :cmdPane"/>
+                    </p:column>
+                    <p:column headerText="#{detailsBean.getColHeader(0)}" sortBy="#{fb.val1}" rendered="#{detailsBean.isColVisible(0)}">
+                        <h:outputText escape="false" value="#{fb.val1}"/>
+                    </p:column>
+                    <p:column headerText="#{detailsBean.getColHeader(1)}" sortBy="#{fb.val2}" rendered="#{detailsBean.isColVisible(1)}">
+                        <h:outputText escape="false" value="#{fb.val2}"/>
+                    </p:column>
+                    <p:column headerText="#{detailsBean.getColHeader(2)}" sortBy="#{fb.val3}" rendered="#{detailsBean.isColVisible(2)}">
+                        <h:outputText escape="false" value="#{fb.val3}"/>
+                    </p:column>
+                    <p:column headerText="#{detailsBean.getColHeader(3)}" sortBy="#{fb.val4}" rendered="#{detailsBean.isColVisible(3)}">
+                        <h:outputText escape="false" value="#{fb.val4}"/>
+                    </p:column>
+                    <p:column headerText="#{detailsBean.getColHeader(4)}" sortBy="#{fb.val5}" rendered="#{detailsBean.isColVisible(4)}">
+                        <h:outputText escape="false" value="#{fb.val5}"/>
+                    </p:column>
+                    <p:column headerText="#{detailsBean.getColHeader(5)}" sortBy="#{fb.val6}" rendered="#{detailsBean.isColVisible(5)}">
+                        <h:outputText escape="false" value="#{fb.val6}"/>
+                    </p:column>
+                    <p:column headerText="#{detailsBean.getColHeader(6)}" sortBy="#{fb.val7}" rendered="#{detailsBean.isColVisible(6)}">
+                        <h:outputText escape="false" value="#{fb.val7}"/>
+                    </p:column>
+                    <p:column headerText="#{detailsBean.getColHeader(7)}" sortBy="#{fb.val8}" rendered="#{detailsBean.isColVisible(7)}">
+                        <h:outputText escape="false" value="#{fb.val8}"/>
+                    </p:column>
+                    <p:column headerText="Post-hoc tests" rendered="#{detailsBean.isExtraColVisible()}">
+                        <h:outputText escape="false" value="#{fb.extra}"/>
+                    </p:column>
+                </p:dataTable> 
+            </h:panelGrid>
+        </h:form>
+    </ui:define>
+</ui:composition>

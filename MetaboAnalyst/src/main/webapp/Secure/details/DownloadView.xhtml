@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_anal_template.xhtml">
+    <ui:define name="metaInfo">
+        <f:event type="preRenderView" listener="#{sessionBean1.registerPage('Download')}"/> 
+        <f:event type="preRenderView" listener="#{downloader.setupDownloadTable()}"/>     
+    </ui:define>
+    <ui:define name="content">
+        <h:form id="form1">
+            <h:panelGrid style="padding:30px 50px 30px 40px; font-size: 13px; line-height: 23px">
+                <h2>Result Download</h2>    
+                <p>
+                    Please download the results (tables and images) below. The <b>Download.zip</b> contains all the files in your home 
+                    directory. You can also generate a <b>PDF analysis report</b> using the button below. 
+                </p>
+                <h:panelGrid style="width:100%">
+                    <h:panelGrid columns="2" style="width:100%">
+                        <p:commandButton style="width:160px; height:30px; font-size: 14px; font-weight: bold"  
+                                         process="@this"
+                                         onclick="PF('statusDialog').show()"
+                                         oncomplete="PF('statusDialog').hide()"
+                                         update=":form1:reportURL"
+                                         actionListener="#{downloader.generateReport()}" 
+                                         value="Generate Report"/>
+                        <h:outputLabel style="font-size: 15px; font-weight: bold" id="reportURL" escape="false" value="#{downloader.reportURL}"/>
+                    </h:panelGrid>
+                </h:panelGrid>
+                <p:dataTable style="padding-top: 8px; width:90%;" styleClass="hide-column-names" var="dnld" value="#{downloader.downloads}">  
+                    <p:column>
+                        <h:outputText escape="false" value="#{dnld.fileNameA}"/>
+                    </p:column>
+                    <p:column>
+                        <h:outputText escape="false" value="#{dnld.fileNameB}"/>
+                    </p:column>
+                </p:dataTable>  
+                <h:panelGrid style="width: 90%; text-align: center">
+                    <p:commandButton value="Logout" ajax="false"
+                                     onclick="PF('statusDialog').show()" 
+                                     oncomplete="PF('statusDialog').hide()"
+                                     action="#{sessionBean1.doLogout()}"/>
+                </h:panelGrid> 
+            </h:panelGrid>
+        </h:form>
+    </ui:define>
+</ui:composition>

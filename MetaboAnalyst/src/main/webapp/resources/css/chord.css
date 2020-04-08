@@ -1,0 +1,215 @@
+h4 {
+    overflow: visible;
+    line-height: 20px;
+    height:auto;
+    border-bottom: 1px solid #CDCDCD;
+    padding-bottom: 3px;
+    margin-bottom: 5px;
+}
+
+h4 span{
+    float: none !important;
+}
+
+ul.circos-symbols {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+ul.circos-symbols li {
+    padding-bottom: 2px;
+    display: block;
+    position: relative;
+    padding-left:18px;
+}
+
+ul.circos-symbols li span {
+    cursor: pointer;
+    display: block;
+    padding: 0 0.6em;
+    border-radius: 2px;
+}
+
+ul.circos-symbols li span:hover {
+    color: #333; /*change color*/
+}
+
+ul.circos-symbols li span.active {
+    color: #fff;
+    background: #4589bb /*possibly change for the active green*/;
+}
+
+ul.plot-menu {
+    list-style-type: none;
+    margin: 14px 0;
+}
+
+ul.plot-menu li {
+    border-bottom: 1px solid #CDCDCD;
+    padding: 0;
+    background:lime;
+}
+
+ul.plot-menu-li:last-child {
+    border-bottom: 0 !important;
+}
+
+ul.plot-menu li a {
+    display: inline-block;
+    padding: 4px 14px;
+}
+
+ul.plot-menu li a.current {
+    color: #666666;
+}
+
+ul.plot-menu li a:hover {
+    color: #fff;
+    text-decoration: none;
+    background-color: #659cc5;
+}
+
+.well-dataselect {
+    overflow-y: auto;
+}
+
+a:hover {
+    color: #666;
+}
+
+blockquote {
+    margin: 0;
+}
+
+blockquote:before {
+    content: "“";
+    position: absolute;
+    left: -.4em;
+}
+
+blockquote:after {
+    content: "”";
+    position: absolute;
+}
+
+body > ul {
+    margin: 0;
+    padding: 0;
+}
+
+.invert {
+    background: #1f1f1f;
+    color: #dcdccc;
+}
+
+.invert h2, .invert h3 {
+    color: #7f9f7f;
+}
+
+.string, .regexp {
+    color: #f39;
+}
+
+.keyword {
+    color: #00c;
+}
+
+div#legend h4, div#overlay-legend h4 { margin-top: 10px; margin-bottom: 5px; }
+.colorbox {
+    height: 20px;
+    width: 20px;
+    display: inline-block;
+    margin-right: 5px;
+    margin-top: 5px;
+    margin-bottom: -5px;
+    cursor: pointer;
+    border: 1px solid #fff;
+}
+.colorbox:hover {
+    border: 1px solid #333;
+}
+
+.comment {
+    color: #777;
+    font-style: oblique;
+}
+
+.number {
+    color: #369;
+}
+
+.class, .special {
+    color: #1181B8;
+}
+
+path.arc {
+    cursor: move;
+    fill: #ffffff;
+}
+
+.node {
+    font-size: 10px;
+}
+
+.node:hover {
+    fill: #1f77b4;
+}
+
+.link {
+    fill: none;
+    stroke: #1f77b4;
+    stroke-opacity: .4;
+    pointer-events: none;
+}
+
+.link.source, .link.target {
+    stroke-opacity: 1;
+    stroke-width: 2px;
+}
+
+.node.target {
+    fill: #d62728 !important;
+}
+
+.link.source {
+    stroke: #d62728;
+}
+
+.filtered {
+    fill: none;
+    stroke: #ffffff;
+    pointer-events: none;
+    stroke-opacity: 0;
+    stroke-width: 2px;
+}
+
+[data-filtered="on"] {
+    fill: none;
+    stroke: #ffffff;
+    pointer-events: none;
+    stroke-opacity: 0;
+    stroke-width: 2px;
+}
+
+<!-- green -->
+.node.source {
+    fill: #2ca049;
+}
+
+.link.target {
+    stroke: #2ca049;
+}
+
+.left-logo {display: inline; float: left;}
+.right-logo {display: inline; float: right;}
+.main-left-title {display: inline; float: left; width: 55%; white-space: nowrap; text-align: center; padding-top: 15px;}
+.page-header {width: auto; clear: both; display: block; float: none; height: 60px;}
+
+.infolink {
+    display: inline-block;
+    position: absolute;
+    top:2px;
+    left:0;
+    width: 14px;
+    height: 14px;
+}

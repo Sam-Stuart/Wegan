@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_anal_template.xhtml">
+    <ui:define name="metaInfo">
+        <f:event type="preRenderView" listener="#{sessionBean1.setAnalType('utils')}"/> 
+        <f:event type="preRenderView" listener="#{sessionBean1.registerPage('Batch Upload')}"/> 
+    </ui:define>
+    <ui:define name="content">
+        <h:form id="form" enctype="multipart/form-data"> 
+            <h:panelGrid style="padding: 20px; font-size: 12px;  height:100%; width: 100%; line-height: 180%;">
+                <p:outputLabel style="font-size:14px; font-weight: bold" value="Upload multiple data sets from different batches (.csv)"/>
+                <h:panelGrid style="width:100%; padding-left: 10px">
+                    <ul>
+                        <li>
+                            Each data corresponds to one batch;   
+                        </li>
+                        <li>
+                            Randomized experimental design - i.e. each batch contains roughly the 
+                            same numbers of class labels (i.e. control vs. disease); It can not 
+                            adjust batch effect if the control and disease are in different batches. 
+                        </li>
+                    </ul>
+                    The data set should be uploaded as a comma separated data table (.csv) or tab delimited (.txt) table, with class labels immediately following 
+                    the sample names. The metabolomics data should contain largely the same set of compounds being measured (note, compounds 
+                    can be in different orders or missing a few in some batches). Quality control samples should be named as QC.
+                    MetaboAnalyst will detect and align all tables using the well-established  
+                    <a href="http://www.ncbi.nlm.nih.gov/pubmed/16632515" target="_blank">ComBat method</a> for batch effect correction. <br/><br/>
+                    A demo dataset with three batches can be <a href="#{facesContext.externalContext.requestContextPath}/resources/data/batch.zip" target="_blank">downloaded here</a>. 
+                    You need to unzip it first and then upload each individual file for testing. 
+                </h:panelGrid>
+                <h:panelGrid style="background-color: #F9F9FB; width:760px; padding: 20px">
+                    <p:outputLabel style="font-size:13px; font-weight: bold" value="Please upload your data set (one at a time):"/>
+                    <h:panelGrid columns="2" style="width: 100%">
+                        <h:panelGrid columns="2" style="width: 460px">
+                            <p:outputLabel style="font-size:12px;" value="Data format:"/>
+                            <p:selectOneMenu label="Data Format:" panelStyleClass="panel" value="#{utilBean.dataOpt}">
+                                <f:selectItem itemLabel="Sample in rows" itemValue="row" />
+                                <f:selectItem itemLabel="Sample in columns" itemValue="col" />
+                            </p:selectOneMenu>
+                            <p:outputLabel style="font-size:12px;" value="Data label:"/>
+                            <h:panelGrid columns="2" style="margin-bottom:10px">
+                                <p:inputText id="keyword" value="#{utilBean.dataName}" label="Comment: "/>
+                                <p:watermark for="keyword" value="Enter data label" id="watermark" />
+                            </h:panelGrid>
+                            <p:fileUpload value="#{utilBean.batchFile}" mode="simple"/>
+                            <p:commandButton value="Upload" 
+                                             onclick="PF('statusDialog').show()" 
+                                             oncomplete="PF('statusDialog').hide()"
+                                             ajax="false" 
+                                             action="#{utilBean.performBatchUpload()}"/>  
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" style="width: 100%; padding-left: 20px; text-align: center">
+                            <p:commandButton value="Reset" 
+                                             onclick="PF('statusDialog').show()" 
+                                             oncomplete="PF('statusDialog').hide()"
+                                             ajax="false" 
+                                             action="#{utilBean.resetBatchData()}"/> 
+                            <p:commandButton value="Finish" 
+                                             onclick="PF('statusDialog').show()" 
+                                             oncomplete="PF('statusDialog').hide()"
+                                             ajax="false" 
+                                             action="#{utilBean.performBatchCorrection()}"/>       
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </h:panelGrid>
+            </h:panelGrid>
+        </h:form>
+    </ui:define>
+</ui:composition>
+
+

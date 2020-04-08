@@ -1,0 +1,129 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_anal_template.xhtml">
+    <ui:define name="metaInfo">
+        <f:event type="preRenderView" listener="#{analBean.performDefaultAnalysis('T-test')}"/> 
+    </ui:define>
+    <ui:define name="content">
+        <script type="text/javascript">
+            function addBind() {
+                $('#chart').unbind('jqplotDataClick');
+                $('#chart').bind('jqplotDataClick',
+                        function (ev, seriesIndex, pointIndex, data) {
+                            //note, we use the internal index, not point index 
+                            remoteCall([{name: 'cmpdIndex', value: data[0]}]);
+                        });
+            }
+
+            function ext() {
+                this.cfg.seriesDefaults = {
+                    lineWidth: 1.0,
+                    linePattern: 'dashed',
+                    showMarker: false,
+                    shadow: false
+                };
+                this.cfg.axes.yaxis.tickOptions = {
+                    formatString: "%#.2f"
+                };
+                this.cfg.axes.xaxis.tickOptions = {
+                    formatString: "%d"
+                };
+            }
+        </script>
+        <h:panelGrid style="padding:20px; font-size: 13px; line-height: 23px; width:100%">
+            <p:outputLabel style="font-size: 14px; font-weight: bold; padding-left: 10px" value="T Tests"/>
+            <p>
+                Note, for large data set (> 1000 variables), both the paired information and the group variance will be ignored, 
+                and the default parameters will be used for t-tests to save computational time.  If you choose non-parametric 
+                tests (Wilcoxon rank-sum test), the group variance will be ignored. 
+            </p>  
+            <h:panelGrid columns="2">
+                <h:form id="form2">
+                    <h:panelGrid columns="2" style="text-align: left; width: 560px">
+                        <h:panelGrid columns="2" style="padding: 2px 20px 10px 20px; line-height: 28px">
+                            <h:panelGrid style="width: 200px">
+                                <h:outputLabel style="font-weight: bold" value="Analysis type:"/>
+                            </h:panelGrid>
+                            <p:selectOneMenu disabled="#{!sessionBean1.paired}" styleClass="menu" panelStyleClass="panel" value="#{univBean.pairedTtAnal}">
+                                <f:selectItems value="#{applicationBean1.pairAnalOpts}" />
+                            </p:selectOneMenu>
+                            <h:outputLabel style="font-weight: bold" value="Group variance:"/>
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{univBean.equalVar}">
+                                <f:selectItems value="#{applicationBean1.equalVarOpts}" />
+                            </p:selectOneMenu>
+                            <h:outputLabel style="font-weight: bold" value="Non-parametric tests:"/>
+                            <p:selectBooleanCheckbox value ="#{univBean.nonParTt}"/>
+                            <h:outputLabel style="font-weight: bold" value="Adjusted P-value (FDR) cutoff:"/>
+                            <p:inputText style="width:50px" value="#{univBean.ttPThresh}"/>                                 
+                        </h:panelGrid>
+                        <h:panelGrid style="padding-left: 20px">
+                            <p:commandButton value="Submit" update=":ttPane  :cmdPane" 
+                                             onclick="PF('statusDialog').show();"
+                                             oncomplete="PF('statusDialog').hide(); addBind()"
+                                             actionListener="#{univBean.ttButton_action()}" />  
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </h:form>
+            </h:panelGrid>
+            
+            <hr style="height: 12px; border: 0;box-shadow: inset 0 12px 12px -12px rgba(0, 0, 0, 0.5); width:100%; min-width: 1000px"/>
+
+            <h:panelGrid id="ttPane" style="text-align: center; width: 100%;">
+                <h:panelGrid columns="2" style="width: 100%;">
+                    <h:panelGrid style="width: 540px; text-align: left">
+                        <p:outputLabel style="font-weight:bold; color: #FFAE20" value="Click on a point to view, drag to zoom"/>
+                    </h:panelGrid>
+                    <h:panelGrid columns="4" style="width:200px; text-align: right;">
+                        <p:commandLink type="button" value="Reset" style="width:80px" onclick="PF('chart').resetZoom()"/>
+                        <p:commandLink disabled="#{not sessionBean1.ttSig}" action="#{sessionBean1.detailsLnk_action('tt')}" title="View the detailed data table">
+                            <img src="#{facesContext.externalContext.requestContextPath}/resources/images/table.png"/>
+                        </p:commandLink>
+                        <p:commandLink actionListener="#{sessionBean1.graphicsLnk_action('tt')}" 
+                                       oncomplete="PF('graphDialog').show()"
+                                       title="Customize the graphics output">
+                            <img src="#{facesContext.externalContext.requestContextPath}/resources/images/imgcenter.png"/>
+                        </p:commandLink>                        
+                        <p:commandLink  actionListener="#{univBean.generateUnivReport()}" onclick="PF('statusDialog').show();"
+                                        oncomplete="PF('statusDialog').hide(); PF('UniReportDialog').show()">
+                            <img src="#{facesContext.externalContext.requestContextPath}/resources/images/report.png"/>
+                        </p:commandLink> 
+                    </h:panelGrid>
+                </h:panelGrid>
+                <h:panelGrid columns="2">
+                    <p:chart type="line" id="chart" widgetVar="chart" model="#{univBean.lineModel}"  
+                             style="height:400px; width:720px"/>
+                    <h:panelGrid id="cmpdView" style="padding-left: 20px">
+                        <img onerror='this.style.display="none"' src="#{sessionBean1.cmpdImg}"/>
+                    </h:panelGrid>
+                </h:panelGrid>
+            </h:panelGrid>        
+        </h:panelGrid> 
+        <h:form>
+            <p:remoteCommand name="remoteCall"  
+                             process="@this"
+                             partialSubmit="true"
+                             update=":cmpdView  :cmdPane"
+                             actionListener="#{sessionBean1.setCurrentCmpdIndex}" 
+                             />
+        </h:form>
+        <script type="text/javascript">
+            $('#chart').bind('jqplotDataClick',
+                    function (ev, seriesIndex, pointIndex, data) {
+                        //note, we use the internal index, not point index 
+                        remoteCall([{name: 'cmpdIndex', value: data[0]}]);
+                    });
+        </script>
+
+        <p:dialog widgetVar="UniReportDialog" dynamic="true" modal="true" appendTo="@(body)" height="160"
+                  hideEffect="explode" resizable="true">
+            <h:panelGrid style="padding:20px 40px 20px 40px; font-size: 14px;">
+                <a href="#{univBean.getCurrentUserRelativeDir('univAnalReport.csv')}" target="_blank">Download the univariate analysis report</a>
+            </h:panelGrid>     
+        </p:dialog>
+    </ui:define>
+</ui:composition>

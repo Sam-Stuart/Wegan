@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_anal_template.xhtml">
+    <ui:define name="metaInfo">
+        <f:event type="preRenderView" listener="#{sessionBean1.setAnalType('power')}"/> 
+        <f:event type="preRenderView" listener="#{sessionBean1.registerPage('Upload')}"/> 
+    </ui:define>
+    <ui:define name="content">
+        <h:form id="form1" enctype="multipart/form-data">
+            <h:panelGrid style="padding: 20px; font-size: 12px; line-height: 23px;  width:100%">
+                <h:panelGrid style="padding: 10px 10px 10px 30px; width: 600px">
+                    <h2>Upload your pilot data table (.csv or .txt): </h2>
+                    <h:panelGrid columns="2" style="background-color: #F9F9FB; width:550px; height:120px; padding: 10px; margin-bottom: 10px">
+                         <p:outputLabel style="font-size:12px; font-weight: bold" value="Data Type:"/>
+                        <p:selectOneRadio value="#{uploader.dataType}">
+                            <f:selectItems value="#{applicationBean1.csvOpts}"/>
+                        </p:selectOneRadio>
+                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Format:"/>
+                        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{uploader.dataFormat}">
+                            <f:selectItems value="#{applicationBean1.csvFormatOpts}" />
+                        </p:selectOneMenu>
+                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Data File:"/>
+                        <p:fileUpload value="#{uploader.dataFile}" mode="simple"/>
+                    </h:panelGrid>
+                    <hr/>
+                    <h:panelGrid columns="2" style="padding-top: 10px">
+                        <p:selectBooleanCheckbox value="#{uploader.useExample}"/>
+                        <p:outputLabel style="font-size:13px; font-weight: bold; padding-top: 6px" value="Use the example data"/>
+                    </h:panelGrid>  
+                    <h:panelGrid columns="2" style="width: 560px">
+                        <h:panelGrid style="width:50px">
+                            <p:outputLabel style="font-weight: bold" value="Data"/>
+                        </h:panelGrid>       
+                        <p:outputLabel style="font-weight: bold" value="Description"/>
+                        <a href="#{facesContext.externalContext.requestContextPath}/resources/data/human_cachexia.csv">Dataset</a>
+                        <h:panelGrid>
+                              Metabolite concentration data from a pilot urine metabolomics study on cancer patients. 
+                              Group 1- cachexic; group 2 - control  
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid style="width: 100%; padding-top: 10px; padding-bottom: 10px; text-align: center">
+                        <p:commandButton value="Submit" ajax="false"
+                                         onclick="PF('statusDialog').show()" 
+                                         oncomplete="PF('statusDialog').hide()"
+                                         action="#{uploader.uploadPilotData()}"/>  
+                    </h:panelGrid>
+                </h:panelGrid> 
+            </h:panelGrid>
+        </h:form>
+    </ui:define>
+</ui:composition>

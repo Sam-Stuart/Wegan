@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_anal_template.xhtml">
+    <ui:define name="metaInfo">
+        <f:event type="preRenderView" listener="#{sessionBean1.registerPage('Time Series')}"/> 
+    </ui:define>
+    <ui:define name="content">
+        <h:form>
+            <h:panelGrid style="padding:20px 40px 20px 40px; font-size: 12px; line-height: 23px; width:100%">
+                <h2>Select an analysis path to explore :</h2>
+                <h:panelGrid style="border: lightgray thin solid; width: 650px; margin-left: 30px; padding: 15px 20px 10px 25px; background-color: #F9F9FB; font-size: 13px;">
+
+                    <h:outputLabel style="font-size: 14px; font-weight: bold" value="Data Overview"/>
+                    <h:panelGrid style="padding-left: 10px; padding-bottom: 4px">
+                        <p:commandLink action="iPCA" ajax="false"
+                                       onclick="PF('statusDialog').show()"
+                                       value="Interactive PCA Visualization (iPCA)"/>
+                        <h:panelGrid style="padding-bottom: 4px">
+                            The approach summarizes data into an interactive 3D graph which supports pointing, clicking, rotating, and zooming to view data details .... useful to detect 
+                            overall patterns within the data.
+                        </h:panelGrid>
+
+                        <p:commandLink action="Heatmap2" ajax="false"
+                                       onclick="PF('statusDialog').show()"
+                                       value="Heatmap Visualization (Heatmap2)"/>
+                        <h:panelGrid style="padding-bottom: 4px">
+                            This method displays data in the form of colored cells. It provides direct visualization 
+                            of the relative levels of individual samples or variables.
+                        </h:panelGrid>
+                    </h:panelGrid>
+
+                    <h:outputLabel style="font-size: 14px;  font-weight: bold" value="Univariate Analysis"/>
+                    <h:panelGrid style="padding-left: 10px; padding-bottom: 4px">
+                        <p:commandLink action="ANOVA2" ajax="false"
+                                       onclick="PF('statusDialog').show()"
+                                       value="Two-way ANOVA (ANOVA2)"/>
+                        <h:panelGrid style="padding-bottom: 4px">
+                            This approach provides classical univariate two-way ANOVA analysis based on the two given factors. 
+                            For time-series data, users should choose within-subjects ANOVA.
+                        </h:panelGrid>
+                    </h:panelGrid>
+
+                    <h:outputLabel style="font-size: 14px;  font-weight: bold" value="Multivariate Analysis"/>
+                    <h:panelGrid style="padding-left: 10px; padding-bottom: 4px">
+                        <p:commandLink action="ASCA" ajax="false" disabled="#{timeBean.timeOnly}" 
+                                       onclick="PF('statusDialog').show()"
+                                       value="ANOVA Simultaneous Component Analysis (ASCA)"/>
+                        <h:panelGrid style="padding-bottom: 4px">
+                            This approach is designed to identify major patterns with regard to the 
+                            two given factors and their interaction. The implementation was based on the 
+                            algorithm described by <a href="http://dx.doi.org/10.1093/bioinformatics/bti476" target="_blank">AK Smildle, et al.</a> 
+                            with additional improvements on feature selection and model validation.
+                        </h:panelGrid>
+
+                        <p:commandLink action="MEBA" ajax="false"
+                                       onclick="PF('statusDialog').show()"
+                                       value="Multivariate Empirical Bayes Analysis of Variance (MEBA) for Time Series"/>
+                        <h:panelGrid style="padding-bottom: 4px">
+                            This approach is designed to compare temporal profiles across different biological conditions. It is based 
+                            on the timecourse method described by <a href="http://dx.doi.org/10.1214/009053606000000759" target="_blank">YC Tai. et al.</a>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </h:panelGrid>
+            </h:panelGrid> 
+        </h:form>
+    </ui:define>
+</ui:composition>

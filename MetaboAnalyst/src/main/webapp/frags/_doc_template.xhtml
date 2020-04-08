@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_template.xhtml">
+
+    <ui:define name="centerpane">
+        <p:layout>  
+            <!--
+            <p:layoutUnit style="margin:0px; padding:0px" gutter="0" position="west" size="220" collapsible="true" styleClass="myColorLayoutStyle">
+                <div id="navi" style="font-family: Arial, Helvetica, Geneva; margin: 0; padding: 0">
+                    <h:form>
+                        
+                        <h:panelGrid style="padding: 40px 15px 10px 36px; line-height: 28px; font-size: 15px; height: 480px; text-align: left;">
+                             
+                            <p:commandLink ajax="false" action="Exit" style="padding: 4px 0 10px 0;">  
+                                <h:outputText value="Home" />  
+                            </p:commandLink>  
+                            <p:commandLink ajax="false" action="Overview" style="padding: 4px 0 10px 0;">  
+                                <h:outputText value="Overview" />  
+                            </p:commandLink>  
+                            <p:commandLink ajax="false" action="Format" style="padding: 4px 0 10px 0;">  
+                                <h:outputText value="Data Formats" />  
+                            </p:commandLink>  
+                            <p:commandLink ajax="false" action="Faqs" style="padding: 4px 0 10px 0;">  
+                                <h:outputText value="FAQs" />  
+                            </p:commandLink>  
+                            <p:commandLink ajax="false" action="Tutorials" style="padding: 4px 0 10px 0;">  
+                                <h:outputText value="Tutorials" />  
+                            </p:commandLink>  
+                            <p:commandLink ajax="false" action="Contact" style="padding: 4px 0 10px 0;">  
+                                <h:outputText value="Troubleshooting" />  
+                            </p:commandLink>
+                            <p:commandLink ajax="false" action="Resources" style="padding: 4px 0 10px 0;">  
+                                <h:outputText value="Resources" />  
+                            </p:commandLink>
+                            <p:commandLink ajax="false" action="History" style="padding: 4px 0 10px 0;">  
+                                <h:outputText value="Update History" />  
+                            </p:commandLink>  
+                            <p:commandLink ajax="false" action="UserStats" style="padding: 4px 0 10px 0;">  
+                                <h:outputText value="User Stats" />  
+                            </p:commandLink> 
+                            <p:commandLink ajax="false" action="About" style="padding: 4px 0 10px 0;">  
+                                <h:outputText value="About" />  
+                            </p:commandLink> 
+                           
+                        </h:panelGrid>
+                    </h:form>   
+                </div>  
+
+            </p:layoutUnit>-->
+            <p:layoutUnit position="center" style="margin:0px; padding:0px;" gutter="0" styleClass="myMainColorLayoutStyle">
+                <ui:insert name="content"> 
+                </ui:insert>
+            </p:layoutUnit>
+        </p:layout>
+    </ui:define>
+</ui:composition>

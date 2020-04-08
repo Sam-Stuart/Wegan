@@ -1,0 +1,247 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_anal_template.xhtml">
+    <ui:define name="metaInfo">
+        <f:event type="preRenderView" listener="#{analBean.performDefaultAnalysis('sPLSDA')}"/> 
+    </ui:define>
+    <ui:define name="myscript">
+        <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/jscripts/canvasXpress.min.js"></script>
+        <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/jscripts/graphics.js"></script>
+    </ui:define>
+    <ui:define name="content">
+        <h:inputHidden id="mydir" value="#{sessionBean1.getJsonDir('spls_score3d')}" />
+        <script type="text/javascript">
+            function ext() {
+                this.cfg.seriesDefaults = {
+                    lineWidth: 1.0,
+                    linePattern: 'dashed',
+                    showMarker: false,
+                    markerOptions: {
+                        color: 'rgba(128, 0, 128, 0.5)'
+                    },
+                    shadow: false
+                };
+                this.cfg.axes = {
+                    yaxis: {
+                        showLabel: true,
+                        tickOptions: {
+                            formatString: "%#.2f"
+                        }
+                    },
+                    xaxis: {
+                        showLabel: true,
+                        tickOptions: {
+                            formatString: "%#.2f"
+                        }
+                    }
+                };
+            }
+        </script>
+        <h:panelGrid id="parPane"  style="padding:20px 10px 30px 20px; font-size: 12px; line-height: 23px; width:100%">
+            The sparse PLS-DA (sPLS-DA) algorithm can effectively reduce the number of variables (metabolites) in high-dimensional 
+            metabolomics data to produce robust and easy-to-interpret models. Users can control the "sparseness" of the model 
+            by controlling the <u>number of components</u> in the model and the <u>number of variables</u> within each component. 
+            More details can be found from <a href="http://doi.org/10.1186/1471-2105-12-253" target="_blank">Le Cao et. al</a> 
+            <h:form>
+                <p:selectOneRadio id="compVarRadio" value="#{splsBean.compVarOpt}" layout="custom">  
+                    <f:selectItem itemLabel="All the same" itemValue="same"/>  
+                    <f:selectItem itemLabel="Component specific" itemValue="specific"/>  
+                </p:selectOneRadio>
+                <h:panelGrid id="parPane" columns="2" style="padding:6px 20px 10px 30px;">
+                    <h:panelGrid columns="2">
+                        <h:outputLabel style="font-weight: bold" value="Number of components: "/>
+                        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{splsBean.compNum}">
+                            <f:selectItems value="#{splsBean.splsComps}" />
+                            <p:ajax listener="#{splsBean.onSplsCompNumChange}" update=":compVarPane  :cmdPane"/>
+                        </p:selectOneMenu>
+                        <h:outputLabel style="font-weight: bold" value="Variables in each component: "/>
+                        <h:panelGrid columns="3">
+                            <p:radioButton for="compVarRadio" itemIndex="0"/>
+                            <h:outputLabel style="font-weight: bold" value="Keep the same number: "/>
+                            <p:inputText style="width:50px" value="#{splsBean.varNum}"/> 
+                            <p:radioButton for="compVarRadio" itemIndex="1"/>
+                            <h:outputLabel style="font-weight: bold" value="Specify for each component: "/>
+                            <p:commandLink value="Click here to specify" onclick="PF('compVarDialog').show()"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <p:commandButton value="Update" 
+                                     ajax="false"
+                                     onclick="PF('statusDialog').show()"
+                                     oncomplete="PF('statusDialog').hide()"
+                                     actionListener="#{splsBean.updateSPLSDA()}"/>   
+                </h:panelGrid>
+            </h:form>
+            <p:tabView id="ac" style="width:100%; border: none; background: none; font-size: 13px;">
+                <p:tab title ="Overview">
+                    <h:form id="form1">
+                        <h:panelGrid columns="2" style="width: 70%">
+                            <h:panelGroup>
+                                <h:outputLabel style="font-weight: bold" value="Display pairwise score plot for top "/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{splsBean.splsPairNum}">
+                                    <f:selectItems value="#{splsBean.splsAvailableComps}" />
+                                </p:selectOneMenu>
+                                <h:outputLabel style="font-weight: bold" value=" components"/>
+                            </h:panelGroup>
+                            <p:commandButton value="Update" update=":ac:form1:pairPane  :cmdPane" actionListener="#{splsBean.splsPairBtn_action()}"/>   
+                        </h:panelGrid>
+                        <h:panelGrid id="pairPane" style="text-align: center; width: 100%;">
+                            <h:panelGrid style="text-align: right; padding-left: 700px; width: 760px;">
+                                <p:commandLink actionListener="#{sessionBean1.graphicsLnk_action('spls_pair')}" 
+                                               oncomplete="PF('graphDialog').show()"
+                                               title="Customize the graphics output">
+                                    <img src="#{facesContext.externalContext.requestContextPath}/resources/images/imgcenter.png"/>
+                                </p:commandLink>
+                            </h:panelGrid>
+                            <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('spls_pair')}" alt="PLSPairImage"/>
+                        </h:panelGrid>        
+                    </h:form>
+                </p:tab>
+                <p:tab title ="2D Scores Plot">
+                    <h:form id="form3">
+                        <h:panelGrid columns="2" style="padding: 2px 20px 10px 20px; line-height: 25px">
+                            <h:panelGrid columns="2" style="width:420px; padding-left: 20px; padding-right: 20px">
+                                <h:outputLabel style="font-weight: bold" value="Select component for X-axis:"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:50px" value="#{splsBean.splsScore2dX}">
+                                    <f:selectItems value="#{splsBean.splsAvailableComps}" />
+                                </p:selectOneMenu>
+                                <h:outputLabel style="font-weight: bold" value="Select component for Y-axis:"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:50px" value="#{splsBean.splsScore2dY}">
+                                    <f:selectItems value="#{splsBean.splsAvailableComps}" />
+                                </p:selectOneMenu>
+                                <h:outputLabel style="font-weight: bold" value="Display 95% confidence region:"/>
+                                <p:selectBooleanCheckbox value ="#{splsBean.displayConfs}"/>       
+                                <h:outputLabel style="font-weight: bold" value="Display sample names:"/>
+                                <p:selectBooleanCheckbox value ="#{splsBean.displayNames}"/>
+                                <h:outputLabel style="font-weight: bold" value="Use grey-scale colors:"/>
+                                <p:selectBooleanCheckbox value ="#{splsBean.greyScale}"/>
+                            </h:panelGrid>
+                            <p:commandButton value="Update" update=":ac:form3:score2dPane  :cmdPane" actionListener="#{splsBean.splsScore2dBtn_action()}" partialSubmit="true"/>   
+                        </h:panelGrid>
+                        <h:panelGrid id="score2dPane" style="text-align: center; width: 100%;">
+                            <h:panelGrid style="text-align: right; padding-left: 700px; width: 760px;">
+                                <p:commandLink actionListener="#{sessionBean1.graphicsLnk_action('spls_score2d')}" 
+                                               oncomplete="PF('graphDialog').show()"
+                                               title="Customize the graphics output">
+                                    <img src="#{facesContext.externalContext.requestContextPath}/resources/images/imgcenter.png"/>
+                                </p:commandLink>
+                            </h:panelGrid>
+                            <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('spls_score2d')}" alt="SPLSScore2DImage"/>
+                        </h:panelGrid>  
+                    </h:form>
+                </p:tab>
+                <p:tab title ="Loadings Plot">
+                    The loadings plot shows the variables selected by the sPLS-DA model for a given component. 
+                    The variables are ranked by the <b>absolute values</b> of their loadings. 
+                    <h:panelGrid style="width:100%; padding: 10px 20px 10px 20px;">
+                        <h:form id="form5">
+                            <h:panelGrid  columns="2" style="line-height: 25px">
+                                <h:panelGrid columns="2" style="width:320px; padding-left: 20px">
+                                    <h:outputLabel style="font-weight: bold" value="Show loadings for component:"/>
+                                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:50px" value="#{splsBean.splsLoadX}">
+                                        <f:selectItems value="#{splsBean.splsAvailableComps}" />
+                                    </p:selectOneMenu>
+                                </h:panelGrid>
+                                <h:panelGrid style="padding-left: 20px">
+                                    <p:commandButton value="Update" 
+                                                     update=":ac:loadPane  :cmdPane" 
+                                                     actionListener="#{splsBean.splsLoadBtn_action()}" partialSubmit="true"/>   
+                                </h:panelGrid>
+                            </h:panelGrid>
+                        </h:form>
+                    </h:panelGrid>
+                    <h:panelGrid id="loadPane" style="width: 100%; text-align: center">
+                        <h:panelGrid columns="2" style="text-align: right; padding-left: 630px; width: 670px">
+                            <p:commandLink action="#{sessionBean1.detailsLnk_action('spls.loadings')}" title="View the detailed data table">
+                                <img src="#{facesContext.externalContext.requestContextPath}/resources/images/table.png"/>
+                            </p:commandLink>
+                            <p:commandLink actionListener="#{sessionBean1.graphicsLnk_action('spls_loading')}" 
+                                           oncomplete="PF('graphDialog').show()"
+                                           title="Customize the graphics output">
+                                <img src="#{facesContext.externalContext.requestContextPath}/resources/images/imgcenter.png"/>
+                            </p:commandLink>
+                        </h:panelGrid>
+                        <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('spls_loading')}" alt="SPLSLoad2DImage"/>
+                    </h:panelGrid>  
+                </p:tab>
+                <p:tab title ="3D Scores Plot">
+                    Click <b>Update</b> to load the plot; <b>Dragging</b> to rotate the view around the axis; <b>Clicking</b> on any data point to view a summary 
+                    of the corresponding sample; <b>Scrolling</b> to zoom in and out; use the <b>Export Image</b> button below 
+                    to export the current view as a PNG image. 
+                    <h:form id="form4">
+                        <h:panelGrid style="width:100%; text-align: right; padding-bottom: 10px">
+                            <h:panelGrid columns="2">
+                                <p:commandButton value="Update" 
+                                                 ajax="false"
+                                                 action="#{splsBean.splsScore3dBtn_action()}"/> 
+                                <p:commandButton type="button" onclick="export_image('score')" value="Export"/>
+                            </h:panelGrid> 
+                        </h:panelGrid>
+                    </h:form>
+                    <h:panelGrid style="width: 100%; text-align: center">
+                        <canvas id='canvas1' width='670px' height='630px'></canvas>
+                    </h:panelGrid>
+                </p:tab>
+                <p:tab title ="Performance">
+                    The performance of the current sPLS-DA models are evaluated using cross validations (CV) with increasing numbers of components 
+                    created using the specified number of variables. Users can choose to use either a 5-fold CV or a leave one out cross-validation (LOOCV). 
+                    Note that the results from the 5-fold CV may change slightly due to random sub-sampling procedures. 
+                    <h:form id="formCV">  
+                        <h:panelGrid columns="2" style="padding: 2px 20px 10px 20px; line-height: 23px; ">
+                            <h:panelGrid columns="2" style="width: 400px">
+                                <h:outputLabel style="font-weight: bold" value="Validation method:"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{splsBean.validationOpt}">
+                                    <f:selectItem itemLabel="5-fold CV" itemValue="Mfold" /> 
+                                    <f:selectItem itemLabel="LOOCV" itemValue="loo" /> 
+                                </p:selectOneMenu>
+                            </h:panelGrid>
+                            <p:commandButton value="Submit" 
+                                             onclick="PF('statusDialog').show()"
+                                             oncomplete="PF('statusDialog').hide()"
+                                             update=":ac:formCV:sumPane  :cmdPane" 
+                                             actionListener="#{splsBean.splsCVBtn_action()}"/>   
+                        </h:panelGrid>
+                        <h:panelGrid id="sumPane">
+                            <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('spls_cv')}" alt="SPLSclass"/>
+                        </h:panelGrid>        
+                    </h:form>
+                </p:tab>
+            </p:tabView> 
+        </h:panelGrid>
+        <p:dialog modal="true" widgetVar="exportDialog" style="width:600px; height: 580px" appendTo="@(body)">  
+            <h:outputLabel style="font-size: 13px; font-weight: bold" value="Right click the PNG image to save as your preferred name:"/><br/>
+            <image id="downloadimage"></image>  
+        </p:dialog> 
+        <p:dialog widgetVar="compVarDialog" dynamic="true" modal="true" appendTo="@(body)" height="360"
+                  hideEffect="explode" resizable="true">
+            <h:panelGrid id="compVarPane">
+                <h:form>
+                    <h:panelGrid style="padding:20px 40px 20px 40px; font-size: 12px; line-height: 23px; width:380px;">
+                        <p:dataTable style="width:100%; font-size: 12px" var="comp" rowIndexVar="rowInx" value="#{splsBean.compBeans}">  
+                            <p:column headerText="Components">  
+                                <h:outputText value="#{comp.name}"/>  
+                            </p:column>   
+                            <p:column headerText="Number of variables">  
+                                <h:inputText value="#{comp.varNum}"/>
+                            </p:column>   
+                        </p:dataTable>
+                        <h:panelGrid columns="2" style="width:100%; font-size: 14px; text-align: center">
+                            <p:commandButton value="OK" 
+                                             actionListener="#{splsBean.setCompVarNums()}" 
+                                             update=":parPane  :cmdPane"
+                                             onclick="PF('compVarDialog').hide()"/>
+                            <p:commandButton value="Cancel" onclick="PF('compVarDialog').hide()"/>
+                        </h:panelGrid> 
+                    </h:panelGrid>
+                </h:form>     
+            </h:panelGrid>
+        </p:dialog>
+        <script type="text/javascript">
+            showPLSDA3DScore();
+        </script>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_doc_template.xhtml">
+    <ui:define name="content">
+        <h:panelGrid style="padding: 30px 60px 20px 50px; font-size: 13px; line-height: 25px; width: 100%">
+            <h2>User Statistics</h2>
+            <p>
+                MetaboAnalyst has been used by over 60,000 researchers in the field of metabolomics from more than 
+                2,000 cities all over the world. It currently receives ~6000 jobs per weekday or 
+                <b>~150,000</b> jobs/month. There are also many local installations at the 
+                major metabolomics centers. The figure below shows traffic over the last 12 months based on 
+                Google Analytics Report.
+            </p>
+            <hr style="height: 12px; border: 0;box-shadow: inset 0 12px 12px -12px rgba(0, 0, 0, 0.5); width:100%; min-width: 1000px"/>
+            <h:panelGrid style="text-align: center; padding: 0px 10px 10px 10px; width:100%">
+                <h:outputLabel style="font-size: 16px; font-weight: bold" value="User traffics (Jan 2017 - Jan 2018)"/>
+                <img width="840" src="#{facesContext.externalContext.requestContextPath}/resources/images/user_traffic_2018.png" alt="User Stats 2018"/>
+            </h:panelGrid>
+        </h:panelGrid>
+    </ui:define>
+</ui:composition>

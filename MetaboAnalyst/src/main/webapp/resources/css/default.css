@@ -1,0 +1,420 @@
+body {
+    margin: 0px;
+    padding: 0;
+    font-size: 13px; 
+    font-family: Arial, Helvetica, Geneva
+}
+
+h1, h2{
+    margin-top: 0;
+}
+
+a:hover {
+    color:yellowgreen;
+}
+
+/* Header */
+#header {
+    padding: 0px;
+    margin: 0px;
+    height: 120px; 
+    position: relative;
+    
+    
+}
+
+.myLayoutStyle .ui-layout-unit-content{
+    background: #f2f8ff;
+}
+
+.title {
+    height: 30px;
+    margin-left: 10px;
+    padding: 8px 0 0 20px;
+}
+
+
+.ui-tree-horizontal .ui-treenode-content {
+    font-weight: bold;
+    width: 172px !important;
+}
+
+/* Footer */
+#footer {
+    padding: 0px;
+    position: relative;
+    text-align: center;
+}
+
+.ui-menu .ui-menu-parent .ui-menu-child {
+    margin-left:4px;
+    margin-right: 20px;
+}
+
+.ui-layout, .ui-layout-doc, .ui-layout-unit, .ui-layout-wrap, .ui-layout-bd, .ui-layout-hd{
+    border: none;
+}
+
+.ui-widget-header {
+    padding-left: 10px !important;
+    color: #2779aa !important;
+}
+.panelColumns td {
+    vertical-align: top; 
+} 
+
+.ui-layout-north {
+    z-index:20 !important;
+    overflow:visible !important;
+}
+
+.ui-layout-north .ui-layout-unit-content {
+    overflow:visible !important;
+}
+
+.affaires .ui-menuitem-text{color:black;}
+
+.ui-tabs-nav {
+    background: none !important;
+}
+
+.ui-datatable .ui-datatable-footer {
+    text-align: right;
+    padding: 4px 10px;
+}
+
+.noBorders tr, .noBorders td {
+    background: none !important;
+    border: none !important;
+}
+
+a.changeBlue:hover { /* change to blue on mouseover */
+    color: #FFAE20;
+    font-size: 110%;
+    text-decoration: underline;
+}
+
+.myui-state-default{
+    color:#0099ff;
+}
+
+.headerH2 {
+    font: 2.2em Arial monospace sans-serif;
+    margin-left: 0px;
+    padding-left:0px;
+    letter-spacing: 1.2px;
+    float: left;
+    color: #0054fc;
+    
+}
+
+.subhead {
+    font: 1.8em Arial monospace sans-serif;
+    letter-spacing: 1.0px;
+    float: left;
+    
+}
+
+.floater { float:left;}
+.non-floater { overflow:hidden; }
+iframe { width:100%; padding:0; border:0; height:100%; }
+
+ui-layout-resizer, .ui-layout-resizer-south, .ui-layout-resizer-open, .ui-layout-resizer-south-open{ height:0px !important; }
+
+strong {
+    font-weight: bold;
+    color: #000;
+}
+
+table.nopadding td {
+    padding: 0;
+}
+
+.helpTip{
+    width: 600px;
+    line-height: 1.6em;
+    background: #ffe7bd;
+    padding-left: 10px
+}
+
+.helpbigTip{
+    width: 800px;
+    line-height: 1.6em;
+    background: #ffe7bd;
+    padding-left: 10px;
+}
+
+.old {
+    background-color: #6CE26C !important;
+    background-image: none !important;
+    color: #000000 !important;
+}
+
+.icon-pdf {
+    background:url('../images/icon_pdf.gif') no-repeat !important;
+    height:11px;
+    width:11px;
+    padding-right: 6px;
+    padding-top: 4px;
+}
+
+div[id="form1:listTbl"] thead {
+    font-size:11px;
+    font-weight:bold; 
+}
+
+div[id="form1:listTbl"] tbody {
+    font-size:11px;
+}
+
+.ui-layout-unit .ui-layout-unit-content {
+    padding: 0em 0em !important;
+}
+
+.ui-growl-icon-close {
+    width: 100%;
+    height: 100%;
+    background-image: none!important;
+}
+
+.mybreadcrumb{
+    margin: 0;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    font-size: 11px !important;
+    font-weight: normal !important;
+    border: none;
+    display: block;
+    background: none;
+    text-decoration: underline;
+}
+
+.ui-panelgrid .firstcolumn{
+    background: #8BC1FF;
+    color: #000000;
+    font-weight: bold
+}
+
+.ui-datalist-content{  
+    border: 0px; 
+    background: none
+}  
+
+.selectable td.ui-selection-column input {
+    display:none;
+}
+
+.unselectable td.ui-selection-column input {
+    display:block;
+}
+
+.myHeaderColorLayoutStyle .ui-layout-unit-content{
+    background: #f2f8ff !important;
+}
+
+.myLogoColorLayoutStyle .ui-layout-unit-content{
+    background: #e5edf6 !important;
+}
+
+.myColorLayoutStyle .ui-layout-unit-content{
+    background: #f2f8ff !important;
+}
+
+.myAnalColorLayoutStyle .ui-layout-unit-content{
+    border-left: dashed thin !important;
+}
+
+
+
+.myMainColorLayoutStyle .ui-layout-unit-content{
+    background: #f2f8ff !important;
+
+    border-left: dashed thin !important;
+}
+
+.myMainColorLayoutStyle1 .ui-layout-unit-content{
+    background: #cddcec !important;
+    border-left: dashed thin !important;
+}
+
+.myImgLayoutStyle .ui-layout-unit-content{
+    background-image: url('/MetaboAnalyst/faces/resources/images/logo.png') !important;
+    background-repeat: no-repeat !important;
+    background-size: 100% !important;
+}
+
+
+#content {
+    background:#f1f3f6;
+    z-index: 1;
+    position:relative;
+}
+
+#rightBar {
+    float:right;
+    height: 100%;
+    background: #e5e9ed;
+    z-index: 10;
+    position:absolute;
+    top:0px;
+    right:0px;
+    width:250px;
+}
+
+#footer {
+    clear:both;
+    background:#DDDDDD;
+    border-top-style:solid;
+    border-width: thin;
+    border-color: silver;
+    text-align: center;
+    vertical-align: middle;
+} 
+
+a:link {
+    color: #011CA2;
+}
+
+h2{ 
+    font-size: 16px; 
+    font-weight: bold
+}
+
+.panelColumns td {
+    vertical-align: top; 
+} 
+
+a.changeBlue:hover { /* change to blue on mouseover */
+    color: #FFAE20;
+    font-size: 110%;
+    text-decoration: underline;
+}
+
+.menu .ui-selectonemenu-label { 
+    font-size: 12px;
+    line-height: 18px
+}
+
+.ui-selectonemenu .ui-selectonemenu-label{
+    font-size: 12px;
+    line-height: 18px 
+}
+
+.panel .ui-selectonemenu-list { 
+    font-size: 12px;
+    line-height: 18px
+}
+
+.ui-selectonemenu label.ui-selectonemenu-label{
+    width:100% !important;
+}
+
+.ui-growl-title {
+    font-size: 15px;
+}
+
+.ui-growl-message p {
+    font-size: 13px;
+}
+
+.ui-dialog.customDialog .ui-dialog-content {
+    font-size: 13px;
+}
+.ui-dialog-titlebar.ui-widget-header.customDialog {
+    font-size: 15px;
+    
+}
+
+.old {
+    background-color: #6CE26C !important;
+    background-image: none !important;
+    color: #000000 !important;
+}
+
+.hide-column-names table thead tr {
+    display: none;
+}
+
+.vertical-text {
+    display:inline-block;
+    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+    -webkit-transform: rotate(270deg);
+    -ms-transform: rotate(270deg);
+    transform: rotate(270deg);
+}
+
+.ui-datatable table, .ui-datatable-resizable table {
+    table-layout: auto !important;
+}
+
+.ui-datatable-scrollable table {
+    table-layout: fixed !important;
+}
+
+.myAccordianStyle .ui-accordion-content {
+    background: #F9F9FB !important;
+}
+
+.fixedWidthClass {
+    width:240px;
+    word-wrap: break-word;
+    word-break: break-all;
+}
+
+.myUILayout .ui-layout-unit-content {
+    background: #f2f8ff !important;
+    overflow-x:hidden !important;
+} 
+
+#my-circle {
+    border-radius: 50%;
+    border: 116px solid  #c2dde6;
+}
+
+.circle-example {
+    position:absolute;
+    top:68px;
+    left:50%;
+    margin-left:-357px;
+    width: 390px;
+    height: 390px;
+}
+
+.btnBckg {
+    border-radius: 50%;
+    width: 116px;
+    height: 116px; 
+    background:white;
+    text-shadow: none !important;
+    box-shadow: none !important;
+    border:solid thin  #f2f8ff !important;
+}
+
+.btnBckg:hover {  
+    border:solid medium salmon !important;
+}
+.btnBckg:focus {
+    outline:none;
+}
+
+.myTable {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.myTable td {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+.myTable th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+.myTable tr:nth-child(even) {
+    background-color: #E0ECFF;
+}

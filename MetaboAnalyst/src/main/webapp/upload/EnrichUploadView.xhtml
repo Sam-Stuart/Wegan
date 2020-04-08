@@ -1,0 +1,159 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_anal_template.xhtml">
+    <ui:define name="metaInfo">
+        <f:event type="preRenderView" listener="#{sessionBean1.setAnalType('enrich')}"/>         
+        <f:event type="preRenderView" listener="#{sessionBean1.registerPage('Upload')}"/> 
+    </ui:define>
+    <ui:define name="content">       
+        <h:panelGrid style="padding-top:20px; padding-left: 40px; font-size: 12px; width:100%">
+            <h2 style="margin-top: 10px; margin-bottom: 4px">Choose one of the following options to proceed</h2>
+            <p:accordionPanel id="ac" styleClass="myAccordianStyle" style="width: 760px;">
+                <p:tab title="A list of compound names (over representation analysis)">
+                    <h:form id="form1">
+                        <h:panelGrid style="padding-left: 100px; padding-top: 2px; padding-bottom: 10px; width: 100%">
+                            <h:panelGrid style="height: 100%; padding-bottom: 5px; width: 100%">
+                                <p:outputLabel style="font-size:12px; font-weight: bold" value="Please enter a one-column compound list: "/>
+                            </h:panelGrid>
+                            <h:panelGrid id="msetArea" style="padding-left:20px;">
+                                <p:inputTextarea  autoResize="false" value="#{enrichLoader.msetOraList}" rows="18" cols="48" />
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" style="height: 100%; padding-top: 5px;">
+                                <p:outputLabel style="font-size:12px; font-weight: bold" value="Input Type: "/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:165px" value="#{enrichLoader.cmpdIDType}">
+                                    <f:selectItems value="#{applicationBean1.cmpdIDOpts}" />
+                                </p:selectOneMenu>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" style="height: 100%; width:100%">
+                                <p:selectBooleanCheckbox value="#{enrichLoader.useMsetListExample}">
+                                    <p:ajax update=":ac:form1:msetArea" event="change" listener="#{enrichLoader.updateOraArea()}"/>
+                                </p:selectBooleanCheckbox>                                      
+                                <p:outputLabel style="font-size:12px; font-weight: bold" value="Use example data (input type: compound names)"/>
+                            </h:panelGrid>
+                            <h:panelGrid style="padding-left: 120px; padding-bottom: 10px;">
+                                <p:commandButton value="Submit" ajax="false" 
+                                                 onclick="PF('statusDialog').show()" 
+                                                 oncomplete="PF('statusDialog').hide()"                
+                                                 action="#{enrichLoader.handleOraListUpload}"/>  
+                            </h:panelGrid>
+                        </h:panelGrid>
+                    </h:form>
+                </p:tab>
+                <p:tab title="A list of compounds with concentration values (single sample profiling)">
+                    <h:form id="form2">
+                        <h:panelGrid style="padding-left: 100px; padding-top: 2px; padding-bottom: 10px; width: 720px">
+                            <h:panelGrid style="height: 100%; padding-bottom: 5px; width: 100%">
+                                <p:outputLabel style="font-size:12px; font-weight: bold" value="Enter your data below (two-column data): "/>
+                            </h:panelGrid>
+                            <h:panelGrid style="padding-left:20px;">
+                                <p:inputTextarea id="sspArea" autoResize="false" value="#{enrichLoader.msetSspData}" rows="18" cols="48" />
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" style="padding-top: 5px;">
+                                <p:outputLabel style="font-size:12px; font-weight: bold" value="Input Type: "/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:165px" value="#{enrichLoader.cmpdIDType}">
+                                    <f:selectItems value="#{applicationBean1.cmpdIDOpts}" />
+                                </p:selectOneMenu>
+                                <p:outputLabel style="font-size:12px; font-weight: bold" value="Biofluid (unit): "/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:200px" value="#{enrichLoader.biofluidType}">
+                                    <f:selectItems value="#{applicationBean1.biofluidOpts}" />
+                                </p:selectOneMenu>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2">
+                                <p:selectBooleanCheckbox value="#{enrichLoader.useMsetSspExample}">
+                                    <p:ajax update=":ac:form2:sspArea" event="change" listener="#{enrichLoader.updateSspArea()}"/>
+                                </p:selectBooleanCheckbox> 
+                                <h:panelGrid>
+                                    <p:outputLabel style="font-size:12px; font-weight: bold" value="Use the example data"/>  
+                                    <p:outputLabel style="font-size:12px;" value="- urine sample (umol/mmol_creatinine)"/>  
+                                </h:panelGrid>
+                            </h:panelGrid>
+                            <h:panelGrid style="height: 100%; padding-top: 10px; padding-bottom: 10px; text-align: center; width:360px">
+                                <p:commandButton value="Submit" ajax="false" 
+                                                 onclick="PF('statusDialog').show()" 
+                                                 oncomplete="PF('statusDialog').hide()"
+                                                 action="#{enrichLoader.handleSspDataUpload}"/>  
+                            </h:panelGrid>
+                        </h:panelGrid>
+                    </h:form>
+                </p:tab>
+                <p:tab title="A concentration table (quantitative enrichment analysis)">
+                    <h:form id="form3" enctype="multipart/form-data">
+                        <h:panelGrid style="padding-left: 10px; padding-top: 2px; padding-bottom: 10px; width: 100%">
+                            <h:panelGrid style="height: 100%; padding-bottom: 4px; width: 100%">
+                                <p:outputLabel style="font-size:13px; font-weight: bold" value="Upload your concentration data (.csv or .txt) "/>
+                            </h:panelGrid>                                
+                            <h:panelGrid columns="2" style="padding:10px; line-height: 23px; background-color: #F9F9FB; width:600px">
+                                <p:outputLabel style="font-size:12px; font-weight: bold" value="Group Label:"/>
+                                <p:selectOneRadio value="#{enrichLoader.qeaClsOpt}">
+                                    <f:selectItems value="#{applicationBean1.clsOpts}" />
+                                </p:selectOneRadio>          
+                                <p:outputLabel style="font-size:12px; font-weight: bold" value="ID Type:"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:165px" value="#{enrichLoader.cmpdIDType}">
+                                    <f:selectItems value="#{applicationBean1.cmpdIDOpts}" />
+                                </p:selectOneMenu>
+                                <p:outputLabel style="font-size:12px; font-weight: bold" value="Data Format:"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:165px" value="#{enrichLoader.dataFormat}">
+                                    <f:selectItems value="#{applicationBean1.rocFormatOpts}" />
+                                </p:selectOneMenu>
+                                <p:outputLabel style="font-size:12px; font-weight: bold" value="Data File:"/>
+                                <p:fileUpload value="#{enrichLoader.csvFile}" mode="simple"/>
+                            </h:panelGrid>
+                            <h:panelGrid style="width: 100%; padding-top: 10px; padding-bottom: 10px; text-align: center">
+                                <p:commandButton value="Submit" ajax="false" 
+                                                 onclick="PF('statusDialog').show()" 
+                                                 oncomplete="PF('statusDialog').hide()"
+                                                 action="#{enrichLoader.handleQeaDataUpload}"/>  
+                            </h:panelGrid>
+                            <p:selectOneRadio id="qeaTestRadio" value="#{enrichLoader.qeaTestDataOpt}" layout="custom">  
+                                <f:selectItems value="#{applicationBean1.qeaTestDataOpts}"/> 
+                            </p:selectOneRadio>  
+                            <h:panelGrid style="border-top: dashed teal 1px; height: 100%; padding-top: 8px; width: 100%">
+                                <p:outputLabel style="font-size:13px; font-weight: bold" value="Try our test data: "/>
+                                <h:panelGrid columns="5" style="padding:10px; line-height: 21px; background-color: #F9F9FB; font-size:12px; width: 600px">
+                                    <p:spacer/>
+                                    <h:panelGrid style="width:50px">
+                                        <p:outputLabel style="font-weight: bold" value="Data"/>
+                                    </h:panelGrid>
+                                    <h:panelGrid style="width:90px">
+                                        <p:outputLabel style="font-weight: bold" value="ID Type"/> 
+                                    </h:panelGrid>
+                                    <h:panelGrid style="width:90px">
+                                        <p:outputLabel style="font-weight: bold" value="Group Label"/> 
+                                    </h:panelGrid>        
+                                    <p:outputLabel style="font-weight: bold" value="Description"/>
+                                    <p:radioButton for="qeaTestRadio" itemIndex="0"/> 
+                                    <a href="#{facesContext.externalContext.requestContextPath}/resources/data/human_cachexia.csv">Data 1</a>
+                                    <p:outputLabel value="Common name"/>
+                                    <p:outputLabel value="Discrete"/>
+                                    <h:panelGrid>
+                                        Urinary metabolite concentrations from 77 cancer patients measured by 1H NMR. 
+                                        Phenotype: <b>N</b> - cachexic; <b>Y</b> - control
+                                    </h:panelGrid>
+                                    <p:radioButton for="qeaTestRadio" itemIndex="1"/> 
+                                    <a href="#{facesContext.externalContext.requestContextPath}/resources/data/cachexia_continuous.csv">Data 2</a>
+                                    <p:outputLabel value="PubChem CID"/>
+                                    <p:outputLabel value="Continuous"/>
+                                    <h:panelGrid>
+                                        Urinary metabolite concentrations from 97 cancer patients measured by 1H NMR. 
+                                        Phenotype: <b>muscle gain</b> (percentage within 100 days, negative values indicate muscle loss)
+                                    </h:panelGrid>
+                                </h:panelGrid>
+                                <h:panelGrid style="width: 100%; padding-top: 10px; padding-bottom: 10px; text-align: center">
+                                    <p:commandButton value="Submit" ajax="false" 
+                                                     onclick="PF('statusDialog').show()" 
+                                                     oncomplete="PF('statusDialog').hide()"
+                                                     action="#{enrichLoader.msetQeaTestBn_action()}"/>  
+                                </h:panelGrid>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                    </h:form>
+                </p:tab>
+            </p:accordionPanel>
+        </h:panelGrid>
+    </ui:define>
+</ui:composition>

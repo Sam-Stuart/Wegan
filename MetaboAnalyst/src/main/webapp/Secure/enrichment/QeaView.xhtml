@@ -1,0 +1,178 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_anal_template.xhtml">
+    <ui:define name="metaInfo">
+        <f:event type="preRenderView" listener="#{sessionBean1.registerPage('View result')}"/> 
+    </ui:define>
+    <ui:define name="myscript">
+        <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/jscripts/sigma.min.js"></script>
+        <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/jscripts/sigma.parsers.json.min.js"></script>
+        <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/jscripts/sigma.plugins.dragNodes.js"></script>
+        <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/jscripts/sigma.layout.noverlap.js"></script>
+        <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/jscripts/sigma.plugins.animate.js"></script>
+        <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/jscripts/sigma.renderers.snapshot.min.js"></script> 
+        <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/jscripts/sigma.svg.edges.curve.js"></script>
+        <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/jscripts/sigma.svg.edges.def.js"></script>
+        <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/jscripts/sigma.svg.labels.def.js"></script>
+        <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/jscripts/sigma.svg.nodes.def.js"></script>
+        <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/jscripts/sigma.exporters.svg.js"></script> 
+        <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/jscripts/sigma.utils.js"></script> 
+        <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/jscripts/metabo_analyst.js"></script>
+    </ui:define>
+    <ui:define name="content">
+        <h:inputHidden id="mydir" value="#{sessionBean1.currentUser.relativeDir}" />
+        <h:inputHidden id="myurl" value="#{applicationBean1.domainURL}" />
+        <style type="text/css">
+            #sigma-parent {
+                float: left;
+                width: 900px;
+                height: 600px;
+                padding-right: 30px;
+                position: relative;
+                background-color: #e6f2ff;
+                border: gray thin solid;
+            }    
+            #sigma-example {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+            }
+        </style>
+
+        <h:panelGrid style="padding: 30px; font-size: 13px; width: 100%">
+            The detailed result table is on the bottom<br/><br/>
+            <p:tabView>
+                <p:tab title="Network View">
+                    <h:form>
+                        <h:panelGrid id="graphPane2">
+                            <h:panelGrid columns="3" style="width: 800px; padding-left: 600px">
+                                <p:graphicImage id="helpIcon" url="../../../resources/images/ui-help.png"  alt="help" />
+                                <p:commandLink value="SIF" ajax="false" style="background:none; border:none;"
+                                               onclick="PrimeFaces.monitorDownload(start, stop);">  
+                                    <p:fileDownload value="#{msetBean.getSifFile()}" />  
+                                </p:commandLink> 
+                                <p:commandLink value="SVG" style="background:none; border:none;" onclick="export2SVG()"/>  
+                            </h:panelGrid>
+                            <p:tooltip for="helpIcon" styleClass="helpTip">
+                                <p>
+                                    Each node represents a metabolite set with its color based on its <u>p value</u>, and its size is based on 
+                                    <u>number of hits</u> to your query. Two metabolite sets are connected by an edge if the number of their 
+                                    shared metabolites is over 20% of the total number of their combined metabolite sets. You can 
+                                    directly interact with the network use your mouse: 
+                                    <ul>
+                                        <li><b>Mouse over</b> mouse on a node to view its label (if not shown); </li>
+                                        <li><b>Drag</b> a node to re-arrange its position to avoid overlaps; </li>
+                                        <li><b>Double click</b> a node to view the matched metabolite set; </li>
+                                        <li><b>Scroll</b> to zoom in and out.</li>
+                                    </ul> 
+                                </p>
+                            </p:tooltip>
+                            <div id="mycontainer" style="width:900px; line-height: 24px; padding-bottom: 20px; padding-left: 30px">
+                                <div id="sigma-parent">
+                                    <div id="sigma-example">
+                                    </div>
+                                </div>
+                                <img id="downloadimage"/>  
+                            </div>
+                        </h:panelGrid>
+                    </h:form>
+                </p:tab>
+                <p:tab title="Barchart View">
+                    <h:form>
+                        <h:panelGrid id="graphPane" style="width:100%">
+                            <h:panelGrid style="width:100%; padding-left: 75%">
+                                <p:commandLink actionListener="#{sessionBean1.graphicsLnk_action('qea')}" 
+                                               oncomplete="PF('graphDialog').show()"
+                                               title="Customize the graphics output">
+                                    <img src="#{facesContext.externalContext.requestContextPath}/resources/images/imgcenter.png"/>
+                                </p:commandLink>
+                            </h:panelGrid>
+                            <h:panelGrid style="width:100%; text-align: center">
+                                <img onerror='this.style.display="none"' src="#{msetBean.qeaImg}" alt="QeaImage"/>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                    </h:form>
+                </p:tab>
+            </p:tabView>
+            <h:form>
+                <p:dataTable id="resTbl" style="width:100%; font-size: 12px" var="qb" rowIndexVar="rowInx" value="#{msetBean.qeaBeans}">  
+                    <p:column headerText="" width="10" style="#{qb.style}">  
+                        ﻿ <h:outputText value=""/> 
+                    </p:column>  
+                    <p:column headerText="Metabolite Set">  
+                        <h:outputText escape="false" value="#{qb.setName}"/> 
+                    </p:column>  
+                    <p:column headerText="Total">  
+                        <h:outputText escape="false" value="#{qb.setNum}"/>
+                    </p:column>  
+                    <p:column headerText="Hits">  
+                        <h:outputText escape="false" value="#{qb.hitNum}"/>
+                    </p:column>  
+                    <p:column headerText="Statistic">  
+                        <h:outputText escape="false" value="#{qb.statQ}"/>
+                    </p:column>                     
+                    <p:column headerText="Expected">  
+                        <h:outputText escape="false" value="#{qb.expQ}"/>
+                    </p:column>  
+                    <p:column headerText="P value">  
+                        <h:outputText escape="false" value="#{qb.PVal}"/>
+                    </p:column>  
+                    <p:column headerText="Holm P">  
+                        <h:outputText escape="false" value="#{qb.bonPval}"/>
+                    </p:column>  
+                    <p:column headerText="FDR">  
+                        <h:outputText escape="false" value="#{qb.fdrPval}"/>
+                    </p:column> 
+                    <p:column headerText="Details">  
+                        <p:commandLink value="View" update=":detailView :cmdPane" oncomplete="PF('msetDialog').show()">  
+                            <f:setPropertyActionListener value="#{qb.setName}" target="#{msetBean.msetNm}" /> 
+                        </p:commandLink>
+                    </p:column>   
+                </p:dataTable>     
+                <p:remoteCommand name="updateMset" process="@this" update=":detailView" />
+                <h:panelGrid style="width: 95%; text-align: center">
+                    <p:commandButton value="Submit" ajax="false" 
+                                     onclick="PF('statusDialog').show()" 
+                                     oncomplete="PF('statusDialog').hide()"                              
+                                     action="#{msetBean.nextBn_action()}"/>
+                </h:panelGrid> 
+            </h:form>
+        </h:panelGrid>
+        <p:dialog widgetVar="msetDialog" dynamic="true" appendTo="@(body)" modal="false" draggable="true"
+                  hideEffect="explode" resizable="true"> 
+            <p:panel style="width:540px; height:560px; border: none">
+                <h:panelGrid id="detailView" style="padding: 8px; font-size: 12px; width: 540px; height:560px;">
+                    <h:outputText escape="false" value="Current metabolite set: "/>
+                    <h:panelGrid style="text-align: center; width: 100%;">
+                        <img onerror='this.style.display="none"' src="#{msetBean.msetImgPath}" alt="MsetImage"/>
+                    </h:panelGrid>
+                    <h:form id="summaryForm">
+                        <p:dataTable style="width:100%; font-size: 12px" var="set" 
+                                     value="#{msetBean.currentMsetLib}">
+                            <p:column headerText="Set Name">  
+                                <h:outputText escape="false" value="#{set.name}"/>  
+                            </p:column>  
+                            <p:column headerText="Metabolites">  
+                                <h:outputText escape="false" value="#{set.members}"/>
+                            </p:column>  
+                            <p:column headerText="References">  
+                                <h:outputText escape="false" value="#{set.refs}"/>
+                            </p:column>  
+                        </p:dataTable> 
+                        <h:panelGrid style="width:100%; text-align: center">
+                            <p:commandButton value="OK" onclick="PF('msetDialog').hide()"/>
+                        </h:panelGrid>
+                    </h:form>
+                </h:panelGrid> 
+            </p:panel>
+        </p:dialog>
+        <script type="text/javascript">
+            showSigmaNetwork();
+        </script>
+    </ui:define>
+</ui:composition>

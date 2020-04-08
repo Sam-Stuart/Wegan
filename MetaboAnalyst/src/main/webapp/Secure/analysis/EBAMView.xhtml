@@ -1,0 +1,69 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_anal_template.xhtml">
+    <ui:define name="metaInfo">
+        <f:event type="preRenderView" listener="#{analBean.performDefaultAnalysis('EBAM')}"/> 
+    </ui:define>
+    <ui:define name="content">
+        <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
+
+            <h:form id="form1">  
+                <h:panelGrid columns="2" style="padding: 2px 20px 10px 20px; line-height: 23px; ">
+                    <h:panelGrid columns="2" style="width: 400px">
+                        <h:outputLabel style="font-weight: bold" value="Non-parametric tests:"/>
+                        <p:selectBooleanCheckbox value ="#{sigBean.nonParEBAM}"/>
+
+                        <h:outputLabel style="font-weight: bold" value="Analysis type:"/>
+                        <p:selectOneMenu disabled="#{!sessionBean1.paired}" styleClass="menu" panelStyleClass="panel" value="#{sigBean.pairedAnal}">
+                            <f:selectItems value="#{applicationBean1.pairAnalOpts}" />
+                        </p:selectOneMenu>
+
+                        <h:outputLabel style="font-weight: bold" value="Group variance:"/>
+                        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{sigBean.equalVar}">
+                            <f:selectItems value="#{applicationBean1.equalVarOpts}" />
+                        </p:selectOneMenu>
+
+                        <h:outputLabel style="font-weight: bold" value="Update the fudge factor (a0):"/>
+                        <h:panelGroup>
+                            <p:inputText style="width:40px; margin-left: 8px; margin-right: 6px" value="#{sigBean.alpha}"/>   
+                            <p:commandLink id="viewBn" value="View details" onclick="PF('paramDialog').show()"/>
+                        </h:panelGroup>
+                        
+                        <h:outputLabel style="font-weight: bold" value="Posterior delta (0,1]:"/>
+                        <h:panelGroup>
+                            <p:inputText style="width:40px; margin-left: 8px; margin-right: 6px" value="#{sigBean.ebamDelta}"/>  
+                            <h:outputLabel value="( 0 &lt;delta &le;1 )"/>
+                        </h:panelGroup>
+                    </h:panelGrid>
+                    <p:commandButton value="Update" update=":sumPane :form1:impPane  :cmdPane" actionListener="#{sigBean.ebamBtn_action()}"/>  
+                </h:panelGrid> 
+
+                <hr style="height: 12px; border: 0;box-shadow: inset 0 12px 12px -12px rgba(0, 0, 0, 0.5); width:100%; min-width: 1000px"/>
+                <h:panelGrid id="impPane" style="padding:20px; text-align: center; width: 100%;">
+                    <h:panelGrid columns="2" style="text-align: right; padding-left: 580px; width: 720px;">
+                        <p:commandLink action="#{sessionBean1.detailsLnk_action('ebam')}" title="View the detailed data table">
+                            <img src="#{facesContext.externalContext.requestContextPath}/resources/images/table.png"/>
+                        </p:commandLink>
+                        <p:commandLink actionListener="#{sessionBean1.graphicsLnk_action('ebam_imp')}" 
+                                       oncomplete="PF('graphDialog').show()"
+                                       title="Customize the graphics output">
+                            <img src="#{facesContext.externalContext.requestContextPath}/resources/images/imgcenter.png"/>
+                        </p:commandLink>
+                    </h:panelGrid>
+                    <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('ebam_imp')}" alt="EBAM result"/>
+                </h:panelGrid> 
+            </h:form>
+        </h:panelGrid> 
+        <p:dialog widgetVar="paramDialog" dynamic="true" modal="false" appendTo="@(body)" height="480"
+                  hideEffect="explode" resizable="true">
+            <h:panelGrid id="sumPane" style="text-align: center; width: 100%; padding: 10px">
+                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('ebam_view')}" alt="EBAM"/>
+            </h:panelGrid> 
+        </p:dialog>
+    </ui:define>
+</ui:composition>
