@@ -77,10 +77,10 @@ public class CAloadBean implements Serializable {
                 if (fileName == null) {
                     return null;
                 }
-
+                //RDataUtils.readTextData(RC, fileName, dataFormat, "disc")
                 if (RDataUtils.readTextData(RC, fileName, dataFormat, "disc")) {
                     sb.setDataUploaded(true);
-                    return "Data check";
+                    return "Download";
                 } else {
                     String err = RDataUtils.getErrMsg(RC);
                     sb.updateMsg("Error", "Failed to read in the CSV file." + err);
@@ -188,26 +188,7 @@ public class CAloadBean implements Serializable {
     //WEGAN FUCNTIONS 
     
     //*********------------------------------------------------------
-    
-    private String NMDSTestDataOpt;
-    
-    public String getNMDSTestDataOpt() {
-        return NMDSTestDataOpt;
-    }
-
-    public void setNMDSTestDataOpt(String NMDSTestDataOpt) {
-        this.NMDSTestDataOpt = NMDSTestDataOpt;
-    }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    //*********------------------------------------------------------
+     
     public String getTestDataOpt() {
         return testDataOpt;
     }
@@ -215,12 +196,8 @@ public class CAloadBean implements Serializable {
     public void setTestDataOpt(String testDataOpt) {
         this.testDataOpt = testDataOpt;
     }
-
-    
-    
-    
-    //----------------------------------------------------------------- Test loader 
-    
+ 
+    //Function for grrabbing the Test files for CA
      public String handleCAtestFileUpload() {
         String format = "";
         boolean paired = false;
@@ -236,7 +213,7 @@ public class CAloadBean implements Serializable {
 
 
         
-        //DUNE DATA SELECTED*********************************************************
+        //DUNE DATA SELECTED
         else if (testDataOpt.equals("Dune")) {
             dataType = "Dune";
             //sb.updateMsg("Error", "Dune data selected");
@@ -286,7 +263,92 @@ public class CAloadBean implements Serializable {
     }
     
     
-    
+     
+     
+     
+        //Handling CA user file upload---------------
+    public String handleCAFileUpload() {
+
+        boolean paired = false;
+        if (dataFormat.endsWith("p")) {
+            paired = true;
+        }
+
+        if (sb.doLogin(dataType, "nmds", false, paired)) {
+            
+            try {
+                RConnection RC = sb.getRConnection();
+                String fileName = DataUtils.uploadFile(dataFile, sb, null, ab.isOnPublicServer());
+                if (fileName == null) {
+                    return null;
+                }
+                
+                //Gets if the file is in Csv or Txt format, allow for use of proper R reader later
+                //Already know it must be one of those based on uploading it to the server without error
+                String fileExt = fileName.substring(fileName.length() - 4);
+                
+                
+                if(runCaR(fileName,fileExt)){
+                    //sb.updateMsg("Error", "CA run successfully");
+                    return "CA";
+                    
+                }else{
+                    sb.updateMsg("Error", "CA not run succesffully");
+
+                    return "";
+                }
+                
+                
+                /*
+                //RDataUtils.readTextData(RC, fileName, dataFormat, "disc")
+                if (RDataUtils.readTextData(RC, fileName, dataFormat, "disc")) {
+                    sb.setDataUploaded(true);
+                    return "Download";
+                } else {
+                    String err = RDataUtils.getErrMsg(RC);
+                    sb.updateMsg("Error", "Failed to read in the CSV file." + err);
+                    return null;
+                }*/
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        sb.updateMsg("Error", "Log in failed. Please check errors in your R codes or the Rserve permission setting!");
+
+        return null;
+    }
+        
+        
+        
+        
+        
+        public boolean runCaR(String inputData,String ext){
+            RConnection RC = sb.getRConnection();
+            try {
+                //String rCommand = "InitDataObjects(\"" + dataType + "\", \"" + analType + "\", " + (isPaired ? "TRUE" : "FALSE") + ")";
+            
+                //String rCommand = "CAWegan(\"" + inputData + "\", \"" + sb.getPath2()+ "\"  )";
+                
+                String rCommand = "CAWegan(\"" + inputData + "\", \"" + sb.getPath2()+ "\", \"" + ext + "\"   )";
+                RC.voidEval(rCommand);
+                RCenter.recordRCommand(RC, rCommand);
+            
+            } catch (RserveException rse) {
+                System.out.println(rse);
+                return false;
+            }
+            //;
+            return true ;
+            
+        }
+        
+        
+        
+        
+        
+        
+    //END WEGAN FUNCS 
+    //*********------------------------------------------------------
     
     
     
@@ -405,9 +467,10 @@ public class CAloadBean implements Serializable {
         if (sb.doLogin(dataType, "roc", false, false)) {
             RConnection RC = sb.getRConnection();
             String fileName = DataUtils.uploadFile(dataFile, sb, null, ab.isOnPublicServer());
+            /*RDataUtils.readTextData(RC, fileName, dataFormat, "disc")*/
             if (RDataUtils.readTextData(RC, fileName, dataFormat, "disc")) {
                 sb.setDataUploaded(true);
-                return "Data check";
+                return "Download";
             } else {
                 sb.updateMsg("Error:", RDataUtils.getErrMsg(RC));
                 return null;

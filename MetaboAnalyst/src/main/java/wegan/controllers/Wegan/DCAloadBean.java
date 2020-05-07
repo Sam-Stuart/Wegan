@@ -276,11 +276,64 @@ public class DCAloadBean implements Serializable {
     }
 
     
+
+        public String handleDCAFileUpload() {
+
+        boolean paired = false;
+        if (dataFormat.endsWith("p")) {
+            paired = true;
+        }
+
+        if (sb.doLogin(dataType, "nmds", false, paired)) {
+            
+            try {
+                RConnection RC = sb.getRConnection();
+                String fileName = DataUtils.uploadFile(dataFile, sb, null, ab.isOnPublicServer());
+                if (fileName == null) {
+                    return null;
+                }
+                
+                //Gets if the file is in Csv or Txt format, allow for use of proper R reader later
+                //Already know it must be one of those based on uploading it to the server without error
+                String fileExt = fileName.substring(fileName.length() - 4);
+                
+                
+                if(runDCaR(fileName,fileExt)){
+                    //sb.updateMsg("Error", "CA run successfully");
+                    return "DCA";
+                    
+                }else{
+                    sb.updateMsg("Error", "DCA not run succesffully");
+
+                    return "";
+                }
+                
+                
+                /*
+                //RDataUtils.readTextData(RC, fileName, dataFormat, "disc")
+                if (RDataUtils.readTextData(RC, fileName, dataFormat, "disc")) {
+                    sb.setDataUploaded(true);
+                    return "Download";
+                } else {
+                    String err = RDataUtils.getErrMsg(RC);
+                    sb.updateMsg("Error", "Failed to read in the CSV file." + err);
+                    return null;
+                }*/
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        sb.updateMsg("Error", "Log in failed. Please check errors in your R codes or the Rserve permission setting!");
+
+        return null;
+    }
     
+    
+    
+  
     
     //----------------------------------------------------------------- Test loader 
-    
-     public String handleDCATestFileUpload() {
+    public String handleDCATestFileUpload() {
         String format = "";
         boolean paired = false;
         boolean isZip = false;
@@ -342,12 +395,30 @@ public class DCAloadBean implements Serializable {
             return "";
         }
         //;
-        return"dca";
+        return"DCA";
     }
     
     
     
-    
+    public boolean runDCaR(String inputData,String ext){
+        RConnection RC = sb.getRConnection();
+        try {
+            //String rCommand = "InitDataObjects(\"" + dataType + "\", \"" + analType + "\", " + (isPaired ? "TRUE" : "FALSE") + ")";
+
+            //String rCommand = "CAWegan(\"" + inputData + "\", \"" + sb.getPath2()+ "\"  )";
+
+            String rCommand = "DCAWegan(\"" + inputData + "\", \"" + sb.getPath2()+ "\", \"" + ext + "\"   )";
+            RC.voidEval(rCommand);
+            RCenter.recordRCommand(RC, rCommand);
+
+        } catch (RserveException rse) {
+            System.out.println(rse);
+            return false;
+        }
+        //;
+        return true ;
+            
+    }    
     
     
     

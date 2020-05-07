@@ -21,13 +21,13 @@
                     <h:panelGrid columns="2" style="width:560px; height:120px; padding: 10px">
 
                         <p:outputLabel style="font-size:12px; font-weight: bold" value="Data File:"/>
-                        <p:fileUpload value="#{uploader.dataFile}" mode="simple"/>
+                        <p:fileUpload value="#{Caload.dataFile}" mode="simple"/>
                     </h:panelGrid>
                     <h:panelGrid style="padding: 20px">
                         <p:commandButton value="Submit" ajax="false"
                                          onclick="PF('statusDialog').show()" 
                                          oncomplete="PF('statusDialog').hide()"
-                                         action="#{uploader.handleFileUpload()}"/>                         
+                                         action="#{Caload.handleCAFileUpload()}"/>                         
                     </h:panelGrid>
 
                     <p:spacer/><p:spacer/>
@@ -36,14 +36,14 @@
                     <h:panelGrid columns="2" style="background-color: #F9F9FB; width:560px; height:120px; padding: 10px">
 
                         <p:outputLabel style="font-size:12px; font-weight: bold" value="Data File:"/>
-                        <p:fileUpload value="#{uploader.zipFile}" mode="simple"/>
+                        <p:fileUpload value="#{Caload.zipFile}" mode="simple"/>
 
                     </h:panelGrid>
                     <h:panelGrid style="padding: 20px">
                         <p:commandButton value="Submit" ajax="false" 
                                          onclick="PF('statusDialog').show()" 
                                          oncomplete="PF('statusDialog').hide()"                                         
-                                         action="#{uploader.handleZipFileUpload}"/>                               
+                                         action="#{Caload.handleZipFileUpload}"/>                               
                     </h:panelGrid>
                 </h:panelGrid>
             </h:panelGrid>

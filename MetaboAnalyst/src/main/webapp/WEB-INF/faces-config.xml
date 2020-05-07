@@ -89,7 +89,7 @@
         
         
         <navigation-case>
-            <from-outcome>Dune</from-outcome>
+            <from-outcome>NMDS</from-outcome>
             <to-view-id>/docs/Overview.xhtml</to-view-id>
             <redirect/>
         </navigation-case> 
@@ -101,7 +101,7 @@
         </navigation-case> 
         
         <navigation-case>
-            <from-outcome>dca</from-outcome>
+            <from-outcome>DCA</from-outcome>
             <to-view-id>/docs/DCAOverview.xhtml</to-view-id>
             <redirect/>
         </navigation-case> 

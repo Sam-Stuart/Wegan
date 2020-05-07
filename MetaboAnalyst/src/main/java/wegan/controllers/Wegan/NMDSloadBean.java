@@ -242,43 +242,7 @@ public class NMDSloadBean implements Serializable {
 
             testFile = ab.getTestamf();
             format = "rowu";
-            
-            
-        //****************************************************************************   
-        /*   
-        } else if (testDataOpt.equals("conccow")) {
-            dataType = "conc";
-            testFile = ab.getTestConcCowPath();
-            format = "rowu";
-        } else if (testDataOpt.equals("nmrspecbin")) {
-            dataType = "specbin";
-            testFile = ab.getTestNMRbinPath();
-            format = "rowu";
-        } else if (testDataOpt.equals("concpair")) {
-            dataType = "conc";
-            paired = true;
-            format = "colp";
-            testFile = ab.getTestConcPairPath();
-        } else if (testDataOpt.equals("mspkint")) {
-            dataType = "pktable";
-            testFile = ab.getTestMSTable();
-            format = "colu";
-        } else if (testDataOpt.equals("nmrpeaklist")) {
-            dataType = "nmrpeak";
-            isZip = true;
-            testFile = ab.getTestNMRpeakPath();
-        } else if (testDataOpt.equals("lcmsspec")) {
-            dataType = "msspec";
-            isZip = true;
-            testFile = ab.getTestLCMSspecPath();
-        } else if (testDataOpt.equals("mspklist")) {
-            dataType = "mspeak";
-            isZip = true;
-            testFile = ab.getTestMSpeakPath3Col();
-        } else if (testDataOpt.equals("gcmsspec")) {
-            dataType = "msspec";
-            isZip = true;
-            testFile = ab.getTestGCMSspecPath(); */
+
         } else {
             sb.updateMsg("Error", "Unknown data selected?");
             return null;
@@ -310,6 +274,61 @@ public class NMDSloadBean implements Serializable {
         return dataType;
     }
 
+    
+    
+    
+    
+    public String handleNMFileUpload() {
+
+        boolean paired = false;
+        if (dataFormat.endsWith("p")) {
+            paired = true;
+        }
+
+        if (sb.doLogin(dataType, "nmds", false, paired)) {
+            
+            try {
+                RConnection RC = sb.getRConnection();
+                String fileName = DataUtils.uploadFile(dataFile, sb, null, ab.isOnPublicServer());
+                if (fileName == null) {
+                    return null;
+                }
+                
+                //Gets if the file is in Csv or Txt format, allow for use of proper R reader later
+                //Already know it must be one of those based on uploading it to the server without error
+                String fileExt = fileName.substring(fileName.length() - 4);
+                
+                
+                if(runNMDSR(fileName,fileExt)){
+                    //sb.updateMsg("Error", "CA run successfully");
+                    return "NMDS";
+                    
+                }else{
+                    sb.updateMsg("Error", "NMDS not run succesffully");
+
+                    return "";
+                }
+                
+                
+                /*
+                //RDataUtils.readTextData(RC, fileName, dataFormat, "disc")
+                if (RDataUtils.readTextData(RC, fileName, dataFormat, "disc")) {
+                    sb.setDataUploaded(true);
+                    return "Download";
+                } else {
+                    String err = RDataUtils.getErrMsg(RC);
+                    sb.updateMsg("Error", "Failed to read in the CSV file." + err);
+                    return null;
+                }*/
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        sb.updateMsg("Error", "Log in failed. Please check errors in your R codes or the Rserve permission setting!");
+
+        return null;
+    }
+   
     
     
     
@@ -376,12 +395,30 @@ public class NMDSloadBean implements Serializable {
             return "";
         }
         //;
-        return"Dune";
+        return"NMDS";
     }
     
     
     
-    
+    public boolean runNMDSR(String inputData,String ext){
+        RConnection RC = sb.getRConnection();
+        try {
+            //String rCommand = "InitDataObjects(\"" + dataType + "\", \"" + analType + "\", " + (isPaired ? "TRUE" : "FALSE") + ")";
+
+            //String rCommand = "CAWegan(\"" + inputData + "\", \"" + sb.getPath2()+ "\"  )";
+
+            String rCommand = "NMDSWegan(\"" + inputData + "\", \"" + sb.getPath2()+ "\", \"" + ext + "\"   )";
+            RC.voidEval(rCommand);
+            RCenter.recordRCommand(RC, rCommand);
+
+        } catch (RserveException rse) {
+            System.out.println(rse);
+            return false;
+        }
+        //;
+        return true ;
+            
+    } 
     
     
     

@@ -1,3 +1,38 @@
+/*WEGAN added CSS*/
+
+.navBar {
+  background-color: #f2f8ff;
+  overflow: hidden;
+  width: 430px;
+  padding: 0px;
+}
+
+
+#navLink {
+  float: left;
+  display: inline-block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+  border-left: white;
+  
+}
+
+#navLink:hover {
+  background-color: grey;
+  
+}
+
+/*END ADDED WEGAN CSS*/
+
+
+
+
+
+
+
 body {
     margin: 0px;
     padding: 0;
@@ -224,13 +259,14 @@ div[id="form1:listTbl"] tbody {
     border-left: dashed thin !important;
 }
 
-
+/*This is the main body color*/
 
 .myMainColorLayoutStyle .ui-layout-unit-content{
     background: #f2f8ff !important;
 
     border-left: dashed thin !important;
 }
+/*----------------------------------------------- */
 
 .myMainColorLayoutStyle1 .ui-layout-unit-content{
     background: #cddcec !important;

@@ -116,15 +116,16 @@
                         <h:panelGrid columns="3" style="width:100%; padding: 0px 0px 0px 36px; margin: 0px">
                             <img src="#{facesContext.externalContext.requestContextPath}/resources/images/Wegan_logo.png" height="118px" alt="Logo"/>
                             <h:panelGrid  style="position: absolute; left:220px; top:42px; height: 60px; border-left: 3px solid #FFAE20;"/>
+                            
                             <h:panelGrid  columns="2" style="padding-left:40px; padding-bottom: 8px">
                                 <h:outputLabel styleClass="headerH2" value="Wegan"/>
                                 <h:panelGrid styleClass="subhead">
                                     - Web based interface for VEGAN R package of community ecology tools 
                                 </h:panelGrid>
                                 
-                            
+                         
                         <h:form>
-                                                      
+                                                    
                         <!-- ALL THESE STILL REFERENCE METABOANALYST LINKS  -->
                         <!--
                         <h:panelGrid columns = "10" style="padding: 0px 0px 0px 0px; line-height: 28px; font-size: 15px; height: 30px; text-align: left; float: botto; ">
@@ -163,6 +164,15 @@
                             
                         </h:panelGrid>-->
                     </h:form>
+                    <div>
+                        <ul class="navBar">
+                            <li id="navLink"><a href="#{facesContext.externalContext.requestContextPath}/faces/home.xhtml">Home</a></li>
+                            <li id="navLink"><a  href="#{facesContext.externalContext.requestContextPath}/faces/docs/About.xhtml">About</a></li>
+                            <li id="navLink" ><a  href="#{facesContext.externalContext.requestContextPath}/faces/docs/Faqs.xhtml">FAQs</a></li>
+                            <li id="navLink"><a  href="#{facesContext.externalContext.requestContextPath}/faces/docs/Tutorial.xhtml">Tutorial</a></li>
+                            <li id="navLink"><a  href="#{facesContext.externalContext.requestContextPath}/faces/docs/Contact.xhtml">Contact</a></li>
+                        </ul>
+                    </div>     
                             </h:panelGrid>
                             
                         </h:panelGrid>

@@ -11,6 +11,28 @@
         <f:event type="preRenderView" listener="#{sessionBean1.registerPage('Upload')}"/> 
     </ui:define>
     <ui:define name="content">
+        
+        
+        
+        <h:panelGrid style="padding: 2px 60px 20px 40px; font-size: 12px; line-height: 20px;">
+                    <h:panelGrid style="border: 1px dotted maroon; padding: 10px 15px 2px 20px; line-height: 23px; background-color: rgb(255, 255, 255); width:100%;">
+                        <h:outputLabel style="color: rgb(74, 91, 112); font-size: 14px; font-weight: bold" value="NMDS Module!"/>
+                        <ul style="margin-top: 0.2em; margin-bottom: 0.2em; font-size: 13px; color:green;">
+                            
+                        </ul> 
+                        <h:panelGrid style="width:100%; text-align: left; padding-right: 20px">
+                            <a href="#{facesContext.externalContext.requestContextPath}/faces/docs/UpdateHistory.xhtml"></a>
+                            <div class="ui-fieldset-content" style="padding:10px"> 
+                            Welcome to the NMDS Module, To begin analysis upload your own data or choose one of our test data sets below. 
+                            
+                        </div>
+                        </h:panelGrid>
+                    </h:panelGrid>
+        </h:panelGrid>
+        
+        
+        
+        
         <h:form id="form" enctype="multipart/form-data"> 
             
             <h:panelGrid style="padding: 20px 20px 20px 40px; font-size:12px;">
@@ -21,13 +43,13 @@
                     <h:panelGrid columns="2" style="width:560px; height:120px; padding: 10px">
 
                         <p:outputLabel style="font-size:12px; font-weight: bold" value="Data File:"/>
-                        <p:fileUpload value="#{uploader.dataFile}" mode="simple"/>
+                        <p:fileUpload value="#{Nmdsload.dataFile}" mode="simple"/>
                     </h:panelGrid>
                     <h:panelGrid style="padding: 20px">
                         <p:commandButton value="Submit" ajax="false"
                                          onclick="PF('statusDialog').show()" 
                                          oncomplete="PF('statusDialog').hide()"
-                                         action="#{uploader.handleFileUpload()}"/>                         
+                                         action="#{Nmdsload.handleNMFileUpload()}"/>                         
                     </h:panelGrid>
 
                     <p:spacer/><p:spacer/>
@@ -36,14 +58,14 @@
                     <h:panelGrid columns="2" style="background-color: #F9F9FB; width:560px; height:120px; padding: 10px">
 
                         <p:outputLabel style="font-size:12px; font-weight: bold" value="Data File:"/>
-                        <p:fileUpload value="#{uploader.zipFile}" mode="simple"/>
+                        <p:fileUpload value="#{Nmdsload.zipFile}" mode="simple"/>
 
                     </h:panelGrid>
                     <h:panelGrid style="padding: 20px">
                         <p:commandButton value="Submit" ajax="false" 
                                          onclick="PF('statusDialog').show()" 
                                          oncomplete="PF('statusDialog').hide()"                                         
-                                         action="#{uploader.handleZipFileUpload}"/>                               
+                                         action="#{Nmdsload.handleZipFileUpload}"/>                               
                     </h:panelGrid>
                 </h:panelGrid>
             </h:panelGrid>
