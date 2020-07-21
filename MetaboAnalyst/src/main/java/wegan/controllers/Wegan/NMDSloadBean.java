@@ -60,40 +60,6 @@ public class NMDSloadBean implements Serializable {
         this.dataFile = dataFile;
     }
 
-    /*
-    Data upload for statistics module
-     */
-    public String handleFileUpload() {
-
-        boolean paired = false;
-        if (dataFormat.endsWith("p")) {
-            paired = true;
-        }
-
-        if (sb.doLogin(dataType, "nmds", false, paired)) {
-            try {
-                RConnection RC = sb.getRConnection();
-                String fileName = DataUtils.uploadFile(dataFile, sb, null, ab.isOnPublicServer());
-                if (fileName == null) {
-                    return null;
-                }
-
-                if (RDataUtils.readTextData(RC, fileName, dataFormat, "disc")) {
-                    sb.setDataUploaded(true);
-                    return "Data check";
-                } else {
-                    String err = RDataUtils.getErrMsg(RC);
-                    sb.updateMsg("Error", "Failed to read in the CSV file." + err);
-                    return null;
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        sb.updateMsg("Error", "Log in failed. Please check errors in your R codes or the Rserve permission setting!");
-
-        return null;
-    }
 
     /*
      * Handle zip file examples (containing csv or txt files)
@@ -176,38 +142,37 @@ public class NMDSloadBean implements Serializable {
         sb.updateMsg("Error", "Log in failed. Please check errors in your R codes or the Rserve permission setting!");
         return null;
     }
+    
+    
+    
+    
+    
+    
+    
+    //WEGAN FUNCS ----------------------------------------------
+    
+    
+    
+    
+    
+    //Handle the uploading of the MetaData for NMDS analysis
+    private UploadedFile metaData;
 
+    public UploadedFile getMetaData() {
+        return metaData;
+    }
+
+    public void setMetaData(UploadedFile metaData) {
+        this.metaData = metaData;
+    }
+
+    
     /*
      * Handle test examples for statistics mode
      */
     private String testDataOpt;
     
-    
-    
-    
-    //WEGAN FUCNTIONS 
-    
-    //*********------------------------------------------------------
-    
-    private String NMDSTestDataOpt;
-    
-    public String getNMDSTestDataOpt() {
-        return NMDSTestDataOpt;
-    }
-
-    public void setNMDSTestDataOpt(String NMDSTestDataOpt) {
-        this.NMDSTestDataOpt = NMDSTestDataOpt;
-    }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    //*********------------------------------------------------------
+  
     public String getTestDataOpt() {
         return testDataOpt;
     }
@@ -215,92 +180,41 @@ public class NMDSloadBean implements Serializable {
     public void setTestDataOpt(String testDataOpt) {
         this.testDataOpt = testDataOpt;
     }
-
-    public String handleStatTestFileUpload() {
-        String format = "";
-        boolean paired = false;
-        boolean isZip = false;
-        String testFile = null;
-
-        
-        
-        if (testDataOpt == null) {
-            //sb.updateMsg("Error", "No data set is selected!");
-            return null;
-        }
-
-        if (testDataOpt.equals("conccancer")) {
-            dataType = "conc";
-            testFile = ab.getTestConcHsaPath();
-            format = "rowu";
-        }
-        
-        //DUNE DATA SELECTED*********************************************************
-        else if (testDataOpt.equals("Dune")) {
-            dataType = "Dune";
-            //sb.updateMsg("Error", "Dune data selected");
-
-            testFile = ab.getTestamf();
-            format = "rowu";
-
-        } else {
-            sb.updateMsg("Error", "Unknown data selected?");
-            return null;
-        }
-
-        if (!sb.doLogin(dataType, "nmds", false, paired)) {
-            //sb.updateMsg("Error", "No login return null?");
-            return null;
-        }
-
-        RConnection RC = sb.getRConnection();
-        if (isZip) {
-            if (!RDataUtils.readZipData(RC, testFile, dataType, "F")) {
-                sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
-                return null;
-            }
-        } else {
-            
-            //Tested cahnging Disc to cont
-            if (!RDataUtils.readTextData(RC, testFile, format, "cont")) {
-                sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
-                return null;
-            }
-        }
-        sb.setDataUploaded(true);
-        if (dataType.equals("conc") || dataType.equals("pktable") || dataType.equals("specbin")) {
-            return "Data check";
-        }
-        return dataType;
-    }
-
+   
     
     
     
-    
-    public String handleNMFileUpload() {
+    public String handleNMDSFileUpload() {
 
         boolean paired = false;
-        if (dataFormat.endsWith("p")) {
-            paired = true;
-        }
 
+        
         if (sb.doLogin(dataType, "nmds", false, paired)) {
             
             try {
                 RConnection RC = sb.getRConnection();
                 String fileName = DataUtils.uploadFile(dataFile, sb, null, ab.isOnPublicServer());
                 if (fileName == null) {
+                    sb.updateMsg("Error", "Data file Uploaded failed, make sure its .txt or .csv format");
+
                     return null;
+                }
+                String MetaName = null;
+                String Metaext = null;
+
+                if (metaData != null){
+                     MetaName = DataUtils.uploadFile(metaData, sb, null, ab.isOnPublicServer());
+                     Metaext = MetaName.substring(MetaName.length() - 4);
+                    
+                    
                 }
                 
                 //Gets if the file is in Csv or Txt format, allow for use of proper R reader later
                 //Already know it must be one of those based on uploading it to the server without error
                 String fileExt = fileName.substring(fileName.length() - 4);
                 
-                
-                if(runNMDSR(fileName,fileExt)){
-                    //sb.updateMsg("Error", "CA run successfully");
+                if(runNMDSR(fileName,fileExt,MetaName,Metaext)){
+                    sb.updateMsg("Error", "CA run successfully");
                     return "NMDS";
                     
                 }else{
@@ -309,30 +223,20 @@ public class NMDSloadBean implements Serializable {
                     return "";
                 }
                 
-                
-                /*
-                //RDataUtils.readTextData(RC, fileName, dataFormat, "disc")
-                if (RDataUtils.readTextData(RC, fileName, dataFormat, "disc")) {
-                    sb.setDataUploaded(true);
-                    return "Download";
-                } else {
-                    String err = RDataUtils.getErrMsg(RC);
-                    sb.updateMsg("Error", "Failed to read in the CSV file." + err);
-                    return null;
-                }*/
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            return "NMDSMeta";
         }
         sb.updateMsg("Error", "Log in failed. Please check errors in your R codes or the Rserve permission setting!");
 
         return null;
     }
    
+        
     
-    
-    
-    //----------------------------------------------------------------- Test loader 
+    //Loads the test data selected by the user
+    //----------------------------------------------------------------- 
     
      public String handleNMDSTestFileUpload() {
         String format = "";
@@ -343,7 +247,7 @@ public class NMDSloadBean implements Serializable {
         
         
         if (testDataOpt == null) {
-            //sb.updateMsg("Error", "No data set is selected!");
+            sb.updateMsg("Error", "No data set is selected!");
             return null;
         }
 
@@ -400,14 +304,15 @@ public class NMDSloadBean implements Serializable {
     
     
     
-    public boolean runNMDSR(String inputData,String ext){
+    public boolean runNMDSR(String inputData,String ext,String metaData, String metaExt){
         RConnection RC = sb.getRConnection();
         try {
             //String rCommand = "InitDataObjects(\"" + dataType + "\", \"" + analType + "\", " + (isPaired ? "TRUE" : "FALSE") + ")";
 
             //String rCommand = "CAWegan(\"" + inputData + "\", \"" + sb.getPath2()+ "\"  )";
 
-            String rCommand = "NMDSWegan(\"" + inputData + "\", \"" + sb.getPath2()+ "\", \"" + ext + "\"   )";
+            //String rCommand = "NMDSWegan(\"" + inputData + "\", \"" + sb.getPath2()+ "\", \"" + ext + "\", \"" + Metadata + "\"   )";
+            String rCommand = "NMDSWegan(\"" + inputData + "\", \"" + ext + "\", \"" + metaData + "\", \"" + metaExt+ "\"   )";
             RC.voidEval(rCommand);
             RCenter.recordRCommand(RC, rCommand);
 
@@ -437,25 +342,7 @@ public class NMDSloadBean implements Serializable {
     
     
     //END IMPORTANT FUNCS***********************************************************************
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
     
     /*
     Handle data for power analysis
@@ -470,45 +357,9 @@ public class NMDSloadBean implements Serializable {
         this.useExample = useExample;
     }
 
-    public String uploadPilotData() {
-        //check if data is uploaded
-        if (useExample) {
-            return handlePowerTestFileUpload();
-        }
+    
 
-        if (dataFile.getSize() == 0) {
-            sb.updateMsg("Error", "File is empty");
-            return null;
-        }
-
-        boolean paired = false;
-        if (dataFormat.endsWith("p")) {
-            paired = true;
-        }
-        if (sb.doLogin(dataType, "power", false, paired)) {
-            RConnection RC = sb.getRConnection();
-            String fileName = DataUtils.uploadFile(dataFile, sb, null, ab.isOnPublicServer());
-            if (RDataUtils.readTextData(RC, fileName, dataFormat, "disc")) {
-                sb.setDataUploaded(true);
-                return "Data check";
-            } else {
-                sb.updateMsg("Error:", RDataUtils.getErrMsg(RC));
-                return null;
-            }
-        }
-        return null;
-    }
-
-    public String handlePowerTestFileUpload() {
-        if (!sb.doLogin("conc", "power", false, false)) {
-            return null;
-        }
-        RConnection RC = sb.getRConnection();
-        RDataUtils.readTextData(RC, ab.getTestPowerPath(), "rowu", "disc");
-        sb.setDataUploaded(true);
-        return "Data check";
-    }
-
+    
     /*
     ROC data upload
      */
@@ -522,42 +373,4 @@ public class NMDSloadBean implements Serializable {
         this.dataOpt = dataOpt;
     }
 
-    public String uploadRocData() {
-        //check if data is uploaded
-        if (useExample) {
-            return handleRocTestFileUpload();
-        }
-
-        if (dataFile.getSize() == 0) {
-            sb.updateMsg("Error", "File is empty");
-            return null;
-        }
-
-        if (sb.doLogin(dataType, "roc", false, false)) {
-            RConnection RC = sb.getRConnection();
-            String fileName = DataUtils.uploadFile(dataFile, sb, null, ab.isOnPublicServer());
-            if (RDataUtils.readTextData(RC, fileName, dataFormat, "disc")) {
-                sb.setDataUploaded(true);
-                return "Data check";
-            } else {
-                sb.updateMsg("Error:", RDataUtils.getErrMsg(RC));
-                return null;
-            }
-        }
-        return null;
-    }
-
-    public String handleRocTestFileUpload() {
-        if (!sb.doLogin("conc", "roc", false, false)) {
-            return null;
-        }
-        RConnection RC = sb.getRConnection();
-        if (dataOpt.equals("data1")) {
-            RDataUtils.readTextData(RC, ab.getTestRocPath(), "rowu", "disc");
-        } else {
-            RDataUtils.readTextData(RC, ab.getTestRocNewPath(), "rowu", "disc");
-        }
-        sb.setDataUploaded(true);
-        return "Data check";
-    }
 }

@@ -126,7 +126,7 @@ GetRCommandHistory <- function(mSetObj=NA){
 #'License: GNU GPL (>= 2)
 #'@export
 
-Read.TextData <- function(mSetObj=NA, filePath, format="rowu", lbl.type="disc"){
+Read.TextData <- function(mSetObj=NA, filePath, format="colu", lbl.type="disc"){
   
   mSetObj <- .get.mSet(mSetObj);
   mSetObj$dataSet$cls.type <- lbl.type;
@@ -243,8 +243,13 @@ Read.TextData <- function(mSetObj=NA, filePath, format="rowu", lbl.type="disc"){
       AddErrMsg("ROC analysis is only defined for two-group comparisions!");
       return(0);
     }
+
   }
-  
+
+
+
+  # WORK ON THIS PART ---------------------------------------------------------------------------------------------------------
+
   # check for uniqueness of dimension name
   if(length(unique(smpl.nms))!=length(smpl.nms)){
     dup.nm <- paste(smpl.nms[duplicated(smpl.nms)], collapse=" ");
@@ -253,6 +258,8 @@ Read.TextData <- function(mSetObj=NA, filePath, format="rowu", lbl.type="disc"){
     return(0);
   }
   
+
+
   # try to remove check & remove empty line if feature name is empty
   empty.inx <- is.na(var.nms) | var.nms == "";
   if(sum(empty.inx) > 0){
@@ -261,12 +268,12 @@ Read.TextData <- function(mSetObj=NA, filePath, format="rowu", lbl.type="disc"){
     conc <- conc[,!empty.inx];
   }
   
-  if(length(unique(var.nms))!=length(var.nms)){
-    dup.nm <- paste(var.nms[duplicated(var.nms)], collapse=" ");
-    AddErrMsg("Duplicate feature names are not allowed!");
-    AddErrMsg(dup.nm);
-    return(0);
-  }
+  #if(length(unique(var.nms))!=length(var.nms)){
+  #  dup.nm <- paste(var.nms[duplicated(var.nms)], collapse=" ");
+  #  AddErrMsg("Duplicate feature names are not allowed!");
+  #  AddErrMsg(dup.nm);
+  # return(0);
+  #}
   
   # now check for special characters in the data labels
   if(sum(is.na(iconv(smpl.nms)))>0){
@@ -299,12 +306,12 @@ Read.TextData <- function(mSetObj=NA, filePath, format="rowu", lbl.type="disc"){
   }else{
     if(lbl.type == "disc"){
       # check for class labels at least two replicates per class
-      if(min(table(cls.lbl)) < 3){
-        AddErrMsg(paste ("A total of", length(levels(as.factor(cls.lbl))), "groups found with", length(smpl.nms), "samples."));
-        AddErrMsg("At least three replicates are required in each group!");
-        AddErrMsg("Or maybe you forgot to specify the data format?");
-        return(0);
-      }
+      #if(min(table(cls.lbl)) < 3){
+      #  AddErrMsg(paste ("A total of", length(levels(as.factor(cls.lbl))), "groups found with", length(smpl.nms), "samples."));
+      #  AddErrMsg("At least three replicates are required in each group!");
+      #  AddErrMsg("Or maybe you forgot to specify the data format?");
+      #  return(0);
+      #}
      
       mSetObj$dataSet$orig.cls <- mSetObj$dataSet$cls <- as.factor(as.character(cls.lbl));
       

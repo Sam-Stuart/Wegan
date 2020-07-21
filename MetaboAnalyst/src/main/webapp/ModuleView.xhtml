@@ -22,7 +22,7 @@
                     <h:panelGrid columns="3" style="width: 260px; font-size:14px; position:absolute;top:280px;left:50%;margin-left:-160px;">
                         <p:spacer width="30px" style="background: #8BC1FF;"/>
                         <p:spacer width="8px"/>
-                        <p:outputLabel value="Targeted or untargeted metabolomics"/>
+                        <p:outputLabel value="Ordination"/>
                         <p:spacer width="30px" style="background: #66ffcc"/>
                         <p:spacer width="8px"/>
                         <p:outputLabel value="Targeted or annotated metabolomics"/>
@@ -44,23 +44,23 @@
                                      styleClass="btnBckg" 
                                      style="position:absolute;top:77px;left:50%;margin-left:-170px;background: #8BC1FF; color:black;"
                                      /> 
-                    <p:commandButton ajax="false" value="Enrichment Analysis" 
+                    <p:commandButton ajax="false" value="Correlation analysis" 
                                      action="msea" 
-                                     title="Metabolite set enrichment analysis"
+                                     title="Correlation analysis"
                                      styleClass="btnBckg" 
                                      style="position:absolute;top:77px;right:50%;margin-right:-78px;background: #66ffcc; color:black;"
                                      /> 
 
-                    <p:commandButton ajax="false" value="Biomarker Analysis" 
+                    <p:commandButton ajax="false" value="Data clustering" 
                                      action="roc" 
-                                     title="ROC-based biomarker analysis"
+                                     title="Data clustering"
                                      styleClass="btnBckg" 
                                      style="position:absolute;top:143px;left:50%;margin-left:-283px; background: #8BC1FF; color:black;"
                                      /> 
 
                     <p:commandButton ajax="false" value="Pathway Analysis" 
                                      action="path" 
-                                     title="Metabolic pathway analysis"
+                                     title="Ordination/Correspondence analysis"
                                      styleClass="btnBckg" 
                                      style="position:absolute;top:143px;right:50%;margin-right:-191px; background: #66ffcc; color:black;"
                                      /> 

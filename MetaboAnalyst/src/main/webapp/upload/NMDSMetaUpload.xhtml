@@ -16,16 +16,14 @@
         
         <h:panelGrid style="padding: 2px 60px 20px 40px; font-size: 12px; line-height: 20px;">
                     <h:panelGrid style="border: 1px dotted maroon; padding: 10px 15px 2px 20px; line-height: 23px; background-color: rgb(255, 255, 255); width:100%;">
-                        <h:outputLabel style="color: rgb(74, 91, 112); font-size: 14px; font-weight: bold" value="NMDS Module!"/>
+                        <h:outputLabel style="color: rgb(74, 91, 112); font-size: 14px; font-weight: bold" value="NMDS Meta Data Uploader"/>
                         <ul style="margin-top: 0.2em; margin-bottom: 0.2em; font-size: 13px; color:green;">
                             
                         </ul> 
                         <h:panelGrid style="width:100%; text-align: left; padding-right: 20px">
                             <a href="#{facesContext.externalContext.requestContextPath}/faces/docs/UpdateHistory.xhtml"></a>
                             <div class="ui-fieldset-content" style="padding:10px"> 
-                            Welcome to the NMDS Module, To begin analysis upload your own data or choose one of our test data sets below.                            
-                            
-                            If your data has a accompanying MetaData file, make sure to upload it along with your data
+                            If your data has corresponding meta data, upload it here, Or if using our test data select the corresponding metadata below
                             
                         </div>
                         </h:panelGrid>
@@ -47,18 +45,16 @@
                         <p:outputLabel style="font-size:12px; font-weight: bold" value="Data File:"/>
                         <p:fileUpload value="#{Nmdsload.dataFile}" mode="simple"/>
                     </h:panelGrid>
-                    <p:spacer/>
-                    <h:panelGrid columns="2" style="width:560px; height:120px; padding: 10px">
-
-                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Meta Data File:"/>
-                        <p:fileUpload value="#{Nmdsload.metaData}" mode="simple"/>
-                    </h:panelGrid>
                     <h:panelGrid style="padding: 20px">
                         <p:commandButton value="Submit" ajax="false"
                                          onclick="PF('statusDialog').show()" 
                                          oncomplete="PF('statusDialog').hide()"
-                                         action="#{Nmdsload.handleNMDSFileUpload()}"/>                         
+                                         action="#{Nmdsload.handleNMDSMetaFileUpload()}"/>                         
                     </h:panelGrid>
+
+                    <p:spacer/><p:spacer/>
+                    
+         
                 </h:panelGrid>
             </h:panelGrid>
             
@@ -82,7 +78,7 @@
                     <p:radioButton for="customRadio" itemIndex="0"/>
                     <p:outputLabel style="font-size:12px; font-weight: bold" value="Dune"/>
                     <h:panelGrid>
-                        Dune data set from within the R Vegan package, Consists data from 30 species taken at 20 locations                                        
+                        Dune data set from within the R Vegan package (insert citation here)                                       
                     </h:panelGrid>
 
                     

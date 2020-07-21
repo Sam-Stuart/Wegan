@@ -36,6 +36,8 @@
             }
         </script>
 
+        
+        <!--
         <h:panelGrid style="padding:10px 20px 20px 30px; font-size: 12px; line-height: 23px; width:100%">
             <h2>
                 One-way ANOVA &amp; post-hoc Tests
@@ -91,6 +93,11 @@
                 </h:panelGrid>
             </h:panelGrid>  
         </h:panelGrid> 
+        
+        -->
+        
+        
+        
         <h:form>
             <p:remoteCommand name="remoteCall"  
                              process="@this"
@@ -99,12 +106,13 @@
                              actionListener="#{sessionBean1.setCurrentCmpdIndex}" 
                              />
         </h:form>
+        <!--
         <script type="text/javascript">
             $('#chart').bind('jqplotDataClick',
                     function (ev, seriesIndex, pointIndex, data) {
                         //note, we use the internal index, not point index 
                         remoteCall([{name: 'cmpdIndex', value: data[0]}]);
                     });
-        </script>
+        </script>-->
     </ui:define>
 </ui:composition>

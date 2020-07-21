@@ -1,36 +1,49 @@
-install.packages("vegan")
+#install.packages("vegan")
 #install.packages("ggplot2")
 library("vegan")
 library("ggplot2")
 
 
-NMDSWegan <- function(input,path = NULL,ext){
-  Cairo::CairoFonts(regular="Arial:style=Regular",bold="Arial:style=Bold",italic="Arial:style=Italic",bolditalic = "Arial:style=Bold Italic",symbol = "Symbol")
+NMDSWegan <- function(input,ext,Meta = NULL, metaExt = NULL){
 
   pathTest <- paste(getwd(),"WeganNMDS.png",sep="/")
-  
+
   Cairo::Cairo(400,400,file=pathTest,type="png",bg="white")
 
   if(input == "Dune"){
     inputData = data(dune)
     nmdsPlot = metaMDS(dune)
 
-    transferToGGplot(nmdsPlot,"WeganNMDS.png")
+    transferToGGplot(nmdsPlot,"NMDS")
 
     #plot(nmdsPlot)
     
   }
   else{
     inputData = loadData(input, ext)
-    nmdsPlot = metaMDS(inputData)
 
-    transferToGGplot(nmdsPlot,"WeganNMDS.png")
+    if(!is.null(Meta)){
+        print("---------------------------") 
+        print("---------------------------")
 
-    plot(nmdsPlot)
+        metaData = loadData(Meta,metaExt)
+        print(metaData)
+        nmdsPlot = metaMDS(inputData)
+
+        transferToGGplot(nmdsPlot,"NMDS",metaData)
+    }
+    else{
+        nmdsPlot = metaMDS(inputData)
+
+        transferToGGplot(nmdsPlot,"NMDS")
+    }
+    
+
+    #plot(nmdsPlot)
     
   }
   dev.off()
-  #return()
+  
 }
 
 
@@ -43,21 +56,23 @@ CAWegan <- function(input,path = NULL,ext){
   if(input == "Dune"){
     inputData = data(dune)
     ca = cca(dune)
-    plot(ca)
+    
+    transferToGGplot(ca,"CA")
     
   }
   else{
     
     inputData = loadData(input, ext)
     ca = cca(inputData)
-    plot(ca)
+    
+    transferToGGplot(ca,"CA")
     
   }
   dev.off()
 }
 
 
-DCAWegan <- function(input,path = NULL,ext){
+DCAWegan <- function(input=NULL,path = NULL,ext=NULL){
 
   pathTest <- paste(getwd(),"WeganDCA.png",sep="/")
   
@@ -66,18 +81,27 @@ DCAWegan <- function(input,path = NULL,ext){
   if(input == "Dune"){
     inputData = data(dune)
     dca = decorana(dune)
-    plot(dca)
-    
+    transferToGGplot(dca,"DCA")
+    #plot(dca)
   }
   else{
     inputData = loadData(input, ext)
     dca = decorana(inputData)
-    plot(dca)
-    
+    transferToGGplot(dca,"DCA")
+    #plot(dca)
   }
   dev.off()
   
 }
+
+testDCA <- function(){
+
+    mSetObj <- .get.mSet(mSetObj);
+    print(mSetObj)
+
+
+}
+
 
 #Simple function to allow proper loading function to be used based on
 #What data format was uploaded to Wegan (Only csv/txt allowed)
@@ -96,16 +120,57 @@ loadData <- function(data,type){
 
 
 
-transferToGGplot <- function(plot,name){
-
-    data.scores = as.data.frame(scores(plot))
-    nmdsplot = ggplot(data.scores,aes(x=NMDS1,y=NMDS2)) +
-           geom_point(size=2) +
-           theme_bw()+
-           labs(title = "NMDS Plot")
+transferToGGplot <- function(plot,name,metaData = NULL){
+    datascore <- scores(plot)
+    data.scores = as.data.frame(scores(datascore))
+    print(data.scores)
     
+    if(name == "NMDS"){
 
-    ggsave(name,nmdsplot,device = png())
-    return("NMDS")
+        if(!is.null(metaData)){
+            print("---------------------------") 
+            print("---------------------------")
+            
+            nmdsData <- cbind(data.scores,metaData)
+            print(nmdsData)
+            rowName = names(nmdsData[3])
+            print(rowName)
+            plots = ggplot(nmdsData,aes(x=NMDS1,y=NMDS2, color = get(rowName))) +
+               geom_point(size=3) +
+               theme_bw()+
+               labs(title = "NMDS Plot", color = rowName)
+
+        }else{
+        print("---------------------------") 
+            print("Why tho?")
+            plots = ggplot(data.scores,aes(x=NMDS1,y=NMDS2)) +
+               geom_point(size=2) +
+               theme_bw()+
+               labs(title = "NMDS Plot")
+
+        }
+        
+        
+    }
+    if(name == "CA"){
+        plots = ggplot(data.scores,aes(x=CA1,y=CA2)) +
+               geom_point(size=2) +
+               theme_bw()+
+               labs(title = "CA Plot")
+    }
+
+    if(name == "DCA"){
+        plots = ggplot(data.scores,aes(x=DCA1,y=DCA2,color = 'red')) +
+               geom_point(size=3) +
+               theme_bw()+
+               theme(legend.position = 'none')+
+               labs(title = "DCA Plot")
+    }
+    
+    
+    filename <- paste("Wegan",name,".png",sep="")
+    
+    ggsave(filename,plots,device = png())
+    return(name)
 
 }

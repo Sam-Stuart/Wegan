@@ -14,7 +14,26 @@
             <h:panelGrid style="padding:20px 40px 20px 40px; font-size: 13px; line-height: 25px; width:100%">
                 <h2>Select an analysis path to explore :</h2>
                 <h:panelGrid style="border: lightgray thin solid; width: 670px; margin-left: 36px; padding: 15px 20px 10px 25px; background-color: #F9F9FB; font-size: 13px;">
+                    
+                    
+                    <h:outputLabel style="font-weight: bold" value="Ordination Analysis"/>
+                    <h:panelGrid style="padding-left: 20px; padding-bottom: 6px">
+                        <h:commandLink action="DCA" onclick="PF('statusDialog').show()" value="Detrended Correspondence Analysis (DCA) "/>
+                        <h:commandLink action="PLSDA" onclick="PF('statusDialog').show()" value="Partial Least Squares - Discriminant Analysis (PLS-DA)"/>
+                        <h:commandLink action="sPLSDA" onclick="PF('statusDialog').show()" value="Sparse Partial Least Squares - Discriminant Analysis (sPLS-DA)"/>
+                        <h:commandLink action="OrthoPLSDA" disabled="#{sessionBean1.multiGroup}" onclick="PF('statusDialog').show()" value="Orthogonal Partial Least Squares - Discriminant Analysis (orthoPLS-DA)"/>
+                    </h:panelGrid>
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
                     <h:outputLabel style="font-weight: bold" value="Univariate Analysis"/>
+
                     <h:panelGrid style="padding-left: 20px; padding-bottom: 6px">
                         <h:panelGrid columns="5">
                             <h:commandLink action="Fold change" disabled="#{sessionBean1.multiGroup}" onclick="PF('statusDialog').show()" value="Fold Change Analysis"/>

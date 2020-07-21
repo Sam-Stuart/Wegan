@@ -15,6 +15,8 @@ import metaboanalyst.rwrappers.RCenter;
 import metaboanalyst.rwrappers.RDataUtils;
 import metaboanalyst.rwrappers.SigVarSelect;
 import metaboanalyst.rwrappers.UniVarTests;
+import metaboanalyst.rwrappers.Ordiantion;
+
 import metaboanalyst.utils.DataUtils;
 
 /**
@@ -28,7 +30,7 @@ public class AnalysisBean implements Serializable {
 
     public void performDefaultAnalysis(String pageID) {
         if (!sb.isAnalInit(pageID)) {
-            sb.registerPage(pageID);
+            //sb.registerPage(pageID);
             switch (pageID) {
                 case "PCA":
                     doDefaultPCA();
@@ -81,6 +83,9 @@ public class AnalysisBean implements Serializable {
                 case "SVM":
                     doDefaultSVM();
                     break;
+                case "DCA":
+                    doDefaultDCA();
+                    break;    
             }
         }
     }
@@ -118,7 +123,10 @@ public class AnalysisBean implements Serializable {
     private void doDefaultCorrelation() {
         UniVarTests.PlotCorrHeatMap(sb, sb.getCurrentImage("corr"), "png", 72, "col", "pearson", "bwm", "overview", "F", "F", "F", 100);
     }
-
+    
+    
+    
+    //-----------------------------------------------------------------------------------------------
     private void doDefaultPCA() {
         ChemoMetrics.InitPCA(sb);
         ChemoMetrics.PlotPCAPairSummary(sb, sb.getCurrentImage("pca_pair"), "png", 72, 5);
@@ -130,6 +138,10 @@ public class AnalysisBean implements Serializable {
         ChemoMetrics.PlotPCA3DScore(sb, sb.getCurrentImage("pca_score3d"), "json", 72, 1, 2, 3);
     }
 
+    //--------------------------------------------------------------------------------------------------
+    
+    
+    
     private void doDefaultPLSDA() {
         ChemoMetrics.InitPLS(sb);
         ChemoMetrics.PlotPLSPairSummary(sb, sb.getCurrentImage("pls_pair"), "png", 72, ChemoMetrics.GetDefaultPLSPairNumber(sb));
@@ -217,4 +229,24 @@ public class AnalysisBean implements Serializable {
         Classifying.PlotSVMClassification(sb, sb.getCurrentImage("svm_cls"), "png", 72);
         Classifying.PlotSVMSigCmpds(sb, sb.getCurrentImage("svm_imp"), "png", 72);
     }
+    
+    private void doDefaultDCA() {
+        ChemoMetrics.InitPCA(sb);
+        ChemoMetrics.PlotPCAPairSummary(sb, sb.getCurrentImage("pca_pair"), "png", 72, 5);
+        ChemoMetrics.PlotPCAScree(sb, sb.getCurrentImage("pca_scree"), "png", 72, 5);
+        ChemoMetrics.PlotPCA2DScore(sb, sb.getCurrentImage("pca_score2d"), "png", 72, 1, 2, 0.95, 1, 0);
+        ChemoMetrics.PlotPCALoading(sb, sb.getCurrentImage("pca_loading"), "png", 72, 1, 2, "scatter", 1);  // setLoadingTable(pcImpInx);
+        ChemoMetrics.PlotPCABiplot(sb, sb.getCurrentImage("pca_biplot"), "png", 72, 1, 2);
+        // ChemoMetrics.PlotPCA3DScore(sb, sb.getCurrentImage("pca_score3d"), "png", 72, 1, 2, 3, 40);
+        ChemoMetrics.PlotPCA3DScore(sb, sb.getCurrentImage("pca_score3d"), "json", 72, 1, 2, 3);
+        
+        
+        
+        
+        //Ordiantion.InitDCA(sb);
+    }
+    
+    
+    
+    
 }

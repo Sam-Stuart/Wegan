@@ -40,7 +40,7 @@ public class DCAloadBean implements Serializable {
         this.dataType = dataType;
     }
 
-    private String dataFormat = "rowu";
+    private String dataFormat = "colu";
 
     public String getDataFormat() {
         return dataFormat;
@@ -70,7 +70,7 @@ public class DCAloadBean implements Serializable {
             paired = true;
         }
 
-        if (sb.doLogin(dataType, "DCA", false, paired)) {
+        if (sb.doLogin(dataType, "stat", false, paired)) {
             try {
                 RConnection RC = sb.getRConnection();
                 String fileName = DataUtils.uploadFile(dataFile, sb, null, ab.isOnPublicServer());
@@ -80,6 +80,7 @@ public class DCAloadBean implements Serializable {
 
                 if (RDataUtils.readTextData(RC, fileName, dataFormat, "disc")) {
                     sb.setDataUploaded(true);
+                    sb.updateMsg("Error", "Data Uploaded successfully");
                     return "Data check";
                 } else {
                     String err = RDataUtils.getErrMsg(RC);

@@ -5,10 +5,16 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
-                template="/frags/_doc_template.xhtml">
+                template="/frags/_anal_template.xhtml">
     <ui:define name="content">
         <h:panelGrid style="padding: 20px 50px 20px 40px; font-size: 13px; line-height: 23px; width: 100%">
-            
+            <h:panelGrid style="text-align: right; padding-left: 700px; width: 760px;">
+                                <p:commandLink actionListener="#{sessionBean1.graphicsLnk_action('pca_biplot')}" 
+                                               oncomplete="PF('graphDialog').show()"
+                                               title="Customize the graphics output">
+                                    <img src="#{facesContext.externalContext.requestContextPath}/resources/images/imgcenter.png"/>
+                                </p:commandLink>
+                            </h:panelGrid>
             <h:panelGrid style="text-align: center; width: 80%">
             <img src="#{sessionBean1.getPath2()}/WeganNMDS.png" width='400' height="400"
                  alt="NMDS"/>
@@ -16,6 +22,7 @@
                <!-- <img src="#{facesContext.externalContext.requestContextPath}/resources/images/WeganNMDS.png" width='800'
                  alt="NMDS"/>-->
             </h:panelGrid>
+            
         </h:panelGrid>
     </ui:define>
 </ui:composition>

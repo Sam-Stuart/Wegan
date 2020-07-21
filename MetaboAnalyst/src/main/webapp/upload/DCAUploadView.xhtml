@@ -7,7 +7,7 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="/frags/_anal_template.xhtml">
     <ui:define name="metaInfo">
-        <f:event type="preRenderView" listener="#{sessionBean1.setAnalType('nmds')}"/> 
+        <f:event type="preRenderView" listener="#{sessionBean1.setAnalType('stat')}"/> 
         <f:event type="preRenderView" listener="#{sessionBean1.registerPage('Upload')}"/> 
     </ui:define>
     <ui:define name="content">
@@ -23,11 +23,18 @@
                         <p:outputLabel style="font-size:12px; font-weight: bold" value="Data File:"/>
                         <p:fileUpload value="#{Dcaload.dataFile}" mode="simple"/>
                     </h:panelGrid>
+                    <p:spacer/>
+                    
+                    <p:outputLabel style="font-size:12px; font-weight: bold" value="Data Format:"/>
+                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:165px" value="#{Dcaload.dataFormat}">
+                        <f:selectItems value="#{applicationBean1.csvFormatOpts}" />
+                    </p:selectOneMenu>
+                    
                     <h:panelGrid style="padding: 20px">
                         <p:commandButton value="Submit" ajax="false"
                                          onclick="PF('statusDialog').show()" 
                                          oncomplete="PF('statusDialog').hide()"
-                                         action="#{Dcaload.handleDCAFileUpload()}"/>                         
+                                         action="#{Dcaload.handleFileUpload()}"/>                         
                     </h:panelGrid>
 
                     <p:spacer/><p:spacer/>
