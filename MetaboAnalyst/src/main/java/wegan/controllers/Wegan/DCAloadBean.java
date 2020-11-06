@@ -200,13 +200,7 @@ public class DCAloadBean implements Serializable {
         this.NMDSTestDataOpt = NMDSTestDataOpt;
     }
     
-    
-    
-    
-    
-    
-    
-    
+
     
     //*********------------------------------------------------------
     public String getTestDataOpt() {
@@ -245,9 +239,9 @@ public class DCAloadBean implements Serializable {
             format = "rowu";
             
            
-        } else {
-            sb.updateMsg("Error", "Unknown data selected?");
-            return null;
+        } else if (testDataOpt.equals("BCI")) {
+            testFile = ab.getTestBCI();
+            format = "rowu";
         }
 
         if (!sb.doLogin(dataType, "DCA", false, paired)) {
@@ -264,7 +258,7 @@ public class DCAloadBean implements Serializable {
         } else {
             
             //Tested cahnging Disc to cont
-            if (!RDataUtils.readTextData(RC, testFile, format, "cont")) {
+            if (!RDataUtils.readTextData(RC, testFile, format, "disc")) {
                 sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
                 return null;
             }
@@ -275,8 +269,8 @@ public class DCAloadBean implements Serializable {
         }
         return dataType;
     }
-
     
+    /*
 
         public String handleDCAFileUpload() {
 
@@ -319,7 +313,7 @@ public class DCAloadBean implements Serializable {
                     String err = RDataUtils.getErrMsg(RC);
                     sb.updateMsg("Error", "Failed to read in the CSV file." + err);
                     return null;
-                }*/
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -330,7 +324,7 @@ public class DCAloadBean implements Serializable {
     }
     
     
-    
+    */
   
     
     //----------------------------------------------------------------- Test loader 
@@ -355,14 +349,16 @@ public class DCAloadBean implements Serializable {
             dataType = "Dune";
             //sb.updateMsg("Error", "Dune data selected");
 
-            testFile = ab.getTestamf();
+            testFile = ab.getTestDune();
             format = "rowu";
             
+        } else if (testDataOpt.equals("BCI")) {
+            testFile = ab.getTestBCI();
+            format = "rowu";
         } else {
             sb.updateMsg("Error", "Unknown data selected?");
             return null;
         }
-
         if (!sb.doLogin(dataType, "nmds", false, paired)) {
             //sb.updateMsg("Error", "No login return null?");
             return null;
@@ -377,26 +373,29 @@ public class DCAloadBean implements Serializable {
         } else {
             
             //Tested cahnging Disc to cont
-            if (!RDataUtils.readTextData(RC, testFile, format, "cont")) {
+            if (!RDataUtils.readTextData(RC, testFile, format, "disc")) {
                 sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
                 return null;
             }
         }
         sb.setDataUploaded(true);
         //RC.Eval;
-        try {
+        /*try {
             //String rCommand = "InitDataObjects(\"" + dataType + "\", \"" + analType + "\", " + (isPaired ? "TRUE" : "FALSE") + ")";
             //String rCommand = "NMDSWegan(\"" + dataType + "\")";
-            String rCommand = "DCAWegan(\"" + dataType + "\", \"" + sb.getPath2()+ "\"  )";
-            RC.voidEval(rCommand);
-            RCenter.recordRCommand(RC, rCommand);
+            
+            //String rCommand = "DCAWegan(\"" + dataType + "\", \"" + sb.getPath2()+ "\"  )";
+            
+            
+            //RC.voidEval(rCommand);
+            //RCenter.recordRCommand(RC, rCommand);
             
         } catch (RserveException rse) {
             System.out.println(rse);
             return "";
-        }
+        }*/
         //;
-        return"DCA";
+        return "Data check";
     }
     
     

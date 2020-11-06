@@ -61,5 +61,5 @@ load_xcms <- function(){
 #------------------------------------WEGAN STUFF
 #Load Vegan
 load_xcms <- function(){
-  library(Vegan)
+  library(vegan)
 }

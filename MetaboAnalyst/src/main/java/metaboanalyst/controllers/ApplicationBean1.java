@@ -56,7 +56,8 @@ public class ApplicationBean1 implements Serializable {
     //WEGAN TEST DATA PATHS ----------------------------------------------------
     
     private static final String test_amf = "/data/WeganTestAMF.csv";
-
+    private static final String test_dune = "/data/dune.txt";
+    private static final String test_BCI = "/data/BCI.txt";
     
     
     //**************************************************************************
@@ -185,7 +186,7 @@ public class ApplicationBean1 implements Serializable {
         testDataOpts = new SelectItem[9];
         //Changed for WEGAN testing
         testDataOpts[0] = new SelectItem("Dune", "NMDS");
-        testDataOpts[1] = new SelectItem("conccow", "Concentrations");
+        testDataOpts[1] = new SelectItem("BCI", "NMDS");
         testDataOpts[2] = new SelectItem("nmrspecbin", "NMR spectral bins");
         testDataOpts[3] = new SelectItem("nmrpeaklist", "NMR peak lists");
         testDataOpts[4] = new SelectItem("concpair", "Concentrations (paired)");
@@ -503,6 +504,15 @@ public class ApplicationBean1 implements Serializable {
     public String getTestamf() {
         return realPath + test_amf;
     }
+    
+    public String getTestDune() {
+        return realPath + test_dune;
+    }
+    
+    public String getTestBCI(){
+        return realPath + test_BCI;
+    }
+    
     
     //--------------------------------------------------------------------------
     

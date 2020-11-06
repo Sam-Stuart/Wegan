@@ -247,9 +247,6 @@ Read.TextData <- function(mSetObj=NA, filePath, format="colu", lbl.type="disc"){
   }
 
 
-
-  # WORK ON THIS PART ---------------------------------------------------------------------------------------------------------
-
   # check for uniqueness of dimension name
   if(length(unique(smpl.nms))!=length(smpl.nms)){
     dup.nm <- paste(smpl.nms[duplicated(smpl.nms)], collapse=" ");

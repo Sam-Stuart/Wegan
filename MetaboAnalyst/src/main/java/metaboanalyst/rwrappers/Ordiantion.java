@@ -10,7 +10,7 @@ import org.rosuda.REngine.Rserve.RConnection;
 import org.rosuda.REngine.Rserve.RserveException;
 /**
  *
- * @author Jeff
+ * @author Sam Stuart
  */
 public class Ordiantion {
 
@@ -37,14 +37,15 @@ public class Ordiantion {
             
             
             
-            System.out.println("Am i making it here?");
+            
             //String rCommand = "testDCA()";
             
             //String rCommand = "DCAWegan(\"" + inputData + "\", \"" + sb.getPath2()+ "\", \"" + ext + "\"   )";
 
-            String rCommand = "PCA.Anal(NA)";
+            
             
             RConnection RC = sb.getRConnection();
+            String rCommand = "transferToJSON()";
             RCenter.recordRCommand(RC, rCommand);
             RC.voidEval(rCommand);
         } catch (RserveException rse) {

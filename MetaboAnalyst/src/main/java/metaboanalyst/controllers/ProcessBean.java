@@ -122,6 +122,8 @@ public class ProcessBean implements Serializable {
 
         if (RDataUtils.getProcFeatureNumber(RC) > 250) {
             return "Data filter";
+        } else if (!sb.getDataType().equalsIgnoreCase("nmds")) {
+            return "Normalization";
         } else if (!sb.getDataType().equalsIgnoreCase("conc")) {
             return "Data filter";
         } else {

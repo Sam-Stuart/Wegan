@@ -452,6 +452,8 @@ public class SessionBean1 implements Serializable {
                 return "powerparam";
             case "roc":
                 return "rocparam";
+            case "nmds":
+                return "Statistics";
         }
         return null;
     }

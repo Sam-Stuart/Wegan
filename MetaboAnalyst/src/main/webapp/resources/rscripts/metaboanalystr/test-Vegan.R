@@ -1,7 +1,6 @@
 #install.packages("vegan")
 #install.packages("ggplot2")
 library("vegan")
-library("ggplot2")
 
 
 NMDSWegan <- function(input,ext,Meta = NULL, metaExt = NULL){
@@ -94,10 +93,10 @@ DCAWegan <- function(input=NULL,path = NULL,ext=NULL){
   
 }
 
-testDCA <- function(){
+testDCA <-function(){
 
-    mSetObj <- .get.mSet(mSetObj);
-    print(mSetObj)
+    mSetObj <- .get.mSet(mSetObj)
+    print(mSetObj$dataSet)
 
 
 }
@@ -174,3 +173,15 @@ transferToGGplot <- function(plot,name,metaData = NULL){
     return(name)
 
 }
+
+
+
+
+
+transferToJSON <- function(){
+    
+    mSetObj <- .get.mSet(mSetObj)
+    print(mSetObj)
+
+}
+
