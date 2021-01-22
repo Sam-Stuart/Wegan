@@ -53,6 +53,29 @@ public class Ordiantion {
         }
     }
 
+    public static void InitDiversity(SessionBean1 sb) {
+        try {
+            
+            //String inputData = null;
+            //String ext = null;
+            
+            
+            
+            
+            //String rCommand = "testDCA()";
+            
+            //String rCommand = "DCAWegan(\"" + inputData + "\", \"" + sb.getPath2()+ "\", \"" + ext + "\"   )";
+
+            
+            
+            RConnection RC = sb.getRConnection();
+            String rCommand = "transferToJSON()";
+            RCenter.recordRCommand(RC, rCommand);
+            RC.voidEval(rCommand);
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        }
+    }
     
 
 }

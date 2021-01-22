@@ -85,6 +85,9 @@ public class AnalysisBean implements Serializable {
                     break;
                 case "DCA":
                     doDefaultDCA();
+                    break;  
+                case "Diversity":
+                    doDefaultDiversity();
                     break;    
             }
         }
@@ -236,6 +239,11 @@ public class AnalysisBean implements Serializable {
         
     }
     
+    private void doDefaultDiversity() {       
+        
+        Ordiantion.InitDiversity(sb);
+        
+    }
     
     
     

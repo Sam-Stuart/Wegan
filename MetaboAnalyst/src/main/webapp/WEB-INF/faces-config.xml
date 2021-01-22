@@ -112,7 +112,11 @@
             <redirect/>
         </navigation-case> 
         
-        
+        <navigation-case>
+            <from-outcome>Diversity</from-outcome>
+            <to-view-id>/docs/DiversityOverview.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case> 
         
         
         

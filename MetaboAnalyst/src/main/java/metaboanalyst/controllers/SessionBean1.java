@@ -441,6 +441,7 @@ public class SessionBean1 implements Serializable {
     public String enterModule() {
         switch (analType) {
             case "stat":
+                
                 return "Statistics";
             case "msetqea":
                 return "enrichparam";
@@ -454,6 +455,8 @@ public class SessionBean1 implements Serializable {
                 return "rocparam";
             case "nmds":
                 return "Statistics";
+            case "diverstiy":
+                return "Diversity";
         }
         return null;
     }
