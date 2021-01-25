@@ -457,6 +457,7 @@ public class SessionBean1 implements Serializable {
                 return "Statistics";
             case "diverstiy":
                 return "Diversity";
+                
         }
         return null;
     }
