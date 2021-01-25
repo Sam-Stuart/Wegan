@@ -118,12 +118,11 @@
             <redirect/>
         </navigation-case> 
         
-<!--        <navigation-case>
-            <from-outcome>Statistics</from-outcome>
-            <to-view-id>/docs/DiversityOverview.xhtml</to-view-id>
+        <navigation-case>
+            <from-outcome>Ordination</from-outcome>
+            <to-view-id>/docs/OrdinationOverview.xhtml</to-view-id>
             <redirect/>
-        </navigation-case> -->
-        
+        </navigation-case> 
         
         
         <navigation-case>
