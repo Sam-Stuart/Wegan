@@ -328,7 +328,7 @@ public class DCAloadBean implements Serializable {
   
     
     //----------------------------------------------------------------- Test loader 
-    public String handleDCATestFileUpload() {
+    public String handleDcaTestFileUpload() {
         String format = "";
         boolean paired = false;
         boolean isZip = false;

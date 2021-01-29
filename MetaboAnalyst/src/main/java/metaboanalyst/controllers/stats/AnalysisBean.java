@@ -16,7 +16,7 @@ import metaboanalyst.rwrappers.RDataUtils;
 import metaboanalyst.rwrappers.SigVarSelect;
 import metaboanalyst.rwrappers.UniVarTests;
 import metaboanalyst.rwrappers.Ordiantion;
-
+import metaboanalyst.rwrappers.Dispersal;
 import metaboanalyst.utils.DataUtils;
 
 /**
@@ -88,11 +88,22 @@ public class AnalysisBean implements Serializable {
                     break;  
                 case "Diversity":
                     doDefaultDiversity();
-                    break;    
+                    break; 
+                case "Dispersal":
+                    doDefaultDispersal();
+                    break; 
             }
         }
     }
 
+    
+    private void doDefaultDispersal() {
+        Dispersal.InitDispersal(sb);
+        
+        
+        UniVarTests.PlotAOV(sb, sb.getCurrentImage("aov"), "png", 72);
+    }
+    
     private void doDefaultANOVA() {
         int res = UniVarTests.performANOVA(sb, "F", 0.05, "fisher");
         if (res == 0) {

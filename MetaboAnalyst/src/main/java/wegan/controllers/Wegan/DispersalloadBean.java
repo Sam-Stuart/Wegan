@@ -19,10 +19,11 @@ import org.rosuda.REngine.Rserve.RserveException;
 
 /**
  *
+ * 
  * @author jianguox
  */
-@ManagedBean(name = "Diversityload")
-public class DiverstyloadBean implements Serializable {
+@ManagedBean(name = "Dispersalload")
+public class DispersalloadBean implements Serializable {
 
     private final ApplicationBean1 ab = (ApplicationBean1) DataUtils.findBean("applicationBean1");
     private final SessionBean1 sb = (SessionBean1) DataUtils.findBean("sessionBean1");
@@ -81,7 +82,7 @@ public class DiverstyloadBean implements Serializable {
                 if (RDataUtils.readTextData(RC, fileName, dataFormat, "disc")) {
                     sb.setDataUploaded(true);
                     sb.updateMsg("Error", "Data Uploaded successfully");
-                    return "Data check";
+                    return "Dispersal123";
                 } else {
                     String err = RDataUtils.getErrMsg(RC);
                     sb.updateMsg("Error", "Failed to read in the CSV file." + err);
@@ -245,7 +246,7 @@ public class DiverstyloadBean implements Serializable {
             format = "rowu";
         }
 
-        if (!sb.doLogin(dataType, "Diversity", false, paired)) {
+        if (!sb.doLogin(dataType, "Dispersal", false, paired)) {
             //sb.updateMsg("Error", "No login return null?");
             return null;
         }
@@ -273,7 +274,7 @@ public class DiverstyloadBean implements Serializable {
     
     /*
 
-        public String handleDiversityFileUpload() {
+        public String handleDispersalFileUpload() {
 
         boolean paired = false;
         if (dataFormat.endsWith("p")) {
@@ -294,9 +295,9 @@ public class DiverstyloadBean implements Serializable {
                 String fileExt = fileName.substring(fileName.length() - 4);
                 
                 
-                if(runDiversityR(fileName,fileExt)){
+                if(runDispersalR(fileName,fileExt)){
                     //sb.updateMsg("Error", "CA run successfully");
-                    return "Diversity";
+                    return "Dispersal";
                     
                 }else{
                     sb.updateMsg("Error", "DCA not run succesffully");
@@ -329,7 +330,7 @@ public class DiverstyloadBean implements Serializable {
   
     
     //----------------------------------------------------------------- Test loader 
-    public String handleDiversityTestFileUpload() {
+    public String handleDispersalTestFileUpload() {
         String format = "";
         boolean paired = false;
         boolean isZip = false;
@@ -396,19 +397,19 @@ public class DiverstyloadBean implements Serializable {
             return "";
         }*/
         //;
-        return "Data check";
+        return "DCA";
     }
     
     
     
-    public boolean runDiversityR(String inputData,String ext){
+    public boolean runDispersalR(String inputData,String ext){
         RConnection RC = sb.getRConnection();
         try {
             //String rCommand = "InitDataObjects(\"" + dataType + "\", \"" + analType + "\", " + (isPaired ? "TRUE" : "FALSE") + ")";
 
             //String rCommand = "CAWegan(\"" + inputData + "\", \"" + sb.getPath2()+ "\"  )";
 
-            String rCommand = "DiversityWegan(\"" + inputData + "\", \"" + sb.getPath2()+ "\", \"" + ext + "\"   )";
+            String rCommand = "DispersalWegan(\"" + inputData + "\", \"" + sb.getPath2()+ "\", \"" + ext + "\"   )";
             RC.voidEval(rCommand);
             RCenter.recordRCommand(RC, rCommand);
 
