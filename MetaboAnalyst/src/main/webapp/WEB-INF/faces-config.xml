@@ -211,12 +211,12 @@
             <redirect/>
         </navigation-case> 
         <navigation-case>
-            <from-outcome>Diversity123</from-outcome>
+            <from-outcome>Diversity</from-outcome>
             <to-view-id>/Secure/analysis/DiversityView.xhtml</to-view-id>
             <redirect/>
        </navigation-case>      
         <navigation-case>
-            <from-outcome>DispersaltoFaces</from-outcome>
+            <from-outcome>Dispersal</from-outcome>
             <to-view-id>/Secure/analysis/DispersalView.xhtml</to-view-id>
             <redirect/>
         </navigation-case> 
@@ -250,6 +250,11 @@
             <to-view-id>/Secure/process/ProcMSpeak.xhtml</to-view-id>
             <redirect/>
         </navigation-case>  
+        <navigation-case>
+            <from-outcome>bgd</from-outcome>
+            <to-view-id>/Secure/analysis/BGDView.xhtml</to-view-id>
+            <redirect/>
+       </navigation-case>  
         <navigation-case>
             <from-outcome>msspec</from-outcome>
             <to-view-id>/Secure/process/ProcMSspec.xhtml</to-view-id>

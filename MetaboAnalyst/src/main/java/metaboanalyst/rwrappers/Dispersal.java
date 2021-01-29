@@ -14,7 +14,7 @@ import org.rosuda.REngine.Rserve.RserveException;
  */
 public class Dispersal {
 
-    public static void InitDispersal(SessionBean1 sb) {
+    public static void InitBGD(SessionBean1 sb) {
         try {
             String rCommand = "bgdispersalWegan(NA)";
             RConnection RC = sb.getRConnection();

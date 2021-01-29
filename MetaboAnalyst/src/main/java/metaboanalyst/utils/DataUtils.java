@@ -590,6 +590,8 @@ public class DataUtils {
                     addPowerNodes(naviTree);
                 } else if (type.equalsIgnoreCase("roc")) {
                     addRocNodes(naviTree);
+                } else if (type.equalsIgnoreCase("dispersal")) {
+                    addDispersalNodes(naviTree);
                 } else {
                     System.out.println("You need to define the navigation tree for this analysis type: " + type);
                 }
@@ -721,6 +723,10 @@ public class DataUtils {
         node_p5.setSelectable(false);
         TreeNode node_p6 = new DefaultTreeNode("Builder", node_p5);
         TreeNode node_p7 = new DefaultTreeNode("Evaluator", node_p5);
+    }
+    private static void addDispersalNodes(TreeNode parent) {
+        TreeNode dispersalNode = new DefaultTreeNode("Dispersal", parent);
+       
     }
 
     private static void addUtilNodes(TreeNode parent) {

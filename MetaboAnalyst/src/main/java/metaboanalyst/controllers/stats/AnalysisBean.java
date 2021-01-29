@@ -89,20 +89,13 @@ public class AnalysisBean implements Serializable {
                 case "Diversity":
                     doDefaultDiversity();
                     break; 
-                case "Dispersal":
-                    doDefaultDispersal();
-                    break; 
+                
             }
         }
     }
 
     
-    private void doDefaultDispersal() {
-        Dispersal.InitDispersal(sb);
-        
-        
-        UniVarTests.PlotAOV(sb, sb.getCurrentImage("aov"), "png", 72);
-    }
+    
     
     private void doDefaultANOVA() {
         int res = UniVarTests.performANOVA(sb, "F", 0.05, "fisher");
