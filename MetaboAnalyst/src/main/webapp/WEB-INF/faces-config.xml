@@ -211,6 +211,16 @@
             <redirect/>
         </navigation-case> 
         <navigation-case>
+            <from-outcome>Diversity123</from-outcome>
+            <to-view-id>/Secure/analysis/DiversityView.xhtml</to-view-id>
+            <redirect/>
+       </navigation-case>      
+        <navigation-case>
+            <from-outcome>DispersaltoFaces</from-outcome>
+            <to-view-id>/Secure/analysis/DispersalView.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case> 
+        <navigation-case>
             <from-outcome>Name check</from-outcome>
             <to-view-id>/Secure/process/NameMapView.xhtml</to-view-id>
             <redirect/>

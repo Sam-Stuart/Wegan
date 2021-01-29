@@ -34,7 +34,7 @@
                         <p:commandButton value="Submit" ajax="false"
                                          onclick="PF('statusDialog').show()" 
                                          oncomplete="PF('statusDialog').hide()"
-                                         action="#{Diversityload.handleFileUpload()}"/>                         
+                                         action="#{Dispersalload.handleFileUpload()}"/>                         
                     </h:panelGrid>
 
                 </h:panelGrid>
@@ -47,7 +47,7 @@
             <h:panelGrid style="padding: 20px; font-size: 12px;  height:100%; width: 100%; line-height: 180%;">
                 
                 <h2 style="margin-top: 20px; margin-bottom: 4px"> 2) Try our test data :</h2>
-                <p:selectOneRadio id="customRadio" value="#{Diversityload.testDataOpt}" layout="custom">  
+                <p:selectOneRadio id="customRadio" value="#{Dispersalload.testDataOpt}" layout="custom">  
                     <f:selectItems value="#{applicationBean1.testDataOpts}"/> 
                 </p:selectOneRadio>  
                 <h:panelGrid columns="3" style="border: gray solid thin; padding: 10px 30px 20px 10px; background-color: #F9F9FB; line-height: 21px; width:760px">
@@ -85,7 +85,7 @@
                 <h:panelGrid style="width:100%; text-align: center">
                     <p:commandButton value="Submit" ajax="false" 
                                      onclick="PF('statusDialog').show()"
-                                     action="#{Diversityload.handleDiversityTestFileUpload}"/>                               
+                                     action="#{Dispersalload.handleDispersalTestFileUpload}"/>                               
                 </h:panelGrid>
             </h:panelGrid>
         </h:form>
