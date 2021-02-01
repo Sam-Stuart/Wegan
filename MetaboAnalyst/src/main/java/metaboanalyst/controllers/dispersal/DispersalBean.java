@@ -33,6 +33,9 @@ public class DispersalBean implements Serializable {
                 case "bgd":
                     doDefaultBGD();
                     break;
+                case "bsmooth":
+                    doDefaultBsmooth();
+                    break;
             }
         }
     }
@@ -43,6 +46,12 @@ public class DispersalBean implements Serializable {
     private void doDefaultBGD() {       
         
         Dispersal.InitBGD(sb);
+        
+    }
+    
+    private void doDefaultBsmooth() {       
+        
+        Dispersal.InitBsmooth(sb);
         
     }
 }

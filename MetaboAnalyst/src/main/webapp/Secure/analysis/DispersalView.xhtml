@@ -7,6 +7,7 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="/frags/_anal_template.xhtml">
     <ui:define name="metaInfo">
+        
         <f:event type="preRenderView" listener="#{sessionBean1.registerPage('Dispersal')}"/> 
     </ui:define>
     <ui:define name="content">
@@ -20,13 +21,12 @@
                     <h:outputLabel style="font-weight: bold" value="Dispersal Analysis"/>
 
                     <h:panelGrid style="padding-left: 20px; padding-bottom: 6px">
-                        <h:panelGrid columns="5">
-                            <h:commandLink action="bgd" onclick="PF('statusDialog').show()" value="Coeffiecents of Biogeographical Dispersal Analysis"/>
-                            <p:spacer style="width: 4px"/>
-                            <h:commandLink action="bsmooth" onclick="PF('statusDialog').show()" value="Beal's Smoothing"/>
-                            <p:spacer style="width: 4px"/>
-                            
-                        </h:panelGrid>
+                        
+                        <h:commandLink action="bgd" onclick="PF('statusDialog').show()" value="Coefficients of Biogeographical Dispersal Direction"/>
+                        <p:spacer style="width: 1px"/>
+                        <h:commandLink action="bsmooth" onclick="PF('statusDialog').show()" value="Beal's Smoothing"/>
+                        <p:spacer style="width: 1px"/>
+
                     </h:panelGrid>
                 </h:panelGrid>
             </h:panelGrid> 

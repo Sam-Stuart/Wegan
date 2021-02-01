@@ -349,7 +349,7 @@ public class DispersalloadBean implements Serializable {
         //DUNE DATA SELECTED*********************************************************
         else if (testDataOpt.equals("Dune")) {
             dataType = "Dune";
-            //sb.updateMsg("Error", "Dune data selected");
+            sb.updateMsg("Error", "Dune data selected");
 
             testFile = ab.getTestDune();
             format = "rowu";

@@ -24,6 +24,17 @@ public class Dispersal {
             System.out.println(rse);
         }
     }
+    
+    public static void InitBsmooth(SessionBean1 sb) {
+        try {
+            String rCommand = "bsmoothWegan(NA)";
+            RConnection RC = sb.getRConnection();
+            RCenter.recordRCommand(RC, rCommand);
+            RC.voidEval(rCommand);
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        }
+    }
 
         
         
