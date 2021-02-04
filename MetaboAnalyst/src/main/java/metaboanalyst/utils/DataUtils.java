@@ -580,6 +580,8 @@ public class DataUtils {
                 TreeNode normNode = new DefaultTreeNode("Normalization", naviTree);
                 if (type.equalsIgnoreCase("stat")) {
                     addStatNodes(naviTree);
+                } else if (type.equalsIgnoreCase("ca")) {
+                    addCANodes(naviTree);
                 } else if (type.equalsIgnoreCase("enrich")) {
                     addEnrichNodes(naviTree);
                 } else if (type.equalsIgnoreCase("pathway")) {
@@ -622,6 +624,11 @@ public class DataUtils {
         TreeNode nodep6 = new DefaultTreeNode("Data filter", processNode);
         TreeNode nodep7 = new DefaultTreeNode("Data editor", processNode);
         TreeNode nodep8 = new DefaultTreeNode("Image options", processNode);
+    }
+    
+    private static void addCANodes(TreeNode parent) {
+        TreeNode caNode = new DefaultTreeNode("Correlation", parent);
+        TreeNode nodea1 = new DefaultTreeNode("Correlations", caNode);
     }
 
     private static void addStatNodes(TreeNode parent) {

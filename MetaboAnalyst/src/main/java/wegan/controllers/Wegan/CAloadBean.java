@@ -198,34 +198,37 @@ public class CAloadBean implements Serializable {
     }
  
     //Function for grrabbing the Test files for CA
-     public String handleCAtestFileUpload() {
+    public String handleCATestFileUpload() {
         String format = "";
         boolean paired = false;
         boolean isZip = false;
         String testFile = null;
 
         
-        
         if (testDataOpt == null) {
-            //sb.updateMsg("Error", "No data set is selected!");
+                    
+
+            sb.updateMsg("Error", "No data set is selected!");
             return null;
         }
 
 
         
-        //DUNE DATA SELECTED
+        //DUNE DATA SELECTED*********************************************************
         else if (testDataOpt.equals("Dune")) {
             dataType = "Dune";
             //sb.updateMsg("Error", "Dune data selected");
 
-            testFile = ab.getTestamf();
+            testFile = ab.getTestDune();
             format = "rowu";
             
+        } else if (testDataOpt.equals("BCI")) {
+            testFile = ab.getTestBCI();
+            format = "rowu";
         } else {
             sb.updateMsg("Error", "Unknown data selected?");
             return null;
         }
-
         if (!sb.doLogin(dataType, "nmds", false, paired)) {
             //sb.updateMsg("Error", "No login return null?");
             return null;
@@ -240,26 +243,29 @@ public class CAloadBean implements Serializable {
         } else {
             
             //Tested cahnging Disc to cont
-            if (!RDataUtils.readTextData(RC, testFile, format, "cont")) {
+            if (!RDataUtils.readTextData(RC, testFile, format, "disc")) {
                 sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
                 return null;
             }
         }
         sb.setDataUploaded(true);
         //RC.Eval;
-        try {
+        /*try {
             //String rCommand = "InitDataObjects(\"" + dataType + "\", \"" + analType + "\", " + (isPaired ? "TRUE" : "FALSE") + ")";
+            //String rCommand = "NMDSWegan(\"" + dataType + "\")";
             
-            String rCommand = "CAWegan(\"" + dataType + "\", \"" + sb.getPath2()+ "\"  )";
-            RC.voidEval(rCommand);
-            RCenter.recordRCommand(RC, rCommand);
+            //String rCommand = "DCAWegan(\"" + dataType + "\", \"" + sb.getPath2()+ "\"  )";
+            
+            
+            //RC.voidEval(rCommand);
+            //RCenter.recordRCommand(RC, rCommand);
             
         } catch (RserveException rse) {
             System.out.println(rse);
             return "";
-        }
+        }*/
         //;
-        return"CA";
+        return "Data check";
     }
     
     

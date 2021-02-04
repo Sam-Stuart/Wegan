@@ -1,0 +1,23 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_anal_template.xhtml">
+    <ui:define name="metaInfo">
+        <f:event type="preRenderView" listener="#{caBean.performDefaultAnalysis('Linear')}"/> 
+    </ui:define>
+    <ui:define name="content">
+        <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
+            <h:form id="form1">
+                <h:panelGrid id="corrPane" style="text-align: center; width: 100%;">
+                    <p:scrollPanel mode="native" style="width:780px;height:700px">
+                        <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_linear')}" alt="linearimage"/>
+                    </p:scrollPanel>
+                </h:panelGrid>        
+            </h:form>
+        </h:panelGrid> 
+    </ui:define>
+</ui:composition>

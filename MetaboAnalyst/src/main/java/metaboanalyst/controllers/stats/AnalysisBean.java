@@ -8,6 +8,7 @@ package metaboanalyst.controllers.stats;
 import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
 import metaboanalyst.controllers.SessionBean1;
+import metaboanalyst.rwrappers.CAUtils;
 import metaboanalyst.rwrappers.ChemoMetrics;
 import metaboanalyst.rwrappers.Classifying;
 import metaboanalyst.rwrappers.Clustering;
