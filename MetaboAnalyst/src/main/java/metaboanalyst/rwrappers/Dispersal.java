@@ -35,7 +35,18 @@ public class Dispersal {
             System.out.println(rse);
         }
     }
-
+    
+    public static void PlotBGD(SessionBean1 sb, String imageName, String format, int dpi, int pcNum) {
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "PlotBGD(NA" + ", \"" + imageName + "\", \"" + format + "\", " + dpi + ", width=NA, " + pcNum + ")";
+            RCenter.recordRCommand(RC, rCommand);
+            sb.addGraphicsCMD("bgd", rCommand);
+            RC.voidEval(rCommand);
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        }
+    }
         
         
 /**      

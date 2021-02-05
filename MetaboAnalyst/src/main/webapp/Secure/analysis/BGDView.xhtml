@@ -7,9 +7,33 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="/frags/_anal_template.xhtml">
     <ui:define name="metaInfo">
-        <f:event type="preRenderView" listener="#{dispersalBean.performDefaultAnalysis('bgd')}"/> 
+
+        <f:event type="preRenderView" listener="#{dispersalBean.performDefaultAnalysis('bgd')}"/>
+        
+    </ui:define>
+    <ui:define name="myscript">
+        <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/jscripts/graphics.js"></script>
     </ui:define>
     <ui:define name="content">
-        
+        <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
+            
+            <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('bgd')}" alt="bgdispersal"/>
+                     
+            <p:commandButton value="Download" action="Download"/>      
+        </h:panelGrid> 
+<!--        
+          <h:panelGroup>
+                                <h:outputLabel style="font-weight: bold" value="Display Matrices of BGD"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:50px" value="{dispersalBean.dispersalBgdNum}">
+                                    <f:selectItems value="hello world" />
+                                </p:selectOneMenu>
+                                <h:outputLabel style="font-weight: bold" value="bgd"/>
+                            </h:panelGroup>
+                            <p:commandButton value="Update" update=":ac:form2:screePane  :cmdPane" actionListener="{pcaBean.pcaScreeBtn_action()}"/>   -->
+<!--        <h:panelGrid style="padding: 20px 50px 20px 40px; font-size: 13px; line-height: 23px; width: 100%">
+            <h1> Coefficients of Biogeographical Dispersal Direction </h1>
+            <h:panelGrid style="text-align: center; width: 80%">-->
+                
+            
     </ui:define>
 </ui:composition>

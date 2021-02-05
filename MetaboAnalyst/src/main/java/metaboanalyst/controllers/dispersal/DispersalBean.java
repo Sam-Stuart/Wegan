@@ -18,6 +18,7 @@ import metaboanalyst.rwrappers.UniVarTests;
 import metaboanalyst.utils.DataUtils;
 import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
+import org.primefaces.context.RequestContext;
 /**
  *
  * @author leif
@@ -40,12 +41,10 @@ public class DispersalBean implements Serializable {
         }
     }
 
-    
-      
-    
     private void doDefaultBGD() {       
         
         Dispersal.InitBGD(sb);
+        Dispersal.PlotBGD(sb, sb.getNewImage("bgd"), "png", 72, dispersalBgdNum);
         
     }
     
@@ -54,4 +53,21 @@ public class DispersalBean implements Serializable {
         Dispersal.InitBsmooth(sb);
         
     }
+    
+    private int dispersalBgdNum = 5;
+
+    public int getDispersalBgdNum() {
+        return dispersalBgdNum;
+    }
+
+    public void setDispersalBgdNum(int dispersalBgdNum) {
+        this.dispersalBgdNum = dispersalBgdNum;
+    } 
+//    public String dispersalBgdBtn_action() {
+//        Dispersal.PlotBGD(sb, sb.getNewImage("bgd"), "png", 72, dispersalBgdNum);
+//        RequestContext.getCurrentInstance().scrollTo("ac:form2:screePane");
+//        return null;
+//    }
+//    
 }
+    
