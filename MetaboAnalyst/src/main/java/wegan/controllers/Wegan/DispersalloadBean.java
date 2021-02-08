@@ -397,7 +397,7 @@ public class DispersalloadBean implements Serializable {
             return "";
         }*/
         //;
-        return "Data check";
+        return "bgd";    /*  CHANGE BACK TO 'Data check'  FOR THE SANITY CHECK _ NORMALIZATOION WORKFLOW   */ 
     }
     
     

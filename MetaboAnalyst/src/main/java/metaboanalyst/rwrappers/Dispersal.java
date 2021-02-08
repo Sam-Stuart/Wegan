@@ -42,6 +42,7 @@ public class Dispersal {
             String rCommand = "PlotBGD(NA" + ", \"" + imageName + "\", \"" + format + "\", " + dpi + ", width=NA, " + pcNum + ")";
             RCenter.recordRCommand(RC, rCommand);
             sb.addGraphicsCMD("bgd", rCommand);
+            System.out.print(imageName);
             RC.voidEval(rCommand);
         } catch (RserveException rse) {
             System.out.println(rse);

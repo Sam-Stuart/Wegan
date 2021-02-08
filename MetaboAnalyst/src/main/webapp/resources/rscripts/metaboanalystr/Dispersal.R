@@ -15,27 +15,24 @@ library(vegan)
 
 
 bgdispersalWegan <- function(mSetObj=NA){
-    print("-----------------------------bgdispersal function activated------------------------------------");
+    print("-----------------------------bgdispersalWegan function activated-1-2-3---------------------------------");
     mSetObj <- .get.mSet(mSetObj);
-    print(mSetObj$dataSet$orig);
+    #print(mSetObj$dataSet$orig);
 
-    print("----------------mSetObj called--------------------------------------");
-    print(class(mSetObj));
-    print("names of mSetobj: ");
-    print(names(mSetObj));
-    print("names of $dataSet: ");
-    print(names(mSetObj$dataSet));
-    print("names of $analSet: ");
-    print(names(mSetObj$analSet));
+    #print(class(mSetObj));
+    #print("names of mSetobj: ");
+    #print(names(mSetObj));
+    #print("names of $dataSet: ");
+    #print(names(mSetObj$dataSet));
+    #print("names of $analSet: ");
+    #print(names(mSetObj$analSet));
     # Calculate the bg dispersal
     output <- bgdispersal(mSetObj$dataSet$orig)
 
-    print("bgdispersal function implemented");
-
+    
     # store the item to the bgdispersal object
     mSetObj$analSet$bgdispersal <- output;
-    print("------------------ mSetObj$analSet$bgdispersal : -----------------------------");
-    print(mSetObj$analSet$bgdispersal);
+    
     
 
     return(.set.mSet(mSetObj));
@@ -43,28 +40,47 @@ bgdispersalWegan <- function(mSetObj=NA){
 
 
 PlotBGD <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, bgdnum){
-  bgdnum = bgdnum;
-  mSetObj <- .get.mSet(mSetObj);
-  
-  DD1 <-mSetObj$analSet$bgdispersal$DD1;
+    print("----------------PlotBGD--------------------------------------");
+    
 
-  imgName = paste(imgName, "dpi", dpi, ".", format, sep="");
-  if(is.na(width)){
-    w <- 10;
-  }else if(width == 0){
-    w <- 8;
-  }else{
-    w <- width;
-  }
-  h <- w;
-  
-  mSetObj$imgSet$dispersal.bgd <- imgName;
+    bgdnum = bgdnum;
+    mSetObj <- .get.mSet(mSetObj);
 
-  Cairo::Cairo(file = imgName, unit="in",width=w, height=h, dpi=dpi, type=format, bg="white");
-  plot(DD1);
-  dev.off();
-  return(.set.mSet(mSetObj));
+    # Check which matrix to plot : 
+    if (imgName == "bgd1_0_"){
+        print("------DD1 CHOSEN------");
+        mat <- as.matrix(mSetObj$analSet$bgdispersal$DD1);
+        
+    }else if (imgName == "bgd2_0_"){
+        print("------DD2 CHOSEN------");
+        mat <-mSetObj$analSet$bgdispersal$DD2 ;
+        
+    }else {
+        mat <-mSetObj$analSet$bgdispersal$DD3
+        print("------DD3 CHOSEN------");
+        }
+    
+    print(" ----------------Image name : --------------------------------");
+      print(imgName);
+    imgName = paste(imgName, "dpi", dpi, ".", format, sep="");
+    if(is.na(width)){
+      w <- 10;
+    }else if(width == 0){
+      w <- 8;
+    }else{
+      w <- width;
+    }
+    h <- w;
+
+    mSetObj$imgSet$dispersal.bgd1 <- imgName;
+    # Use the Cairo package to plot the data
+    Cairo::Cairo(file = imgName, unit="in",width=w, height=h, dpi=dpi, type=format, bg="white");
+    plot(mat);
+    dev.off();
+    return(.set.mSet(mSetObj));
 }
+
+
 bsmoothWegan <- function(){
     
     mSetObj <- .get.mSet(mSetObj);
