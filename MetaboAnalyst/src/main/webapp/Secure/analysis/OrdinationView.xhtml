@@ -23,30 +23,6 @@
                     </h:panelGrid>
                     
                     
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    <h:outputLabel style="font-weight: bold" value="Univariate Analysis"/>
-
-                    <h:panelGrid style="padding-left: 20px; padding-bottom: 6px">
-                        <h:panelGrid columns="5">
-                            <h:commandLink action="Fold change" disabled="#{sessionBean1.multiGroup}" onclick="PF('statusDialog').show()" value="Fold Change Analysis"/>
-                            <p:spacer style="width: 4px"/>
-                            <h:commandLink action="T-test" disabled="#{sessionBean1.multiGroup}" onclick="PF('statusDialog').show()" value="T-tests"/>
-                            <p:spacer style="width: 4px"/>
-                            <h:commandLink action="Volcano plot" disabled="#{sessionBean1.multiGroup}" onclick="PF('statusDialog').show()" value="Volcano plot"/>
-                        </h:panelGrid>
-                        <h:commandLink action="ANOVA" disabled="#{not sessionBean1.multiGroup}" onclick="PF('statusDialog').show()" value="One-way Analysis of Variance (ANOVA)"/>
-                        <h:panelGrid columns="3">
-                            <h:commandLink action="Correlations" onclick="PF('statusDialog').show()" value="Correlation Analysis"/>
-                            <p:spacer style="width: 4px"/>
-                            <h:commandLink action="PatternHunter" onclick="PF('statusDialog').show()" value="Pattern Searching"/>
-                        </h:panelGrid>
-                    </h:panelGrid>
                     <h:outputLabel style="font-weight: bold" value="Chemometrics Analysis"/>
                     <h:panelGrid style="padding-left: 20px; padding-bottom: 6px">
                         <h:commandLink action="PCA" onclick="PF('statusDialog').show()" value="Principal Component Analysis (PCA) "/>
@@ -59,7 +35,7 @@
                         <h:commandLink action="SAM" onclick="PF('statusDialog').show()" value="Significance Analysis of Microarray (and Metabolites) (SAM)"/>
                         <h:commandLink action="EBAM" disabled="#{sessionBean1.multiGroup}" onclick="PF('statusDialog').show()" value="Empirical Bayesian Analysis of Microarray (and Metabolites) (EBAM)"/>
                     </h:panelGrid>                    
-                    <h:outputLabel style="font-weight: bold" value="Cluster Analysis"/>
+<!--                    <h:outputLabel style="font-weight: bold" value="Cluster Analysis"/>
                     <h:panelGrid style="padding-left: 20px; padding-bottom: 6px">
                         <h:panelGrid columns="5">
                             <h:outputLabel value="Hierarchical Clustering:"/>
@@ -75,7 +51,7 @@
                             <p:spacer style="width: 4px"/>
                             <h:commandLink action="SOM" onclick="PF('statusDialog').show()" value="Self Organizing Map (SOM)"/>
                         </h:panelGrid>
-                    </h:panelGrid>                    
+                    </h:panelGrid>                    -->
                     <h:outputLabel style="font-weight: bold" value="Classification &amp; Feature Selection"/>
                     <h:panelGrid style="padding-left: 20px; padding-bottom: 6px">
                         <h:commandLink action="RandomForest" onclick="PF('statusDialog').show()" value="Random Forest"/>
