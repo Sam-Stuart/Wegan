@@ -592,6 +592,12 @@ public class DataUtils {
                     addRocNodes(naviTree);
                 } else if (type.equalsIgnoreCase("dispersal")) {
                     addDispersalNodes(naviTree);
+                } else if (type.equalsIgnoreCase("ord")) {
+                    addOrdinationNodes(naviTree);
+                } else if (type.equalsIgnoreCase("diversity")) {
+                    addDiversityNodes(naviTree);                
+                } else if (type.equalsIgnoreCase("cluster")) {
+                    addClusterNodes(naviTree);   
                 } else {
                     System.out.println("You need to define the navigation tree for this analysis type: " + type);
                 }
@@ -728,7 +734,16 @@ public class DataUtils {
         TreeNode dispersalNode = new DefaultTreeNode("Dispersal", parent);
        
     }
-
+    
+    private static void addOrdinationNodes(TreeNode parent) {
+        TreeNode dispersalNode = new DefaultTreeNode("Ordination", parent);   
+    }
+    private static void addDiversityNodes(TreeNode parent) {
+        TreeNode dispersalNode = new DefaultTreeNode("Diversity", parent);  
+    }
+    private static void addClusterNodes(TreeNode parent) {
+        TreeNode dispersalNode = new DefaultTreeNode("Clustering", parent);  
+    }    
     private static void addUtilNodes(TreeNode parent) {
         //TreeNode uNode = new DefaultTreeNode("Utilities", parent);
         //uNode.setSelectable(false);

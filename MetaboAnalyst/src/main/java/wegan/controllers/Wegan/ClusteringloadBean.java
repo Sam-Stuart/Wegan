@@ -21,8 +21,8 @@ import org.rosuda.REngine.Rserve.RserveException;
  *
  * @author jianguox
  */
-@ManagedBean(name = "Ordinationload")
-public class OrdinationloadBean1 implements Serializable {
+@ManagedBean(name = "Clusterload")
+public class ClusteringloadBean implements Serializable {
 
     private final ApplicationBean1 ab = (ApplicationBean1) DataUtils.findBean("applicationBean1");
     private final SessionBean1 sb = (SessionBean1) DataUtils.findBean("sessionBean1");
@@ -212,7 +212,6 @@ public class OrdinationloadBean1 implements Serializable {
     }
 
     public String handleStatTestFileUpload() {
-        System.out.print(" ------------------OVER HERE !!!! ------------------------------");
         String format = "";
         boolean paired = false;
         boolean isZip = false;
@@ -245,7 +244,7 @@ public class OrdinationloadBean1 implements Serializable {
             format = "rowu";
         }
 
-        if (!sb.doLogin(dataType, "Ordination", false, paired)) {
+        if (!sb.doLogin(dataType, "DCA", false, paired)) {
             //sb.updateMsg("Error", "No login return null?");
             return null;
         }
@@ -273,7 +272,7 @@ public class OrdinationloadBean1 implements Serializable {
     
     /*
 
-        public String handleOrdinationFileUpload() {
+        public String handleDCAFileUpload() {
 
         boolean paired = false;
         if (dataFormat.endsWith("p")) {
@@ -294,9 +293,9 @@ public class OrdinationloadBean1 implements Serializable {
                 String fileExt = fileName.substring(fileName.length() - 4);
                 
                 
-                if(runOrdinationR(fileName,fileExt)){
+                if(runDCaR(fileName,fileExt)){
                     //sb.updateMsg("Error", "CA run successfully");
-                    return "Ordination";
+                    return "DCA";
                     
                 }else{
                     sb.updateMsg("Error", "DCA not run succesffully");
@@ -329,7 +328,7 @@ public class OrdinationloadBean1 implements Serializable {
   
     
     //----------------------------------------------------------------- Test loader 
-    public String handleOrdinationTestFileUpload() {
+    public String handleClusterTestFileUpload() {
         String format = "";
         boolean paired = false;
         boolean isZip = false;
@@ -349,7 +348,7 @@ public class OrdinationloadBean1 implements Serializable {
         else if (testDataOpt.equals("Dune")) {
             dataType = "Dune";
             //sb.updateMsg("Error", "Dune data selected");
-
+            sb.updateMsg("Hello", "Leif was here");
             testFile = ab.getTestDune();
             format = "rowu";
             
@@ -401,14 +400,14 @@ public class OrdinationloadBean1 implements Serializable {
     
     
     
-    public boolean runOrdinationR(String inputData,String ext){
+    public boolean runDCaR(String inputData,String ext){
         RConnection RC = sb.getRConnection();
         try {
             //String rCommand = "InitDataObjects(\"" + dataType + "\", \"" + analType + "\", " + (isPaired ? "TRUE" : "FALSE") + ")";
 
             //String rCommand = "CAWegan(\"" + inputData + "\", \"" + sb.getPath2()+ "\"  )";
 
-            String rCommand = "OrdinationWegan(\"" + inputData + "\", \"" + sb.getPath2()+ "\", \"" + ext + "\"   )";
+            String rCommand = "DCAWegan(\"" + inputData + "\", \"" + sb.getPath2()+ "\", \"" + ext + "\"   )";
             RC.voidEval(rCommand);
             RCenter.recordRCommand(RC, rCommand);
 

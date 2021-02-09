@@ -120,11 +120,10 @@
         
         <navigation-case>
             <from-outcome>Ordination</from-outcome>
-            <to-view-id>/docs/OrdinationOverview.xhtml</to-view-id>
+            <to-view-id>/Secure/analysis/OrdinationView.xhtml</to-view-id>
             <redirect/>
-        </navigation-case> 
-        
-        
+        </navigation-case>  
+                
         <navigation-case>
             <from-outcome>Overview</from-outcome>
             <to-view-id>/docs/Overview.xhtml</to-view-id>
@@ -212,9 +211,14 @@
         </navigation-case> 
         <navigation-case>
             <from-outcome>Diversity</from-outcome>
-            <to-view-id>/Secure/analysis/DiversityView.xhtml</to-view-id>
+            <to-view-id>/Secure/diversity/DiversityView.xhtml</to-view-id>
             <redirect/>
-       </navigation-case>      
+       </navigation-case>  
+        <navigation-case>
+            <from-outcome>Clustering</from-outcome>
+            <to-view-id>/Secure/clustering/ClusteringView.xhtml</to-view-id>
+            <redirect/>
+       </navigation-case>     
         <navigation-case>
             <from-outcome>Dispersal</from-outcome>
             <to-view-id>/Secure/analysis/DispersalView.xhtml</to-view-id>

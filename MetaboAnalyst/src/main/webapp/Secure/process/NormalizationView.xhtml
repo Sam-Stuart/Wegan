@@ -9,7 +9,7 @@
     <ui:define name="metaInfo">
         <f:event type="preRenderView" listener="#{sessionBean1.registerPage('Normalization')}"/>
         <f:event type="preRenderView" listener="#{normBean.initPrenormData()}"/> 
-        <f:event type="preRenderView" listener="#{sessionBean1.setAnalType('dispersal')}"/>   <!-- Dana's temporary fix,  remove later.  -->
+        <f:event type="preRenderView" listener="#{sessionBean1.setAnalType('cluster')}"/>   <!-- Dana's temporary fix,  remove later.  -->
     </ui:define>
     <ui:define name="content">
         <h:form id="form1">

@@ -7,7 +7,7 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="/frags/_anal_template.xhtml">
     <ui:define name="metaInfo">
-        <f:event type="preRenderView" listener="#{sessionBean1.setAnalType('stat')}"/> 
+        <f:event type="preRenderView" listener="#{sessionBean1.setAnalType('cluster')}"/> 
         <f:event type="preRenderView" listener="#{sessionBean1.registerPage('Upload')}"/> 
     </ui:define>
     <ui:define name="content">
@@ -85,7 +85,7 @@
                 <h:panelGrid style="width:100%; text-align: center">
                     <p:commandButton value="Submit" ajax="false" 
                                      onclick="PF('statusDialog').show()"
-                                     action="#{Statisticsload.handleStatisticsTestFileUpload}"/>                               
+                                     action="#{Clusterload.handleClusterTestFileUpload}"/>                               
                 </h:panelGrid>
             </h:panelGrid>
         </h:form>

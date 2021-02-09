@@ -21,8 +21,8 @@ import org.rosuda.REngine.Rserve.RserveException;
  *
  * @author jianguox
  */
-@ManagedBean(name = "Statisticsload")
-public class StatisticsloadBean implements Serializable {
+@ManagedBean(name = "Diversityload")
+public class DiversityloadBean implements Serializable {
 
     private final ApplicationBean1 ab = (ApplicationBean1) DataUtils.findBean("applicationBean1");
     private final SessionBean1 sb = (SessionBean1) DataUtils.findBean("sessionBean1");
@@ -328,7 +328,7 @@ public class StatisticsloadBean implements Serializable {
   
     
     //----------------------------------------------------------------- Test loader 
-    public String handleStatisticsTestFileUpload() {
+    public String handleDiversityTestFileUpload() {
         String format = "";
         boolean paired = false;
         boolean isZip = false;
@@ -348,7 +348,7 @@ public class StatisticsloadBean implements Serializable {
         else if (testDataOpt.equals("Dune")) {
             dataType = "Dune";
             //sb.updateMsg("Error", "Dune data selected");
-            sb.updateMsg("Hello", "Leif was here");
+
             testFile = ab.getTestDune();
             format = "rowu";
             

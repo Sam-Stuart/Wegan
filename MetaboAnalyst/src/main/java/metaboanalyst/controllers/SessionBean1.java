@@ -455,11 +455,14 @@ public class SessionBean1 implements Serializable {
                 return "rocparam";
             case "nmds":
                 return "Statistics";
-            case "diverstiy":
+            case "diversity":
                 return "Diversity";
             case "dispersal":
                 return "Dispersal";
-                
+            case "ord":
+                return "Ordination";                
+            case "cluster":
+                return "Clustering"; 
         }
         return null;
     }
