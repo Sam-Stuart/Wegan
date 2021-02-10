@@ -249,22 +249,6 @@ public class CAloadBean implements Serializable {
             }
         }
         sb.setDataUploaded(true);
-        //RC.Eval;
-        /*try {
-            //String rCommand = "InitDataObjects(\"" + dataType + "\", \"" + analType + "\", " + (isPaired ? "TRUE" : "FALSE") + ")";
-            //String rCommand = "NMDSWegan(\"" + dataType + "\")";
-            
-            //String rCommand = "DCAWegan(\"" + dataType + "\", \"" + sb.getPath2()+ "\"  )";
-            
-            
-            //RC.voidEval(rCommand);
-            //RCenter.recordRCommand(RC, rCommand);
-            
-        } catch (RserveException rse) {
-            System.out.println(rse);
-            return "";
-        }*/
-        //;
         return "Data check";
     }
     

@@ -32,6 +32,9 @@ public class CABean implements Serializable {
                 case "Linear":
                     doDefaultLinear();
                     break; 
+                case "Penalized":
+                    doDefaultPenalized();
+                    break;
             }
             
         }
@@ -45,8 +48,15 @@ public class CABean implements Serializable {
     
     private void doDefaultLinear() {
         System.out.println("HELLO RIGHT BEFORE LINEAR");
-        CAUtils.PlotLinearCA(sb, sb.getCurrentImage("corr_linear"), "png", 72);
+//        CAUtils.PlotLinearModelTESTCA(sb);
+//        CAUtils.PlotTESTLinearCA(sb, sb.getCurrentImage("corr_linear"), "png", 72);
         CAUtils.PlotLinearTableCA(sb);
+        CAUtils.PlotLinearCA(sb, sb.getCurrentImage("corr_linear"), "png", 72);
+    }
+    
+    private void doDefaultPenalized() {
+        //CAUtils.PlotLinearTableCA(sb);
+        CAUtils.PlotPenalizedCA(sb, sb.getCurrentImage("corr_linear"), "png", 72);
     }
     
 }

@@ -296,6 +296,11 @@
             <redirect/>
         </navigation-case>
         <navigation-case>
+            <from-outcome>Penalized</from-outcome>
+            <to-view-id>/Secure/correlation/PenalizedView.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
             <from-outcome>PatternHunter</from-outcome>
             <to-view-id>/Secure/analysis/PatternView.xhtml</to-view-id>
             <redirect/>

@@ -59,6 +59,8 @@ public class ApplicationBean1 implements Serializable {
     private static final String test_dune = "/data/dune.txt";
     private static final String test_BCI = "/data/BCI.txt";
     
+    private static final String test_dune_weights = "/data/dune_weights.txt";
+    
     
     //**************************************************************************
     
@@ -508,7 +510,11 @@ public class ApplicationBean1 implements Serializable {
     public String getTestDune() {
         return realPath + test_dune;
     }
-    
+
+    public String getTestWeightsDune() {
+        return realPath + test_dune_weights;
+    }
+        
     public String getTestBCI(){
         return realPath + test_BCI;
     }
