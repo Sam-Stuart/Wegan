@@ -511,7 +511,7 @@ public class ApplicationBean1 implements Serializable {
         return realPath + test_dune;
     }
 
-    public String getTestWeightsDune() {
+    public String getTestWeightDune() {
         return realPath + test_dune_weights;
     }
         

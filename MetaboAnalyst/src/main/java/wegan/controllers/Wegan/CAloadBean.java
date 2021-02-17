@@ -203,7 +203,7 @@ public class CAloadBean implements Serializable {
         boolean paired = false;
         boolean isZip = false;
         String testFile = null;
-
+        String testWeightFile = null;
         
         if (testDataOpt == null) {
                     
@@ -220,6 +220,7 @@ public class CAloadBean implements Serializable {
             //sb.updateMsg("Error", "Dune data selected");
 
             testFile = ab.getTestDune();
+//            testWeightFile = ab.getTestWeightDune();
             format = "rowu";
             
         } else if (testDataOpt.equals("BCI")) {
@@ -247,6 +248,10 @@ public class CAloadBean implements Serializable {
                 sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
                 return null;
             }
+//            if (!RDataUtils.readTextData(RC, testWeightFile, format, "disc")) {
+//                sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
+//                return null;
+//            }
         }
         sb.setDataUploaded(true);
         return "Data check";

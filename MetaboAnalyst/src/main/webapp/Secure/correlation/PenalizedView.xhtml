@@ -11,13 +11,23 @@
     </ui:define>
     <ui:define name="content">
         <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
-            <h:form id="form1">
-                <h:panelGrid id="corrPane" style="text-align: center; width: 100%;">
-                    <p:scrollPanel mode="native" style="width:780px;height:700px">
-                        <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_penalized')}" alt="linearimage"/>
-                    </p:scrollPanel>
-                </h:panelGrid>        
-            </h:form>
+            <!--<img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_penalized')}" alt="penalizedimage"/>-->
+            <p:tabView id="ac" style="width:100%; border: none; background: none; font-size: 13px;">
+                <p:tab title ="Overview">
+                    <h:form id="form1">
+                        <h:panelGrid columns="2" style="width: 70%">
+                            <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_penalized')}" alt="penalizedimage"/>
+                        </h:panelGrid>        
+                    </h:form>
+                </p:tab>
+                <p:tab title ="Test 2">
+                    <h:form id="form2">
+                        <h:panelGrid columns="2" style="width: 70%">
+                            <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_penalized')}" alt="penalizedimage"/>
+                        </h:panelGrid>        
+                    </h:form>
+                </p:tab>
+            </p:tabView> 
         </h:panelGrid> 
     </ui:define>
 </ui:composition>

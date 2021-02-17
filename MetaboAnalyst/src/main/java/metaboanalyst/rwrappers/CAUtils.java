@@ -8,6 +8,13 @@ import metaboanalyst.controllers.SessionBean1;
 import org.rosuda.REngine.Rserve.RConnection;
 import org.rosuda.REngine.Rserve.RserveException;
 
+import javax.faces.model.SelectItem;
+import metaboanalyst.rwrappers.RDataUtils;
+import org.primefaces.model.chart.Axis;
+import org.primefaces.model.chart.AxisType;
+import org.primefaces.model.chart.LineChartModel;
+import org.primefaces.model.chart.LineChartSeries;
+
 /**
  *
  * @author Jeff
@@ -63,7 +70,26 @@ public class CAUtils {
     }
     
     public static void PlotPenalizedCA(SessionBean1 sb, String imgName, String format, int dpi) {
-        System.out.println("HELLO RIGHT BEFORE PLOT Penalized");
-        System.out.println("HELLO RIGHT AFTER PLOT Penalized");
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "plot.pred.penReg(NA" + ", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            sb.addGraphicsCMD("corr_penalized", rCommand);
+            RC.voidEval(rCommand);
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        }
+    }
+    
+    public static void CreatePenalizedModel(SessionBean1 sb) {
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "pen.reg.anal(NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            //sb.addGraphicsCMD("corr_penalized", rCommand);
+            RC.voidEval(rCommand);
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        }
     }
 }

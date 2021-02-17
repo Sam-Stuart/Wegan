@@ -12,6 +12,8 @@ import metaboanalyst.rwrappers.UniVarTests;
 import metaboanalyst.rwrappers.CAUtils;
 
 import metaboanalyst.utils.DataUtils;
+import org.primefaces.context.RequestContext;
+
 
 /**
  *
@@ -52,11 +54,13 @@ public class CABean implements Serializable {
 //        CAUtils.PlotTESTLinearCA(sb, sb.getCurrentImage("corr_linear"), "png", 72);
         CAUtils.PlotLinearTableCA(sb);
         CAUtils.PlotLinearCA(sb, sb.getCurrentImage("corr_linear"), "png", 72);
+        RequestContext.getCurrentInstance().scrollTo("ac:form2:screePane");
     }
     
     private void doDefaultPenalized() {
-        //CAUtils.PlotLinearTableCA(sb);
-        CAUtils.PlotPenalizedCA(sb, sb.getCurrentImage("corr_linear"), "png", 72);
+        CAUtils.CreatePenalizedModel(sb);
+        CAUtils.PlotPenalizedCA(sb, sb.getCurrentImage("corr_penalized"), "png", 72);
+        CAUtils.PlotPenalizedCA(sb, sb.getCurrentImage("corr_penalized2"), "png", 72);
     }
     
 }
