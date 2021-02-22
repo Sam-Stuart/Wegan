@@ -48,7 +48,48 @@ public class Dispersal {
             System.out.println(rse);
         }
     }
-        
+    public static double[][] GetBGDSigMat(SessionBean1 sb) {
+        try {
+            String rCommand = "GetBGDSigMat(NA)";
+            return sb.getRConnection().eval(rCommand).asDoubleMatrix();
+        } catch (Exception rse) {
+            System.out.println(rse);
+        }
+        return null;
+    }
+
+
+    public static String[] GetBGDSigRowNames(SessionBean1 sb) {
+        try {
+            String rCommand = "GetBGDSigRowNames(NA)";
+            return sb.getRConnection().eval(rCommand).asStrings();
+        } catch (Exception rse) {
+            System.out.println(rse);
+        }
+        return null;
+    }
+
+    public static String[] GetBGDSigColNames(SessionBean1 sb) {
+        try {
+            String rCommand = "GetBGDSigColNames(NA)";
+            return sb.getRConnection().eval(rCommand).asStrings();
+        } catch (Exception rse) {
+            System.out.println(rse);
+        }
+        return null;
+    }
+    public static String GetBGDSigFileName(SessionBean1 sb) {
+        try {
+            String rCommand = "GetBGDSigFileName(NA)";
+            //  RCenter.recordRCommand(RC, rCommand);
+            return sb.getRConnection().eval(rCommand).asString();
+        } catch (Exception rse) {
+            System.out.println(rse);
+        }
+        return null;
+    }
+    
+    
         
 /**      
     public static void FlipPCA(SessionBean1 sb, String axisOpt) {

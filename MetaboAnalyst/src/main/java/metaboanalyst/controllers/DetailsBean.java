@@ -15,6 +15,7 @@ import javax.faces.model.ListDataModel;
 import metaboanalyst.models.ColumnBean;
 import metaboanalyst.models.FeatureBean;
 import metaboanalyst.rwrappers.ChemoMetrics;
+import metaboanalyst.rwrappers.Dispersal;
 import metaboanalyst.rwrappers.Classifying;
 import metaboanalyst.rwrappers.RDataUtils;
 import metaboanalyst.rwrappers.SigVarSelect;
@@ -22,6 +23,7 @@ import metaboanalyst.rwrappers.TimeSeries;
 import metaboanalyst.rwrappers.UniVarTests;
 import metaboanalyst.utils.DataUtils;
 import org.rosuda.REngine.Rserve.RConnection;
+
 
 /**
  *
@@ -66,12 +68,16 @@ public class DetailsBean implements Serializable {
         }
         colnames = null;
         SessionBean1 sb = (SessionBean1) DataUtils.findBean("sessionBean1");
+        
         String from = sb.getSigSource();
+        System.out.print("SetupDetailsTable Testing");
+        System.out.print(from);
         extraVis = from.equals("anova");
         String[] rownames = null;
         double[][] sigmat = null;
         String[] stringCol = null;
         String fileName = "";
+        
         if (from.equals("fc")) {
             rownames = UniVarTests.GetFCSigRowNames(sb);
             colnames = UniVarTests.GetFCSigColNames(sb);
@@ -82,6 +88,12 @@ public class DetailsBean implements Serializable {
             colnames = UniVarTests.GetTTSigColNames(sb);
             sigmat = UniVarTests.GetTTSigMat(sb);
             fileName = UniVarTests.GetTtestSigFileName(sb);
+        } else if (from.equals("bgd")) {
+            rownames = Dispersal.GetBGDSigRowNames(sb);
+            colnames = Dispersal.GetBGDSigColNames(sb);
+            sigmat = Dispersal.GetBGDSigMat(sb);
+//            fileName = Dispersal.GetBGDSigFileName(sb);
+            fileName= "test_fileName.csv";
         } else if (from.equals("volcano")) {
             rownames = UniVarTests.GetVolcanoSigRowNames(sb);
             colnames = UniVarTests.GetVolcanoSigColNames(sb);

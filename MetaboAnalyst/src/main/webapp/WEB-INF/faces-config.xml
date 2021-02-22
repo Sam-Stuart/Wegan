@@ -16,7 +16,8 @@
             <from-outcome>stat</from-outcome>
             <to-view-id>/upload/StatUploadView.xhtml</to-view-id>
             <redirect/>
-        </navigation-case> 
+        </navigation-case>
+        
         <navigation-case>
             <from-outcome>time</from-outcome>
             <to-view-id>/upload/TimeUploadView.xhtml</to-view-id>
@@ -214,12 +215,13 @@
             <from-outcome>Diversity</from-outcome>
             <to-view-id>/Secure/analysis/DiversityView.xhtml</to-view-id>
             <redirect/>
-       </navigation-case>      
+        </navigation-case>      
         <navigation-case>
             <from-outcome>Dispersal</from-outcome>
             <to-view-id>/Secure/analysis/DispersalView.xhtml</to-view-id>
             <redirect/>
         </navigation-case> 
+        
         <navigation-case>
             <from-outcome>Name check</from-outcome>
             <to-view-id>/Secure/process/NameMapView.xhtml</to-view-id>

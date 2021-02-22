@@ -27,7 +27,7 @@ public class DispersalloadBean implements Serializable {
 
     private final ApplicationBean1 ab = (ApplicationBean1) DataUtils.findBean("applicationBean1");
     private final SessionBean1 sb = (SessionBean1) DataUtils.findBean("sessionBean1");
-
+    
     /*
      * Handle file upoad (.csv or .txt)
      */
@@ -335,8 +335,8 @@ public class DispersalloadBean implements Serializable {
         boolean paired = false;
         boolean isZip = false;
         String testFile = null;
-
-        
+//        System.out.println(" HELLO THERE !! ");
+//        
         if (testDataOpt == null) {
                     
 
@@ -397,6 +397,7 @@ public class DispersalloadBean implements Serializable {
             return "";
         }*/
         //;
+        System.out.print("---------------- handleDispersaltestfileUpload -----------------------");
         return "bgd";    /*  CHANGE BACK TO 'Data check'  FOR THE SANITY CHECK _ NORMALIZATOION WORKFLOW   */ 
     }
     
