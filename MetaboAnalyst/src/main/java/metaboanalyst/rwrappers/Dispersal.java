@@ -48,7 +48,7 @@ public class Dispersal {
             System.out.println(rse);
         }
     }
-    public static double[][] GetBGDSigMat(SessionBean1 sb) {
+    public static double[][] GetBGDSigMat(SessionBean1 sb, String table) {
         try {
             String rCommand = "GetBGDSigMat(NA)";
             return sb.getRConnection().eval(rCommand).asDoubleMatrix();
@@ -59,7 +59,7 @@ public class Dispersal {
     }
 
 
-    public static String[] GetBGDSigRowNames(SessionBean1 sb) {
+    public static String[] GetBGDSigRowNames(SessionBean1 sb, String table) {
         try {
             String rCommand = "GetBGDSigRowNames(NA)";
             return sb.getRConnection().eval(rCommand).asStrings();
@@ -69,7 +69,7 @@ public class Dispersal {
         return null;
     }
 
-    public static String[] GetBGDSigColNames(SessionBean1 sb) {
+    public static String[] GetBGDSigColNames(SessionBean1 sb, String table) {
         try {
             String rCommand = "GetBGDSigColNames(NA)";
             return sb.getRConnection().eval(rCommand).asStrings();
@@ -78,7 +78,7 @@ public class Dispersal {
         }
         return null;
     }
-    public static String GetBGDSigFileName(SessionBean1 sb) {
+    public static String GetBGDSigFileName(SessionBean1 sb, String table) {
         try {
             String rCommand = "GetBGDSigFileName(NA)";
             //  RCenter.recordRCommand(RC, rCommand);

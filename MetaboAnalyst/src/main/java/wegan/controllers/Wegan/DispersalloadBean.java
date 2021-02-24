@@ -357,6 +357,9 @@ public class DispersalloadBean implements Serializable {
         } else if (testDataOpt.equals("BCI")) {
             testFile = ab.getTestBCI();
             format = "rowu";
+        } else if (testDataOpt.equals("Varespec")) {
+            testFile = ab.getTestVarespec();
+            format = "rowu";
         } else {
             sb.updateMsg("Error", "Unknown data selected?");
             return null;

@@ -15,26 +15,15 @@ library(vegan)
 
 
 bgdispersalWegan <- function(mSetObj=NA){
-    print("-----------------------------bgdispersalWegan function activated-1-2-3---------------------------------");
+    print("-----------------------------bgdispersalWegan-------------------------------");
     mSetObj <- .get.mSet(mSetObj);
-    #print(mSetObj$dataSet$orig);
-
-    #print(class(mSetObj));
-    #print("names of mSetobj: ");
-    #print(names(mSetObj));
-    #print("names of $dataSet: ");
-    #print(names(mSetObj$dataSet));
-    #print("names of $analSet: ");
-    #print(names(mSetObj$analSet));
+    
     # Calculate the bg dispersal
-    output <- bgdispersal(mSetObj$dataSet$orig)
-    print(" MsetObj$dataSet$norm  :  ") ;
-    print(mSetObj$dataSet$norm);
+    output <- bgdispersal(mSetObj$dataSet$orig);
     
-    # store the item to the bgdispersal object
+    # Store the item to the bgdispersal object
     mSetObj$analSet$bgdispersal <- output;
-    
-    
+     
 
     return(.set.mSet(mSetObj));
 }
@@ -88,14 +77,16 @@ PlotBGD <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, bgdnum)
 #'McGill University, Canada
 #'License: GNU GPL (>= 2)
 
-GetBGDSigMat <- function(mSetObj=NA){
+GetBGDSigMat <- function(mSetObj=NA, table){
+  table <- "table";
   mSetObj <- .get.mSet(mSetObj);
-  print( "    GetBGDSigMat function: ");
-  cat(CleanNumber(mSetObj$analSet$bgdispersal$DD1));
+  print( "    GetBGDSigMat function123: ");
+  print(table);
   return(CleanNumber(mSetObj$analSet$bgdispersal$DD1));
 }
 
 GetBGDSigRowNames <- function(mSetObj=NA){
+  print("GetBGDSigRowNames");
   mSetObj <- .get.mSet(mSetObj);
   rownames(mSetObj$analSet$bgdispersal$DD1);
 }
@@ -112,7 +103,7 @@ GetBGDSigFileName <- function(mSetObj=NA){
 
 
 
-## Beals smoothing function 
+###### Beals smoothing function 
 bsmoothWegan <- function(){
     
     mSetObj <- .get.mSet(mSetObj);
@@ -126,4 +117,29 @@ bsmoothWegan <- function(){
     mSetObj$analSet$bsmooth <- output;
 
     return(.set.mSet(mSetObj));
+}
+
+
+
+####### Beta Dispersal  
+
+Leif Wilm  2:11 PM
+betadisperWegan <- function(input,dist,group){
+        if(input == "BCI"){
+                # Catches if user is asking to use sample data :
+                # Barro Colorado Island Tree Counts
+                data(BCI)
+                inputData <- BCI
+        else if ( input == 'varespec'){
+                data(varespec)
+                inputData <- varespec
+                dis <- vegdist(varespec)
+                groups <- factor(c(rep(1,16), rep(2,8)), labels = c("grazed","ungrazed"))
+                mod <- betadisper(dis, groups)
+                print(mod)
+        }
+        }else{
+                inputData <- loadData(input)
+        }
+       
 }

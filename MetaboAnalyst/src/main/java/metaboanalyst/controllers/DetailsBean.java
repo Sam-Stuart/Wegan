@@ -88,10 +88,10 @@ public class DetailsBean implements Serializable {
             colnames = UniVarTests.GetTTSigColNames(sb);
             sigmat = UniVarTests.GetTTSigMat(sb);
             fileName = UniVarTests.GetTtestSigFileName(sb);
-        } else if (from.equals("bgd")) {
-            rownames = Dispersal.GetBGDSigRowNames(sb);
-            colnames = Dispersal.GetBGDSigColNames(sb);
-            sigmat = Dispersal.GetBGDSigMat(sb);
+        } else if (from.equals("bgd")||from.equals("bgd1")||from.equals("bgd2")||from.equals("bgd3")||from.equals("bgd4")) {
+            rownames = Dispersal.GetBGDSigRowNames(sb, from);
+            colnames = Dispersal.GetBGDSigColNames(sb, from);
+            sigmat = Dispersal.GetBGDSigMat(sb, from);
 //            fileName = Dispersal.GetBGDSigFileName(sb);
             fileName= "test_fileName.csv";
         } else if (from.equals("volcano")) {

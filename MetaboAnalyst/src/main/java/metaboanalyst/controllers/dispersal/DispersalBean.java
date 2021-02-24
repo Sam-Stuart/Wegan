@@ -46,7 +46,7 @@ public class DispersalBean implements Serializable {
     private void doDefaultBGD() {       
         
         Dispersal.InitBGD(sb);
-        Dispersal.PlotBGD(sb, sb.getNewImage("bgd1"), "png", 72, dispersalBgdNum);
+//        Dispersal.PlotBGD(sb, sb.getNewImage("bgd1"), "png", 72, dispersalBgdNum);
         
     }
     

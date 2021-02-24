@@ -58,6 +58,7 @@ public class ApplicationBean1 implements Serializable {
     private static final String test_amf = "/data/WeganTestAMF.csv";
     private static final String test_dune = "/data/dune.txt";
     private static final String test_BCI = "/data/BCI.txt";
+    private static final String test_varespec = "/data/varespec.txt";
     
     
     //**************************************************************************
@@ -511,6 +512,9 @@ public class ApplicationBean1 implements Serializable {
     
     public String getTestBCI(){
         return realPath + test_BCI;
+    }
+    public String getTestVarespec(){
+        return realPath + test_varespec;
     }
     
     
