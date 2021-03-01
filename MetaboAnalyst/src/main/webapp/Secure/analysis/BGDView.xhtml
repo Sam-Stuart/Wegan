@@ -18,7 +18,7 @@
        
         <h:panelGrid style="padding:20px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%; align: center">
             
-    <!--        <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('bgd')}" alt="bgdispersal"/>
+    <!--        <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('bgd1')}" alt="bgdispersal"/>
                 <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('bgd2')}" alt="bgdispersal"/> 
                 <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('bgd3')}" alt="bgdispersal"/> -->
 
@@ -26,24 +26,24 @@
 <!--                <div class ="tooltip">
                     <span class="tooltiptext"> This is text</span>
                 </div>-->
-                <p:commandLink  value="DD1  " action="#{sessionBean1.detailsLnk_action('bgd')}" title="DD1[j,k] = (a * (b - c))/((a + b + c)^2)">
+                <p:commandLink  value="DD1  " action="#{sessionBean1.detailsLnk_action('bgd1')}" title="DD1[j,k] = (a * (b - c))/((a + b + c)^2)">
     <!--                <img src="#{facesContext.externalContext.requestContextPath}/resources/images/table.png"/>-->
                 </p:commandLink>
-                <p:commandLink  value="DD2 " action="#{sessionBean1.detailsLnk_action('bgd1')}" title="DD2[j,k] = (2*a * (b - c))/((2*a + b + c) * (a + b + c)) where a, b, and c have the same meaning as in the computation of binary similarity coefficients. ">
+                <p:commandLink  value="DD2 " action="#{sessionBean1.detailsLnk_action('bgd2')}" title="DD2[j,k] = (2*a * (b - c))/((2*a + b + c) * (a + b + c)) where a, b, and c have the same meaning as in the computation of binary similarity coefficients. ">
     <!--                <img src="#{facesContext.externalContext.requestContextPath}/resources/images/table.png"/>-->
                 </p:commandLink>
-                <p:commandLink  value="DD3" action="#{sessionBean1.detailsLnk_action('bgd2')}" title="DD3[j,k] = W*(A-B) / (A+B-W)^2">
+                <p:commandLink  value="DD3" action="#{sessionBean1.detailsLnk_action('bgd3')}" title="DD3[j,k] = W*(A-B) / (A+B-W)^2">
     <!--                <img src="#{facesContext.externalContext.requestContextPath}/resources/images/table.png"/>-->
                 </p:commandLink>
-                <p:commandLink  value="DD4" action="#{sessionBean1.detailsLnk_action('bgd3')}" title="DD4[j,k] = 2*W*(A-B) / ((A+B)*(A+B-W)) where W = sum(pmin(vector1, vector2)), 
+                <p:commandLink  value="DD4" action="#{sessionBean1.detailsLnk_action('bgd4')}" title="DD4[j,k] = 2*W*(A-B) / ((A+B)*(A+B-W)) where W = sum(pmin(vector1, vector2)), 
                                 A = sum(vector1), B = sum(vector2)">
     <!--                <img src="#{facesContext.externalContext.requestContextPath}/resources/images/table.png"/>-->
                 </p:commandLink>
-                <p:commandLink  value="McNemar" action="#{sessionBean1.detailsLnk_action('bgd')}" title="McNemar chi-square statistic of asymmetry (Sokal and Rohlf 1995):
+                <p:commandLink  value="McNemar" action="#{sessionBean1.detailsLnk_action('bgd5')}" title="McNemar chi-square statistic of asymmetry (Sokal and Rohlf 1995):
                                 2*(b*log(b) + c*log(c) - (b+c)*log((b+c)/2)) / q, where q = 1 + 1/(2*(b+c)) (Williams correction for continuity) ">
     <!--                <img src="#{facesContext.externalContext.requestContextPath}/resources/images/table.png"/>-->
                 </p:commandLink>
-                <p:commandLink  value="prob.McNemar" action="#{sessionBean1.detailsLnk_action('bgd')}" title="probabilities associated with McNemar statistics, chi-square test. H0: no asymmetry in (b-c). ">
+                <p:commandLink  value="prob.McNemar" action="#{sessionBean1.detailsLnk_action('bgd6')}" title="probabilities associated with McNemar statistics, chi-square test. H0: no asymmetry in (b-c). ">
     <!--                <img src="#{facesContext.externalContext.requestContextPath}/resources/images/table.png"/>-->
                 </p:commandLink>
                 <p:commandButton value="Download" action="Download" title="Download the R code and included tables"/>   

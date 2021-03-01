@@ -1,6 +1,6 @@
 # This script should be called by server to load actual scripts
 # based on the modules user selected
-
+print(" SCRIPT LOADER " );
 general_files <- c("general_data_utils","general_misc_utils","general_load_libs");
 general_stat_files <- c("general_norm_utils","general_proc_utils");
 general_anot_files <- "general_anot_utils";
@@ -14,7 +14,8 @@ mummichog_files <- c("mummichog", "networks");
 metaanal_files <- c("meta_methods", "meta_data_utils");
 network_files <- c("networks", "enrich_integ", "enrich_name_match", "gene_fun_utils", "enrich_path_kegg");
 other_files <- c("others_batch_check", "others_lipomics", "enrich_name_match");
-nmds_files <- c("test-Vegan","Dispersal");
+nmds_files <- c("test-Vegan", "Dispersal");
+dispersal_files <- c("Dispersal");
 LoadScripts <- function(module.nm = "nmds"){
     file.sources <- "";
     if(module.nm == "stat"){
@@ -39,6 +40,8 @@ LoadScripts <- function(module.nm = "nmds"){
         file.sources <- c(general_files, general_stat_files, metaanal_files);
     }else if(module.nm == "nmds"){
         file.sources <- c(general_files, general_stat_files, stats_files,nmds_files);
+    }else if(module.nm == "disersal"){
+        file.sources <- c(dispersal_files);
     }else{
         print(paste("Unknown module code: ", module.nm));
     }

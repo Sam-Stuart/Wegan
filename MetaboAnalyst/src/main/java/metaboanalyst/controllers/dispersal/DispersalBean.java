@@ -28,12 +28,17 @@ public class DispersalBean implements Serializable {
     private final SessionBean1 sb = (SessionBean1) DataUtils.findBean("sessionBean1");
 
     public void performDefaultAnalysis(String pageID) {
-        System.out.print(" TESTING HERE  at performDefaultAnalysis");
+        System.out.print(" Currently printing at performDefaultAnalysis");
         System.out.print(sb);
         if (!sb.isAnalInit(pageID)) {
+            System.out.print(" pageID");
+                
             //sb.registerPage(pageID);
             switch (pageID) {
+                 
                 case "bgd":
+                    System.out.print(" case bgd      ");
+                             
                     doDefaultBGD();
                     break;
                 case "bsmooth":
@@ -45,7 +50,9 @@ public class DispersalBean implements Serializable {
 
     private void doDefaultBGD() {       
         
+        System.out.print("##########deDefaultBGD");
         Dispersal.InitBGD(sb);
+        
 //        Dispersal.PlotBGD(sb, sb.getNewImage("bgd1"), "png", 72, dispersalBgdNum);
         
     }

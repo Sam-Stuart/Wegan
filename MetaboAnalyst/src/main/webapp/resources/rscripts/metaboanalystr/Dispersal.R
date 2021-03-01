@@ -15,14 +15,15 @@ library(vegan)
 
 
 bgdispersalWegan <- function(mSetObj=NA){
-    print("-----------------------------bgdispersalWegan-------------------------------");
+    print("------------######---------bgdispersalWegan------------#######----------");
+    
     mSetObj <- .get.mSet(mSetObj);
     
     # Calculate the bg dispersal
     output <- bgdispersal(mSetObj$dataSet$orig);
     
     # Store the item to the bgdispersal object
-    mSetObj$analSet$bgdispersal <- output;
+    mSetObj$analSet$bgdispersal <- output; 
      
 
     return(.set.mSet(mSetObj));
@@ -74,26 +75,75 @@ PlotBGD <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, bgdnum)
 #'@description Return a matrix of values from the bgdispersal output
 #'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
 #'@author Leif Wilm (lwilm@ualberta.ca)
-#'McGill University, Canada
+#'UofA, Canada
 #'License: GNU GPL (>= 2)
 
-GetBGDSigMat <- function(mSetObj=NA, table){
-  table <- "table";
-  mSetObj <- .get.mSet(mSetObj);
-  print( "    GetBGDSigMat function123: ");
-  print(table);
-  return(CleanNumber(mSetObj$analSet$bgdispersal$DD1));
+GetBGDSigMat <- function(mSetObj=NA, tableName){
+  
+    mSetObj <- .get.mSet(mSetObj);
+    print( "    GetBGDSigMat function123: ");
+  
+    if(tableName == 'bgd1'){
+        print(' Row AFFRIMATIVE ')
+        return(CleanNumber(mSetObj$analSet$bgdispersal$DD1));
+    }else if(tableName == 'bgd2'){
+        return(CleanNumber(mSetObj$analSet$bgdispersal$DD2));
+    }else if(tableName == 'bgd3'){
+        return(CleanNumber(mSetObj$analSet$bgdispersal$DD3));
+    }else if(tableName == 'bgd4'){
+        return(CleanNumber(mSetObj$analSet$bgdispersal$DD4));
+    }else if(tableName == 'bgd5'){
+        zero_mat <- mSetObj$analSet$bgdispersal$McNemar
+        zero_mat[is.na(zero_mat)] <- 0
+        return(CleanNumber(zero_mat));
+    }else if(tableName == 'bgd6'){
+        return(CleanNumber(mSetObj$analSet$bgdispersal$prob.McNemar));
+    }
 }
 
-GetBGDSigRowNames <- function(mSetObj=NA){
-  print("GetBGDSigRowNames");
-  mSetObj <- .get.mSet(mSetObj);
+GetBGDSigRowNames <- function(mSetObj=NA, tableName){
+    mSetObj <- .get.mSet(mSetObj);
+
+    print("GetBGDSigRowNames R");
+    print(tableName);
+    if(tableName == 'bgd1'){
+        print(' Row AFFRIMATIVE ')
+        rownames(mSetObj$analSet$bgdispersal$DD1);
+    }else if(tableName == 'bgd2'){
+        rownames(mSetObj$analSet$bgdispersal$DD2);
+    }else if(tableName == 'bgd3'){
+        rownames(mSetObj$analSet$bgdispersal$DD3);
+    }else if(tableName == 'bgd4'){
+        rownames(mSetObj$analSet$bgdispersal$DD4);
+    }else if(tableName == 'bgd5'){
+        rownames(mSetObj$analSet$bgdispersal$McNemar);
+    }else if(tableName == 'bgd6'){
+        rownames(mSetObj$analSet$bgdispersal$prob.McNemar);
+    }
+
+
   rownames(mSetObj$analSet$bgdispersal$DD1);
 }
 
-GetBGDSigColNames <- function(mSetObj=NA){
-  mSetObj <- .get.mSet(mSetObj);
-  colnames(mSetObj$analSet$bgdispersal$DD1);
+GetBGDSigColNames <- function(mSetObj=NA, tableName){
+    print("GetBGDSigColNames");
+    mSetObj <- .get.mSet(mSetObj);
+    print(tableName);   
+  
+    if(tableName == 'bgd1'){
+        print(' Row AFFRIMATIVE ')
+        colnames(mSetObj$analSet$bgdispersal$DD1);
+    }else if(tableName == 'bgd2'){
+        colnames(mSetObj$analSet$bgdispersal$DD2);
+    }else if(tableName == 'bgd3'){
+        colnames(mSetObj$analSet$bgdispersal$DD3);
+    }else if(tableName == 'bgd4'){
+        colnames(mSetObj$analSet$bgdispersal$DD4);
+    }else if(tableName == 'bgd5'){
+        colnames(mSetObj$analSet$bgdispersal$McNemar);
+    }else if(tableName == 'bgd6'){
+        colnames(mSetObj$analSet$bgdispersal$prob.McNemar);
+    }
 }
 
 GetBGDSigFileName <- function(mSetObj=NA){
@@ -123,21 +173,20 @@ bsmoothWegan <- function(){
 
 ####### Beta Dispersal  
 
-Leif Wilm  2:11 PM
 betadisperWegan <- function(input,dist,group){
         if(input == "BCI"){
                 # Catches if user is asking to use sample data :
                 # Barro Colorado Island Tree Counts
                 data(BCI)
                 inputData <- BCI
-        else if ( input == 'varespec'){
+        }else if( input == 'varespec'){
                 data(varespec)
                 inputData <- varespec
                 dis <- vegdist(varespec)
                 groups <- factor(c(rep(1,16), rep(2,8)), labels = c("grazed","ungrazed"))
                 mod <- betadisper(dis, groups)
                 print(mod)
-        }
+        
         }else{
                 inputData <- loadData(input)
         }

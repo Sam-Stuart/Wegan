@@ -15,6 +15,8 @@ import org.rosuda.REngine.Rserve.RserveException;
 public class Dispersal {
 
     public static void InitBGD(SessionBean1 sb) {
+        System.out.print("######## InitBGD #######");
+        System.out.print(sb);
         try {
             String rCommand = "bgdispersalWegan(NA)";
             RConnection RC = sb.getRConnection();
@@ -40,6 +42,8 @@ public class Dispersal {
         try {
             RConnection RC = sb.getRConnection();
             String rCommand = "PlotBGD(NA" + ", \"" + imageName + "\", \"" + format + "\", " + dpi + ", width=NA, " + pcNum + ")";
+            System.out.print("PlotBGD:");
+            System.out.print(rCommand);
             RCenter.recordRCommand(RC, rCommand);
             sb.addGraphicsCMD("bgd", rCommand);
             System.out.print(imageName);
@@ -48,9 +52,11 @@ public class Dispersal {
             System.out.println(rse);
         }
     }
-    public static double[][] GetBGDSigMat(SessionBean1 sb, String table) {
+    public static double[][] GetBGDSigMat(SessionBean1 sb, String tableName) {
+        System.out.print("GetBGDSigMat.java");
+        System.out.print(tableName);
         try {
-            String rCommand = "GetBGDSigMat(NA)";
+            String rCommand = "GetBGDSigMat(NA" + ",\""+  tableName + "\")";
             return sb.getRConnection().eval(rCommand).asDoubleMatrix();
         } catch (Exception rse) {
             System.out.println(rse);
@@ -59,9 +65,11 @@ public class Dispersal {
     }
 
 
-    public static String[] GetBGDSigRowNames(SessionBean1 sb, String table) {
+    public static String[] GetBGDSigRowNames(SessionBean1 sb, String tableName) {
         try {
-            String rCommand = "GetBGDSigRowNames(NA)";
+            System.out.print("BGD Row");
+            String rCommand = "GetBGDSigRowNames(NA" + ",\""+  tableName + "\")";
+            System.out.print(rCommand);
             return sb.getRConnection().eval(rCommand).asStrings();
         } catch (Exception rse) {
             System.out.println(rse);
@@ -69,16 +77,16 @@ public class Dispersal {
         return null;
     }
 
-    public static String[] GetBGDSigColNames(SessionBean1 sb, String table) {
+    public static String[] GetBGDSigColNames(SessionBean1 sb, String tableName) {
         try {
-            String rCommand = "GetBGDSigColNames(NA)";
+            String rCommand = "GetBGDSigColNames(NA" + ",\""+  tableName + "\")";
             return sb.getRConnection().eval(rCommand).asStrings();
         } catch (Exception rse) {
             System.out.println(rse);
         }
         return null;
     }
-    public static String GetBGDSigFileName(SessionBean1 sb, String table) {
+    public static String GetBGDSigFileName(SessionBean1 sb, String tableName) {
         try {
             String rCommand = "GetBGDSigFileName(NA)";
             //  RCenter.recordRCommand(RC, rCommand);
