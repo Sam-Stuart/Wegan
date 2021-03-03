@@ -27,17 +27,7 @@ public class Dispersal {
         }
     }
     
-    public static void InitBsmooth(SessionBean1 sb) {
-        try {
-            String rCommand = "bsmoothWegan(NA)";
-            RConnection RC = sb.getRConnection();
-            RCenter.recordRCommand(RC, rCommand);
-            RC.voidEval(rCommand);
-        } catch (RserveException rse) {
-            System.out.println(rse);
-        }
-    }
-    
+      
     public static void PlotBGD(SessionBean1 sb, String imageName, String format, int dpi, int pcNum) {
         try {
             RConnection RC = sb.getRConnection();
@@ -97,6 +87,35 @@ public class Dispersal {
         return null;
     }
     
+    
+//    ####### Beals Smoothing functions 
+            
+    public static void InitBeals(SessionBean1 sb) {
+        System.out.print("######## InitBeals #######");
+        try {
+            String rCommand = "bealsWegan(NA)";
+            RConnection RC = sb.getRConnection();
+            RCenter.recordRCommand(RC, rCommand);
+            RC.voidEval(rCommand);
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        }
+    }
+    
+    public static void PlotBeals(SessionBean1 sb, String imageName, String format, int dpi, int pcNum) {
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "PlotBeals(NA" + ", \"" + imageName + "\", \"" + format + "\", " + dpi + ", width=NA, " + pcNum + ")";
+            System.out.print("PlotBeals:");
+            System.out.print(rCommand);
+            RCenter.recordRCommand(RC, rCommand);
+            sb.addGraphicsCMD("beals", rCommand);
+            System.out.print(imageName);
+            RC.voidEval(rCommand);
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        }
+    }
     
         
 /**      

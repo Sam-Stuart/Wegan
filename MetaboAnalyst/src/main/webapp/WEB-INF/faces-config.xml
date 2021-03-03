@@ -258,8 +258,8 @@
             <redirect/>
        </navigation-case>  
        <navigation-case>
-            <from-outcome>bsmooth</from-outcome>
-            <to-view-id>/Secure/analysis/BsmoothView.xhtml</to-view-id>
+            <from-outcome>beals</from-outcome>
+            <to-view-id>/Secure/analysis/BealsView.xhtml</to-view-id>
             <redirect/>
        </navigation-case> 
         <navigation-case>

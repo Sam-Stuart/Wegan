@@ -41,8 +41,8 @@ public class DispersalBean implements Serializable {
                              
                     doDefaultBGD();
                     break;
-                case "bsmooth":
-                    doDefaultBsmooth();
+                case "beals":
+                    doDefaultBeals();
                     break;
             }
         }
@@ -57,9 +57,10 @@ public class DispersalBean implements Serializable {
         
     }
     
-    private void doDefaultBsmooth() {       
+    private void doDefaultBeals() {       
         
-        Dispersal.InitBsmooth(sb);
+        Dispersal.InitBeals(sb);
+        Dispersal.PlotBeals(sb, sb.getNewImage("beals"), "png", 72, dispersalBgdNum);
         
     }
     

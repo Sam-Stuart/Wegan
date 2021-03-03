@@ -1,0 +1,121 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_anal_template.xhtml">
+    <ui:define name="metaInfo">
+        <f:event type="preRenderView" listener="#{dispersalBean.performDefaultAnalysis('beals')}"/> 
+    </ui:define>
+ <ui:define name="myscript">
+        <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/jscripts/canvasXpress.min.js"></script>
+        <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/jscripts/graphics.js"></script>
+    </ui:define>
+    <ui:define name="content">
+        <h:inputHidden id="mydir" value="#{sessionBean1.getJsonDir('pca_score3d')}" />
+        <script type="text/javascript">
+            // for scatter plot
+            function addBind() {
+                mychart = $("[id='ac:chart']");
+                mychart.unbind('jqplotDataClick');
+                mychart.bind('jqplotDataClick',
+                        function (ev, seriesIndex, pointIndex, data) {
+                            //note, we use the internal index, not point index 
+                            remoteCall([{name: 'cmpdIndex', value: data[0]}]);
+                        });
+            }
+
+            function ext() {
+                this.cfg.seriesDefaults = {
+                    lineWidth: 1.0,
+                    linePattern: 'dashed',
+                    showMarker: false,
+                    markerOptions: {
+                        color: 'rgba(128, 0, 128, 0.5)'
+                    },
+                    shadow: false
+                };
+                this.cfg.axes = {
+                    yaxis: {
+                        showLabel: true,
+                        tickOptions: {
+                            formatString: "%#.2f"
+                        }
+                    },
+                    xaxis: {
+                        showLabel: true,
+                        tickOptions: {
+                            formatString: "%#.2f"
+                        }
+                    }
+                };
+            }
+        </script>
+        <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
+            
+                    <h:form id="form1">
+                        <h:panelGrid columns="2" style="width: 70%">
+                            <h:panelGroup>
+                                <h:outputLabel style="font-weight: bold" value="Display default beals smoothing box plot"/>
+                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('beals')}" alt="beals"/>
+                                <h:outputLabel style="font-weight: bold" value="Beals"/>
+                                
+<!--                            <h:panelGrid columns="2" style="width:480px;">
+                                <h:outputLabel style="font-weight: bold" value="Specify PC on X-axis:"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:50px" value="#{pcaBean.pcaScoreX}">
+                                    <f:selectItems value="#{pcaBean.pcaAllPCs}" />
+                                </p:selectOneMenu>                             
+                                <h:outputLabel style="font-weight: bold" value="Specify PC on Y-axis:"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:50px" value="#{pcaBean.pcaScoreY}">
+                                    <f:selectItems value="#{pcaBean.pcaAllPCs}" />
+                                </p:selectOneMenu> 
+                                <h:outputLabel style="font-weight: bold" value="Display 95% confidence regions:"/>
+                                <p:selectBooleanCheckbox value ="#{pcaBean.displayConfs}"/>    
+                                <h:outputLabel style="font-weight: bold" value="Display sample names:"/>
+                                <p:selectBooleanCheckbox value ="#{pcaBean.displayNames}"/>                                
+                                <h:outputLabel style="font-weight: bold" value="Use grey-scale colors:"/>
+                                <p:selectBooleanCheckbox value ="#{pcaBean.greyScale}"/>
+                                <p:commandButton action="#{pcaBean.flipPCA()}" ajax ="false" value="Flip Image"/>
+                                <p:selectOneRadio value="#{pcaBean.flipOpt}">
+                                    <f:selectItem itemLabel="X axis" itemValue="x" />
+                                    <f:selectItem itemLabel="Y axis" itemValue="y" />
+                                    <f:selectItem itemLabel="All" itemValue="all" />
+                                </p:selectOneRadio>
+                                  
+                            </h:panelGrid>-->
+                            <h:panelGrid style="text-align: right; padding-left: 700px; width: 760px;">  
+                                <!--<p:commandButton value="Update" update=":ac:form1:pairPane  :cmdPane" actionListener="#{pcaBean.pcaPairBtn_action()}"/>--> 
+                            </h:panelGrid>
+                            </h:panelGroup>
+                            
+                        </h:panelGrid>
+                        <h:panelGrid id="pairPane" style="text-align: center; width: 100%;">
+                            <h:panelGrid style="text-align: right; padding-left: 700px; width: 760px;">
+                                <p:commandLink actionListener="#{sessionBean1.graphicsLnk_action('pca_pair')}" 
+                                               oncomplete="PF('graphDialog').show()"
+                                               title="Customize the graphics output">
+                                    <img src="#{facesContext.externalContext.requestContextPath}/resources/images/imgcenter.png"/>
+                                </p:commandLink>
+                            </h:panelGrid>
+                            <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('pca_pair')}" alt="PCAPairImage"/>
+                        </h:panelGrid>        
+                    </h:form>
+               
+        </h:panelGrid> 
+        <p:dialog modal="true" widgetVar="exportDialog" style="width:600px; height: 580px" appendTo="@(body)">  
+            <h:outputLabel style="font-size: 13px; font-weight: bold" value="Right click the PNG image to save as your preferred name:"/><br/>
+            <image id="downloadimage"></image>  
+        </p:dialog>  
+   
+        <script type="text/javascript">
+            showPCA3DScore();
+            $("[id='ac:chart']").bind('jqplotDataClick',
+                    function (ev, seriesIndex, pointIndex, data) {
+                        //note, we use the internal index, not point index 
+                        remoteCall([{name: 'cmpdIndex', value: data[0]}]);
+                    });
+        </script>
+    </ui:define>
+</ui:composition>

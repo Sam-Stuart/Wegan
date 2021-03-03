@@ -25,7 +25,7 @@ bgdispersalWegan <- function(mSetObj=NA){
     # Store the item to the bgdispersal object
     mSetObj$analSet$bgdispersal <- output; 
      
-
+    
     return(.set.mSet(mSetObj));
 }
 
@@ -51,8 +51,7 @@ PlotBGD <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, bgdnum)
         print("------DD3 CHOSEN------");
         }
     
-    print(" ----------------Image name : --------------------------------");
-      print(imgName);
+    
     imgName = paste(imgName, "dpi", dpi, ".", format, sep="");
     if(is.na(width)){
       w <- 10;
@@ -154,21 +153,54 @@ GetBGDSigFileName <- function(mSetObj=NA){
 
 
 ###### Beals smoothing function 
-bsmoothWegan <- function(){
-    
+bealsWegan <- function(mSetObj=NA){
+    print("beals Wegan 1");
     mSetObj <- .get.mSet(mSetObj);
+   
+    # Call upon the beals smoothing function 
+    # default beals
+    output <- beals(mSetObj$dataSet$orig)
     
-
-#   
-    # Call upon the beals smoothing function
-    output <- beals(mSetObj)
-
     # store the item to the bgdispersal object
-    mSetObj$analSet$bsmooth <- output;
-
+    mSetObj$analSet$beals <- output;
+    
     return(.set.mSet(mSetObj));
 }
 
+
+PlotBeals <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, pcnum=0){
+  print(" -------------------------PLOT Beals  ------------------");
+  mSetObj <- .get.mSet(mSetObj);
+  
+  beals_matrix <- as.matrix(mSetObj$analSet$beals);
+    
+  print("plot beals 1");  
+  imgName = paste(imgName, "dpi", dpi, ".", format, sep="");
+  if(is.na(width)){
+    w <- 10;
+  }else if(width == 0){
+    w <- 8;
+  }else{
+    w <- width;
+  }
+  
+  print("plot beals 2");
+  mSetObj$imgSet$defaultbeals<- imgName;
+  print("plot beals 3");
+  print(dim(mSetObj$dataSet$orig));
+
+  pa <- decostand(mSetObj$dataSet$orig, "pa");
+
+  print("plot beals 5");
+  print(dim(beals_matrix));
+  h <- w;
+  Cairo::Cairo(file = imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white");
+  boxplot(as.vector(beals_matrix) ~ unlist(pa), xlab="Presence", ylab="Beals");
+
+  print("plot beals 6");
+  dev.off();
+  return(.set.mSet(mSetObj));
+}
 
 
 ####### Beta Dispersal  
