@@ -213,7 +213,6 @@ public class DispersalloadBean implements Serializable {
     }
 
     public String handleStatTestFileUpload() {
-        System.out.print(" ------------------OVER HERE !!!! ------------------------------");
         String format = "";
         boolean paired = false;
         boolean isZip = false;
@@ -222,7 +221,7 @@ public class DispersalloadBean implements Serializable {
         
         
         if (testDataOpt == null) {
-            //sb.updateMsg("Error", "No data set is selected!");
+            sb.updateMsg("Error", "No data set is selected!");
             return null;
         }
 
@@ -336,14 +335,17 @@ public class DispersalloadBean implements Serializable {
         boolean isZip = false;
         String testFile = null;
 //        System.out.println(" HELLO THERE !! ");
-//        
+
+
+        System.out.print("-------------testDataOpt: ");
+        System.out.print(testDataOpt);  
+        
         if (testDataOpt == null) {
                     
 
             sb.updateMsg("Error", "No data set is selected!");
             return null;
         }
-
 
         
         //DUNE DATA SELECTED*********************************************************
@@ -358,10 +360,15 @@ public class DispersalloadBean implements Serializable {
             testFile = ab.getTestBCI();
             format = "rowu";
         } else if (testDataOpt.equals("Varespec")) {
+            System.out.print(" ---------------------Varespec data selected ----------------------------");
+            dataType = "Varespec";
+            sb.updateMsg("Error", "Varespec data selected");
             testFile = ab.getTestVarespec();
             format = "rowu";
         } else {
-            sb.updateMsg("Error", "Unknown data selected?");
+            System.out.print( " Unknown data has been selected");
+            System.out.print( dataType                       );
+            sb.updateMsg("Error", "Unknown data selected");
             return null;
         }
         if (!sb.doLogin(dataType, "nmds", false, paired)) {

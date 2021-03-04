@@ -184,7 +184,7 @@ public class ApplicationBean1 implements Serializable {
         rocFormatOpts[0] = new SelectItem("rowu", "Samples in rows");
         rocFormatOpts[1] = new SelectItem("colu", "Samples in columns");
 
-        testDataOpts = new SelectItem[9];
+        testDataOpts = new SelectItem[10];
         //Changed for WEGAN testing
         testDataOpts[0] = new SelectItem("Dune", "NMDS");
         testDataOpts[1] = new SelectItem("BCI", "NMDS");
@@ -195,6 +195,8 @@ public class ApplicationBean1 implements Serializable {
         testDataOpts[6] = new SelectItem("mspklist", "MS peak list");
         testDataOpts[7] = new SelectItem("lcmsspec", "LC-MS spectra");
         testDataOpts[8] = new SelectItem("gcmsspec", "GC-MS spectra");
+        testDataOpts[9] = new SelectItem("Varespec", "Dispersal");
+        
 
         //WEGAN TEST FUNCTIONS START HERE
         

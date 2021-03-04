@@ -79,5 +79,14 @@ public class DispersalBean implements Serializable {
 //        return null;
 //    }
 //    
-}
+
+    public String dispersalBealsBtn_action() {
+          System.out.print("dispersalBeals button action  -dispersalBean");
+//        Dispersal.PlotBealsSummary
+//        ChemoMetrics.PlotPCAPairSummary(sb, sb.getNewImage("pca_pair"), "png", 72, dispersalBgdNum);
+//        RequestContext.getCurrentInstance().scrollTo("ac:form1:pairPane");
+        return null;
+    }
     
+}
+
