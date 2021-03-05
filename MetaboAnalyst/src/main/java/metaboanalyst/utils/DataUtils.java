@@ -728,6 +728,7 @@ public class DataUtils {
         TreeNode dispersalNode = new DefaultTreeNode("Dispersal", parent);
         TreeNode noded1 = new DefaultTreeNode("Biogeographical Dispersal", dispersalNode);
         TreeNode noded2 = new DefaultTreeNode("Beals Smoothing", dispersalNode);
+        TreeNode noded3 = new DefaultTreeNode("Beta Dispersal", dispersalNode);
     }
 
     private static void addUtilNodes(TreeNode parent) {

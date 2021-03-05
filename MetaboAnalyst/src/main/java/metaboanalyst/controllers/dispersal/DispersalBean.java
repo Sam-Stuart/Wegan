@@ -44,6 +44,9 @@ public class DispersalBean implements Serializable {
                 case "beals":
                     doDefaultBeals();
                     break;
+                case "betadisper":
+                    doDefaultBetaDisper();
+                    break;
             }
         }
     }
@@ -61,6 +64,13 @@ public class DispersalBean implements Serializable {
         
         Dispersal.InitBeals(sb);
         Dispersal.PlotBeals(sb, sb.getNewImage("beals"), "png", 72, dispersalBgdNum);
+        
+    }
+    
+    private void doDefaultBetaDisper() {       
+        
+        Dispersal.InitBetaDisper(sb);
+        Dispersal.PlotBetaDisper(sb, sb.getNewImage("betadisper"), "png", 72, dispersalBgdNum);
         
     }
     
@@ -87,6 +97,8 @@ public class DispersalBean implements Serializable {
 //        RequestContext.getCurrentInstance().scrollTo("ac:form1:pairPane");
         return null;
     }
+    
+    
     
 }
 

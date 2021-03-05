@@ -203,24 +203,66 @@ PlotBeals <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, pcnum
 }
 
 
-####### Beta Dispersal  
+####### BETA DISPERSAL ###### 
 
-betadisperWegan <- function(input,dist,group){
-        if(input == "BCI"){
-                # Catches if user is asking to use sample data :
-                # Barro Colorado Island Tree Counts
-                data(BCI)
-                inputData <- BCI
-        }else if( input == 'varespec'){
-                data(varespec)
-                inputData <- varespec
-                dis <- vegdist(varespec)
-                groups <- factor(c(rep(1,16), rep(2,8)), labels = c("grazed","ungrazed"))
-                mod <- betadisper(dis, groups)
-                print(mod)
-        
-        }else{
-                inputData <- loadData(input)
-        }
+betadisperWegan <- function(mSetObj=NA){
+    print("betaDispersal Wegan 1");
+    mSetObj <- .get.mSet(mSetObj);
        
+    data <- mSetObj$dataSet$orig
+    print(dim(data));
+    print(data);
+    #data(varespec);
+    #data <- varespec;
+    print(" ########## BETA 2");
+    print(dim(data));
+    ## Bray-Curtis distances between samples
+    dis <- vegdist(data);
+    print(dis);
+    ## First 16 sites grazed, remaining 8 sites ungrazed
+    groups <- factor(c(rep(1,16), rep(2,8)), labels = c("grazed","ungrazed"))
+    print(groups);
+    ## Calculate multivariate dispersions
+    mod <- betadisper(dis, groups)
+    print(mod)
+    print(class(mod));
+    
+    # store the item to the bgdispersal object
+    mSetObj$analSet$betadisper <- mod;
+    
+    return(.set.mSet(mSetObj));
+}
+
+
+PlotBetaDisper <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, pcnum=0){
+  print(" -------------------------PLOT Beta Dispersal  ------------------");
+  mSetObj <- .get.mSet(mSetObj);
+  
+  mod <- mSetObj$analSet$betadisper;
+    
+  print("plot beta disper 1");  
+  imgName = paste(imgName, "dpi", dpi, ".", format, sep="");
+  if(is.na(width)){
+    w <- 10;
+  }else if(width == 0){
+    w <- 8;
+  }else{
+    w <- width;
+  }
+  
+  print("plot beta 2");
+  print(imgName);
+  mSetObj$imgSet$defaultbetadisper<- imgName;
+  print("plot beta 3");
+  
+   
+  print(class(mod));
+  
+  print(dim(mod));
+  h <- w;
+  Cairo::Cairo(file = imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white");
+  plot(mod);
+  print("plot beta 6");
+  dev.off();
+  return(.set.mSet(mSetObj));
 }

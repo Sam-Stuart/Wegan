@@ -408,7 +408,7 @@ public class DispersalloadBean implements Serializable {
         }*/
         //;
         System.out.print("---------------- handleDispersaltestfileUpload -----------------------");
-        return "beals";    /*  CHANGE BACK TO 'Data check'  FOR THE SANITY CHECK _ NORMALIZATOION WORKFLOW   */ 
+        return "Dispersal";    /*  CHANGE BACK TO 'Data check'  FOR THE SANITY CHECK _ NORMALIZATOION WORKFLOW   */ 
     }
     
     

@@ -262,6 +262,11 @@
             <to-view-id>/Secure/analysis/BealsView.xhtml</to-view-id>
             <redirect/>
        </navigation-case> 
+       <navigation-case>
+            <from-outcome>betadisper</from-outcome>
+            <to-view-id>/Secure/analysis/BetaDisperView.xhtml</to-view-id>
+            <redirect/>
+       </navigation-case> 
         <navigation-case>
             <from-outcome>msspec</from-outcome>
             <to-view-id>/Secure/process/ProcMSspec.xhtml</to-view-id>

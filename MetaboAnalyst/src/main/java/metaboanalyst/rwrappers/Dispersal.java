@@ -117,6 +117,36 @@ public class Dispersal {
         }
     }
     
+    
+   // ### Beta Dispersal Functions #####
+    public static void InitBetaDisper(SessionBean1 sb) {
+        System.out.print("######## InitBetaDisper#######");
+        try {
+            String rCommand = "betadisperWegan(NA)";
+            RConnection RC = sb.getRConnection();
+            RCenter.recordRCommand(RC, rCommand);
+            RC.voidEval(rCommand);
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        }
+    }
+    
+    public static void PlotBetaDisper(SessionBean1 sb, String imageName, String format, int dpi, int pcNum) {
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "PlotBetaDisper(NA" + ", \"" + imageName + "\", \"" + format + "\", " + dpi + ", width=NA, " + pcNum + ")";
+            System.out.print("PlotBetaDisper:");
+            System.out.print(rCommand);
+            RCenter.recordRCommand(RC, rCommand);
+            sb.addGraphicsCMD("betadisper", rCommand);
+            System.out.print(imageName);
+            RC.voidEval(rCommand);
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        }
+    }
+    
+    
         
 /**      
     public static void FlipPCA(SessionBean1 sb, String axisOpt) {
