@@ -11,11 +11,10 @@
 library(Cairo)
 library(vegan)
 
-# -------------Coefficients of Biogeographical Dispersal Direction--------------------------------------------------
+# -------------Coefficients of Biogeographical Dispersal Direction-------------------------------------------------- 
 
 
 bgdispersalWegan <- function(mSetObj=NA){
-    print("------------######---------bgdispersalWegan------------#######----------");
     
     mSetObj <- .get.mSet(mSetObj);
     
@@ -65,7 +64,6 @@ PlotBGD <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, bgdnum)
     mSetObj$imgSet$dispersal.bgd1 <- imgName;
     # Use the Cairo package to plot the data
     Cairo::Cairo(file = imgName, unit="in",width=w, height=h, dpi=dpi, type=format, bg="white");
-    print(mat);
     dev.off();
     return(.set.mSet(mSetObj));
 }
@@ -80,10 +78,8 @@ PlotBGD <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, bgdnum)
 GetBGDSigMat <- function(mSetObj=NA, tableName){
   
     mSetObj <- .get.mSet(mSetObj);
-    print( "    GetBGDSigMat function123: ");
   
     if(tableName == 'bgd1'){
-        print(' Row AFFRIMATIVE ')
         return(CleanNumber(mSetObj$analSet$bgdispersal$DD1));
     }else if(tableName == 'bgd2'){
         return(CleanNumber(mSetObj$analSet$bgdispersal$DD2));
@@ -103,10 +99,7 @@ GetBGDSigMat <- function(mSetObj=NA, tableName){
 GetBGDSigRowNames <- function(mSetObj=NA, tableName){
     mSetObj <- .get.mSet(mSetObj);
 
-    print("GetBGDSigRowNames R");
-    print(tableName);
     if(tableName == 'bgd1'){
-        print(' Row AFFRIMATIVE ')
         rownames(mSetObj$analSet$bgdispersal$DD1);
     }else if(tableName == 'bgd2'){
         rownames(mSetObj$analSet$bgdispersal$DD2);
@@ -125,12 +118,9 @@ GetBGDSigRowNames <- function(mSetObj=NA, tableName){
 }
 
 GetBGDSigColNames <- function(mSetObj=NA, tableName){
-    print("GetBGDSigColNames");
     mSetObj <- .get.mSet(mSetObj);
-    print(tableName);   
-  
+    
     if(tableName == 'bgd1'){
-        print(' Row AFFRIMATIVE ')
         colnames(mSetObj$analSet$bgdispersal$DD1);
     }else if(tableName == 'bgd2'){
         colnames(mSetObj$analSet$bgdispersal$DD2);
@@ -154,7 +144,7 @@ GetBGDSigFileName <- function(mSetObj=NA){
 
 ###### Beals smoothing function 
 bealsWegan <- function(mSetObj=NA){
-    print("beals Wegan 1");
+    print("Beals Wegan");
     mSetObj <- .get.mSet(mSetObj);
    
     # Call upon the beals smoothing function 
@@ -169,12 +159,10 @@ bealsWegan <- function(mSetObj=NA){
 
 
 PlotBeals <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, pcnum=0){
-  print(" -------------------------PLOT Beals  ------------------");
-  mSetObj <- .get.mSet(mSetObj);
+  
+mSetObj <- .get.mSet(mSetObj);
   
   beals_matrix <- as.matrix(mSetObj$analSet$beals);
-    
-  print("plot beals 1");  
   imgName = paste(imgName, "dpi", dpi, ".", format, sep="");
   if(is.na(width)){
     w <- 10;
@@ -184,20 +172,13 @@ PlotBeals <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, pcnum
     w <- width;
   }
   
-  print("plot beals 2");
   mSetObj$imgSet$defaultbeals<- imgName;
-  print("plot beals 3");
-  print(dim(mSetObj$dataSet$orig));
-
   pa <- decostand(mSetObj$dataSet$orig, "pa");
 
-  print("plot beals 5");
-  print(dim(beals_matrix));
   h <- w;
   Cairo::Cairo(file = imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white");
   boxplot(as.vector(beals_matrix) ~ unlist(pa), xlab="Presence", ylab="Beals");
 
-  print("plot beals 6");
   dev.off();
   return(.set.mSet(mSetObj));
 }
@@ -206,26 +187,28 @@ PlotBeals <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, pcnum
 ####### BETA DISPERSAL ###### 
 
 betadisperWegan <- function(mSetObj=NA){
-    print("betaDispersal Wegan 1");
+    print(" beta dispersal");
     mSetObj <- .get.mSet(mSetObj);
        
     data <- mSetObj$dataSet$orig
-    print(dim(data));
-    print(data);
+    data_type <- mSetObj$dataSet$type;
     #data(varespec);
     #data <- varespec;
-    print(" ########## BETA 2");
-    print(dim(data));
+    
     ## Bray-Curtis distances between samples
     dis <- vegdist(data);
-    print(dis);
     ## First 16 sites grazed, remaining 8 sites ungrazed
-    groups <- factor(c(rep(1,16), rep(2,8)), labels = c("grazed","ungrazed"))
-    print(groups);
+    if (data_type == 'Varespec'){
+        print("here?");
+        groups <- factor(c(rep(1,16), rep(2,8)), labels = c("grazed","ungrazed"))
+    }else if (data_type == 'Dune'){
+        print(" data type is dune");
+        groups <- factor(c(rep(1,10), rep(2,10)), labels = c("group A","group B"))
+    }
     ## Calculate multivariate dispersions
+    print(" made it here");
     mod <- betadisper(dis, groups)
-    print(mod)
-    print(class(mod));
+    print(" and here ");
     
     # store the item to the bgdispersal object
     mSetObj$analSet$betadisper <- mod;
@@ -235,12 +218,10 @@ betadisperWegan <- function(mSetObj=NA){
 
 
 PlotBetaDisper <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, pcnum=0){
-  print(" -------------------------PLOT Beta Dispersal  ------------------");
   mSetObj <- .get.mSet(mSetObj);
   
   mod <- mSetObj$analSet$betadisper;
     
-  print("plot beta disper 1");  
   imgName = paste(imgName, "dpi", dpi, ".", format, sep="");
   if(is.na(width)){
     w <- 10;
@@ -249,20 +230,12 @@ PlotBetaDisper <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, 
   }else{
     w <- width;
   }
-  
-  print("plot beta 2");
-  print(imgName);
+  data_type <- mSetObj$dataSet$type;
+  title <- paste('Multivariate Dispersions of',data_type);
   mSetObj$imgSet$defaultbetadisper<- imgName;
-  print("plot beta 3");
-  
-   
-  print(class(mod));
-  
-  print(dim(mod));
   h <- w;
   Cairo::Cairo(file = imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white");
-  plot(mod);
-  print("plot beta 6");
+  plot(mod, main = title);
   dev.off();
   return(.set.mSet(mSetObj));
 }
