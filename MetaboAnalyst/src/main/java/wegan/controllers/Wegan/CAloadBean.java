@@ -222,7 +222,9 @@ public class CAloadBean implements Serializable {
             testFile = ab.getTestDune();
 //            testWeightFile = ab.getTestWeightDune();
             format = "rowu";
-            
+        } else if (testDataOpt.equals("Iris")) {
+            testFile = ab.getTestIris();
+            format = "rowu";           
         } else if (testDataOpt.equals("BCI")) {
             testFile = ab.getTestBCI();
             format = "rowu";

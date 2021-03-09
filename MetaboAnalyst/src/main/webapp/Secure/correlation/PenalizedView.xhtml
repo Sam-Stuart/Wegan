@@ -11,19 +11,77 @@
     </ui:define>
     <ui:define name="content">
         <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
-            <!--<img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_penalized')}" alt="penalizedimage"/>-->
-            <p:tabView id="ac" style="width:100%; border: none; background: none; font-size: 13px;">
-                <p:tab title ="Overview">
+            <p:tabView id="penalCA" style="width:100%; border: none; background: none; font-size: 13px;">
+                <p:tab title ="Predicted vs Actual Plot">
                     <h:form id="form1">
-                        <h:panelGrid columns="2" style="width: 70%">
-                            <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_penalized')}" alt="penalizedimage"/>
-                        </h:panelGrid>        
-                    </h:form>
+                        <p>
+                            One dependent variable and one or more independent variables will be tested for correlation. The variables can be numeric or categorical. 
+                            Note that all variables other than the dependent variable will be treated as independent variables. The penalized regression models will constrain the contribution of the independent variables on the dependent variable accordingly.
+                            The train data for model building is 70% of the dataset, while the test data for model testing is 30% of the dataset.
+                            The penalized regression model was optimized using alpha = #{penalCABean.corrPenalResults.get(0)} and lambda = #{penalCABean.corrPenalResults.get(1)}. 
+                        </p>
+                        <h:panelGrid columns="3">
+                            <h:panelGrid columns="2" style="padding: 2px 20px 10px 20px; line-height: 25px">
+                                <h:outputLabel style="font-weight: bold" value="Regression Methods:"/>
+                                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{penalCABean.corrFunctionMethods}">
+                                        <f:selectItems value="#{applicationBean1.corrMethodsOpts}" />
+                                    </p:selectOneMenu> 
+                                
+                                <h:outputLabel style="font-weight: bold" value="Include Weights:"/>
+                                    <p:selectBooleanCheckbox value ="#{penalCABean.addWeights}"/> 
+                                    
+                                <h:outputLabel style="font-weight: bold" value="Dependant Variable:"/>
+                                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{penalCABean.columnNameA}">
+                                        <f:selectItems value="#{penalCABean.columnOpts}" />
+                                    </p:selectOneMenu>
+                                    <p:commandButton value="Submit" 
+                                                     onclick="PF('statusDialog').show()"
+                                                     oncomplete="PF('statusDialog').hide()"  
+                                                     update=":penalCA:form1:corrPenalPane1  :cmdPane" 
+                                                     actionListener="#{penalCABean.penalizedUpdate_action()}"/>  
+                            </h:panelGrid>                        
+                        </h:panelGrid>
+                                        <hr style="height: 12px; border: 0;box-shadow: inset 0 12px 12px -12px rgba(0, 0, 0, 0.5); width:100%; min-width: 1000px"/>
+                        <h:panelGrid id="corrPenalPane1" style="text-align: center; width: 100%;">
+                            <h:panelGrid columns="1" style="padding: 2px 20px 10px 20px; line-height: 25px">
+                                <h:outputLabel style="font-weight: bold" value="Root-Mean-Square Error : #{penalCABean.corrPenalResults.get(2)}"/>
+                           </h:panelGrid>
+                            <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_penalized')}" alt="Correrlationimage"/>
+                        </h:panelGrid>           
+                    </h:form>    
                 </p:tab>
-                <p:tab title ="Test 2">
+                <p:tab title ="Mean Squared Error-log(lambda) Plots">
                     <h:form id="form2">
-                        <h:panelGrid columns="2" style="width: 70%">
-                            <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_penalized')}" alt="penalizedimage"/>
+                        <p>
+                            One dependent variable and one or more independent variables will be tested for correlation. The variables can be numeric or categorical. 
+                            Note that all variables other than the dependent variable will be treated as independent variables. The penalized regression models will constrain the contribution of the independent variables on the dependent variable accordingly.
+                            The train data for model building is 70% of the dataset, while the test data for model testing is 30% of the dataset.
+                            The penalized regression model was optimized using alpha = #{penalCABean.corrPenalResults.get(0)} and lambda = #{penalCABean.corrPenalResults.get(1)}. 
+                        </p>
+                        <h:panelGrid columns="3">
+                            <h:panelGrid columns="2" style="padding: 2px 20px 10px 20px; line-height: 25px">
+                                <h:outputLabel style="font-weight: bold" value="Regression Methods:"/>
+                                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{penalCABean.corrFunctionMethods}">
+                                        <f:selectItems value="#{applicationBean1.corrMethodsOpts}" />
+                                    </p:selectOneMenu> 
+                                
+                                <h:outputLabel style="font-weight: bold" value="Include Weights:"/>
+                                    <p:selectBooleanCheckbox value ="#{penalCABean.addWeights}"/> 
+                                    
+                                <h:outputLabel style="font-weight: bold" value="Dependant Variable:"/>
+                                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{penalCABean.columnNameA}">
+                                        <f:selectItems value="#{penalCABean.columnOpts}" />
+                                    </p:selectOneMenu>
+                                    <p:commandButton value="Submit" 
+                                                     onclick="PF('statusDialog').show()"
+                                                     oncomplete="PF('statusDialog').hide()"  
+                                                     update=":penalCA:form1:corrPenalPane1  :cmdPane" 
+                                                     actionListener="#{penalCABean.penalizedUpdate2_action()}"/>  
+                            </h:panelGrid>                       
+                        </h:panelGrid>
+                                        <hr style="height: 12px; border: 0;box-shadow: inset 0 12px 12px -12px rgba(0, 0, 0, 0.5); width:100%; min-width: 1000px"/>
+                        <h:panelGrid id="corrPenalPane2" style="text-align: center; width: 100%;">
+                            <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_penalized2')}" alt="CorrelationPolyPredictimage"/>
                         </h:panelGrid>        
                     </h:form>
                 </p:tab>

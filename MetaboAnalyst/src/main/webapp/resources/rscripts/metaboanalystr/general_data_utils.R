@@ -131,9 +131,9 @@ Read.TextData <- function(mSetObj=NA, filePath, format="colu", lbl.type="disc"){
   mSetObj <- .get.mSet(mSetObj);
   mSetObj$dataSet$cls.type <- lbl.type;
   mSetObj$dataSet$format <- format;
-  
+
   dat <- .readDataTable(filePath);
-  
+
   if(class(dat) == "try-error" || ncol(dat) == 1){
     AddErrMsg("Data format error. Failed to read in the data!");
     AddErrMsg("Make sure the data table is saved as comma separated values (.csv) format!");
@@ -183,6 +183,7 @@ Read.TextData <- function(mSetObj=NA, filePath, format="colu", lbl.type="disc"){
     if(substring(format,1,3)=="row"){ # sample in row
       msg <- c(msg, "Samples are in rows and features in columns");
       smpl.nms <-dat[,1];
+      cat(paste0(smpl.nms))
       dat[,1] <- NULL;
       if(lbl.type == "qc"){
         rownames(dat) <- smpl.nms;
@@ -564,6 +565,7 @@ ReadPairFile <- function(filePath="pairs.txt"){
 #'
 SaveTransformedData <- function(mSetObj=NA){
   mSetObj <- .get.mSet(mSetObj);
+
   if(!is.null(mSetObj$dataSet[["orig"]])){
     lbls <- NULL;
     tsFormat <- substring(mSetObj$dataSet$format,4,5)=="ts";
@@ -571,7 +573,7 @@ SaveTransformedData <- function(mSetObj=NA){
       lbls <- cbind(as.character(mSetObj$dataSet$orig.facA),as.character(mSetObj$dataSet$orig.facB));
       colnames(lbls) <- c(mSetObj$dataSet$facA.lbl, mSetObj$dataSet$facB.lbl);
     }else{
-      lbls <- cbind("Label"= as.character(mSetObj$dataSet$orig.cls));
+      #lbls <- cbind("Label"= as.character(mSetObj$dataSet$orig.cls));
     }
     orig.data<-cbind(lbls, mSetObj$dataSet$orig);
     if(dim(orig.data)[2]>200){
@@ -595,7 +597,7 @@ SaveTransformedData <- function(mSetObj=NA){
           lbls <- cbind(as.character(mSetObj$dataSet$facA),as.character(mSetObj$dataSet$facB));
           colnames(lbls) <- c(mSetObj$dataSet$facA.lbl, mSetObj$dataSet$facB.lbl);
         }else{
-          lbls <- cbind("Label"= as.character(mSetObj$dataSet$cls));
+          #lbls <- cbind("Label"= as.character(mSetObj$dataSet$cls));
         }
         
         # for ms peaks with rt and ms, insert two columns, without labels

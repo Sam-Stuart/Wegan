@@ -59,6 +59,7 @@ public class ApplicationBean1 implements Serializable {
     private static final String test_dune = "/data/dune.txt";
     private static final String test_BCI = "/data/BCI.txt";
     
+    private static final String test_iris = "/data/iris.csv";
     private static final String test_dune_weights = "/data/dune_weights.txt";
     
     
@@ -120,6 +121,7 @@ public class ApplicationBean1 implements Serializable {
     private final SelectItem[] pathLibOpts;
     private final SelectItem[] massLibOpts;
     private final SelectItem[] refLibOpts;
+    private final SelectItem[] corrMethodsOpts;
     
     
     
@@ -305,6 +307,11 @@ public class ApplicationBean1 implements Serializable {
         distMeasureOpts[1] = new SelectItem("spearman", "Spearman rank correlation");
         distMeasureOpts[2] = new SelectItem("kendall", "Kendall rank correlation");
 
+        corrMethodsOpts = new SelectItem[3];
+        corrMethodsOpts[0] = new SelectItem("ridge", "Ridge");
+        corrMethodsOpts[1] = new SelectItem("elastic net", "Elastic Net");
+        corrMethodsOpts[2] = new SelectItem("lasso", "Lasso");
+        
         orgOpts = new SelectItem[4];
         orgOpts[0] = new SelectItem("NA", "----Not specified----");
         orgOpts[1] = new SelectItem("hsa", "Homo sapiens (human)");
@@ -511,6 +518,10 @@ public class ApplicationBean1 implements Serializable {
         return realPath + test_dune;
     }
 
+    public String getTestIris() {
+        return realPath + test_iris;
+    }
+    
     public String getTestWeightDune() {
         return realPath + test_dune_weights;
     }
@@ -786,6 +797,9 @@ public class ApplicationBean1 implements Serializable {
         return distMeasureOpts;
     }
 
+    public SelectItem[] getCorrMethodsOpts() {
+        return corrMethodsOpts;
+    }
     public SelectItem[] getColorContrastOpts() {
         return colorContrastOpts;
     }

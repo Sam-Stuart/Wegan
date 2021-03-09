@@ -15,7 +15,7 @@ metaanal_files <- c("meta_methods", "meta_data_utils");
 network_files <- c("networks", "enrich_integ", "enrich_name_match", "gene_fun_utils", "enrich_path_kegg");
 other_files <- c("others_batch_check", "others_lipomics", "enrich_name_match");
 nmds_files <- c("test-Vegan");
-correlation_files <- c("correlation_linear", "correlation_penalized");
+correlation_files <- c("correlation_linear", "correlation_penalized", "correlation_polynomial", "correlation_ml", "correlation_multivariate", "correlation_SVM");
 LoadScripts <- function(module.nm = "ca"){
     file.sources <- "";
     if(module.nm == "stat"){

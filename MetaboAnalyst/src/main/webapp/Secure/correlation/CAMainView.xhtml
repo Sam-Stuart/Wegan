@@ -25,8 +25,15 @@
                         <h:commandLink action="Polynomial" onclick="PF('statusDialog').show()" value="Polynomial Regression Analysis"/>
                     </h:panelGrid>
                     <h:panelGrid columns="3">
-                        <h:commandLink action="Logistic" onclick="PF('statusDialog').show()" value="Logistic Regression Analysis"/>
+                        <h:commandLink action="Penalized" onclick="PF('statusDialog').show()" value="Penalized Regression"/>
                     </h:panelGrid>
+                    <h:panelGrid columns="3">
+                        <h:commandLink action="MultivariateLinear" onclick="PF('statusDialog').show()" value="Multivariate Regression Analysis"/>
+                    </h:panelGrid>
+                    <h:panelGrid columns="3">
+                        <h:commandLink action="SVMCorrelation" onclick="PF('statusDialog').show()" value="SVM Regression Analysis"/>
+                    </h:panelGrid>
+                    <!--
                     <h:panelGrid columns="3">
                         <h:commandLink action="Multiple" onclick="PF('statusDialog').show()" value="Multiple Regression Analysis"/>
                     </h:panelGrid>
@@ -35,10 +42,7 @@
                     </h:panelGrid>
                     <h:panelGrid columns="3">
                         <h:commandLink action="Linear" onclick="PF('statusDialog').show()" value="Random Forest Analysis"/>
-                    </h:panelGrid>
-                    <h:panelGrid columns="3">
-                        <h:commandLink action="Penalized" onclick="PF('statusDialog').show()" value="Penalized Regression"/>
-                    </h:panelGrid>
+                    </h:panelGrid>-->
                 </h:panelGrid>
             </h:panelGrid> 
         </h:form>

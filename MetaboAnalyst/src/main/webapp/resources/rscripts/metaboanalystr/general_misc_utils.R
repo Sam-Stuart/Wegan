@@ -131,6 +131,7 @@ RemoveDuplicates <- function(data, lvlOpt="mean", quiet=T){
 #'
 .readDataTable <- function(fileName){
   dat <- try(data.table::fread(fileName, header=TRUE, check.names=FALSE, data.table=FALSE));
+
   if(class(dat) == "try-error"){
     # try to use "tr" to remove double return characters
     trFileName <- paste("tr -d \'\\r\' <", fileName);
@@ -140,7 +141,9 @@ RemoveDuplicates <- function(data, lvlOpt="mean", quiet=T){
       formatStr <- substr(fileName, nchar(fileName)-2, nchar(fileName))
       if(formatStr == "txt"){
         dat <- try(read.table(fileName, header=TRUE, comment.char = "", check.names=F, as.is=T));
+        cat("INSIDE THE TXT ONE");
       }else{ # note, read.csv is more than read.table with sep=","
+        cat("INSIDE THE CSV ONE");
         dat <- try(read.csv(fileName, header=TRUE, comment.char = "", check.names=F, as.is=T));
       }  
     }

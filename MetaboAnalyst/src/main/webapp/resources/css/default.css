@@ -261,8 +261,15 @@ div[id="form1:listTbl"] tbody {
 
 /*This is the main body color*/
 
-.myMainColorLayoutStyle .ui-layout-unit-content{
+/*.myMainColorLayoutStyle .ui-layout-unit-content{
     background: #f2f8ff !important;
+
+    border-left: dashed thin !important;
+}*/
+
+.myMainColorLayoutStyle .ui-layout-unit-content{
+    /*background: #f2f8ff !important;*/
+    background-image: url('/MetaboAnalyst/faces/resources/images/background.jpg') !important;
 
     border-left: dashed thin !important;
 }

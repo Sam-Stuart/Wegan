@@ -242,7 +242,11 @@ public class UploadBean implements Serializable {
             
             
         //****************************************************************************   
-            
+        } else if (testDataOpt.equals("Iris")) {
+            dataType = "iris";
+            testFile = ab.getTestIris();
+            format = "rowu";
+        
         } else if (testDataOpt.equals("conccow")) {
             dataType = "conc";
             testFile = ab.getTestConcCowPath();

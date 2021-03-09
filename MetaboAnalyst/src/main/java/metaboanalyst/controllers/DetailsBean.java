@@ -156,6 +156,7 @@ public class DetailsBean implements Serializable {
             fileName = TimeSeries.GetAscaSigFileName(sb);
         } else {
             //do nothing
+            
         }
         //set up the view
         if (colnames == null || colnames.length == 0) {

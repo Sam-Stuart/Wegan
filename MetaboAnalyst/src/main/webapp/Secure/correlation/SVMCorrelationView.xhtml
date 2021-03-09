@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_anal_template.xhtml">
+    <ui:define name="metaInfo">
+        <f:event type="preRenderView" listener="#{caBean.performDefaultAnalysis('SVM')}"/> 
+    </ui:define>
+    <ui:define name="content">
+        <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
+            <h:form id="form1">
+                <p>
+                    One dependent variable and one or more independent variables will be tested for correlation. The dependent variable must be numeric. The independent variables can be numeric or categorical.
+                    For categorical independent variables, make sure to use characters for the levels and not numbers. For example, if you have levels 1, 2 and 3, change the level labels to I, II and III prior to upload.
+                    You have created this formula for model building: ", facA, " ~ ", pred.text (stored in mSetObj$analSet$rfReg$res as response and pred.text, respectively)
+                    The Left hand side is the dependent variable. The R hand side is the independent variable(s).
+                    If the formula is not what you intended, retype independent variable(s) in the text box and/or choose another dependent variable.
+                    The train data for model building is 70% of the dataset, while the test data for model testing is 30% of the dataset.
+                </p>
+                <h:panelGrid columns="2">
+                </h:panelGrid>
+                                <hr style="height: 12px; border: 0;box-shadow: inset 0 12px 12px -12px rgba(0, 0, 0, 0.5); width:100%; min-width: 1000px"/>
+                <h:panelGrid id="corrPane" style="text-align: center; width: 100%;">
+                    <p:scrollPanel mode="native" style="width:780px;height:700px">
+                        <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_svm')}" alt="SVMimage"/>
+                    </p:scrollPanel>
+                </h:panelGrid>        
+            </h:form>
+            <!--<img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_svm')}" alt="penalizedimage"/>-->
+<!--            <p:tabView id="ac" style="width:100%; border: none; background: none; font-size: 13px;">
+                <p:tab title ="Overview">
+                    <h:form id="form1">
+
+                        <h:panelGrid id="corrPane" style="text-align: center; width: 100%;">
+                            <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_penalized')}" alt="penalizedimage"/>
+                        </h:panelGrid>        
+                    </h:form>
+                </p:tab>
+                <p:tab title ="Test 2">
+                    <h:form id="form2">
+                        <h:panelGrid columns="2" style="width: 70%">
+                            <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_penalized')}" alt="penalizedimage"/>
+                        </h:panelGrid>        
+                    </h:form>
+                </p:tab>
+            </p:tabView> -->
+        </h:panelGrid> 
+    </ui:define>
+</ui:composition>

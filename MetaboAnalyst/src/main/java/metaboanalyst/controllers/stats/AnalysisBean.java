@@ -7,6 +7,7 @@ package metaboanalyst.controllers.stats;
 
 import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
+import javax.faces.context.FacesContext;
 import metaboanalyst.controllers.SessionBean1;
 import metaboanalyst.rwrappers.CAUtils;
 import metaboanalyst.rwrappers.ChemoMetrics;
@@ -31,62 +32,64 @@ public class AnalysisBean implements Serializable {
 
     public void performDefaultAnalysis(String pageID) {
         if (!sb.isAnalInit(pageID)) {
-            //sb.registerPage(pageID);
-            switch (pageID) {
-                case "PCA":
-                    doDefaultPCA();
-                    break;
-                case "ANOVA":
-                    doDefaultANOVA();
-                    break;
-                case "Fold change":
-                    doDefaultFC();
-                    break;
-                case "T-test":
-                    doDefaultTT();
-                    break;
-                case "Volcano plot":
-                    doDefaultVC();
-                    break;
-                case "Correlations":
-                    doDefaultCorrelation();
-                    break;
-                case "PLSDA":
-                    doDefaultPLSDA();
-                    break;
-                case "sPLSDA":
-                    doDefaultSPLSDA();
-                    break;
-                case "OrthoPLSDA":
-                    doDefaultOPLSDA();
-                    break;
-                case "SAM":
-                    doDefaultSAM();
-                    break;
-                case "EBAM":
-                    doDefaultEBAM();
-                    break;
-                case "Dendrogram":
-                    doDefaultDendrogram();
-                    break;
-                case "Heatmap":
-                    doDefaultHmClust();
-                    break;
-                case "K-means":
-                    doDefaultKmeanClust();
-                    break;
-                case "SOM":
-                    doDefaultSOMClust();
-                    break;
-                case "RandomForest":
-                    doDefaultRF();
-                    break;
-                case "SVM":
-                    doDefaultSVM();
-                    break;
-                case "DCA":
-                    doDefaultDCA();
-                    break;    
+            if (!FacesContext.getCurrentInstance().isPostback()) {
+                //sb.registerPage(pageID);
+                switch (pageID) {
+                    case "PCA":
+                        doDefaultPCA();
+                        break;
+                    case "ANOVA":
+                        doDefaultANOVA();
+                        break;
+                    case "Fold change":
+                        doDefaultFC();
+                        break;
+                    case "T-test":
+                        doDefaultTT();
+                        break;
+                    case "Volcano plot":
+                        doDefaultVC();
+                        break;
+                    case "Correlations":
+                        doDefaultCorrelation();
+                        break;
+                    case "PLSDA":
+                        doDefaultPLSDA();
+                        break;
+                    case "sPLSDA":
+                        doDefaultSPLSDA();
+                        break;
+                    case "OrthoPLSDA":
+                        doDefaultOPLSDA();
+                        break;
+                    case "SAM":
+                        doDefaultSAM();
+                        break;
+                    case "EBAM":
+                        doDefaultEBAM();
+                        break;
+                    case "Dendrogram":
+                        doDefaultDendrogram();
+                        break;
+                    case "Heatmap":
+                        doDefaultHmClust();
+                        break;
+                    case "K-means":
+                        doDefaultKmeanClust();
+                        break;
+                    case "SOM":
+                        doDefaultSOMClust();
+                        break;
+                    case "RandomForest":
+                        doDefaultRF();
+                        break;
+                    case "SVM":
+                        doDefaultSVM();
+                        break;
+                    case "DCA":
+                        doDefaultDCA();
+                        break; 
+                }
             }
         }
     }

@@ -1,0 +1,98 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_anal_template.xhtml">
+    <ui:define name="metaInfo">
+        <f:event type="preRenderView" listener="#{caBean.performDefaultAnalysis('Polynomial')}"/> 
+    </ui:define>
+
+    <ui:define name="content">
+        <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
+            <p:tabView id="polyCA" style="width:100%; border: none; background: none; font-size: 13px;">
+                <p:tab title ="Overview">
+                    <h:form id="form1">
+                        <p>
+                            Two variables will be tested for correlation, a dependent variable and an independent variable. Both must have numeric values.                
+                        </p>
+                        <h:panelGrid columns="3">
+                            <h:panelGrid columns="2" style="padding: 2px 20px 10px 20px; line-height: 25px">
+                                <h:outputLabel style="font-weight: bold" value="Include Weights:"/>
+                                    <p:selectBooleanCheckbox value ="#{polyCABean.addWeights}"/> 
+                                    
+                                <h:outputLabel style="font-weight: bold" value="Dependant Variable:"/>
+                                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{polyCABean.columnNameA}">
+                                        <f:selectItems value="#{polyCABean.columnOpts}" />
+                                    </p:selectOneMenu>
+                                <h:outputLabel style="font-weight: bold" value="Independant Variable:"/>
+                                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{polyCABean.columnNameB}">
+                                        <f:selectItems value="#{polyCABean.columnOpts}" />
+                                    </p:selectOneMenu>
+                                <h:outputLabel style="font-weight: bold" value="Degree of Polynomial:"/>
+                                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{polyCABean.polyDegree}">
+                                        <f:selectItems value="#{polyCABean.degreeOpts}" />
+                                    </p:selectOneMenu>
+                                    <p:commandButton value="Submit" 
+                                                     onclick="PF('statusDialog').show()"
+                                                     oncomplete="PF('statusDialog').hide()"  
+                                                     update=":polyCA:form1:corrPolyPane1  :cmdPane" 
+                                                     actionListener="#{polyCABean.corrPoly1Btn_action()}"/>  
+                            </h:panelGrid>                        
+                        </h:panelGrid>
+                                        <hr style="height: 12px; border: 0;box-shadow: inset 0 12px 12px -12px rgba(0, 0, 0, 0.5); width:100%; min-width: 1000px"/>
+                        <h:panelGrid id="corrPolyPane1" style="text-align: center; width: 100%;">
+                            <h:panelGrid columns="1" style="padding: 2px 20px 10px 20px; line-height: 25px">
+                                <h:outputLabel style="font-weight: bold" value="Formula: #{polyCABean.corrPolyResults.get(0)}"/>
+                           </h:panelGrid>
+                            <h:panelGrid columns="1" style="padding: 2px 20px 10px 20px; line-height: 25px">
+                                <h:outputLabel style="font-weight: bold" value="#{polyCABean.corrPolyResults.get(1)}"/>
+                           </h:panelGrid>
+                            <h:panelGrid columns="1" style="padding: 2px 20px 10px 20px; line-height: 25px">
+                                <h:outputLabel style="font-weight: bold" value="#{polyCABean.corrPolyResults.get(2)}"/>
+                           </h:panelGrid>
+                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_poly')}" alt="CorrerlationPolyimage"/>
+                        </h:panelGrid>           
+                    </h:form>    
+                </p:tab>
+                <p:tab title ="Predicted vs Actual Plot">
+                    <h:form id="form2">
+                        <p>
+                            Two variables will be tested for correlation, a dependent variable and an independent variable. Both must have numeric values.                
+                        </p>
+                        <h:panelGrid columns="3">
+                            <h:panelGrid columns="2" style="padding: 2px 20px 10px 20px; line-height: 25px">
+                                <h:outputLabel style="font-weight: bold" value="Include Weights:"/>
+                                    <p:selectBooleanCheckbox value ="#{polyCABean.addWeights}"/> 
+     
+                                <h:outputLabel style="font-weight: bold" value="Dependant Variable:"/>
+                                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{polyCABean.columnNameA}">
+                                        <f:selectItems value="#{polyCABean.columnOpts}" />
+                                    </p:selectOneMenu>
+                                <h:outputLabel style="font-weight: bold" value="Independant Variable:"/>
+                                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{polyCABean.columnNameB}">
+                                        <f:selectItems value="#{polyCABean.columnOpts}" />
+                                    </p:selectOneMenu>
+                                <h:outputLabel style="font-weight: bold" value="Degree of Polynomial:"/>
+                                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{polyCABean.polyDegree}">
+                                        <f:selectItems value="#{polyCABean.degreeOpts}" />
+                                    </p:selectOneMenu>
+                                    <p:commandButton value="Submit" 
+                                                     onclick="PF('statusDialog').show()"
+                                                     oncomplete="PF('statusDialog').hide()"  
+                                                     update=":polyCA:form2:corrPolyPane2  :cmdPane" 
+                                                     actionListener="#{polyCABean.corrPolyPredBtn_action()}"/>  
+                            </h:panelGrid>                        
+                        </h:panelGrid>
+                                        <hr style="height: 12px; border: 0;box-shadow: inset 0 12px 12px -12px rgba(0, 0, 0, 0.5); width:100%; min-width: 1000px"/>
+                        <h:panelGrid id="corrPolyPane2" style="text-align: center; width: 100%;">
+                            <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_poly_pred')}" alt="CorrelationPolyPredictimage"/>
+                        </h:panelGrid>        
+                    </h:form>
+                </p:tab>
+            </p:tabView> 
+        </h:panelGrid> 
+    </ui:define>
+</ui:composition>

@@ -296,8 +296,28 @@
             <redirect/>
         </navigation-case>
         <navigation-case>
+            <from-outcome>MultivariateLinear</from-outcome>
+            <to-view-id>/Secure/correlation/MultivariateView.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>SVMCorrelation</from-outcome>
+            <to-view-id>/Secure/correlation/SVMCorrelationView.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>RFCorrelation</from-outcome>
+            <to-view-id>/Secure/correlation/RFCorrelationView.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
             <from-outcome>Penalized</from-outcome>
             <to-view-id>/Secure/correlation/PenalizedView.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>Polynomial</from-outcome>
+            <to-view-id>/Secure/correlation/PolynomialView.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         <navigation-case>

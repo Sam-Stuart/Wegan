@@ -1,166 +1,160 @@
 #'Perform Linear Regression'
-#'@description Build a linear regression model for one term
-#'@param mSetObj Input name of the created mSetObject 
-#'@param weights Set weight values, default is NULL
-#'@author Louisa Normington\email{normingt@ualberta.ca}
-#'University of Alberta, Canada
-#'License: GNU GPL (>= 2)
-#'@export
-
-PlotLinearTable<-function(mSetObj=NA, weights=NULL){
-  
-  mSetObj <- .get.mSet(mSetObj)
-
-  cat(paste0(mSetObj$dataSet$norm))
-
-  formula <- mSetObj$dataSet$norm[,1] ~ mSetObj$dataSet$norm[,2] #Default response is first column. Terms should also be user selected once results are displayed. The # of columns will be determined by Col.Count(). Javascript will then display columns in drop down.
-  
-  if (is.null(weights)==TRUE) { #Weights is an optional secondary file uploaded by user, separate from data
-    weights <- NULL
-  }
-
-  else {
-    weights <- mSetObj$dataSet$weights
-  }
-  
-  model <- lm(formula=formula, data=mSetObj$dataSet$norm, weights=NULL)
-  
-  fileName <- "linear_regression_summary_one_term.txt"
-  
-  results <-list(
-    model = model,
-    summary = summary(model), #actual table needing to be shown 
-    tableName = fileName 
-  )
-  
-  mSetObj$analSet$linReg1 <- results #results is in msetboject (holds summary table and table name)
-  return(.set.mSet(mSetObj))
-
-}
-#returning a table
-
-#'Plot line of best fit for linear regression with one term results
-#'@description 
-#'@usage Plot.linReg1(mSetObj, imgName, format="png", dpi=72, width=NA)
-#'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
-#'@param imgName Input a name for the plot
-#'@param format Select the image format, "png", or "pdf". 
-#'@param dpi Input the dpi. If the image format is "pdf", users need not define the dpi. For "png" images, 
-#'the default dpi is 72. It is suggested that for high-resolution images, select a dpi of 300.  
-#'@param width Input the width, there are 2 default widths, the first, width = NULL, is 10.5.
-#'The second default is width = 0, where the width is 7.2. Otherwise users can input their own width.   
-#'@author Louisa Normington\email{normingt@ualberta.ca}
-#'University of Alberta, Canada
-#'License: GNU GPL (>= 2)
-#'@export
-
-PlotLinearGraph<-function(mSetObj=NA, imgName, format="png", dpi=72, width=NA){
-
-  mSetObj <- .get.mSet(mSetObj);
-  response <- mSetObj$dataSet$norm[,1]
-  #factor <- mSetObj$dataSet$facA
-  factor <- mSetObj$dataSet$norm[,2]
-  model <- mSetObj$analSet$linReg1$model
-  imgName = paste(imgName, "dpi", dpi, ".", format, sep="");
-
-  if(is.na(width)){
-    w <- 7;
-  }
-
-  else if(width == 0){
-    w <- 7;
-  }
-
-  else{
-    w <- width;
-  }
-
-  mSetObj$imgSet$Plot.linReg1 <- imgName;
-
-  h <- w;
-  
-  Cairo::Cairo(file = imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white");
-  plot(factor, response)
-  abline(model)
-  dev.off();
-  return(.set.mSet(mSetObj));
-  
-}
-
-#'Perform Linear Regression'
 #'@description Build a linear regression model for one user selected predictor variable
 #'@param mSetObj Input the name of the created mSetObj
+#'@param facA Input the name of the response column (java uses Columns() to give user options)
+#'@param facB Input the name of the predictor column (java uses Columns() to give user options)
 #'@param weights Set weight values, default is NULL
 #'@author Louisa Normington\email{normingt@ualberta.ca}
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2)
 #'@export
 
-lin.reg.anal.one <- function(mSetObj=NA, weights=NULL){
+lin.reg.anal.one <- function(mSetObj=NA, facA=NULL, facB=NULL, weights=NULL){
   
   mSetObj <- .get.mSet(mSetObj)
-  #facA <- colnames(mSetObj$dataSet$norm)[2] #facA is the name of the first predictor variable (ie the column name)
-  facA <- "Agrostol"
-  cat("The first column will be the response variable.") #This should be visible to user
-  cat(paste0(facA))  
+  
+  #Dependent var default is first column. Independent var default is second column.
 
-  formula <- mSetObj$dataSet$norm[,1] ~ mSetObj$dataSet$norm[,"Agrostol"] #facA predictor variable should be user selected once results are displayed. The # and names of columns will be determined by Columns(). Javascript will then display columns in drop down.
 
-  cat("After formula line")  
+  #Set dependent (response) variable name
+  if (facA == "NULL"){
+    facA <- colnames(mSetObj$dataSet$norm)[1] #Default is first column.
+  } else {
+    facA <- facA #Determined using Columns() function below (java will present options in drop down menu)
+  }
+  
+  #Set independent (predictor) variable name
+  if (facB == "NULL"){
+    facB <- colnames(mSetObj$dataSet$norm)[2] #Default is second column.
+  } else {
+    facB <- facB #Determined using Columns() function below (java will present options in drop down menu)
+  }
 
+  #Variable type check
+  if (is.factor(mSetObj$dataSet$norm[,facA] || mSetObj$dataSet$norm[,facB])==TRUE){
+    #AddErrMsg("You have chosen 1 or more categorical columns! Try selecting another independent and/or dependent variable. You can also try other regression models such as penalized, logistic, SVM or random forest.")
+    stop("You have chosen 1 or more categorical columns! Try selecting another independent and/or dependent variable. You can also try other regression models such as penalized, logistic, SVM or random forest.") #Error msg
+  }
+  
+  #Define formula
+  formula <- as.formula(paste0(facA, "~", facB)) 
+  
+  #Generate model with or without weights
   if (is.null(weights)==TRUE) {
     model <- lm(formula=formula, data=mSetObj$dataSet$norm, weights=NULL) #Create linear model, no weights
-    cat("Model was just created")
   } else {
-    weights <- mSetObj$linReg$weights #Weights is held separate from dataSet, and can therefore only be accessed in the linear regression analysis pathway.
-    weights <- unlist(weights) #Change weights from a dataframe into a vector of numeric values
+    weights <- weights #Java upload weights as a vector of numeric values
     if (length(weights) == nrow(mSetObj$dataSet$norm)) { #There must be one weight for every row in the data set
       model <- lm(formula=formula, data=mSetObj$dataSet$norm, weights=weights) #Create linear model, with weights
     } else {
-        cat("The length of the weights vector does not equal the number of rows in the data set!") #Error should be thrown so user can see it 
-      }
+      #AddErrMsg("The length of the weights vector does not equal the number of rows in the data set! Check that the weights vector is correct.") #Error msg 
+      stop("The length of the weights vector does not equal the number of rows in the data set! Check that the weights vector is correct.") #Error msg 
     }
-  cat("After everything")
-  mSetObj$analSet$linReg1$mod <- model #Note where the model is stored
-  summary <- summary(model) #Generate summary
-  #fileName <- paste0("linear_regression_summary_", colnames(mSetObj$dataSet$norm)[1], "~", facA, ".txt") #File name for summary, used by save.linReg1.summary()
-  #mSetObj$analSet$linReg1$sum <- list(summary=summary, fileName=fileName) #Note where the summary is stored
+  }
+  
+  #Store model
+  mSetObj$analSet$linReg1$mod <- model
+  
+  #Extract results
+  fitted <- fitted(model) #Predicted values
+  summary <- summary(model) #Summary includes coefficients, residuals and fit parameters
+  residuals <- model$residuals # Get the residuals 
+  conf.int <- confint(model, level=0.95) #Confidence intervals for predictor variables
+  covar <- vcov(model) #Covariance matrix for preductor variables
+  fileName <- paste0("linear_regession_summary_", facA, "~", facB, ".txt") #File name for summary
+  coeffs <- summary[["coefficients"]] #Extract model coefficients
+  beta <- round(coeffs[2], 2)
+  alpha <- round(coeffs[1], 2)
+  equation <- paste(facA, " = ", paste(paste(beta, facB, sep="*"), alpha, sep=" + ")) #Create equation with intercept, coefficient and predictor variable name
+  r.squared <- summary[["adj.r.squared"]] #Extract R^2 value
+  r_sq <- round(r.squared, 2)
+  r.squared.eq <- paste("R-squared = ", r_sq) #Generate R^2 equation
+  r.squared.adj <- summary[["adj.r.squared"]] #Extract adjusted R^2 value
+  r_sq_adj <- round(r.squared.adj, 2)
+  r.squared.adj.eq <- paste("R-squared adjusted = ", r_sq_adj) #Generate adjusted R^2 equation
+  
+  # #Test residuals for normality. Error will be visable to user.
+  # norm_resid <- shapiro.test(residuals) 
+  # if (norm_resid$p.value < 0.05){
+  #   norm_resid_text <- paste0("The residuals are normally distributed. This model is valid.") #To be used in summary, not to be displayed
+  # } else {
+  #   #AddErrMsg("The residuals are NOT normally distributed. This model is invalid. Try other preprocessing options, or try other regression models such as SVM or random forest.")
+  #   stop("The residuals are NOT normally distributed. This model is invalid. Try other preprocessing options, or try other regression models such as SVM or random forest.")
+  # }
+  
+  #Store results
+  mSetObj$analSet$linReg1$res <- list(response=facA, predictor=facB, summary=summary, predicted.values=fitted, confidence.intervals=conf.int, covariance.matrix=covar, equation=equation, r.squared.eq=r.squared.eq, r.squared.adj.eq=r.squared.adj.eq, fileName=fileName, formula=formula) #Note where the summary is stored
+  
+  #Download text document containing the summary, called the fileName. Document goes into the working directory and should be accessible to the user as part of the report.
+  sink(fileName) 
+
+  cat("Formula:\n")
+  print(formula)
+
+  print(summary)
+  # print(norm_resid)
+  # cat("Normality of residuals result:\n")
+  # cat(paste0(norm_resid_text, "\n"))
+
+  cat("\nConfidence intervals for predictor variables:")
+  print(conf.int)
+
+  cat("\nPredicted values:")
+  print(fitted)
+
+  cat("\nCovariance matrix for predictor variables:")
+  print(covar)
+  sink()
+  
   
   return(.set.mSet(mSetObj))
   
 }
+
+
+#'Plot line of best fit for linear regression with one predictor variable
+#'@description Scatter plot with line of best fit, where response variable is y and predictor variable is x
+#'@usage Plot.linReg1(mSetObj, imgName, format="png", dpi=72, width=NA)
+#'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
+#'@param imgName Input the image name
+#'@param format Select the image format, "png" or "pdf", default is "png" 
+#'@param dpi Input the dpi. If the image format is "pdf", users need not define the dpi. For "png" images, 
+#'the default dpi is 72. It is suggested that for high-resolution images, select a dpi of 300.  
+#'@param width Input the width, there are 2 default widths. The first, width=NULL, is 10.5.
+#'The second default is width=0, where the width is 7.2. Otherwise users can input their own width.   
+#'@author Louisa Normington\email{normingt@ualberta.ca}
+#'University of Alberta, Canada
+#'License: GNU GPL (>= 2)
+#'@export
 
 plot.linReg1 <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA){
   
   #Extract necessary objects from mSetObj
   mSetObj <- .get.mSet(mSetObj)
-  response_name <- colnames(mSetObj$dataSet$norm)[1] #For x-axis label
-  predictor_name <- mSetObj$dataSet$facA #For y-axis label
-  response <- mSetObj$dataSet$norm[,1] #First column is reponse variable by default
-  predictor <- mSetObj$dataSet$norm[,facA] #User selects predictor variable in drop down menu
-  model <- mSetObj$analSet$linReg1$mod #Obtained by lin.reg.anal.one()
-
-  #Obtain equations for line of best fit and R^2 which will be displayed next to the plot
-  coeffs <- mSetObj$analSet$linReg1$sum$summary$coefficients #Extract model coefficients
-  equation <- paste("Y =", paste(round(coeffs[1],2), paste(round(coeffs[2],2), predictor_name, sep=" * ", collapse=" + "), sep=" + ")) #Create equation with intercept, coefficient and predictor variable name
-  equation <- gsub('\\+ -', '- ', gsub(' \\* ', '*', equation)) #Tidy equation
-  r.squared <- mSetObj$analSet$linReg1$sum$summary$r.squared #Extract R^2 value
-  r.squared.eq <- paste("R^2 = ", round(r_sq,2)) #Generate R^2 equation
-  mSetObj$analSet$linReg1$eq <- list(equation=equation, r.squared.eq=r.squared.eq) #Note where the equations are stored
+  facA <- mSetObj$analSet$linReg1$res$response #For x-axis label
+  facB <- mSetObj$analSet$linReg1$res$predictor #For y-axis label
+  response <- mSetObj$dataSet$norm[,facA] #First column is reponse variable by default
+  predictor <- mSetObj$dataSet$norm[,facB] #User selects predictor variable in drop down menu
+  model <- mSetObj$analSet$linReg1$mod
   
+  #Set plot dimensions
   if(is.na(width)){
-    w <- 10.5
+    w <- 7.2
   } else if(width == 0){
     w <- 7.2
   } else{
     w <- width
   }
-  
   h <- w
-  mSetObj$imgSet$Plot.linReg1 <- imgName
- 
+  
+  #Name plot for download
+  imgName <- paste(imgName, "dpi", dpi, ".", format, sep="")
+  mSetObj$imgSet$plot.linReg1 <- imgName
+  
+  #Generate plot
   Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
-  plot(response, predictor, xlab=response_name, ylab=predictor_name, main="Univariate Linear Regression")
+  plot(response, predictor, xlab=facA, ylab=facB, main="Univariate Linear Regression Line of Best Fit", yaxt="n")
+  axis(2, las=2)
   abline(model)
   dev.off()
   
@@ -168,27 +162,12 @@ plot.linReg1 <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA){
   
 }
 
+
 ##############################################
 ##############################################
 ########## Utilities for web-server ##########
 ##############################################
 ##############################################
-
-#'Determine number of columns in dataset'
-#'@description Jave will use the number of columns to enable user options
-#'@param mSetObj Input name of the created mSetObject 
-#'@author Louisa Normington\email{normingt@ualberta.ca}
-#'University of Alberta, Canada
-#'License: GNU GPL (>= 2)
-#'@export
-
-Col.Count <- function(mSetObj=NA){
-  
-  mSetObj <- .get.mSet(mSetObj)
-  col.count <- ncol(mSetObj$dataSet$norm)
-  return(col.count)
-  
-}
 
 #'Determine number and names of columns in dataset'
 #'@description Java will use the number of columns to enable user options
@@ -198,38 +177,29 @@ Col.Count <- function(mSetObj=NA){
 #'License: GNU GPL (>= 2)
 #'@export
 
-Columns <- function(mSetObj=NA){
+lin.reg.columns <- function(mSetObj=NA){
   
   mSetObj <- .get.mSet(mSetObj)
-  column.count <- ncol(mSetObj$dataSet$norm)-1 #Removing the first column (response variable) from the count
-  column.names <- colnames(mSetObj$dataSet$norm)[-1] #Removing the first column (response variable) from the names
   
-  column.results <- list(
-    count=col.count,
-    names=col.names
+  library("dplyr")
+  
+  data <- select_if(mSetObj$dataSet$norm, is.numeric)
+  count.all.numeric.cols <- ncol(data)
+  name.all.numeric.cols <- colnames(data)
+  
+  num.col.results <- list(
+    count=count.all.numeric.cols,
+    names=name.all.numeric.cols
   )
   
-  return(column.results)
+  return(name.all.numeric.cols)
   
 }
 
+lin.reg.get.results <- function(mSetObj=NA){
 
-#'Save linear regression model summary in txt file'
-#'@description Saves linear regression model summary to the current working directory
-#'@param mSetObj Input name of the created mSetObject 
-#'@author Louisa Normington\email{normingt@ualberta.ca}
-#'University of Alberta, Canada
-#'License: GNU GPL (>= 2)
-#'@export
-
-save.linReg1.summary <- function(mSetObj=NA){
-  
   mSetObj <- .get.mSet(mSetObj)
-  summary <- mSetObj$analSet$linReg1$sum$summary 
-  fileName <- mSetObj$analSet$linReg1$sum$fileName
-  
-  sink(fileName)
-  print(summary)
-  sink()
-  
+  lin.reg.result <- c(mSetObj$analSet$linReg1$res$equation, mSetObj$analSet$linReg1$res$r.squared.eq, mSetObj$analSet$linReg1$res$r.squared.adj.eq)
+  return(lin.reg.result)
+
 }
