@@ -194,12 +194,12 @@ betadisperWegan <- function(mSetObj=NA){
     data_type <- mSetObj$dataSet$type;
     #data(varespec);
     #data <- varespec;
-    
+    print(mSetObj);
+    print(mSetObj$dataSet);
     ## Bray-Curtis distances between samples
     dis <- vegdist(data);
     ## First 16 sites grazed, remaining 8 sites ungrazed
     if (data_type == 'Varespec'){
-        print("here?");
         groups <- factor(c(rep(1,16), rep(2,8)), labels = c("grazed","ungrazed"))
     }else if (data_type == 'Dune'){
         print(" data type is dune");
