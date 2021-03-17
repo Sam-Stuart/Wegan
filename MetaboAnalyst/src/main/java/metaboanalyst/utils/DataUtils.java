@@ -592,6 +592,8 @@ public class DataUtils {
                     addRocNodes(naviTree);
                 } else if (type.equalsIgnoreCase("dispersal")) {
                     addDispersalNodes(naviTree);
+                } else if (type.equalsIgnoreCase("plotting")) {
+                    addPlottingNodes(naviTree);
                 } else {
                     System.out.println("You need to define the navigation tree for this analysis type: " + type);
                 }
@@ -729,6 +731,16 @@ public class DataUtils {
         TreeNode noded1 = new DefaultTreeNode("Biogeographical Dispersal", dispersalNode);
         TreeNode noded2 = new DefaultTreeNode("Beals Smoothing", dispersalNode);
         TreeNode noded3 = new DefaultTreeNode("Beta Dispersal", dispersalNode);
+    }
+    
+    private static void addPlottingNodes(TreeNode parent) {
+        TreeNode plottingNode = new DefaultTreeNode("Plotting", parent);
+        TreeNode noded1 = new DefaultTreeNode("Linear Graph", plottingNode);
+        TreeNode noded2 = new DefaultTreeNode("Boxplot", plottingNode);
+        TreeNode noded3 = new DefaultTreeNode("Bar Graph", plottingNode);
+        TreeNode noded4 = new DefaultTreeNode("Scatter Plot", plottingNode);
+        TreeNode noded5 = new DefaultTreeNode("Histogram", plottingNode);
+        TreeNode noded6 = new DefaultTreeNode("Pie chart", plottingNode);
     }
 
     private static void addUtilNodes(TreeNode parent) {

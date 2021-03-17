@@ -7,7 +7,7 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="/frags/_doc_template.xhtml">
     <ui:define name="metaInfo">
-        <f:event type="preRenderView" listener="#{sessionBean1.registerPage('plotting')}"/> 
+        <f:event type="preRenderView" listener="#{sessionBean1.registerPage('Home')}"/> 
     </ui:define>
     <ui:define name="content">
         <p:layout id="layout">  
@@ -42,7 +42,7 @@
                     <fieldset class="ui-fieldset ui-widget ui-widget-content ui-corner-all ui-fieldset-toggleable">
                         <legend class="ui-fieldset-legend ui-corner-all ui-state-default">
                             <span class="ui-icon ui-icon-circle-arrow-e" style="display: inline-block; margin-bottom: -2px"/>
-                            <span><a class="changeBlue" href="#{facesContext.externalContext.requestContextPath}/faces/PlottingModule/PlottingUploadView.xhtml">Plotting Module  </a></span>
+                            <span><a class="changeBlue" href="#{facesContext.externalContext.requestContextPath}/faces/upload/PlottingUploadView.xhtml">Plotting Module  </a></span>
                         </legend>
                         <div class="ui-fieldset-content" style="padding:10px"> 
                             Line graph, bar graphs, box plot , scatter plot, histogram, etc. 

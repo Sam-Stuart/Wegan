@@ -217,11 +217,10 @@
             <redirect/>
         </navigation-case>      
         <navigation-case>
-            <from-outcome>Dispersal</from-outcome>
-            <to-view-id>/Secure/analysis/DispersalView.xhtml</to-view-id>
+            <from-outcome>Plotting</from-outcome>
+            <to-view-id>/Secure/plotting/PlottingMainView.xhtml</to-view-id>
             <redirect/>
         </navigation-case> 
-        
         <navigation-case>
             <from-outcome>Name check</from-outcome>
             <to-view-id>/Secure/process/NameMapView.xhtml</to-view-id>
@@ -251,20 +250,25 @@
             <from-outcome>mspeak</from-outcome>
             <to-view-id>/Secure/process/ProcMSpeak.xhtml</to-view-id>
             <redirect/>
+        </navigation-case> 
+        <navigation-case>
+            <from-outcome>Dispersal</from-outcome>
+            <to-view-id>/Secure/dispersal/DispersalView.xhtml</to-view-id>
+            <redirect/>
         </navigation-case>  
         <navigation-case>
             <from-outcome>bgd</from-outcome>
-            <to-view-id>/Secure/analysis/BGDView.xhtml</to-view-id>
+            <to-view-id>/Secure/dispersal/BGDView.xhtml</to-view-id>
             <redirect/>
        </navigation-case>  
        <navigation-case>
             <from-outcome>beals</from-outcome>
-            <to-view-id>/Secure/analysis/BealsView.xhtml</to-view-id>
+            <to-view-id>/Secure/dispersal/BealsView.xhtml</to-view-id>
             <redirect/>
        </navigation-case> 
        <navigation-case>
             <from-outcome>betadisper</from-outcome>
-            <to-view-id>/Secure/analysis/BetaDisperView.xhtml</to-view-id>
+            <to-view-id>/Secure/dispersal/BetaDisperView.xhtml</to-view-id>
             <redirect/>
        </navigation-case> 
         <navigation-case>

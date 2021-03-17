@@ -3,7 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package wegan.controllers.Wegan.PlottingModuleJava;
+package wegan.controllers.Wegan;
+
 
 import wegan.controllers.Wegan.*;
 import metaboanalyst.controllers.stats.*;
@@ -22,7 +23,7 @@ import org.rosuda.REngine.Rserve.RserveException;
  *
  * @author jianguox
  */
-@ManagedBean(name = "Dcaload")
+@ManagedBean(name = "Plottingload")
 public class PlottingloadBean implements Serializable {
 
     private final ApplicationBean1 ab = (ApplicationBean1) DataUtils.findBean("applicationBean1");
@@ -329,7 +330,7 @@ public class PlottingloadBean implements Serializable {
   
     
     //----------------------------------------------------------------- Test loader 
-    public String handleDcaTestFileUpload() {
+    public String handleTestFileUpload() {
         String format = "";
         boolean paired = false;
         boolean isZip = false;
