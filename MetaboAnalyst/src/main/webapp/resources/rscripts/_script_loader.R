@@ -15,8 +15,8 @@ metaanal_files <- c("meta_methods", "meta_data_utils");
 network_files <- c("networks", "enrich_integ", "enrich_name_match", "gene_fun_utils", "enrich_path_kegg");
 other_files <- c("others_batch_check", "others_lipomics", "enrich_name_match");
 nmds_files <- c("test-Vegan", "Dispersal");
-dispersal_files <- c("Dispersal");
-LoadScripts <- function(module.nm = "nmds"){
+dispersal_files <- c("dispersal");
+LoadScripts <- function(module.nm = "dispersal"){
     file.sources <- "";
     if(module.nm == "stat"){
         file.sources <- c(general_files, general_stat_files, stats_files);
@@ -40,8 +40,8 @@ LoadScripts <- function(module.nm = "nmds"){
         file.sources <- c(general_files, general_stat_files, metaanal_files);
     }else if(module.nm == "nmds"){
         file.sources <- c(general_files, general_stat_files, stats_files,nmds_files);
-    }else if(module.nm == "disersal"){
-        file.sources <- c(dispersal_files);
+    }else if(module.nm == "dispersal"){
+        file.sources <- c(general_files, general_stat_files, stats_files,dispersal_files);
     }else{
         print(paste("Unknown module code: ", module.nm));
     }
