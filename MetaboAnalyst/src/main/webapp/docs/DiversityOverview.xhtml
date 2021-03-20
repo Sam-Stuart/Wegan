@@ -8,11 +8,13 @@
                 template="/frags/_anal_template.xhtml">
     
     <ui:define name="metaInfo">
-        <f:event type="preRenderView" listener="#{analBean.performDefaultAnalysis('DCA')}"/> 
+        <f:event type="preRenderView" listener="#{analBean.performDefaultAnalysis('Diversity')}"/> 
     </ui:define>
  
     
     <ui:define name="content">
+        
+        
         
         <h:inputHidden id="mydir" value="#{sessionBean1.getJsonDir('pca_score3d')}" />
         <script type="text/javascript">
@@ -60,6 +62,15 @@
             
         </h:panelGrid> 
         
+        
+        
+        
+        
+        
+        
+        
+        
+        <!--  
         <h:panelGrid style="padding: 20px 50px 20px 40px; font-size: 13px; line-height: 23px; width: 100%">
             
             <h:panelGrid style="text-align: center; width: 80%">
@@ -74,6 +85,6 @@
                
             </h:panelGrid>
         </h:panelGrid>
-        
+        -->
     </ui:define>
 </ui:composition>

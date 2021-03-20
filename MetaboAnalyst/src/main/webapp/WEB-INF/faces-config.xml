@@ -111,13 +111,19 @@
             <to-view-id>/docs/DCAOverview.xhtml</to-view-id>
             <redirect/>
         </navigation-case> 
-      
         
+        <navigation-case>
+            <from-outcome>Diversity</from-outcome>
+            <to-view-id>/docs/DiversityOverview.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case> 
         
-        
-        
-        
-        
+        <navigation-case>
+            <from-outcome>Ordination</from-outcome>
+            <to-view-id>/Secure/analysis/OrdinationView.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>  
+                
         <navigation-case>
             <from-outcome>Overview</from-outcome>
             <to-view-id>/docs/Overview.xhtml</to-view-id>
@@ -204,6 +210,21 @@
             <redirect/>
         </navigation-case> 
         <navigation-case>
+            <from-outcome>Diversity</from-outcome>
+            <to-view-id>/Secure/diversity/DiversityView.xhtml</to-view-id>
+            <redirect/>
+       </navigation-case>  
+        <navigation-case>
+            <from-outcome>Clustering</from-outcome>
+            <to-view-id>/Secure/clustering/ClusteringView.xhtml</to-view-id>
+            <redirect/>
+       </navigation-case>     
+        <navigation-case>
+            <from-outcome>Dispersal</from-outcome>
+            <to-view-id>/Secure/analysis/DispersalView.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case> 
+        <navigation-case>
             <from-outcome>Name check</from-outcome>
             <to-view-id>/Secure/process/NameMapView.xhtml</to-view-id>
             <redirect/>
@@ -233,6 +254,16 @@
             <to-view-id>/Secure/process/ProcMSpeak.xhtml</to-view-id>
             <redirect/>
         </navigation-case>  
+        <navigation-case>
+            <from-outcome>bgd</from-outcome>
+            <to-view-id>/Secure/analysis/BGDView.xhtml</to-view-id>
+            <redirect/>
+       </navigation-case>  
+       <navigation-case>
+            <from-outcome>bsmooth</from-outcome>
+            <to-view-id>/Secure/analysis/BsmoothView.xhtml</to-view-id>
+            <redirect/>
+       </navigation-case> 
         <navigation-case>
             <from-outcome>msspec</from-outcome>
             <to-view-id>/Secure/process/ProcMSspec.xhtml</to-view-id>

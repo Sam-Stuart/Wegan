@@ -19,10 +19,11 @@ import org.rosuda.REngine.Rserve.RserveException;
 
 /**
  *
+ * 
  * @author jianguox
  */
-@ManagedBean(name = "Dcaload")
-public class DCAloadBean implements Serializable {
+@ManagedBean(name = "Dispersalload")
+public class DispersalloadBean implements Serializable {
 
     private final ApplicationBean1 ab = (ApplicationBean1) DataUtils.findBean("applicationBean1");
     private final SessionBean1 sb = (SessionBean1) DataUtils.findBean("sessionBean1");
@@ -81,7 +82,7 @@ public class DCAloadBean implements Serializable {
                 if (RDataUtils.readTextData(RC, fileName, dataFormat, "disc")) {
                     sb.setDataUploaded(true);
                     sb.updateMsg("Error", "Data Uploaded successfully");
-                    return "Data check";
+                    return "Dispersal123";
                 } else {
                     String err = RDataUtils.getErrMsg(RC);
                     sb.updateMsg("Error", "Failed to read in the CSV file." + err);
@@ -212,6 +213,7 @@ public class DCAloadBean implements Serializable {
     }
 
     public String handleStatTestFileUpload() {
+        System.out.print(" ------------------OVER HERE !!!! ------------------------------");
         String format = "";
         boolean paired = false;
         boolean isZip = false;
@@ -244,7 +246,7 @@ public class DCAloadBean implements Serializable {
             format = "rowu";
         }
 
-        if (!sb.doLogin(dataType, "DCA", false, paired)) {
+        if (!sb.doLogin(dataType, "Dispersal", false, paired)) {
             //sb.updateMsg("Error", "No login return null?");
             return null;
         }
@@ -272,7 +274,7 @@ public class DCAloadBean implements Serializable {
     
     /*
 
-        public String handleDCAFileUpload() {
+        public String handleDispersalFileUpload() {
 
         boolean paired = false;
         if (dataFormat.endsWith("p")) {
@@ -293,9 +295,9 @@ public class DCAloadBean implements Serializable {
                 String fileExt = fileName.substring(fileName.length() - 4);
                 
                 
-                if(runDCaR(fileName,fileExt)){
+                if(runDispersalR(fileName,fileExt)){
                     //sb.updateMsg("Error", "CA run successfully");
-                    return "DCA";
+                    return "Dispersal";
                     
                 }else{
                     sb.updateMsg("Error", "DCA not run succesffully");
@@ -328,7 +330,7 @@ public class DCAloadBean implements Serializable {
   
     
     //----------------------------------------------------------------- Test loader 
-    public String handleDcaTestFileUpload() {
+    public String handleDispersalTestFileUpload() {
         String format = "";
         boolean paired = false;
         boolean isZip = false;
@@ -347,7 +349,7 @@ public class DCAloadBean implements Serializable {
         //DUNE DATA SELECTED*********************************************************
         else if (testDataOpt.equals("Dune")) {
             dataType = "Dune";
-            //sb.updateMsg("Error", "Dune data selected");
+            sb.updateMsg("Error", "Dune data selected");
 
             testFile = ab.getTestDune();
             format = "rowu";
@@ -359,7 +361,7 @@ public class DCAloadBean implements Serializable {
             sb.updateMsg("Error", "Unknown data selected?");
             return null;
         }
-        if (!sb.doLogin(dataType, "stat", false, paired)) {
+        if (!sb.doLogin(dataType, "dispersal", false, paired)) {
             //sb.updateMsg("Error", "No login return null?");
             return null;
         }
@@ -379,20 +381,35 @@ public class DCAloadBean implements Serializable {
             }
         }
         sb.setDataUploaded(true);
-
-        return "Data check";
+        //RC.Eval;
+        /*try {
+            //String rCommand = "InitDataObjects(\"" + dataType + "\", \"" + analType + "\", " + (isPaired ? "TRUE" : "FALSE") + ")";
+            //String rCommand = "NMDSWegan(\"" + dataType + "\")";
+            
+            //String rCommand = "DCAWegan(\"" + dataType + "\", \"" + sb.getPath2()+ "\"  )";
+            
+            
+            //RC.voidEval(rCommand);
+            //RCenter.recordRCommand(RC, rCommand);
+            
+        } catch (RserveException rse) {
+            System.out.println(rse);
+            return "";
+        }*/
+        //;
+        return "bgd";    /*  CHANGE BACK TO 'Data check'  FOR THE SANITY CHECK _ NORMALIZATOION WORKFLOW   */ 
     }
     
     
     
-    public boolean runDCaR(String inputData,String ext){
+    public boolean runDispersalR(String inputData,String ext){
         RConnection RC = sb.getRConnection();
         try {
             //String rCommand = "InitDataObjects(\"" + dataType + "\", \"" + analType + "\", " + (isPaired ? "TRUE" : "FALSE") + ")";
 
             //String rCommand = "CAWegan(\"" + inputData + "\", \"" + sb.getPath2()+ "\"  )";
 
-            String rCommand = "DCAWegan(\"" + inputData + "\", \"" + sb.getPath2()+ "\", \"" + ext + "\"   )";
+            String rCommand = "DispersalWegan(\"" + inputData + "\", \"" + sb.getPath2()+ "\", \"" + ext + "\"   )";
             RC.voidEval(rCommand);
             RCenter.recordRCommand(RC, rCommand);
 

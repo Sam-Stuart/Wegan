@@ -8,8 +8,8 @@
                 template="/frags/_anal_template.xhtml">
     <ui:define name="metaInfo">
         <f:event type="preRenderView" listener="#{sessionBean1.registerPage('Normalization')}"/>
-        <!--<f:event type="preRenderView" listener="#{sessionBean1.setAnalType('ca')}"/>--> 
         <f:event type="preRenderView" listener="#{normBean.initPrenormData()}"/> 
+       
     </ui:define>
     <ui:define name="content">
         <h:form id="form1">
@@ -166,7 +166,7 @@
                                                title="Customize the graphics output">
                                     <img src="#{facesContext.externalContext.requestContextPath}/resources/images/imgcenter.png"/>
                                 </p:commandLink>
-                            </h:panelGrid>
+                            </h:panelGrid> 
                             <img src="#{sessionBean1.getCurrentImageURL('norm')}" alt="Normalization"/>
                         </h:panelGrid>
                     </p:tab>

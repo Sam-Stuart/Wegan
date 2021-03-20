@@ -21,8 +21,8 @@ import org.rosuda.REngine.Rserve.RserveException;
  *
  * @author jianguox
  */
-@ManagedBean(name = "Dcaload")
-public class DCAloadBean implements Serializable {
+@ManagedBean(name = "Diversityload")
+public class DiversityloadBean implements Serializable {
 
     private final ApplicationBean1 ab = (ApplicationBean1) DataUtils.findBean("applicationBean1");
     private final SessionBean1 sb = (SessionBean1) DataUtils.findBean("sessionBean1");
@@ -328,7 +328,7 @@ public class DCAloadBean implements Serializable {
   
     
     //----------------------------------------------------------------- Test loader 
-    public String handleDcaTestFileUpload() {
+    public String handleDiversityTestFileUpload() {
         String format = "";
         boolean paired = false;
         boolean isZip = false;
@@ -359,7 +359,7 @@ public class DCAloadBean implements Serializable {
             sb.updateMsg("Error", "Unknown data selected?");
             return null;
         }
-        if (!sb.doLogin(dataType, "stat", false, paired)) {
+        if (!sb.doLogin(dataType, "diversity", false, paired)) {
             //sb.updateMsg("Error", "No login return null?");
             return null;
         }
@@ -379,7 +379,22 @@ public class DCAloadBean implements Serializable {
             }
         }
         sb.setDataUploaded(true);
-
+        //RC.Eval;
+        /*try {
+            //String rCommand = "InitDataObjects(\"" + dataType + "\", \"" + analType + "\", " + (isPaired ? "TRUE" : "FALSE") + ")";
+            //String rCommand = "NMDSWegan(\"" + dataType + "\")";
+            
+            //String rCommand = "DCAWegan(\"" + dataType + "\", \"" + sb.getPath2()+ "\"  )";
+            
+            
+            //RC.voidEval(rCommand);
+            //RCenter.recordRCommand(RC, rCommand);
+            
+        } catch (RserveException rse) {
+            System.out.println(rse);
+            return "";
+        }*/
+        //;
         return "Data check";
     }
     

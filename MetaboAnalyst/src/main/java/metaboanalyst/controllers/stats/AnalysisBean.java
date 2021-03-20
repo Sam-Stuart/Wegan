@@ -18,7 +18,7 @@ import metaboanalyst.rwrappers.RDataUtils;
 import metaboanalyst.rwrappers.SigVarSelect;
 import metaboanalyst.rwrappers.UniVarTests;
 import metaboanalyst.rwrappers.Ordiantion;
-
+import metaboanalyst.rwrappers.Dispersal;
 import metaboanalyst.utils.DataUtils;
 
 /**
@@ -93,7 +93,7 @@ public class AnalysisBean implements Serializable {
             }
         }
     }
-
+  
     private void doDefaultANOVA() {
         int res = UniVarTests.performANOVA(sb, "F", 0.05, "fisher");
         if (res == 0) {
@@ -240,6 +240,11 @@ public class AnalysisBean implements Serializable {
         
     }
     
+    private void doDefaultDiversity() {       
+        
+        Ordiantion.InitDiversity(sb);
+        
+    }
     
     
     

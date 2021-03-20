@@ -326,7 +326,7 @@ public class SessionBean1 implements Serializable {
                 break;
             case "Data editor":
                 if (RDataUtils.isReadyForEditor(RC) == 0) {
-                    updateMsg("Error", "The data need to be further processed till normalization page for this procedure! ");
+                    updateMsg("Error", "The data needs to be further processed until normalization page for this procedure! ");
                     RequestContext.getCurrentInstance().execute("PF('statusDialog').hide()");
                     return;
                 }
@@ -441,7 +441,7 @@ public class SessionBean1 implements Serializable {
     public String enterModule() {
         System.out.println(analType);
         switch (analType) {
-            case "stat":
+            case "stat":                
                 return "Statistics";
             case "msetqea":
                 return "enrichparam";
@@ -457,6 +457,14 @@ public class SessionBean1 implements Serializable {
                 return "Correlation";
             case "ca":
                 return "Correlation";
+            case "diversity":
+                return "Diversity";
+            case "dispersal":
+                return "Dispersal";
+            case "ord":
+                return "Ordination";                
+            case "cluster":
+                return "Clustering"; 
         }
         return null;
     }
