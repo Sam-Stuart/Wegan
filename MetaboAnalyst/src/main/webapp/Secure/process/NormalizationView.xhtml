@@ -8,7 +8,7 @@
                 template="/frags/_anal_template.xhtml">
     <ui:define name="metaInfo">
         <f:event type="preRenderView" listener="#{sessionBean1.registerPage('Normalization')}"/>
-        <f:event type="preRenderView" listener="#{sessionBean1.setAnalType('ca')}"/> 
+        <!--<f:event type="preRenderView" listener="#{sessionBean1.setAnalType('ca')}"/>--> 
         <f:event type="preRenderView" listener="#{normBean.initPrenormData()}"/> 
     </ui:define>
     <ui:define name="content">
@@ -120,7 +120,7 @@
                                      oncomplete="PF('statusDialog').hide()" update=":ac form1:viewBn form1:nextBn  :cmdPane"
                                      actionListener="#{normBean.performDataNormalization()}"/>   
                     <p:commandButton id="viewBn" style="width: 120px" value="View Result" onclick="PF('normResDialog').show()" disabled="#{not normBean.normPerformed}"/>
-                    <p:commandButton id="nextBn" style="width: 100px" value="Proceed" onclick="PF('statusDialog').show()" ajax="false" disabled="#{not normBean.normPerformed}" action="#{sessionBean1.enterModule}"/>                               
+                    <p:commandButton id="nextBn" style="width: 100px" value="#{sessionBean1.getAnalType()}" onclick="PF('statusDialog').show()" ajax="false" disabled="#{not normBean.normPerformed}" action="#{sessionBean1.enterModule}"/>                               
                 </h:panelGrid>
             </h:panelGrid> 
         </h:form>

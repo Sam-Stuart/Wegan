@@ -13,54 +13,93 @@
         <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
             <h:form id="form1">
                 <p>
-                    Test                
+                    Note, the heatmap will only show correlations for a maximum of 1000 features. For larger datasets, 
+                    only the top 1000 features will be selected based on their interquantile range (IQR). When the 
+                    color distribution is fixed, you can potentially compare the correlation patterns among different data sets. 
+                    In this case, you can choose "do not perform clustering" for the entire data set,  or only to perform clustering on a 
+                    single reference data set, then manually re-arrange other data sets according to the clustering pattern of the 
+                    reference data set.                  
                 </p>
-                <h:panelGrid columns="2">
-                    <h:panelGrid columns="2" style="padding: 2px 20px 10px 20px; line-height: 25px">
-                        <h:outputLabel style="font-weight: bold" value="Choose a dimension:"/>
-                        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{univBean.corDirection}">
-                            <f:selectItem itemLabel="Features" itemValue="col" /> 
-                            <f:selectItem itemLabel="Samples" itemValue="row" /> 
-                        </p:selectOneMenu>
-                        <h:outputLabel style="font-weight: bold" value="Distance measure:"/>
-                        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{univBean.hmDistMeasure}">
-                            <f:selectItems value="#{applicationBean1.distMeasureOpts}" />
-                        </p:selectOneMenu>
-                        <h:outputLabel style="font-weight: bold" value="View Mode :"/>
-                        <p:selectOneRadio value="#{univBean.viewOpt}" layout="pageDirection">
-                            <f:selectItem itemLabel="Overview" itemValue="overview" /> 
-                            <f:selectItem itemLabel="Detail View" itemValue="detail" /> 
-                        </p:selectOneRadio>
-                        <h:outputLabel style="font-weight: bold" value="Fix color distribution [-1, 1]:"/>
-                        <p:selectBooleanCheckbox value ="#{univBean.fixRange}"/>                               
-                        <h:outputLabel style="font-weight: bold" value="Color contrasts:"/>
+                <h:panelGrid id="panelGrid" columns="5" cellpadding="3" columnClasses="colLeftLong,colRightShort,colLeftLong,colRightShort, colLast">
+                            
+                    <h:outputLabel style="font-weight: bold" value="Choose a dimension:"/>
+                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{univBean.corDirection}">
+                        <f:selectItem itemLabel="Features" itemValue="col" /> 
+                        <f:selectItem itemLabel="Samples" itemValue="row" /> 
+                    </p:selectOneMenu>
+
+                    <h:outputLabel style="font-weight: bold" value="Color contrasts:"/>
                         <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{univBean.colContrast}">
                             <f:selectItems value="#{applicationBean1.colorContrastOpts}" />
                         </p:selectOneMenu>
-                        <h:outputLabel style="font-weight: bold" value="Do not perform clustering:"/>
-                        <p:selectBooleanCheckbox value ="#{univBean.noClust}"/> 
-                    </h:panelGrid>
+                    
+                    <p:panelGrid></p:panelGrid>
+
+                    <h:outputLabel style="font-weight: bold" value="Distance measure:"/>
+                        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{univBean.hmDistMeasure}">
+                            <f:selectItems value="#{applicationBean1.distMeasureOpts}" />
+                        </p:selectOneMenu>
+                    
+                    <h:outputLabel style="font-weight: bold" value="Fix color distribution [-1, 1]:"/>
+                    <p:selectBooleanCheckbox value ="#{univBean.fixRange}"/> 
+
+                    <p:panelGrid></p:panelGrid>
+
+
+                    <h:outputLabel style="font-weight: bold" value="Do not perform clustering:"/>
+                    <p:selectBooleanCheckbox value ="#{univBean.noClust}"/>
+
+                    
+                    <h:outputLabel style="font-weight: bold" value="View Mode :"/>
+                    <p:selectOneRadio value="#{univBean.viewOpt}" layout="pageDirection">
+                        <f:selectItem itemLabel="Overview" itemValue="overview" /> 
+                        <f:selectItem itemLabel="Detail View" itemValue="detail" /> 
+                    </p:selectOneRadio>
+                    
+                    <p:panelGrid></p:panelGrid>
+                    <p:panelGrid></p:panelGrid>
+                    <p:panelGrid></p:panelGrid>
+                    <p:panelGrid></p:panelGrid>
+                    <!--<p:panelGrid></p:panelGrid>-->
+                    <!--<p:panelGrid></p:panelGrid>-->
+                    
                     <p:commandButton value="Submit" 
+                                     style="background: #75bafb; border: 5px #75bafb; color: black"
                                      onclick="PF('statusDialog').show()"
                                      oncomplete="PF('statusDialog').hide()"  
                                      update=":form1:corrPane  :cmdPane" 
                                      actionListener="#{univBean.corrBtn_action()}"/>   
                 </h:panelGrid>
-                <hr style="height: 12px; border: 0;box-shadow: inset 0 12px 12px -12px rgba(0, 0, 0, 0.5); width:100%; min-width: 1000px"/>
-                <h:panelGrid id="corrPane" style="text-align: center; width: 100%;">
-                    <h:panelGrid columns="4" style="text-align: right; padding-left: 460px; width: 760px;">
+                 <h:panelGrid class="resultsBar" columns="2">
+                            <h:panelGroup>
+                                <h:panelGrid columns="1" style="text-align : left;">
+                                    Results
+                                </h:panelGrid>
+                            </h:panelGroup> 
+                            <h:panelGroup>
+                                <h:panelGrid columns="3" class="resultsImages">
+                                    <i class="fas fa-palette"></i>
+                                    <i class="fa fa-table"></i>
+                                    <i class="fa fa-question-circle"></i>
+<!--                                                                       <i class="fas fa-table"></i>
+                                   <i class="fas fa-palette"></i>
+                                   <i class="far fa-question-circle"></i>-->
+                                </h:panelGrid>
+                            
+                            </h:panelGroup>                            
+                </h:panelGrid>
+                <h:panelGrid id="corrPane" style="width: 100%;">
+                    <h:panelGrid columns="1" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
                         <h:outputText escape="false" value="#{univBean.corrDownloadTxt}"/>
-                        <h:outputText escape="false" value="#{univBean.pvalDownloadTxt}"/>
-                        <p:spacer style="width:20px"/>
-                        <p:commandLink actionListener="#{sessionBean1.graphicsLnk_action('corr')}" 
-                                       oncomplete="PF('graphDialog').show()"
-                                       title="Customize the graphics output">
-                            <img src="#{facesContext.externalContext.requestContextPath}/resources/images/imgcenter.png"/>
-                        </p:commandLink>
                     </h:panelGrid>
-                    <p:scrollPanel mode="native" style="width:780px;height:700px">
-                        <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr')}" alt="Correrlationimage"/>
-                    </p:scrollPanel>
+                    <h:panelGrid columns="1" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                        <h:outputText escape="false" value="#{univBean.pvalDownloadTxt}"/>
+                    </h:panelGrid>
+                    <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                        <p:scrollPanel mode="native" style="width:780px;height:700px">
+                            <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr')}" alt="Correrlationimage"/>
+                        </p:scrollPanel>
+                    </h:panelGrid> 
                 </h:panelGrid>        
             </h:form>
         </h:panelGrid> 

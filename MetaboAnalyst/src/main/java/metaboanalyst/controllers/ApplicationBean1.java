@@ -189,7 +189,7 @@ public class ApplicationBean1 implements Serializable {
 
         testDataOpts = new SelectItem[9];
         //Changed for WEGAN testing
-        testDataOpts[0] = new SelectItem("Dune", "NMDS");
+        testDataOpts[0] = new SelectItem("Dune", "CA");
         testDataOpts[1] = new SelectItem("BCI", "NMDS");
         testDataOpts[2] = new SelectItem("nmrspecbin", "NMR spectral bins");
         testDataOpts[3] = new SelectItem("nmrpeaklist", "NMR peak lists");

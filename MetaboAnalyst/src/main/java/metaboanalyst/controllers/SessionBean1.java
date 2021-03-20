@@ -439,6 +439,7 @@ public class SessionBean1 implements Serializable {
     }
 
     public String enterModule() {
+        System.out.println(analType);
         switch (analType) {
             case "stat":
                 return "Statistics";

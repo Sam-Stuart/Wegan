@@ -232,7 +232,7 @@ public class CAloadBean implements Serializable {
             sb.updateMsg("Error", "Unknown data selected?");
             return null;
         }
-        if (!sb.doLogin(dataType, "nmds", false, paired)) {
+        if (!sb.doLogin(dataType, "ca", false, paired)) {
             //sb.updateMsg("Error", "No login return null?");
             return null;
         }

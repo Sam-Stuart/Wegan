@@ -35,8 +35,9 @@
                 <h:panelGrid rendered="#{not (procBean.bnDisabled or sessionBean1.analType eq 'mummichog')}" columns="2" columnClasses="ui-grid-col-7, ui-grid-col-5" style="width: 500px; text-align: center">
                     <p:commandButton value="Missing value estimation" ajax="false" 
                                      onclick="PF('statusDialog').show()"
-                                     action="#{procBean.imputeButton_action()}"/>    
-                    <p:commandButton value="Skip" ajax="false" 
+                                     action="#{procBean.imputeButton_action()}"/> 
+                    
+                    <p:commandButton value="#{sessionBean1.getAnalType()}" ajax="false" 
                                      onclick="PF('statusDialog').show()"
                                      disabled="#{procBean.bnDisabled}"
                                      action="#{procBean.skipButton_action()}"/>    

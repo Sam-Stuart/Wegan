@@ -161,3 +161,9 @@ h1 {
     top: 10px;
     left:10px;
 }
+
+.p-tab-nav {
+    background-color: #8cbd4830;
+    border: 2px solid #8cbd48;
+    border-color: #8cbd48; 
+}

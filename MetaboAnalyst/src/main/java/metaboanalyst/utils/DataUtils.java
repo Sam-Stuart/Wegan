@@ -562,7 +562,7 @@ public class DataUtils {
         if (type.equalsIgnoreCase("utils")) {
             addUtilNodes(naviTree);
         }else if (type.equalsIgnoreCase("nmds")) {
-            //System.out.println("You need to define the navigation tree for this analysis type: " + type);
+            System.out.println("You need to define the navigation tree for this analysis type: " + type);
             addProcNodes(naviTree, type);
             TreeNode normNode = new DefaultTreeNode("Normalization", naviTree);
         }

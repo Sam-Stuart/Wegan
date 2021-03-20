@@ -359,7 +359,7 @@ public class DCAloadBean implements Serializable {
             sb.updateMsg("Error", "Unknown data selected?");
             return null;
         }
-        if (!sb.doLogin(dataType, "nmds", false, paired)) {
+        if (!sb.doLogin(dataType, "stat", false, paired)) {
             //sb.updateMsg("Error", "No login return null?");
             return null;
         }

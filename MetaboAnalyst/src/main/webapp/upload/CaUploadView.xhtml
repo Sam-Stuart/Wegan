@@ -90,7 +90,7 @@
                     
                 </h:panelGrid>
                 <h:panelGrid style="width:100%; text-align: center">
-                    <p:commandButton value="Submit" ajax="false" 
+                    <p:commandButton value="#{sessionBean1.getAnalType()}" ajax="false" 
                                      onclick="PF('statusDialog').show()"
                                      action="#{Caload.handleCATestFileUpload}"/>                               
                 </h:panelGrid>
