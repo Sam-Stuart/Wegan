@@ -202,7 +202,8 @@ SanityCheckData <- function(mSetObj=NA){
   
   # obtain original half of minimal positive value (threshold)
   minConc<-min(int.mat[int.mat>0], na.rm=T)/2;
-  
+
+
   mSetObj$dataSet$minConc <- minConc;
   mSetObj$dataSet$preproc <- as.data.frame(int.mat);
 
@@ -247,7 +248,7 @@ ReplaceMin <- function(mSetObj=NA){
     
     # replace zero and missing values
     # we leave nagative values unchanged! ? not sure if this is the best way
-    int.mat[int.mat==0 | is.na(int.mat)] <- minConc;
+    #int.mat[int.mat==0 | is.na(int.mat)] <- minConc; # I COMMENTED OUT THIS LINE
     
     # note, this is last step of processing, replace norm and save to procr
     mSetObj$dataSet$procr <- as.data.frame(int.mat);
@@ -262,7 +263,7 @@ ReplaceMin <- function(mSetObj=NA){
     
     # replace zero and missing values
     # we leave nagative values unchanged! ? not sure if this is the best way
-    int.mat[int.mat==0 | is.na(int.mat)] <- minConc;
+    #int.mat[int.mat==0 | is.na(int.mat)] <- minConc; # I COMMENTED OUT THIS LINE
     
     # note, this is last step of processing, also save to proc
     mSetObj$dataSet$procr <- as.data.frame(int.mat);

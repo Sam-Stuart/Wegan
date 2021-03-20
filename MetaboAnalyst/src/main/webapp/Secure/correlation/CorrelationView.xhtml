@@ -7,18 +7,13 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="/frags/_anal_template.xhtml">
     <ui:define name="metaInfo">
-        <f:event type="preRenderView" listener="#{analBean.performDefaultAnalysis('Correlations')}"/> 
+        <f:event type="preRenderView" listener="#{caBean.performDefaultAnalysis('Correlations')}"/> 
     </ui:define>
     <ui:define name="content">
         <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
             <h:form id="form1">
                 <p>
-                    Note, the heatmap will only show correlations for a maximum of 1000 features. For larger datasets, 
-                    only the top 1000 features will be selected based on their interquantile range (IQR). When the 
-                    color distribution is fixed, you can potentially compare the correlation patterns among different data sets. 
-                    In this case, you can choose "do not perform clustering" for the entire data set,  or only to perform clustering on a 
-                    single reference data set, then manually re-arrange other data sets according to the clustering pattern of the 
-                    reference data set.                
+                    Test                
                 </p>
                 <h:panelGrid columns="2">
                     <h:panelGrid columns="2" style="padding: 2px 20px 10px 20px; line-height: 25px">
@@ -51,7 +46,7 @@
                                      update=":form1:corrPane  :cmdPane" 
                                      actionListener="#{univBean.corrBtn_action()}"/>   
                 </h:panelGrid>
-                                <hr style="height: 12px; border: 0;box-shadow: inset 0 12px 12px -12px rgba(0, 0, 0, 0.5); width:100%; min-width: 1000px"/>
+                <hr style="height: 12px; border: 0;box-shadow: inset 0 12px 12px -12px rgba(0, 0, 0, 0.5); width:100%; min-width: 1000px"/>
                 <h:panelGrid id="corrPane" style="text-align: center; width: 100%;">
                     <h:panelGrid columns="4" style="text-align: right; padding-left: 460px; width: 760px;">
                         <h:outputText escape="false" value="#{univBean.corrDownloadTxt}"/>

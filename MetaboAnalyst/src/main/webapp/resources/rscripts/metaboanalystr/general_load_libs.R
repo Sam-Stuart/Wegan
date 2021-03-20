@@ -60,6 +60,14 @@ load_xcms <- function(){
 
 #------------------------------------WEGAN STUFF
 #Load Vegan
-load_xcms <- function(){
+load_vegan <- function(){
   library(vegan)
+}
+
+load_caret <- function(){
+  library(caret)
+}
+
+load_glmnet <- function(){
+  library(glmnet)
 }

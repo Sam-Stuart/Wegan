@@ -4,7 +4,7 @@ print(" SCRIPT LOADER " );
 general_files <- c("general_data_utils","general_misc_utils","general_load_libs");
 general_stat_files <- c("general_norm_utils","general_proc_utils");
 general_anot_files <- "general_anot_utils";
-stats_files <- c("stats_chemometrics","stats_classification","stats_clustering","stats_correlations","stats_sigfeatures","stats_univariates");
+stats_files <- c("stats_chemometrics","stats_classification","stats_clustering", "stats_correlations", "stats_sigfeatures","stats_univariates");
 enrich_files <- c("enrich_graphics","enrich_mset","enrich_name_match","enrich_stats");
 pathway_files <- c("enrich_mset","enrich_stats","enrich_name_match","enrich_path_graphics","enrich_path_kegg","enrich_path_stats")
 integmex_files <- c("enrich_integ","enrich_path_kegg","enrich_stats","enrich_name_match")
@@ -19,7 +19,7 @@ dispersal_files <- c("dispersal");
 LoadScripts <- function(module.nm = "dispersal"){
     file.sources <- "";
     if(module.nm == "stat"){
-        file.sources <- c(general_files, general_stat_files, stats_files);
+        file.sources <- c(general_files, general_stat_files, stats_files, correlation_files);
     }else if(module.nm == "ts"){
         file.sources <- c(general_files, general_stat_files, time_files);
     }else if(module.nm == "pathinteg"){
@@ -42,6 +42,9 @@ LoadScripts <- function(module.nm = "dispersal"){
         file.sources <- c(general_files, general_stat_files, stats_files,nmds_files);
     }else if(module.nm == "dispersal"){
         file.sources <- c(general_files, general_stat_files, stats_files,dispersal_files);
+        file.sources <- c(general_files, general_stat_files, stats_files,nmds_files, correlation_files);
+    }else if(module.nm == "ca"){
+        file.sources <- c(general_files, general_stat_files, stats_files, correlation_files);
     }else{
         print(paste("Unknown module code: ", module.nm));
     }

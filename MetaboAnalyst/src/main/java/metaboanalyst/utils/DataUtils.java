@@ -580,6 +580,8 @@ public class DataUtils {
                 TreeNode normNode = new DefaultTreeNode("Normalization", naviTree);
                 if (type.equalsIgnoreCase("stat")) {
                     addStatNodes(naviTree);
+                } else if (type.equalsIgnoreCase("ca")) {
+                    addCANodes(naviTree);
                 } else if (type.equalsIgnoreCase("enrich")) {
                     addEnrichNodes(naviTree);
                 } else if (type.equalsIgnoreCase("pathway")) {
@@ -627,6 +629,13 @@ public class DataUtils {
         TreeNode nodep7 = new DefaultTreeNode("Data editor", processNode);
         TreeNode nodep8 = new DefaultTreeNode("Image options", processNode);
     }
+    
+    private static void addCANodes(TreeNode parent) {
+        TreeNode caNode = new DefaultTreeNode("Correlation", parent);
+        TreeNode nodec1 = new DefaultTreeNode("Correlations", caNode);
+        TreeNode nodec2 = new DefaultTreeNode("Linear", caNode);
+        TreeNode nodec3 = new DefaultTreeNode("polynomial", caNode);
+    }
 
     private static void addStatNodes(TreeNode parent) {
         TreeNode analNode = new DefaultTreeNode("Statistics", parent);
@@ -634,7 +643,7 @@ public class DataUtils {
         TreeNode nodea2 = new DefaultTreeNode("T-test", analNode);
         TreeNode nodea3 = new DefaultTreeNode("Volcano plot", analNode);
         TreeNode nodea4 = new DefaultTreeNode("ANOVA", analNode);
-        TreeNode nodea5 = new DefaultTreeNode("Correlations", analNode);
+//        TreeNode nodea5 = new DefaultTreeNode("Correlations", analNode);
         TreeNode nodea6 = new DefaultTreeNode("PatternHunter", analNode);
         TreeNode nodea7 = new DefaultTreeNode("PCA", analNode);
         TreeNode nodea8 = new DefaultTreeNode("PLSDA", analNode);

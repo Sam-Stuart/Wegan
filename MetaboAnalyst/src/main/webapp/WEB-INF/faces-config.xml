@@ -296,6 +296,13 @@
             <to-view-id>/Secure/analysis/AnalysisView.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
+        
+        <navigation-case>
+            <from-outcome>Correlation</from-outcome>
+            <to-view-id>/Secure/correlation/CAMainView.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        
         <navigation-case>
             <from-outcome>T-test</from-outcome>
             <to-view-id>/Secure/analysis/TtestView.xhtml</to-view-id>
@@ -318,7 +325,37 @@
         </navigation-case>
         <navigation-case>
             <from-outcome>Correlations</from-outcome>
-            <to-view-id>/Secure/analysis/CorrelationView.xhtml</to-view-id>
+            <to-view-id>/Secure/correlation/CorrelationView.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>Linear</from-outcome>
+            <to-view-id>/Secure/correlation/LinearView.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>MultivariateLinear</from-outcome>
+            <to-view-id>/Secure/correlation/MultivariateView.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>SVMCorrelation</from-outcome>
+            <to-view-id>/Secure/correlation/SVMCorrelationView.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>RFCorrelation</from-outcome>
+            <to-view-id>/Secure/correlation/RFCorrelationView.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>Penalized</from-outcome>
+            <to-view-id>/Secure/correlation/PenalizedView.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>Polynomial</from-outcome>
+            <to-view-id>/Secure/correlation/PolynomialView.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         <navigation-case>
