@@ -7,7 +7,7 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="/frags/_anal_template.xhtml">
     <ui:define name="metaInfo">
-        <f:event type="preRenderView" listener="#{caBean.performDefaultAnalysis('SVM')}"/> 
+        <f:event type="preRenderView" listener="#{caBean.performDefaultAnalysis('Logistic')}"/> 
     </ui:define>
     <ui:define name="content">
         <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
@@ -21,7 +21,7 @@
                     The train data for model building is 70% of the dataset, while the test data for model testing is 30% of the dataset.
                 </p>
                 
-                <h:panelGrid id="panelGrid" columns="2" cellpadding="3" columnClasses="width: 10%, width: 40%">
+<!--                <h:panelGrid id="panelGrid" columns="2" cellpadding="3" columnClasses="width: 10%, width: 40%">
                     <h:outputLabel style="font-weight: bold" value="Dependant Variable:"/>
                             
                     <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{svmCABean.columnNameA}">
@@ -39,7 +39,7 @@
                                     update=":form1:corrSVMPane1  :cmdPane" 
                                     actionListener="#{svmCABean.corrSVMBtn_action()}"/> 
                     
-                </h:panelGrid>
+                </h:panelGrid>-->
                 <h:panelGrid class="resultsBar" columns="2">
                     <h:panelGroup>
                         <h:panelGrid columns="1" style="text-align : left;">
@@ -60,28 +60,11 @@
                 </h:panelGrid> 
                         <h:panelGrid id="corrSVMPane1" style="width: 100%;">
                              <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
-                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_svm')}" alt="SVM image"/>
+                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_logistic1')}" alt="Logistic image"/>
                             </h:panelGrid>                           
                         </h:panelGrid>       
             </h:form>
-            <!--<img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_svm')}" alt="penalizedimage"/>-->
-<!--            <p:tabView id="ac" style="width:100%; border: none; background: none; font-size: 13px;">
-                <p:tab title ="Overview">
-                    <h:form id="form1">
-
-                        <h:panelGrid id="corrPane" style="text-align: center; width: 100%;">
-                            <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_penalized')}" alt="penalizedimage"/>
-                        </h:panelGrid>        
-                    </h:form>
-                </p:tab>
-                <p:tab title ="Test 2">
-                    <h:form id="form2">
-                        <h:panelGrid columns="2" style="width: 70%">
-                            <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_penalized')}" alt="penalizedimage"/>
-                        </h:panelGrid>        
-                    </h:form>
-                </p:tab>
-            </p:tabView> -->
+       
         </h:panelGrid> 
     </ui:define>
 </ui:composition>

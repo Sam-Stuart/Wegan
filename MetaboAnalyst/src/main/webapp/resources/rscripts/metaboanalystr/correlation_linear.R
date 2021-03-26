@@ -12,7 +12,7 @@
 lin.reg.anal.one <- function(mSetObj=NA, facA=NULL, facB=NULL, weights=NULL){
   
   mSetObj <- .get.mSet(mSetObj)
-  
+  mSetObj$dataSet$norm <- mSetObj$dataSet$norm[order(as.numeric(rownames(mSetObj$dataSet$norm))),,drop=FALSE]
   #Dependent var default is first column. Independent var default is second column.
 
 

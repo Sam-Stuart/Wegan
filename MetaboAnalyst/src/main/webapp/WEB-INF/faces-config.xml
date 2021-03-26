@@ -342,8 +342,18 @@
             <redirect/>
         </navigation-case>
         <navigation-case>
+            <from-outcome>RFCorrelation</from-outcome>
+            <to-view-id>/Secure/correlation/RFCorrelationView.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
             <from-outcome>Penalized</from-outcome>
             <to-view-id>/Secure/correlation/PenalizedView.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>LogisticCorrelation</from-outcome>
+            <to-view-id>/Secure/correlation/LogisticCorrelationView.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         <navigation-case>

@@ -21,10 +21,11 @@
             </p:panelGrid>
 
             <span><a href="#{facesContext.externalContext.requestContextPath}/faces/upload/CaUploadView.xhtml">
-                <div class="card moduleButton" href="#{facesContext.externalContext.requestContextPath}/faces/upload/CaUploadView.xhtml">
+                <div id="corrBtn" class="card moduleButton" href="#{facesContext.externalContext.requestContextPath}/faces/upload/CaUploadView.xhtml">
+                   
                     <div class="card-horizontal">
                         <div class="img-square-wrapper">
-                            <img style="height:100px; width:100px; margin-left: 5px" src="#{facesContext.externalContext.requestContextPath}/resources/images/ca_icon.png"></img>
+                            <img style="height:100px; width:100px; margin-left: 5px" src="#{facesContext.externalContext.requestContextPath}/resources/images/icons/ca_icon.png"></img>
                         </div>
                         <div class="card-body">
                             <p class="card-text moduleTitle">Correlation Analysis</p>
@@ -32,14 +33,16 @@
                             <!--<p class="card-text">Heatmap and Regression Analysis</p>-->
                         </div>
                     </div>
-                </div> 
+                    <!--<p:tooltip for="corrBtn" style="font-size: 11px;" value="Two variables will be tested for correlation, an independent variable and a dependent variable. Both must have numeric values." />-->
+                </div>
+
             </a></span>
 
             <span><a href="#{facesContext.externalContext.requestContextPath}/faces/upload/DiversityUploadView.xhtml">
                 <div class="card moduleButton">
                     <div class="card-horizontal">
                         <div class="img-square-wrapper">
-                            <img style="height:100px; width:100px; margin-left: 5px" src="#{facesContext.externalContext.requestContextPath}/resources/images/diversity_icon.png"></img>
+                            <img style="height:100px; width:100px; margin-left: 5px" src="#{facesContext.externalContext.requestContextPath}/resources/images/icons/diversity_icon.png"></img>
                         </div>
                         <div class="card-body">
                             <p class="card-text moduleTitle">Diversity Analysis</p>

@@ -19,7 +19,7 @@ library("dplyr")
 pen.reg.anal <- function(mSetObj=NA, method="ridge", facA=NULL, weights=NULL){
   
   mSetObj <- .get.mSet(mSetObj)
-  
+  mSetObj$dataSet$norm <- mSetObj$dataSet$norm[order(as.numeric(rownames(mSetObj$dataSet$norm))),,drop=FALSE]
   #Text will be visible to user. 
   cat("One dependent variable and two or more independent variables will be tested for correlation. Only numeric variables will be used.")
   cat("Note that all variables other than the dependent variable will be treated as independent variables.") 

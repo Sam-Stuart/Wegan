@@ -11,45 +11,205 @@
     </ui:define>
     <ui:define name="content">
         <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
-            <h:form id="form1">
-                <h:panelGrid columns="2">
-                    <h:panelGrid columns="2" style="padding: 2px 20px 10px 20px; line-height: 25px">
-                        <h:outputLabel style="font-weight: bold" value="Regression Methods:"/>
-                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{caBean.corrFunctionMethods}">
-                                <f:selectItems value="#{applicationBean1.corrMethodsOpts}" />
-                            </p:selectOneMenu>  
-                            <p:commandButton value="Submit" 
-                                     onclick="PF('statusDialog').show()"
-                                     oncomplete="PF('statusDialog').hide()"  
-                                     update=":form1:corrPane  :cmdPane" 
-                                     actionListener="#{caBean.penalizedUpdate_action}"/> 
-                    </h:panelGrid>  
-                </h:panelGrid>
-                                <hr style="height: 12px; border: 0;box-shadow: inset 0 12px 12px -12px rgba(0, 0, 0, 0.5); width:100%; min-width: 1000px"/>
-                <h:panelGrid id="corrPane" style="text-align: center; width: 100%;">
-                    <p:scrollPanel mode="native" style="width:780px;height:700px">
-                        <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_multivariate')}" alt="Multivariateimage"/>
-                    </p:scrollPanel>
-                </h:panelGrid>        
-            </h:form>
-            <!--<img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_penalized')}" alt="penalizedimage"/>-->
-<!--            <p:tabView id="ac" style="width:100%; border: none; background: none; font-size: 13px;">
-                <p:tab title ="Overview">
+            <p:tabView id="multiCA">
+                <p:tab title ="Overview" titleStyleClass="p-tab-nav">
                     <h:form id="form1">
+                        <p>
+                            "One dependent variable and multiple independent variables will be tested for correlation. All must have numeric values." 
+                              "You have created this formula for model building: ", facA, " ~ ", pred.text (facA and pred.text are store in  mSetObj$analSet$linRegMulti$res as response and predictors, respectively)
+                              "The L hand side is the dependent variable. The R hand side is the independent variable(s). If there is >1 independent variable, plus signs indicate the variables are evaluated on their own; colons indicate an interaction between the variables is evaluated."
+                              "If the formula is not what you intended, retype independent variable(s) in the text box and/or choose another dependent variable."
+                        </p>
+                        <h:panelGrid id="panelGrid" columns="2" cellpadding="3" columnClasses="width: 10%, width: 40%">
+                            <h:outputLabel style="font-weight: bold" value="Dependant Variable:"/>
 
-                        <h:panelGrid id="corrPane" style="text-align: center; width: 100%;">
-                            <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_penalized')}" alt="penalizedimage"/>
-                        </h:panelGrid>        
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{rfCABean.columnNameA}">
+                                <f:selectItems value="#{rfCABean.columnOpts}" />
+                            </p:selectOneMenu>
+
+                            <h:outputLabel style="font-weight: bold" value="Indicate independent variables using the column names with commas in between:"/>
+                            <p:inputText style="width:400px; height:100px" value="#{rfCABean.indInput}"/> 
+
+                            <p:panelGrid></p:panelGrid>
+                            <p:commandButton value="Update" 
+                                             style="background: #75bafb; border: 5px #75bafb; color: black"
+                                            onclick="PF('statusDialog').show()"
+                                            oncomplete="PF('statusDialog').hide()"  
+                                            update=":multiCA:form1:rfPane1  :cmdPane" 
+                                            actionListener="#{rfCABean.corrRFBtn_action()}"/> 
+
+                        </h:panelGrid>
+                        <h:panelGrid class="resultsBar" columns="2">
+                            <h:panelGroup>
+                                <h:panelGrid columns="1" style="text-align : left;">
+                                    Results
+                                </h:panelGrid>
+                            </h:panelGroup> 
+                            <h:panelGroup>
+                                <h:panelGrid columns="3" class="resultsImages">
+                                    <i class="fas fa-palette"></i>
+                                    <i class="fa fa-table"></i>
+                                    <i class="fa fa-question-circle"></i>
+                                </h:panelGrid>
+
+                            </h:panelGroup>                            
+                        </h:panelGrid> 
+                        <h:panelGrid id="rfPane1" style="text-align: center; width: 100%;">
+                            <!--<img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_rf')}" alt="Multivariateimage"/>-->
+                        </h:panelGrid>
                     </h:form>
                 </p:tab>
-                <p:tab title ="Test 2">
+                <p:tab title ="Predicted vs Actual Plot" titleStyleClass="p-tab-nav">
                     <h:form id="form2">
-                        <h:panelGrid columns="2" style="width: 70%">
-                            <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_penalized')}" alt="penalizedimage"/>
-                        </h:panelGrid>        
+                        <p>
+                           "One dependent variable and two or more independent variables will be tested for correlation. The dependent variable must be numeric. The independent variables can be numeric or categorical."
+                            "For categorical independent variables, make sure to use characters for the levels and not numbers. For example, if you have levels 1, 2 and 3, change the level labels to I, II and III prior to upload."
+                          "You have created this formula for model building: ", facA, " ~ ", pred.text (stored in mSetObj$analSet$rfReg$res as response and pred.text, respectively)
+                            "The L hand side is the dependent variable. The R hand side is the independent variable(s).
+                            "If the formula is not what you intended, retype independent variable(s) in the text box and/or choose another dependent variable."
+                          "The train data for model building is 70% of the dataset, while the test data for model testing is 30% of the dataset."
+
+                        </p>
+                        <h:panelGrid id="panelGrid" columns="2" cellpadding="3" columnClasses="width: 10%, width: 40%">
+                            <h:outputLabel style="font-weight: bold" value="Dependant Variable:"/>
+
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{rfCABean.columnNameA}">
+                                <f:selectItems value="#{rfCABean.columnOpts}" />
+                            </p:selectOneMenu>
+
+                            <h:outputLabel style="font-weight: bold" value="Indicate independent variables using the column names with commas in between:"/>
+                            <p:inputText style="width:400px; height:100px" value="#{rfCABean.indInput}"/> 
+
+                            <p:panelGrid></p:panelGrid>
+                            <p:commandButton value="Update" 
+                                             style="background: #75bafb; border: 5px #75bafb; color: black"
+                                            onclick="PF('statusDialog').show()"
+                                            oncomplete="PF('statusDialog').hide()"  
+                                            update=":multiCA:form2:rfPane2  :cmdPane" 
+                                            actionListener="#{rfCABean.corrRFBtn_action()}"/> 
+
+                        </h:panelGrid>
+                        <h:panelGrid class="resultsBar" columns="2">
+                            <h:panelGroup>
+                                <h:panelGrid columns="1" style="text-align : left;">
+                                    Results
+                                </h:panelGrid>
+                            </h:panelGroup> 
+                            <h:panelGroup>
+                                <h:panelGrid columns="3" class="resultsImages">
+                                    <i class="fas fa-palette"></i>
+                                    <i class="fa fa-table"></i>
+                                    <i class="fa fa-question-circle"></i>
+                                </h:panelGrid>
+
+                            </h:panelGroup>                            
+                        </h:panelGrid> 
+                        <h:panelGrid id="rfPane2" style="text-align: center; width: 100%;">
+                            <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_multivariate')}" alt="RFimage"/>
+                        </h:panelGrid>
                     </h:form>
                 </p:tab>
-            </p:tabView> -->
+                <p:tab title ="Coefficient Plot" titleStyleClass="p-tab-nav">
+                    <h:form id="form3">
+                        <p>
+                           "One dependent variable and two or more independent variables will be tested for correlation. The dependent variable must be numeric. The independent variables can be numeric or categorical."
+                            "For categorical independent variables, make sure to use characters for the levels and not numbers. For example, if you have levels 1, 2 and 3, change the level labels to I, II and III prior to upload."
+                          "You have created this formula for model building: ", facA, " ~ ", pred.text (stored in mSetObj$analSet$rfReg$res as response and pred.text, respectively)
+                            "The L hand side is the dependent variable. The R hand side is the independent variable(s).
+                            "If the formula is not what you intended, retype independent variable(s) in the text box and/or choose another dependent variable."
+                          "The train data for model building is 70% of the dataset, while the test data for model testing is 30% of the dataset."
+
+                        </p>
+                        <h:panelGrid id="panelGrid" columns="2" cellpadding="3" columnClasses="width: 10%, width: 40%">
+                            <h:outputLabel style="font-weight: bold" value="Dependant Variable:"/>
+
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{rfCABean.columnNameA}">
+                                <f:selectItems value="#{rfCABean.columnOpts}" />
+                            </p:selectOneMenu>
+
+                            <h:outputLabel style="font-weight: bold" value="Indicate independent variables using the column names with commas in between:"/>
+                            <p:inputText style="width:400px; height:100px" value="#{rfCABean.indInput}"/> 
+
+                            <p:panelGrid></p:panelGrid>
+                            <p:commandButton value="Update" 
+                                             style="background: #75bafb; border: 5px #75bafb; color: black"
+                                            onclick="PF('statusDialog').show()"
+                                            oncomplete="PF('statusDialog').hide()"  
+                                            update=":multiCA:form3:rfPane3  :cmdPane" 
+                                            actionListener="#{rfCABean.corrRFBtn_action()}"/> 
+
+                        </h:panelGrid>
+                        <h:panelGrid class="resultsBar" columns="2">
+                            <h:panelGroup>
+                                <h:panelGrid columns="1" style="text-align : left;">
+                                    Results
+                                </h:panelGrid>
+                            </h:panelGroup> 
+                            <h:panelGroup>
+                                <h:panelGrid columns="3" class="resultsImages">
+                                    <i class="fas fa-palette"></i>
+                                    <i class="fa fa-table"></i>
+                                    <i class="fa fa-question-circle"></i>
+                                </h:panelGrid>
+
+                            </h:panelGroup>                            
+                        </h:panelGrid> 
+                        <h:panelGrid id="rfPane3" style="text-align: center; width: 100%;">
+                            <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_multivariate_coeff')}" alt="RFimage"/>
+                        </h:panelGrid>
+                    </h:form>
+                </p:tab>
+                <p:tab title ="Relative Importance" titleStyleClass="p-tab-nav">
+                    <h:form id="form4">
+                        <p>
+                           "One dependent variable and two or more independent variables will be tested for correlation. The dependent variable must be numeric. The independent variables can be numeric or categorical."
+                            "For categorical independent variables, make sure to use characters for the levels and not numbers. For example, if you have levels 1, 2 and 3, change the level labels to I, II and III prior to upload."
+                          "You have created this formula for model building: ", facA, " ~ ", pred.text (stored in mSetObj$analSet$rfReg$res as response and pred.text, respectively)
+                            "The L hand side is the dependent variable. The R hand side is the independent variable(s).
+                            "If the formula is not what you intended, retype independent variable(s) in the text box and/or choose another dependent variable."
+                          "The train data for model building is 70% of the dataset, while the test data for model testing is 30% of the dataset."
+
+                        </p>
+                        <h:panelGrid id="panelGrid" columns="2" cellpadding="3" columnClasses="width: 10%, width: 40%">
+                            <h:outputLabel style="font-weight: bold" value="Dependant Variable:"/>
+
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{rfCABean.columnNameA}">
+                                <f:selectItems value="#{rfCABean.columnOpts}" />
+                            </p:selectOneMenu>
+
+                            <h:outputLabel style="font-weight: bold" value="Indicate independent variables using the column names with commas in between:"/>
+                            <p:inputText style="width:400px; height:100px" value="#{rfCABean.indInput}"/> 
+
+                            <p:panelGrid></p:panelGrid>
+                            <p:commandButton value="Update" 
+                                             style="background: #75bafb; border: 5px #75bafb; color: black"
+                                            onclick="PF('statusDialog').show()"
+                                            oncomplete="PF('statusDialog').hide()"  
+                                            update=":multiCA:form4:rfPane3  :cmdPane" 
+                                            actionListener="#{rfCABean.corrRFBtn_action()}"/> 
+
+                        </h:panelGrid>
+                        <h:panelGrid class="resultsBar" columns="2">
+                            <h:panelGroup>
+                                <h:panelGrid columns="1" style="text-align : left;">
+                                    Results
+                                </h:panelGrid>
+                            </h:panelGroup> 
+                            <h:panelGroup>
+                                <h:panelGrid columns="3" class="resultsImages">
+                                    <i class="fas fa-palette"></i>
+                                    <i class="fa fa-table"></i>
+                                    <i class="fa fa-question-circle"></i>
+                                </h:panelGrid>
+
+                            </h:panelGroup>                            
+                        </h:panelGrid> 
+                        <h:panelGrid id="rfPane3" style="text-align: center; width: 100%;">
+                            <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_rf_error')}" alt="RFimage"/>
+                        </h:panelGrid>
+                    </h:form>
+                </p:tab>            
+            </p:tabView>
         </h:panelGrid> 
     </ui:define>
 </ui:composition>

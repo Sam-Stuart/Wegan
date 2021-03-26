@@ -15,7 +15,7 @@ poly.reg.anal <- function(mSetObj=NA, facA=NULL, facB=NULL, weights=NULL){
   
   #Text should be visable to user
   cat("Two variables will be tested for correlation, a dependent variable and an independent variable. Both must have numeric values.")
-
+  mSetObj$dataSet$norm <- mSetObj$dataSet$norm[order(as.numeric(rownames(mSetObj$dataSet$norm))),,drop=FALSE]
   #Set dependent (response) variable name
   if (facA=="NULL") {
     for (i in 1:ncol(mSetObj$dataSet$norm)) {

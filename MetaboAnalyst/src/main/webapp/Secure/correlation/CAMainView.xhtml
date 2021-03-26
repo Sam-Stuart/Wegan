@@ -37,23 +37,14 @@
                         <h2>Multivariate Analysis:</h2>
                         <h:commandLink style="margin-left: 25px; color: rgb(66, 133, 244) " action="Penalized" onclick="PF('statusDialog').show()" value="Penalized Linear Regression"/>
                         <h:commandLink style="margin-left: 25px; color: rgb(66, 133, 244)" action="MultivariateLinear" onclick="PF('statusDialog').show()" value="Multivariate Linear Regression Analysis"/>
+                        <h:commandLink style="margin-left: 25px; color: rgb(66, 133, 244)" action="LogisticCorrelation" onclick="PF('statusDialog').show()" value="Logistic Regression Analysis"/>
                     </h:panelGrid>
                     
                     <h:panelGrid>
                         <h2>Machine Learning Analysis: </h2>
                         <h:commandLink style="margin-left: 25px" action="SVMCorrelation" onclick="PF('statusDialog').show()" value="Support Vector Machine (SVM) Regression"/>
-                        <h:commandLink style="margin-left: 25px" action="SVMCorrelation" onclick="PF('statusDialog').show()" value="Random Forest Regression"/>
+                        <h:commandLink style="margin-left: 25px" action="RFCorrelation" onclick="PF('statusDialog').show()" value="Random Forest Regression"/>
                     </h:panelGrid>
-                    <!--
-                    <h:panelGrid columns="3">
-                        <h:commandLink action="Multiple" onclick="PF('statusDialog').show()" value="Multiple Regression Analysis"/>
-                    </h:panelGrid>
-                    <h:panelGrid columns="3">
-                        <h:commandLink action="Linear" onclick="PF('statusDialog').show()" value="SVM Regression Analysis"/>
-                    </h:panelGrid>
-                    <h:panelGrid columns="3">
-                        <h:commandLink action="Linear" onclick="PF('statusDialog').show()" value="Random Forest Analysis"/>
-                    </h:panelGrid>-->
                 </h:panelGrid>
             </h:panelGrid> 
         </h:form>

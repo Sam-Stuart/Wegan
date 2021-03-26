@@ -128,19 +128,7 @@ public class CAUtils {
             return false;
         }
     }    
-    
-    public static void PlotMultivariateCA(SessionBean1 sb, String imgName, String format, int dpi) {
-        try {
-            RConnection RC = sb.getRConnection();
-            String rCommand = "plot.linRegMulti.diagnostic(NA" + ", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
-            RCenter.recordRCommand(RC, rCommand);
-            sb.addGraphicsCMD(imgName, rCommand);
-            RC.voidEval(rCommand);
-        } catch (RserveException rse) {
-            System.out.println(rse);
-        }
-    }
-    
+ 
     public static void CreateMultivariateModel(SessionBean1 sb) {
         try {
             RConnection RC = sb.getRConnection();
@@ -152,22 +140,47 @@ public class CAUtils {
             System.out.println(rse);
         }
     }
-    
-    public static void CreateMLModel(SessionBean1 sb, String model) {
+        
+    public static void PlotMultivariateCA(SessionBean1 sb, String imgName, String format, int dpi) {
         try {
             RConnection RC = sb.getRConnection();
-            String rCommand = "reg.machine.anal(NA" + ", \"" + model + "\" )";
+            String rCommand = "plot.pred.linRegMulti(NA" + ", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
             RCenter.recordRCommand(RC, rCommand);
+            sb.addGraphicsCMD(imgName, rCommand);
             RC.voidEval(rCommand);
         } catch (RserveException rse) {
             System.out.println(rse);
         }
     }
 
-    public static void CreateSVMModel(SessionBean1 sb) {
+    public static void PlotMultivariateCoeffCA(SessionBean1 sb, String imgName, String format, int dpi) {
         try {
             RConnection RC = sb.getRConnection();
-            String rCommand = "reg.svm.anal(NA)";
+            String rCommand = "plot.relaimpo.linRegMulti(NA" + ", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            sb.addGraphicsCMD(imgName, rCommand);
+            RC.voidEval(rCommand);
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        }
+    }
+
+    public static void PlotMultivariateRelativeCA(SessionBean1 sb, String imgName, String format, int dpi) {
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "plot.pred.linRegMulti(NA" + ", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            sb.addGraphicsCMD(imgName, rCommand);
+            RC.voidEval(rCommand);
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        }
+    }    
+
+    public static void CreateSVMModel(SessionBean1 sb, String facA, String facB) {
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "reg.svm.anal(NA" + ", \"" + facA + "\", \"" + facB + "\" )";
             RCenter.recordRCommand(RC, rCommand);
             RC.voidEval(rCommand);
         } catch (RserveException rse) {
@@ -187,10 +200,21 @@ public class CAUtils {
         }
     }
     
-    public static void PlotMLCA(SessionBean1 sb, String model, String imgName, String format, int dpi) {
+        public static void CreateRFModel(SessionBean1 sb, String facA, String facB) {
         try {
             RConnection RC = sb.getRConnection();
-            String rCommand = "plot.pred.MLReg(NA" + ", \"" + model + ", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
+            String rCommand = "reg.rf.anal(NA" + ", \"" + facA + "\", \"" + facB + "\" )";
+            RCenter.recordRCommand(RC, rCommand);
+            RC.voidEval(rCommand);
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        }
+    }
+    
+    public static void PlotRFCA(SessionBean1 sb, String imgName, String format, int dpi) {
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "plot.pred.RFReg(NA" + ", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
             RCenter.recordRCommand(RC, rCommand);
             sb.addGraphicsCMD(imgName, rCommand);
             RC.voidEval(rCommand);
@@ -198,6 +222,55 @@ public class CAUtils {
             System.out.println(rse);
         }
     }
+    
+    public static void PlotRFRelativeCA(SessionBean1 sb, String imgName, String format, int dpi) {
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "plot.relimpo.rfReg(NA" + ", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            sb.addGraphicsCMD(imgName, rCommand);
+            RC.voidEval(rCommand);
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        }
+    }
+    
+    public static void PlotRFErrorCA(SessionBean1 sb, String imgName, String format, int dpi) {
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "plot.pred.rfError(NA" + ", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            sb.addGraphicsCMD(imgName, rCommand);
+            RC.voidEval(rCommand);
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        }
+    }
+    
+        public static void CreateLogisticModel(SessionBean1 sb, String facA, String facB) {
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "log.reg.anal(NA)";
+//            String rCommand = "log.reg.anal(NA" + ", \"" + facA + "\", \"" + facB + "\" )";
+            RCenter.recordRCommand(RC, rCommand);
+            RC.voidEval(rCommand);
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        }
+    }
+    
+    public static void PlotLogisticCA(SessionBean1 sb, String type, String imgName, String format, int dpi) {
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "plot.effects.logReg(NA" + ", \"" + type + "\", \""  + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            sb.addGraphicsCMD(imgName, rCommand);
+            RC.voidEval(rCommand);
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        }
+    }
+    
     
     
     

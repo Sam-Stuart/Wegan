@@ -59,7 +59,7 @@ public class ApplicationBean1 implements Serializable {
     private static final String test_dune = "/data/dune.txt";
     private static final String test_BCI = "/data/BCI.txt";
     
-    private static final String test_iris = "/data/iris.csv";
+    //private static final String test_dune = "/data/iris.txt";
     private static final String test_dune_weights = "/data/dune_weights.txt";
     
     
@@ -519,7 +519,8 @@ public class ApplicationBean1 implements Serializable {
     }
 
     public String getTestIris() {
-        return realPath + test_iris;
+//        return realPath + test_iris;
+          return realPath;
     }
     
     public String getTestWeightDune() {

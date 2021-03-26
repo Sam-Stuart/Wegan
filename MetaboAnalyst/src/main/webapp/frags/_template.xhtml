@@ -26,6 +26,61 @@
               background-color: #75bafb;
               color: white;
             }
+            /* The dropdown container */
+            .dropdown {
+              float: left;
+              overflow: hidden;
+            }
+
+            /* Dropdown button */
+            .dropdown .dropbtn {
+              font-size: 16px;
+              border: none;
+              outline: none;
+              color: black;
+              padding: 14px 16px;
+              background-color: inherit;
+              font-family: inherit; /* Important for vertical align on mobile phones */
+              margin: 0; /* Important for vertical align on mobile phones */
+            }
+
+            /* Add a red background color to navbar links on hover */
+            .navbar a:hover, .dropdown:hover .dropbtn {
+                background-color: #75bafb;
+                color: white;
+            }
+
+            /* Dropdown content (hidden by default) */
+            .dropdown-content {
+              display: none;
+              position: absolute;
+              background-color: #f9f9f9;
+              color: #75bafb;
+              min-width: 160px;
+              box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+              z-index: 1;
+            }
+
+            /* Links inside the dropdown */
+            .dropdown-content a {
+              float: none;
+              color: black;
+              padding: 12px 16px;
+              text-decoration: none;
+              display: block;
+              text-align: left;
+            }
+
+            /* Add a grey background color to dropdown links on hover */
+            .dropdown-content a:hover {
+              background-color: #75bafb;
+              color: black;
+            }
+
+            /* Show the dropdown menu on hover */
+            .dropdown:hover .dropdown-content {
+              display: block;
+            }
 
         </style>    
         <f:facet name="first">
@@ -134,17 +189,32 @@
         <p:layout style="margin:0px; padding:0px; font-size: 13px " fullPage="true">
             <p:layoutUnit style="margin:0px; padding:0px; border: none" size="50" collapsible="true" gutter="0" position="north">
                 <div class="topnav">
-                    <a href="/">
-                        <img src="#{facesContext.externalContext.requestContextPath}/resources/images/Wegan_logo.png" height="10px" alt="Logo"/>
-                    </a>
-                    <a class="active" href="#{facesContext.externalContext.requestContextPath}/faces/home.xhtml">Home</a>
+                    <a href="#"><img src="#{facesContext.externalContext.requestContextPath}/resources/images/icons/topLogo.png" style="height:30px; width:30px; padding-top: 0px !important" alt="Logo"></img></a>
+                    <a class="active" href="#{facesContext.externalContext.requestContextPath}/faces/home.xhtml">WEGAN</a>
+                    <div class="dropdown">
+                        <button class="dropbtn">Modules
+                            <i class="fa fa-caret-down"></i>
+                        </button>
+                        <div class="dropdown-content">
+                            <a href="#"><img src="#{facesContext.externalContext.requestContextPath}/resources/images/icons/ca_icon.png" style="height:20px; width: 20px; padding-right: 5px; padding-left: 0px" alt="..."></img>Correlation</a>
+                            <a href="#"><img src="#{facesContext.externalContext.requestContextPath}/resources/images/icons/diversity_icon.png" style="height:20px; width: 20px; padding-right: 5px; padding-left: 0px" alt="..."></img>Diversity</a>
+                            <a href="#"><img src="#{facesContext.externalContext.requestContextPath}/resources/images/icons/ord_icon.png" style="height:20px; width: 20px; padding-right: 5px; padding-left: 0px" alt="..."></img>Ordination</a>
+                            <a href="#"><img src="#{facesContext.externalContext.requestContextPath}/resources/images/icons/stat_icon.png" style="height:20px; width: 20px; padding-right: 5px; padding-left: 0px" alt="..."></img>Statistics</a>
+                            <a href="#"><img src="#{facesContext.externalContext.requestContextPath}/resources/images/icons/disp_icon.png" style="height:20px; width: 20px; padding-right: 5px; padding-left: 0px" alt="..."></img>Dispersal</a>
+                            <a href="#"><img src="#{facesContext.externalContext.requestContextPath}/resources/images/icons/cluster_icon.png" style="height:20px; width: 20px; padding-right: 5px; padding-left: 0px" alt="..."></img>Clustering and Visualization</a>
+                            <a href="#"><img src="#{facesContext.externalContext.requestContextPath}/resources/images/icons/plot_icon.png" style="height:20px; width: 20px; padding-right: 5px; padding-left: 0px" alt="..."></img>Plotting</a>
+                            <a href="#"><img src="#{facesContext.externalContext.requestContextPath}/resources/images/icons/taxa_icon.png" style="height:20px; width: 20px; padding-right: 5px; padding-left: 0px" alt="..."></img>Taxonomy</a>
+                        </div>
+                    </div>
+                    <!--<a href="#{facesContext.externalContext.requestContextPath}/faces/ModuleHome.xhtml">Modules</a>-->
                     <a href="#{facesContext.externalContext.requestContextPath}/faces/home.xhtml">About</a>
                     <a href="#{facesContext.externalContext.requestContextPath}/faces/home.xhtml">FAQs</a>
                     <a href="#{facesContext.externalContext.requestContextPath}/faces/home.xhtml">Tutorial</a>
                     <a href="#{facesContext.externalContext.requestContextPath}/faces/home.xhtml">Contact</a>
 
                 </div>
-<!--                    <div id="header" class="ui-widget-header">
+
+                <!--                    <div id="header" class="ui-widget-header">
                         <h:panelGrid columns="3" style="width:100%; padding: 0px 0px 0px 36px; margin: 0px">
                             <img src="#{facesContext.externalContext.requestContextPath}/resources/images/Wegan_logo.png" height="118px" alt="Logo"/>
                             

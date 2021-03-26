@@ -53,8 +53,12 @@ public class CABean implements Serializable {
                         break;
                     case "SVM":
                         doDefaultSVM();
-                    case "random forest":
-                        doDefaultML(pageID);
+                        break;
+                    case "RF":
+                        doDefaultRF();
+                        break;
+                    case "Logistic":
+                        doDefaultLogistic();
                         break;
                 }
             }
@@ -92,24 +96,27 @@ public class CABean implements Serializable {
 
     private void doDefaultMultivariate() {
         CAUtils.CreateMultivariateModel(sb);
-        // Don't need the plot  anymore 
         CAUtils.PlotMultivariateCA(sb, sb.getCurrentImage("corr_multivariate"), "png", 72);
+        CAUtils.PlotMultivariateCoeffCA(sb, sb.getCurrentImage("corr_multivariate_coeff"), "png", 72);
+        CAUtils.PlotMultivariateRelativeCA(sb, sb.getCurrentImage("corr_multivariate_relative"), "png", 72);
     }
 
-    private void doDefaultML(String modelType) {
-        CAUtils.CreateMLModel(sb, modelType);
-        if (modelType == "SVM") {
-            CAUtils.PlotMLCA(sb, "NULL", sb.getCurrentImage("corr_svm"), "png", 72);
-        } else {
-            CAUtils.PlotMLCA(sb, "NULL", sb.getCurrentImage("corr_rf"), "png", 72);
-        }
-
-    }
 
     private void doDefaultSVM() {
-        CAUtils.CreateSVMModel(sb);
+        CAUtils.CreateSVMModel(sb, "NULL", "NULL");
         CAUtils.PlotSVMCA(sb, sb.getCurrentImage("corr_svm"), "png", 72);
     }    
 
+    private void doDefaultRF() {
+        CAUtils.CreateRFModel(sb, "NULL", "NULL");
+        CAUtils.PlotRFCA(sb, sb.getCurrentImage("corr_rf"), "png", 72);
+        CAUtils.PlotRFRelativeCA(sb, sb.getCurrentImage("corr_rf_relative"), "png", 72);
+        CAUtils.PlotRFErrorCA(sb, sb.getCurrentImage("corr_rf_error"), "png", 72);
+    }  
+    
+    private void doDefaultLogistic() {
+        CAUtils.CreateLogisticModel(sb, "NULL", "NULL");
+        CAUtils.PlotLogisticCA(sb, "multinomial", sb.getCurrentImage("corr_logistic1"), "png", 72);
+    } 
     
 }
