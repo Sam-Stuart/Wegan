@@ -1,6 +1,5 @@
 # This script should be called by server to load actual scripts
 # based on the modules user selected
-print(" SCRIPT LOADER " );
 general_files <- c("general_data_utils","general_misc_utils","general_load_libs");
 general_stat_files <- c("general_norm_utils","general_proc_utils");
 general_anot_files <- "general_anot_utils";
@@ -14,9 +13,11 @@ mummichog_files <- c("mummichog", "networks");
 metaanal_files <- c("meta_methods", "meta_data_utils");
 network_files <- c("networks", "enrich_integ", "enrich_name_match", "gene_fun_utils", "enrich_path_kegg");
 other_files <- c("others_batch_check", "others_lipomics", "enrich_name_match");
-nmds_files <- c("test-Vegan", "Dispersal");
+nmds_files <- c("test-Vegan", "Dispersal", "plotting");
 dispersal_files <- c("dispersal");
-LoadScripts <- function(module.nm = "dispersal"){
+plotting_files <- c("plotting");
+correlation_files <- c("correlation_linear", "correlation_penalized", "correlation_polynomial", "correlation_ml", "correlation_multivariate", "correlation_SVM");
+LoadScripts <- function(module.nm = "nmds"){
     file.sources <- "";
     if(module.nm == "stat"){
         file.sources <- c(general_files, general_stat_files, stats_files, correlation_files);
@@ -39,13 +40,15 @@ LoadScripts <- function(module.nm = "dispersal"){
     }else if(module.nm == "metadata"){
         file.sources <- c(general_files, general_stat_files, metaanal_files);
     }else if(module.nm == "nmds"){
-        file.sources <- c(general_files, general_stat_files, stats_files,nmds_files);
+        file.sources <- c(general_files, general_stat_files, stats_files,nmds_files, correlation_files);
     }else if(module.nm == "dispersal"){
         file.sources <- c(general_files, general_stat_files, stats_files,dispersal_files);
-        file.sources <- c(general_files, general_stat_files, stats_files,nmds_files, correlation_files);
     }else if(module.nm == "ca"){
         file.sources <- c(general_files, general_stat_files, stats_files, correlation_files);
-    }else{
+    }else if(module.nm == "plotting"){
+        file.sources <- c(general_files, general_stat_files, stats_files, plotting_files);
+    }
+    else{
         print(paste("Unknown module code: ", module.nm));
     }
 

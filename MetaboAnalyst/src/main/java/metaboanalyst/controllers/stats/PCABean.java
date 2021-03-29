@@ -39,6 +39,8 @@ public class PCABean implements Serializable {
 
     public SelectItem[] getPcaPCs() {
         int pcNums = ChemoMetrics.GetMaxPCACompNumber(sb) - 2;
+        System.out.print("in PcaPCS... pcNums : ");
+        System.out.print(pcNums);
         SelectItem[] items = new SelectItem[pcNums];
         for (int i = 0; i < pcNums; i++) {
             int pcNum = i + 2;

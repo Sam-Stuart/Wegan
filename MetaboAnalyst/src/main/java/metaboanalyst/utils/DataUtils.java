@@ -596,6 +596,8 @@ public class DataUtils {
                     addDispersalNodes(naviTree);
                 } else if (type.equalsIgnoreCase("plotting")) {
                     addPlottingNodes(naviTree);
+                } else if (type.equalsIgnoreCase("correlation")) {
+                    addCANodes(naviTree);
                 } else {
                     System.out.println("You need to define the navigation tree for this analysis type: " + type);
                 }

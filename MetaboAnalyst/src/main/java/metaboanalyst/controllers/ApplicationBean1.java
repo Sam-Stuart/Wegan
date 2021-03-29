@@ -59,6 +59,8 @@ public class ApplicationBean1 implements Serializable {
     private static final String test_dune = "/data/dune.txt";
     private static final String test_BCI = "/data/BCI.txt";
     private static final String test_varespec = "/data/varespec.txt";
+    private static final String test_linear = "/data/linear_test_data4.txt"; // linear plot test data 
+   
     
     private static final String test_iris = "/data/iris.csv";
     private static final String test_dune_weights = "/data/dune_weights.txt";
@@ -123,7 +125,7 @@ public class ApplicationBean1 implements Serializable {
     private final SelectItem[] massLibOpts;
     private final SelectItem[] refLibOpts;
     private final SelectItem[] corrMethodsOpts;
-    
+    private final SelectItem[] plottingDataOpts;
     
     
     //Wegan variables begin here (currently ot used, regulat TestDataOpt is used
@@ -188,7 +190,7 @@ public class ApplicationBean1 implements Serializable {
         rocFormatOpts[0] = new SelectItem("rowu", "Samples in rows");
         rocFormatOpts[1] = new SelectItem("colu", "Samples in columns");
 
-        testDataOpts = new SelectItem[10];
+        testDataOpts = new SelectItem[11];
         //Changed for WEGAN testing
         testDataOpts[0] = new SelectItem("Dune", "NMDS");
         testDataOpts[1] = new SelectItem("BCI", "NMDS");
@@ -200,29 +202,19 @@ public class ApplicationBean1 implements Serializable {
         testDataOpts[7] = new SelectItem("lcmsspec", "LC-MS spectra");
         testDataOpts[8] = new SelectItem("gcmsspec", "GC-MS spectra");
         testDataOpts[9] = new SelectItem("Varespec", "Dispersal");
+        testDataOpts[10] = new SelectItem("Linear", "Plotting");
         
 
         //WEGAN TEST FUNCTIONS START HERE
         
         NMDSTestDataOpts = new SelectItem[1];
         NMDSTestDataOpts[0] = new SelectItem("Dune");
+
+        // Plotting Test Functions 
         
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+        plottingDataOpts = new SelectItem[2];
+        plottingDataOpts[0] = new SelectItem("Dune");
+        plottingDataOpts[1] = new SelectItem("Linear");
         
         
         
@@ -535,7 +527,9 @@ public class ApplicationBean1 implements Serializable {
     public String getTestVarespec(){
         return realPath + test_varespec;
     }
-    
+    public String getTestLinear(){
+        return realPath + test_linear;
+    }
     
     //--------------------------------------------------------------------------
     
@@ -720,6 +714,9 @@ public class ApplicationBean1 implements Serializable {
 
     public SelectItem[] getTestDataOpts() {
         return testDataOpts;
+    }
+    public SelectItem[] getPlottingDataOpts() {
+        return plottingDataOpts;
     }
     //Public Wegan functions NOT USED ATM
     //********----------------------------------------------------

@@ -65,7 +65,6 @@ public class CABean implements Serializable {
 //  cat(paste0(mSetObj$dataSet$cmpd))
 
     private void doDefaultCorrelation() {
-        System.out.println("HELLO RIGHT BEFORE PLOT Corr");
         UniVarTests.PlotCorrHeatMap(sb, sb.getCurrentImage("corr"), "png", 72, "col", "pearson", "bwm", "overview", "F", "F", "F", 100);
     }
 

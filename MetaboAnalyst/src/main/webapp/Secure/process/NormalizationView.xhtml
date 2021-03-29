@@ -8,7 +8,6 @@
                 template="/frags/_anal_template.xhtml">
     <ui:define name="metaInfo">
         <f:event type="preRenderView" listener="#{sessionBean1.registerPage('Normalization')}"/>
-        <f:event type="preRenderView" listener="#{sessionBean1.setAnalType('ca')}"/> 
         <f:event type="preRenderView" listener="#{normBean.initPrenormData()}"/> 
         <f:event type="preRenderView" listener="#{sessionBean1.setAnalType('plotting')}"/>   <!-- Dana's temporary fix,  remove later.  stat, dispersal, -->
     </ui:define>

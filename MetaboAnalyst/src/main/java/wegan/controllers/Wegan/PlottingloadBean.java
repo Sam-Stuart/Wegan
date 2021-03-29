@@ -357,7 +357,15 @@ public class PlottingloadBean implements Serializable {
         } else if (testDataOpt.equals("BCI")) {
             testFile = ab.getTestBCI();
             format = "rowu";
-        } else {
+        } else if (testDataOpt.equals("Linear")) {
+            //System.out.print(" Linear Data selected");
+            dataType = "Linear";
+            //sb.updateMsg("Error", "Dune data selected");
+
+            testFile = ab.getTestLinear();
+            format = "rowu";
+            
+        }else {
             sb.updateMsg("Error", "Unknown data selected?");
             return null;
         }
@@ -365,6 +373,7 @@ public class PlottingloadBean implements Serializable {
             //sb.updateMsg("Error", "No login return null?");
             return null;
         }
+        
 
         RConnection RC = sb.getRConnection();
         if (isZip) {
@@ -397,7 +406,7 @@ public class PlottingloadBean implements Serializable {
             return "";
         }*/
         //;
-        return "Data check";
+        return "Data check";  // Change back to 'Data check' 
     }
     
     

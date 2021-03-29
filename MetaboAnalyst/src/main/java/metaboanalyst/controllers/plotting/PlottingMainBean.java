@@ -5,7 +5,7 @@
  */
 package metaboanalyst.controllers.plotting;
 
-import metaboanalyst.controllers.dispersal.*;
+import metaboanalyst.controllers.plotting.*;
 import metaboanalyst.controllers.SessionBean1;
 import metaboanalyst.rwrappers.ChemoMetrics;
 import metaboanalyst.rwrappers.Classifying;
@@ -16,15 +16,18 @@ import metaboanalyst.rwrappers.RCenter;
 import metaboanalyst.rwrappers.RDataUtils;
 import metaboanalyst.rwrappers.SigVarSelect;
 import metaboanalyst.rwrappers.UniVarTests;
+import metaboanalyst.rwrappers.PlottingUtils;
 import metaboanalyst.utils.DataUtils;
 import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
+import javax.faces.context.FacesContext;
 import org.primefaces.context.RequestContext;
 /**
  *
  * @author leif
  */
-@ManagedBean(name = "plottingBean")
+// All functions being called from plotting.r via PlottingUtils.java
+@ManagedBean(name = "plottingMainBean")
 public class PlottingMainBean implements Serializable {
     private final SessionBean1 sb = (SessionBean1) DataUtils.findBean("sessionBean1");
     
@@ -32,34 +35,37 @@ public class PlottingMainBean implements Serializable {
         System.out.print(" Currently printing at performDefaultAnalysis");
         System.out.print(sb);
         if (!sb.isAnalInit(pageID)) {
-            System.out.print(" pageID");
-                
-            //sb.registerPage(pageID);
-            switch (pageID) {
-                 
-                case "linear":
-                    System.out.print("    ");
-                             
-                    doDefaultBGD();
-                    break;
-                case "boxplot":
-                    doDefaultBeals();
-                    break;
-                case "bargraph":
-                    doDefaultBetaDisper();
-                    break;
+            if (!FacesContext.getCurrentInstance().isPostback()) {
+                System.out.print(" pageID");
+
+                //sb.registerPage(pageID);
+                switch (pageID) {
+                    case "plotting":
+                        doDefaultLinear();
+                        
+                        
+                        break;
+                        
+                    case "linear":
+                        System.out.print("  linear case  ");
+                        doDefaultLinear();
+                        break;
+                    case "boxplot":
+                        doDefaultBeals();
+                        break;
+                    case "bargraph":
+                        doDefaultBetaDisper();
+                        break;
+                }
             }
         }
     }
 
-    private void doDefaultBGD() {       
-        
-        System.out.print("##########deDefaultBGD");
-        Dispersal.InitBGD(sb);
-        
-//        Dispersal.PlotBGD(sb, sb.getNewImage("bgd1"), "png", 72, dispersalBgdNum);
-        
+    private void doDefaultLinear(){       
+        PlottingUtils.PlotlinearGraph(sb, sb.getCurrentImage("lin"), "png", 72, 
+                "p", 1, "black", 1, 19, "x axis", "y axis", "Linear Plot Title", "NULL", "NULL");     
     }
+    
     
     private void doDefaultBeals() {       
         
