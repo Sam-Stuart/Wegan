@@ -9,7 +9,18 @@
     <ui:define name="metaInfo">
         <f:event type="preRenderView" listener="#{sessionBean1.registerPage('ModuleHome')}"/> 
     </ui:define>
+    <h:head>
+        <link rel="stylesheet" href="css/bootstrap.min.css"></link>
+        <link rel="stylesheet" href="css/global.css"></link>
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous"></link>
+        <script type='text/javascript' src="/bootstrap.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/> 
+    
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <script type='text/javascript' src="css/bootstrap.js"></script>
+    </h:head>
     <ui:define name="content">
+        
         <h:panelGrid style="padding:5px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
 
             <p:panelGrid>
@@ -20,7 +31,7 @@
                 <h:panelGrid style="margin-left: 20px; margin-right: 20px; width:100%; background-color: white; "></h:panelGrid>
             </p:panelGrid>
 
-            <span><a href="#{facesContext.externalContext.requestContextPath}/faces/upload/CaUploadView.xhtml">
+            <span><a style="text-decoration:none" href="#{facesContext.externalContext.requestContextPath}/faces/upload/CaUploadView.xhtml">
                 <div id="corrBtn" class="card moduleButton" href="#{facesContext.externalContext.requestContextPath}/faces/upload/CaUploadView.xhtml">
                    
                     <div class="card-horizontal">
@@ -28,7 +39,7 @@
                             <img style="height:100px; width:100px; margin-left: 5px" src="#{facesContext.externalContext.requestContextPath}/resources/images/icons/ca_icon.png"></img>
                         </div>
                         <div class="card-body">
-                            <p class="card-text moduleTitle">Correlation Analysis</p>
+                            <p class="card-text moduleTitle" style="margin-left: 50px;">Correlation Analysis</p>
                             <p class="card-text moduleText">Heatmap and Regression</p>
                             <!--<p class="card-text">Heatmap and Regression Analysis</p>-->
                         </div>
@@ -38,44 +49,44 @@
 
             </a></span>
 
-            <span><a href="#{facesContext.externalContext.requestContextPath}/faces/upload/DiversityUploadView.xhtml">
+            <span><a style="text-decoration:none" href="#{facesContext.externalContext.requestContextPath}/faces/upload/DiversityUploadView.xhtml">
                 <div class="card moduleButton">
                     <div class="card-horizontal">
                         <div class="img-square-wrapper">
                             <img style="height:100px; width:100px; margin-left: 5px" src="#{facesContext.externalContext.requestContextPath}/resources/images/icons/diversity_icon.png"></img>
                         </div>
                         <div class="card-body">
-                            <p class="card-text moduleTitle">Diversity Analysis</p>
-                            <p class="card-text moduleText">Alpha, Beta, Gamma Diversity and Other Species Data Analyses</p>
+                            <p class="card-text moduleTitle" style="margin-left: 75px;">Diversity Analysis</p>
+                            <p class="card-text moduleText" style="margin-left: 30px;">Alpha, Beta, Gamma Diversity and Other Species Data Analysis</p>
                             <!--<p class="card-text">Heatmap and Regression Analysis</p>-->
                         </div>
                     </div>
                 </div> 
             </a></span>
 
-            <span><a href="#{facesContext.externalContext.requestContextPath}/faces/upload/OrdinationUploadView.xhtml">
+            <span><a style="text-decoration:none" href="#{facesContext.externalContext.requestContextPath}/faces/upload/OrdinationUploadView.xhtml">
                 <div class="card moduleButton">
                     <div class="card-horizontal">
                         <div class="img-square-wrapper">
                             <img style="height:100px; width:100px; margin-left: 5px" src="#{facesContext.externalContext.requestContextPath}/resources/images/icons/ord_icon.png"></img>
                         </div>
                         <div class="card-body">
-                            <p class="card-text moduleTitle">Ordination Analysis</p>
-                            <p class="card-text moduleText">PCA, CA, NDMS, PCoA and Other Multivariate Plotting Techniques</p>
+                            <p class="card-text moduleTitle" style="margin-left: 55px;">Ordination Analysis</p>
+                            <p class="card-text moduleText" style="margin-left: 55px;">PCA, CA, NDMS, PCoA and Other Multivariate Plotting Techniques</p>
                             <!--<p class="card-text">Heatmap and Regression Analysis</p>-->
                         </div>
                     </div>
                 </div> 
             </a></span>    
  
-            <span><a href="#{facesContext.externalContext.requestContextPath}/faces/upload/DCAUploadView.xhtml">
+            <span><a style="text-decoration:none" href="#{facesContext.externalContext.requestContextPath}/faces/upload/DCAUploadView.xhtml">
                 <div class="card moduleButton">
                     <div class="card-horizontal">
                         <div class="img-square-wrapper">
                             <img style="height:100px; width:100px; margin-left: 5px" src="#{facesContext.externalContext.requestContextPath}/resources/images/icons/stat_icon.png"></img>
                         </div>
                         <div class="card-body">
-                            <p class="card-text moduleTitle">Classical Statistics</p>
+                            <p class="card-text moduleTitle" style="margin-right: 0px;">Classical Statistics</p>
                             <p class="card-text moduleText">Univariate, Multivariate, and Classification</p>
                             <!--<p class="card-text">Heatmap and Regression Analysis</p>-->
                         </div>
@@ -83,35 +94,35 @@
                 </div> 
             </a></span>
  
-            <span><a href="#{facesContext.externalContext.requestContextPath}/faces/upload/DispersalUploadView.xhtml">
+            <span><a style="text-decoration:none" href="#{facesContext.externalContext.requestContextPath}/faces/upload/DispersalUploadView.xhtml">
                 <div class="card moduleButton">
                     <div class="card-horizontal">
                         <div class="img-square-wrapper">
                             <img style="height:100px; width:100px; margin-left: 5px" src="#{facesContext.externalContext.requestContextPath}/resources/images/icons/disp_icon.png"></img>
                         </div>
                         <div class="card-body">
-                            <p class="card-text moduleTitle">Dispersal Analysis</p>
-                            <p class="card-text moduleText">Biogeographical, Beals Smoothing, and Beta Dispersal</p>
+                            <p class="card-text moduleTitle" style="margin-left: 55px;">Dispersal Analysis</p>
+                            <p class="card-text moduleText" style="margin-left: 10px;">Biogeographical, Beals Smoothing, and Beta Dispersal</p>
                             <!--<p class="card-text">Heatmap and Regression Analysis</p>-->
                         </div>
                     </div>
                 </div> 
             </a></span>     
-            <span><a href="#{facesContext.externalContext.requestContextPath}/faces/upload/ClusterUploadView.xhtml">
+            <span><a style="text-decoration:none" href="#{facesContext.externalContext.requestContextPath}/faces/upload/ClusterUploadView.xhtml">
                 <div class="card moduleButton">
                     <div class="card-horizontal">
                         <div class="img-square-wrapper">
                             <img style="height:100px; width:100px; margin-left: 5px" src="#{facesContext.externalContext.requestContextPath}/resources/images/icons/cluster_icon.png"></img>
                         </div>
                         <div class="card-body">
-                            <p class="card-text moduleTitle">Clustering and Visualization</p>
-                            <p class="card-text moduleText">Geospatial Mapping and Other Clustering Methods</p>
+                            <p class="card-text moduleTitle" style="margin-left: 90px; margin-bottom: 0px">Clustering and Visualization</p>
+                            <p class="card-text moduleText" style="margin-left: 20px;  margin-top: 0px;">Geospatial Mapping and Other Clustering Methods</p>
                             <!--<p class="card-text">Heatmap and Regression Analysis</p>-->
                         </div>
                     </div>
                 </div> 
             </a></span>   
-            <span><a href="#{facesContext.externalContext.requestContextPath}/faces/upload/CaUploadView.xhtml">
+            <span><a style="text-decoration:none" href="#{facesContext.externalContext.requestContextPath}/faces/upload/CaUploadView.xhtml">
                 <div class="card moduleButton" href="#{facesContext.externalContext.requestContextPath}/faces/upload/CaUploadView.xhtml">
                     <div class="card-horizontal">
                         <div class="img-square-wrapper">
@@ -125,14 +136,14 @@
                     </div>
                 </div> 
             </a></span>            
-            <span><a href="#{facesContext.externalContext.requestContextPath}/faces/upload/CaUploadView.xhtml">
+            <span><a style="text-decoration:none" href="#{facesContext.externalContext.requestContextPath}/faces/upload/CaUploadView.xhtml">
                 <div class="card moduleButton">
                     <div class="card-horizontal">
                         <div class="img-square-wrapper">
                             <img style="height:100px; width:100px; margin-left: 5px" src="#{facesContext.externalContext.requestContextPath}/resources/images/icons/taxa_icon.png"></img>
                         </div>
                         <div class="card-body">
-                            <p class="card-text moduleTitle">Taxonomy</p>
+                            <p class="card-text moduleTitle" style="margin-left: 80px;" >Taxonomy</p>
                             <p class="card-text moduleText">NCBI Database, Phylogenetic Trees and Relative Species Abundance</p>
                             <!--<p class="card-text">Heatmap and Regression Analysis</p>-->
                         </div>
