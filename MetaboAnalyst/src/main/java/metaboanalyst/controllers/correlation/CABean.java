@@ -56,7 +56,8 @@ public class CABean implements Serializable {
     
     private void doDefaultPenalized() {
         //CAUtils.PlotLinearTableCA(sb);
-        CAUtils.PlotPenalizedCA(sb, sb.getCurrentImage("corr_linear"), "png", 72);
+        CAUtils.CreatePenalizedModel(sb);
+        CAUtils.PlotPenalizedCA(sb, sb.getCurrentImage("corr_penalized"), "png", 72);
     }
     
 }

@@ -63,7 +63,31 @@ public class CAUtils {
     }
     
     public static void PlotPenalizedCA(SessionBean1 sb, String imgName, String format, int dpi) {
-        System.out.println("HELLO RIGHT BEFORE PLOT Penalized");
-        System.out.println("HELLO RIGHT AFTER PLOT Penalized");
+        System.out.println("HELLO RIGHT BEFORE PLOT LINEAR");
+        try {
+            RConnection RC = sb.getRConnection();
+            
+            String rCommand = "plot.pred.penReg(NA" + ", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            sb.addGraphicsCMD("corr_penalized", rCommand);
+            RC.voidEval(rCommand);
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        }
+        System.out.println("HELLO RIGHT AFTER PLOT LINEAR");        
+    }
+    
+        public static void CreatePenalizedModel(SessionBean1 sb) {
+        System.out.println("HELLO RIGHT BEFORE PLOT LINEAR");
+        try {
+            RConnection RC = sb.getRConnection();
+            
+            String rCommand = "pen.reg.anal(NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            RC.voidEval(rCommand);
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        }
+        System.out.println("HELLO RIGHT AFTER PLOT LINEAR");        
     }
 }

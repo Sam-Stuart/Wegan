@@ -1,0 +1,36 @@
+Lactobacillus acidophilus
+Lactococcus lactis
+Lactobacillus reuteri
+Porphyromonas gingivalis
+Acinetobacter baumannii MDR-ZJ06
+Bacteroides sp. 20_3
+Enterococcus sp. 7L76
+Enterococcus faecalis HH22
+Enterococcus faecium PC4.1
+Enterococcus faecalis TX0411
+Enterococcus casseliflavus ATCC 12755
+Bilophila wadsworthia NT5036
+Bifidobacterium adolescentis
+Ruminococcus lactaris ATCC 29176
+Coprococcus comes NT5048
+Akkermansia muciniphila NT5021
+Prevotella copri NT5019
+Eubacterium rectale NT5009
+Ruminococcus torques NT5047
+Bacteroides uniformis NT5002
+Eubacterium siraeum
+Eubacterium eligens
+Eubacterium nodatum
+Eubacterium rectale
+Eubacterium biforme
+Faecalibacterium prausnitzii
+Ruminococcus torques
+Veillonella parvula
+Dialister invisus
+Fusobacterium
+Lachnospiraceae
+Parabacteroides
+Prevotella
+Roseburia
+Ruminococcaceae
+Treponema
