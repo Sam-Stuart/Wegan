@@ -35,12 +35,12 @@ public class PlottingUtils {
                     + dpi + ", width=NA, \"" + type + "\", \"" + numlines + "\", \"" + colors + "\", \"" + weights + "\", \""  + pchs + "\", \"" 
                     + xlab + "\", \""  + ylab + "\", \""  + title + "\", \""  + facA + "\", \""  + facB + "\")";
             RCenter.recordRCommand(RC, rCommand);
-            System.out.println("123");
+            
             sb.addGraphicsCMD("lin", rCommand);
-            System.out.println("456");
+            
             
             RC.voidEval(rCommand);
-            System.out.println("789");
+            
             
         } catch (RserveException rse) {
             System.out.println(rse);

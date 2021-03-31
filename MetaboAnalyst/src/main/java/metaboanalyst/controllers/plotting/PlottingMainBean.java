@@ -43,15 +43,13 @@ public class PlottingMainBean implements Serializable {
                     case "plotting":
                         doDefaultLinear();
                         
-                        
                         break;
                         
                     case "linear":
-                        System.out.print("  linear case  ");
                         doDefaultLinear();
                         break;
                     case "boxplot":
-                        doDefaultBeals();
+                        
                         break;
                     case "bargraph":
                         doDefaultBetaDisper();
@@ -67,12 +65,7 @@ public class PlottingMainBean implements Serializable {
     }
     
     
-    private void doDefaultBeals() {       
-        
-        Dispersal.InitBeals(sb);
-        Dispersal.PlotBeals(sb, sb.getNewImage("beals"), "png", 72, dispersalBgdNum);
-        
-    }
+    
     
     private void doDefaultBetaDisper() {       
         

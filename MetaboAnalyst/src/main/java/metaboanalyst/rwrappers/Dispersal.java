@@ -15,7 +15,6 @@ import org.rosuda.REngine.Rserve.RserveException;
 public class Dispersal {
 
     public static void InitBGD(SessionBean1 sb) {
-        System.out.print("######## InitBGD #######");
         System.out.print(sb);
         try {
             String rCommand = "bgdispersalWegan(NA)";
@@ -32,7 +31,6 @@ public class Dispersal {
         try {
             RConnection RC = sb.getRConnection();
             String rCommand = "PlotBGD(NA" + ", \"" + imageName + "\", \"" + format + "\", " + dpi + ", width=NA, " + pcNum + ")";
-            System.out.print("PlotBGD:");
             System.out.print(rCommand);
             RCenter.recordRCommand(RC, rCommand);
             sb.addGraphicsCMD("bgd", rCommand);
@@ -43,7 +41,6 @@ public class Dispersal {
         }
     }
     public static double[][] GetBGDSigMat(SessionBean1 sb, String tableName) {
-        System.out.print("GetBGDSigMat.java");
         System.out.print(tableName);
         try {
             String rCommand = "GetBGDSigMat(NA" + ",\""+  tableName + "\")";
@@ -57,7 +54,6 @@ public class Dispersal {
 
     public static String[] GetBGDSigRowNames(SessionBean1 sb, String tableName) {
         try {
-            System.out.print("BGD Row");
             String rCommand = "GetBGDSigRowNames(NA" + ",\""+  tableName + "\")";
             System.out.print(rCommand);
             return sb.getRConnection().eval(rCommand).asStrings();
@@ -90,10 +86,9 @@ public class Dispersal {
     
 //    ####### Beals Smoothing functions 
             
-    public static void InitBeals(SessionBean1 sb) {
-        System.out.print("######## InitBeals #######");
+    public static void InitBeals(SessionBean1 sb, String species, String ref, int type, String incld) {
         try {
-            String rCommand = "bealsWegan(NA)";
+            String rCommand = "bealsWegan(NA" + ", \"" + species + "\", \"" + ref + "\", \"" + type + "\",\" " + incld + "\")";
             RConnection RC = sb.getRConnection();
             RCenter.recordRCommand(RC, rCommand);
             RC.voidEval(rCommand);
@@ -106,7 +101,6 @@ public class Dispersal {
         try {
             RConnection RC = sb.getRConnection();
             String rCommand = "PlotBeals(NA" + ", \"" + imageName + "\", \"" + format + "\", " + dpi + ", width=NA, " + pcNum + ")";
-            System.out.print("PlotBeals:");
             System.out.print(rCommand);
             RCenter.recordRCommand(RC, rCommand);
             sb.addGraphicsCMD("beals", rCommand);
@@ -120,7 +114,6 @@ public class Dispersal {
     
    // ### Beta Dispersal Functions #####
     public static void InitBetaDisper(SessionBean1 sb) {
-        System.out.print("######## InitBetaDisper#######");
         try {
             String rCommand = "betadisperWegan(NA)";
             RConnection RC = sb.getRConnection();
@@ -135,7 +128,6 @@ public class Dispersal {
         try {
             RConnection RC = sb.getRConnection();
             String rCommand = "PlotBetaDisper(NA" + ", \"" + imageName + "\", \"" + format + "\", " + dpi + ", width=NA, " + pcNum + ")";
-            System.out.print("PlotBetaDisper:");
             System.out.print(rCommand);
             RCenter.recordRCommand(RC, rCommand);
             sb.addGraphicsCMD("betadisper", rCommand);

@@ -13,11 +13,11 @@ mummichog_files <- c("mummichog", "networks");
 metaanal_files <- c("meta_methods", "meta_data_utils");
 network_files <- c("networks", "enrich_integ", "enrich_name_match", "gene_fun_utils", "enrich_path_kegg");
 other_files <- c("others_batch_check", "others_lipomics", "enrich_name_match");
-nmds_files <- c("test-Vegan", "Dispersal", "plotting");
+nmds_files <- c("test-Vegan", "dispersal", "plotting");
 dispersal_files <- c("dispersal");
 plotting_files <- c("plotting");
 correlation_files <- c("correlation_linear", "correlation_penalized", "correlation_polynomial", "correlation_ml", "correlation_multivariate", "correlation_SVM");
-LoadScripts <- function(module.nm = "nmds"){
+LoadScripts <- function(module.nm = "dispersal"){
     file.sources <- "";
     if(module.nm == "stat"){
         file.sources <- c(general_files, general_stat_files, stats_files, correlation_files);
@@ -40,9 +40,11 @@ LoadScripts <- function(module.nm = "nmds"){
     }else if(module.nm == "metadata"){
         file.sources <- c(general_files, general_stat_files, metaanal_files);
     }else if(module.nm == "nmds"){
-        file.sources <- c(general_files, general_stat_files, stats_files,nmds_files, correlation_files);
+        file.sources <- c(general_files, general_stat_files, stats_files,nmds_files, correlation_files, dispersal_files);
+        
     }else if(module.nm == "dispersal"){
         file.sources <- c(general_files, general_stat_files, stats_files,dispersal_files);
+        
     }else if(module.nm == "ca"){
         file.sources <- c(general_files, general_stat_files, stats_files, correlation_files);
     }else if(module.nm == "plotting"){

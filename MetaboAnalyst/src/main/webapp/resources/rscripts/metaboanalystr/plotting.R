@@ -40,21 +40,10 @@ plotLinearFunction <- function(mSetObj=NA, imgName, format="png", dpi=72, width=
   
   #Define formula
   formula <- as.formula(paste0(facB, "~", facA)) 
-  print(formula);
-
-    print("BANANANANA");
-    #data <- mSetObj$dataSet$orig
-    data <- mSetObj$dataSet$norm[order(as.numeric(rownames(mSetObj$dataSet$norm))),,drop=FALSE]
-
-    print("facA: ");
-   print(facA);
-   print(data[facA]);
-    print("facB: ");
-   print(facB);
-    print(data[facB]);
   
-    
-    #mSetObj <- list()
+   data <- mSetObj$dataSet$norm[order(as.numeric(rownames(mSetObj$dataSet$norm))),,drop=FALSE]
+
+  
     #Set plot dimensions
     if(is.na(width)){
       w <- 7.2
@@ -72,11 +61,10 @@ plotLinearFunction <- function(mSetObj=NA, imgName, format="png", dpi=72, width=
     
     #Generate plot
     Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
-    #print("plot linear function 2 " )
+    
     plot <- plot(formula = formula, data = data, type = type, col = colors[1], lwd = weights[2], pch = pchs, xlab = xlab,ylab = ylab, main = maintitle )
     #plot(t,z);
-    print(imgName);
-    print("plot linear function 3 " );
+    
     dev.off()
 
     #return(.set.mSet(mSetObj))

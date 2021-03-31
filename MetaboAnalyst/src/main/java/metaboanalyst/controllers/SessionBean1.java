@@ -697,10 +697,6 @@ public class SessionBean1 implements Serializable {
     public String detailsLnk_action(String code) {
         sigVec.add(code);
 //        sigVec.add(table);
-        System.out.print("----------------------------detailsLnk_action CLASSASSSSS in sessionBean1------------------------");
-        System.out.print(" What the fuck");
-        System.out.print(code);
-        System.out.print(sigVec);
         return "featuredetails";
     }
     

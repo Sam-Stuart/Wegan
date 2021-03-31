@@ -8,14 +8,12 @@
 #'
 
 
-library(Cairo)
 library(vegan)
 
 # -------------Coefficients of Biogeographical Dispersal Direction-------------------------------------------------- 
 
 
 bgdispersalWegan <- function(mSetObj=NA){
-    
     mSetObj <- .get.mSet(mSetObj);
     
     # Calculate the bg dispersal
@@ -30,9 +28,7 @@ bgdispersalWegan <- function(mSetObj=NA){
 
 
 PlotBGD <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, bgdnum){
-    print("----------------PlotBGD--------------------------------------");
     
-
     bgdnum = bgdnum;
     mSetObj <- .get.mSet(mSetObj);
 
@@ -143,24 +139,24 @@ GetBGDSigFileName <- function(mSetObj=NA){
 
 
 ###### Beals smoothing function 
-bealsWegan <- function(mSetObj=NA){
-    print("Beals Wegan");
+bealsWegan <- function(mSetObj=NA, spcs = 'NA', ref = 'NA', type = 0, incld = TRUE){
+    
     mSetObj <- .get.mSet(mSetObj);
-   
+    
     # Call upon the beals smoothing function 
-    # default beals
-    output <- beals(mSetObj$dataSet$orig)
+    data <- mSetObj$dataSet$orig;
+    #output <- beals(data, species = spcs, reference = ref, type = type, include = incld)
+    output <- beals(data);
     
     # store the item to the bgdispersal object
     mSetObj$analSet$beals <- output;
-    
     return(.set.mSet(mSetObj));
 }
 
 
 PlotBeals <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, pcnum=0){
   
-mSetObj <- .get.mSet(mSetObj);
+  mSetObj <- .get.mSet(mSetObj);
   
   beals_matrix <- as.matrix(mSetObj$analSet$beals);
   imgName = paste(imgName, "dpi", dpi, ".", format, sep="");
@@ -187,28 +183,25 @@ mSetObj <- .get.mSet(mSetObj);
 ####### BETA DISPERSAL ###### 
 
 betadisperWegan <- function(mSetObj=NA){
-    print(" beta dispersal");
     mSetObj <- .get.mSet(mSetObj);
        
     data <- mSetObj$dataSet$orig
     data_type <- mSetObj$dataSet$type;
-    #data(varespec);
-    #data <- varespec;
-    print(mSetObj);
-    print(mSetObj$dataSet);
+    
+    
     ## Bray-Curtis distances between samples
     dis <- vegdist(data);
     ## First 16 sites grazed, remaining 8 sites ungrazed
     if (data_type == 'Varespec'){
         groups <- factor(c(rep(1,16), rep(2,8)), labels = c("grazed","ungrazed"))
     }else if (data_type == 'Dune'){
-        print(" data type is dune");
+        
         groups <- factor(c(rep(1,10), rep(2,10)), labels = c("group A","group B"))
     }
     ## Calculate multivariate dispersions
-    print(" made it here");
+   
     mod <- betadisper(dis, groups)
-    print(" and here ");
+    
     
     # store the item to the bgdispersal object
     mSetObj$analSet$betadisper <- mod;

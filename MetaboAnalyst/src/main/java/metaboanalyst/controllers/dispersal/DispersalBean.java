@@ -53,7 +53,7 @@ public class DispersalBean implements Serializable {
 
     private void doDefaultBGD() {       
         
-        System.out.print("##########deDefaultBGD");
+        
         Dispersal.InitBGD(sb);
         
 //        Dispersal.PlotBGD(sb, sb.getNewImage("bgd1"), "png", 72, dispersalBgdNum);
@@ -61,8 +61,7 @@ public class DispersalBean implements Serializable {
     }
     
     private void doDefaultBeals() {       
-        
-        Dispersal.InitBeals(sb);
+        Dispersal.InitBeals(sb, "NA", "data", 0, "TRUE");
         Dispersal.PlotBeals(sb, sb.getNewImage("beals"), "png", 72, dispersalBgdNum);
         
     }

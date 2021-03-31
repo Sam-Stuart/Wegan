@@ -14,7 +14,6 @@
         <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/jscripts/graphics.js"></script>
     </ui:define>
     <ui:define name="content">
-        <h:inputHidden id="mydir" value="#{sessionBean1.getJsonDir('pca_score3d')}" />
         <script type="text/javascript">
             // for scatter plot
             function addBind() {
@@ -56,38 +55,14 @@
         <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
             
                     <h:form id="form1">
+                         <h:outputLabel style="font-weight: bold" value="Beals Smoothing box plot"/>
                         <h:panelGrid columns="2" style="width: 70%">
                             <h:panelGroup>
-                                <h:outputLabel style="font-weight: bold" value="Beals Smoothing box plot"/>
+
                                 <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('beals')}" alt="beals"/>
                                 <h:outputLabel style="font-weight: bold" value="Beals"/>
                                 
-<!--                            <h:panelGrid columns="2" style="width:480px;">
-                                <h:outputLabel style="font-weight: bold" value="Specify PC on X-axis:"/>
-                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:50px" value="#{pcaBean.pcaScoreX}">
-                                    <f:selectItems value="#{pcaBean.pcaAllPCs}" />
-                                </p:selectOneMenu>                             
-                                <h:outputLabel style="font-weight: bold" value="Specify PC on Y-axis:"/>
-                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:50px" value="#{pcaBean.pcaScoreY}">
-                                    <f:selectItems value="#{pcaBean.pcaAllPCs}" />
-                                </p:selectOneMenu> 
-                                <h:outputLabel style="font-weight: bold" value="Display 95% confidence regions:"/>
-                                <p:selectBooleanCheckbox value ="#{pcaBean.displayConfs}"/>    
-                                <h:outputLabel style="font-weight: bold" value="Display sample names:"/>
-                                <p:selectBooleanCheckbox value ="#{pcaBean.displayNames}"/>                                
-                                <h:outputLabel style="font-weight: bold" value="Use grey-scale colors:"/>
-                                <p:selectBooleanCheckbox value ="#{pcaBean.greyScale}"/>
-                                <p:commandButton action="#{pcaBean.flipPCA()}" ajax ="false" value="Flip Image"/>
-                                <p:selectOneRadio value="#{pcaBean.flipOpt}">
-                                    <f:selectItem itemLabel="X axis" itemValue="x" />
-                                    <f:selectItem itemLabel="Y axis" itemValue="y" />
-                                    <f:selectItem itemLabel="All" itemValue="all" />
-                                </p:selectOneRadio>
-                                  
-                            </h:panelGrid>-->
-                            <h:panelGrid style="text-align: right; padding-left: 700px; width: 760px;">  
-                                <!--<p:commandButton value="Update" update=":ac:form1:pairPane  :cmdPane" actionListener="{pcaBean.pcaPairBtn_action()}"/>--> 
-                            </h:panelGrid>
+                      
                             </h:panelGroup>
                             
                         </h:panelGrid>

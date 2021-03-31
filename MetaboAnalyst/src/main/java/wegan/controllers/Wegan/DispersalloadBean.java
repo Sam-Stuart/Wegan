@@ -337,7 +337,6 @@ public class DispersalloadBean implements Serializable {
 //        System.out.println(" HELLO THERE !! ");
 
 
-        System.out.print("-------------testDataOpt: ");
         System.out.print(testDataOpt);  
         
         if (testDataOpt == null) {
@@ -360,13 +359,12 @@ public class DispersalloadBean implements Serializable {
             testFile = ab.getTestBCI();
             format = "rowu";
         } else if (testDataOpt.equals("Varespec")) {
-            System.out.print(" ---------------------Varespec data selected ----------------------------");
             dataType = "Varespec";
             sb.updateMsg("Error", "Varespec data selected");
             testFile = ab.getTestVarespec();
             format = "rowu";
         } else {
-            System.out.print( " Unknown data has been selected");
+            System.out.print(" Unknown data has been selected");
             System.out.print( dataType                       );
             sb.updateMsg("Error", "Unknown data selected");
             return null;
@@ -407,7 +405,6 @@ public class DispersalloadBean implements Serializable {
             return "";
         }*/
         //;
-        System.out.print("---------------- handleDispersaltestfileUpload -----------------------");
         return "Dispersal";    /*  CHANGE BACK TO 'Data check'  FOR THE SANITY CHECK _ NORMALIZATOION WORKFLOW   */ 
     }
     

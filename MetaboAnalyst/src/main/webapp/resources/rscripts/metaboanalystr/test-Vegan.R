@@ -1,6 +1,4 @@
-#install.packages("vegan")
-#install.packages("ggplot2")
-library("vegan")
+
 
 
 NMDSWegan <- function(input,ext,Meta = NULL, metaExt = NULL){
