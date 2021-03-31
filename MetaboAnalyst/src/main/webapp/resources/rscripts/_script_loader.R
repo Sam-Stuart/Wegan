@@ -45,7 +45,7 @@ LoadScripts <- function(module.nm = "nmds"){
         file.sources <- c(general_files, general_stat_files, stats_files, nmds_files);
         
     }else if(module.nm == "dispersal"){
-        file.sources <- c(general_files, general_stat_files, stats_files,dispersal_files);
+        file.sources <- c(general_files, general_stat_files, stats_files, dispersal_files);
         
     }else if(module.nm == "ca"){
         file.sources <- c(general_files, general_stat_files, stats_files, correlation_files);
