@@ -73,6 +73,7 @@ plotLinearFunction <- function(mSetObj=NA, imgName, format="png", dpi=72, width=
 lin.reg.columns <- function(mSetObj=NA){
   
   mSetObj <- .get.mSet(mSetObj)
+  library("dplyr")
   
   
   
