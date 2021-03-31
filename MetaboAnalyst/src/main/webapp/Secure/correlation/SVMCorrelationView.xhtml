@@ -20,14 +20,49 @@
                     If the formula is not what you intended, retype independent variable(s) in the text box and/or choose another dependent variable.
                     The train data for model building is 70% of the dataset, while the test data for model testing is 30% of the dataset.
                 </p>
-                <h:panelGrid columns="2">
+                
+                <h:panelGrid id="panelGrid" columns="2" cellpadding="3" columnClasses="width: 10%, width: 40%">
+                    <h:outputLabel style="font-weight: bold" value="Dependant Variable:"/>
+                            
+                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{svmCABean.columnNameA}">
+                        <f:selectItems value="#{svmCABean.columnOpts}" />
+                    </p:selectOneMenu>
+                    
+                    <h:outputLabel style="font-weight: bold" value="Indicate independent variables using the column names with commas in between:"/>
+                    <p:inputText style="width:400px; height:100px" value="#{svmCABean.indInput}"/> 
+                    
+                    <p:panelGrid></p:panelGrid>
+                    <p:commandButton value="Update" 
+                                     style="background: #75bafb; border: 5px #75bafb; color: black"
+                                    onclick="PF('statusDialog').show()"
+                                    oncomplete="PF('statusDialog').hide()"  
+                                    update=":form1:corrSVMPane1  :cmdPane" 
+                                    actionListener="#{svmCABean.corrSVMBtn_action()}"/> 
+                    
                 </h:panelGrid>
-                                <hr style="height: 12px; border: 0;box-shadow: inset 0 12px 12px -12px rgba(0, 0, 0, 0.5); width:100%; min-width: 1000px"/>
-                <h:panelGrid id="corrPane" style="text-align: center; width: 100%;">
-                    <p:scrollPanel mode="native" style="width:780px;height:700px">
-                        <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_svm')}" alt="SVMimage"/>
-                    </p:scrollPanel>
-                </h:panelGrid>        
+                <h:panelGrid class="resultsBar" columns="2">
+                    <h:panelGroup>
+                        <h:panelGrid columns="1" style="text-align : left;">
+                            Results
+                        </h:panelGrid>
+                    </h:panelGroup> 
+                    <h:panelGroup>
+                        <h:panelGrid columns="3" class="resultsImages">
+                            <i class="fas fa-palette"></i>
+                            <i class="fa fa-table"></i>
+                            <i class="fa fa-question-circle"></i>
+<!--                                                                       <i class="fas fa-table"></i>
+                           <i class="fas fa-palette"></i>
+                           <i class="far fa-question-circle"></i>-->
+                        </h:panelGrid>
+
+                    </h:panelGroup>                            
+                </h:panelGrid> 
+                        <h:panelGrid id="corrSVMPane1" style="width: 100%;">
+                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_svm')}" alt="SVM image"/>
+                            </h:panelGrid>                           
+                        </h:panelGrid>       
             </h:form>
             <!--<img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_svm')}" alt="penalizedimage"/>-->
 <!--            <p:tabView id="ac" style="width:100%; border: none; background: none; font-size: 13px;">

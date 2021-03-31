@@ -15,13 +15,13 @@
                         <h:panelGrid style="padding: 20px 10px 10px 20px; font-size: 13px;">
                             <h:panelGrid style="padding-left: 20px;">
                                 <h:commandLink id="homelnk" action="#{sessionBean1.doLogout()}">
-                                    <p:graphicImage id="home" 
+<!--                                    <p:graphicImage id="home" 
                                                     url="/resources/images/home.png"
-                                                    width="28" height="28"/>
+                                                    width="28" height="28"/>-->
                                 </h:commandLink>
                                 <p:tooltip for="homelnk" style="font-size: 11px;" value="Exit and return the Home page" />
                             </h:panelGrid>
-                            <p:tree style="border: 3px rgb(177, 208, 238) ridge; width: 165px" 
+                            <p:tree style="border: 3px rgb(177, 208, 238) ridge; width: 165px; color: #75bafb" 
                                     value="#{sessionBean1.naviTree}" var="node" selectionMode="single">
                                 <p:ajax update=":treeForm" 
                                         onstart="PF('statusDialog').show()"  
@@ -42,7 +42,7 @@
                     </ui:insert>
                 </div>
             </p:layoutUnit>
-            <p:layoutUnit header="R Command History" style="margin:0px; padding:0px" size="280" 
+            <p:layoutUnit header="R Command History" style="margin:0px; padding:0px; color:#75bafb" size="280" 
                           collapsible="true" closable="true" gutter="0" position="east" styleClass="myUILayout"> 
                 <h:form> 
                     <h:panelGrid columns="2" style="width:100%; text-align: right">
@@ -52,7 +52,8 @@
                             </p:selectBooleanCheckbox>
                             <p:outputLabel value="Keep collapsed"/>
                         </h:panelGrid>
-                        <p:commandButton value="Save" ajax="false" style="float:right;"
+                        <p:commandButton value="Save" ajax="false" 
+                                         style="background: #75bafb; border: 5px #75bafb; color: black; float:right"
                                          onclick="PrimeFaces.monitorDownload(start, stop);" 
                                          icon="ui-icon-disk">
                             <p:fileDownload value="#{sessionBean1.getRCmdFile()}" />

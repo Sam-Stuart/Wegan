@@ -223,6 +223,7 @@ public class CAloadBean implements Serializable {
 //            testWeightFile = ab.getTestWeightDune();
             format = "rowu";
         } else if (testDataOpt.equals("Iris")) {
+            dataType = "Dune";
             testFile = ab.getTestIris();
             format = "rowu";           
         } else if (testDataOpt.equals("BCI")) {
@@ -232,7 +233,7 @@ public class CAloadBean implements Serializable {
             sb.updateMsg("Error", "Unknown data selected?");
             return null;
         }
-        if (!sb.doLogin(dataType, "nmds", false, paired)) {
+        if (!sb.doLogin(dataType, "ca", false, paired)) {
             //sb.updateMsg("Error", "No login return null?");
             return null;
         }

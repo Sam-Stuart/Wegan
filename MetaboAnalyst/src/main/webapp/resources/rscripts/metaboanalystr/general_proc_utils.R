@@ -156,6 +156,7 @@ SanityCheckData <- function(mSetObj=NA){
   msg<-c(msg,"<font color=\"orange\">Other special characters or punctuations (if any) will be stripped off.</font>");
   
   int.mat <- mSetObj$dataSet$orig;
+  mSetObj$dataSet$test_cat <- mSetObj$dataSet$orig;
   
   # check numerical matrix
   rowNms <- rownames(int.mat);
@@ -164,17 +165,18 @@ SanityCheckData <- function(mSetObj=NA){
   
   num.mat <- apply(int.mat, 2, as.numeric)
   
-  if(sum(is.na(num.mat)) > naNms){
+  # TODO: REMOVED THIS TO SEE IF WE CAN KEEP CATEGORICAL DATA
+  #if(sum(is.na(num.mat)) > naNms){
     # try to remove "," in thousand seperator if it is the cause
-    num.mat <- apply(int.mat,2,function(x) as.numeric(gsub(",", "", x)));
-    if(sum(is.na(num.mat)) > naNms){
-      msg<-c(msg,"<font color=\"red\">Non-numeric values were found and replaced by NA.</font>");
-    }else{
-      msg<-c(msg,"All data values are numeric.");
-    }
-  }else{
-    msg<-c(msg,"All data values are numeric.");
-  }
+  #  num.mat <- apply(int.mat,2,function(x) as.numeric(gsub(",", "", x)));
+  #  if(sum(is.na(num.mat)) > naNms){
+  #    msg<-c(msg,"<font color=\"red\">Non-numeric values were found and replaced by NA.</font>");
+  #  }else{
+  #    msg<-c(msg,"All data values are numeric.");
+  #  }
+  #}else{
+  #  msg<-c(msg,"All data values are numeric.");
+  #}
   
   int.mat <- num.mat;
   rownames(int.mat) <- rowNms;

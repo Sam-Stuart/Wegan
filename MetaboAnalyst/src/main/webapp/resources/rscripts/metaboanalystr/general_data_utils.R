@@ -183,7 +183,6 @@ Read.TextData <- function(mSetObj=NA, filePath, format="colu", lbl.type="disc"){
     if(substring(format,1,3)=="row"){ # sample in row
       msg <- c(msg, "Samples are in rows and features in columns");
       smpl.nms <-dat[,1];
-      cat(paste0(smpl.nms))
       dat[,1] <- NULL;
       if(lbl.type == "qc"){
         rownames(dat) <- smpl.nms;
@@ -191,8 +190,8 @@ Read.TextData <- function(mSetObj=NA, filePath, format="colu", lbl.type="disc"){
         mSetObj$dataSet$cmpd <- colnames(dat);
         return(1);
       }
-      
-      cls.lbl <- dat[,1];
+      cls.lbl <- smpl.nms;
+      #cls.lbl <- dat[,1];
       conc <- dat[,-1];
       var.nms <- colnames(conc);
     }else{ # sample in col
@@ -573,7 +572,7 @@ SaveTransformedData <- function(mSetObj=NA){
       lbls <- cbind(as.character(mSetObj$dataSet$orig.facA),as.character(mSetObj$dataSet$orig.facB));
       colnames(lbls) <- c(mSetObj$dataSet$facA.lbl, mSetObj$dataSet$facB.lbl);
     }else{
-      #lbls <- cbind("Label"= as.character(mSetObj$dataSet$orig.cls));
+      lbls <- cbind("Label"= as.character(mSetObj$dataSet$orig.cls));
     }
     orig.data<-cbind(lbls, mSetObj$dataSet$orig);
     if(dim(orig.data)[2]>200){
@@ -597,7 +596,7 @@ SaveTransformedData <- function(mSetObj=NA){
           lbls <- cbind(as.character(mSetObj$dataSet$facA),as.character(mSetObj$dataSet$facB));
           colnames(lbls) <- c(mSetObj$dataSet$facA.lbl, mSetObj$dataSet$facB.lbl);
         }else{
-          #lbls <- cbind("Label"= as.character(mSetObj$dataSet$cls));
+          lbls <- cbind("Label"= as.character(mSetObj$dataSet$cls));
         }
         
         # for ms peaks with rt and ms, insert two columns, without labels

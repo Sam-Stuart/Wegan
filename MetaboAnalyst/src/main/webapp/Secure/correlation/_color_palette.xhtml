@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="formgraph">
+        <h:panelGrid columns="2" style="width:380px;">
+            <h:panelGrid columns="2" style="padding-top: 10px; padding-left: 20px">
+                <h:outputLabel value="Format:"/>
+                <p:selectOneMenu value="#{sessionBean1.formatOpt}">
+                    <f:selectItem itemLabel="PNG" itemValue="png"/> 
+                    <f:selectItem itemLabel="TIFF" itemValue="tiff"/> 
+                    <f:selectItem itemLabel="PDF" itemValue="pdf"/> 
+                    <f:selectItem itemLabel="SVG" itemValue="svg"/> 
+                    <f:selectItem itemLabel="PostScript" itemValue="ps"/> 
+                </p:selectOneMenu> 
+                <h:outputLabel value="Resolution:"/>
+                <p:selectOneMenu value="#{sessionBean1.dpiOpt}">
+                    <f:selectItem itemLabel="72 DPI" itemValue="72"/>  
+                    <f:selectItem itemLabel="150 DPI" itemValue="150"/>  
+                    <f:selectItem itemLabel="300 DPI" itemValue="300"/>  
+                    <f:selectItem itemLabel="600 DPI" itemValue="600"/> 
+                </p:selectOneMenu> 
+                <h:outputLabel value="Size:"/>
+<!--                <p:selectOneMenu value="#{sessionBean1.sizeOpt}">
+                    <f:selectItem itemLabel="Default" itemValue="NA"/>  
+                    <f:selectItem itemLabel="Full page" itemValue="7"/>  
+                    <f:selectItem itemLabel="Half page" itemValue="3.5"/>  
+                </p:selectOneMenu> -->
+            </h:panelGrid>
+            <p:commandButton value="Submit" 
+                             update=":formgraph:glink"
+                             onclick="PF('statusDialog').show()" 
+                             oncomplete="PF('statusDialog').hide()"
+                             actionListener="#{sessionBean1.graphBn_action()}"/>
+        </h:panelGrid>
+        <h:panelGrid style="width:400px; text-align: center; padding-top: 10px; padding-bottom: 20px">
+            <h:outputText id="glink" escape="false" value="#{sessionBean1.imgDownloadTxt}"/>  
+        </h:panelGrid>
+    </h:form>
+</ui:composition>

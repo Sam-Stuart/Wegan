@@ -96,10 +96,7 @@ public class AnalysisBean implements Serializable {
             }
         }
     }
-
-    
-    
-    
+  
     private void doDefaultANOVA() {
         int res = UniVarTests.performANOVA(sb, "F", 0.05, "fisher");
         if (res == 0) {

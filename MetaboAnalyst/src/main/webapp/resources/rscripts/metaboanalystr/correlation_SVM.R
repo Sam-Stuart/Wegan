@@ -14,15 +14,16 @@ reg.svm.anal <- function(mSetObj=NA, facA=NULL, pred.text=NULL) {
   #install.packages(c("e1071", "Metrics"))
   library("e1071")
   library("Metrics")
-
   mSetObj <- .get.mSet(mSetObj)
   
+  mSetObj$dataSet$norm <- mSetObj$dataSet$norm[order(as.numeric(rownames(mSetObj$dataSet$norm))),,drop=FALSE]
+  print(mSetObj$dataSet$norm)
   #Text should be visable to user
   cat("One dependent variable and one or more independent variables will be tested for correlation. The dependent variable must be numeric. The independent variables can be numeric or categorical.")
   cat("For categorical independent variables, make sure to use characters for the levels and not numbers. For example, if you have levels 1, 2 and 3, change the level labels to I, II and III prior to upload.")
   
   #Set dependent (response) variable name
-  if (is.null(facA)==TRUE) {
+  if (facA=="NULL") {
     for (i in 1:ncol(mSetObj$dataSet$norm)) {
       if (is.factor(mSetObj$dataSet$norm[,i])==FALSE) {
         facA <- colnames(mSetObj$dataSet$norm)[i]# Default is to choose the first numeric column as response column
@@ -37,7 +38,7 @@ reg.svm.anal <- function(mSetObj=NA, facA=NULL, pred.text=NULL) {
   cat("Indicate independent variables using the column names with commas in between.")
   
   #Set right side of formula with predictor variables
-  if (is.null(pred.text)==TRUE) {
+  if (pred.text=="NULL") {
     resp.col.num <- which(colnames(mSetObj$dataSet$norm)==facA)
     data <- mSetObj$dataSet$norm[,-resp.col.num]
     pred.text <- colnames(data)[1] #Default is the first potential predictor column
@@ -95,7 +96,7 @@ reg.svm.anal <- function(mSetObj=NA, facA=NULL, pred.text=NULL) {
   #Store results
   mSetObj$analSet$rfReg$res <- list(summary=summary, response=facA, predictors=pred_data, pred.text=pred.text, predicted.values=fitted, train.RMSE=train_rmse, test.prediction=test_prediction, test.RMSE=test_rmse, train_data=train_data, test_data=test_data, method=model_name, fileName=fileName)       
   mSetObj$analSet$rfReg$mod <- list(model_name=model_name, model=model, response=facA, predictors=predictors)
-  
+  mSetObj$analSet$rfReg$res$test_this <- test_data
   #Download text document containing the results, called the fileName. Document goes into the working directory and should be accessible to the user as part of the report.
   sink(fileName) 
   cat("Formula:\n")
@@ -110,6 +111,7 @@ reg.svm.anal <- function(mSetObj=NA, facA=NULL, pred.text=NULL) {
   cat("\nPredicted values:\n")
   print(fitted)
   cat("\nModel RMSE:\n")
+  #cat(paste0(svm_RMSE))
   sink()
   
   return(.set.mSet(mSetObj))
@@ -139,7 +141,7 @@ plot.pred.svmReg <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA
 
   method <- mSetObj$analSet$rfReg$res$method
   prediction <- mSetObj$analSet$rfReg$res$test.prediction
-  test_data <- mSetObj$analSet$rfReg$res$test_data
+  test_data <- mSetObj$analSet$rfReg$res$test_this
   facA <- mSetObj$analSet$rfReg$res$response
   
   #Set plot dimensions

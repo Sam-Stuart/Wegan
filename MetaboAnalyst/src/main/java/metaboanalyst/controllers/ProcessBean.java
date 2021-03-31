@@ -73,10 +73,13 @@ public class ProcessBean implements Serializable {
                 }
 
             } else {
+                System.out.println("WE ARE HERE YES SIR");
+                System.out.println(sb.getAnalType());
                 if (RDataUtils.sanityCheckData(RC)) {
                     msgVec.add("Checking data content ...passed ");
                     msgArray = RDataUtils.getSanityCheckMessage(RC);
                     bnDisabled = false;
+                    System.out.println(sb.getAnalType());
                 } else {
                     msgVec.add("Checking data content ...failed ");
                     msgArray = RDataUtils.getErrorMsgs(RC);
@@ -97,6 +100,7 @@ public class ProcessBean implements Serializable {
         }
         msg = msg + "</table>";
         msgText = msg;
+        System.out.println(sb.getAnalType());
     }
 
     public String imputeButton_action() {

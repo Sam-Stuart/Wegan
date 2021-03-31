@@ -114,18 +114,11 @@
         </navigation-case> 
         
         <navigation-case>
-            <from-outcome>Diversity</from-outcome>
-            <to-view-id>/docs/DiversityOverview.xhtml</to-view-id>
-            <redirect/>
-        </navigation-case> 
-        
-        <navigation-case>
             <from-outcome>Ordination</from-outcome>
-            <to-view-id>/docs/OrdinationOverview.xhtml</to-view-id>
+            <to-view-id>/Secure/analysis/OrdinationView.xhtml</to-view-id>
             <redirect/>
-        </navigation-case> 
-        
-        
+        </navigation-case>  
+                
         <navigation-case>
             <from-outcome>Overview</from-outcome>
             <to-view-id>/docs/Overview.xhtml</to-view-id>
@@ -213,9 +206,14 @@
         </navigation-case> 
         <navigation-case>
             <from-outcome>Diversity</from-outcome>
-            <to-view-id>/Secure/analysis/DiversityView.xhtml</to-view-id>
+            <to-view-id>/Secure/diversity/DiversityView.xhtml</to-view-id>
             <redirect/>
         </navigation-case>      
+        <navigation-case>
+            <from-outcome>Clustering</from-outcome>
+            <to-view-id>/Secure/clustering/ClusteringView.xhtml</to-view-id>
+            <redirect/>
+       </navigation-case>     
         <navigation-case>
             <from-outcome>Plotting</from-outcome>
             <to-view-id>/Secure/plotting/PlottingMainView.xhtml</to-view-id>
@@ -349,8 +347,18 @@
             <redirect/>
         </navigation-case>
         <navigation-case>
+            <from-outcome>RFCorrelation</from-outcome>
+            <to-view-id>/Secure/correlation/RFCorrelationView.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
             <from-outcome>Penalized</from-outcome>
             <to-view-id>/Secure/correlation/PenalizedView.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>LogisticCorrelation</from-outcome>
+            <to-view-id>/Secure/correlation/LogisticCorrelationView.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         <navigation-case>

@@ -62,7 +62,7 @@ public class ApplicationBean1 implements Serializable {
     private static final String test_linear = "/data/linear_test_data4.txt"; // linear plot test data 
    
     
-    private static final String test_iris = "/data/iris.csv";
+    //private static final String test_dune = "/data/iris.txt";
     private static final String test_dune_weights = "/data/dune_weights.txt";
     
     
@@ -192,7 +192,7 @@ public class ApplicationBean1 implements Serializable {
 
         testDataOpts = new SelectItem[11];
         //Changed for WEGAN testing
-        testDataOpts[0] = new SelectItem("Dune", "NMDS");
+        testDataOpts[0] = new SelectItem("Dune", "CA");
         testDataOpts[1] = new SelectItem("BCI", "NMDS");
         testDataOpts[2] = new SelectItem("nmrspecbin", "NMR spectral bins");
         testDataOpts[3] = new SelectItem("nmrpeaklist", "NMR peak lists");
@@ -514,7 +514,8 @@ public class ApplicationBean1 implements Serializable {
     }
 
     public String getTestIris() {
-        return realPath + test_iris;
+//        return realPath + test_iris;
+          return realPath;
     }
     
     public String getTestWeightDune() {

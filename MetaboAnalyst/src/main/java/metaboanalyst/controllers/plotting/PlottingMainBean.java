@@ -5,7 +5,6 @@
  */
 package metaboanalyst.controllers.plotting;
 
-import metaboanalyst.controllers.plotting.*;
 import metaboanalyst.controllers.SessionBean1;
 import metaboanalyst.rwrappers.ChemoMetrics;
 import metaboanalyst.rwrappers.Classifying;

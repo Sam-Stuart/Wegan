@@ -55,7 +55,7 @@ public class LinearCABean implements Serializable {
         return corrColumnOpts;
     }
     
-    private String corrColumnNameA = getCorrColumnOpts()[0].getLabel();
+    private String corrColumnNameA = getCorrColumnOpts()[1].getLabel();
     
     public String getCorrColumnNameA() {
         return corrColumnNameA;
@@ -65,7 +65,7 @@ public class LinearCABean implements Serializable {
         this.corrColumnNameA = corrColumnNameA;
     }
     
-    private String corrColumnNameB = getCorrColumnOpts()[1].getLabel();
+    private String corrColumnNameB = getCorrColumnOpts()[0].getLabel();
     
     public String getCorrColumnNameB() {
         return corrColumnNameB;

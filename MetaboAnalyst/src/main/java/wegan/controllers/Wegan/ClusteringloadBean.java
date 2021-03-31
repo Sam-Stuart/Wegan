@@ -21,8 +21,8 @@ import org.rosuda.REngine.Rserve.RserveException;
  *
  * @author jianguox
  */
-@ManagedBean(name = "Ordinationload")
-public class OrdinationloadBean1 implements Serializable {
+@ManagedBean(name = "Clusterload")
+public class ClusteringloadBean implements Serializable {
 
     private final ApplicationBean1 ab = (ApplicationBean1) DataUtils.findBean("applicationBean1");
     private final SessionBean1 sb = (SessionBean1) DataUtils.findBean("sessionBean1");
@@ -70,7 +70,7 @@ public class OrdinationloadBean1 implements Serializable {
             paired = true;
         }
 
-        if (sb.doLogin(dataType, "stat", false, paired)) {
+        if (sb.doLogin(dataType, "cluster", false, paired)) {
             try {
                 RConnection RC = sb.getRConnection();
                 String fileName = DataUtils.uploadFile(dataFile, sb, null, ab.isOnPublicServer());
@@ -153,7 +153,7 @@ public class OrdinationloadBean1 implements Serializable {
             paired = true;
         }
 
-        if (sb.doLogin(zipDataType, "stat", false, paired)) {
+        if (sb.doLogin(zipDataType, "cluster", false, paired)) {
             try {
                 RConnection RC = sb.getRConnection();
                 //String homeDir = sb.getCurrentUser().getHomeDir();
@@ -211,125 +211,9 @@ public class OrdinationloadBean1 implements Serializable {
         this.testDataOpt = testDataOpt;
     }
 
-    public String handleStatTestFileUpload() {
-        System.out.print(" ------------------OVER HERE !!!! ------------------------------");
-        String format = "";
-        boolean paired = false;
-        boolean isZip = false;
-        String testFile = null;
-
-        
-        
-        if (testDataOpt == null) {
-            //sb.updateMsg("Error", "No data set is selected!");
-            return null;
-        }
-
-        if (testDataOpt.equals("conccancer")) {
-            dataType = "conc";
-            testFile = ab.getTestConcHsaPath();
-            format = "rowu";
-        }
-        
-        //DUNE DATA SELECTED*********************************************************
-        else if (testDataOpt.equals("Dune")) {
-            dataType = "Dune";
-            sb.updateMsg("Error", "Dune data selected");
-
-            testFile = ab.getTestamf();
-            format = "rowu";
-            
-           
-        } else if (testDataOpt.equals("BCI")) {
-            testFile = ab.getTestBCI();
-            format = "rowu";
-        }
-
-        if (!sb.doLogin(dataType, "Ordination", false, paired)) {
-            //sb.updateMsg("Error", "No login return null?");
-            return null;
-        }
-
-        RConnection RC = sb.getRConnection();
-        if (isZip) {
-            if (!RDataUtils.readZipData(RC, testFile, dataType, "F")) {
-                sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
-                return null;
-            }
-        } else {
-            
-            //Tested cahnging Disc to cont
-            if (!RDataUtils.readTextData(RC, testFile, format, "disc")) {
-                sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
-                return null;
-            }
-        }
-        sb.setDataUploaded(true);
-        if (dataType.equals("conc") || dataType.equals("pktable") || dataType.equals("specbin")) {
-            return "Data check";
-        }
-        return dataType;
-    }
-    
-    /*
-
-        public String handleOrdinationFileUpload() {
-
-        boolean paired = false;
-        if (dataFormat.endsWith("p")) {
-            paired = true;
-        }
-
-        if (sb.doLogin(dataType, "nmds", false, paired)) {
-            
-            try {
-                RConnection RC = sb.getRConnection();
-                String fileName = DataUtils.uploadFile(dataFile, sb, null, ab.isOnPublicServer());
-                if (fileName == null) {
-                    return null;
-                }
-                
-                //Gets if the file is in Csv or Txt format, allow for use of proper R reader later
-                //Already know it must be one of those based on uploading it to the server without error
-                String fileExt = fileName.substring(fileName.length() - 4);
-                
-                
-                if(runOrdinationR(fileName,fileExt)){
-                    //sb.updateMsg("Error", "CA run successfully");
-                    return "Ordination";
-                    
-                }else{
-                    sb.updateMsg("Error", "DCA not run succesffully");
-
-                    return "";
-                }
-                
-                
-                /*
-                //RDataUtils.readTextData(RC, fileName, dataFormat, "disc")
-                if (RDataUtils.readTextData(RC, fileName, dataFormat, "disc")) {
-                    sb.setDataUploaded(true);
-                    return "Download";
-                } else {
-                    String err = RDataUtils.getErrMsg(RC);
-                    sb.updateMsg("Error", "Failed to read in the CSV file." + err);
-                    return null;
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        sb.updateMsg("Error", "Log in failed. Please check errors in your R codes or the Rserve permission setting!");
-
-        return null;
-    }
-    
-    
-    */
-  
-    
+     
     //----------------------------------------------------------------- Test loader 
-    public String handleOrdinationTestFileUpload() {
+    public String handleClusterTestFileUpload() {
         String format = "";
         boolean paired = false;
         boolean isZip = false;
@@ -348,8 +232,6 @@ public class OrdinationloadBean1 implements Serializable {
         //DUNE DATA SELECTED*********************************************************
         else if (testDataOpt.equals("Dune")) {
             dataType = "Dune";
-            //sb.updateMsg("Error", "Dune data selected");
-
             testFile = ab.getTestDune();
             format = "rowu";
             
@@ -360,7 +242,7 @@ public class OrdinationloadBean1 implements Serializable {
             sb.updateMsg("Error", "Unknown data selected?");
             return null;
         }
-        if (!sb.doLogin(dataType, "nmds", false, paired)) {
+        if (!sb.doLogin(dataType, "cluster", false, paired)) {
             //sb.updateMsg("Error", "No login return null?");
             return null;
         }
@@ -380,35 +262,19 @@ public class OrdinationloadBean1 implements Serializable {
             }
         }
         sb.setDataUploaded(true);
-        //RC.Eval;
-        /*try {
-            //String rCommand = "InitDataObjects(\"" + dataType + "\", \"" + analType + "\", " + (isPaired ? "TRUE" : "FALSE") + ")";
-            //String rCommand = "NMDSWegan(\"" + dataType + "\")";
-            
-            //String rCommand = "DCAWegan(\"" + dataType + "\", \"" + sb.getPath2()+ "\"  )";
-            
-            
-            //RC.voidEval(rCommand);
-            //RCenter.recordRCommand(RC, rCommand);
-            
-        } catch (RserveException rse) {
-            System.out.println(rse);
-            return "";
-        }*/
-        //;
         return "Data check";
     }
     
     
     
-    public boolean runOrdinationR(String inputData,String ext){
+    public boolean runDCaR(String inputData,String ext){
         RConnection RC = sb.getRConnection();
         try {
             //String rCommand = "InitDataObjects(\"" + dataType + "\", \"" + analType + "\", " + (isPaired ? "TRUE" : "FALSE") + ")";
 
             //String rCommand = "CAWegan(\"" + inputData + "\", \"" + sb.getPath2()+ "\"  )";
 
-            String rCommand = "OrdinationWegan(\"" + inputData + "\", \"" + sb.getPath2()+ "\", \"" + ext + "\"   )";
+            String rCommand = "DCAWegan(\"" + inputData + "\", \"" + sb.getPath2()+ "\", \"" + ext + "\"   )";
             RC.voidEval(rCommand);
             RCenter.recordRCommand(RC, rCommand);
 

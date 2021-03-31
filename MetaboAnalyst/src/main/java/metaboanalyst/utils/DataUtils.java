@@ -562,7 +562,7 @@ public class DataUtils {
         if (type.equalsIgnoreCase("utils")) {
             addUtilNodes(naviTree);
         }else if (type.equalsIgnoreCase("nmds")) {
-            //System.out.println("You need to define the navigation tree for this analysis type: " + type);
+            System.out.println("You need to define the navigation tree for this analysis type: " + type);
             addProcNodes(naviTree, type);
             TreeNode normNode = new DefaultTreeNode("Normalization", naviTree);
         }
@@ -598,6 +598,12 @@ public class DataUtils {
                     addPlottingNodes(naviTree);
                 } else if (type.equalsIgnoreCase("correlation")) {
                     addCANodes(naviTree);
+                } else if (type.equalsIgnoreCase("ord")) {
+                    addOrdinationNodes(naviTree);
+                } else if (type.equalsIgnoreCase("diversity")) {
+                    addDiversityNodes(naviTree);                
+                } else if (type.equalsIgnoreCase("cluster")) {
+                    addClusterNodes(naviTree);   
                 } else {
                     System.out.println("You need to define the navigation tree for this analysis type: " + type);
                 }
@@ -753,7 +759,16 @@ public class DataUtils {
         TreeNode noded5 = new DefaultTreeNode("Histogram", plottingNode);
         TreeNode noded6 = new DefaultTreeNode("Pie chart", plottingNode);
     }
-
+    
+    private static void addOrdinationNodes(TreeNode parent) {
+        TreeNode dispersalNode = new DefaultTreeNode("Ordination", parent);   
+    }
+    private static void addDiversityNodes(TreeNode parent) {
+        TreeNode dispersalNode = new DefaultTreeNode("Diversity", parent);  
+    }
+    private static void addClusterNodes(TreeNode parent) {
+        TreeNode dispersalNode = new DefaultTreeNode("Clustering", parent);  
+    }    
     private static void addUtilNodes(TreeNode parent) {
         //TreeNode uNode = new DefaultTreeNode("Utilities", parent);
         //uNode.setSelectable(false);

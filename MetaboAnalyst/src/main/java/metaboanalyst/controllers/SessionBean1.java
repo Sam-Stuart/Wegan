@@ -268,7 +268,7 @@ public class SessionBean1 implements Serializable {
     /*
      * navigation tree
      */
-    private final List<String> parentNodes = Arrays.asList(new String[]{"Processing", "Correlation","Dispersal", "Plotting", "Enrichment", "Pathway", "Time Series", "ID Conversion",
+    private final List<String> parentNodes = Arrays.asList(new String[]{"Processing", "Correlation", "Dispersal","Plotting", "Enrichment", "Pathway", "Time Series", "ID Conversion",
         "Batch Effect", "ROC Analysis", "Integrative Analysis", "Power Analysis", "Multivariate", "Univariate", "Tester"});
     private final List<String> twoGrpsMethods = Arrays.asList(new String[]{"T-test", "Volcano plot", "Fold change", "EBAM", "SVM", "OrthoPLSDA"});
 
@@ -439,9 +439,9 @@ public class SessionBean1 implements Serializable {
     }
 
     public String enterModule() {
+        System.out.println(analType);
         switch (analType) {
-            case "stat":
-                
+            case "stat":                
                 return "Statistics";
             case "msetqea":
                 return "enrichparam";
@@ -457,10 +457,16 @@ public class SessionBean1 implements Serializable {
                 return "Correlation";
             case "ca":
                 return "Correlation";
-            case "dispersal":
-                return "Dispersal";
             case "plotting":
                 return "Plotting";
+            case "diversity":
+                return "Diversity";
+            case "dispersal":
+                return "Dispersal";
+            case "ord":
+                return "Ordination";                
+            case "cluster":
+                return "Clustering"; 
         }
         return null;
     }

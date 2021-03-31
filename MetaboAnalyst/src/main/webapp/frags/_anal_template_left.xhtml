@@ -12,15 +12,15 @@
                 <div id="navi" style="line-height: 23px; font-family: Arial, Helvetica, Geneva; margin: 0; padding: 0">
                     <h:form id="treeForm">
                         <h:panelGrid style="padding: 20px 10px 10px 20px; font-size: 13px;">
-                            <h:panelGrid style="padding-left: 20px;">
+<!--                            <h:panelGrid style="padding-left: 20px;">
                                 <h:commandLink id="homelnk" action="Exit">
                                     <p:graphicImage id="home" 
                                                     url="/resources/images/home.png"
                                                     width="28" height="28"/>
                                 </h:commandLink>
                                 <p:tooltip for="homelnk" style="font-size: 11px;" value="Exit and return the Home page" />
-                            </h:panelGrid>
-                            <p:tree style="border: 3px rgb(177, 208, 238) ridge; width: 165px" 
+                            </h:panelGrid>-->
+                            <p:tree style="border: 3px rgb(177, 208, 238) #75bafb ridge; width: 165px" 
                                     value="#{sessionBean1.naviTree}" var="node" selectionMode="single">
                                 <p:ajax update=":treeForm" 
                                         onstart="PF('statusDialog').show()"  
@@ -28,7 +28,7 @@
                                         event="select" 
                                         listener="#{sessionBean1.onNodeSelect}" />  
                                 <p:treeNode>
-                                    <h:outputText style="color: #011CA2;" value="#{node}" />
+                                    <h:outputText style="color:#75bafb" value="#{node}" />
                                 </p:treeNode>
                             </p:tree>         
                         </h:panelGrid>
