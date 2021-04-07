@@ -12,13 +12,20 @@
     </ui:define>
     <ui:define name="content">
         <h:form id="form1">
-            <h:panelGrid id="normPane" style="padding:20px 40px 20px 40px; font-size: 12px; line-height: 26px; width:880px">
-                <h2>Normalization overview:</h2>
-                <p>
+            <h:panelGrid style="padding:20px 40px 20px 40px; font-size: 13px; line-height: 25px; width:100%">
+                <h1>Normalization overview:</h1>
+                <h:panelGrid style="width:100%; background-color: #75bafb;"></h:panelGrid>
+                <h:panelGrid style="width:100%; background-color: white; "></h:panelGrid>
+                <h:panelGrid style="width:100%; background-color: #75bafb;"></h:panelGrid>
+                <h:panelGrid style="width:100%; background-color: white; "></h:panelGrid>
+
+
+                <h:panelGrid style=" margin-bottom: 10px;font-size: 16px; width:100%">
                     The normalization procedures are grouped into three categories. The sample normalization 
                     allows general-purpose adjustment for differences among your sample; data transformation and scaling are two different 
                     approaches to make individual features more comparable. You can use one or combine them to achieve better results.  
-                </p>                
+                </h:panelGrid>
+
                 <p:selectOneRadio id="rowRadio" value="#{normBean.rowNormOpt}" layout="custom">  
                     <f:selectItems value="#{applicationBean1.dataNormOpts}"/> 
                 </p:selectOneRadio>
@@ -28,98 +35,118 @@
                 <p:selectOneRadio id="scaleRadio" value="#{normBean.scaleNormOpt}" layout="custom">  
                     <f:selectItems value="#{applicationBean1.scaleNormOpts}"/> 
                 </p:selectOneRadio>
-                <h:panelGrid  style="border: solid gray thin; width:100%; font-size: 13px; background-color: #F9F9FB; padding: 20px">
-                    <b>Sample normalization</b>
-                    <h:panelGrid columns="3" style="padding:2px 12px 10px 10px">
-                        <p:radioButton for="rowRadio" itemIndex="0"/>
-                        <p:outputLabel style="font-size:12px; font-weight: bold" value="None"/>
-                        <p:spacer/>
+                
+                <h:panelGrid columns="2" style="margin-left: 5px; margin-right: 800px; border: none; width: 100%; padding: 15px 10px 10px 25px; background-color: #8cbd4830; font-size: 14px; position:relative">
+                    <h:panelGrid>
+                        <b>Sample normalization</b>
+                        <h:panelGrid columns="3" style="padding:2px 12px 10px 10px">
+                            <p:radioButton for="rowRadio" itemIndex="0"/>
+                            <p:outputLabel style="font-size:12px; font-weight: bold" value="None"/>
+                            <p:spacer/>
+
+                            <p:radioButton for="rowRadio" itemIndex="1"/>
+                            <p:outputLabel style="font-size:13px; font-weight: bold" value="Sample-specific normalization (i.e. weight, volume)"/>
+                            <p:commandLink value="Specify" onclick="PF('smplNormDialog').show()"/>
+
+                            <p:radioButton for="rowRadio" itemIndex="2"/>
+                            <p:outputLabel style="font-size:12px; font-weight: bold" value="Normalization by sum"/>
+                            <p:spacer/>
+
+                            <p:radioButton for="rowRadio" itemIndex="3"/>
+                            <p:outputLabel style="font-size:12px; font-weight: bold" value="Normalization by median"/>
+                            <p:spacer/>   
+
+                            <p:radioButton for="rowRadio" itemIndex="4"/>
+                            <p:outputLabel style="font-size:12px; font-weight: bold" value="Normalization by reference sample (PQN)"/>  
+                            <p:commandLink value="Specify" onclick="PF('refSmplDialog').show()"/>
+
+                            <p:radioButton for="rowRadio" itemIndex="5"/>
+                            <p:outputLabel style="font-size:12px; font-weight: bold" value="Normalization by a pooled sample from group"/>  
+                            <p:commandLink value="Specify" onclick="PF('refGrpDialog').show()"/>
+
+                            <p:radioButton for="rowRadio" itemIndex="6"/>
+                            <p:outputLabel style="font-size:12px; font-weight: bold" value="Normalization by reference feature"/>  
+                            <p:commandLink value="Specify" onclick="PF('refVarDialog').show()"/>
+
+                            <p:radioButton for="rowRadio" itemIndex="7"/>
+                            <p:outputLabel style="font-size:12px; font-weight: bold" value="Quantile normalization"/>
+                            <p:spacer/>   
+                        </h:panelGrid>
+                        <h:panelGrid style="width:100%; border-bottom: darkgray dashed thin; border-top: darkgray dashed thin" rendered="#{sessionBean1.analType eq 'roc' and sessionBean1.dataType eq 'conc'}">
+                            <h:panelGroup>
+                                <p:selectBooleanCheckbox value ="#{normBean.includeRatio}"/>
+                                <h:outputLabel style="font-weight: bold" value=" Compute and include metabolite ratios:"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{normBean.ratioNumOpt}">
+                                    <f:selectItem itemLabel="Top 20" itemValue="20"/> 
+                                    <f:selectItem itemLabel="Top 50" itemValue="50"/> 
+                                    <f:selectItem itemLabel="Top 100" itemValue="100"/> 
+                                </p:selectOneMenu>
+                            </h:panelGroup>
+                            <p>
+                                Ratios between two metabolite concentrations may carry more information than the two corresponding metabolite 
+                                concentrations alone. MetaboAnalyst will compute ratios of all possible metabolite pairs and then 
+                                choose top ranked ratios (based on p values) to be included in the data for further biomarker analysis.
+                                <u>Note, there is a potential overfitting issue associated with the procedure. The main purpose here is 
+                                    to improve the chance of biomarker discovery</u>. You need to validate the performance in independent studies.
+                                Log normalization will be performed during the process. You can only perform Data scaling in the next step.
+                            </p>
+                        </h:panelGrid>
+                        <b>Data transformation</b>
+                        <h:panelGrid columns="3" style="padding:2px 12px 10px 10px">
+                            <p:radioButton for="transRadio" itemIndex="0"/>
+                            <p:outputLabel style="font-size:12px; font-weight: bold" value="None"/>
+                            <p:spacer/>
+                            <p:radioButton for="transRadio" itemIndex="1"/>
+                            <p:outputLabel style="font-size:12px; font-weight: bold" value="Log transformation"/>
+                            <h:outputLabel value="(generalized logarithm transformation or glog)"/>
+                            <p:radioButton for="transRadio" itemIndex="2"/>
+                            <p:outputLabel style="font-size:12px; font-weight: bold" value="Cube root transformation"/>
+                            <h:outputLabel value="(takes the cube root of data values)"/>
+                        </h:panelGrid>
+                        <b>Data scaling</b>
+                        <h:panelGrid columns="3" style="padding:2px 12px 10px 10px">
+                            <p:radioButton for="scaleRadio" itemIndex="0"/>
+                            <p:outputLabel style="font-size:12px; font-weight: bold" value="None"/>
+                            <p:spacer/>
+                            <p:radioButton for="scaleRadio" itemIndex="1"/>
+                            <p:outputLabel style="font-size:12px; font-weight: bold" value="Mean centering"/>
+                            <h:outputLabel value="(mean-centered only)"/>
+                            <p:radioButton for="scaleRadio" itemIndex="2"/>
+                            <p:outputLabel style="font-size:12px; font-weight: bold" value="Auto scaling"/>
+                            <h:outputLabel value="(mean-centered and divided by the standard deviation of each variable)"/>
+                            <p:radioButton for="scaleRadio" itemIndex="3"/>
+                            <p:outputLabel style="font-size:12px; font-weight: bold" value="Pareto scaling"/>
+                            <h:outputLabel value="(mean-centered and divided by the square root of the standard deviation of each variable)"/>
+                            <p:radioButton for="scaleRadio" itemIndex="4"/>
+                            <p:outputLabel style="font-size:12px; font-weight: bold" value="Range scaling"/>
+                            <h:outputLabel value="(mean-centered and divided by the range of each variable)"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid style="position: absolute; right: 35px; top: 30px">
+                        <p:commandButton style="background: #75bafb ; padding: 4px 7px 4px 7px; width: 150px; font-size: 18px; color: black; margin-bottom: 10px" 
+                                         value="Auto Normalize" onclick="PF('statusDialog').show()" 
+                                         oncomplete="PF('statusDialog').hide()" 
+                                         update=":ac form1:viewBn form1:nextBn  :cmdPane"
+                                         actionListener="#{normBean.performDataNormalization()}"/>  
                         
-                        <p:radioButton for="rowRadio" itemIndex="1"/>
-                        <p:outputLabel style="font-size:13px; font-weight: bold" value="Sample-specific normalization (i.e. weight, volume)"/>
-                        <p:commandLink value="Specify" onclick="PF('smplNormDialog').show()"/>
-
-                        <p:radioButton for="rowRadio" itemIndex="2"/>
-                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Normalization by sum"/>
-                        <p:spacer/>
-
-                        <p:radioButton for="rowRadio" itemIndex="3"/>
-                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Normalization by median"/>
-                        <p:spacer/>   
-
-                        <p:radioButton for="rowRadio" itemIndex="4"/>
-                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Normalization by reference sample (PQN)"/>  
-                        <p:commandLink value="Specify" onclick="PF('refSmplDialog').show()"/>
-
-                        <p:radioButton for="rowRadio" itemIndex="5"/>
-                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Normalization by a pooled sample from group"/>  
-                        <p:commandLink value="Specify" onclick="PF('refGrpDialog').show()"/>
-
-                        <p:radioButton for="rowRadio" itemIndex="6"/>
-                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Normalization by reference feature"/>  
-                        <p:commandLink value="Specify" onclick="PF('refVarDialog').show()"/>
-
-                        <p:radioButton for="rowRadio" itemIndex="7"/>
-                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Quantile normalization"/>
-                        <p:spacer/>   
-
-                    </h:panelGrid>
-                    <h:panelGrid style="width:100%; border-bottom: darkgray dashed thin; border-top: darkgray dashed thin" rendered="#{sessionBean1.analType eq 'roc' and sessionBean1.dataType eq 'conc'}">
-                        <h:panelGroup>
-                            <p:selectBooleanCheckbox value ="#{normBean.includeRatio}"/>
-                            <h:outputLabel style="font-weight: bold" value=" Compute and include metabolite ratios:"/>
-                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{normBean.ratioNumOpt}">
-                                <f:selectItem itemLabel="Top 20" itemValue="20"/> 
-                                <f:selectItem itemLabel="Top 50" itemValue="50"/> 
-                                <f:selectItem itemLabel="Top 100" itemValue="100"/> 
-                            </p:selectOneMenu>
-                        </h:panelGroup>
-                        <p>
-                            Ratios between two metabolite concentrations may carry more information than the two corresponding metabolite 
-                            concentrations alone. MetaboAnalyst will compute ratios of all possible metabolite pairs and then 
-                            choose top ranked ratios (based on p values) to be included in the data for further biomarker analysis.
-                            <u>Note, there is a potential overfitting issue associated with the procedure. The main purpose here is 
-                                to improve the chance of biomarker discovery</u>. You need to validate the performance in independent studies.
-                            Log normalization will be performed during the process. You can only perform Data scaling in the next step.
-                        </p>
-                    </h:panelGrid>
-                    <b>Data transformation</b>
-                    <h:panelGrid columns="3" style="padding:2px 12px 10px 10px">
-                        <p:radioButton for="transRadio" itemIndex="0"/>
-                        <p:outputLabel style="font-size:12px; font-weight: bold" value="None"/>
-                        <p:spacer/>
-                        <p:radioButton for="transRadio" itemIndex="1"/>
-                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Log transformation"/>
-                        <h:outputLabel value="(generalized logarithm transformation or glog)"/>
-                        <p:radioButton for="transRadio" itemIndex="2"/>
-                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Cube root transformation"/>
-                        <h:outputLabel value="(takes the cube root of data values)"/>
-                    </h:panelGrid>
-                    <b>Data scaling</b>
-                    <h:panelGrid columns="3" style="padding:2px 12px 10px 10px">
-                        <p:radioButton for="scaleRadio" itemIndex="0"/>
-                        <p:outputLabel style="font-size:12px; font-weight: bold" value="None"/>
-                        <p:spacer/>
-                        <p:radioButton for="scaleRadio" itemIndex="1"/>
-                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Mean centering"/>
-                        <h:outputLabel value="(mean-centered only)"/>
-                        <p:radioButton for="scaleRadio" itemIndex="2"/>
-                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Auto scaling"/>
-                        <h:outputLabel value="(mean-centered and divided by the standard deviation of each variable)"/>
-                        <p:radioButton for="scaleRadio" itemIndex="3"/>
-                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Pareto scaling"/>
-                        <h:outputLabel value="(mean-centered and divided by the square root of the standard deviation of each variable)"/>
-                        <p:radioButton for="scaleRadio" itemIndex="4"/>
-                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Range scaling"/>
-                        <h:outputLabel value="(mean-centered and divided by the range of each variable)"/>
+                        <p:commandButton style="background: #75bafb ; padding: 4px 7px 4px 7px; width: 150px; font-size: 18px; color: black; margin-bottom: 10px" 
+                                         value="Custom Normalize" onclick="PF('statusDialog').show()" 
+                                         oncomplete="PF('statusDialog').hide()" update=":ac form1:viewBn form1:nextBn  :cmdPane"
+                                         actionListener="#{normBean.performDataNormalization()}"/>  
                     </h:panelGrid>
                 </h:panelGrid> 
-                <h:panelGrid columns="3" style="width:100%; text-align: center">
-                    <p:commandButton style="width: 100px" value="Normalize" onclick="PF('statusDialog').show()" 
-                                     oncomplete="PF('statusDialog').hide()" update=":ac form1:viewBn form1:nextBn  :cmdPane"
-                                     actionListener="#{normBean.performDataNormalization()}"/>   
-                    <p:commandButton id="viewBn" style="width: 120px" value="View Result" onclick="PF('normResDialog').show()" disabled="#{not normBean.normPerformed}"/>
-                    <p:commandButton id="nextBn" style="width: 100px" value="Proceed" onclick="PF('statusDialog').show()" ajax="false" disabled="#{not normBean.normPerformed}" action="#{sessionBean1.enterModule}"/>                               
+                <h:panelGrid style="position:absolute; right: 15px; width: 320px">
+                    <h:panelGrid rendered="#{not (procBean.bnDisabled or sessionBean1.analType eq 'mummichog')}" columns="2" columnClasses="ui-grid-col-7, ui-grid-col-5" style="width: 280px; text-align: right">
+                        <p:commandButton id="viewBn" 
+                                         style="padding: 4px 7px 4px 7px; width: 120px; background: #75bafb"
+                                         value="View Result" onclick="PF('normResDialog').show()" 
+                                         disabled="#{not normBean.normPerformed}"/>
+                        <p:commandButton id="nextBn" 
+                                         style="padding: 4px 7px 4px 7px; width: 100px; background: #75bafb" 
+                                         value="Proceed" onclick="PF('statusDialog').show()" ajax="false" 
+                                         disabled="#{not normBean.normPerformed}" 
+                                         action="#{sessionBean1.enterModule}"/>
+                    </h:panelGrid>
                 </h:panelGrid>
             </h:panelGrid> 
         </h:form>

@@ -13,36 +13,48 @@
     </ui:define>
     <ui:define name="content">
         <h:form>
-            <h:panelGrid style="padding:20px 20px 20px 50px; font-size: 12px; line-height: 23px">
-                
-                <h2>Data Integrity Check:</h2>
-                <ol>
-                    <li>
-                        Checking the class labels - at least three replicates are required in each class.
-                    </li>
-                    <li>
-                        If the samples are paired, the pair labels must conform to the specified format.
-                    </li>
-                    <li>
-                        The data (except class labels) must not contain non-numeric values.
-                    </li>
-                    <li>
-                        The presence of missing values or features with constant values (i.e. all zeros)                
-                    </li>
-                </ol>
-                <h:panelGrid style="border: 1px dashed black; padding: 10px; background-color: #F9F9FB; width: 100%">
+            <h:panelGrid style="padding:20px 40px 20px 40px; font-size: 13px; line-height: 25px; width:100%; position: relative">
+                <h1>Data Integrity Check:</h1>
+                <h:panelGrid style="width:100%; background-color: #75bafb;"></h:panelGrid>
+                <h:panelGrid style="width:100%; background-color: white; "></h:panelGrid>
+                <h:panelGrid style="width:100%; background-color: #75bafb;"></h:panelGrid>
+                <h:panelGrid style="width:100%; background-color: white; "></h:panelGrid>  
+                <h:panelGrid columns="2" style=" border: none; width: 100%; padding: 15px 10px 10px 5px; background-color: #8cbd4830; font-size: 14px">
+                    <ol>
+                        <li>
+                            Checking the class labels - at least three replicates are required in each class.
+                        </li>
+                        <li>
+                            If the samples are paired, the pair labels must conform to the specified format.
+                        </li>
+                        <li>
+                            The data (except class labels) must not contain non-numeric values.
+                        </li>
+                        <li>
+                            The presence of missing values or features with constant values (i.e. all zeros)                
+                        </li>
+                    </ol>
+                </h:panelGrid>
+                <p/>
+                <h2>Data Processing Information:</h2>
+                <h:panelGrid style=" border: none; width: 100%; padding: 5px 10px 10px 5px; background-color: #8cbd4830; font-size: 14px">
+                    
                     <h:outputLabel value="#{procBean.msgText}" escape="false"/>
                 </h:panelGrid>
-                <h:panelGrid rendered="#{not (procBean.bnDisabled or sessionBean1.analType eq 'mummichog')}" columns="2" columnClasses="ui-grid-col-7, ui-grid-col-5" style="width: 500px; text-align: center">
-                    <p:commandButton value="Missing value estimation" ajax="false" 
-                                     onclick="PF('statusDialog').show()"
-                                     action="#{procBean.imputeButton_action()}"/> 
-                    
-                    <p:commandButton value="Skip" ajax="false" 
-                                     onclick="PF('statusDialog').show()"
-                                     disabled="#{procBean.bnDisabled}"
-                                     action="#{procBean.skipButton_action()}"/>    
-                </h:panelGrid> 
+                <h:panelGrid style="position:absolute; right: 5px; width: 320px">
+                    <h:panelGrid rendered="#{not (procBean.bnDisabled or sessionBean1.analType eq 'mummichog')}" columns="2" columnClasses="ui-grid-col-7, ui-grid-col-5" style="width: 280px; text-align: right">
+                        <p:commandButton style ="background: #8cbd48; border: none; padding: 4px 7px 4px 7px; width: 190px; font-size: 18px; color: black"
+                                         value="Missing value estimation" ajax="false" 
+                                         onclick="PF('statusDialog').show()"
+                                         action="#{procBean.imputeButton_action()}"/> 
+
+                        <p:commandButton style ="background: #75bafb; padding: 4px 7px 2px 7px; width: 70px;  font-size: 18px; color: black"
+                                         value="Skip" ajax="false" 
+                                         onclick="PF('statusDialog').show()"
+                                         disabled="#{procBean.bnDisabled}"
+                                         action="#{procBean.skipButton_action()}"/>    
+                    </h:panelGrid> 
+                </h:panelGrid>>
                 <h:panelGrid rendered="#{sessionBean1.analType eq 'mummichog'}" columns="2" style="width: 500px; text-align: center">   
                     <p:commandButton value="Analysis Options" ajax="false" rendered="false"
                                      onclick="PF('statusDialog').show()"
