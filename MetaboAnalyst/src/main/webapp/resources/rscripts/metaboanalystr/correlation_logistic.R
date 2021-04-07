@@ -69,15 +69,9 @@ log.reg.anal <- function(mSetObj=NA, facA="NULL", pred.text="NULL", type="multin
   
   #Subset data using predictor column names
   predictors <- unlist(strsplit(pred.text, "+", fixed=TRUE))
-  cat("NUMBER 1")
   pred_data <- mSetObj$dataSet$test_cat[,which(colnames(mSetObj$dataSet$test_cat) %in% predictors)]
-  cat("NUMBER 2")
   model_data <- data.frame(mSetObj$dataSet$test_cat[,facA], pred_data)
-  cat("NUMBER 3")
   colnames(model_data) <- c(paste0(facA), predictors)
-  cat("NUMBER 4")
-
-  cat("NUMBER 5")
   
   if (type=="ordinal") {
       
@@ -164,7 +158,6 @@ log.reg.anal <- function(mSetObj=NA, facA="NULL", pred.text="NULL", type="multin
     
   } else if (type=="multinomial") {
 
-    cat("NUMBER 0")
     
     #Check number of levels
     model_data_as_factor <- as.factor(model_data[,facA]) 
@@ -175,45 +168,31 @@ log.reg.anal <- function(mSetObj=NA, facA="NULL", pred.text="NULL", type="multin
       stop("The dependent variable has less than 3 levels! Try binomial regression instead.")
     }
 
-    cat("NUMBER 1")
     
     #Obtain reference level for response variable
     if (is.null(reference)==TRUE) {
       ref.col <- model_data[,facA] 
       reference <- paste0(ref.col[1]) #Reference category is default the first level of the response column
     }
-    cat("NUMBER 2")
     #Set reference
     model_data[,facA] <- relevel(as.factor(model_data[,facA]), ref=reference) 
-    cat("NUMBER 3")
     #Build model for multinomial regression
     model <- multinom(formula, data=model_data, Hess=TRUE, maxit=1000, weights=NULL)
-    cat("NUMBER 3.1")
     model_name <- "Multinomial Logistic Regression"
-    cat("NUMBER 3.2")
     #Extract results
     summary <- summary(model)
-    cat("NUMBER 3.3")
     residuals <- model[["residuals"]]
-    cat("NUMBER 3.4")
     fitted <- fitted(model) #Predicted values
-    cat("NUMBER 3.5")
     conf.int <- confint(model, level=0.95) #Confidence intervals for predictor variables
-    cat("NUMBER 3.6")
     oddsRatio <- exp(coef(model))
-    cat("NUMBER 3.7")
     covar <- vcov(model) #Covariance matrix for preductor variables
-    cat("NUMBER 3.8")
     logLik <- logLik(model)
-    cat("NUMBER 3.9")
     coeffs <- coef(model)
-    cat("NUMBER 4")
     std.errors <- sqrt(diag(covar))
     zValues <- coeffs / std.errors
     pValues <- pnorm(abs(zValues), lower.tail=FALSE)*2
     Hessian <- model[["Hessian"]]
     fileName <- paste0("multinomial_logistic_regression_reference_", reference, "_summary.txt") #File name for results
-    cat("NUMBER 5")
     #Store results
     mSetObj$analSet$logMultinomReg$res <- list(summary=summary, model.data=model_data, response=facA, predictor=predictors, residuals=residuals, predicted.values=fitted, confidence.intervals=conf.int, 
                                             oddsRatio=oddsRatio, covariance.matrix=covar, Loglikelihood=logLik, zValues=zValues, pValues=pValues, fileName=fileName)       
@@ -346,7 +325,7 @@ log.reg.anal <- function(mSetObj=NA, facA="NULL", pred.text="NULL", type="multin
 #'License: GNU GPL (>= 2)
 #'@export
 
-plot.effects.logReg <- function(mSetObj=NA, type="binomial", imgName, format="png", dpi=72, width=NA){
+plot.effects.logReg <- function(mSetObj=NA, type="multinomial", imgName, format="png", dpi=72, width=NA){
   
   library("effects")
   
@@ -404,9 +383,9 @@ plot.effects.logReg <- function(mSetObj=NA, type="binomial", imgName, format="pn
 #'License: GNU GPL (>= 2)
 #'@export
 
-plot.ROC.logReg <- function(mSetObj=NA, type="binomial", imgName, format="png", dpi=72, width=NA){
+plot.ROC.logReg <- function(mSetObj=NA, type="multinomial", imgName, format="png", dpi=72, width=NA){
   
-  install.packages("pROC")
+  #install.packages("pROC")
   library(pROC)
   
   #Extract necessary objects from mSetObj
@@ -499,19 +478,18 @@ factor.columns <- function(mSetObj=NA){
   
   fac.col.names <- c()
   for (i in 1:ncol(mSetObj$dataSet$test_cat)) {
-    if (is.factor(mSetObj$dataSet$test_cat[,i])==TRUE) {
+    if (class(mSetObj$dataSet$test_cat[,i])=="character") {
       fac.col <- colnames(mSetObj$dataSet$test_cat)[i]
       fac.col.names <- append(fac.col.names, fac.col) #Names of categorical columns
     }
   }
-  
   fac.col.count <- length(fac.col.names) #Number of categorical columns
   fac.col.results <- list(
     count=fac.col.count,
     names=fac.col.names
   )
   
-  return(cat.columns.results)
+  return(fac.col.names)
   
 }
 
@@ -525,13 +503,13 @@ factor.columns <- function(mSetObj=NA){
 #'License: GNU GPL (>= 2)
 #'@export
 
-log.response.levels <- function(mSetObj=NA, facA=NULL){
+log.response.levels <- function(mSetObj=NA, facA="NULL"){
   
   mSetObj <- .get.mSet(mSetObj)
   
-  if (is.null(facA)==TRUE) {
+  if (facA=="NULL") {
     for (i in 1:ncol(mSetObj$dataSet$test_cat)) {
-      if (is.factor(mSetObj$dataSet$test_cat[,i])==TRUE) {
+      if (class(mSetObj$dataSet$test_cat[,i])=="character") {
         facA <- colnames(mSetObj$dataSet$test_cat)[i] # Choose the first factor column as response column
         break
       }
@@ -539,12 +517,18 @@ log.response.levels <- function(mSetObj=NA, facA=NULL){
   } else {
     facA <- facA #User selected, java uses function factor.columns() to obtain options
   }
+  print("INSIDE LEVELS")
+  print(facA)
   
   resp.levels.names <- unique(mSetObj$dataSet$test_cat[,facA]) #List names of levels in the response column
-  resp.levels.names <- levels(resp.levels.names) #Extract names in character vector
+  model_data_as_factor <- as.factor(resp.levels.names)
+  print(model_data_as_factor)
+  resp.levels.names <- levels(model_data_as_factor) #Extract names in character vector
   resp.levels.count <- length(resp.levels.names) #Count the number of levels in the response column
   resp.levels.results <- list(resp.levels.count=resp.levels.count, resp.levels.names=resp.levels.names)
+  print(resp.levels.names)
+  resp.levels.names <- c(resp.levels.names)
   
-  return(resp.levels.results)
+  return(resp.levels.names)
   
 }

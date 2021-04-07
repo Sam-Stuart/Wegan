@@ -16,7 +16,7 @@ other_files <- c("others_batch_check", "others_lipomics", "enrich_name_match");
 nmds_files <- c("test-Vegan", "dispersal", "plotting");
 dispersal_files <- c("dispersal");
 plotting_files <- c("plotting");
-correlation_files <- c("correlation_linear", "correlation_penalized", "correlation_polynomial", "correlation_ml", "correlation_multivariate", "correlation_SVM");
+correlation_files <- c("correlation_linear", "correlation_penalized", "correlation_polynomial", "correlation_ml", "correlation_multivariate", "correlation_SVM", "correlation_logistic");
 ordination_files <- c("oa_nmds");
 nmds_files <- c("test-Vegan","Dispersal");
 LoadScripts <- function(module.nm = "nmds"){

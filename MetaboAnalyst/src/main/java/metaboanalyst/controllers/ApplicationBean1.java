@@ -62,7 +62,8 @@ public class ApplicationBean1 implements Serializable {
     private static final String test_linear = "/data/linear_test_data4.txt"; // linear plot test data 
    
     
-    //private static final String test_dune = "/data/iris.txt";
+    private static final String test_iris = "/data/iris.txt";
+//    private static final String test_linear = "/data/linear.txt";
     private static final String test_dune_weights = "/data/dune_weights.txt";
     
     
@@ -97,6 +98,7 @@ public class ApplicationBean1 implements Serializable {
     private final SelectItem[] rocFormatOpts;
     private final SelectItem[] tsFormatOpts;
     private final SelectItem[] testDataOpts;
+    private final SelectItem[] caDataOpts;
     private final SelectItem[] qeaTestDataOpts;
     private final SelectItem[] tsDataOpts;
     private final SelectItem[] designOpts;
@@ -190,7 +192,7 @@ public class ApplicationBean1 implements Serializable {
         rocFormatOpts[0] = new SelectItem("rowu", "Samples in rows");
         rocFormatOpts[1] = new SelectItem("colu", "Samples in columns");
 
-        testDataOpts = new SelectItem[11];
+        testDataOpts = new SelectItem[12];
         //Changed for WEGAN testing
         testDataOpts[0] = new SelectItem("Dune", "CA");
         testDataOpts[1] = new SelectItem("BCI", "NMDS");
@@ -203,8 +205,11 @@ public class ApplicationBean1 implements Serializable {
         testDataOpts[8] = new SelectItem("gcmsspec", "GC-MS spectra");
         testDataOpts[9] = new SelectItem("Varespec", "Dispersal");
         testDataOpts[10] = new SelectItem("Linear", "Plotting");
+        testDataOpts[11] = new SelectItem("Iris", "Iris");
         
-
+        caDataOpts = new SelectItem[2];
+        caDataOpts[0] = new SelectItem("Dune", "CA");
+        caDataOpts[1] = new SelectItem("BCI", "NMDS");
         //WEGAN TEST FUNCTIONS START HERE
         
         NMDSTestDataOpts = new SelectItem[1];
@@ -215,7 +220,10 @@ public class ApplicationBean1 implements Serializable {
         plottingDataOpts = new SelectItem[2];
         plottingDataOpts[0] = new SelectItem("Dune");
         plottingDataOpts[1] = new SelectItem("Linear");
-        
+
+        //caDataOpts = new SelectItem[2];
+        //caDataOpts[0] = new SelectItem("Dune");
+        //caDataOpts[1] = new SelectItem("Iris");        
         
         
         cmpdIDOpts1 = new SelectItem[4];
@@ -514,10 +522,12 @@ public class ApplicationBean1 implements Serializable {
     }
 
     public String getTestIris() {
-//        return realPath + test_iris;
-          return realPath;
+        return realPath + test_iris;
     }
-    
+//    public String getTestLinear() {
+//        return realPath + test_linear;
+//    }
+//    
     public String getTestWeightDune() {
         return realPath + test_dune_weights;
     }

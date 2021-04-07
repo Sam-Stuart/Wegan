@@ -11,13 +11,26 @@
     </ui:define>
     <ui:define name="content">
         <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
-            <h:form id="form1">
-                <h:panelGrid id="ordPane" style="text-align: center; width: 100%;">
-                    <p:scrollPanel mode="native" style="width:780px;height:700px">
-                        <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('ord_nmds_scree')}" alt="nmdsscreeimage"/>
-                    </p:scrollPanel>
-                </h:panelGrid>        
-            </h:form>
+            <p:tabView id="penalCA" style="width:100%; border: none; background: none; font-size: 13px;">
+                <p:tab title ="Summary" titleStyleClass="p-tab-nav">
+                    <h:form id="form1">
+                        <h:panelGrid id="ordPane" style="text-align: center; width: 100%;">
+                            <p:scrollPanel mode="native" style="width:780px;height:700px">
+                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('ord_nmds_scree')}" alt="nmdsscreeimage"/>
+                            </p:scrollPanel>
+                        </h:panelGrid>        
+                    </h:form>
+                </p:tab>
+                <p:tab title ="Whale Facts" titleStyleClass="p-tab-nav">
+                    <h:form id="form2">
+                        <h:panelGrid id="ordPane" style="text-align: center; width: 100%;">
+                            <p:scrollPanel mode="native" style="width:780px;height:700px">
+                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('ord_nmds_scree')}" alt="nmdsscreeimage"/>
+                            </p:scrollPanel>
+                        </h:panelGrid>        
+                    </h:form>
+                </p:tab>
+            </p:tabView> 
         </h:panelGrid> 
     </ui:define>
 </ui:composition>
