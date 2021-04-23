@@ -82,7 +82,7 @@ public class DispersalloadBean implements Serializable {
                 if (RDataUtils.readTextData(RC, fileName, dataFormat, "disc")) {
                     sb.setDataUploaded(true);
                     sb.updateMsg("Error", "Data Uploaded successfully");
-                    return "Dispersal123";
+                    return "Data check";
                 } else {
                     String err = RDataUtils.getErrMsg(RC);
                     sb.updateMsg("Error", "Failed to read in the CSV file." + err);

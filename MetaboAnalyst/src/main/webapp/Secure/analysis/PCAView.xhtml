@@ -160,7 +160,7 @@
                         </h:panelGrid>
                     </h:form>
                     <h:panelGrid style="width: 100%; text-align: center">
-                        <canvas id='canvas1' width='670px' height='630px'/>
+                        <!--<canvas id='canvas1' width='670px' height='630px'/>-->
                     </h:panelGrid>
                 </p:tab>
                 <p:tab title ="Loadings Plot">
@@ -210,6 +210,9 @@
                             </p:commandLink>
                         </h:panelGrid>
                     </h:panelGrid>
+                    <h:panelGrid style="width: 100%; text-align: center">
+                        <canvas id='canvas2' width='670px' height='630px'/>
+                    </h:panelGrid>
                     <h:panelGrid columns="2" id="loadPane">
                         <div class="vertical-text">Loadings #{pcaBean.pcaLoadY}</div>
                         <h:panelGrid style="text-align: center">
@@ -243,6 +246,13 @@
                             </h:panelGrid>
                             <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('pca_biplot')}" alt="PCABiplotImage"/>
                         </h:panelGrid>  
+                    </h:form>
+                </p:tab>
+                <p:tab title ="Test">
+                    <h:form id="form7">
+                        <h:panelGrid style="width: 100%; text-align: center">
+                            <canvas id='canvas3' width='670px' height='630px'/>
+                        </h:panelGrid>     
                     </h:form>
                 </p:tab>
             </p:tabView> 

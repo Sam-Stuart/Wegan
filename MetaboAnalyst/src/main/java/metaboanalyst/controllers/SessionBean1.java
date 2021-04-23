@@ -454,7 +454,7 @@ public class SessionBean1 implements Serializable {
             case "roc":
                 return "rocparam";
             case "nmds":
-                return "Correlation";
+                return "Ordination";
             case "ca":
                 return "Correlation";
             case "plotting":
