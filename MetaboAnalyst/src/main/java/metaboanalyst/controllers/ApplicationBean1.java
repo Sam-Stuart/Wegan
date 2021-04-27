@@ -107,6 +107,8 @@ public class ApplicationBean1 implements Serializable {
     private final SelectItem[] probNormOpts;
     private final SelectItem[] transNormOpts;
     private final SelectItem[] scaleNormOpts;
+    private final SelectItem[] ordStressDimensionOpts;
+    private final SelectItem[] ordColorPaletteOpts;
     private final SelectItem[] pairAnalOpts;
     private final SelectItem[] equalVarOpts;
     private final SelectItem[] posthocOpts;
@@ -124,7 +126,10 @@ public class ApplicationBean1 implements Serializable {
     private final SelectItem[] pathLibOpts;
     private final SelectItem[] massLibOpts;
     private final SelectItem[] refLibOpts;
+    private final SelectItem[] vegdistMeasureOpts;
     private final SelectItem[] corrMethodsOpts;
+    private final SelectItem[] ciaDataSetOpts;
+    private final SelectItem[] ciaTypeOpts;
     private final SelectItem[] plottingDataOpts;
     
     
@@ -212,11 +217,55 @@ public class ApplicationBean1 implements Serializable {
 
         // Plotting Test Functions 
         
+        
+        
+        
+        
+        
+        
+        
+        
+                
+        vegdistMeasureOpts = new SelectItem[14];
+        vegdistMeasureOpts[0] = new SelectItem("bray", "Bray-Curtis");
+        vegdistMeasureOpts[1] = new SelectItem("manhattan", "Manhattan");
+        vegdistMeasureOpts[2] = new SelectItem("canberra", "Canberra");
+        vegdistMeasureOpts[3] = new SelectItem("kulczynski", "Kulczynski");
+        vegdistMeasureOpts[4] = new SelectItem("jaccard", "Jaccard");
+        vegdistMeasureOpts[5] = new SelectItem("gower", "Gower");
+        vegdistMeasureOpts[6] = new SelectItem("horn", "Horn-Morisita");
+        vegdistMeasureOpts[7] = new SelectItem("mountford", "Mountford");
+        vegdistMeasureOpts[8] = new SelectItem("raup" , "Raup-Crick");
+        vegdistMeasureOpts[9] = new SelectItem("binomial", "Binomial");
+        vegdistMeasureOpts[10] = new SelectItem("chao", "Chao");
+        vegdistMeasureOpts[11] = new SelectItem("cao", "Cao");
+        vegdistMeasureOpts[12] = new SelectItem("mahalanobis", "Mahalanobis");
+        vegdistMeasureOpts[13] = new SelectItem("euclidean", "Euclidean");
+        
+        ciaTypeOpts = new SelectItem[2];
+        ciaTypeOpts[0] = new SelectItem("numeric", "Numeric Data Types");
+        ciaTypeOpts[1] = new SelectItem("categorical", "Categorical Data Types");
+       
+        ciaDataSetOpts = new SelectItem[2];
+        ciaDataSetOpts[0] = new SelectItem("main", "Main Data Set");
+        ciaDataSetOpts[1] = new SelectItem("env", "Constraining Data Set");
+                
+        ordColorPaletteOpts = new SelectItem[4];
+        ordColorPaletteOpts[0] = new SelectItem("viridis", "Viridis");
+        ordColorPaletteOpts[1] = new SelectItem("plasma", "Plasma");
+        ordColorPaletteOpts[2] = new SelectItem("grey", "Grayscale");
+        ordColorPaletteOpts[3] = new SelectItem("none", "No Color");
+        
+        ordStressDimensionOpts = new SelectItem[5];
+        ordStressDimensionOpts[0] = new SelectItem("1", "1");
+        ordStressDimensionOpts[1] = new SelectItem("2", "2");
+        ordStressDimensionOpts[2] = new SelectItem("3", "3");
+        ordStressDimensionOpts[3] = new SelectItem("4", "4");
+        ordStressDimensionOpts[4] = new SelectItem("5", "5");    
+
         plottingDataOpts = new SelectItem[2];
         plottingDataOpts[0] = new SelectItem("Dune");
         plottingDataOpts[1] = new SelectItem("Linear");
-        
-        
         
         cmpdIDOpts1 = new SelectItem[4];
         cmpdIDOpts1[0] = new SelectItem("na", "-- Please specify");
@@ -788,7 +837,15 @@ public class ApplicationBean1 implements Serializable {
     public SelectItem[] getScaleNormOpts() {
         return scaleNormOpts;
     }
-
+    
+    public SelectItem[] getordStressDimensionOpts() {
+        return ordStressDimensionOpts;
+    }
+        
+    public SelectItem[] getordColorPaletteOpts() {
+        return ordColorPaletteOpts;
+    }
+            
     public SelectItem[] getProbNormOpts() {
         return probNormOpts;
     }
@@ -804,6 +861,19 @@ public class ApplicationBean1 implements Serializable {
     public SelectItem[] getCorrMethodsOpts() {
         return corrMethodsOpts;
     }
+    
+    public SelectItem[] getvegdistMeasureOpts() {
+        return vegdistMeasureOpts;
+    }
+      
+    public SelectItem[] getciaTypeOpts() {
+        return ciaTypeOpts;
+    }
+        
+    public SelectItem[] getciaDataSetOpts() {
+        return ciaDataSetOpts;
+    }
+            
     public SelectItem[] getColorContrastOpts() {
         return colorContrastOpts;
     }

@@ -7,78 +7,84 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="/frags/_anal_template.xhtml">
     <ui:define name="metaInfo">
-        <f:event type="preRenderView" listener="#{oaBean.performDefaultAnalysis('NMDS')}"/> 
+        <f:event type="preRenderView" listener="#{oaBean.performDefaultAnalysis('PCOA')}"/> 
     </ui:define>
     <ui:define name="content">
         <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
-            <p:tabView id="ordNMDS" style="width:100%; border: none; background: none; font-size: 13px;">
+            <p:tabView id="ordPCOA" style="width:100%; border: none; background: none; font-size: 13px;">
                 <p:tab title ="2D Ordination Plot" titleStyleClass="p-tab-nav">
                     <h:form id="form1">
                         <p>
-                            NMDS is performed on numeric data.                
+                            PCOA is performed on numeric data.                
                         </p>
                         <h:panelGrid id="panelGrid" columns="4" cellpadding="3" columnClasses="colRight, colRight, colRight, colLast">
                             
                             <p:panelGrid></p:panelGrid>
                             
                             <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
-                                <p:selectBooleanCheckbox value ="#{ordNMDSBean.doOriginal}"/> 
-
-                            <p:panelGrid></p:panelGrid>
-                            <p:panelGrid></p:panelGrid>
-
-                            <h:outputLabel style="font-weight: bold" value="Perform Relative Abundance Transformation:"/>
-                                <p:selectBooleanCheckbox value ="#{ordNMDSBean.doAbundance}"/> 
+                                <p:selectBooleanCheckbox value ="#{ordPCOABean.doOriginal}"/> 
                             
                             <p:panelGrid></p:panelGrid>
                             <p:panelGrid></p:panelGrid>
+                            
+                            <h:outputLabel style="font-weight: bold" value="Perform Relative Abundance Transformation:"/>
+                                <p:selectBooleanCheckbox value ="#{ordPCOABean.doAbundance}"/> 
+                            
+                            <p:panelGrid></p:panelGrid>
+                            <p:panelGrid></p:panelGrid>
+            
+                            <h:outputLabel style="font-weight: bold" value="Presence/Absence Species Data:"/>
+                                <p:selectBooleanCheckbox value ="#{ordPCOABean.doBinary}"/> 
 
+                            <p:panelGrid></p:panelGrid>
+                            <p:panelGrid></p:panelGrid>
+            
                             <h:outputLabel style="font-weight: bold" value="Distance Measure:"/>
-                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordNMDSBean.vegdistOpts}">
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordPCOABean.vegdistOpts}">
                                     <f:selectItems value="#{applicationBean1.vegdistMeasureOpts}" />
                                 </p:selectOneMenu> 
-                            
+  
                             <p:panelGrid></p:panelGrid>
                             <p:panelGrid></p:panelGrid>
-    
+            
                             <h:outputLabel style="font-weight: bold" value="Add Ellipses:"/>
-                                <p:selectBooleanCheckbox value ="#{ordNMDSBean.ellipseOpts}"/> 
+                                <p:selectBooleanCheckbox value ="#{ordPCOABean.ellipseOpts}"/> 
                             
                             <p:panelGrid></p:panelGrid>
                             <p:panelGrid></p:panelGrid>
-                            
+                        
                             <h:outputLabel style="font-weight: bold" value="Add Variable Arrows:"/>
-                                <p:selectBooleanCheckbox value ="#{ordNMDSBean.var_arrowsOpts}"/> 
-                            
+                                <p:selectBooleanCheckbox value ="#{ordPCOABean.var_arrowsOpts}"/> 
+                           
                             <p:panelGrid></p:panelGrid>
                             <p:panelGrid></p:panelGrid>
-                            
+                        
                             <h:outputLabel style="font-weight: bold" value="Add Environmental Arrows:"/>
-                                <p:selectBooleanCheckbox value ="#{ordNMDSBean.env_arrowsOpts}"/> 
-                            
+                                <p:selectBooleanCheckbox value ="#{ordPCOABean.env_arrowsOpts}"/> 
+                           
                             <p:panelGrid></p:panelGrid>
                             <p:panelGrid></p:panelGrid>
-                            
+                        
                             <h:outputLabel style="font-weight: bold" value="Add Environmental Centroids:"/>
-                                <p:selectBooleanCheckbox value ="#{ordNMDSBean.env_centOpts}"/> 
-                            
+                                <p:selectBooleanCheckbox value ="#{ordPCOABean.env_centOpts}"/> 
+                           
                             <p:panelGrid></p:panelGrid>
                             <p:panelGrid></p:panelGrid>
-                            
+                        
                             <h:outputLabel style="font-weight: bold" value="Display Sample Names:"/>
-                                <p:selectBooleanCheckbox value ="#{ordNMDSBean.sampleNamesOpts}"/> 
-                            
+                                <p:selectBooleanCheckbox value ="#{ordPCOABean.sampleNamesOpts}"/> 
+  
                             <p:panelGrid></p:panelGrid>
                             <p:panelGrid></p:panelGrid>
-                            
+            
                             <h:outputLabel style="font-weight: bold" value="Use Point Styles for Grouping:"/>
-                                <p:selectBooleanCheckbox value ="#{ordNMDSBean.point_optionsOpts}"/> 
-                            
+                                <p:selectBooleanCheckbox value ="#{ordPCOABean.point_optionsOpts}"/> 
+  
                             <p:panelGrid></p:panelGrid>
                             <p:panelGrid></p:panelGrid>
-                            
+            
                             <h:outputLabel style="font-weight: bold" value="Color Palette:"/>
-                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordNMDSBean.ordColorOpts}">
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordPCOABean.ordColorOpts}">
                                     <f:selectItems value="#{applicationBean1.ordColorPaletteOpts}" />
                                 </p:selectOneMenu> 
 
@@ -91,8 +97,8 @@
                                              style="background: #75bafb; border: 5px #75bafb; color: black"
                                             onclick="PF('statusDialog').show()"
                                             oncomplete="PF('statusDialog').hide()"  
-                                            update=":ordNMDS:form1:nmdsPane1  :cmdPane" 
-                                            actionListener="#{ordNMDSBean.nmdsUpdate_action()}"/>  
+                                            update=":ordPCOA:form1:pcoaPane1  :cmdPane" 
+                                            actionListener="#{ordPCOABean.pcoaUpdate_action()}"/>  
                         
 <!--                                          -->
                         </h:panelGrid>
@@ -115,9 +121,9 @@
                             </h:panelGroup>                            
                         </h:panelGrid>   
                         
-                        <h:panelGrid id="nmdsPane1" style="width: 100%;">
+                        <h:panelGrid id="pcoaPane1" style="width: 100%;">
                              <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
-                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('ord_nmds_2D')}" alt="nmds2dimage"/>
+                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('ord_pcoa_2D')}" alt="pcoa2dimage"/>
                             </h:panelGrid>                           
                             
                         </h:panelGrid>  
@@ -127,26 +133,32 @@
                 <p:tab title ="Scree Plot" titleStyleClass="p-tab-nav">
                     <h:form id="form2">
                         <p>
-                        NMDS is performed on numeric data.               
+                        PCOA is performed on numeric data.               
                         </p>
                         <h:panelGrid id="panelGrid" columns="4" cellpadding="3" columnClasses="colRight, colRight, colRight, colLast">
                             
                         <p:panelGrid></p:panelGrid>
-                                                                          
+                                                        
                         <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
-                            <p:selectBooleanCheckbox value ="#{ordNMDSBean.doOriginal}"/> 
+                        <p:selectBooleanCheckbox value ="#{ordPCOABean.doOriginal}"/> 
                         
                         <p:panelGrid></p:panelGrid>
                         <p:panelGrid></p:panelGrid>
-                                                        
+
                         <h:outputLabel style="font-weight: bold" value="Perform Relative Abundance Transformation:"/>
-                            <p:selectBooleanCheckbox value ="#{ordNMDSBean.doAbundance}"/> 
+                            <p:selectBooleanCheckbox value ="#{ordPCOABean.doAbundance}"/> 
+                        
+                        <p:panelGrid></p:panelGrid>
+                        <p:panelGrid></p:panelGrid>
+
+                        <h:outputLabel style="font-weight: bold" value="Presence/Absence Species Data:"/>
+                                <p:selectBooleanCheckbox value ="#{ordPCOABean.doBinary}"/> 
                                 
                         <p:panelGrid></p:panelGrid>
                         <p:panelGrid></p:panelGrid>
-                                                        
+
                         <h:outputLabel style="font-weight: bold" value="Distance Measure:"/>
-                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordNMDSBean.vegdistOpts}">
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordPCOABean.vegdistOpts}">
                                 <f:selectItems value="#{applicationBean1.vegdistMeasureOpts}" />
                             </p:selectOneMenu> 
 
@@ -159,8 +171,8 @@
                                          style="background: #75bafb; border: 5px #75bafb; color: black"
                                         onclick="PF('statusDialog').show()"
                                         oncomplete="PF('statusDialog').hide()"  
-                                        update=":ordNMDS:form2:nmdsPane2  :cmdPane" 
-                                        actionListener="#{ordNMDSBean.nmdsUpdate_action()}"/>
+                                        update=":ordPCOA:form2:pcoaPane2  :cmdPane" 
+                                        actionListener="#{ordPCOABean.pcoaUpdate_action()}"/>
                         </h:panelGrid>                       
                         <h:panelGrid class="resultsBar" columns="2">
                             <h:panelGroup>
@@ -180,43 +192,41 @@
                             
                             </h:panelGroup>                            
                         </h:panelGrid> 
-                        <h:panelGrid id="nmdsPane2" style="text-align: center; width: 100%;">
-                            <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('ord_nmds_scree')}" alt="nmdsscreeimage"/>
+                        <h:panelGrid id="pcoaPane2" style="text-align: center; width: 100%;">
+                            <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('ord_pcoa_scree')}" alt="pcoascreeimage"/>
                         </h:panelGrid>        
                     </h:form>
                 </p:tab>
-                <p:tab title ="Stress Plot" titleStyleClass="p-tab-nav">
+                <p:tab title ="Shepard Plot" titleStyleClass="p-tab-nav">
                     <h:form id="form3">
                         <p>
-                        NMDS is performed on numeric data.               
+                        PCOA is performed on numeric data.               
                         </p>
                         <h:panelGrid id="panelGrid" columns="4" cellpadding="3" columnClasses="colRight, colRight, colRight, colLast">
                             
                         <p:panelGrid></p:panelGrid>
-                                                                                 
+                                                                                    
                         <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
-                            <p:selectBooleanCheckbox value ="#{ordNMDSBean.doOriginal}"/> 
-
-                        <p:panelGrid></p:panelGrid>
-                        <p:panelGrid></p:panelGrid>                        
-                        
-                        <h:outputLabel style="font-weight: bold" value="Perform Relative Abundance Transformation:"/>
-                            <p:selectBooleanCheckbox value ="#{ordNMDSBean.doAbundance}"/> 
+                            <p:selectBooleanCheckbox value ="#{ordPCOABean.doOriginal}"/> 
                                 
                         <p:panelGrid></p:panelGrid>
                         <p:panelGrid></p:panelGrid>
-                        
-                        <h:outputLabel style="font-weight: bold" value="Distance Measure:"/>
-                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordNMDSBean.vegdistOpts}">
-                                <f:selectItems value="#{applicationBean1.vegdistMeasureOpts}" />
-                            </p:selectOneMenu> 
 
+                        <h:outputLabel style="font-weight: bold" value="Perform Relative Abundance Transformation:"/>
+                            <p:selectBooleanCheckbox value ="#{ordPCOABean.doAbundance}"/> 
+                                
                         <p:panelGrid></p:panelGrid>
                         <p:panelGrid></p:panelGrid>
-                        
-                        <h:outputLabel style="font-weight: bold" value="Dimension:"/>
-                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordNMDSBean.ordStressDimOpts}">
-                                <f:selectItems value="#{applicationBean1.ordStressDimensionOpts}" />
+
+                        <h:outputLabel style="font-weight: bold" value="Presence/Absence Species Data:"/>
+                                <p:selectBooleanCheckbox value ="#{ordPCOABean.doBinary}"/> 
+                                
+                        <p:panelGrid></p:panelGrid>
+                        <p:panelGrid></p:panelGrid>
+                                
+                        <h:outputLabel style="font-weight: bold" value="Distance Measure:"/>
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordPCOABean.vegdistOpts}">
+                                <f:selectItems value="#{applicationBean1.vegdistMeasureOpts}" />
                             </p:selectOneMenu> 
 
                         <p:panelGrid></p:panelGrid>
@@ -228,8 +238,8 @@
                                          style="background: #75bafb; border: 5px #75bafb; color: black"
                                         onclick="PF('statusDialog').show()"
                                         oncomplete="PF('statusDialog').hide()"  
-                                        update=":ordNMDS:form3:nmdsPane3  :cmdPane" 
-                                        actionListener="#{ordNMDSBean.nmdsUpdate_action()}"/>
+                                        update=":ordPCOA:form3:pcoaPane3  :cmdPane" 
+                                        actionListener="#{ordPCOABean.pcoaUpdate_action()}"/>
                         </h:panelGrid>                       
                         <h:panelGrid class="resultsBar" columns="2">
                             <h:panelGroup>
@@ -242,13 +252,15 @@
                                     <i class="fas fa-palette"></i>
                                     <i class="fa fa-table"></i>
                                     <i class="fa fa-question-circle"></i>
-<!--                                <i class="fas fa-table"></i>    -->
+<!--                                                                       <i class="fas fa-table"></i>
+                                   <i class="fas fa-palette"></i>
+                                   <i class="far fa-question-circle"></i>-->
                                 </h:panelGrid>
                             
                             </h:panelGroup>                            
                         </h:panelGrid> 
-                        <h:panelGrid id="nmdsPane3" style="text-align: center; width: 100%;">
-                            <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('ord_nmds_stress')}" alt="nmdsstressimage"/>
+                        <h:panelGrid id="pcoaPane3" style="text-align: center; width: 100%;">
+                            <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('ord_pcoa_stress')}" alt="pcoastressimage"/>
                         </h:panelGrid>        
                     </h:form>
                 </p:tab>

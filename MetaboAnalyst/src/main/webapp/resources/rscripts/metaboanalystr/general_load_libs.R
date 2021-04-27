@@ -71,3 +71,27 @@ load_caret <- function(){
 load_glmnet <- function(){
   library(glmnet)
 }
+
+load_dplyr <- function(){
+  library(dplyr)
+}
+
+load_viridis <- function(){
+  library(viridis)
+}
+
+load_RJSONIO <- function(){
+  library(RJSONIO)
+}
+
+load_Metrics <- function(){
+  library(Metrics)
+}
+
+load_ade4 <- function(){
+  library(ade4)
+}
+
+load_adegraphics <- function(){
+  library(adegraphics)
+}

@@ -24,7 +24,7 @@ import org.rosuda.REngine.Rserve.RConnection;
 
 /**
  *
- * @author jianguox
+ * @author Louisa Normington
  */
 @ManagedBean(name = "oaBean")
 public class OABean implements Serializable {
@@ -39,6 +39,15 @@ public class OABean implements Serializable {
                     case "NMDS":
                         doDefaultNMDS();
                         break;
+                    case "PCOA":
+                        doDefaultPCOA();
+                        break;
+                    case "CIA":
+                        doDefaultCIA();
+                        break;
+//                    case "ANOSIM":
+//                        doDefaultANOSIM();
+//                        break;
                 }
             }
 
@@ -46,9 +55,32 @@ public class OABean implements Serializable {
     }
 
     private void doDefaultNMDS() {
-        System.out.println("HELLO RIGHT BEFORE NMDS");
-        OAUtils.CreateNMDSOA(sb);
-        OAUtils.PlotNMDSscreeOA(sb, sb.getCurrentImage("ord_nmds_scree"), "png", 72);
+        OAUtils.CreateNMDSOrdination(sb, "NULL", false, false, "NULL", "NULL", "NULL");
+        OAUtils.PlotNMDS2DOrdination(sb, false, false, false, false, false, false, "NULL", "NULL", "NULL", sb.getCurrentImage("ord_nmds_2D"), "png", 72, "NULL");
+//        OAUtils.PlotNMDS3DOrdination(sb, "NULL", "NULL", "NULL", sb.getCurrentImage("ord_nmds_3D"), "png", 72, "NULL");
+        OAUtils.PlotNMDSstressOrdination(sb, "NULL", sb.getCurrentImage("ord_nmds_stress"), "png", 72, "NULL");
+        OAUtils.PlotNMDSscreeOrdination(sb, sb.getCurrentImage("ord_nmds_scree"), "png", 72, "NULL");
     }
     
+
+    private void doDefaultPCOA() {
+        OAUtils.CreatePCOAOrdination(sb, "NULL", false, false, false, "NULL", "NULL", "NULL");
+        OAUtils.PlotPCOA2DOrdination(sb, false, false, false, false, false, false, "NULL", "NULL", "NULL", sb.getCurrentImage("ord_pcoa_2D"), "png", 72, "NULL");
+//        OAUtils.PlotPCOA3DOrdination(sb, "NULL", "NULL", "NULL", sb.getCurrentImage("ord_pcoa_3D"), "png", 72, "NULL");
+        OAUtils.PlotPCOAstressOrdination(sb, sb.getCurrentImage("ord_pcoa_stress"), "png", 72, "NULL");
+        OAUtils.PlotPCOAscreeOrdination(sb, sb.getCurrentImage("ord_pcoa_scree"), "png", 72, "NULL");
+    }
+    
+    
+    private void doDefaultCIA() {
+        OAUtils.CreateCIAOrdination(sb, false, "NULL", "NULL", "NULL", "NULL");
+        OAUtils.PlotCIAscatterOrdination(sb, "NULL", "NULL", "NULL", sb.getCurrentImage("ord_cia_scatter"), "png", 72, "NULL");
+        OAUtils.PlotCIAloadingOrdination(sb, "NULL", sb.getCurrentImage("ord_cia_loading"), "png", 72, "NULL");
+        OAUtils.PlotCIAscreeOrdination(sb, sb.getCurrentImage("ord_cia_scree"), "png", 72, "NULL");  
+    }
+//    
+//    private void doDefaultANOSIM() {
+//        OAUtils.CreateANOSIMOrdination(sb);
+//        OAUtils.PlotANOSIMOrdination(sb, "NULL", sb.getCurrentImage("ord_cia_scatter"), "png", 72);
+//    }
 }
