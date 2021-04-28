@@ -1,16 +1,14 @@
 #'Perform CIA
 #'@description Perform co-inertia analysis between 2 data sets with the same rows
 #'@param mSetObj Input name of the created mSet Object
-#'@param envData Input name of environmental data set
-#'@param metaData  Set grouping data, default is categorical columns in data set
-#'@param data Which data set to use, normalized (default) or original
+#'@param data Boolean for which data set to use, normalized (default) or original
 #'@param type Set type for data sets, drop down options are "Categorical" or "Numeric" (default)
 #'@param env_text Input environmental data column names (java uses text box to obtain string)
 #'@author Louisa Normington\email{normingt@ualberta.ca}
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2)
 #'@export
-ord.cia <- function(mSetObj=NA, data="NULL", type="NULL", metaData="NULL", envData="NULL", env_text="NULL") {
+ord.cia <- function(mSetObj=NA, data=NULL, type="NULL", env_text="NULL") {
  
   library("ade4")
   library("adegraphics")
@@ -19,19 +17,20 @@ ord.cia <- function(mSetObj=NA, data="NULL", type="NULL", metaData="NULL", envDa
  
   #Extract input from mSetObj
   mSetObj <- .get.mSet(mSetObj)
-  if (data=="NULL") { #normalized data as input
+
+  ####FOR TESTING####
+  metaData <- .readDataTable("/home/louisa/Wegan/Wegan/MetaboAnalyst/src/main/webapp/resources/rscripts/metaboanalystr/test_data/dune_meta.csv")
+  envData <- .readDataTable("/home/louisa/Wegan/Wegan/MetaboAnalyst/src/main/webapp/resources/rscripts/metaboanalystr/test_data/dune_env.csv")
+  envData$Moisture <- as.numeric(as.character(envData$Moisture)) #Require more than one numeric column for numeric option
+
+  if (is.null(data)) { #normalized data as input
     input <- mSetObj$dataSet$norm
   } else { #original data as input
     input <- mSetObj$dataSet$orig
   }
  
-  ####FOR TESTING####
-  data("dune.env")
-  envData <- dune.env
-  envData$Moisture <- as.numeric(as.character(envData$Moisture)) #Require more than one numeric column for numeric option
- 
   #environmental data, used to correlate with rows in main data set
-  if (is.data.frame(envData)=="NULL") { #No user uplaoded environmental data
+  if (is.data.frame(envData)==FALSE) { #No user uplaoded environmental data
     #AddErrMsg("No constraining dataset uploaded! Coinertia analysis requires two datasets for comparison. Please update dataset(s) or try a non-constraining method such as PCA, PCoA, NMDS, CA, Bray-Curtis or DCA.")
     stop("No constraining dataset uploaded! Coinertia analysis requires two datasets for comparison. Please update dataset(s) or try a non-constraining method such as PCA, PCoA, NMDS, CA, Bray-Curtis or DCA.")
   } else {  #User uplaoded environmental data
@@ -46,11 +45,8 @@ ord.cia <- function(mSetObj=NA, data="NULL", type="NULL", metaData="NULL", envDa
   cat("Identify environmental variables for co-inertia analysis using the column names with commas in between.")
  
   #Set up environmental data using user selected columns
-  if (is.null(env_text)) {
+  if (env_text=="NULL") {
     env_text1 <- colnames(envData1) #Default is the all env columns
-    cat(paste0("You have selected these constraining variables: ", paste(env_text1, collapse=", "), "."))
-    cat("If the selection is not what you intended, reenter environmental variable(s) in the text box, using the column names with commas in between.")
-   
   } else {
     env_text1 <- env_text #taken from text box by java, fed as string into R code
     env_text1 <- gsub("\n", "", env_text1, fixed=TRUE) #fixed=TRUE means we are dealing with one string, versus a vector of strings (fixed=FALSE)
@@ -59,14 +55,12 @@ ord.cia <- function(mSetObj=NA, data="NULL", type="NULL", metaData="NULL", envDa
     env_text1 <- gsub(" ", "", env_text1, fixed=TRUE)
     env_text1 <- gsub(":", "+", env_text1, fixed=TRUE)
     env_text1 <- gsub("*", "+", env_text1, fixed=TRUE)
-    cat(paste0("You have selected these constraining variables: ", gsub("+", ", ", env_text1, fixed=TRUE), "."))
-    cat("If the selection is not what you intended, reenter environmental variable(s) in the text box, using the column names with commas in between.")
   }
  
   env_cols <- unlist(strsplit(env_text1, "+", fixed=TRUE))
   env_data <- as.data.frame(envData1[,which(colnames(envData1) %in% env_cols)])
   colnames(env_data) <- env_cols
- 
+  
   if (type=="NULL") { #data for comparison is numeric
     type1 <- "Numeric"
     method <- "PCA"
@@ -83,6 +77,9 @@ ord.cia <- function(mSetObj=NA, data="NULL", type="NULL", metaData="NULL", envDa
       stop("Environmental data set has less than 2 numeric columns! Please adjust your environmental data set and rerun analysis.")
     }
    
+    cat(paste0("You have selected these numeric constraining variables: ", paste(colnames(envData.1), collapse=", "), "."))
+    cat("If the selection is not what you intended, reenter environmental variable(s) in the text box, using the column names with commas in between.")
+  
     dudi_data <- dudi.pca(input.1, scannf=FALSE) #Create Duality Diagram for both data sets
     dudi_env <- dudi.pca(envData.1, scannf=FALSE)
    
@@ -102,6 +99,9 @@ ord.cia <- function(mSetObj=NA, data="NULL", type="NULL", metaData="NULL", envDa
       stop("Environmental data set has less than 2 categorical columns! Please adjust your environmental data set and rerun analysis.")
     }
    
+    cat(paste0("You have selected these categorical constraining variables: ", paste(colnames(envData.1), collapse=", "), "."))
+    cat("If the selection is not what you intended, reenter environmental variable(s) in the text box, using the column names with commas in between.")
+  
     dudi_data <- dudi.coa(input.1, scannf=FALSE)
     dudi_env <- dudi.coa(envData.1, scannf=FALSE)
    
@@ -184,15 +184,15 @@ ord.cia <- function(mSetObj=NA, data="NULL", type="NULL", metaData="NULL", envDa
 #'@param meta_colname Meta data column to use for grouping, Can be user inputted where options are given to java using function meta.columns()
 #'@param imgName Input the image name
 #'@param format Select the image format, "png" or "pdf", default is "png"
-#'@param dpi Input the dpi. If the image format is "pdf", users need not define the dpi. For "png" images,
+#'@param dpi Input the dpi as int. If the image format is "pdf", users need not define the dpi. For "png" images,
 #'the default dpi is 72. It is suggested that for high-resolution images, select a dpi of 300.  
-#'@param width Input the width, there are 2 default widths. The first, width=NA, is 10.5.
+#'@param width Input the width as int, there are 2 default widths. The first, width=NA, is 10.5.
 #'The second default is width=0, where the width is 7.2. Otherwise users can input their own width
 #'@author Louisa Normington\email{normingt@ualberta.ca}
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2)
 #'@export
-Plot.cia.scatter <- function(mSetObj=NA, meta_group=NULL, meta_colname=NULL, color=NULL, imgName, format="png", dpi=72, width=NA) {
+Plot.cia.scatter <- function(mSetObj=NA, meta_group=NULL, meta_colname="NULL", color="NULL", imgName, format="png", dpi=72, width=NA) {
  
   library("ade4")
   library("adegraphics")
@@ -223,12 +223,12 @@ Plot.cia.scatter <- function(mSetObj=NA, meta_group=NULL, meta_colname=NULL, col
   par(xpd=FALSE, mar=c(5.1, 4.1, 4.1, 2.1))
  
   if (is.data.frame(metaData)==FALSE) { #No meta (grouping) data
-    scatter.var <- s.label(cia$mX, pgrid.draw=FALSE, ppoints.cex=1, plabels.cex=0, main="Co-Inertia Scatter Plot with Groupings\nArrows from Axis 2 Position to Axis 1 Position\n", xlab="\nAxis 1, Constraining Data Set Variance\n", ylab="Axis 2, Main Data Set Variance\n", plot = FALSE)
-    scatter.env <- s.label(cia$mY, pgrid.draw=FALSE, ppoints.cex=1, plabels.cex=0, main="Co-Inertia Scatter Plot with Groupings\nArrows from Axis 2 Position to Axis 1 Position\n", xlab="\nAxis 1, Constraining Data Set Variance\n", ylab="Axis 2, Main Data Set Variance\n", plot = FALSE)
-    plot_1 <- superpose(scatter.var, scatter.env, plot=FALSE)
-    plot_2 <- s.match(scatter.var@data$dfxy, scatter.env@data$dfxy)
-    update(plot_2, plabels.box.draw=TRUE, pgrid.draw=FALSE, plabels.cex=.8, plabels.optim=TRUE, plabels=row.names(input), ppoints.cex=0.5, psub.cex=0, plot=TRUE, main="Co-Inertia Scatter Plot\nArrows from Axis 2 Position to Axis 1 Position\n", xlab="\nAxis 1, Constraining Data Set Variance\n", ylab="Axis 2, Main Data Set Variance\n")
-    dev.off()
+    s.label(cia$mX, pgrid.draw=FALSE, ppoints.cex=1, plabels.cex=0, main="Co-Inertia Scatter Plot with Groupings\nArrows from Axis 2 Position to Axis 1 Position\n", xlab="\nAxis 1, Constraining Data Set Variance\n", ylab="Axis 2, Main Data Set Variance\n", plot = TRUE)
+    #scatter.var <- s.label(cia$mX, pgrid.draw=FALSE, ppoints.cex=1, plabels.cex=0, main="Co-Inertia Scatter Plot with Groupings\nArrows from Axis 2 Position to Axis 1 Position\n", xlab="\nAxis 1, Constraining Data Set Variance\n", ylab="Axis 2, Main Data Set Variance\n", plot = FALSE)
+    #scatter.env <- s.label(cia$mY, pgrid.draw=FALSE, ppoints.cex=1, plabels.cex=0, main="Co-Inertia Scatter Plot with Groupings\nArrows from Axis 2 Position to Axis 1 Position\n", xlab="\nAxis 1, Constraining Data Set Variance\n", ylab="Axis 2, Main Data Set Variance\n", plot = FALSE)
+    #plot_1 <- superpose(scatter.var, scatter.env, plot=FALSE)
+    #plot_2 <- s.match(scatter.var@data$dfxy, scatter.env@data$dfxy)
+    #update(plot_2, plabels.box.draw=TRUE, pgrid.draw=FALSE, plabels.cex=.8, plabels.optim=TRUE, plabels=row.names(input), ppoints.cex=0.5, psub.cex=0, plot=TRUE, main="Co-Inertia Scatter Plot\nArrows from Axis 2 Position to Axis 1 Position\n", xlab="\nAxis 1, Constraining Data Set Variance\n", ylab="Axis 2, Main Data Set Variance\n")
   } else { #Yes meta data
     if (is.null(meta_group)) { #default is no meta grouping with color
       scatter.var <- s.label(cia$mX, pgrid.draw=FALSE, ppoints.cex=1, plabels.cex=0, main="Co-Inertia Scatter Plot with Groupings\nArrows from Axis 2 Position to Axis 1 Position\n", xlab="\nAxis 1, Constraining Data Set Variance\n", ylab="Axis 2, Main Data Set Variance\n", plot = FALSE)
@@ -236,9 +236,8 @@ Plot.cia.scatter <- function(mSetObj=NA, meta_group=NULL, meta_colname=NULL, col
       plot_1 <- superpose(scatter.var, scatter.env, plot=FALSE)
       plot_2 <- s.match(scatter.var@data$dfxy, scatter.env@data$dfxy)
       update(plot_2, plabels.box.draw=TRUE, pgrid.draw=FALSE, plabels.cex=.8, plabels.optim=TRUE, plabels=row.names(input), ppoints.cex=0.5, psub.cex=0, plot=TRUE, main="Co-Inertia Scatter Plot\nArrows from Axis 2 Position to Axis 1 Position\n", xlab="\nAxis 1, Constraining Data Set Variance\n", ylab="Axis 2, Main Data Set Variance\n")
-      dev.off()
-  } else { #grouping by meta data with color
-      if (is.null(meta_colname)) { #if no column user selected
+    } else { #grouping by meta data with color
+      if (meta_colname=="NULL") { #if no column user selected
         meta_colname1 <- colnames(metaData)[1] #Default is first meta data column
       } else { #User selected, java uses meta.columns function below to offer user options in drop down menu
         meta_colname1 <- meta_colname
@@ -246,7 +245,7 @@ Plot.cia.scatter <- function(mSetObj=NA, meta_group=NULL, meta_colname=NULL, col
      
       n <- length(levels(metaData[,meta_colname1])) #Determine how many different colors are needed based on the levels of theg rouping data column of interest
      
-      if (is.null(color)) { #Default colors
+      if (color=="NULL") { #Default colors
         colors <- viridis(n+1) #Assign a color to each level using the viridis pallete (viridis package)
       } else if (color=="plasma") {
         colors <- plasma(n+1) #Assign a color to each level using the plasma pallete (viridis package)
@@ -261,9 +260,9 @@ Plot.cia.scatter <- function(mSetObj=NA, meta_group=NULL, meta_colname=NULL, col
       plot_1 <- superpose(scatter.var, scatter.env, plot=FALSE)
       plot_2 <- s.match(scatter.var@stats$means, scatter.env@stats$means, plabels.cex = .9, labels=c(levels(metaData[,meta_colname1])), plabels.boxes.border=colors, plines.lwd = 2, plot = FALSE)
       superpose(plot_1, plot_2, plot=TRUE)
-      dev.off()
     }
   }
+  dev.off()
 }
 
 
@@ -283,7 +282,7 @@ Plot.cia.scatter <- function(mSetObj=NA, meta_group=NULL, meta_colname=NULL, col
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2)
 #'@export
-Plot.cia.loading <- function(mSetObj=NA, dataSet=NULL, imgName, format="png", dpi=72, width=NA) {
+Plot.cia.loading <- function(mSetObj=NA, dataSet="NULL", imgName, format="png", dpi=72, width=NA) {
  
   library("ade4")
   library("adegraphics")
@@ -310,7 +309,7 @@ Plot.cia.loading <- function(mSetObj=NA, dataSet=NULL, imgName, format="png", dp
   Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
   par(xpd=FALSE, mar=c(5.1, 4.1, 4.1, 2.1))
  
-  if (is.null(dataSet)) { #Main data set
+  if (dataSet=="NULL") { #Main data set
     s.arrow(cia$c1, plabels.box.draw=FALSE, pgrid.draw=FALSE, plabels.cex=1, psub.cex=0, plot=TRUE, xlab="\nLoadings 1\n", ylab="Loadings 2\n", main="Co-Inertia Analysis Loading Plot\n")
   } else { #env data set
     s.arrow(cia$l1, plabels.box.draw=FALSE, pgrid.draw=FALSE, plabels.cex=1, psub.cex=0, plot=TRUE, xlab="\nLoadings 1\n", ylab="Loadings 2\n", main="Co-Inertia Analysis Loading Plot\n")
@@ -385,7 +384,7 @@ Plot.cia.scree <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA) 
 #'License: GNU GPL (>= 2)
 #'@export
 
-meta.columns <- function(mSetObj=NA) {
+cia.meta.columns <- function(mSetObj=NA) {
  
   mSetObj <- .get.mSet(mSetObj)
  

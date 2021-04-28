@@ -174,14 +174,14 @@ public class OrdinationPCOABean implements Serializable {
     }
     
 
-// ACTION BUTTONS //
-    public void pcoaUpdate_action() {
-        OAUtils.CreatePCOAOrdination(sb, vegdistOpts, doAbundance, doOriginal, doBinary, "NULL", "NULL", "NULL");
-        OAUtils.PlotPCOA2DOrdination(sb, ellipseOpts, var_arrowsOpts, env_arrowsOpts, env_centOpts, sampleNamesOpts, point_optionsOpts, ordColorOpts, "NULL", "NULL", sb.getCurrentImage("ord_pcoa_2D"), "png", 72, "NULL");
-//        OAUtils.PlotPCOA3DOrdination(sb, "NULL", "NULL", "NULL", sb.getCurrentImage("ord_pcoa_3D"), "png", 72, "NULL");
-       OAUtils.PlotPCOAstressOrdination(sb, sb.getCurrentImage("ord_pcoa_stress"), "png", 72, "NULL");
-       OAUtils.PlotPCOAscreeOrdination(sb, sb.getCurrentImage("ord_pcoa_scree"), "png", 72, "NULL");    
-    }
+//// ACTION BUTTONS //
+//    public void pcoaUpdate_action() {
+//        OAUtils.CreatePCOAOrdination(sb, vegdistOpts, doAbundance, doOriginal, doBinary, "NULL", "NULL", "NULL");
+//        OAUtils.PlotPCOA2DOrdination(sb, ellipseOpts, var_arrowsOpts, env_arrowsOpts, env_centOpts, sampleNamesOpts, point_optionsOpts, ordColorOpts, "NULL", "NULL", sb.getCurrentImage("ord_pcoa_2D"), "png", 72, "NULL");
+////        OAUtils.PlotPCOA3DOrdination(sb, "NULL", "NULL", "NULL", sb.getCurrentImage("ord_pcoa_3D"), "png", 72, "NULL");
+//       OAUtils.PlotPCOAstressOrdination(sb, sb.getCurrentImage("ord_pcoa_stress"), "png", 72, "NULL");
+//       OAUtils.PlotPCOAscreeOrdination(sb, sb.getCurrentImage("ord_pcoa_scree"), "png", 72, "NULL");    
+//    }
     
 }
 

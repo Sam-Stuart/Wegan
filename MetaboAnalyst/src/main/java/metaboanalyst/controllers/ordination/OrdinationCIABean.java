@@ -14,7 +14,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import metaboanalyst.controllers.SessionBean1;
 import metaboanalyst.rwrappers.UniVarTests;
-import metaboanalyst.rwrappers.UniVarTests;
+import metaboanalyst.rwrappers.CAUtils;
 import metaboanalyst.rwrappers.OAUtils;
 import metaboanalyst.rwrappers.RDataUtils;
 
@@ -47,6 +47,27 @@ public class OrdinationCIABean implements Serializable {
     }
     
     
+    private boolean doMetaGroup = false; 
+    
+    public boolean isdoMetaGroup() {
+        return doMetaGroup;
+    }
+    
+    public void setdoMetaGroup(boolean doMetaGroup) {
+        this.doMetaGroup = doMetaGroup;
+    }
+    
+    
+    //TEXT BOX
+    private String envInput = "";
+
+    public String getenvInput() {
+        return envInput;
+    }
+
+    public void setenvInput(String envInput) {
+        this.envInput = envInput;
+    }
     
     
     //STATIC DROPDOWN
@@ -83,13 +104,42 @@ public class OrdinationCIABean implements Serializable {
     public void setcoiaTypeOpts(String coiaTypeOpts) {
         this.coiaTypeOpts = coiaTypeOpts;
     }
+    
 
+
+    //DYNAMIC DROPDOWN 
+    private SelectItem[] ciaMetaColumnOpts = null;
+    
+    public SelectItem[] getCIAMetaColumnOpts(){
+        String[] columns = OAUtils.ciaGetMetaColumns(sb);
+        int columnsLen = columns.length; 
+        ciaMetaColumnOpts = new SelectItem[columnsLen];
+        List<String> columnNames = Arrays.asList(columns);
+        for (int i = 0; i < columnsLen; i++) {
+            ciaMetaColumnOpts[i] = new SelectItem(columnNames.get(i), columnNames.get(i));
+        }
+        return ciaMetaColumnOpts;
+    }
+    
+    private String ciaMetaColumnName = getCIAMetaColumnOpts()[0].getLabel();
+    
+    public String getCIAMetaColumnName() {
+        return ciaMetaColumnName;
+    }
+
+    public void setCIAMetaColumnName(String ciaMetaColumnName) {
+        this.ciaMetaColumnName = ciaMetaColumnName;
+    }
+
+    
+    
+    
 // ACTION BUTTONS //
     public void ciaUpdate_action() {
-        OAUtils.CreateCIAOrdination(sb, doOriginal, coiaTypeOpts, "NULL", "NULL", "NULL");
-        OAUtils.PlotCIAscatterOrdination(sb, "NULL", "NULL", ordColorOpts, sb.getCurrentImage("ord_cia_scatter"), "png", 72, "NULL");
-        OAUtils.PlotCIAloadingOrdination(sb, coiaDataSetOpts, sb.getCurrentImage("ord_cia_loading"), "png", 72, "NULL");
-        OAUtils.PlotCIAscreeOrdination(sb, sb.getCurrentImage("ord_cia_scree"), "png", 72, "NULL");    
+        OAUtils.CreateCIAOrdination(sb, coiaTypeOpts, envInput, doOriginal); 
+        OAUtils.PlotCIAscatterOrdination(sb, doMetaGroup, ciaMetaColumnName, ordColorOpts, sb.getCurrentImage("ord_cia_scatter"), "png", 72); //ordMetaColnameOpts is a dynamic dropdown
+        OAUtils.PlotCIAloadingOrdination(sb, coiaDataSetOpts, sb.getCurrentImage("ord_cia_loading"), "png", 72);
+        OAUtils.PlotCIAscreeOrdination(sb, sb.getCurrentImage("ord_cia_scree"), "png", 72);    
     }
     
 }

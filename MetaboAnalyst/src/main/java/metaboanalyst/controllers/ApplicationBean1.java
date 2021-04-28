@@ -245,7 +245,7 @@ public class ApplicationBean1 implements Serializable {
         ciaTypeOpts = new SelectItem[2];
         ciaTypeOpts[0] = new SelectItem("numeric", "Numeric Data Types");
         ciaTypeOpts[1] = new SelectItem("categorical", "Categorical Data Types");
-       
+                
         ciaDataSetOpts = new SelectItem[2];
         ciaDataSetOpts[0] = new SelectItem("main", "Main Data Set");
         ciaDataSetOpts[1] = new SelectItem("env", "Constraining Data Set");

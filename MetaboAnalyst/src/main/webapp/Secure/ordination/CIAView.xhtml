@@ -35,11 +35,26 @@
                             <p:panelGrid></p:panelGrid>
                             <p:panelGrid></p:panelGrid>
             
+                            <h:outputLabel style="font-weight: bold" value="Indicate constraining variables using the column names with commas in between:"/>
+                            <p:inputText style="width:400px; height:100px" value="#{ordCIABean.envInput}"/> 
+                                                        
+                            <p:panelGrid></p:panelGrid>
+                            <p:panelGrid></p:panelGrid>
+            
                             <h:outputLabel style="font-weight: bold" value="Color Palette:"/>
                                 <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordCIABean.ordColorOpts}">
                                     <f:selectItems value="#{applicationBean1.ordColorPaletteOpts}" />
                                 </p:selectOneMenu> 
-
+                            
+                            <p:panelGrid></p:panelGrid>
+                            <p:panelGrid></p:panelGrid>
+            
+                            <h:outputLabel style="font-weight: bold" value="Column for Grouping Main Data Set:"/>
+                            
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordCIABean.ciaMetaColumnName}">
+                                <f:selectItems value="#{ordCIABean.ciaMetaColumnOpts}" />
+                            </p:selectOneMenu>
+                                                        
                             <p:panelGrid></p:panelGrid>
                             <p:panelGrid></p:panelGrid>
                             <p:panelGrid></p:panelGrid>
