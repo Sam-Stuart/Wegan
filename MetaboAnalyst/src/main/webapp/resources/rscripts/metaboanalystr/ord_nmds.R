@@ -452,7 +452,7 @@ Plot.NMDS.3D <- function(mSetObj=NA, color=NULL, var_arrows=NULL, meta_col_color
   mSetObj <- .get.mSet(mSetObj)
   input <- mSetObj$analSet$nmds$input
   nmds3D <- mSetObj$analSet$nmds$nmds3D
-  metaData <- mSetObj$analSet$nmds$meta
+  metaData <- mSetObj$analSet$nmds$metaData
   samp.scores3D <- mSetObj$analSet$nmds$sample.scores3D
   var.scores3D <- mSetObj$analSet$nmds$var.scores3D
   distance <- mSetObj$analSet$nmds$distance

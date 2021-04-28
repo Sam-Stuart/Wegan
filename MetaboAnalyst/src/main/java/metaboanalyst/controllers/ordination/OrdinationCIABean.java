@@ -32,8 +32,6 @@ public class OrdinationCIABean implements Serializable {
 
     private final SessionBean1 sb = (SessionBean1) DataUtils.findBean("sessionBean1");
         
-    //Hard code insupplementary data for testing:
-//    envData <- .readDataTable("/home/louisa/Wegan/MetaboAnalyst/src/main/webapp/resources/data/dune_env.csv")
     
     //CHECKBOX
     private boolean doOriginal = false; 
@@ -42,7 +40,7 @@ public class OrdinationCIABean implements Serializable {
         return doOriginal;
     }
     
-    public void setdoOriginal(boolean doOriginal) {
+    public void setDoOriginal(boolean doOriginal) {
         this.doOriginal = doOriginal;
     }
     
@@ -53,7 +51,7 @@ public class OrdinationCIABean implements Serializable {
         return doMetaGroup;
     }
     
-    public void setdoMetaGroup(boolean doMetaGroup) {
+    public void setDoMetaGroup(boolean doMetaGroup) {
         this.doMetaGroup = doMetaGroup;
     }
     
@@ -61,11 +59,11 @@ public class OrdinationCIABean implements Serializable {
     //TEXT BOX
     private String envInput = "";
 
-    public String getenvInput() {
+    public String getEnvInput() {
         return envInput;
     }
 
-    public void setenvInput(String envInput) {
+    public void setEnvInput(String envInput) {
         this.envInput = envInput;
     }
     
@@ -73,11 +71,11 @@ public class OrdinationCIABean implements Serializable {
     //STATIC DROPDOWN
     private String coiaDataSetOpts = "main";
     
-    public String getcoiaDataSetOpts() {
+    public String getCoiaDataSetOpts() {
         return coiaDataSetOpts;
     }
 
-    public void setcoiaDataSetOpts(String coiaDataSetOpts) {
+    public void setCoiaDataSetOpts(String coiaDataSetOpts) {
         this.coiaDataSetOpts = coiaDataSetOpts;
     }
 
@@ -85,11 +83,11 @@ public class OrdinationCIABean implements Serializable {
 
     private String ordColorOpts = "viridis";
     
-    public String getordColorOpts() {
+    public String getOrdColorOpts() {
         return ordColorOpts;
     }
 
-    public void setordColorOpts(String ordColorOpts) {
+    public void setOrdColorOpts(String ordColorOpts) {
         this.ordColorOpts = ordColorOpts;
     }
     
@@ -97,11 +95,11 @@ public class OrdinationCIABean implements Serializable {
 
     private String coiaTypeOpts = "numeric";
     
-    public String getcoiaTypeOpts() {
+    public String getCoiaTypeOpts() {
         return coiaTypeOpts;
     }
 
-    public void setcoiaTypeOpts(String coiaTypeOpts) {
+    public void setCoiaTypeOpts(String coiaTypeOpts) {
         this.coiaTypeOpts = coiaTypeOpts;
     }
     
@@ -110,8 +108,9 @@ public class OrdinationCIABean implements Serializable {
     //DYNAMIC DROPDOWN 
     private SelectItem[] ciaMetaColumnOpts = null;
     
-    public SelectItem[] getCIAMetaColumnOpts(){
+    public SelectItem[] getCiaMetaColumnOpts(){
         String[] columns = OAUtils.ciaGetMetaColumns(sb);
+        System.out.print(columns);
         int columnsLen = columns.length; 
         ciaMetaColumnOpts = new SelectItem[columnsLen];
         List<String> columnNames = Arrays.asList(columns);
@@ -121,20 +120,18 @@ public class OrdinationCIABean implements Serializable {
         return ciaMetaColumnOpts;
     }
     
-    private String ciaMetaColumnName = getCIAMetaColumnOpts()[0].getLabel();
-    
-    public String getCIAMetaColumnName() {
+    private String ciaMetaColumnName = getCiaMetaColumnOpts()[0].getLabel();
+        
+    public String getCiaMetaColumnName() {
         return ciaMetaColumnName;
     }
 
-    public void setCIAMetaColumnName(String ciaMetaColumnName) {
+    public void setCiaMetaColumnName(String ciaMetaColumnName) {
         this.ciaMetaColumnName = ciaMetaColumnName;
     }
-
     
     
-    
-// ACTION BUTTONS //
+// ACTION BUTTON //
     public void ciaUpdate_action() {
         OAUtils.CreateCIAOrdination(sb, coiaTypeOpts, envInput, doOriginal); 
         OAUtils.PlotCIAscatterOrdination(sb, doMetaGroup, ciaMetaColumnName, ordColorOpts, sb.getCurrentImage("ord_cia_scatter"), "png", 72); //ordMetaColnameOpts is a dynamic dropdown
