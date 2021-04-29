@@ -64,6 +64,7 @@ public class ApplicationBean1 implements Serializable {
     
     //private static final String test_dune = "/data/iris.txt";
     private static final String test_dune_weights = "/data/dune_weights.txt";
+    private static final String test_iris = "/data/iris.txt";
     
     
     //**************************************************************************
@@ -195,7 +196,7 @@ public class ApplicationBean1 implements Serializable {
         rocFormatOpts[0] = new SelectItem("rowu", "Samples in rows");
         rocFormatOpts[1] = new SelectItem("colu", "Samples in columns");
 
-        testDataOpts = new SelectItem[11];
+        testDataOpts = new SelectItem[12];
         //Changed for WEGAN testing
         testDataOpts[0] = new SelectItem("Dune", "CA");
         testDataOpts[1] = new SelectItem("BCI", "NMDS");
@@ -208,6 +209,7 @@ public class ApplicationBean1 implements Serializable {
         testDataOpts[8] = new SelectItem("gcmsspec", "GC-MS spectra");
         testDataOpts[9] = new SelectItem("Varespec", "Dispersal");
         testDataOpts[10] = new SelectItem("Linear", "Plotting");
+        testDataOpts[11] = new SelectItem("Iris", "Iris");
         
 
         //WEGAN TEST FUNCTIONS START HERE
@@ -563,8 +565,7 @@ public class ApplicationBean1 implements Serializable {
     }
 
     public String getTestIris() {
-//        return realPath + test_iris;
-          return realPath;
+        return realPath + test_iris;
     }
     
     public String getTestWeightDune() {

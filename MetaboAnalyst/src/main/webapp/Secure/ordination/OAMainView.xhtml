@@ -12,20 +12,32 @@
     <ui:define name="content">
         <h:form>
             <h:panelGrid style="padding:20px 40px 20px 40px; font-size: 13px; line-height: 25px; width:100%">
-                <h2>Select an analysis path to explore :</h2>
-                <h:panelGrid style="border: lightgray thin solid; width: 670px; margin-left: 36px; padding: 15px 20px 10px 25px; background-color: #F9F9FB; font-size: 13px;">
+                <h2>Select an analysis path to explore:</h2>
+                <h:panelGrid style="width:100%; background-color: #75bafb;"></h:panelGrid>
+                <h:panelGrid style="width:100%; background-color: white; "></h:panelGrid>
+                <h:panelGrid style="width:100%; background-color: #75bafb;"></h:panelGrid>
+                <h:panelGrid style="width:100%; background-color: white; "></h:panelGrid>
+
+                <h:panelGrid style="border: none; width: 100%; padding: 15px 20px 10px 25px; background-color: #8cbd4830; font-size: 14px;">
                     
-                    <h:panelGrid columns="3">
-                        <h:commandLink action="NMDS" onclick="PF('statusDialog').show()" value="Non-metric Multidimensional Scaling"/>
+                    <h:panelGrid>
+                        <h:commandLink id="nmds" style="margin-left: 25px" action="NMDS" onclick="PF('statusDialog').show()" value="Non-metric Multidimensional Scaling"/>
+                        <p:tooltip for="nmds" style="font-size: 11px;" value="TODO: Rewrite nmds hoverover" />
+                        
+                        <h:commandLink id="cia" style="margin-left: 25px" action="CIA" onclick="PF('statusDialog').show()" value="Co-Inertia Analysis"/>
+                        <p:tooltip for="cia" style="font-size: 11px;" value="TODO: Rewrite nmds hoverover" />
+                        
+                        <h:commandLink id="poca" style="margin-left: 25px" action="PCOA" onclick="PF('statusDialog').show()" value="Principal Coordinate Analysis"/>
+                        <p:tooltip for="poca" style="font-size: 11px;" value="TODO: Rewrite nmds hoverover" />
+                        
+                        <h:commandLink id="rda" style="margin-left: 25px" action="RDA" onclick="PF('statusDialog').show()" value="Redundancy Dinosaur Agnst"/>
+                        <p:tooltip for="rda" style="font-size: 11px;" value="TODO: Rewrite nmds hoverover" />
                     </h:panelGrid>
-                    <h:panelGrid columns="3">
-                        <h:commandLink action="CIA" onclick="PF('statusDialog').show()" value="Co-Inertia Analysis"/>
-                    </h:panelGrid>
-                    <h:panelGrid columns="3">
-                        <h:commandLink action="PCOA" onclick="PF('statusDialog').show()" value="Principal Coordinate Analysis"/>
-                    </h:panelGrid>
+                    
+                    
                 </h:panelGrid>
             </h:panelGrid> 
         </h:form>
     </ui:define>
 </ui:composition>
+

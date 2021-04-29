@@ -13,6 +13,7 @@ import java.util.Iterator;
 import java.util.ArrayList;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
+import metaboanalyst.controllers.ordination.OARDABean;
 import metaboanalyst.models.ResultBean;
 import metaboanalyst.models.User;
 import metaboanalyst.rwrappers.RCenter;
@@ -34,7 +35,7 @@ public class DownloadBean implements Serializable {
     public ResultBean[] getDownloads() {
         return downloads;
     }
-
+    
     public void setupDownloadTable() {
 
         //to prevent ajax call trigger this event

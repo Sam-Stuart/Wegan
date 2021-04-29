@@ -642,7 +642,11 @@ public class DataUtils {
         TreeNode caNode = new DefaultTreeNode("Correlation", parent);
         TreeNode nodec1 = new DefaultTreeNode("Correlations", caNode);
         TreeNode nodec2 = new DefaultTreeNode("Linear", caNode);
-        TreeNode nodec3 = new DefaultTreeNode("polynomial", caNode);
+        TreeNode nodec3 = new DefaultTreeNode("Polynomial", caNode);
+        TreeNode nodec4 = new DefaultTreeNode("Multivariate", caNode);
+        TreeNode nodec5 = new DefaultTreeNode("Penalized", caNode);
+        TreeNode nodec6 = new DefaultTreeNode("SVM", caNode);
+        TreeNode nodec7 = new DefaultTreeNode("Random Forest", caNode);
     }
 
     private static void addStatNodes(TreeNode parent) {
@@ -761,7 +765,11 @@ public class DataUtils {
     }
     
     private static void addOrdinationNodes(TreeNode parent) {
-        TreeNode dispersalNode = new DefaultTreeNode("Ordination", parent);   
+        TreeNode oaNode = new DefaultTreeNode("Ordination", parent); 
+        TreeNode nodeoa01 = new DefaultTreeNode("NMDS", oaNode);
+        TreeNode nodeoa02 = new DefaultTreeNode("Co-Inerita", oaNode);
+        TreeNode nodeoa03 = new DefaultTreeNode("PCoIA", oaNode);
+        TreeNode nodeoa04 = new DefaultTreeNode("RDA", oaNode);
     }
     private static void addDiversityNodes(TreeNode parent) {
         TreeNode dispersalNode = new DefaultTreeNode("Diversity", parent);  

@@ -184,6 +184,58 @@ public class OAUtils {
             System.out.println(rse);
         }
     }
+    
+    public static void CreateRDA(SessionBean1 sb, String abundance, String metaData, String envText, String data) {
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "ord.rda(NA" + ", \"" + abundance + "\", \"" + metaData + "\", \"" + envText + "\" , \"" + data + "\")";
+//            String rCommand = "ord.rda(NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            RC.voidEval(rCommand);
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        }
+    }
+
+    
+    public static void PlotRDA2D(SessionBean1 sb, String color, String varArrows, String envArrows, String envCent, String sampleNames, String metaColColor, String pointOptions, String metaColPoint, String ellipse, String imgName, String format, int dpi, String width) {
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "Plot.RDA.2D(NA" 
+                                            + ", \"" + color 
+                                            + "\", \"" + varArrows
+                                            + "\", \"" + envArrows
+                                            + "\", \"" + envCent
+                                            + "\", \"" + sampleNames
+                                            + "\", \"" + metaColColor
+                                            + "\", \"" + pointOptions
+                                            + "\", \"" + metaColPoint
+                                            + "\", \"" + ellipse
+                                            + "\", \"" + imgName 
+                                            + "\", \"" + format  
+                                            + "\", " + dpi 
+                                            + ", width=NA)";
+//            String rCommand = "Plot.RDA.2D(NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            sb.addGraphicsCMD("ord_rda_2D", rCommand);
+            RC.voidEval(rCommand);
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        }
+    }
+    
+    public static void PlotRDAScree(SessionBean1 sb, String imgName, String format, int dpi, String width) {
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "Plot.RDA.scree(NA" + ", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";;
+//            String rCommand = "Plot.RDA.2D(NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            sb.addGraphicsCMD("ord_rda_scree", rCommand);
+            RC.voidEval(rCommand);
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        }
+    }
         
 
      

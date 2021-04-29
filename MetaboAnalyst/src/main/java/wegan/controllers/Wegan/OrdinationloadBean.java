@@ -297,7 +297,10 @@ public class OrdinationloadBean implements Serializable {
 
             testFile = ab.getTestDune();
             format = "rowu";
-            
+        } else if (testDataOpt.equals("Iris")) {
+            dataType = "Dune";
+            testFile = ab.getTestIris();
+            format = "rowu";            
         } else if (testDataOpt.equals("BCI")) {
             testFile = ab.getTestBCI();
             format = "rowu";

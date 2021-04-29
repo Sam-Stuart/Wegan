@@ -88,6 +88,11 @@
         
         <from-view-id>*</from-view-id>
         
+        <navigation-case>
+            <from-outcome>RDA</from-outcome>
+            <to-view-id>/Secure/ordination/RDAView.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>        
         
         <navigation-case>
             <from-outcome>NMDS</from-outcome>

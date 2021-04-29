@@ -4,14 +4,14 @@
 #'@param abundance Set abundance transformation, default is absolute (no change), else relative (divide by column total)
 #'@param metaData  Set meta data, default is categorical columns in data set
 #'@param envData  Set environmental data (must be user uploaded), default is none
-#'@param p.max.var  Set p-value cutoff for variable fit, default is no cutoff
-#'@param p.max.env  Set p-value cutoff for environmental fit, default is no cutoff
+#'@param env_text Input environmental data column names (java uses text box to obtain string)
 #'@param data Which data set to use, normalized (default) or original
 #'@author Louisa Normington\email{normingt@ualberta.ca}
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2)
 #'@export
-ord.rda <- function(mSetObj=NA, abundance="NULL", metaData="NULL", envData="NULL", env.text="NULL", p.max.var=0, p.max.env=0, data="NULL") { 
+
+ord.rda <- function(mSetObj=NA, abundance="NULL", metaData="NULL", envData="NULL", env_text="NULL", data="NULL") { #3 user options on all results pages, plus ability to upload up to 2 supplemental data sets
   
   library("vegan")
   library("dplyr")
@@ -27,12 +27,12 @@ ord.rda <- function(mSetObj=NA, abundance="NULL", metaData="NULL", envData="NULL
     input <- mSetObj$dataSet$orig
   }
   
-  #Obtain numeric data for ordination and categorical data for grouping data
+  #Obtain numeric data for ordination and catgroical data for grouping data
   num_data <- select_if(input, is.numeric)
   fac_data <- select_if(input, is.factor)
   count.fac.cols <- ncol(fac_data)
   
-  print("Should you have community species data, you may want to investigate the relative abundance (divide all values by column totals) versus absolute abundance (no change to data).")
+  print("More: Should you have community species data, you may want to investigate the relative abundance (divide all values by column totals) versus absolute abundance (no change to data).")
   if (abundance=="NULL") {
     abundance1 <- "absolute"
     num_data1 <- num_data #Default abundance is absolute and no change is made to data
@@ -42,7 +42,7 @@ ord.rda <- function(mSetObj=NA, abundance="NULL", metaData="NULL", envData="NULL
   }
   
   #environmental data, used to correlate with rows in main data set
-  if (is.data.frame(envData)=="NULL") { #No user uplaoded environmental data
+  if (is.data.frame(envData)==FALSE) { #No user uplaoded environmental data
     envData1 <- "NA"
   } else {  #User uplaoded environmental data
     envData1 <- envData #User uploaded (like weights in correlation module)
@@ -52,55 +52,57 @@ ord.rda <- function(mSetObj=NA, abundance="NULL", metaData="NULL", envData="NULL
     }
   }
   
-  #Text box instructions for selecting predictor variables. Text box should be interactive, meaning any change in text alters the result in real time. Default env.text is second column.
-  cat("You uploaded environmental data. Identify environmental variables for RDA using the column names with commas in between.")
+  #Text box instructions for selecting predictor variables. Text box should be interactive, meaning any change in text alters the result in real time. Default env_text is second column.
+  if (is.data.frame(envData)==TRUE) { #User uplaoded environmental data  
+    cat("You uploaded environmental data. Identify environmental variables for DCA using the column names with commas in between.")
+  }
   
   #Set up environmental data using user selected columns
   if (is.data.frame(envData1)==TRUE) { #User uplaoded environmental data
-    if (env.text=="NULL") { #Change in other scripts
-      env.text1 <- colnames(envData1) #Default is the all env columns
-      cat(paste0("You have selected these constraining variables: ", paste(env.text1, collapse=", ")))
+    if (env_text=="NULL") { 
+      env_text1 <- colnames(envData1) #Default is the all env columns
+      cat(paste0("You have selected these constraining environmental variables: ", paste(env_text1, collapse=", ")))
       cat("If the selection is not what you intended, reenter environmental variable(s) in the text box, using the column names with commas in between.")
       
     } else {
-      env.text1 <- env.text #taken from text box by java, fed as string into R code
-      env.text1 <- gsub("\n", "", env.text1, fixed=TRUE) #fixed=TRUE means we are dealing with one string, versus a vector of strings (fixed=FALSE)
-      env.text1 <- gsub(",", "+", env.text1, fixed=TRUE) 
-      env.text1 <- gsub(";", "+", env.text1, fixed=TRUE)
-      env.text1 <- gsub(" ", "", env.text1, fixed=TRUE)
-      env.text1 <- gsub(":", "+", env.text1, fixed=TRUE)
-      env.text1 <- gsub("*", "+", env.text1, fixed=TRUE)
-      cat(paste0("You have selected these constraining variables: ", gsub("+", ", ", env.text1, fixed=TRUE), "."))
+      env_text1 <- env_text #taken from text box by java, fed as string into R code
+      env_text1 <- gsub("\n", "", env_text1, fixed=TRUE) #fixed=TRUE means we are dealing with one string, versus a vector of strings (fixed=FALSE)
+      env_text1 <- gsub(",", "+", env_text1, fixed=TRUE) 
+      env_text1 <- gsub(";", "+", env_text1, fixed=TRUE)
+      env_text1 <- gsub(" ", "", env_text1, fixed=TRUE)
+      env_text1 <- gsub(":", "+", env_text1, fixed=TRUE)
+      env_text1 <- gsub("*", "+", env_text1, fixed=TRUE)
+      cat(paste0("You have selected these constraining environmental variables: ", gsub("+", ", ", env_text1, fixed=TRUE), "."))
       cat("If the selection is not what you intended, reenter environmental variable(s) in the text box, using the column names with commas in between.")
     }
   
-      env_cols <- unlist(strsplit(env.text1, "+", fixed=TRUE))
-      env_data <- as.data.frame(envData1[,which(colnames(envData1) %in% env_cols)])
-      colnames(env_data) <- env_cols
-  } else {
+      env_cols <- unlist(strsplit(env_text1, "+", fixed=TRUE)) #Extract column names from env_text1
+      env_data <- as.data.frame(envData1[,which(colnames(envData1) %in% env_cols)]) #Subset environmental data set to select columns of interest
+      colnames(env_data) <- env_cols #Name columns
+  } else { #No environmetal data uploaded
     env_data <- "NA"
   }
   
   #Run RDA
-  if(is.data.frame(envData1)==FALSE) { #Without envData
+  if(is.data.frame(envData1)==FALSE) { #Without environmetal data
     rda <- rda(num_data1)
-  } else{ #With user uploaded envData
+  } else{ #With user uploaded environmetal data
     rda <- rda(X=num_data1, Y=env_data)
   }
 
-  #meta data, used to group samples using colors or plotting symbols
-  if (is.data.frame(metaData)==FALSE) { #No user uplaoded meta data
-    if (count.fac.cols >= 1) { #If species data had at least one categorical column, call it meta data
+  #meta (grouping) data, used to group samples using colors or plotting symbols
+  if (is.data.frame(metaData)==FALSE) { #No user uplaoded grouping data
+    if (count.fac.cols >= 1) { #If species data had at least one categorical column, call it grouping data
       metaData1 <- as.data.frame(fac_data)
     } else {
-      metaData1 <- "NA" #If species data had no categorical columns, meta data is NULL
+      metaData1 <- "NA" #If species data had no categorical columns, grouping data is NULL
       #AddErrMsg("No groupings columns were detected. If this is a mistake, make sure that groupings columns use characters and not numbers. For example, instead ofgrouping data using 1, 2, and 3, use I, II and III.")
       print("No groupings columns were detected! If this is a mistake, make sure that groupings columns use characters and not numbers. For example, instead of grouping data using 1, 2, and 3, use I, II and III.")
     }
-  } else {  #User uploaded meta data
+  } else {  #User uploaded grouping data
     metaData1 <- metaData #User uploaded like weights in correlation module
     if (nrow(metaData1)!=nrow(input)) {
-      #AddErrMsg("Your meta data does not have the same number of rows as your numerical data! Please check that you grouping data is correct.")
+      #AddErrMsg("Your grouping data does not have the same number of rows as your numerical data! Please check that you grouping data is correct.")
       stop("Your grouping data does not have the same number of rows as your numerical data! Please check that you grouping data is correct.")
     }
     for(i in 1:ncol(metaData1)) {
@@ -109,61 +111,56 @@ ord.rda <- function(mSetObj=NA, abundance="NULL", metaData="NULL", envData="NULL
   }
   
   #Fit variables to ordination plots for plotting arrows
-  if (p.max.var=="NULL") { #If no p-value cutoff selected (default)
-    p.max.var1 <- "NA"
-    var.fit <- envfit(rda, num_data1, permutations=999, p.max=NULL, type="lc")
-  } else { #If p-value cutoff selected, options are none (default), 0.05, 0.01, 0.005
-    p.max.var1 <- p.max.var
-    var.fit <- envfit(rda, num_data1, permutations=999, p.max=p.max.var, type="lc")
-  }
+  var_fit <- envfit(rda, num_data1, permutations=999, p.max=NULL, type="lc")
   
-  #Fit environmental data to ordination plots for plotting arrows
-  if (is.data.frame(envData1)==FALSE) { #If environmental data not uploaded
-    env.fit <- "NA"
-    p.max.env1 <- "NA"
+  #Fit environmental data to ordination plots for plotting arrows and centroids
+  if (is.data.frame(envData1)==FALSE) { #If environmental data not uploaded, all fit objects are the character "NA"
+    env_fit_fac <- "NA"
+    env_fit_num <- "NA"
+    env_fit <- "NA"
   } else { #If environmental data uploaded
-    if (p.max.env=="NULL") { #If no p-value cutoff selected (default)
-      p.max.env1 <- "NA"
-      env.fit <- envfit(rda, env_data, permutations=999, p.max=NULL, type="lc")
-    } else { #If p-value cutoff selected, options are none (default), 0.05, 0.01, 0.005
-      p.max.env1 <- p.max.env
-      env.fit2D <- envfit(rda, env_data, permutations=999, p.max=p.max.env, type="lc")
+    env_data_numeric <- select_if(env_data, is.numeric)
+    env_data_factor <- select_if(env_data, is.factor)
+    env_fit <- envfit(rda, env_data, permutations=999, p.max=NULL, display="sites")
+    if (ncol(env_data_factor)>0) {
+      env_fit_fac <- envfit(rda, env_data_factor, permutations=999, p.max=NULL, display="sites")
+    }
+    if (ncol(env_data_numeric)>0) {
+      env_fit_num <- envfit(rda, env_data_numeric, permutations=999, p.max=NULL, display="sites")
     }
   }
-
+  
   #Extract row and column scores
-  samp.scores <- signif(scores(rda, display="sites"), 5)
-  row.names(samp.scores) <- row.names(input)
-  colnames(samp.scores) <- c("RDA1", "RDA2")
-  var.scores <- signif(scores(rda, display="species"), 5)
-  colnames(var.scores) <- c("RDA1", "RDA2")
+  samp.scores <- signif(scores(rda, display="sites"), 5) #Extract scores for samples (rows), and truncate to 5 significant figures
+  colnames(samp.scores) <- c("RDA1", "RDA2") #Name score columns
+  var_scores <- signif(scores(rda, display="species"), 5)
+  colnames(var_scores) <- c("RDA1", "RDA2")
   
   #Extract environment scores
   if (is.data.frame(envData1)==FALSE) { #If environmental data not uploaded
-    env.scores <- "NA"
+    env_scores <- "NA"
   } else { #If environmental data uploaded
-    env_data_numeric <- select_if(env_data, is.numeric)
-    if (length(env_data_numeric)>0) {
-      env.scores.num <- signif(scores(env.fit, display="vectors"), 5)
-    } else {
-      env.scores.num <- "NA"
+    if (length(env_data_numeric)>0) { #If any numeric environmental varibles exist
+      env_scores.num <- signif(scores(env_fit, display="vectors"), 5) #Obtain scores
+    } else { #No numeric envrionmental columns
+      env_scores.num <- "NA"
     }
     
-    env_data_factor <- select_if(env_data, is.factor)
-    if (length(env_data_factor)>0) {
-      env.scores.fac <- signif(scores(env.fit, display="factors"), 5)
+    if (length(env_data_factor)>0) { #Repeat for categorical environmental variables
+      env_scores.fac <- signif(scores(env_fit, display="factors"), 5)
     } else {
-      env.scores.fac <- "NA"
+      env_scores.fac <- "NA"
     }
     
-    if (is.matrix(env.scores.num)==TRUE) { #Numeric constraining variables
-      if (is.matrix(env.scores.fac)==TRUE) { #Categorical constraining variables
-        env.scores <- rbind(env.scores.num, env.scores.fac)
-      } else {  #No categorical constraining variables
-        env.scores <- env.scores.num
+    
+    if (is.matrix(env_scores.num)==TRUE) { #Numeric environmental variable scores turned into a matrix
+      if (is.matrix(env_scores.fac)==TRUE) { #Categorical environmental variable scores turned into a matrix
+        env_scores <- rbind(env_scores.num, env_scores.fac) #If both types of scores exist, combine them
+      } else {  #No categorical environmental variables
+        env_scores <- env_scores.num #Just scores for numeric data
       }
-    } else { #No numeric constraining variables
-      env.scores <- env.scores.fac
+    } else { #No numeric environmental variables
+      env_scores <- env_scores.fac #Just scores for factor data
     }
   }
   
@@ -176,39 +173,47 @@ ord.rda <- function(mSetObj=NA, abundance="NULL", metaData="NULL", envData="NULL
   mSetObj$analSet$rda$abundance <- abundance1
   mSetObj$analSet$rda$input <- num_data1
   mSetObj$analSet$rda$metaData <- metaData1
-  mSetObj$analSet$rda$envData <- envData1
-  mSetObj$analSet$rda$envDataPlotting <- env_data
-  mSetObj$analSet$rda$variable.fit <- var.fit
-  mSetObj$analSet$rda$enviroment.fit <- env.fit
-  mSetObj$analSet$rda$p.max.env <- p.max.env1
-  mSetObj$analSet$rda$p.max.var <- p.max.var1
+  mSetObj$analSet$rda$env_data <- env_data
+  mSetObj$analSet$rda$variable.fit <- var_fit
+  mSetObj$analSet$rda$enviroment.fit <- env_fit
+  mSetObj$analSet$rda$enviroment.factor.fit <- env_fit_fac
+  mSetObj$analSet$rda$enviroment.numeric.fit <- env_fit_num
   mSetObj$analSet$rda$sample.scores <- samp.scores
-  mSetObj$analSet$rda$var.scores <- var.scores
-  mSetObj$analSet$rda$env.scores <- env.scores
+  mSetObj$analSet$rda$var_scores <- var_scores
+  mSetObj$analSet$rda$env_scores <- env_scores
   mSetObj$analSet$rda$summary <- summary
+  mSetObj$analSet$rda$eigenvalues <- rda$CCA$eig
 
   #Download relevent data
-  write.csv(samp.scores, file="rda_row_scores.csv", row.names=TRUE)
-  write.csv(var.scores, file="rda_column_scores.csv", row.names=TRUE)
+  write.csv(samp.scores, file="rda_row_scores.csv", row.names=row.names(input))
+  write.csv(var_scores, file="rda_column_scores.csv", row.names=TRUE)
   if (is.data.frame(envData1)==TRUE) { #If environmental data uploaded
-    write.csv(env.scores, file="rda_environment_scores.csv", row.names=TRUE)
+    write.csv(env_scores, file="rda_environment_scores.csv", row.names=TRUE)
   } 
 
+  eigenValues_data <- cbind(rda$CCA$eig, rda$CCA$eig/sum(rda$CCA$eig))
+  n <- nrow(eigenValues_data)
+  eigenValues_data <- as.data.frame(cbind(paste0("RDA ", 1:nrow(eigenValues_data)), eigenValues_data))
+  colnames(eigenValues_data) <- c("Dimension", "Eigen_Value", "Variance_Explained")
+  write.csv(eigenValues_data, file="rda_scree_data.csv", row.names=FALSE)
+  
   sink("column_impact_on_rda.txt") 
   cat("Data columns may significantly impact RDA\n")
-  print(var.fit)
+  print(var_fit)
   sink()  
 
   if (is.data.frame(envData1)==TRUE) { #If environmental data uploaded
     sink("environment_impact_on_rda.txt") 
     cat("Environmental data may significantly impact RDA\n")
-    print(env.fit)
+    print(env_fit)
     sink()
   }
   
   sink("rda_summary.txt") 
-  cat(paste0("Redunancy Analysis Summary\n"))
+  cat(paste0("Redundancy Analysis Summary\n"))
   print(summary)
+  cat("\nLengend:\n")
+  cat("Site=Rows and Species=Columns\n")
   sink()  
   
   return(.set.mSet(mSetObj))
@@ -219,18 +224,18 @@ ord.rda <- function(mSetObj=NA, abundance="NULL", metaData="NULL", envData="NULL
 
 
 
-#'Produce RDA 2D ordination plot with and without ellipses/sample labels/metadata options/variable arrows/env data arrows
+#'Produce RDA 2D ordination plot with and without ellipses/sample labels/metadata options/variable arrows/env data arrows/env centroids
 #'@description Produce RDA ordination plot with user selected options
 #'@param mSetObj Input name of the created mSet Object
 #'@param color #Viridis pallete, options include "viridis" (default), "plasma" and "grey"
 #'@param ellipse Boolean, TRUE to add confidence ellipses, FALSE (default) to not add confidence ellipses
-#'@param var.arrows Boolean, TRUE to produce variable arrows, FALSE (default) to produce ordination plot without variable arrows
-#'@param env.arrows Boolean, TRUE to produce environmental arrows, FALSE (default) to produce ordination plot without environmental arrows---only appear if env data uploaded
+#'@param var_arrows Boolean, TRUE to produce variable arrows, FALSE (default) to produce ordination plot without variable arrows
+#'@param env_arrows Boolean, TRUE to produce environmental arrows, FALSE (default) to produce ordination plot without environmental arrows---only appear if env data uploaded
+#'@param env_cent Boolean, TRUE to produce display factor environmental data centroids, FALSE (default) to produce ordination plot without environmental centroids
 #'@param sampleNames Boolean, TRUE to display data as variable names, FALSE (default) to display data as points
 #'@param meta_col_color Meta data column to use for plotting colors, Can be user inputted where options are given to java using function meta.columns()
-#'@param point.options Boolean, TRUE to turn data into points, FALSE (default) uses row names as data points
+#'@param point_options Boolean, TRUE to turn data into points, FALSE (default) uses row names as data points
 #'@param meta_col_point Meta data column to use for plotting points, Can be user inputted where options are given to java using function meta.columns()
-#'@param scaling Should plot elements be scaled, options are "none" (default), "points", "arrows", "both"
 #'@param imgName Input the image name
 #'@param format Select the image format, "png" or "pdf", default is "png" 
 #'@param dpi Input the dpi. If the image format is "pdf", users need not define the dpi. For "png" images, 
@@ -241,8 +246,8 @@ ord.rda <- function(mSetObj=NA, abundance="NULL", metaData="NULL", envData="NULL
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2)
 #'@export
-Plot.RDA.2D <- function(mSetObj=NA, color="NULL", ellipse="NULL", var.arrows="NULL", env.arrows="NULL", sampleNames="NULL", meta_col_color="NULL", point.options="NULL", meta_col_point="NULL", scaling="NULL", imgName, format="png", dpi=72, width=NA) {
-  
+Plot.RDA.2D <- function(mSetObj=NA, color="NULL", var_arrows="NULL", env_arrows="NULL", env_cent="NULL", sampleNames="NULL", meta_col_color="NULL", point_options="NULL", meta_col_point="NULL", ellipse="NULL", imgName, format="png", dpi=72, width=NA) { #6 check boxes, 3 drop downs
+
   library("vegan")
   library("viridis") 
   
@@ -251,9 +256,11 @@ Plot.RDA.2D <- function(mSetObj=NA, color="NULL", ellipse="NULL", var.arrows="NU
   rda <- mSetObj$analSet$rda$rda
   metaData <- mSetObj$analSet$rda$metaData
   env_data <- mSetObj$analSet$rda$envDataPlotting
-  input <- mSetObj$analSet$rda$input
-  var.fit <- mSetObj$analSet$rda$variable.fit
-  env.fit <- mSetObj$analSet$rda$enviroment.fit
+  num_data <- mSetObj$analSet$rda$num_data
+  var_fit <- mSetObj$analSet$rda$variable.fit
+  env_fit_fac <- mSetObj$analSet$rda$enviroment.factor.fit
+  env_fit_num <- mSetObj$analSet$rda$enviroment.numeric.fit
+  summary <- mSetObj$analSet$rda$summary
   
   #Set plot dimensions
   if(is.na(width)){
@@ -270,10 +277,10 @@ Plot.RDA.2D <- function(mSetObj=NA, color="NULL", ellipse="NULL", var.arrows="NU
   mSetObj$imgSet$Plot.RDA.2D <- imgName
   
   #Extract % variance explained by axis 1 and 2 for plotting
-  if (is.data.frame(env_data)==FALSE) {
+  if (is.data.frame(env_data)==FALSE) { #No environmental data uploaded
     RDA1 <- summary$cont$importance[2,1]
     RDA2 <- summary$cont$importance[2,2]
-  } else {
+  } else { #Yes environmental (constraing) data uploaded
     RDA1 <- summary$concont$importance[2,1]
     RDA2 <- summary$concont$importance[2,2]
   }
@@ -282,22 +289,14 @@ Plot.RDA.2D <- function(mSetObj=NA, color="NULL", ellipse="NULL", var.arrows="NU
   Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
   par(xpd=FALSE, mar=c(5.1, 4.1, 4.1, 2.1)) 
   
-  #Set scaling parameter for plotting
-  if (scaling=="NULL") {
-    ordiplot(rda, type="n", xlab=paste0("RDA 1 (", signif(RDA1, 4)*100, " %)"), ylab=paste0("RDA 2 (", signif(RDA2, 4)*100, " %)"), main="Redundancy Analysis", yaxt="n") #Empty ordination plot 
-  } else if (scaling=="points") {
-    ordiplot(rda, scaling=1, type="n", xlab=paste0("RDA 1 (", signif(RDA1, 4)*100, " %)"), ylab=paste0("RDA 2 (", signif(RDA2, 4)*100, " %)"), main="Redundancy Analysis", yaxt="n") #Empty ordination plot 
-  } else if (scaling=="arrows") {
-    ordiplot(rda, scaling=2, type="n", xlab=paste0("RDA 1 (", signif(RDA1, 4)*100, " %)"), ylab=paste0("RDA 2 (", signif(RDA2, 4)*100, " %)"), main="Redundancy Analysis", yaxt="n") #Empty ordination plot 
-  } else if (scaling=="both") {
-    ordiplot(rda, scaling=3, type="n", xlab=paste0("RDA 1 (", signif(RDA1, 4)*100, " %)"), ylab=paste0("RDA 2 (", signif(RDA2, 4)*100, " %)"), main="Redundancy Analysis", yaxt="n") #Empty ordination plot 
-  }
+  #Set up empty ordination plot
+  ordiplot(rda, type="n", xlab=paste0("RDA 1 (", signif(RDA1, 4)*100, " %)"), ylab=paste0("RDA 2 (", signif(RDA2, 4)*100, " %)"), main="Redundancy Analysis", yaxt="n")
   axis(2, las=2)
   
-  #Plot with and without ellipses/sample labels/metadata options/variable arrows/env data arrows
-  if (is.data.frame(metaData)==FALSE) { #If no meta data
+  #Plot with and without ellipses/sample labels/grouping options/variable arrows/env data arrows
+  if (is.data.frame(metaData)==FALSE) { #If no grouping data uploaded
     
-    #point options
+    #point text option
     if (sampleNames!="NULL") { #If display data as lables
       text(rda, display="sites") #Add text for samples
     } else {
@@ -305,43 +304,48 @@ Plot.RDA.2D <- function(mSetObj=NA, color="NULL", ellipse="NULL", var.arrows="NU
     }
     
     #Arrow options
-    if (var.arrows!="NULL") { #If variable arrows
-      plot(var.fit, col="darkred", lwd=2)
+    if (var_arrows!="NULL") { #If variable arrows selected
+      plot(var_fit, col="darkred", lwd=2)
     }
     
-    if (env.arrows!="NULL") {
-      plot(env.fit, col="blue", lwd=2)
+    if (is.data.frame(env_data)==TRUE) { #If environment data uploaded
+      if (env_arrows!="NULL") { #If environment arrows selected
+        plot(env_fit_num, col="blue", lwd=2)
+      }
+      
+      if (env_cent!="NULL") { #If environment constraints selected
+        plot(env_fit_fac, col="blue", lwd=2)
+      }
     }
     
-  } else { #If meta data available
+  } else { #If grouping data available
     
-    #Set up meta data column to use for colors
-    if (meta_col_color=="NULL") { 
-      meta_col_color_data <- as.factor(metaData[,1]) #Default meta data column for labeling with color is the first
-      meta_col_color_name <- colnames(metaData)[1]
+    #Set up grouping data column to use for colors
+    if (meta_col_color=="NULL") { #No column selected for grouping by color
+      meta_col_color_data <- as.factor(metaData[,1]) #Default grouping data column for grouping with color is the first
+      meta_col_color_name <- colnames(metaData)[1] #Extract name
+    } else { #column selected for grouping by color
+      meta_col_color_data <- as.factor(metaData[,meta_col_color]) #User uploaded grouping data column for grouping with colors, options given to java using function meta.columns() below
+      meta_col_color_name <- meta_col_color #Extract name
+    }
+    
+    #Set up grouping data column to use for points
+    if (meta_col_point=="NULL") { #No column selected for grouping by point shape
+      meta_col_point_data <- as.factor(metaData[,1]) #Default grouping data column for grouping with points is the first
+      meta_col_point_name <- colnames(metaData)[1] #Extract name
     } else {
-      meta_col_color_data <- as.factor(metaData[,meta_col_color]) #User imputted meta data column for labeling with colors, options given to java using function meta.columns() below
-      meta_col_color_name <- meta_col_color
-    }
-    
-    #Set up meta data column to use for points
-    if (meta_col_point=="NULL") { 
-      meta_col_point_data <- as.factor(metaData[,1]) #Default meta data column for labeling with points is the first
-      meta_col_point_name <- colnames(metaData)[1]
-    } else {
-      meta_col_point_data <- as.factor(metaData[,meta_col_point]) #User imputted meta data column for labeling with points, options given to java using function meta.columns() below
-      meta_col_point_name <- meta_col_point #User defined
+      meta_col_point_data <- as.factor(metaData[,meta_col_point]) #User uploaded grouping data column for grouping with points, options given to java using function meta.columns() below
+      meta_col_point_name <- meta_col_point #Extract name
     }
     
     #Color options
-    n <- length(levels(meta_col_color_data)) #Determine how many different colors are needed based on the levels of the meta data
-    if (color=="NULL") {
-      color <- "viridis" #Default
+    n <- length(levels(meta_col_color_data)) #Determine how many different colors are needed based on the levels of the grouping data column selected for grouping
+    if (color=="NULL") { #Default palette 
       colors <- viridis(n)#Assign a color to each level using the viridis pallete (viridis package)
     } else if (color=="plasma") {
       colors <- plasma(n+1)#Assign a color to each level using the plasma pallete (viridis package)
     } else if (color=="grey") {
-      colors <- grey.colors(n, start=0.1, end=0.75) #Assing a grey color to each level (grDevices package- automatically installed)
+      colors <- grey.colors(n, start=0.1, end=0.75) #Assign a grey color to each level (grDevices package- automatically installed)
     } else { 
       color <- "none"
     }
@@ -356,7 +360,7 @@ Plot.RDA.2D <- function(mSetObj=NA, color="NULL", ellipse="NULL", var.arrows="NU
     #point options
     pch_options <- c(19, 17, 15, 18, 1, 2, 0, 5, 6, 3, 4, 7, 8, 9, 10, 11, 12, 13, 14)
     
-    if (point.options=="NULL") {
+    if (point_options=="NULL") {
       pchs <- 19 #No points option gets solid circle
     } else {
       pchs <- pch_options[meta_col_point_data] #Otherwise point options applied for grouping of user's choice
@@ -365,7 +369,7 @@ Plot.RDA.2D <- function(mSetObj=NA, color="NULL", ellipse="NULL", var.arrows="NU
     if (sampleNames!="NULL") { #If display data as lables
       with(metaData, text(rda, display="sites", col=cols, bg=cols)) # Text for samples
     } else { #display data as points
-      if (point.options!="NULL") { #Engage point options
+      if (point_options!="NULL") { #Engage point options
         with(metaData, points(rda, display="sites", col=cols, pch=pchs, bg=cols)) 
         with(metaData, legend("bottomright", legend=levels(meta_col_point_data), col="black", pch=unique(pchs), pt.bg="black", title=meta_col_point_name))
       } else { #No point options
@@ -374,25 +378,28 @@ Plot.RDA.2D <- function(mSetObj=NA, color="NULL", ellipse="NULL", var.arrows="NU
     }
     
     #arrow options
-    if (var.arrows!="NULL") { #If variable arrows selected
-      plot(var.fit, col="darkred", lwd=2)
+    if (var_arrows!="NULL") { #If variable arrows selected
+      plot(var_fit, col="darkred", lwd=2)
     }
     
     if (is.data.frame(env_data)==TRUE) { #If environment data uploaded
-      if (env.arrows!="NULL") { #If environment arrows selected
-        plot(env.fit, col="blue", lwd=2)
+      if (env_arrows!="NULL") { #If environment arrows selected
+        plot(env_fit_num, col="blue", lwd=2)
+      }
+      
+      if (env_cent!="NULL") { #If environment centroids selected
+        plot(env_fit_fac, col="blue", lwd=2)
       }
     }
     
     #Ellipse option
     if (ellipse!="NULL") { #if ellipses selected
-      with(metaData, ordiellipse(rda, meta_col_color_data, display="sites", kind="sd", draw="polygon", border=colors, lwd=2)) # Include standard deviation ellipses that are the same color as the text.
+      with(metaData, ordiellipse(pcoa, meta_col_color_data, kind="sd", draw="polygon", border=colors, lwd=2)) # Include standard deviation ellipses that are the same color as the text.
     }
     
-    #Legend
+    #Legend for colors
     with(metaData, legend("topright", legend=levels(meta_col_color_data), col=colors, pch=19, title=meta_col_color_name)) # Include legend for colors in figure   
   }
-  print("DONE")
   
   dev.off()
   
@@ -420,23 +427,14 @@ Plot.RDA.scree <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA) 
   
   #Extract necessary objects from mSetObj
   mSetObj <- .get.mSet(mSetObj)
-  summary <- mSetObj$analSet$rda$summary
-  env_data <- mSetObj$analSet$rda$env_data
-  
-  #Extract axis importance data
-  if (is.data.frame(env_data)==FALSE) {
-    importance <- summary$cont$importance
-  } else {
-    importance <- summary$concont$importance
-  }
+  eigenvalues <- mSetObj$analSet$rda$eigenvalues
   
   #Produce data set for plotting
-  variance_data <- importance[2,]
-  n <- ncol(importance)
-  scree_data <- as.data.frame(cbind(1:n, variance_data))
-  colnames(scree_data) <- c("RDA_Dimension", "Variance_Explained")
-  write.csv(scree_data, file="redundancy_analysis_scree_data.csv", row.names=FALSE)
-  
+  eigenValues_data <- as.data.frame(cbind(eigenvalues, eigenvalues/sum(eigenvalues)))
+  n <- nrow(eigenValues_data)
+  eigenValues_data <- as.data.frame(cbind(1:nrow(eigenValues_data), eigenValues_data))
+  colnames(eigenValues_data) <- c("Dimension", "Eigen_Value", "Variance_Explained")
+
   #Set plot dimensions
   if(is.na(width)){
     w <- 10.5
@@ -454,8 +452,8 @@ Plot.RDA.scree <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA) 
   #Scree plot
   Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
   par(xpd=FALSE, mar=c(5.1, 4.1, 4.1, 2.1)) 
-  plot(x=scree_data$RDA_Dimension, y=scree_data$Variance_Explained, type="l", xlim=c(1, n), ylim=c(0, 1), xlab="Number of Dimensions", ylab="Proportion of Variance Explained", main="Redundnacy Analysis Scree Plot", yaxt="n", xaxt="n", col="blue", lwd=2)
-  points(x=scree_data$RDA_Dimension, y=scree_data$Variance_Explained, cex=1.1, pch=19, col="blue")
+  plot(x=eigenValues_data$Dimension, y=eigenValues_data$Variance_Explained, type="l", xlim=c(1, n), ylim=c(0, 1), xlab="Dimension", ylab="Proportion of Variance Explained", main="Redundancy Analysis Scree Plot", yaxt="n", xaxt="n", col="blue", lwd=2)
+  points(x=eigenValues_data$Dimension, y=eigenValues_data$Variance_Explained, cex=1.1, pch=19, col="blue")
   axis(2, las=2)
   axis(1, at=1:n)
   dev.off()
@@ -476,20 +474,29 @@ Plot.RDA.scree <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA) 
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2)
 #'@export
-
 meta.columns <- function(mSetObj=NA) {
   
   mSetObj <- .get.mSet(mSetObj)
   
   metaData <- mSetObj$analSet$rda$metaData
-  count.all.meta.cols <- ncol(metaData)
   name.all.meta.cols <- colnames(metaData)
+
+  return(name.all.meta.cols)
   
-  meta.col.results <- list(
-    count=count.all.meta.cols,
-    names=name.all.meta.cols
-  )
+}
+
+
+#'Obtain results'
+#'@description Java will use the stored results as needed for the results page
+#'@param mSetObj Input name of the created mSetObject 
+#'@author Louisa Normington\email{normingt@ualberta.ca}
+#'University of Alberta, Canada
+#'License: GNU GPL (>= 2)
+#'@export
+ord.rda.get.results <- function(mSetObj=NA){
   
-  return(meta.col.results)
+  mSetObj <- .get.mSet(mSetObj)
+  ord.rda.result <- c(mSetObj$analSet$rda)
+  return(ord.rda.result)
   
 }

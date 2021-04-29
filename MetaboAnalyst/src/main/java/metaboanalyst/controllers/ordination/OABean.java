@@ -36,9 +36,9 @@ public class OABean implements Serializable {
             if (!FacesContext.getCurrentInstance().isPostback()) {
                 //sb.registerPage(pageID);
                 switch (pageID) {
-//                    case "NMDS":
-//                        doDefaultNMDS();
-//                        break;
+                    case "NMDS":
+                        doDefaultNMDS();
+                        break;
 //                    case "PCOA":
 //                        doDefaultPCOA();
 //                        break;
@@ -48,19 +48,22 @@ public class OABean implements Serializable {
 //                    case "ANOSIM":
 //                        doDefaultANOSIM();
 //                        break;
+                    case "RDA":
+                        doDefaultRDA();
+                        break;                
                 }
             }
 
         }
     }
 
-//    private void doDefaultNMDS() {
-//        OAUtils.CreateNMDSOrdination(sb, "NULL", false, false, "NULL", "NULL", "NULL");
+    private void doDefaultNMDS() {
+////        OAUtils.CreateNMDSOrdination(sb, "NULL", false, false, "NULL", "NULL", "NULL");
 //        OAUtils.PlotNMDS2DOrdination(sb, false, false, false, false, false, false, "NULL", "NULL", "NULL", sb.getCurrentImage("ord_nmds_2D"), "png", 72, "NULL");
 ////        OAUtils.PlotNMDS3DOrdination(sb, "NULL", "NULL", "NULL", sb.getCurrentImage("ord_nmds_3D"), "png", 72, "NULL");
 //        OAUtils.PlotNMDSstressOrdination(sb, "NULL", sb.getCurrentImage("ord_nmds_stress"), "png", 72, "NULL");
 //        OAUtils.PlotNMDSscreeOrdination(sb, sb.getCurrentImage("ord_nmds_scree"), "png", 72, "NULL");
-//    }
+    }
 //    
 //
 //    private void doDefaultPCOA() {
@@ -83,4 +86,10 @@ public class OABean implements Serializable {
 //        OAUtils.CreateANOSIMOrdination(sb);
 //        OAUtils.PlotANOSIMOrdination(sb, "NULL", sb.getCurrentImage("ord_cia_scatter"), "png", 72);
 //    }
+    
+    private void doDefaultRDA(){
+        OAUtils.CreateRDA(sb, "NULL", "NULL", "NULL", "NULL");
+        OAUtils.PlotRDA2D(sb, "NULL", "NULL", "NULL", "NULL", "NULL", "NULL", "NULL", "NULL", "NULL", sb.getCurrentImage("ord_rda_2D"), "png", 72, "NULL");
+        OAUtils.PlotRDAScree(sb, sb.getCurrentImage("ord_rda_scree"), "png", 72, "NULL");
+    }
 }
