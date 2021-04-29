@@ -839,11 +839,11 @@ public class ApplicationBean1 implements Serializable {
         return scaleNormOpts;
     }
     
-    public SelectItem[] getordStressDimensionOpts() {
+    public SelectItem[] getOrdStressDimensionOpts() {
         return ordStressDimensionOpts;
     }
         
-    public SelectItem[] getordColorPaletteOpts() {
+    public SelectItem[] getOrdColorPaletteOpts() {
         return ordColorPaletteOpts;
     }
             
@@ -863,15 +863,15 @@ public class ApplicationBean1 implements Serializable {
         return corrMethodsOpts;
     }
     
-    public SelectItem[] getvegdistMeasureOpts() {
+    public SelectItem[] getVegdistMeasureOpts() {
         return vegdistMeasureOpts;
     }
       
-    public SelectItem[] getciaTypeOpts() {
+    public SelectItem[] getCiaTypeOpts() {
         return ciaTypeOpts;
     }
         
-    public SelectItem[] getciaDataSetOpts() {
+    public SelectItem[] getCiaDataSetOpts() {
         return ciaDataSetOpts;
     }
             
