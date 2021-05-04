@@ -21,10 +21,8 @@ import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 import org.primefaces.context.RequestContext;
-/**
- *
- * @author leif
- */
+
+
 // All functions being called from plotting.r via PlottingUtils.java
 @ManagedBean(name = "plottingMainBean")
 public class PlottingMainBean implements Serializable {
@@ -41,9 +39,11 @@ public class PlottingMainBean implements Serializable {
                 switch (pageID) {
                     case "plotting":
                         doDefaultLinear();
-                        
-                        break;
-                        
+                        doDefaultPieChart();
+                        doDefaultBarChart();
+                        doDefaultBoxChart();
+                        doDefaultScatterChart();
+                        break;  
                     case "linear":
                         doDefaultLinear();
                         break;
@@ -51,7 +51,7 @@ public class PlottingMainBean implements Serializable {
                         
                         break;
                     case "bargraph":
-                        doDefaultBetaDisper();
+//                        doDefaultBetaDisper();
                         break;
                 }
             }
@@ -63,39 +63,57 @@ public class PlottingMainBean implements Serializable {
                 "p", 1, "black", 1, 19, "x axis", "y axis", "Linear Plot Title", "NULL", "NULL");     
     }
     
-    
-    
-    
-    private void doDefaultBetaDisper() {       
-        
-        Dispersal.InitBetaDisper(sb);
-        Dispersal.PlotBetaDisper(sb, sb.getNewImage("betadisper"), "png", 72, dispersalBgdNum);
-        
+    private void doDefaultPieChart(){  
+        PlottingUtils.CreatePieChart(sb);
+        PlottingUtils.PlotPieChart(sb, sb.getCurrentImage("plot_pie_chart"), "png", 72);     
     }
     
-    private int dispersalBgdNum = 5;
-
-    public int getDispersalBgdNum() {
-        return dispersalBgdNum;
+    private void doDefaultBarChart(){  
+        PlottingUtils.CreateBarChart(sb, "FALSE", "NULL", "NULL", "NULL", "NULL", "NULL", "NULL", "NULL");
+        PlottingUtils.PlotBarChart(sb, sb.getCurrentImage("plot_bar_chart"), "png", 72);     
     }
-
-    public void setDispersalBgdNum(int dispersalBgdNum) {
-        this.dispersalBgdNum = dispersalBgdNum;
+    
+    private void doDefaultBoxChart(){  
+        PlottingUtils.CreateBoxChart(sb);
+        PlottingUtils.PlotBoxChart(sb, sb.getCurrentImage("plot_box_chart"), "png", 72);     
     } 
-//    public String dispersalBgdBtn_action() {
-//        Dispersal.PlotBGD(sb, sb.getNewImage("bgd"), "png", 72, dispersalBgdNum);
-//        RequestContext.getCurrentInstance().scrollTo("ac:form2:screePane");
-//        return null;
+    
+    private void doDefaultScatterChart(){  
+        PlottingUtils.CreateScatterChart(sb);
+        PlottingUtils.PlotScatterChart(sb, sb.getCurrentImage("plot_scatter_chart"), "png", 72);     
+    }  
+    
+//    @LEIF: PLEASE REMOVE CODE THAT DOES NOT BELONG
+//    private void doDefaultBetaDisper() {       
+//        
+//        Dispersal.InitBetaDisper(sb);
+//        Dispersal.PlotBetaDisper(sb, sb.getNewImage("betadisper"), "png", 72, dispersalBgdNum);
+//        
 //    }
 //    
-
-    public String dispersalBealsBtn_action() {
-          System.out.print("dispersalBeals button action  -dispersalBean");
-//        Dispersal.PlotBealsSummary
-//        ChemoMetrics.PlotPCAPairSummary(sb, sb.getNewImage("pca_pair"), "png", 72, dispersalBgdNum);
-//        RequestContext.getCurrentInstance().scrollTo("ac:form1:pairPane");
-        return null;
-    }
+//    private int dispersalBgdNum = 5;
+//
+//    public int getDispersalBgdNum() {
+//        return dispersalBgdNum;
+//    }
+//
+//    public void setDispersalBgdNum(int dispersalBgdNum) {
+//        this.dispersalBgdNum = dispersalBgdNum;
+//    } 
+////    public String dispersalBgdBtn_action() {
+////        Dispersal.PlotBGD(sb, sb.getNewImage("bgd"), "png", 72, dispersalBgdNum);
+////        RequestContext.getCurrentInstance().scrollTo("ac:form2:screePane");
+////        return null;
+////    }
+////    
+//
+//    public String dispersalBealsBtn_action() {
+//          System.out.print("dispersalBeals button action  -dispersalBean");
+////        Dispersal.PlotBealsSummary
+////        ChemoMetrics.PlotPCAPairSummary(sb, sb.getNewImage("pca_pair"), "png", 72, dispersalBgdNum);
+////        RequestContext.getCurrentInstance().scrollTo("ac:form1:pairPane");
+//        return null;
+//    }
     
     
     

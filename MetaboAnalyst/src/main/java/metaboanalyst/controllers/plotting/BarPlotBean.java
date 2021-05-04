@@ -26,138 +26,65 @@ import org.primefaces.model.chart.LineChartModel;
 import org.primefaces.model.chart.LineChartSeries;
 import org.rosuda.REngine.Rserve.RConnection;
 
-/**
- *
- * @author Leif
- */
-@ManagedBean(name = "linear")
+
+
+@ManagedBean(name = "barPlotBean")
 @ViewScoped
-public class LinearBean implements Serializable {
+public class BarPlotBean implements Serializable {
 
     private final ApplicationBean1 ab = (ApplicationBean1) DataUtils.findBean("applicationBean1");
     private final SessionBean1 sb = (SessionBean1) DataUtils.findBean("sessionBean1");
-
+    private final SelectItem[] trendlineOpts;
+    private final SelectItem[] colorOpts;
     
-    private String linearPlotType = "l";
+    private String colorChosen;
+    private String lineBF;
+   
 
-    public String getLinearPlotType() {
-        return linearPlotType;
+    public String getColorChosen() {
+        return colorChosen;
     }
 
-    public void setLinearPlotType(String linearPlotType) {
-        this.linearPlotType = linearPlotType;
-    }
-    
-    private int linNumLines = 1;
-
-    public int getLinNumLines() {
-        return linNumLines;
-    }
-
-    public void setLinNumLines(int linNumLines) {
-        this.linNumLines = linNumLines;
+    public void setColorChosen(String colorChosen) {
+        this.colorChosen = colorChosen;
     }
     
-    private String linColor = "black";
-
-    public String getLinColor() {
-        return linColor;
+    public String getLineBF() {
+        return lineBF;
     }
 
-    public void setLinColor(String linColor) {
-        this.linColor = linColor;
+    public void setLineBF(String linBF) {
+        this.lineBF = lineBF;
+    }
+        
+    public SelectItem[] getTrendlineOpts() {
+        return trendlineOpts;
     }
     
-    private int linWeight = 1;
-    
-    public int getLinWeight(){
-        return linWeight;
-    }
-
-    public void setLinWeight(int linWeight){
-        this.linWeight = linWeight; 
-    }
-    
-//    defines what shapes to use as points on the graph, default is filled in bullets.
-    private int linPchs = 21;  
-    
-    public int getLinPchs(){
-        return linPchs;
-    }
-
-    public void setLinPchs(int linPchs){
-        this.linPchs = linPchs; 
-    }
-    
-    private String linxLabel = "x axis";
-
-    public String getLinxLabel() {
-        return linxLabel;
-    }
-
-    public void setLinxLabel(String linxLabel) {
-        this.linxLabel = linxLabel;
-    }
-    
-    private String linyLabel = "y axis";
-
-    public String getLinyLabel() {
-        return linyLabel;
-    }
-
-    public void setLinyLabel(String linyLabel) {
-        this.linyLabel = linyLabel;
-    }
-    
-    private String linTitle = "Graph Title";
-
-    public String getLinTitle() {
-        return linTitle;
-    }
-
-    public void setLinTitle(String linTitle) {
-        this.linTitle = linTitle;
+    public SelectItem[] getColorOpts() {
+        return colorOpts;
     }
     
     
-    private SelectItem[] linColumnOpts = null;
-    
-    public SelectItem[] getLinColumnOpts(){
-        String[] columns = PlottingUtils.GetDataColumns(sb);
-        int columnsLen = columns.length;
-        linColumnOpts = new SelectItem[columnsLen];
-        List<String> columnNames = Arrays.asList(columns);
-        for (int i = 0; i < columnsLen; i++) {
-            linColumnOpts[i] = new SelectItem(columnNames.get(i), columnNames.get(i));
-        }
-        //List<String> columnNames = Arrays.asList(columns);
-        return linColumnOpts;
-    }
-    private String linColumnNameA = getLinColumnOpts()[0].getLabel();
-    
-    public String getLinColumnNameA() {
-        return linColumnNameA;
-    }
-
-    public void setLinColumnNameA(String linColumnNameA) {
-        this.linColumnNameA = linColumnNameA;
+    public void barBtn_action() {
+        PlottingUtils.CreateBarChart(sb, "FALSE", "NULL", lineBF, colorChosen, "NULL", "NULL", "NULL", "NULL");
+        PlottingUtils.PlotBarChart(sb, sb.getCurrentImage("plot_bar_chart"), "png", 72); 
     }
     
-    private String linColumnNameB = getLinColumnOpts()[1].getLabel();
-    
-    public String getLinColumnNameB() {
-        return linColumnNameB;
-    }
+    public BarPlotBean() {
+        
+        trendlineOpts = new SelectItem[3];
+        trendlineOpts[0] = new SelectItem("lbf", "Line of Best Fit");
+        trendlineOpts[1] = new SelectItem("lowess", "Locally Weighted Trend Line");
+        trendlineOpts[2] = new SelectItem("NULL", "None");
 
-    public void setLinColumnNameB(String linColumnNameB) {
-        this.linColumnNameB = linColumnNameB;
+        colorOpts = new SelectItem[5];
+        colorOpts[0] = new SelectItem("r", "Rainbow");
+        colorOpts[1] = new SelectItem("v", "Viridis");
+        colorOpts[2] = new SelectItem("g", "Grey");
+        colorOpts[3] = new SelectItem("p", "Plasma");
+        colorOpts[4] = new SelectItem("NULL", "Light blue");
+        
     }
-    public void linearBtn_action() {
-
-        PlottingUtils.PlotlinearGraph(sb, sb.getNewImage("lin"), "png", 72, 
-                linearPlotType, linNumLines, linColor, linWeight, linPchs, linxLabel, linyLabel, linTitle, linColumnNameA, linColumnNameB);
-        RequestContext.getCurrentInstance().scrollTo(":ac:form1:linPane");
-    }
-
    
 }

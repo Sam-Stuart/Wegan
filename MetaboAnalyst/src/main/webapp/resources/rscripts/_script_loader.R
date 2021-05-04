@@ -15,7 +15,7 @@ network_files <- c("networks", "enrich_integ", "enrich_name_match", "gene_fun_ut
 other_files <- c("others_batch_check", "others_lipomics", "enrich_name_match");
 nmds_files <- c("test-Vegan", "dispersal", "plotting");
 dispersal_files <- c("dispersal");
-plotting_files <- c("plotting");
+plotting_files <- c("plotting", "plotting_pie", "plot_bar", "plot_box", "plot_scatter");
 correlation_files <- c("correlation_linear", "correlation_penalized", "correlation_polynomial", "correlation_ml", "correlation_multivariate", "correlation_SVM");
 ordination_files <- c("oa_nmds");
 nmds_files <- c("test-Vegan","Dispersal");
