@@ -12,7 +12,7 @@
     </ui:define>
     <ui:define name="content">
         <h:form id="form1">
-            <h:panelGrid style="padding:20px 40px 20px 40px; font-size: 13px; line-height: 25px; width:100%">
+            <h:panelGrid style="padding:20px 40px 20px 40px; font-size: 13px; line-height: 25px; width:100%; position: relative">
                 <h1>Normalization overview:</h1>
                 <h:panelGrid style="width:100%; background-color: #75bafb;"></h:panelGrid>
                 <h:panelGrid style="width:100%; background-color: white; "></h:panelGrid>
@@ -25,7 +25,7 @@
                     allows general-purpose adjustment for differences among your sample; data transformation and scaling are two different 
                     approaches to make individual features more comparable. You can use one or combine them to achieve better results.  
                 </h:panelGrid>
-
+                
                 <p:selectOneRadio id="rowRadio" value="#{normBean.rowNormOpt}" layout="custom">  
                     <f:selectItems value="#{applicationBean1.dataNormOpts}"/> 
                 </p:selectOneRadio>
@@ -36,7 +36,7 @@
                     <f:selectItems value="#{applicationBean1.scaleNormOpts}"/> 
                 </p:selectOneRadio>
                 
-                <h:panelGrid columns="2" style="margin-left: 5px; margin-right: 800px; border: none; width: 100%; padding: 15px 10px 10px 25px; background-color: #8cbd4830; font-size: 14px; position:relative">
+                <h:panelGrid columns="2" style=" border: none; width: 100%; padding: 5px 10px 10px 5px; background-color: #8cbd4830; font-size: 14px; position:relative">
                     <h:panelGrid>
                         <b>Sample normalization</b>
                         <h:panelGrid columns="3" style="padding:2px 12px 10px 10px">
