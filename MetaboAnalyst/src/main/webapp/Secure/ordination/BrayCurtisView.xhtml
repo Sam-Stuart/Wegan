@@ -149,6 +149,33 @@
                         <p>
                             The use of data groupings will create more interesting plots. Load grouping data separately, where each row aligns with the rows in your data set, or include groupings as columns in your data set.
                         </p>
+                        <h3>Dataset Options:</h3>
+                        <h:panelGrid id="panelGrid" columns="5" cellpadding="3" columnClasses="colBrayLong,colBrayShort,colBrayLong,colBrayShort, colLast">
+                                
+                                <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
+                                <p:selectBooleanCheckbox value ="#{brayBean.doOriginal}"/> 
+                                <h:outputLabel style="font-weight: bold" value="Perform Relative Abundance Transformation:"/>
+                                <p:selectBooleanCheckbox value ="#{brayBean.doAbundance}"/> 
+                                <p:panelGrid></p:panelGrid>
+                                
+                                <h:outputLabel style="font-weight: bold" value="Dataset is presence/absence data:"/>
+                                <p:selectBooleanCheckbox value ="#{brayBean.dataAbsence}"/> 
+                                
+                                <h:outputLabel style="font-weight: bold" value="Distance Measure:"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{brayBean.distOpts}">
+                                    <f:selectItems value="#{applicationBean1.vegdistMeasureOpts}" />
+                                </p:selectOneMenu> 
+                                <p:panelGrid></p:panelGrid>
+                                
+                        </h:panelGrid>
+                        <h:panelGrid columns="1" cellpadding="3" style="float: right">    
+                            <p:commandButton value="Update" 
+                                             style="background: #75bafb; border: 5px #75bafb; color: black"
+                                            onclick="PF('statusDialog').show()"
+                                            oncomplete="PF('statusDialog').hide()"  
+                                            update=":overviewbray:form3:brayPane3  :cmdPane" 
+                                            actionListener="#{brayBean.brayUpdate_action()}"/>                          
+                        </h:panelGrid>
                         <h:panelGrid class="resultsBar" columns="2">
                             <h:panelGroup>
                                 <h:panelGrid columns="1" style="text-align : left;">
@@ -189,6 +216,14 @@
                                 </p:selectOneMenu> 
                                 <p:panelGrid></p:panelGrid>
                                 
+                        </h:panelGrid>
+                        <h:panelGrid columns="1" cellpadding="3" style="float: right">    
+                            <p:commandButton value="Update" 
+                                             style="background: #75bafb; border: 5px #75bafb; color: black"
+                                            onclick="PF('statusDialog').show()"
+                                            oncomplete="PF('statusDialog').hide()"  
+                                            update=":overviewbray:form3:brayPane3  :cmdPane" 
+                                            actionListener="#{brayBean.brayUpdate_action()}"/>                          
                         </h:panelGrid>
                         <h:panelGrid class="resultsBar" columns="2">
                             <h:panelGroup>
