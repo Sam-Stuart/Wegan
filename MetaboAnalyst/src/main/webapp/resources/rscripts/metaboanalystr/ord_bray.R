@@ -9,20 +9,15 @@
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2)
 #'@export
-ord.bray <- function(mSetObj=NA, abundance=NULL, distance="NULL", data=NULL, binary=NULL) { 
+ord.bray <- function(mSetObj=NA, abundance="NULL", distance="NULL", data=NULL, binary=NULL) { 
   
-  # install.packages("remotes")
-  # remotes::install_github("jarioksa/natto", force=TRUE)
   library("natto")
   library("vegan")
   library("dplyr") #For easy data manipulation
   
-  ####FOR TESTING META DATA####
-  #metaData <- .readDataTable("/home/louisa/Wegan/Wegan/MetaboAnalyst/src/main/webapp/resources/rscripts/metaboanalystr/test_data/dune_meta.csv")
-
   #Obtain mSet dataset
   mSetObj <- .get.mSet(mSetObj)
-  if (is.null(data) {
+  if (is.null(data)) {
     input <- mSetObj$dataSet$norm
   } else {
     input <- mSetObj$dataSet$orig
@@ -57,7 +52,7 @@ ord.bray <- function(mSetObj=NA, abundance=NULL, distance="NULL", data=NULL, bin
   
   #Performed Bray-Curtis Ordination
   polar <- polarord(dist, k = 6)
-
+  metaData = FALSE
   #Get meta data, used to group samples for plotting
   if (is.data.frame(metaData)==FALSE) { #No user uplaoded meta data
     fac_data <- select_if(input, is.factor)
@@ -356,7 +351,11 @@ Plot.bray.3D <- function(mSetObj=NA, color="NULL", var_arrows=NULL, meta_col_col
     } else {
       cols <- colors[meta_col_color_data]
     }
-    bray3D_plot$score$color <- col2rgb(cols)
+    bray3D_plot$score$colors <- col2rgb(cols)
+    cols <- unique(GetColorSchema(mSetObj));
+    rgbcols <- col2rgb(cols);
+    cols <- apply(rgbcols, 2, function(x){paste("rgb(", paste(x, collapse=","), ")", sep="")})
+    bray3D_plot$score$colors <- cols;
 
   }
   

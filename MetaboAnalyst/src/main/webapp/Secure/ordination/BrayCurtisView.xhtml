@@ -7,10 +7,52 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="/frags/_anal_template.xhtml">
     <ui:define name="metaInfo">
-        <f:event type="preRenderView" listener="#{oaBean.performDefaultAnalysis('RDA')}"/> 
-        <f:event type="preRenderView" listener="#{downloader.setupDownloadTable()}"/>
+        <f:event type="preRenderView" listener="#{oaBean.performDefaultAnalysis('Bray')}"/> 
+    </ui:define>
+    <ui:define name="myscript">
+        <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/jscripts/canvasXpress.min.js"></script>
+        <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/jscripts/graphics.js"></script>
     </ui:define>
     <ui:define name="content">
+        <h:inputHidden id="mydir" value="#{sessionBean1.getJsonDir('bray_score3d')}" />
+        <script type="text/javascript">
+            // for scatter plot
+            function addBind() {
+                mychart = $("[id='ac:chart']");
+                mychart.unbind('jqplotDataClick');
+                mychart.bind('jqplotDataClick',
+                        function (ev, seriesIndex, pointIndex, data) {
+                            //note, we use the internal index, not point index 
+                            remoteCall([{name: 'cmpdIndex', value: data[0]}]);
+                        });
+            }
+
+            function ext() {
+                this.cfg.seriesDefaults = {
+                    lineWidth: 1.0,
+                    linePattern: 'dashed',
+                    showMarker: false,
+                    markerOptions: {
+                        color: 'rgba(128, 0, 128, 0.5)'
+                    },
+                    shadow: false
+                };
+                this.cfg.axes = {
+                    yaxis: {
+                        showLabel: true,
+                        tickOptions: {
+                            formatString: "%#.2f"
+                        }
+                    },
+                    xaxis: {
+                        showLabel: true,
+                        tickOptions: {
+                            formatString: "%#.2f"
+                        }
+                    }
+                };
+            }
+        </script>
         <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
             <p:tabView id="overviewRDA">
                 <p:tab title ="Overview" titleStyleClass="p-tab-nav">
@@ -33,12 +75,8 @@
                             </h:panelGroup>                            
                         </h:panelGrid>
                         <h:panelGrid id="rdaPane1" style="width: 100%;">
-                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
-                                <h:outputText escape="false" value="#{rdaBean.fileNMA}"/>
-                                <!--<h:outputLabel style="font-weight: bold" value="#{rdaBean.fileNMA}"/>-->
-                            </h:panelGrid>
                              <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
-                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('ord_rda_2D')}" alt="rda2D"/>
+                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('ord_bray_2D')}" alt="rda2D"/>
                             </h:panelGrid>                           
                             
                         </h:panelGrid> 
@@ -54,7 +92,7 @@
                         </p>
                         <h:panelGrid id="rdaPane2" style="width: 100%;">
                              <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
-                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('ord_rda_scree')}" alt="rdascree"/>
+                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('ord_bray_scree')}" alt="rdascree"/>
                             </h:panelGrid>                           
                             
                         </h:panelGrid>  
@@ -72,6 +110,9 @@
                           "The train data for model building is 70% of the dataset, while the test data for model testing is 30% of the dataset."
 
                         </p>
+                        <h:panelGrid style="width: 100%; text-align: center">
+                            <canvas id='canvasBray' width='670px' height='630px'/>
+                        </h:panelGrid> 
                     </h:form>
                 </p:tab>
                 <p:tab title ="Relative Importance" titleStyleClass="p-tab-nav">
@@ -88,6 +129,14 @@
                     </h:form>
                 </p:tab>            
             </p:tabView>
-        </h:panelGrid> 
+        </h:panelGrid>
+        <script type="text/javascript">
+            showBray3DScore();
+            $("[id='ac:chart']").bind('jqplotDataClick',
+                    function (ev, seriesIndex, pointIndex, data) {
+                        //note, we use the internal index, not point index 
+                        remoteCall([{name: 'cmpdIndex', value: data[0]}]);
+                    });
+        </script>
     </ui:define>
 </ui:composition>

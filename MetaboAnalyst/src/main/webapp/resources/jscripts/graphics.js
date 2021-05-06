@@ -265,6 +265,47 @@ function showPLSDA3DScore() {
             });
 }
 
+function showBray3DScore() {
+    console.log("INSIDE SHOW BRAY3D SCORES")
+    $.getJSON('/MetaboAnalyst' + document.getElementById("mydir").value,
+            function (raw_data) {
+                score_obj = raw_data['score'];
+                names = score_obj['name'];
+                coords = score_obj['xyz'];
+                smps = score_obj['axis'];
+//                cols = score_obj['colors'];
+                facA = score_obj['facA'];
+                cx1 = new CanvasXpress(
+                        'canvasBray',
+                        {
+                            'z': {
+                                'Legend': facA
+                            },
+                            'y': {
+                                'vars': names,
+                                'smps': smps,
+                                'data': coords
+                            }
+                        },
+                        {
+                            'graphType': 'Scatter3D',
+                            'xAxis': ['PC1'],
+                            'yAxis': ['PC2'],
+                            'zAxis': ['PC3'],
+                            'colorSCheme': 'user',
+                            'colorBy': 'Legend',
+//                            'colors': cols,
+                            'disableToolbar': 'true',
+                            'disableMenu': 'true',
+                            'gradient': 'true',
+                            'imageDir': '../../resources/images/'
+                        }
+                );
+
+            });
+}
+
+
 function export_image(name) {
     if (name === 'score') {
         document.getElementById("downloadimage").src = document.getElementById("canvas1").toDataURL();

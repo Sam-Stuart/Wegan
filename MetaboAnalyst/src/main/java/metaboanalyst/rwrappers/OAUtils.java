@@ -236,6 +236,66 @@ public class OAUtils {
             System.out.println(rse);
         }
     }
+    
+    public static void CreateBray(SessionBean1 sb, String abundance, String metaData, String envText, String data) {
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "ord.bray(NA)";
+//            String rCommand = "ord.rda(NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            RC.voidEval(rCommand);
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        }
+    }
+
+    public static void PlotBray2D(SessionBean1 sb, String color, String ellipse, String varArrows, String sampleNames, String metaColColor, String pointOptions, String metaColPoint, String imgName, String format, int dpi, String width) {
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "Plot.bray.2D(NA" 
+                                            + ", \"" + color 
+                                            + "\", \"" + ellipse
+                                            + "\", \"" + varArrows
+                                            + "\", \"" + sampleNames
+                                            + "\", \"" + metaColColor
+                                            + "\", \"" + pointOptions
+                                            + "\", \"" + metaColPoint
+                                            + "\", \"" + imgName 
+                                            + "\", \"" + format  
+                                            + "\", " + dpi 
+                                            + ", width=NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            sb.addGraphicsCMD("ord_bray_2D", rCommand);
+            RC.voidEval(rCommand);
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        }
+    }
+    public static void PlotBray3D(SessionBean1 sb, String imgName, String format) {
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "Plot.bray.3D(NA, NULL, NULL, NULL" + ", \"" + imgName + "\", \"" + format + "\")";
+//            String rCommand = "Plot.RDA.2D(NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            sb.addGraphicsCMD("bray_score3d", rCommand);
+            RC.voidEval(rCommand);
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        }
+    }
+    
+    public static void PlotBrayScree(SessionBean1 sb, String imgName, String format, int dpi, String width) {
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "Plot.bray.scree(NA" + ", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
+//            String rCommand = "Plot.RDA.2D(NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            sb.addGraphicsCMD("ord_bray_scree", rCommand);
+            RC.voidEval(rCommand);
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        }
+    }
         
 
      
