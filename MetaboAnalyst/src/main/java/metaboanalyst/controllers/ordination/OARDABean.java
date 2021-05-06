@@ -18,10 +18,7 @@ import metaboanalyst.rwrappers.OAUtils;
 
 import metaboanalyst.utils.DataUtils;
 
-/**
- *
- * @author Louisa Normington
- */
+
 @ManagedBean(name = "rdaBean")
 public class OARDABean implements Serializable {
 

@@ -73,7 +73,6 @@ public class ProcessBean implements Serializable {
                 }
 
             } else {
-                System.out.println("WE ARE HERE YES SIR");
                 System.out.println(sb.getAnalType());
                 if (RDataUtils.sanityCheckData(RC)) {
                     msgVec.add("Checking data content ...passed ");

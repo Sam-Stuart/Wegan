@@ -130,6 +130,16 @@
     width: 10%;
 }
 
+.colBrayLong {
+    width: 40%;
+}
+
+.colBrayShort {
+    width: 15%;
+}
+
+
+
 .home-banner {
   position: relative;
   left: -30px;

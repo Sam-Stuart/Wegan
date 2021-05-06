@@ -54,12 +54,68 @@
             }
         </script>
         <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
-            <p:tabView id="overviewRDA">
+            <p:tabView id="overviewbray">
                 <p:tab title ="Overview" titleStyleClass="p-tab-nav">
                     <h:form id="form1">
                         <p>
-                            RDA stuff
-                        </p> 
+                            The use of data groupings will create more interesting plots. Load grouping data separately, where each row aligns with the rows in your data set, or include groupings as columns in your data set.
+                        </p>
+                        <h3>Dataset Options:</h3>
+                        <h:panelGrid id="panelGrid" columns="5" cellpadding="3" columnClasses="colBrayLong,colBrayShort,colBrayLong,colBrayShort, colLast">
+                                
+                                <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
+                                <p:selectBooleanCheckbox value ="#{brayBean.doOriginal}"/> 
+                                <h:outputLabel style="font-weight: bold" value="Perform Relative Abundance Transformation:"/>
+                                <p:selectBooleanCheckbox value ="#{brayBean.doAbundance}"/> 
+                                <p:panelGrid></p:panelGrid>
+                                
+                                <h:outputLabel style="font-weight: bold" value="Dataset is presence/absence data:"/>
+                                <p:selectBooleanCheckbox value ="#{brayBean.dataAbsence}"/> 
+        
+                                <p:panelGrid></p:panelGrid>
+                                
+                        </h:panelGrid>
+                        <h3>Graph Options:</h3>
+                        <h:panelGrid id="panelGrid2" columns="5" cellpadding="3" columnClasses="colBrayLong,colBrayShort,colBrayLong,colBrayShort, colLast">
+                            <h:outputLabel style="font-weight: bold" value="Variable Arrows:"/>
+                            <p:selectBooleanCheckbox value ="#{brayBean.varArrows}"/> 
+                            <h:outputLabel style="font-weight: bold" value="Use Sample Names:"/>
+                            <p:selectBooleanCheckbox value ="#{brayBean.sampleNames}"/> 
+                            <p:panelGrid></p:panelGrid> 
+                            <h:outputLabel style="font-weight: bold" value="Distance Measure:"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{brayBean.distOpts}">
+                                    <f:selectItems value="#{applicationBean1.vegdistMeasureOpts}" />
+                                </p:selectOneMenu> 
+                                                               
+                        </h:panelGrid>
+                        
+                        <h3>MetaData Options:</h3>
+                        <h:panelGrid id="panelGrid3" columns="5" cellpadding="3" columnClasses="colBrayLong,colBrayShort,colBrayLong,colBrayShort, colLast">
+                            <h:outputLabel style="font-weight: bold" value="Ellipse:"/>
+                                <p:selectBooleanCheckbox value ="#{brayBean.addEllipse}"/> 
+                                
+                            <h:outputLabel style="font-weight: bold" value="Color Grouping Column:"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ brayBean.groupCol}">
+                                    <f:selectItems value="#{applicationBean1.vegdistMeasureOpts}" />
+                                </p:selectOneMenu> 
+
+                            <p:panelGrid></p:panelGrid>  
+                            
+                            <h:outputLabel style="font-weight: bold" value="Color Pallet:"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ brayBean.color}">
+                                    <f:selectItems value="#{applicationBean1.vegdistMeasureOpts}" />
+                                </p:selectOneMenu>
+                        </h:panelGrid>
+                        
+                        <h:panelGrid id="panelGrid4" columns="1" cellpadding="3" style="float: right">    
+                            <p:commandButton value="Update" 
+                                             style="background: #75bafb; border: 5px #75bafb; color: black"
+                                            onclick="PF('statusDialog').show()"
+                                            oncomplete="PF('statusDialog').hide()"  
+                                            update=":overviewbray:form1:brayPane1  :cmdPane" 
+                                            actionListener="#{brayBean.brayUpdate_action()}"/>                          
+                        </h:panelGrid>
+                        
                         <h:panelGrid class="resultsBar" columns="2">
                             <h:panelGroup>
                                 <h:panelGrid columns="1" style="text-align : left;">
@@ -68,29 +124,88 @@
                             </h:panelGroup> 
                             <h:panelGroup>
                                 <h:panelGrid columns="3" class="resultsImages">
-                                    <i class="fas fa-palette"></i>
-                                    <i class="fa fa-table"></i>
                                     <i class="fa fa-question-circle"></i>
                                 </h:panelGrid>
                             </h:panelGroup>                            
                         </h:panelGrid>
-                        <h:panelGrid id="rdaPane1" style="width: 100%;">
+                        <h:panelGrid id="brayPane1" style="width: 100%;">
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <h:outputText escape="false" value="#{brayBean.fileSampleScorePath}"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <h:outputText escape="false" value="#{brayBean.fileColScorePath}"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <h:outputText escape="false" value="#{brayBean.fileMatPath}"/>
+                            </h:panelGrid>                            
                              <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
                                 <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('ord_bray_2D')}" alt="rda2D"/>
-                            </h:panelGrid>                           
-                            
+                            </h:panelGrid>                            
                         </h:panelGrid> 
-                        
-                        
                     </h:form>
                 </p:tab>
-                <p:tab title ="Scree Plot" titleStyleClass="p-tab-nav">
+                <p:tab title ="Score 3D Plot" titleStyleClass="p-tab-nav">
                     <h:form id="form2">
                         <p>
-                           RDA stuff tab2
-
+                            The use of data groupings will create more interesting plots. Load grouping data separately, where each row aligns with the rows in your data set, or include groupings as columns in your data set.
                         </p>
-                        <h:panelGrid id="rdaPane2" style="width: 100%;">
+                        <h:panelGrid class="resultsBar" columns="2">
+                            <h:panelGroup>
+                                <h:panelGrid columns="1" style="text-align : left;">
+                                    Results
+                                </h:panelGrid>
+                            </h:panelGroup> 
+                            <h:panelGroup>
+                                <h:panelGrid columns="3" class="resultsImages">
+                                    <i class="fa fa-question-circle"></i>
+                                </h:panelGrid>
+                            </h:panelGroup>                            
+                        </h:panelGrid>
+                        <h:panelGrid style="width: 100%; text-align: center">
+                            <canvas id='canvasBray' width='670px' height='630px'/>
+                        </h:panelGrid> 
+                    </h:form>
+                </p:tab> 
+                <p:tab title ="Scree Plot" titleStyleClass="p-tab-nav">
+                    <h:form id="form3">
+                        <p>
+                            The use of data groupings will create more interesting plots. Load grouping data separately, where each row aligns with the rows in your data set, or include groupings as columns in your data set.
+                        </p>
+                        <h3>Dataset Options:</h3>
+                        <h:panelGrid id="panelGrid" columns="5" cellpadding="3" columnClasses="colBrayLong,colBrayShort,colBrayLong,colBrayShort, colLast">
+                                
+                                <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
+                                <p:selectBooleanCheckbox value ="#{brayBean.doOriginal}"/> 
+                                <h:outputLabel style="font-weight: bold" value="Perform Relative Abundance Transformation:"/>
+                                <p:selectBooleanCheckbox value ="#{brayBean.doAbundance}"/> 
+                                <p:panelGrid></p:panelGrid>
+                                
+                                <h:outputLabel style="font-weight: bold" value="Dataset is presence/absence data:"/>
+                                <p:selectBooleanCheckbox value ="#{brayBean.dataAbsence}"/> 
+                                
+                                <h:outputLabel style="font-weight: bold" value="Distance Measure:"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{brayBean.distOpts}">
+                                    <f:selectItems value="#{applicationBean1.vegdistMeasureOpts}" />
+                                </p:selectOneMenu> 
+                                <p:panelGrid></p:panelGrid>
+                                
+                        </h:panelGrid>
+                        <h:panelGrid class="resultsBar" columns="2">
+                            <h:panelGroup>
+                                <h:panelGrid columns="1" style="text-align : left;">
+                                    Results
+                                </h:panelGrid>
+                            </h:panelGroup> 
+                            <h:panelGroup>
+                                <h:panelGrid columns="3" class="resultsImages">
+                                    <i class="fa fa-question-circle"></i>
+                                </h:panelGrid>
+                            </h:panelGroup>                            
+                        </h:panelGrid>
+                        <h:panelGrid id="brayPane3" style="width: 100%;">
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <h:outputText escape="false" value="#{brayBean.fileScreePath}"/>
+                            </h:panelGrid>                            
                              <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
                                 <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('ord_bray_scree')}" alt="rdascree"/>
                             </h:panelGrid>                           
@@ -98,36 +213,7 @@
                         </h:panelGrid>  
                        
                     </h:form>
-                </p:tab>
-                <p:tab title ="Coefficient Plot" titleStyleClass="p-tab-nav">
-                    <h:form id="form3">
-                        <p>
-                           "One dependent variable and two or more independent variables will be tested for correlation. The dependent variable must be numeric. The independent variables can be numeric or categorical."
-                            "For categorical independent variables, make sure to use characters for the levels and not numbers. For example, if you have levels 1, 2 and 3, change the level labels to I, II and III prior to upload."
-                          "You have created this formula for model building: ", facA, " ~ ", pred.text (stored in mSetObj$analSet$rfReg$res as response and pred.text, respectively)
-                            "The L hand side is the dependent variable. The R hand side is the independent variable(s).
-                            "If the formula is not what you intended, retype independent variable(s) in the text box and/or choose another dependent variable."
-                          "The train data for model building is 70% of the dataset, while the test data for model testing is 30% of the dataset."
-
-                        </p>
-                        <h:panelGrid style="width: 100%; text-align: center">
-                            <canvas id='canvasBray' width='670px' height='630px'/>
-                        </h:panelGrid> 
-                    </h:form>
-                </p:tab>
-                <p:tab title ="Relative Importance" titleStyleClass="p-tab-nav">
-                    <h:form id="form4">
-                        <p>
-                           "One dependent variable and two or more independent variables will be tested for correlation. The dependent variable must be numeric. The independent variables can be numeric or categorical."
-                            "For categorical independent variables, make sure to use characters for the levels and not numbers. For example, if you have levels 1, 2 and 3, change the level labels to I, II and III prior to upload."
-                          "You have created this formula for model building: ", facA, " ~ ", pred.text (stored in mSetObj$analSet$rfReg$res as response and pred.text, respectively)
-                            "The L hand side is the dependent variable. The R hand side is the independent variable(s).
-                            "If the formula is not what you intended, retype independent variable(s) in the text box and/or choose another dependent variable."
-                          "The train data for model building is 70% of the dataset, while the test data for model testing is 30% of the dataset."
-
-                        </p>
-                    </h:form>
-                </p:tab>            
+                </p:tab>        
             </p:tabView>
         </h:panelGrid>
         <script type="text/javascript">
