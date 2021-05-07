@@ -432,7 +432,7 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
     line-height: 1;
     padding: 5px 4px;
     text-align: center;
-    text-shadow: 0 1px 0 #eee;
+    /*text-shadow: 0 1px 0 #eee;*/
     vertical-align: middle;
 }
 .sp-container button:hover {
@@ -445,7 +445,7 @@ See http://bgrins.github.io/spectrum/themes/ for instructions.
     border: 1px solid #bbb;
     border-bottom: 1px solid #999;
     cursor: pointer;
-    text-shadow: 0 1px 0 #ddd;
+    /*text-shadow: 0 1px 0 #ddd;*/
 }
 .sp-container button:active {
     border: 1px solid #aaa;

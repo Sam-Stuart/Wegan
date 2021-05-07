@@ -98,7 +98,7 @@ public class OABean implements Serializable {
     
     private void doDefaultBray(){
         OAUtils.CreateBray(sb, "NULL", "NULL", "NULL", "NULL");
-        OAUtils.PlotBray2D(sb, "NULL", "NULL", "NULL", "NULL", "NULL", "NULL", "NULL", sb.getCurrentImage("ord_bray_2D"), "png", 72, "NULL");
+        OAUtils.PlotBray2D(sb, "NULL", "NULL", false, false, "NULL", "NULL", "NULL", sb.getCurrentImage("ord_bray_2D"), "png", 72, "NULL");
 //        OAUtils.PlotBray3D(sb, sb.getCurrentImage("ord_rda_scree"), "png", 72, "NULL");
         OAUtils.PlotBray3D(sb, sb.getCurrentImage("bray_score3d"), "json");
         OAUtils.PlotBrayScree(sb, sb.getCurrentImage("ord_bray_scree"), "png", 72, "NULL");

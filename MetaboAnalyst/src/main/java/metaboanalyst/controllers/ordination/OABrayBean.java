@@ -178,15 +178,16 @@ public class OABrayBean implements Serializable {
     
 
     
-    
+
     
 // ACTION BUTTONS //
     public void brayUpdate_action() {
-//        OAUtils.CreateCIAOrdination(sb, coiaTypeOpts, envInput, doOriginal); 
-//        OAUtils.PlotCIAscatterOrdination(sb, doMetaGroup, ciaMetaColumnName, ordColorOpts, sb.getCurrentImage("ord_cia_scatter"), "png", 72); //ordMetaColnameOpts is a dynamic dropdown
-//        OAUtils.PlotCIAloadingOrdination(sb, coiaDataSetOpts, sb.getCurrentImage("ord_cia_loading"), "png", 72);
-//        OAUtils.PlotCIAscreeOrdination(sb, sb.getCurrentImage("ord_cia_scree"), "png", 72);    
+        OAUtils.CreateBray(sb, "NULL", "NULL", "NULL", "NULL");
+//        OAUtils.PlotBray2D(sb, "NULL", "NULL", varArrows, false, "NULL", "NULL", "NULL", sb.getCurrentImage("ord_bray_2D"), "png", 72, "NULL"); 
+        OAUtils.PlotBray2D(sb, "NULL", "NULL", true, false, "NULL", "NULL", "NULL", sb.getCurrentImage("ord_bray_2D"), "png", 72, "NULL");
     }
+    
+    
     
     
 }

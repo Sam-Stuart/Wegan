@@ -162,7 +162,7 @@ Plot.bray.2D <- function(mSetObj=NA, color="NULL", ellipse="NULL", var_arrows=NU
 
   library("vegan")
   library("viridis") 
-  
+  print(var_arrows)
   #Extract necessary objects from mSetObj
   mSetObj <- .get.mSet(mSetObj)
   bray <- mSetObj$analSet$bray$bray
@@ -192,16 +192,17 @@ Plot.bray.2D <- function(mSetObj=NA, color="NULL", ellipse="NULL", var_arrows=NU
   
   #Plot with and without ellipses/sample labels/metadata options/variable arrows/env data arrows
   if (is.data.frame(metaData)==FALSE) { #If no meta data
-    
+    print("NULL metadata")
     #point options
-    if (is.null(sampleNames)==FALSE) { #If display data as lables
+    if (sampleNames) { #If display data as lables
       text(bray$points) #Add text for samples
     } else {
       points(bray$points, pch=19, col="black") #Add text for samples
     }
     
     #arrow options
-    if (is.null(var_arrows)==FALSE) { #If variable arrows selected
+    if (var_arrows=="true") { #If variable arrows selected
+      print("inside the car arrows")
       plot(var_fit, col="darkred", choices=c(1,2), lwd=2, at=c(max(bray[["points"]][,1])/2, max(bray[["points"]][,2])/2))
     }
     
@@ -265,7 +266,7 @@ Plot.bray.2D <- function(mSetObj=NA, color="NULL", ellipse="NULL", var_arrows=NU
     }
     
     #arrow options
-    if (var_arrows!="NULL") { #If variable arrows selected
+    if (var_arrows=="true") { #If variable arrows selected
       plot(var_fit, col="darkred", lwd=2, at=c(max(bray[["points"]][,1])/2, max(bray[["points"]][,2])/2)) #Set color, linewidth and place origin in the middle of the plot
     }
     
@@ -277,7 +278,7 @@ Plot.bray.2D <- function(mSetObj=NA, color="NULL", ellipse="NULL", var_arrows=NU
     #Legend
     with(metaData, legend("topright", legend=levels(meta_col_color_data), col=colors, pch=19, title=meta_col_color_name)) # Include legend for colors in figure   
   }
-  
+  print("at the end")
   dev.off()
   
   return(.set.mSet(mSetObj))

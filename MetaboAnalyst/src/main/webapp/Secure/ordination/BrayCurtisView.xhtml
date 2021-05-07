@@ -71,45 +71,27 @@
                                 
                                 <h:outputLabel style="font-weight: bold" value="Dataset is presence/absence data:"/>
                                 <p:selectBooleanCheckbox value ="#{brayBean.dataAbsence}"/> 
-        
-                                <p:panelGrid></p:panelGrid>
                                 
-                        </h:panelGrid>
-                        <h3>Graph Options:</h3>
-                        <h:panelGrid id="panelGrid2" columns="5" cellpadding="3" columnClasses="colBrayLong,colBrayShort,colBrayLong,colBrayShort, colLast">
-                            <h:outputLabel style="font-weight: bold" value="Variable Arrows:"/>
-                            <p:selectBooleanCheckbox value ="#{brayBean.varArrows}"/> 
-                            <h:outputLabel style="font-weight: bold" value="Use Sample Names:"/>
-                            <p:selectBooleanCheckbox value ="#{brayBean.sampleNames}"/> 
-                            <p:panelGrid></p:panelGrid> 
-                            <h:outputLabel style="font-weight: bold" value="Distance Measure:"/>
+                                <h:outputLabel style="font-weight: bold" value="Distance Measure:"/>
                                 <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{brayBean.distOpts}">
                                     <f:selectItems value="#{applicationBean1.vegdistMeasureOpts}" />
                                 </p:selectOneMenu> 
-                                                               
+                                <p:panelGrid></p:panelGrid>
+                                <h:outputLabel style="font-weight: bold" value="Variable Arrows:"/>
+                                <p:selectBooleanCheckbox value ="#{brayBean.varArrows}"/> 
                         </h:panelGrid>
-                        
-                        <h3>MetaData Options:</h3>
-                        <h:panelGrid id="panelGrid3" columns="5" cellpadding="3" columnClasses="colBrayLong,colBrayShort,colBrayLong,colBrayShort, colLast">
-                            <h:outputLabel style="font-weight: bold" value="Ellipse:"/>
-                                <p:selectBooleanCheckbox value ="#{brayBean.addEllipse}"/> 
-                                
-                            <h:outputLabel style="font-weight: bold" value="Color Grouping Column:"/>
-                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ brayBean.groupCol}">
-                                    <f:selectItems value="#{applicationBean1.vegdistMeasureOpts}" />
-                                </p:selectOneMenu> 
-
-                            <p:panelGrid></p:panelGrid>  
+                        <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
                             
-                            <h:outputLabel style="font-weight: bold" value="Color Pallet:"/>
-                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ brayBean.color}">
-                                    <f:selectItems value="#{applicationBean1.vegdistMeasureOpts}" />
-                                </p:selectOneMenu>
-                        </h:panelGrid>
-                        
-                        <h:panelGrid id="panelGrid4" columns="1" cellpadding="3" style="float: right">    
+                            <p:commandButton value="Customize Graph"
+                                             styleClass="graphicsButton"
+                                             style="box-shadow: none !important; text-shadow: none !important;"
+                                             actionListener="#{sessionBean1.graphicsLnk_action('pca_pair')}" 
+                                            oncomplete="PF('graphApperanceBray').show()"/>  
+                
+                           
                             <p:commandButton value="Update" 
-                                             style="background: #75bafb; border: 5px #75bafb; color: black"
+                                             styleClass="updateButton"
+                                             style="box-shadow: none !important; text-shadow: none !important"
                                             onclick="PF('statusDialog').show()"
                                             oncomplete="PF('statusDialog').hide()"  
                                             update=":overviewbray:form1:brayPane1  :cmdPane" 
@@ -170,11 +152,12 @@
                         </h:panelGrid>
                         <h:panelGrid columns="1" cellpadding="3" style="float: right">    
                             <p:commandButton value="Update" 
-                                             style="background: #75bafb; border: 5px #75bafb; color: black"
+                                             styleClass="updateButton"
+                                             style="box-shadow: none !important; text-shadow: none !important"
                                             onclick="PF('statusDialog').show()"
                                             oncomplete="PF('statusDialog').hide()"  
-                                            update=":overviewbray:form3:brayPane3  :cmdPane" 
-                                            actionListener="#{brayBean.brayUpdate_action()}"/>                          
+                                            update=":overviewbray:form1:brayPane1  :cmdPane" 
+                                            actionListener="#{brayBean.brayUpdate_action()}"/>                           
                         </h:panelGrid>
                         <h:panelGrid class="resultsBar" columns="2">
                             <h:panelGroup>
@@ -219,10 +202,11 @@
                         </h:panelGrid>
                         <h:panelGrid columns="1" cellpadding="3" style="float: right">    
                             <p:commandButton value="Update" 
-                                             style="background: #75bafb; border: 5px #75bafb; color: black"
+                                             styleClass="updateButton"
+                                             style="box-shadow: none !important; text-shadow: none !important"
                                             onclick="PF('statusDialog').show()"
                                             oncomplete="PF('statusDialog').hide()"  
-                                            update=":overviewbray:form3:brayPane3  :cmdPane" 
+                                            update=":overviewbray:form1:brayPane1  :cmdPane" 
                                             actionListener="#{brayBean.brayUpdate_action()}"/>                          
                         </h:panelGrid>
                         <h:panelGrid class="resultsBar" columns="2">
@@ -251,6 +235,12 @@
                 </p:tab>        
             </p:tabView>
         </h:panelGrid>
+        <p:dialog modal="true" widgetVar="graphApperanceBray" 
+            style="width: 400px; height:400px;" 
+            appendTo="@(body)" header="Graphics Center"
+            draggable="false" closable="true" resizable="false"> 
+            <ui:include src="_color_palette_bray.xhtml" />
+        </p:dialog>
         <script type="text/javascript">
             showBray3DScore();
             $("[id='ac:chart']").bind('jqplotDataClick',

@@ -123,14 +123,17 @@
                         </h:panelGrid>
                     </h:panelGrid>
                     <h:panelGrid style="position: absolute; right: 35px; top: 30px">
-                        <p:commandButton style="background: #75bafb ; padding: 4px 7px 4px 7px; width: 150px; font-size: 18px; color: black; margin-bottom: 10px" 
-                                         value="Auto Normalize" onclick="PF('statusDialog').show()" 
+                        <p:commandButton value="Auto Normalize" onclick="PF('statusDialog').show()" 
+                                         styleClass="normButton"
+                                         style="box-shadow: none !important; text-shadow: none !important;"
                                          oncomplete="PF('statusDialog').hide()" 
                                          update=":ac form1:viewBn form1:nextBn  :cmdPane"
                                          actionListener="#{normBean.performDataNormalization()}"/>  
                         
-                        <p:commandButton style="background: #75bafb ; padding: 4px 7px 4px 7px; width: 150px; font-size: 18px; color: black; margin-bottom: 10px" 
-                                         value="Custom Normalize" onclick="PF('statusDialog').show()" 
+                        <p:commandButton value="Custom Normalize" 
+                                         styleClass="normButton"
+                                         style="box-shadow: none !important; text-shadow: none !important;"
+                                         onclick="PF('statusDialog').show()" 
                                          oncomplete="PF('statusDialog').hide()" update=":ac form1:viewBn form1:nextBn  :cmdPane"
                                          actionListener="#{normBean.performDataNormalization()}"/>  
                     </h:panelGrid>
@@ -244,6 +247,8 @@
                     </h:panelGrid>
                     <h:panelGrid columns="2" style="padding-top: 10px; width:100%; font-size: 14px; text-align: center">
                         <p:commandButton value="Submit" 
+                                         styleClass="submitButton"
+                                         style="box-shadow: none !important; text-shadow: none !important"
                                          update=":form1:normPane  :cmdPane"
                                          onclick="PF('refGrpDialog').hide()"/>
                         <p:commandButton value="Cancel" onclick="PF('refGrpDialog').hide()"/>
@@ -264,6 +269,8 @@
                     </h:panelGrid>
                     <h:panelGrid columns="2" style="padding-top: 10px; width:100%; font-size: 14px; text-align: center">
                         <p:commandButton value="Submit" 
+                                         styleClass="submitButton"
+                                         style="box-shadow: none !important; text-shadow: none !important"
                                          update=":form1:normPane  :cmdPane"
                                          onclick="PF('refVarDialog').hide()"/>
                         <p:commandButton value="Cancel" onclick="PF('refVarDialog').hide()"/>

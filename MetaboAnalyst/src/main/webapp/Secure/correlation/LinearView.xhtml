@@ -10,10 +10,6 @@
     <ui:define name="metaInfo">
         <f:event type="preRenderView" listener="#{caBean.performDefaultAnalysis('Linear')}"/> 
     </ui:define>
-<!--    <ui:define name="myscript">
-        <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/jscripts/canvasXpress.min.js"></script>
-        <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/jscripts/graphics.js"></script>
-    </ui:define>-->
     <ui:define name="content">
         <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
             <p:tabView id="linCA" style="border-bottom-color: #8cbd48 !important">
@@ -47,7 +43,8 @@
                           
 
                             <p:commandButton value="Update" 
-                                             style="background: #75bafb; border: 5px #75bafb; color: black"
+                                             styleClass="updateButton"
+                                             style="box-shadow: none !important; text-shadow: none !important"
                                             onclick="PF('statusDialog').show()"
                                             oncomplete="PF('statusDialog').hide()"  
                                             update=":linCA:form1:corrLinPane1  :cmdPane" 

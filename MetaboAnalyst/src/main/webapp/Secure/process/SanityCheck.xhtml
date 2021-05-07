@@ -43,13 +43,15 @@
                 </h:panelGrid>
                 <h:panelGrid style="position:absolute; right: 5px; width: 320px">
                     <h:panelGrid rendered="#{not (procBean.bnDisabled or sessionBean1.analType eq 'mummichog')}" columns="2" columnClasses="ui-grid-col-7, ui-grid-col-5" style="width: 280px; text-align: right">
-                        <p:commandButton style ="background: #8cbd48; border: none; padding: 4px 7px 4px 7px; width: 190px; font-size: 18px; color: black"
-                                         value="Missing value estimation" ajax="false" 
+                        <p:commandButton value="Missing value estimation" ajax="false" 
+                                         styleClass="sanityButton"
+                                         style="box-shadow: none !important; text-shadow: none !important;"
                                          onclick="PF('statusDialog').show()"
                                          action="#{procBean.imputeButton_action()}"/> 
 
-                        <p:commandButton style ="background: #75bafb; padding: 4px 7px 2px 7px; width: 70px;  font-size: 18px; color: black"
-                                         value="Skip" ajax="false" 
+                        <p:commandButton value="Skip" ajax="false" 
+                                         styleClass="submitButton"
+                                         style="box-shadow: none !important; text-shadow: none !important;"
                                          onclick="PF('statusDialog').show()"
                                          disabled="#{procBean.bnDisabled}"
                                          action="#{procBean.skipButton_action()}"/>    
