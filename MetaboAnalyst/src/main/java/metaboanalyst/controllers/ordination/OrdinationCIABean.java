@@ -134,9 +134,9 @@ public class OrdinationCIABean implements Serializable {
 // ACTION BUTTON //
     public void ciaUpdate_action() {
         OAUtils.CreateCIAOrdination(sb, coiaTypeOpts, envInput, doOriginal); 
-        OAUtils.PlotCIAscatterOrdination(sb, doMetaGroup, ciaMetaColumnName, ordColorOpts, sb.getCurrentImage("ord_cia_scatter"), "png", 72); //ordMetaColnameOpts is a dynamic dropdown
-        OAUtils.PlotCIAloadingOrdination(sb, coiaDataSetOpts, sb.getCurrentImage("ord_cia_loading"), "png", 72);
-        OAUtils.PlotCIAscreeOrdination(sb, sb.getCurrentImage("ord_cia_scree"), "png", 72);    
+        OAUtils.PlotCIAscatterOrdination(sb, doMetaGroup, ciaMetaColumnName, ordColorOpts, sb.getNewImage("ord_cia_scatter"), "png", 72); //ordMetaColnameOpts is a dynamic dropdown
+        OAUtils.PlotCIAloadingOrdination(sb, coiaDataSetOpts, sb.getNewImage("ord_cia_loading"), "png", 72);
+        OAUtils.PlotCIAscreeOrdination(sb, sb.getNewImage("ord_cia_scree"), "png", 72);    
     }
     
 }

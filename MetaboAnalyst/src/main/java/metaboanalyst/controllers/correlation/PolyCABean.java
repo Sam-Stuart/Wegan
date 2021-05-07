@@ -112,15 +112,15 @@ public class PolyCABean implements Serializable {
     public void corrPoly1Btn_action() {
         System.out.println("Inside poly");
         CAUtils.CreatePolynomialModel(sb, columnNameA, columnNameB);
-        CAUtils.PlotPolynomialCA(sb, polyDegree, sb.getCurrentImage("corr_poly"), "png", 72);
+        CAUtils.PlotPolynomialCA(sb, polyDegree, sb.getNewImage("corr_poly"), "png", 72);
         System.out.println("Done poly");
     }
     // ACTION BUTTONS //
     public void corrPolyPredBtn_action() {
         System.out.println("Inside poly");
         CAUtils.CreatePolynomialModel(sb, columnNameA, columnNameB);
-        CAUtils.PlotPolynomialCA(sb, polyDegree, sb.getCurrentImage("corr_poly"), "png", 72);
-        CAUtils.PlotPolynomialPredictCA(sb, 2, sb.getCurrentImage("corr_poly_pred"), "png", 72);
+        CAUtils.PlotPolynomialCA(sb, polyDegree, sb.getNewImage("corr_poly"), "png", 72);
+        CAUtils.PlotPolynomialPredictCA(sb, 2, sb.getNewImage("corr_poly_pred"), "png", 72);
         System.out.println("Done poly");
     }    
 }

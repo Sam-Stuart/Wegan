@@ -194,7 +194,7 @@ Plot.bray.2D <- function(mSetObj=NA, color="NULL", ellipse="NULL", var_arrows=NU
   if (is.data.frame(metaData)==FALSE) { #If no meta data
     print("NULL metadata")
     #point options
-    if (sampleNames) { #If display data as lables
+    if (sampleNames=="true") { #If display data as lables
       text(bray$points) #Add text for samples
     } else {
       points(bray$points, pch=19, col="black") #Add text for samples
@@ -254,7 +254,7 @@ Plot.bray.2D <- function(mSetObj=NA, color="NULL", ellipse="NULL", var_arrows=NU
       pchs <- pch_options[meta_col_point_data] #Otherwise use points for grouping by color
     }
     
-    if (is.null(sampleNames)==FALSE) { #If display data as lables
+    if (sampleNames=="true") { #If display data as lables
       with(metaData, text(bray$points, col=cols, bg=cols)) # Text for samples
     } else { #display data as points
       if (is.null(point_options)) { #No grouping by points (default)
@@ -271,7 +271,7 @@ Plot.bray.2D <- function(mSetObj=NA, color="NULL", ellipse="NULL", var_arrows=NU
     }
     
     #Ellipse option
-    if (ellipse!="NULL") { #if ellipses selected
+    if (ellipse=="true") { #if ellipses selected
       with(metaData, ordiellipse(bray, meta_col_color_data, kind="sd", draw="polygon", border=colors, lwd=2)) # Include standard deviation ellipses that are the same color as the text.
     }
     

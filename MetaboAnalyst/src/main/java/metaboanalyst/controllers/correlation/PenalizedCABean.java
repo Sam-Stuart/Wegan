@@ -89,13 +89,13 @@ public class PenalizedCABean implements Serializable {
     public void penalizedUpdate_action() {
         System.out.println(corrFunctionMethods);
         CAUtils.CreatePenalizedModel(sb, corrFunctionMethods, columnNameA, addWeights);
-        CAUtils.PlotPenalizedCA(sb, sb.getCurrentImage("corr_penalized"), "png", 72);
+        CAUtils.PlotPenalizedCA(sb, sb.getNewImage("corr_penalized"), "png", 72);
     }
     
     public void penalizedUpdate2_action() {
         System.out.println(corrFunctionMethods);
         CAUtils.CreatePenalizedModel(sb, corrFunctionMethods, columnNameA, addWeights);
-        CAUtils.PlotPenalizedCVCA(sb, sb.getCurrentImage("corr_penalized2"), "png", 72);
+        CAUtils.PlotPenalizedCVCA(sb, sb.getNewImage("corr_penalized2"), "png", 72);
     }
 
 

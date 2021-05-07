@@ -249,7 +249,7 @@ public class OAUtils {
         }
     }
 
-    public static void PlotBray2D(SessionBean1 sb, String color, String ellipse, Boolean varArrows, Boolean sampleNames, String metaColColor, String pointOptions, String metaColPoint, String imgName, String format, int dpi, String width) {
+    public static void PlotBray2D(SessionBean1 sb, String color, Boolean ellipse, Boolean varArrows, Boolean sampleNames, String metaColColor, String pointOptions, String metaColPoint, String imgName, String format, int dpi, String width) {
         try {
             RConnection RC = sb.getRConnection();
             String rCommand = "Plot.bray.2D(NA" 

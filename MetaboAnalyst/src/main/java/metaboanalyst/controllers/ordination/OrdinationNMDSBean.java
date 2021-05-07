@@ -166,10 +166,10 @@ public class OrdinationNMDSBean implements Serializable {
 //// ACTION BUTTONS //
 //    public void nmdsUpdate_action() {
 //        OAUtils.CreateNMDSOrdination(sb, vegdistOpts, doAbundance, doOriginal, "NULL", "NULL", "NULL");
-//        OAUtils.PlotNMDS2DOrdination(sb, ellipseOpts, var_arrowsOpts, env_arrowsOpts, env_centOpts, sampleNamesOpts, point_optionsOpts, ordColorOpts, "NULL", "NULL", sb.getCurrentImage("ord_nmds_2D"), "png", 72, "NULL");
-////        OAUtils.PlotNMDS3DOrdination(sb, "NULL", "NULL", "NULL", sb.getCurrentImage("ord_nmds_3D"), "png", 72, "NULL");
-//        OAUtils.PlotNMDSstressOrdination(sb, ordStressDimOpts, sb.getCurrentImage("ord_nmds_stress"), "png", 72, "NULL");
-//        OAUtils.PlotNMDSscreeOrdination(sb, sb.getCurrentImage("ord_nmds_scree"), "png", 72, "NULL");    
+//        OAUtils.PlotNMDS2DOrdination(sb, ellipseOpts, var_arrowsOpts, env_arrowsOpts, env_centOpts, sampleNamesOpts, point_optionsOpts, ordColorOpts, "NULL", "NULL", sb.getNewImage("ord_nmds_2D"), "png", 72, "NULL");
+////        OAUtils.PlotNMDS3DOrdination(sb, "NULL", "NULL", "NULL", sb.getNewImage("ord_nmds_3D"), "png", 72, "NULL");
+//        OAUtils.PlotNMDSstressOrdination(sb, ordStressDimOpts, sb.getNewImage("ord_nmds_stress"), "png", 72, "NULL");
+//        OAUtils.PlotNMDSscreeOrdination(sb, sb.getNewImage("ord_nmds_scree"), "png", 72, "NULL");    
 //    }
     
 }
