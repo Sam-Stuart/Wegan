@@ -78,7 +78,7 @@ public class RFCABean implements Serializable {
         // ACTION BUTTONS //
     public void corrRFBtn_action() {
         CAUtils.CreateSVMModel(sb, columnNameA, indInput);
-        CAUtils.PlotSVMCA(sb, sb.getCurrentImage("corr_svm"), "png", 72);
+        CAUtils.PlotSVMCA(sb, sb.getNewImage("corr_svm"), "png", 72);
     }
 //    // ACTION BUTTONS //
 //    public void corrPolyPredBtn_action() {

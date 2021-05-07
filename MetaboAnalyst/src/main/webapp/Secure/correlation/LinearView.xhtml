@@ -5,10 +5,13 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
-                template="/frags/_anal_template.xhtml"
-                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+                template="/frags/_anal_template.xhtml">
     <ui:define name="metaInfo">
         <f:event type="preRenderView" listener="#{caBean.performDefaultAnalysis('Linear')}"/> 
+    </ui:define>
+    <ui:define name="myscript">
+        <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/jscripts/canvasXpress.min.js"></script>
+        <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/jscripts/graphics.js"></script>
     </ui:define>
 <!--    <ui:define name="myscript">
         <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/jscripts/canvasXpress.min.js"></script>
@@ -45,7 +48,6 @@
                             <p:panelGrid></p:panelGrid>
 
                           
-
                             <p:commandButton value="Update" 
                                              style="background: #75bafb; border: 5px #75bafb; color: black"
                                             onclick="PF('statusDialog').show()"
@@ -60,12 +62,6 @@
                                     <img src="#{facesContext.externalContext.requestContextPath}/resources/images/imgcenter.png"/>
                         </p:commandLink>
                         <ui:include src="_results_bar.xhtml" />
-                        <p:dialog modal="true" widgetVar="graphApperance" 
-                            style="width: 400px; height:400px;" 
-                            appendTo="@(body)" header="Graphics Center"
-                            draggable="false" closable="true" resizable="false"> 
-                            <ui:include src="_color_palette.xhtml" />
-                        </p:dialog>
                                   
                         <h:panelGrid id="corrLinPane1" style="width: 100%;">
                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">

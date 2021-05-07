@@ -43,7 +43,7 @@ public class CAUtils {
             RConnection RC = sb.getRConnection();
             String rCommand = "plot.linReg1(NA" + ", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
             RCenter.recordRCommand(RC, rCommand);
-            //sb.addGraphicsCMD("corr_linear", rCommand);
+            sb.addGraphicsCMD("corr_linear", rCommand);
             RC.voidEval(rCommand);
             return true;
         } catch (RserveException rse) {
