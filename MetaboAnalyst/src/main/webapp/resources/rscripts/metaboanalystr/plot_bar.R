@@ -54,9 +54,9 @@ barGraph_setup <- function(mSetObj = NA, byrow = "FALSE", colNum = "NULL", rowNu
       } else {
         input <- input[,colNum]
       } 
-      #if (rowNum != "NULL"){
-      #  input <- input[rowNum,] # input selected rows, default is to use all the rows.
-      #}
+      if (rowNum != "NULL"){
+        input <- input[rowNum,] # input selected rows, default is to use all the rows.
+      }
       if (is.numeric(input)){
         input <- input[which(input > 0)] # remove any zeros from the data.
       }

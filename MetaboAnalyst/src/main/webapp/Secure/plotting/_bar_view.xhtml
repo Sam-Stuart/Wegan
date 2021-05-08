@@ -17,13 +17,24 @@
                 <f:selectItems value="#{barPlotBean.colorOpts}" />
             </p:selectOneMenu> 
 
-        <h:outputLabel style="font-weight: bold" value="Line of Best Fit:"/>
-            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{barPlotBean.lineBF}">
-                <f:selectItems value="#{barPlotBean.trendlineOpts}" />
-            </p:selectOneMenu> 
-
+        <h:outputLabel style="font-weight: bold" value="x axis label: "/>
+        <p:inputText value="#{barPlotBean.labx}"></p:inputText>
+        <h:outputLabel style="font-weight: bold" value="y axis label: "/>
+        <p:inputText value="#{barPlotBean.laby}"></p:inputText>-->
+        <h:outputLabel style="font-weight: bold" value="Main Title: "/>
+        <p:inputText value="#{barPlotBean.title}"></p:inputText>-->
         <p:panelGrid></p:panelGrid>
+        
 
+                <h:selectManyCheckbox id="subscriptions" layout="pageDirection">
+                <f:selectItem id="item1" itemLabel="News" itemValue="1" />
+                <f:selectItem id="item2" itemLabel="Sports" itemValue="2" />
+                <f:selectItem id="item3" itemLabel="Music" itemValue="3" />
+                <f:selectItem id="item4" itemLabel="Java" itemValue="4" />
+                <f:selectItem id="item5" itemLabel="Web" itemValue="5" />
+            </h:selectManyCheckbox>
+
+        
         <p:commandButton value="Update" 
                          style="background: #75bafb; border: 5px #75bafb; color: black"
                         onclick="PF('statusDialog').show()"

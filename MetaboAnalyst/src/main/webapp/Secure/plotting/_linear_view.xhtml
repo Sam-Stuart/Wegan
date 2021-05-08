@@ -6,68 +6,83 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:p="http://primefaces.org/ui">
     
-    <h:panelGrid columns="2" style="width: 90%">
-        <h:panelGrid columns="2" style="padding: 2px 20px 10px 20px; line-height: 25px">
-            <h:outputLabel style="font-weight: bold" value="Independant Variable:"/>
-            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linear.linColumnNameA}">
-                <f:selectItems value="#{linear.linColumnOpts}" />
-            </p:selectOneMenu>
-            <h:outputLabel style="font-weight: bold" value="Dependant Variable:"/>
-            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linear.linColumnNameB}">
-                <f:selectItems value="#{linear.linColumnOpts}" />
-            </p:selectOneMenu>
-            <h:outputLabel style="font-weight: bold" value="Graph Type:"/>
-            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linear.linearPlotType}">
-                <f:selectItem itemLabel="Lines" itemValue="l" /> 
-                <f:selectItem itemLabel="Points" itemValue="p" />
-                <f:selectItem itemLabel="Both" itemValue="b" />
-            </p:selectOneMenu>
-            <h:outputLabel style="font-weight: bold" value="Line Color:"/>
-            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linear.linColor}" >
-                <f:selectItem itemLabel="black" itemValue="black" /> 
-                <f:selectItem itemLabel="green" itemValue="green" /> 
-                <f:selectItem itemLabel="blue" itemValue="blue" /> 
-            </p:selectOneMenu>
-            <h:outputLabel style="font-weight: bold" value="Point Shapes:"/>
-            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linear.linPchs}">
-                <f:selectItem itemLabel="Bullets" itemValue="20" /> 
-                <f:selectItem itemLabel="Circles" itemValue="1" />
-                <f:selectItem itemLabel="Squares" itemValue="0" />
-                <f:selectItem itemLabel="Plus Signs" itemValue="3" /> 
-                <f:selectItem itemLabel="x marks" itemValue="4" />
-                <f:selectItem itemLabel="Diamonds" itemValue="5" />   
-            </p:selectOneMenu>
-            <h:outputLabel style="font-weight: bold" value="Graph Title:"/>
-            <p:inputText value="#{linear.linTitle}"></p:inputText>
-            <h:outputLabel style="font-weight: bold" value="x axis label: "/>
-            <p:inputText value="#{linear.linxLabel}"></p:inputText>
-            <h:outputLabel style="font-weight: bold" value="y axis label: "/>
-            <p:inputText value="#{linear.linyLabel}"></p:inputText>
+    <h:panelGrid id="panelGrid" columns="5" cellpadding="3" columnClasses="colLeft,colRight,colLeft,colRight, colLast">
+        <h:outputLabel style="font-weight: bold" value="Independant Variable:"/>
+        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linear.linColumnNameA}">
+            <f:selectItems value="#{linear.linColumnOpts}" />
+        </p:selectOneMenu>
+        <h:outputLabel style="font-weight: bold" value="Dependant Variable:"/>
+        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linear.linColumnNameB}">
+            <f:selectItems value="#{linear.linColumnOpts}" />
+        </p:selectOneMenu>
+<!--            <h:outputLabel style="font-weight: bold" value="Graph Type:"/>
+        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linear.linearPlotType}">
+            <f:selectItem itemLabel="Lines" itemValue="l" /> 
+            <f:selectItem itemLabel="Points" itemValue="p" />
+            <f:selectItem itemLabel="Both" itemValue="b" />
+        </p:selectOneMenu>
+        <h:outputLabel style="font-weight: bold" value="Line Color:"/>
+        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linear.linColor}" >
+            <f:selectItem itemLabel="black" itemValue="black" /> 
+            <f:selectItem itemLabel="green" itemValue="green" /> 
+            <f:selectItem itemLabel="blue" itemValue="blue" /> 
+        </p:selectOneMenu>
+        <h:outputLabel style="font-weight: bold" value="Point Shapes:"/>
+        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linear.linPchs}">
+            <f:selectItem itemLabel="Bullets" itemValue="20" /> 
+            <f:selectItem itemLabel="Circles" itemValue="1" />
+            <f:selectItem itemLabel="Squares" itemValue="0" />
+            <f:selectItem itemLabel="Plus Signs" itemValue="3" /> 
+            <f:selectItem itemLabel="x marks" itemValue="4" />
+            <f:selectItem itemLabel="Diamonds" itemValue="5" />   
+        </p:selectOneMenu>-->
+<!--            <h:outputLabel style="font-weight: bold" value="Graph Title:"/>
+        <p:inputText value="#{linear.linTitle}"></p:inputText>
+        <h:outputLabel style="font-weight: bold" value="x axis label: "/>
+        <p:inputText value="#{linear.linxLabel}"></p:inputText>
+        <h:outputLabel style="font-weight: bold" value="y axis label: "/>
+        <p:inputText value="#{linear.linyLabel}"></p:inputText>-->
 
-        </h:panelGrid>  
-        <h:panelGrid  style="text-align: center; padding-left: 50px; padding-top: 200px; width: 100px;">
-            <p:commandButton style ="text-align:right; padding-left: 20 px; padding-top:0px;"
-                 value="Submit" 
-                 onclick="PF('statusDialog').show()"
-                 oncomplete="PF('statusDialog').hide()"  
-                 update=":ac:form1:linPane  :cmdPane" 
-                 actionListener="#{linear.linearBtn_action()}"/>  
-        </h:panelGrid> 
     </h:panelGrid>
+    <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right;"> 
 
-    <hr style="height: 12px; border: 0;box-shadow: inset 0 12px 12px -12px rgba(0, 0, 0, 0.5); width:100%; min-width: 1000px"/>
+        <p:commandButton value="Customize Graph"
+                         styleClass="graphicsButton"
+                         style="box-shadow: none !important; text-shadow: none !important;"
+                         actionListener="#{sessionBean1.graphicsLnk_action('pca_pair')}" 
+                        oncomplete="PF('graphApperanceLinear').show()"/>  
+
+
+        <p:commandButton value="Update" 
+                         styleClass="updateButton"
+                         style="box-shadow: none !important; text-shadow: none !important"
+                        onclick="PF('statusDialog').show()"
+                        oncomplete="PF('statusDialog').hide()"  
+                        update=":ac:form1:linPane  :cmdPane" 
+                        actionListener="#{linear.linearBtn_action()}"/>                          
+    </h:panelGrid> 
+    <h:panelGrid class="resultsBar" columns="2">
+        <h:panelGroup>
+            <h:panelGrid columns="1" style="text-align : left;">
+                Results
+            </h:panelGrid>
+        </h:panelGroup> 
+        <h:panelGroup>
+            <h:panelGrid columns="3" class="resultsImages">
+
+                <i class="fa fa-question-circle"></i>
+            </h:panelGrid>
+
+        </h:panelGroup>                            
+    </h:panelGrid>  
     <h:panelGrid id="linPane" style="text-align: center; width: 100%;">
-        <h:panelGrid columns="4" style="text-align: right; padding-left: 460px; width: 760px;">
-            <p:spacer style="width:20px"/>
-            <p:commandLink actionListener="#{sessionBean1.graphicsLnk_action('lin')}" 
-                           oncomplete="PF('graphDialog').show()"
-                           title="Customize the graphics output">
-                <img src="#{facesContext.externalContext.requestContextPath}/resources/images/imgcenter.png"/>
-            </p:commandLink>
-        </h:panelGrid>
-        <p:scrollPanel mode="native" style="width:780px;height:700px">
-            <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('lin')}" alt="Linearimage"/>
-        </p:scrollPanel>
+        <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('lin')}" alt="Linearimage"/>
     </h:panelGrid>
+    <p:dialog modal="true" widgetVar="graphApperanceLinear" 
+        style="width: 400px; height:400px;" 
+        appendTo="@(body)" header="Graphics Center"
+        draggable="false" closable="true" resizable="false"> 
+        <ui:include src="_color_palette_linear.xhtml" />
+    </p:dialog>
 </ui:composition>
                

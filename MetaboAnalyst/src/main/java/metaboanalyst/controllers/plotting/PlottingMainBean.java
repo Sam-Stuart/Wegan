@@ -62,9 +62,9 @@ public class PlottingMainBean implements Serializable {
         PlottingUtils.PlotlinearGraph(sb, sb.getCurrentImage("lin"), "png", 72, 
                 "p", 1, "black", 1, 19, "x axis", "y axis", "Linear Plot Title", "NULL", "NULL");     
     }
-    
+
     private void doDefaultPieChart(){  
-        PlottingUtils.CreatePieChart(sb);
+        PlottingUtils.CreatePieChart(sb, false, false, 1, "NULL", "NULL", "NULL", "Main Title", false);
         PlottingUtils.PlotPieChart(sb, sb.getCurrentImage("plot_pie_chart"), "png", 72);     
     }
     
@@ -82,39 +82,6 @@ public class PlottingMainBean implements Serializable {
         PlottingUtils.CreateScatterChart(sb);
         PlottingUtils.PlotScatterChart(sb, sb.getCurrentImage("plot_scatter_chart"), "png", 72);     
     }  
-    
-//    @LEIF: PLEASE REMOVE CODE THAT DOES NOT BELONG
-//    private void doDefaultBetaDisper() {       
-//        
-//        Dispersal.InitBetaDisper(sb);
-//        Dispersal.PlotBetaDisper(sb, sb.getNewImage("betadisper"), "png", 72, dispersalBgdNum);
-//        
-//    }
-//    
-//    private int dispersalBgdNum = 5;
-//
-//    public int getDispersalBgdNum() {
-//        return dispersalBgdNum;
-//    }
-//
-//    public void setDispersalBgdNum(int dispersalBgdNum) {
-//        this.dispersalBgdNum = dispersalBgdNum;
-//    } 
-////    public String dispersalBgdBtn_action() {
-////        Dispersal.PlotBGD(sb, sb.getNewImage("bgd"), "png", 72, dispersalBgdNum);
-////        RequestContext.getCurrentInstance().scrollTo("ac:form2:screePane");
-////        return null;
-////    }
-////    
-//
-//    public String dispersalBealsBtn_action() {
-//          System.out.print("dispersalBeals button action  -dispersalBean");
-////        Dispersal.PlotBealsSummary
-////        ChemoMetrics.PlotPCAPairSummary(sb, sb.getNewImage("pca_pair"), "png", 72, dispersalBgdNum);
-////        RequestContext.getCurrentInstance().scrollTo("ac:form1:pairPane");
-//        return null;
-//    }
-    
     
     
 }

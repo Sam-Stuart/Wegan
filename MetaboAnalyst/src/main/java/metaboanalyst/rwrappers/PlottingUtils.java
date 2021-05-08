@@ -42,19 +42,28 @@ public class PlottingUtils {
         } catch (RserveException rse) {
             System.out.println(rse);
         }
-    }
-    
-    public static void CreatePieChart(SessionBean1 sb) {
+    } 
+
+    public static void CreatePieChart(SessionBean1 sb, Boolean byRow, Boolean bySum, int columns, String rows, String labels, String colors, String mainTitle, Boolean lgnd) {
         try {
             RConnection RC = sb.getRConnection();
-            String rCommand = "pieChart_setup(NA)";
+            String rCommand = "pieChart_setup(NA"
+                                                + ", \"" + byRow
+                                                + "\", \"" + bySum
+                                                + "\", " + columns
+                                                + ", \"" + rows
+                                                + "\", \"" + labels
+                                                + "\", \"" + colors
+                                                + "\", \"" + mainTitle
+                                                + "\", \"" + lgnd
+                                                + "\")";
             RCenter.recordRCommand(RC, rCommand);
             RC.voidEval(rCommand);
         } catch (RserveException rse) {
             System.out.println(rse);
         }
     }   
-    
+
     public static void PlotPieChart(SessionBean1 sb, String imgName, String format, int dpi) {
         try {
             RConnection RC = sb.getRConnection();

@@ -37,9 +37,78 @@ public class PiePlotBean implements Serializable {
     private final ApplicationBean1 ab = (ApplicationBean1) DataUtils.findBean("applicationBean1");
     private final SessionBean1 sb = (SessionBean1) DataUtils.findBean("sessionBean1");
 
-public void pieBtn_action() {
+    private boolean byRow;
+    private boolean bySum;
+    private boolean lgnd;
+    private String labels;
+    private String colorChosen;
+    private String mainTitle;
+    private final SelectItem[] colorOpts;
+    
+    
+    public void setLabels(String labels) {
+        this.labels = labels;
+    } 
+    
+    public String getLabels() {
+        return labels;
+    }
+    
+    public void setMainTitle(String mainTitle) {
+        this.mainTitle = mainTitle;
+    } 
+    
+    public String getMainTitle() {
+        return mainTitle;
+    }
+    
+    public boolean isBySum() {
+        return bySum;
+    }
+    
+    public void setBySum(boolean bySum) {
+        this.bySum = bySum;
+    }
+    public boolean isLgnd() {
+        return lgnd;
+    }
+    
+    public void setLgnd(boolean lgnd) {
+        this.lgnd = lgnd;
+    }
+    public boolean isByRow() {
+        return byRow;
+    }
+    
+    public void setByRow(boolean byRow) {
+        this.byRow = byRow;
+    }
+    public String getColorChosen() {
+        return colorChosen;
+    }
+
+    public void setColorChosen(String colorChosen) {
+        this.colorChosen = colorChosen;
+    }
+    
+    public SelectItem[] getColorOpts() {
+        return colorOpts;
+    }
+    
+    public void pieBtn_action() {
 
     
     }
+    public PiePlotBean() {
+
+        colorOpts = new SelectItem[5];
+        colorOpts[0] = new SelectItem("r", "Rainbow");
+        colorOpts[1] = new SelectItem("v", "Viridis");
+        colorOpts[2] = new SelectItem("g", "Grey");
+        colorOpts[3] = new SelectItem("p", "Plasma");
+        colorOpts[4] = new SelectItem("NULL", "Light blue");
+        
+    }
+   
    
 }
