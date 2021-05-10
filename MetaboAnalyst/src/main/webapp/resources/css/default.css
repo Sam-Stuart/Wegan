@@ -130,6 +130,16 @@
     width: 10%;
 }
 
+.colBrayLong {
+    width: 40%;
+}
+
+.colBrayShort {
+    width: 15%;
+}
+
+
+
 .home-banner {
   position: relative;
   left: -30px;
@@ -193,6 +203,78 @@
   }
 }
 
+.ui-icon-palette {
+    background: url("images/icons/paint") !important;
+    position: absolute;
+    width: 40px;
+    height: 30px;
+    
+}
+
+.graphicsButton {
+    background: #fae12e !important; 
+    border: 5px #fae12e !important; 
+    color: black !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
+    width: 150px; 
+    height: 30px;
+    font-size: 18px;
+    font-bold: false;
+}
+
+.updateButton {
+    background: #75bafb !important; 
+    border: 5px #75bafb !important; 
+    color: black !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
+    width: 70px; 
+    height: 30px;
+    font-size: 18px;
+    font-bold: false;
+}
+
+.submitButton {
+    background: #75bafb !important; 
+    border: 5px #75bafb !important; 
+    color: black !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
+    width: 70px; 
+    height: 30px;
+    font-size: 18px;
+    font-bold: false;
+}
+
+.normButton {
+    background: #75bafb !important; 
+    border: 5px #75bafb !important; 
+    color: black !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
+    width: 150px; 
+    height: 30px;
+    font-size: 18px;
+    font-bold: false;
+}
+
+.sanityButton {
+    background: #8cbd48 !important; 
+    border: 5px #8cbd48 !important; 
+    color: black !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
+    width: 200px; 
+    height: 30px;
+    font-size: 18px;
+    font-bold: false;
+}
+
+.ui-button, .ui-button span, button.ui-button.ui-state-default span, .ui-button.ui-state-default span {
+    text-shadow: none !important;
+    font-weight: bold;
+}
 
 
 

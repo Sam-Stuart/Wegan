@@ -88,7 +88,7 @@ public class LinearCABean implements Serializable {
     public void corrLin1Btn_action() {
         CAUtils.CreateLinearModel(sb, corrColumnNameA, corrColumnNameB);
         //CAUtils.CreateLinearModel(sb, "/Users/danaallen/NetBeansProjects/Wegan/MetaboAnalyst/target/MetaboAnalyst-4.34/resources/data/dune_weights.csv");
-        CAUtils.PlotLinearCA(sb, sb.getCurrentImage("corr_linear"), "png", 72);
+        CAUtils.PlotLinearCA(sb, sb.getNewImage("corr_linear"), "png", 72);
     }
 
     
