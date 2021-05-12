@@ -54,6 +54,9 @@ public class OABean implements Serializable {
                     case "Bray":
                         doDefaultBray();
                         break; 
+                    case "CCA":
+                        doDefaultCCA();
+                        break; 
                 }
             }
 
@@ -102,5 +105,16 @@ public class OABean implements Serializable {
 //        OAUtils.PlotBray3D(sb, sb.getCurrentImage("ord_rda_scree"), "png", 72, "NULL");
         OAUtils.PlotBray3D(sb, sb.getCurrentImage("bray_score3d"), "json");
         OAUtils.PlotBrayScree(sb, sb.getCurrentImage("ord_bray_scree"), "png", 72, "NULL");
+    }
+    
+    private void doDefaultCCA(){
+        if (!OAUtils.CreateCCA(sb)){
+            RConnection RC = sb.getRConnection();
+            sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
+        }
+        OAUtils.PlotCCA(sb, "NULL", "NULL", "NULL", "NULL", "NULL", "NULL", "NULL", "NULL", "NULL", sb.getCurrentImage("ord_cca_2D"), "png", 72, "NULL");
+//        OAUtils.PlotBray3D(sb, sb.getCurrentImage("ord_rda_scree"), "png", 72, "NULL");
+//        OAUtils.PlotBray3D(sb, sb.getCurrentImage("bray_score3d"), "json");
+//        OAUtils.PlotBrayScree(sb, sb.getCurrentImage("ord_bray_scree"), "png", 72, "NULL");
     }
 }

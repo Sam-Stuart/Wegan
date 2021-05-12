@@ -297,9 +297,43 @@ public class OAUtils {
         }
     }
         
-
+    public static boolean CreateCCA(SessionBean1 sb) {
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "ord.cca(NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            RC.voidEval(rCommand);
+            return true;
+        } catch (RserveException rse) {
+            System.out.println(rse);
+            return false;
+        }
+    }
      
-
+    public static void PlotCCA(SessionBean1 sb, String color, String ellipse, String varArrows, String envArrows, String envCent, String sampleNames, String metaColColor, String pointOptions, String metaColPoint, String imgName, String format, int dpi, String width) {
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "Plot.CCA.biplot(NA" 
+                                            + ", \"" + color 
+                                            + "\", \"" + ellipse
+                                            + "\", \"" + varArrows
+                                            + "\", \"" + envArrows
+                                            + "\", \"" + envCent
+                                            + "\", \"" + sampleNames
+                                            + "\", \"" + metaColColor
+                                            + "\", \"" + pointOptions
+                                            + "\", \"" + metaColPoint
+                                            + "\", \"" + imgName 
+                                            + "\", \"" + format  
+                                            + "\", " + dpi 
+                                            + ", width=NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            sb.addGraphicsCMD("ord_bray_2D", rCommand);
+            RC.voidEval(rCommand);
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        }
+    }
 
     /////// ------------ Ordination helper functions --------------- //////////////
     

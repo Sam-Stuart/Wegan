@@ -92,8 +92,14 @@
             <from-outcome>RDA</from-outcome>
             <to-view-id>/Secure/ordination/RDAView.xhtml</to-view-id>
             <redirect/>
-        </navigation-case>    
-            
+        </navigation-case>  
+          
+        <navigation-case>
+            <from-outcome>CCA</from-outcome>
+            <to-view-id>/Secure/ordination/CCAView.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>  
+                   
         <navigation-case>
             <from-outcome>Bray</from-outcome>
             <to-view-id>/Secure/ordination/BrayCurtisView.xhtml</to-view-id>
