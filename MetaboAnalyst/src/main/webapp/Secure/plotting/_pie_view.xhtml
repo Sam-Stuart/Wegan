@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+    
+    <h:panelGrid id="panelGrid" columns="4" cellpadding="3" columnClasses="colLeft,colRight,colLeft,colRight">
+        <h:outputLabel style="font-weight: bold" value="Summerize by row"/>
+            <p:selectBooleanCheckbox value ="#{piePlotBean.byRow}"/>
+        <h:outputLabel style="font-weight: bold" value="Summerize by sum"/>
+            <p:selectBooleanCheckbox value ="#{piePlotBean.bySum}"/>
+    </h:panelGrid>
+    <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right;"> 
+
+        <p:commandButton value="Customize Graph"
+                         styleClass="graphicsButton"
+                         style="box-shadow: none !important; text-shadow: none !important;"
+                         actionListener="#{sessionBean1.graphicsLnk_action('pca_pair')}" 
+                        oncomplete="PF('graphApperanceLinear').show()"/> 
+        
+        <p:commandButton value="Update" 
+                         styleClass="updateButton"
+                         style="box-shadow: none !important; text-shadow: none !important"
+                        onclick="PF('statusDialog').show()"
+                        oncomplete="PF('statusDialog').hide()"  
+                        update=":ac:form6:plotPiePane1  :cmdPane" 
+                        actionListener="#{pieBean.pieBtn_action()}"/>
+
+                                          
+    </h:panelGrid>
+    <h:panelGrid class="resultsBar" columns="2">
+        <h:panelGroup>
+            <h:panelGrid columns="1" style="text-align : left;">
+                Results
+            </h:panelGrid>
+        </h:panelGroup> 
+        <h:panelGroup>
+            <h:panelGrid columns="3" class="resultsImages">
+                <i class="fa fa-question-circle"></i>
+            </h:panelGrid>
+
+        </h:panelGroup>                            
+    </h:panelGrid>  
+    <h:panelGrid id="plotPiePane1" style="width: 100%;">
+         <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+            <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('plot_pie_chart')}" alt="PieChartImage"/>
+        </h:panelGrid>                           
+
+    </h:panelGrid>   
+</ui:composition>
+               

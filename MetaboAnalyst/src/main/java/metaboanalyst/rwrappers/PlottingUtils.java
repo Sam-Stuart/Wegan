@@ -19,10 +19,7 @@ import org.primefaces.model.chart.LineChartModel;
 import org.primefaces.model.chart.LineChartSeries;
 import org.rosuda.REngine.REXPMismatchException;
 
-/**
- *
- * @author Leif
- */
+
 public class PlottingUtils {
     
     
@@ -45,7 +42,114 @@ public class PlottingUtils {
         } catch (RserveException rse) {
             System.out.println(rse);
         }
+    } 
+
+    public static void CreatePieChart(SessionBean1 sb, Boolean byRow, Boolean bySum, int columns, String rows, String labels, String colors, String mainTitle, Boolean lgnd) {
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "pieChart_setup(NA"
+                                                + ", \"" + byRow
+                                                + "\", \"" + bySum
+                                                + "\", " + columns
+                                                + ", \"" + rows
+                                                + "\", \"" + labels
+                                                + "\", \"" + colors
+                                                + "\", \"" + mainTitle
+                                                + "\", \"" + lgnd
+                                                + "\")";
+            RCenter.recordRCommand(RC, rCommand);
+            RC.voidEval(rCommand);
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        }
+    }   
+
+    public static void PlotPieChart(SessionBean1 sb, String imgName, String format, int dpi) {
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "plotPieChart(NA" + ", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            RC.voidEval(rCommand);
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        }
     }
+
+    public static void CreateBarChart(SessionBean1 sb, String byRow, String colNum, String rowNum, String color, String xLab, String yLab, String barLabels, String mainTitle) {
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "barGraph_setup(NA"
+                                                + ", \"" + byRow
+                                                + "\", \"" + colNum
+                                                + "\", \"" + rowNum
+                                                + "\", \"" + color
+                                                + "\", \"" + xLab
+                                                + "\", \"" + yLab
+                                                + "\", \"" + barLabels
+                                                + "\", \"" + mainTitle + "\")";
+            RCenter.recordRCommand(RC, rCommand);
+            RC.voidEval(rCommand);
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        }
+    }   
+    
+    public static void PlotBarChart(SessionBean1 sb, String imgName, String format, int dpi) {
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "plotBarGraph(NA" + ", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            RC.voidEval(rCommand);
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        }
+    }
+    
+    public static void CreateBoxChart(SessionBean1 sb) {
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "boxPlot_setup(NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            RC.voidEval(rCommand);
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        }
+    }   
+    
+    public static void PlotBoxChart(SessionBean1 sb, String imgName, String format, int dpi) {
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "plotBoxPlot(NA" + ", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            RC.voidEval(rCommand);
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        }
+    }
+    
+     public static void CreateScatterChart(SessionBean1 sb) {
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "scatterPlot_setup(NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            RC.voidEval(rCommand);
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        }
+    }   
+    
+    public static void PlotScatterChart(SessionBean1 sb, String imgName, String format, int dpi) {
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "plotScatterPlot(NA" + ", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            RC.voidEval(rCommand);
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        }
+    }   
+    
+    
     
     // linear get data colums n
     public static String[] GetDataColumns(SessionBean1 sb){

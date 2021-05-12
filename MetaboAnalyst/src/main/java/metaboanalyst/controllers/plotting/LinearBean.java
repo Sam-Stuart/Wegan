@@ -153,10 +153,10 @@ public class LinearBean implements Serializable {
         this.linColumnNameB = linColumnNameB;
     }
     public void linearBtn_action() {
-
+        System.out.println("Linear button press");
         PlottingUtils.PlotlinearGraph(sb, sb.getNewImage("lin"), "png", 72, 
                 linearPlotType, linNumLines, linColor, linWeight, linPchs, linxLabel, linyLabel, linTitle, linColumnNameA, linColumnNameB);
-        RequestContext.getCurrentInstance().scrollTo(":ac:form1:linPane");
+//        RequestContext.getCurrentInstance().scrollTo(":ac:form1:linPane");
     }
 
    

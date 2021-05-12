@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="linearGraph">
+        <h:panelGrid columns="1" style="width:380px;">
+            <h:panelGrid id="panelGrid2" columns="2" cellpadding="5" columnClasses="colBrayLong,colBrayShort">
+                <h:outputLabel style="font-weight: bold" value="Graph Type:"/>
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linear.linearPlotType}">
+                    <f:selectItem itemLabel="Lines" itemValue="l" /> 
+                    <f:selectItem itemLabel="Points" itemValue="p" />
+                    <f:selectItem itemLabel="Both" itemValue="b" />
+                </p:selectOneMenu>
+                <h:outputLabel style="font-weight: bold" value="Line Color:"/>
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linear.linColor}" >
+                    <f:selectItem itemLabel="black" itemValue="black" /> 
+                    <f:selectItem itemLabel="green" itemValue="green" /> 
+                    <f:selectItem itemLabel="blue" itemValue="blue" /> 
+                </p:selectOneMenu>
+                <h:outputLabel style="font-weight: bold" value="Point Shapes:"/>
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linear.linPchs}">
+                    <f:selectItem itemLabel="Bullets" itemValue="20" /> 
+                    <f:selectItem itemLabel="Circles" itemValue="1" />
+                    <f:selectItem itemLabel="Squares" itemValue="0" />
+                    <f:selectItem itemLabel="Plus Signs" itemValue="3" /> 
+                    <f:selectItem itemLabel="x marks" itemValue="4" />
+                    <f:selectItem itemLabel="Diamonds" itemValue="5" />   
+                </p:selectOneMenu>
+                <h:outputLabel style="font-weight: bold" value="Graph Title:"/>
+                <p:inputText value="#{linear.linTitle}"></p:inputText>
+                <h:outputLabel style="font-weight: bold" value="x axis label: "/>
+                <p:inputText value="#{linear.linxLabel}"></p:inputText>
+                <h:outputLabel style="font-weight: bold" value="y axis label: "/>
+                <p:inputText value="#{linear.linyLabel}"></p:inputText>  
+
+
+            </h:panelGrid>
+            <h:panelGrid columns="1" cellpadding="5" style="float: right">
+                <p:commandButton value="Update" 
+                                 styleClass="updateButton"
+                                 style="box-shadow: none !important; text-shadow: none !important"
+                                onclick="PF('statusDialog').show()"
+                                oncomplete="PF('graphApperanceLinear').hide(); PF('statusDialog').hide()"  
+                                update=":ac:form1:linPane  :cmdPane" 
+                                actionListener="#{linear.linearBtn_action()}"/>
+            </h:panelGrid>
+        </h:panelGrid>
+    </h:form>
+</ui:composition>
+               

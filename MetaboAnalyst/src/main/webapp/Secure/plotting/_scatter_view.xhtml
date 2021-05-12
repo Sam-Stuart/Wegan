@@ -1,0 +1,35 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+    
+    <p>
+        THIS IS THE SCATTER VIEW
+    </p>
+        
+    <h:panelGrid class="resultsBar" columns="2">
+        <h:panelGroup>
+            <h:panelGrid columns="1" style="text-align : left;">
+                Results
+            </h:panelGrid>
+        </h:panelGroup> 
+        <h:panelGroup>
+            <h:panelGrid columns="3" class="resultsImages">
+                <i class="fas fa-palette"></i>
+                <i class="fa fa-table"></i>
+                <i class="fa fa-question-circle"></i>
+            </h:panelGrid>
+
+        </h:panelGroup>                            
+    </h:panelGrid>  
+    <h:panelGrid id="plotScatterPane1" style="width: 100%;">
+         <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+            <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('plot_scatter_chart')}" alt="ScatterChartImage"/>
+        </h:panelGrid>                           
+
+    </h:panelGrid>
+</ui:composition>
+               
