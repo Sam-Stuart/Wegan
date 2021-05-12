@@ -5,6 +5,7 @@
  */
 package metaboanalyst.controllers.correlation;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,6 +13,7 @@ import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.model.SelectItem;
 import metaboanalyst.controllers.SessionBean1;
+import metaboanalyst.models.User;
 import metaboanalyst.rwrappers.UniVarTests;
 import metaboanalyst.rwrappers.CAUtils;
 import metaboanalyst.rwrappers.RDataUtils;
@@ -21,16 +23,27 @@ import org.primefaces.context.RequestContext;
 import org.primefaces.model.DualListModel;
 import org.rosuda.REngine.Rserve.RConnection;
 
-/**
- *
- * @author dnallen
- */
+
 @ManagedBean(name = "polyCABean")
 public class PolyCABean implements Serializable {
 
     private final SessionBean1 sb = (SessionBean1) DataUtils.findBean("sessionBean1");
 
     private boolean addWeights = false;
+    private User usr = sb.getCurrentUser();
+    private String usrName = usr.getName();
+    
+
+    private String fileDownload = getSummaryDownload();
+    private String fileDownloadPath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileDownload + "\">" + fileDownload + "</a>";
+    
+    public String getFileDownloadPath() {
+        return fileDownloadPath;
+    }
+
+    public void setFileDownloadPath(String fileDownloadPath) {
+        this.fileDownloadPath = fileDownloadPath;
+    }
     
     public boolean isaddWeights() {
         return addWeights;
@@ -92,7 +105,7 @@ public class PolyCABean implements Serializable {
     private String polyDegree = getDegreeOpts()[0].getLabel();
     
     public String getPolyDegree() {
-        return columnNameA;
+        return polyDegree;
     }
 
     public void setPolyDegree(String polyDegree) {
@@ -100,6 +113,7 @@ public class PolyCABean implements Serializable {
     }
     
     private List<String> corrPolyResults = null;
+    
     
     public List<String> getCorrPolyResults(){
         String[] results = CAUtils.GetPolyCAResults(sb, 2);
@@ -110,17 +124,21 @@ public class PolyCABean implements Serializable {
     
         // ACTION BUTTONS //
     public void corrPoly1Btn_action() {
-        System.out.println("Inside poly");
         CAUtils.CreatePolynomialModel(sb, columnNameA, columnNameB);
         CAUtils.PlotPolynomialCA(sb, polyDegree, sb.getNewImage("corr_poly"), "png", 72);
-        System.out.println("Done poly");
     }
     // ACTION BUTTONS //
     public void corrPolyPredBtn_action() {
-        System.out.println("Inside poly");
         CAUtils.CreatePolynomialModel(sb, columnNameA, columnNameB);
         CAUtils.PlotPolynomialCA(sb, polyDegree, sb.getNewImage("corr_poly"), "png", 72);
         CAUtils.PlotPolynomialPredictCA(sb, 2, sb.getNewImage("corr_poly_pred"), "png", 72);
-        System.out.println("Done poly");
-    }    
+    }  
+    
+    
+    private String getSummaryDownload(){
+        String degree = getPolyDegree(); 
+        String facA = getColumnNameA();
+        String facB = getColumnNameB();
+        return "polynomial_regession_summary_degree_" + degree + "_" + facA + "~" + facB + ".txt";
+    }
 }

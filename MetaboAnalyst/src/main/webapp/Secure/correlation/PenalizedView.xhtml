@@ -37,9 +37,8 @@
                                     <f:selectItems value="#{penalCABean.columnOpts}" />
                                 </p:selectOneMenu>
                             
-                            <p:panelGrid></p:panelGrid>
-                            <p:panelGrid></p:panelGrid>
-
+                        </h:panelGrid>
+                        <h:panelGrid id="panelGrid4" columns="1" cellpadding="3" style="float: right; text-shadow: none !important;"> 
                             <p:commandButton value="Update" 
                                              styleClass="updateButton"
                                              style="box-shadow: none !important; text-shadow: none !important"
@@ -47,8 +46,6 @@
                                             oncomplete="PF('statusDialog').hide()"  
                                             update=":penalCA:form1:corrPenalPane1  :cmdPane" 
                                             actionListener="#{penalCABean.penalizedUpdate_action()}"/>  
-                        
-<!--                                          -->
                         </h:panelGrid>
                         <h:panelGrid class="resultsBar" columns="2">
                             <h:panelGroup>

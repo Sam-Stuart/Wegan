@@ -17,7 +17,6 @@
                         <p>
                             Two variables will be tested for correlation, a dependent variable and an independent variable. Both must have numeric values.                
                         </p>
-                        <!--<h:panelGrid columns="3" columnClasses="p-col-12 p-md-3 p-xl-2, p-col-12 p-md-9 p-xl-4, p-col-12 p-md-3 p-xl-2" style="width: 100%; border: none !important">-->
                         <h:panelGrid id="panelGrid" columns="5" cellpadding="3" columnClasses="colLeft,colRight,colLeft,colRight, colLast">
                             
                             <h:outputLabel style="font-weight: bold" value="Dependant Variable:"/>
@@ -35,36 +34,28 @@
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linearCABean.corrColumnNameB}">
                                 <f:selectItems value="#{linearCABean.corrColumnOpts}" />
                             </p:selectOneMenu>
-                            
-                            <p:panelGrid></p:panelGrid>
-                            <p:panelGrid></p:panelGrid>
-
-                          
+                        </h:panelGrid> 
+                        <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
                             <p:commandButton value="Update" 
-                                             styleClass="updateButton"
-                                             style="box-shadow: none !important; text-shadow: none !important"
+                                            styleClass="updateButton"
+                                            style="box-shadow: none !important; text-shadow: none !important"
                                             onclick="PF('statusDialog').show()"
                                             oncomplete="PF('statusDialog').hide()"  
                                             update=":linCA:form1:corrLinPane1  :cmdPane" 
                                             actionListener="#{linearCABean.corrLin1Btn_action()}"/>  
                         
                         </h:panelGrid>
-                        <p:commandLink actionListener="#{sessionBean1.graphicsLnk_action('pca_pair')}" 
-                                               oncomplete="PF('graphApperance').show()"
-                                               title="Customize the graphics output">
-                                    <img src="#{facesContext.externalContext.requestContextPath}/resources/images/imgcenter.png"/>
-                        </p:commandLink>
                         <ui:include src="_results_bar.xhtml" />
                                   
                         <h:panelGrid id="corrLinPane1" style="width: 100%;">
-                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px;">
                                 <h:outputLabel style="font-weight: bold" value="Formula: #{linearCABean.corrLinearResults.get(0)}"/>
                             </h:panelGrid>
                             <!--<h:panelGrid class="subResultsBar"></h:panelGrid>--> 
-                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px;">
                                 <h:outputLabel style="font-weight: bold" value="#{linearCABean.corrLinearResults.get(1)}"/>
                             </h:panelGrid>
-                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px;">
                                 <h:outputLabel style="font-weight: bold" value="#{linearCABean.corrLinearResults.get(2)}"/>
                             </h:panelGrid>
                              <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">

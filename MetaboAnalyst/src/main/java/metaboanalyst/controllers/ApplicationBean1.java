@@ -62,9 +62,10 @@ public class ApplicationBean1 implements Serializable {
     private static final String test_linear = "/data/linear_test_data4.txt"; // linear plot test data 
    
     
-    //private static final String test_dune = "/data/iris.txt";
-    private static final String test_dune_weights = "/data/dune_weights.txt";
     private static final String test_iris = "/data/iris.txt";
+//    private static final String test_linear = "/data/linear.txt";
+    private static final String test_dune_weights = "/data/dune_weights.txt";
+//    private static final String test_iris = "/data/iris.txt";
     
     
     //**************************************************************************
@@ -98,6 +99,7 @@ public class ApplicationBean1 implements Serializable {
     private final SelectItem[] rocFormatOpts;
     private final SelectItem[] tsFormatOpts;
     private final SelectItem[] testDataOpts;
+    private final SelectItem[] caDataOpts;
     private final SelectItem[] qeaTestDataOpts;
     private final SelectItem[] tsDataOpts;
     private final SelectItem[] designOpts;
@@ -211,7 +213,9 @@ public class ApplicationBean1 implements Serializable {
         testDataOpts[10] = new SelectItem("Linear", "Plotting");
         testDataOpts[11] = new SelectItem("Iris", "Iris");
         
-
+        caDataOpts = new SelectItem[2];
+        caDataOpts[0] = new SelectItem("Dune", "CA");
+        caDataOpts[1] = new SelectItem("BCI", "NMDS");
         //WEGAN TEST FUNCTIONS START HERE
         
         NMDSTestDataOpts = new SelectItem[1];
@@ -268,6 +272,7 @@ public class ApplicationBean1 implements Serializable {
         plottingDataOpts = new SelectItem[2];
         plottingDataOpts[0] = new SelectItem("Dune");
         plottingDataOpts[1] = new SelectItem("Linear");
+
         
         cmpdIDOpts1 = new SelectItem[4];
         cmpdIDOpts1[0] = new SelectItem("na", "-- Please specify");
@@ -567,7 +572,10 @@ public class ApplicationBean1 implements Serializable {
     public String getTestIris() {
         return realPath + test_iris;
     }
-    
+//    public String getTestLinear() {
+//        return realPath + test_linear;
+//    }
+//    
     public String getTestWeightDune() {
         return realPath + test_dune_weights;
     }

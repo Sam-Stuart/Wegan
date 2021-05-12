@@ -115,7 +115,8 @@ public class CABean implements Serializable {
     
     private void doDefaultLogistic() {
         CAUtils.CreateLogisticModel(sb, "NULL", "NULL");
-        CAUtils.PlotLogisticCA(sb, "multinomial", sb.getCurrentImage("corr_logistic1"), "png", 72);
+        CAUtils.PlotLogisticEffectCA(sb, "multinomial", sb.getCurrentImage("corr_logistic1"), "png", 72);
+        CAUtils.PlotLogisticROCCA(sb, "multinomial", sb.getCurrentImage("corr_logisticROC"), "png", 72);
     } 
     
 }

@@ -259,7 +259,7 @@ public class CAUtils {
         }
     }
     
-    public static void PlotLogisticCA(SessionBean1 sb, String type, String imgName, String format, int dpi) {
+    public static void PlotLogisticEffectCA(SessionBean1 sb, String type, String imgName, String format, int dpi) {
         try {
             RConnection RC = sb.getRConnection();
             String rCommand = "plot.effects.logReg(NA" + ", \"" + type + "\", \""  + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
@@ -270,7 +270,18 @@ public class CAUtils {
             System.out.println(rse);
         }
     }
-    
+
+    public static void PlotLogisticROCCA(SessionBean1 sb, String type, String imgName, String format, int dpi) {
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "plot.ROC.logReg(NA" + ", \"" + type + "\", \""  + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            sb.addGraphicsCMD(imgName, rCommand);
+            RC.voidEval(rCommand);
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        }
+    }    
     
     
     
@@ -366,6 +377,34 @@ public class CAUtils {
         try {
             RConnection RC = sb.getRConnection();
             String rCommand = "penal.reg.get.results(NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            return RC.eval(rCommand).asStrings();
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        } catch (REXPMismatchException ex) {
+            Logger.getLogger(CAUtils.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+    public static String[] GetCatDataColumns(SessionBean1 sb){
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "factor.columns(NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            return RC.eval(rCommand).asStrings();
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        } catch (REXPMismatchException ex) {
+            Logger.getLogger(CAUtils.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+    public static String[] GetCatLevelDataColumns(SessionBean1 sb, String facA){
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "log.response.levels(NA" + ", \"" + facA + "\")";
             RCenter.recordRCommand(RC, rCommand);
             return RC.eval(rCommand).asStrings();
         } catch (RserveException rse) {
