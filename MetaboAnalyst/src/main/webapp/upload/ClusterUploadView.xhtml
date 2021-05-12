@@ -31,7 +31,10 @@
                     </p:selectOneMenu>
                     
                     <h:panelGrid style="padding: 10px">
-                        <p:commandButton value="Submit" ajax="false"
+                        <p:commandButton value="Submit"
+                                         styleClass="updateButton"
+                                         style="box-shadow: none !important; text-shadow: none !important"
+                                         ajax="false"
                                          onclick="PF('statusDialog').show()" 
                                          oncomplete="PF('statusDialog').hide()"
                                          action="#{Clusterload.handleFileUpload()}"/>                         
@@ -83,7 +86,10 @@
                     
                 </h:panelGrid>
                 <h:panelGrid style="width:100%; text-align: center">
-                    <p:commandButton value="Submit" ajax="false" 
+                    <p:commandButton value="Submit"
+                                     styleClass="updateButton"
+                                    style="box-shadow: none !important; text-shadow: none !important"
+                                     ajax="false" 
                                      onclick="PF('statusDialog').show()"
                                      action="#{Clusterload.handleClusterTestFileUpload}"/>                               
                 </h:panelGrid>

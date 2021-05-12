@@ -41,7 +41,8 @@
 
                     <h:panelGrid style="padding: 10px; float:right">
                         <p:commandButton value="Submit" 
-                                         style="background-color: #75bafb"
+                                         styleClass="updateButton"
+                                        style="box-shadow: none !important; text-shadow: none !important"
                                          ajax="false"
                                          onclick="PF('statusDialog').show()" 
                                          oncomplete="PF('statusDialog').hide()"
@@ -67,7 +68,10 @@
                     </h:panelGrid>
 
                     <h:panelGrid style="padding: 10px; float:right">
-                        <p:commandButton value="Submit" ajax="false" 
+                        <p:commandButton value="Submit"
+                                         styleClass="updateButton"
+                                         style="box-shadow: none !important; text-shadow: none !important"
+                                         ajax="false" 
                                          onclick="PF('statusDialog').show()" 
                                          oncomplete="PF('statusDialog').hide()"                                         
                                          action="#{Caload.handleZipFileUpload}"/>                      
@@ -95,11 +99,6 @@
                         <p:outputLabel style="font-size:12px; font-weight: bold" value="Iris"/>
                         <h:panelGrid>
                             Iris Data Set(insert citation here)                                       
-                        </h:panelGrid>
-                        <p:radioButton for="customRadio" itemIndex="12"/>
-                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Whale"/>
-                        <h:panelGrid>
-                            Iris Data Set(insert citation here)                                       
                         </h:panelGrid>                        
                         <p:radioButton for="customRadio" itemIndex="2"/>
                         <p:outputLabel style="font-size:12px; font-weight: bold" value="AMF"/>
@@ -113,7 +112,10 @@
                         </h:panelGrid>
                    </h:panelGrid>
                     <h:panelGrid style="float:right">
-                        <p:commandButton value="Submit" ajax="false" 
+                        <p:commandButton value="Submit"
+                                         styleClass="updateButton"
+                                         style="box-shadow: none !important; text-shadow: none !important"
+                                         ajax="false" 
                                          onclick="PF('statusDialog').show()" 
                                          oncomplete="PF('statusDialog').hide()"                                         
                                          action="#{Caload.handleCATestFileUpload}"/>                      

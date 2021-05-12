@@ -23,7 +23,7 @@
 
             /* Change the color of links on hover */
             .topnav a:hover {
-              background-color: #75bafb;
+              /*background-color: #75bafb;*/
               color: white;
             }
             /* The dropdown container */
@@ -190,7 +190,7 @@
         <p:layout style="margin:0px; padding:0px; font-size: 13px " fullPage="true">
             <p:layoutUnit style="margin:0px; padding:0px; border: none" size="50" collapsible="true" gutter="0" position="north">
                 <div class="topnav">
-                    <a href="#"><img src="#{facesContext.externalContext.requestContextPath}/resources/images/icons/topLogo.png" style="height:30px; width:30px; padding-top: 0px !important" alt="Logo"></img></a>
+                    <a href="#{facesContext.externalContext.requestContextPath}/faces/home.xhtml"><img src="#{facesContext.externalContext.requestContextPath}/resources/images/icons/topLogo.png" style="horizontal-align: center; height:20px; width:20px; margin-top: 0px !important" alt="Logo"></img></a>
                     <a class="active" href="#{facesContext.externalContext.requestContextPath}/faces/home.xhtml">WEGAN</a>
                     <div class="dropdown">
                         <button class="dropbtn">Modules
@@ -208,9 +208,9 @@
                         </div>
                     </div>
                     <!--<a href="#{facesContext.externalContext.requestContextPath}/faces/ModuleHome.xhtml">Modules</a>-->
-                    <a href="#{facesContext.externalContext.requestContextPath}/faces/home.xhtml">About</a>
-                    <a href="#{facesContext.externalContext.requestContextPath}/faces/home.xhtml">FAQs</a>
-                    <a href="#{facesContext.externalContext.requestContextPath}/faces/home.xhtml">Tutorial</a>
+                    <a href="#{facesContext.externalContext.requestContextPath}/faces/docs/About.xhtml">About</a>
+                    <a href="#{facesContext.externalContext.requestContextPath}/faces/docs/Faqs.xhtml">FAQs</a>
+                    <a href="#{facesContext.externalContext.requestContextPath}/faces/Tutorial.xhtml">Tutorial</a>
                     <a href="#{facesContext.externalContext.requestContextPath}/faces/home.xhtml">Contact</a>
 
                 </div>
