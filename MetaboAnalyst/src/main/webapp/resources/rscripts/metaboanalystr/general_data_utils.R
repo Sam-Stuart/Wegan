@@ -340,6 +340,15 @@ Read.TextData <- function(mSetObj=NA, filePath, format="colu", lbl.type="disc"){
   return(.set.mSet(mSetObj));
 }
 
+Read.TextDataWeight <- function(mSetObj=NA, filePath, format="colu", lbl.type="disc"){
+  
+  mSetObj <- .get.mSet(mSetObj);
+  dat <- .readDataTable(filePath);
+  mSetObj$dataSet$origWeight <- dat; # copy to be processed in the downstream
+  dat <- NULL;
+  return(.set.mSet(mSetObj));
+}
+
 #'Read peak list files
 #'@description This function reads peak list files and fills the data into a dataSet object.  
 #'For NMR peak lists, the input should be formatted as two-columns containing numeric values (ppm, int).

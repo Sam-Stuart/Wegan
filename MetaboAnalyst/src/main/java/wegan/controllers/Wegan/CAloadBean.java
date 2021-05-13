@@ -59,7 +59,15 @@ public class CAloadBean implements Serializable {
     public void setDataFile(UploadedFile dataFile) {
         this.dataFile = dataFile;
     }
+    private UploadedFile dataFileWeight;
 
+    public UploadedFile getDataFileWeight() {
+        return dataFileWeight;
+    }
+
+    public void setDataFileWeight(UploadedFile dataFileWeight) {
+        this.dataFileWeight = dataFileWeight;
+    }
     /*
     Data upload for statistics module
      */
@@ -203,7 +211,7 @@ public class CAloadBean implements Serializable {
         boolean paired = false;
         boolean isZip = false;
         String testFile = null;
-        String testWeightFile = null;
+        String testFileWeight = null;
         
         if (testDataOpt == null) {
                     
@@ -216,11 +224,12 @@ public class CAloadBean implements Serializable {
             System.out.println("DUNE DATASET");
             dataType = "Dune";
             testFile = ab.getTestDune();
+            testFileWeight = ab.getTestWeightDune();
+            
 //            testWeightFile = ab.getTestWeightDune();
             format = "rowu";
             
         } else if (testDataOpt.equals("Iris")) {
-            System.out.println("IRIS DATASET");
             dataType = "Iris";
             testFile = ab.getTestIris();
             format = "rowu";    
@@ -244,16 +253,12 @@ public class CAloadBean implements Serializable {
                 return null;
             }
         } else {
-            
+            RDataUtils.readTextDataWeight(RC, testFileWeight, format, "disc");
             //Tested cahnging Disc to cont
             if (!RDataUtils.readTextData(RC, testFile, format, "disc")) {
                 sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
                 return null;
             }
-//            if (!RDataUtils.readTextData(RC, testWeightFile, format, "disc")) {
-//                sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
-//                return null;
-//            }
         }
         sb.setDataUploaded(true);
         return "Data check";
