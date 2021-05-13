@@ -64,7 +64,7 @@
                         <h:panelGrid id="panelGrid" columns="5" cellpadding="3" columnClasses="colBrayLong,colBrayShort,colBrayLong,colBrayShort, colLast">
                                 
                                 <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
-                                <p:selectBooleanCheckbox value ="#{brayBean.doOriginal}"/> 
+                                <p:selectBooleanCheckbox style="background-color: red;" value ="#{brayBean.doOriginal}"/> 
                                 <h:outputLabel style="font-weight: bold" value="Perform Relative Abundance Transformation:"/>
                                 <p:selectBooleanCheckbox value ="#{brayBean.doAbundance}"/> 
                                 <p:panelGrid></p:panelGrid>

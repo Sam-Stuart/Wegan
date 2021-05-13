@@ -23,6 +23,10 @@ ord.cca <- function(mSetObj=NA, envData=NA, abundance="NULL", metaData="NULL", d
     input <- mSetObj$dataSet$orig
   }
 
+  metaData <- mSetObj$dataSet$origMeta
+  envData <- mSetObj$dataSet$origEnv
+  print(envData)
+
   #Subset main data set for cca
   num_data <- select_if(input, is.numeric) #Numeric data for CCA
   zero_sum_logic <- rowSums(num_data)>0 #Determine wich rows sum to 0
@@ -67,13 +71,30 @@ ord.cca <- function(mSetObj=NA, envData=NA, abundance="NULL", metaData="NULL", d
   }
 
   #Subset env data using user-selected columns
+  #env_cols <- unlist(strsplit(env_text1, "+", fixed=TRUE)) #Create character vector for use as column names
+  #print(env_cols)
+  #env_data <- as.data.frame(envData1[,which(colnames(envData1) %in% env_cols)]) #Subset envData to obtain user selected environmental data
+  #print(env_data)
+  #print("after column crap 2")
+  #env_data1 <- as.data.frame(env_data[zero_sum_logic,]) #Subset env_data removing any rows that were removed for the main data set
+  #print(env_data1)
+  #print("after column crap 1")
+  #env_cols <- colnames(env_data1)
+  #print(env_cols)
+  #print("after column crap")
+  
   env_cols <- unlist(strsplit(env_text1, "+", fixed=TRUE)) #Create character vector for use as column names
   env_data <- as.data.frame(envData1[,which(colnames(envData1) %in% env_cols)]) #Subset envData to obtain user selected environmental data
   env_data1 <- as.data.frame(env_data[zero_sum_logic,]) #Subset env_data removing any rows that were removed for the main data set
-  colnames(env_data1) <- env_cols
-  
+  env_cols <- colnames(env_data1)
+  #Subset numerical data and constraining data to remove lines containing NA
+  env_data1 <- na.omit(env_data1)
+  num_data1 <- num_data1[row.names(num_data1) %in% row.names(env_data1),]
   cca <- cca(formula=num_data1~., data=env_data1) #Run CCA with subsetted env_data
-  
+
+  #cca <- cca(formula=num_data1~., data=env_data1, na.action=na.omit) #Run CCA with subsetted env_data
+  print(cca)
+  print("after cca")
   #meta data for input, used to group samples for plotting
   if (is.data.frame(metaData)==FALSE) { #No user uplaoded meta data
     fac_data <- select_if(input, is.factor)

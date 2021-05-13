@@ -59,6 +59,31 @@ public class RDataUtils {
     }
 
     //should be in the same directory format specify sample in row or column
+    public static boolean readTextDataMeta(RConnection RC, String filePath, String format, String lblType) {
+        try {
+            String rCommand = "Read.TextDataMeta(NA, \"" + filePath + "\", \"" + format + "\", \"" + lblType + "\");";
+            String rCommand2 = "Read.TextDataMeta(NA, \"" + "Replacing_with_your_file_path" + "\", \"" + format + "\", \"" + lblType + "\");";
+            RCenter.recordRCommand(RC, rCommand2);
+            return (RC.eval(rCommand).asInteger() == 1);
+        } catch (Exception rse) {
+            System.out.println(rse);
+            return false;
+        }
+    }    
+
+    public static boolean readTextDataEnv(RConnection RC, String filePath, String format, String lblType) {
+        try {
+            String rCommand = "Read.TextDataEnv(NA, \"" + filePath + "\", \"" + format + "\", \"" + lblType + "\");";
+            String rCommand2 = "Read.TextDataEnv(NA, \"" + "Replacing_with_your_file_path" + "\", \"" + format + "\", \"" + lblType + "\");";
+            RCenter.recordRCommand(RC, rCommand2);
+            return (RC.eval(rCommand).asInteger() == 1);
+        } catch (Exception rse) {
+            System.out.println(rse);
+            return false;
+        }
+    }
+    
+    //should be in the same directory format specify sample in row or column
     public static boolean readPeakListData(RConnection RC, String filePath) {
         try {
             String rCommand = "Read.PeakListData(NA, \"" + filePath + "\");";

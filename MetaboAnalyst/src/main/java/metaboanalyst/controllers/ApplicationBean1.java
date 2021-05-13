@@ -565,6 +565,13 @@ public class ApplicationBean1 implements Serializable {
         return realPath + test_amf;
     }
     
+    public String getTestFileMeta() {
+        return realPath + "/data/dune_meta.txt";
+    }
+    public String getTestFileEnv() {
+        return realPath + "/data/dune_env.txt";
+    }
+    
     public String getTestDune() {
         return realPath + test_dune;
     }
@@ -572,10 +579,7 @@ public class ApplicationBean1 implements Serializable {
     public String getTestIris() {
         return realPath + test_iris;
     }
-//    public String getTestLinear() {
-//        return realPath + test_linear;
-//    }
-//    
+
     public String getTestWeightDune() {
         return realPath + test_dune_weights;
     }
