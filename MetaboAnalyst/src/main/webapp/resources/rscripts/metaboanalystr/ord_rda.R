@@ -109,10 +109,12 @@ ord.rda <- function(mSetObj=NA, abundance="NULL", metaData="NULL", envData="NULL
       metaData1[,i] <- as.factor(metaData1[,i]) #Make sure all columns are read as factors
     }
   }
+  print("LINE 1")
   
-  #Fit variables to ordination plots for plotting arrows
+#Fit variables to ordination plots for plotting arrows
   var_fit <- envfit(rda, num_data1, permutations=999, p.max=NULL, type="lc")
-  
+  print("LINE 2")
+
   #Fit environmental data to ordination plots for plotting arrows and centroids
   if (is.data.frame(envData1)==FALSE) { #If environmental data not uploaded, all fit objects are the character "NA"
     env_fit_fac <- "NA"
@@ -129,13 +131,15 @@ ord.rda <- function(mSetObj=NA, abundance="NULL", metaData="NULL", envData="NULL
       env_fit_num <- envfit(rda, env_data_numeric, permutations=999, p.max=NULL, display="sites")
     }
   }
-  
+  print("LINE 3")
+
   #Extract row and column scores
   samp.scores <- signif(scores(rda, display="sites"), 5) #Extract scores for samples (rows), and truncate to 5 significant figures
   colnames(samp.scores) <- c("RDA1", "RDA2") #Name score columns
   var_scores <- signif(scores(rda, display="species"), 5)
   colnames(var_scores) <- c("RDA1", "RDA2")
-  
+  print("LINE 4")
+
   #Extract environment scores
   if (is.data.frame(envData1)==FALSE) { #If environmental data not uploaded
     env_scores <- "NA"
@@ -152,7 +156,6 @@ ord.rda <- function(mSetObj=NA, abundance="NULL", metaData="NULL", envData="NULL
       env_scores.fac <- "NA"
     }
     
-    
     if (is.matrix(env_scores.num)==TRUE) { #Numeric environmental variable scores turned into a matrix
       if (is.matrix(env_scores.fac)==TRUE) { #Categorical environmental variable scores turned into a matrix
         env_scores <- rbind(env_scores.num, env_scores.fac) #If both types of scores exist, combine them
@@ -163,9 +166,11 @@ ord.rda <- function(mSetObj=NA, abundance="NULL", metaData="NULL", envData="NULL
       env_scores <- env_scores.fac #Just scores for factor data
     }
   }
-  
-  #Produce summary
+  print("LINE 5")
+
+  #Produce relevant results
   summary <- summary(rda)
+  eigenvalues <- rda$CCA$eig
     
   #Store results in mSetObj$analSet$rda
   mSetObj$analSet$rda$name <- "RDA"
@@ -182,16 +187,18 @@ ord.rda <- function(mSetObj=NA, abundance="NULL", metaData="NULL", envData="NULL
   mSetObj$analSet$rda$var_scores <- var_scores
   mSetObj$analSet$rda$env_scores <- env_scores
   mSetObj$analSet$rda$summary <- summary
-  mSetObj$analSet$rda$eigenvalues <- rda$CCA$eig
+  print("PERFORMED RDA")
+  mSetObj$analSet$rda$eigenvalues <- eigenvalues
+  print(mSetObj$analSet$rda$eigenvalues)
 
-  #Download relevent data
+  #Download relevant data
   write.csv(samp.scores, file="rda_row_scores.csv", row.names=row.names(input))
   write.csv(var_scores, file="rda_column_scores.csv", row.names=TRUE)
   if (is.data.frame(envData1)==TRUE) { #If environmental data uploaded
     write.csv(env_scores, file="rda_environment_scores.csv", row.names=TRUE)
   } 
 
-  eigenValues_data <- cbind(rda$CCA$eig, rda$CCA$eig/sum(rda$CCA$eig))
+  eigenValues_data <- cbind(eigenvalues, eigenvalues/sum(eigenvalues))
   n <- nrow(eigenValues_data)
   eigenValues_data <- as.data.frame(cbind(paste0("RDA ", 1:nrow(eigenValues_data)), eigenValues_data))
   colnames(eigenValues_data) <- c("Dimension", "Eigen_Value", "Variance_Explained")
@@ -428,11 +435,15 @@ Plot.RDA.scree <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA) 
   #Extract necessary objects from mSetObj
   mSetObj <- .get.mSet(mSetObj)
   eigenvalues <- mSetObj$analSet$rda$eigenvalues
-  
+  print(eigenvalues)
+  print(eigenvalues/sum(eigenvalues))
+
   #Produce data set for plotting
-  eigenValues_data <- as.data.frame(cbind(eigenvalues, eigenvalues/sum(eigenvalues)))
-  n <- nrow(eigenValues_data)
-  eigenValues_data <- as.data.frame(cbind(1:nrow(eigenValues_data), eigenValues_data))
+  eigenValues_data <- as.data.frame(cbind(eigenvalues, eigenvalues/sum(eigenvalues))) #Eigen values and variance explained
+  print(eigenValues_data)
+
+  n <- nrow(eigenValues_data) #also used in plot code below
+  eigenValues_data <- as.data.frame(cbind(1:n, eigenValues_data)) #Add dimension column
   colnames(eigenValues_data) <- c("Dimension", "Eigen_Value", "Variance_Explained")
 
   #Set plot dimensions
