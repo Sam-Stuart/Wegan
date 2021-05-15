@@ -12,7 +12,7 @@
 #'@export
 
 ord.rda <- function(mSetObj=NA, abundance="NULL", metaData="NULL", envData="NULL", env_text="NULL", data="NULL") { #3 user options on all results pages, plus ability to upload up to 2 supplemental data sets
-  
+
   library("vegan")
   library("dplyr")
 
@@ -84,7 +84,7 @@ ord.rda <- function(mSetObj=NA, abundance="NULL", metaData="NULL", envData="NULL
   }
   
   #Run RDA
-  if(is.data.frame(envData1)==FALSE) { #Without environmetal data
+  if(is.data.frame(envData1)==FALSE) { #Without environmental data
     rda <- rda(num_data1)
   } else{ #With user uploaded environmetal data
     rda <- rda(X=num_data1, Y=env_data)
@@ -109,11 +109,9 @@ ord.rda <- function(mSetObj=NA, abundance="NULL", metaData="NULL", envData="NULL
       metaData1[,i] <- as.factor(metaData1[,i]) #Make sure all columns are read as factors
     }
   }
-  print("LINE 1")
   
 #Fit variables to ordination plots for plotting arrows
   var_fit <- envfit(rda, num_data1, permutations=999, p.max=NULL, type="lc")
-  print("LINE 2")
 
   #Fit environmental data to ordination plots for plotting arrows and centroids
   if (is.data.frame(envData1)==FALSE) { #If environmental data not uploaded, all fit objects are the character "NA"
@@ -131,14 +129,12 @@ ord.rda <- function(mSetObj=NA, abundance="NULL", metaData="NULL", envData="NULL
       env_fit_num <- envfit(rda, env_data_numeric, permutations=999, p.max=NULL, display="sites")
     }
   }
-  print("LINE 3")
 
   #Extract row and column scores
   samp.scores <- signif(scores(rda, display="sites"), 5) #Extract scores for samples (rows), and truncate to 5 significant figures
   colnames(samp.scores) <- c("RDA1", "RDA2") #Name score columns
   var_scores <- signif(scores(rda, display="species"), 5)
   colnames(var_scores) <- c("RDA1", "RDA2")
-  print("LINE 4")
 
   #Extract environment scores
   if (is.data.frame(envData1)==FALSE) { #If environmental data not uploaded
@@ -166,12 +162,12 @@ ord.rda <- function(mSetObj=NA, abundance="NULL", metaData="NULL", envData="NULL
       env_scores <- env_scores.fac #Just scores for factor data
     }
   }
-  print("LINE 5")
 
   #Produce relevant results
   summary <- summary(rda)
-  eigenvalues <- rda$CCA$eig
-    
+  eigenvalues <- eigenvals(rda)
+  print(eigenvalues)
+ 
   #Store results in mSetObj$analSet$rda
   mSetObj$analSet$rda$name <- "RDA"
   mSetObj$analSet$rda$rda <- rda
@@ -187,9 +183,7 @@ ord.rda <- function(mSetObj=NA, abundance="NULL", metaData="NULL", envData="NULL
   mSetObj$analSet$rda$var_scores <- var_scores
   mSetObj$analSet$rda$env_scores <- env_scores
   mSetObj$analSet$rda$summary <- summary
-  print("PERFORMED RDA")
   mSetObj$analSet$rda$eigenvalues <- eigenvalues
-  print(mSetObj$analSet$rda$eigenvalues)
 
   #Download relevant data
   write.csv(samp.scores, file="rda_row_scores.csv", row.names=row.names(input))
@@ -206,6 +200,7 @@ ord.rda <- function(mSetObj=NA, abundance="NULL", metaData="NULL", envData="NULL
   
   sink("column_impact_on_rda.txt") 
   cat("Data columns may significantly impact RDA\n")
+  print("LINE 8")
   print(var_fit)
   sink()  
 
@@ -435,8 +430,6 @@ Plot.RDA.scree <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA) 
   #Extract necessary objects from mSetObj
   mSetObj <- .get.mSet(mSetObj)
   eigenvalues <- mSetObj$analSet$rda$eigenvalues
-  print(eigenvalues)
-  print(eigenvalues/sum(eigenvalues))
 
   #Produce data set for plotting
   eigenValues_data <- as.data.frame(cbind(eigenvalues, eigenvalues/sum(eigenvalues))) #Eigen values and variance explained
