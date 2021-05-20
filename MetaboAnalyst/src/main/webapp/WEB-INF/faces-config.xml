@@ -99,7 +99,11 @@
             <to-view-id>/Secure/ordination/CCAView.xhtml</to-view-id>
             <redirect/>
         </navigation-case>  
-                   
+        <navigation-case>
+            <from-outcome>CA</from-outcome>
+            <to-view-id>/Secure/ordination/CAView.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>                    
         <navigation-case>
             <from-outcome>Bray</from-outcome>
             <to-view-id>/Secure/ordination/BrayCurtisView.xhtml</to-view-id>
@@ -130,11 +134,11 @@
             <redirect/>
         </navigation-case> 
         
-        <navigation-case>
+<!--        <navigation-case>
             <from-outcome>CA</from-outcome>
             <to-view-id>/docs/CAOverview.xhtml</to-view-id>
             <redirect/>
-        </navigation-case> 
+        </navigation-case> -->
         
         <navigation-case>
             <from-outcome>DCA</from-outcome>

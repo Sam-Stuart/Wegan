@@ -6,36 +6,45 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:p="http://primefaces.org/ui">
 
-    <h:form id="ccaGraph">
+    <h:form id="rdaGraph">
         <h:panelGrid columns="1" style="width:380px;">
             <h:panelGrid id="panelGrid2" columns="2" cellpadding="5" columnClasses="colBrayLong,colBrayShort">
                 <h:outputLabel style="font-weight: bold" value="Variable Arrows:"/>
-                <p:selectBooleanCheckbox value ="#{ccaBean.varArrows}"/> 
-                
-                <h:outputLabel style="font-weight: bold" value="Environmental Arrows:"/>
-                <p:selectBooleanCheckbox value ="#{ccaBean.envArrows}"/> 
-                
-                <h:outputLabel style="font-weight: bold" value="Environmental Centroid:"/>
-                <p:selectBooleanCheckbox value ="#{ccaBean.envCentroid}"/> 
+                <p:selectBooleanCheckbox value ="#{rdaBean.varArrows}"/> 
                 
                 <h:outputLabel style="font-weight: bold" value="Use Sample Names:"/>
-                <p:selectBooleanCheckbox value ="#{ccaBean.sampleNames}"/> 
+                <p:selectBooleanCheckbox value ="#{rdaBean.sampleNames}"/> 
 
 
                 <h:outputLabel style="font-weight: bold" value="Ellipse:"/>
-                    <p:selectBooleanCheckbox value ="#{ccaBean.addEllipse}"/> 
+                    <p:selectBooleanCheckbox value ="#{rdaBean.addEllipse}"/> 
                     
+                <h:outputLabel style="font-weight: bold" value="Point Style:"/>
+                    <p:selectBooleanCheckbox value ="#{rdaBean.pointStyle}"/> 
+                <h3>MetaData Options</h3>
+                <p:panelGrid></p:panelGrid>
+                <h:outputLabel style="font-weight: bold" value="Group Point:"/>
+                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ rdaBean.groupPoint}">
+                        <f:selectItems value="#{applicationBean1.ordColorPaletteOpts}" />
+                    </p:selectOneMenu>
+                
                 <h:outputLabel style="font-weight: bold" value="Color Pallet:"/>
-                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ ccaBean.color}">
+                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ rdaBean.color}">
                         <f:selectItems value="#{applicationBean1.ordColorPaletteOpts}" />
                     </p:selectOneMenu>
                 
                 <h:outputLabel style="font-weight: bold" value="Color Grouping Column:"/>
-                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ ccaBean.groupCol}">
+                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ rdaBean.groupCol}">
                         <f:selectItems value="#{applicationBean1.vegdistMeasureOpts}" />
                     </p:selectOneMenu> 
-
-                <p:panelGrid></p:panelGrid>  
+                <h3>Environmental Data Options</h3>
+                <p:panelGrid></p:panelGrid>
+                <h:outputLabel style="font-weight: bold" value="Environmental Arrows:"/>
+                <p:selectBooleanCheckbox value ="#{rdaBean.envArrows}"/> 
+                
+                <h:outputLabel style="font-weight: bold" value="Environmental Centroid:"/>
+                <p:selectBooleanCheckbox value ="#{rdaBean.envCentroid}"/> 
+ 
 
 
             </h:panelGrid>
@@ -44,9 +53,9 @@
                                  styleClass="updateButton"
                                  style="box-shadow: none !important; text-shadow: none !important"
                                 onclick="PF('statusDialog').show()"
-                                oncomplete="PF('graphApperanceCca').hide(); PF('statusDialog').hide()"  
-                                update=":overviewcca:form1:ccaPane1  :cmdPane" 
-                                actionListener="#{ccaBean.ccaUpdate_action()}"/>
+                                oncomplete="PF('graphApperanceRda').hide(); PF('statusDialog').hide()"  
+                                update=":overviewRDA:form1:rdaPane1  :cmdPane" 
+                                actionListener="#{rdaBean.rdaUpdate_action()}"/>
             </h:panelGrid>
         </h:panelGrid>
     </h:form>

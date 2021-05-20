@@ -70,7 +70,8 @@ public class OACcaBean implements Serializable {
 
     public void setEnvDataCol(String envDataCol) {
         this.envDataCol = envDataCol;
-    }    
+    } 
+    
     public String getGroupCol() {
         return groupCol;
     }
