@@ -112,9 +112,9 @@ public class OABean implements Serializable {
             RConnection RC = sb.getRConnection();
             sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
         }
-        OAUtils.PlotCCA(sb, "NULL", "NULL", "NULL", "NULL", "NULL", "NULL", "NULL", "NULL", "NULL", sb.getCurrentImage("ord_cca_2D"), "png", 72, "NULL");
+        OAUtils.PlotCCA(sb, "NULL", false, false, false, false, false, "NULL", "NULL", "NULL", sb.getCurrentImage("ord_cca_2D"), "png", 72, "NULL");
 //        OAUtils.PlotBray3D(sb, sb.getCurrentImage("ord_rda_scree"), "png", 72, "NULL");
 //        OAUtils.PlotBray3D(sb, sb.getCurrentImage("bray_score3d"), "json");
-//        OAUtils.PlotBrayScree(sb, sb.getCurrentImage("ord_bray_scree"), "png", 72, "NULL");
+        OAUtils.PlotCcaScree(sb, sb.getCurrentImage("ord_cca_scree"), "png", 72, "NULL");
     }
 }

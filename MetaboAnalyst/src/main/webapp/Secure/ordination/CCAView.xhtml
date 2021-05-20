@@ -14,50 +14,40 @@
         <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/jscripts/graphics.js"></script>
     </ui:define>
     <ui:define name="content">
-        <h:inputHidden id="mydir" value="#{sessionBean1.getJsonDir('bray_score3d')}" />
-        <script type="text/javascript">
-            // for scatter plot
-            function addBind() {
-                mychart = $("[id='ac:chart']");
-                mychart.unbind('jqplotDataClick');
-                mychart.bind('jqplotDataClick',
-                        function (ev, seriesIndex, pointIndex, data) {
-                            //note, we use the internal index, not point index 
-                            remoteCall([{name: 'cmpdIndex', value: data[0]}]);
-                        });
-            }
-
-            function ext() {
-                this.cfg.seriesDefaults = {
-                    lineWidth: 1.0,
-                    linePattern: 'dashed',
-                    showMarker: false,
-                    markerOptions: {
-                        color: 'rgba(128, 0, 128, 0.5)'
-                    },
-                    shadow: false
-                };
-                this.cfg.axes = {
-                    yaxis: {
-                        showLabel: true,
-                        tickOptions: {
-                            formatString: "%#.2f"
-                        }
-                    },
-                    xaxis: {
-                        showLabel: true,
-                        tickOptions: {
-                            formatString: "%#.2f"
-                        }
-                    }
-                };
-            }
-        </script>
         <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
-            <p:tabView id="overviewbray">
-                <p:tab title ="Overview" titleStyleClass="p-tab-nav">
+            <p:tabView id="overviewcca">
+                <p:tab title ="Biplot" titleStyleClass="p-tab-nav">
                     <h:form id="form1">
+                        <p>
+                            The use of data groupings will create more interesting plots. Load grouping data separately, where each row aligns with the rows in your data set, or include groupings as columns in your data set.
+                        </p>
+                        <h:panelGrid columns="4" cellpadding="3" columnClasses="colBrayLong,colBrayShort,colBrayLong,colBrayShort" >
+                            <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
+                            <p:selectBooleanCheckbox value ="#{ccaBean.doOriginal}"/> 
+                            <h:outputLabel style="font-weight: bold" value="Perform Relative Abundance Transformation:"/>
+                            <p:selectBooleanCheckbox value ="#{ccaBean.doAbundance}"/> 
 
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" cellpadding="3">
+                            <h:outputLabel style="font-weight: bold" value="Environmental Data Column Selection:"/>
+                            <p:inputText style="width:400px; height:100px; line-height:5px;" value="#{ccaBean.envDataCol}"/>
+
+                        </h:panelGrid>
+                        <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
+                            
+                            <p:commandButton value="Customize Graph"
+                                             styleClass="graphicsButton"
+                                             style="box-shadow: none !important; text-shadow: none !important;"
+                                             actionListener="#{sessionBean1.graphicsLnk_action('pca_pair')}" 
+                                            oncomplete="PF('graphApperanceCca').show()"/>  
+                            <p:commandButton value="Update" 
+                                             styleClass="updateButton"
+                                             style="box-shadow: none !important; text-shadow: none !important"
+                                            onclick="PF('statusDialog').show()"
+                                            oncomplete="PF('statusDialog').hide()"  
+                                            update=":overviewcca:form1:ccaPane1  :cmdPane" 
+                                            actionListener="#{ccaBean.brayUpdate_action()}"/>
+                        </h:panelGrid>
                         
                         <h:panelGrid class="resultsBar" columns="2">
                             <h:panelGroup>
@@ -71,29 +61,89 @@
                                 </h:panelGrid>
                             </h:panelGroup>                            
                         </h:panelGrid>
-                        <h:panelGrid id="brayPane1" style="width: 100%;">                           
+                        <h:panelGrid id="ccaPane1" style="width: 100%;">
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
+                                    <h:outputText style="padding-left: 0px" escape="false" value="#{ccaBean.fileRowScorePath}"/>
+                                </i>
+                                
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
+                                    <h:outputText style="padding-left: 0px" escape="false" value="#{ccaBean.fileColScorePath}"/>
+                                </i>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 2px">
+                                    <h:outputText style="padding-left: 0px" escape="false" value="#{ccaBean.fileEnvPath}"/>
+                                </i>
+                            </h:panelGrid>
                              <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
-                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('ord_cca_2D')}" alt="rda2D"/>
+                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('ord_cca_2D')}" alt="ord2D"/>
+                            </h:panelGrid>                            
+                        </h:panelGrid> 
+                    </h:form>
+                    
+                </p:tab>
+                <p:tab title ="Scree Plot" titleStyleClass="p-tab-nav">
+                    <h:form id="form2">
+                        <p>
+                            The use of data groupings will create more interesting plots. Load grouping data separately, where each row aligns with the rows in your data set, or include groupings as columns in your data set.
+                        </p>
+                        <h:panelGrid columns="4" cellpadding="3" columnClasses="colBrayLong,colBrayShort,colBrayLong,colBrayShort" >
+                            <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
+                            <p:selectBooleanCheckbox value ="#{ccaBean.doOriginal}"/> 
+                            <h:outputLabel style="font-weight: bold" value="Perform Relative Abundance Transformation:"/>
+                            <p:selectBooleanCheckbox value ="#{ccaBean.doAbundance}"/> 
+
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" cellpadding="3">
+                            <h:outputLabel style="font-weight: bold" value="Environmental Data Column Selection:"/>
+                            <p:inputText style="width:400px; height:100px" value="#{ccaBean.envDataCol}"/>
+
+                        </h:panelGrid>
+                        <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
+                            <p:commandButton value="Update" 
+                                             styleClass="updateButton"
+                                             style="box-shadow: none !important; text-shadow: none !important"
+                                            onclick="PF('statusDialog').show()"
+                                            oncomplete="PF('statusDialog').hide()"  
+                                            update=":overviewcca:form2:ccaPane2  :cmdPane" 
+                                            actionListener="#{ccaBean.brayUpdate_action()}"/>
+                        </h:panelGrid>
+                        
+                        <h:panelGrid class="resultsBar" columns="2">
+                            <h:panelGroup>
+                                <h:panelGrid columns="1" style="text-align : left;">
+                                    Results
+                                </h:panelGrid>
+                            </h:panelGroup> 
+                            <h:panelGroup>
+                                <h:panelGrid columns="3" class="resultsImages">
+                                    <i class="fa fa-question-circle"></i>
+                                </h:panelGrid>
+                            </h:panelGroup>                            
+                        </h:panelGrid>
+                        <h:panelGrid id="ccaPane2" style="width: 100%;">
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
+                                    <h:outputText style="padding-left: 0px" escape="false" value="#{ccaBean.fileScreePath}"/>
+                                </i>
+                                
+                            </h:panelGrid>
+                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('ord_cca_scree')}" alt="ord2D"/>
                             </h:panelGrid>                            
                         </h:panelGrid> 
                     </h:form>
                 </p:tab>
-                
             </p:tabView>
+            <p:dialog modal="true" widgetVar="graphApperanceCca" 
+                style="width: 400px; height:400px;" 
+                appendTo="@(body)" header="Graphics Center"
+                draggable="false" closable="true" resizable="false"> 
+                <ui:include src="_color_palette_cca.xhtml" />
+            </p:dialog>
         </h:panelGrid>
-        <p:dialog modal="true" widgetVar="graphApperanceBray" 
-            style="width: 400px; height:400px;" 
-            appendTo="@(body)" header="Graphics Center"
-            draggable="false" closable="true" resizable="false"> 
-            <ui:include src="_color_palette_bray.xhtml" />
-        </p:dialog>
-        <script type="text/javascript">
-            showBray3DScore();
-            $("[id='ac:chart']").bind('jqplotDataClick',
-                    function (ev, seriesIndex, pointIndex, data) {
-                        //note, we use the internal index, not point index 
-                        remoteCall([{name: 'cmpdIndex', value: data[0]}]);
-                    });
-        </script>
     </ui:define>
 </ui:composition>

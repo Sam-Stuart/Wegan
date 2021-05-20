@@ -310,7 +310,7 @@ public class OAUtils {
         }
     }
      
-    public static void PlotCCA(SessionBean1 sb, String color, String ellipse, String varArrows, String envArrows, String envCent, String sampleNames, String metaColColor, String pointOptions, String metaColPoint, String imgName, String format, int dpi, String width) {
+    public static void PlotCCA(SessionBean1 sb, String color, Boolean ellipse, Boolean varArrows, Boolean envArrows, Boolean envCent, Boolean sampleNames, String metaColColor, String pointOptions, String metaColPoint, String imgName, String format, int dpi, String width) {
         try {
             RConnection RC = sb.getRConnection();
             String rCommand = "Plot.CCA.biplot(NA" 
@@ -329,6 +329,18 @@ public class OAUtils {
                                             + ", width=NA)";
             RCenter.recordRCommand(RC, rCommand);
             sb.addGraphicsCMD("ord_bray_2D", rCommand);
+            RC.voidEval(rCommand);
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        }
+    }
+    public static void PlotCcaScree(SessionBean1 sb, String imgName, String format, int dpi, String width) {
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "Plot.cca.scree(NA" + ", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
+//            String rCommand = "Plot.RDA.2D(NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            sb.addGraphicsCMD("ord_cca_scree", rCommand);
             RC.voidEval(rCommand);
         } catch (RserveException rse) {
             System.out.println(rse);

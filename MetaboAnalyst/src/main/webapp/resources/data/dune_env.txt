@@ -19,3 +19,4 @@ Thickness	Moisture	Management	Use	Manure
 4.6	1	NM	Hayfield	NA
 3.7	5	NM	Hayfield	NA
 3.5	5	NM	Hayfield	NA
+3.5	5	NM	Hayfield	NA
