@@ -333,7 +333,8 @@ public class OAUtils {
         } catch (RserveException rse) {
             System.out.println(rse);
         }
-    }
+    }  
+    
     public static void PlotCcaScree(SessionBean1 sb, String imgName, String format, int dpi, String width) {
         try {
             RConnection RC = sb.getRConnection();
@@ -346,7 +347,50 @@ public class OAUtils {
             System.out.println(rse);
         }
     }
+    
+    public static boolean CreateCA(SessionBean1 sb) {
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "ord.ca(NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            RC.voidEval(rCommand);
+            return true;
+        } catch (RserveException rse) {
+            System.out.println(rse);
+            return false;
+        }
+    }
 
+    public static void PlotCA2D(SessionBean1 sb, String color, Boolean varArrows, Boolean pointOptions, String imgName, String format, int dpi, String width) {
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "Plot.ca.2D(NA" 
+                                            + ", \"" + color 
+                                            + "\", \"" + varArrows
+                                            + "\", \"" + pointOptions
+                                            + "\", \"" + imgName 
+                                            + "\", \"" + format  
+                                            + "\", " + dpi 
+                                            + ", width=NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            sb.addGraphicsCMD("ord_ca_2D", rCommand);
+            RC.voidEval(rCommand);
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        }
+    }
+    
+    public static void PlotCAScree(SessionBean1 sb, String imgName, String format, int dpi, String width) {
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "Plot.ca.scree(NA" + ", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            sb.addGraphicsCMD("ord_ca_scree", rCommand);
+            RC.voidEval(rCommand);
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        }
+    }
     /////// ------------ Ordination helper functions --------------- //////////////
     
     public static String[] ciaGetMetaColumns(SessionBean1 sb){

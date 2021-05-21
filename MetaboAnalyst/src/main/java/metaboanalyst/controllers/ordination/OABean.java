@@ -120,11 +120,11 @@ public class OABean implements Serializable {
     }
     
     private void doDefaultCA(){
-        if (!OAUtils.CreateCCA(sb)){
-            RConnection RC = sb.getRConnection();
-            sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
-        }
-        OAUtils.PlotCCA(sb, "NULL", false, false, false, false, false, "NULL", "NULL", "NULL", sb.getCurrentImage("ord_cca_2D"), "png", 72, "NULL");
-        OAUtils.PlotCcaScree(sb, sb.getCurrentImage("ord_cca_scree"), "png", 72, "NULL");
+//        if (!OAUtils.CreateCA(sb)){
+//            RConnection RC = sb.getRConnection();
+//            sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
+//        }
+//        OAUtils.PlotCA2D(sb, "NULL", false, false, sb.getCurrentImage("ord_ca_2D"), "png", 72, "NULL");
+//        OAUtils.PlotCAScree(sb, sb.getCurrentImage("ord_cca_scree"), "png", 72, "NULL");
     }
 }

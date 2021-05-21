@@ -19,8 +19,8 @@ import metaboanalyst.rwrappers.OAUtils;
 import metaboanalyst.utils.DataUtils;
 
 
-@ManagedBean(name = "ccaBean")
-public class OACcaBean implements Serializable {
+@ManagedBean(name = "caBean")
+public class OACABean implements Serializable {
 
     private final SessionBean1 sb = (SessionBean1) DataUtils.findBean("sessionBean1");
     
@@ -28,31 +28,22 @@ public class OACcaBean implements Serializable {
     private String usrName = usr.getName();
     
 
-    private String fileRowScores = "cca_row_scores.csv";
+    private String fileRowScores = "ca_row_scores.csv";
     private String fileRowScorePath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileRowScores + "\">" + fileRowScores + "</a>";
     
-    private String fileColScores = "cca_column_scores.csv";
+    private String fileColScores = "ca_column_scores.csv";
     private String fileColScorePath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileColScores + "\">" + fileColScores + "</a>";
-    
-    private String fileEnv = "cca_environment_scores.csv";
-    private String fileEnvPath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileEnv + "\">" + fileEnv + "</a>";
-    
-    private String fileScree = "cca_scree_data.csv";
+   
+    private String fileScree = "ca_scree_data.csv";
     private String fileScreePath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileScree + "\">" + fileScree + "</a>";
        
     private boolean varArrows = false; 
-    private boolean envArrows = false;
-    private boolean envCentroid = false;
-    private boolean sampleNames = false;
-    private boolean addEllipse = false;
     
     private boolean doOriginal = false; 
-    private boolean doAbundance = false;
     
     
     private boolean pointStyle = false; 
     
-    private String groupCol = "null";
     private String groupPoint = "null";
     private String color = "null";
     private String envDataCol = "null";
@@ -71,15 +62,7 @@ public class OACcaBean implements Serializable {
     public void setEnvDataCol(String envDataCol) {
         this.envDataCol = envDataCol;
     } 
-    
-    public String getGroupCol() {
-        return groupCol;
-    }
 
-    public void setGroupCol(String groupCol) {
-        this.groupCol = groupCol;
-    }
-    
     public String getGroupPoint() {
         return groupPoint;
     }
@@ -95,22 +78,6 @@ public class OACcaBean implements Serializable {
     public void setVarArrows(boolean varArrows) {
         this.varArrows = varArrows;
     }
-
-    public boolean isEnvCentroid() {
-        return envCentroid;
-    }
-    
-    public void setEnvCentroid(boolean envCentroid) {
-        this.envCentroid = envCentroid;
-    }
-    
-    public boolean isEnvArrows() {
-        return envArrows;
-    }
-    
-    public void setEnvArrows(boolean envArrows) {
-        this.envArrows = envArrows;
-    }
     
     public boolean isPointStyle() {
         return pointStyle;
@@ -120,22 +87,6 @@ public class OACcaBean implements Serializable {
         this.pointStyle = pointStyle;
     }
     
-    public boolean isAddEllipse() {
-        return addEllipse;
-    }
-    
-    public void setAddEllipse(boolean addEllipse) {
-        this.addEllipse = addEllipse;
-    }
-    
-    public boolean isSampleNames() {
-        return sampleNames;
-    }
-    
-    public void setSampleNames(boolean sampleNames) {
-        this.sampleNames = sampleNames;
-    }    
-
     public String getFileScreePath() {
         return fileScreePath;
     }
@@ -161,22 +112,6 @@ public class OACcaBean implements Serializable {
         this.fileColScorePath = fileColScorePath;
     }  
     
-    public String getFileEnvPath() {
-        return fileEnvPath;
-    }
-
-    public void setFileEnvPath(String fileEnvPath) {
-        this.fileEnvPath = fileEnvPath;
-    }  
-    
-    public boolean isdoAbundance() {
-        return doAbundance;
-    }
-    
-    public void setdoAbundance(boolean doAbundance) {
-        this.doAbundance = doAbundance;
-    }
-    
     public boolean isdoOriginal() {
         return doOriginal;
     }
@@ -188,9 +123,9 @@ public class OACcaBean implements Serializable {
 
     
 // ACTION BUTTONS //
-    public void ccaUpdate_action() {
+    public void caUpdate_action() {
 //        OAUtils.CreateBray(sb, "NULL", "NULL", "NULL", "NULL");
-        OAUtils.PlotCCA(sb, color, addEllipse, varArrows, envArrows, envCentroid, sampleNames, groupCol, "NULL", "NULL", sb.getNewImage("ord_cca_2D"), "png", 72, "NULL");
+//        OAUtils.PlotCCA(sb, color, addEllipse, varArrows, envArrows, envCentroid, sampleNames, groupCol, "NULL", "NULL", sb.getNewImage("ord_cca_2D"), "png", 72, "NULL");
     }
     
     
