@@ -775,7 +775,11 @@ public class DataUtils {
         TreeNode dispersalNode = new DefaultTreeNode("Diversity", parent);  
     }
     private static void addClusterNodes(TreeNode parent) {
-        TreeNode dispersalNode = new DefaultTreeNode("Clustering", parent);  
+        TreeNode clusterNode = new DefaultTreeNode("Clustering", parent); 
+        TreeNode nodecluster01 = new DefaultTreeNode("Dendogram", clusterNode);
+        TreeNode nodecluster02 = new DefaultTreeNode("K-Means", clusterNode);
+        TreeNode nodecluster03 = new DefaultTreeNode("Heatmap", clusterNode);
+        TreeNode nodecluster04 = new DefaultTreeNode("SOM", clusterNode);
     }    
     private static void addUtilNodes(TreeNode parent) {
         //TreeNode uNode = new DefaultTreeNode("Utilities", parent);

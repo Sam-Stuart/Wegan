@@ -432,22 +432,22 @@
         </navigation-case>
         <navigation-case>
             <from-outcome>Dendrogram</from-outcome>
-            <to-view-id>/Secure/analysis/TreeView.xhtml</to-view-id>
+            <to-view-id>/Secure/clustering/TreeView.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         <navigation-case>
             <from-outcome>Heatmap</from-outcome>
-            <to-view-id>/Secure/analysis/HeatmapView.xhtml</to-view-id>
+            <to-view-id>/Secure/clustering/HeatmapView.xhtml</to-view-id>
             <redirect/>
         </navigation-case>           
         <navigation-case>
             <from-outcome>K-means</from-outcome>
-            <to-view-id>/Secure/analysis/KMView.xhtml</to-view-id>
+            <to-view-id>/Secure/clustering/KMView.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         <navigation-case>
             <from-outcome>SOM</from-outcome>
-            <to-view-id>/Secure/analysis/SOMView.xhtml</to-view-id>
+            <to-view-id>/Secure/clustering/SOMView.xhtml</to-view-id>
             <redirect/>
         </navigation-case> 
         <navigation-case>

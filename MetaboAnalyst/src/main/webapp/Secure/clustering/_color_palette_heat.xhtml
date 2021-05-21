@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="heatGraph">
+        <h:panelGrid columns="2">
+            <h:panelGrid columns="2" style="padding: 1px 20px 10px 20px; width: 100%">
+                <h:outputLabel style="font-weight: bold" value="View Mode :"/>
+                <p:selectOneRadio value="#{clusterBean.viewOpt}">
+                    <f:selectItem itemLabel="Overview" itemValue="overview" /> 
+                    <f:selectItem itemLabel="Detail View (&lt; 2000 features)" itemValue="detail" /> 
+                </p:selectOneRadio>
+                <h:outputLabel style="font-weight: bold" value="View Options:"/>
+                <h:panelGrid columns="3">
+                    <p:selectBooleanCheckbox value ="#{clusterBean.noReorg}"/>
+                    <h:outputLabel style="font-weight: bold" value="Do not reorganize:"/>
+                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel"  value="#{clusterBean.noOrgOpt}">
+                        <f:selectItem itemLabel="Samples" itemValue="row" /> 
+                        <f:selectItem itemLabel="Features" itemValue="col" /> 
+                        <f:selectItem itemLabel="Both" itemValue="both" />                                 
+                    </p:selectOneMenu>
+                    <p:selectBooleanCheckbox value ="#{clusterBean.useTopFeature}"/>
+                    <h:panelGroup>
+                        <h:outputLabel style="font-weight: bold" value="Use top:"/>
+                        <p:inputText style="width:50px" value="#{clusterBean.topThresh}"/>
+                    </h:panelGroup>
+                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{clusterBean.selectMethodOpt}">
+                        <f:selectItem itemLabel="T-test / ANOVA" itemValue="tanova" /> 
+                        <f:selectItem itemLabel="PLS-DA VIP" itemValue="vip" /> 
+                        <f:selectItem itemLabel="Random Forest" itemValue="rf" />     
+                    </p:selectOneMenu>
+                    <p:selectBooleanCheckbox value="#{clusterBean.drawBorders}" /> 
+                    <h:outputLabel style="font-weight: bold" value="Show cell borders"/>
+                    <p:spacer/>
+                    <p:selectBooleanCheckbox value="#{clusterBean.grpAves}" /> 
+                    <h:outputLabel style="font-weight: bold" value="Show only group averages"/>
+                </h:panelGrid>
+            </h:panelGrid>
+        </h:panelGrid> 
+        <h:panelGrid id="panelGrid4" columns="1" cellpadding="5" style="float: right">
+            <p:commandButton value="Update" 
+                             styleClass="updateButton"
+                             style="box-shadow: none !important; text-shadow: none !important"
+                            onclick="PF('statusDialog').show()"
+                            oncomplete="PF('graphApperanceHeat').hide(); PF('statusDialog').hide()"  
+                            update=":overviewHeat:form1:heatPane1  :cmdPane" 
+                            actionListener="#{clusterBean.hmButton_action()}"/> 
+        </h:panelGrid>
+    </h:form>
+</ui:composition>
+

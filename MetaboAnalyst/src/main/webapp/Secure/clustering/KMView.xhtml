@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_anal_template.xhtml">
+    <ui:define name="metaInfo">
+        <f:event type="preRenderView" listener="#{analBean.performDefaultAnalysis('K-means')}"/> 
+    </ui:define>
+    <ui:define name="content">
+        <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
+            <p:tabView id="overviewKM">
+                <p:tab title ="Overview" titleStyleClass="p-tab-nav">
+                    <h:form id="form1">
+                        <p>
+                            Please note: due to space limit, only the &#xa;cluster members will be calculated if the specified cluster number &gt; 20. The blue lines represent the median intensities of each cluster. 
+                        </p>
+                        <h:panelGrid id="panelGrid" columns="5" cellpadding="3" columnClasses="colLeft,colRight,colLeft,colRight, colLast">
+                            <h:outputLabel style="font-weight: bold" value="Specify the cluster number:"/>
+                            <p:inputText style="width:50px" value="#{clusterBean.kmClustNm}"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="1" cellpadding="3" style="float: right">    
+                            <p:commandButton value="Update" 
+                                             styleClass="updateButton"
+                                             style="box-shadow: none !important; text-shadow: none !important"
+                                            onclick="PF('statusDialog').show()"
+                                            oncomplete="PF('statusDialog').hide()"  
+                                            update=":overviewKM:form1:kmPane1  :cmdPane" 
+                                            actionListener="#{clusterBean.kmButton_action()}"/>                          
+                        </h:panelGrid>
+                        <h:panelGrid class="resultsBar" columns="2">
+                            <h:panelGroup>
+                                <h:panelGrid columns="1" style="text-align : left;">
+                                    Results
+                                </h:panelGrid>
+                            </h:panelGroup> 
+                            <h:panelGroup>
+                                <h:panelGrid columns="3" class="resultsImages">
+                                    <p:commandLink onclick="PF('detailDialog').show()" title="View the detailed data table">
+                                        <i class="fa fa-table"></i>
+                                    </p:commandLink>
+                                    
+                                </h:panelGrid>
+                            </h:panelGroup>                            
+                        </h:panelGrid>
+                        <h:panelGrid id="kmPane1" style="width: 100%;">
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('km')}" alt="KMeanimage"/>
+                            </h:panelGrid>                           
+
+                        </h:panelGrid>
+                    </h:form>
+                </p:tab>
+            </p:tabView>
+            <p:dialog widgetVar="detailDialog" dynamic="true" modal="true" appendTo="@(body)" width="800" height="400" resizable="true">
+                <h:panelGrid id="detailView" style="width:500px; padding: 20px; font-size: 12px">
+                  <h:outputText escape="false" value="#{clusterBean.kmTxt}"/>
+                </h:panelGrid> 
+            </p:dialog> 
+        </h:panelGrid>
+        
+    </ui:define>
+</ui:composition>
