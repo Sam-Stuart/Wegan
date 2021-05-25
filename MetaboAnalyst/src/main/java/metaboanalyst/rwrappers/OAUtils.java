@@ -328,7 +328,7 @@ public class OAUtils {
                                             + "\", " + dpi 
                                             + ", width=NA)";
             RCenter.recordRCommand(RC, rCommand);
-            sb.addGraphicsCMD("ord_bray_2D", rCommand);
+//            sb.addGraphicsCMD("ord_bray_2D", rCommand);
             RC.voidEval(rCommand);
         } catch (RserveException rse) {
             System.out.println(rse);
@@ -386,6 +386,55 @@ public class OAUtils {
             String rCommand = "Plot.ca.scree(NA" + ", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
             RCenter.recordRCommand(RC, rCommand);
             sb.addGraphicsCMD("ord_ca_scree", rCommand);
+            RC.voidEval(rCommand);
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        }
+    }
+    public static boolean CreateDCA(SessionBean1 sb) {
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "ord.dca(NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            RC.voidEval(rCommand);
+            return true;
+        } catch (RserveException rse) {
+            System.out.println(rse);
+            return false;
+        }
+    }
+
+    public static void PlotDCA2D(SessionBean1 sb, String color, Boolean ellipse, Boolean varArrows, Boolean envArrows, Boolean sampleNames, Boolean envCent, String metaColColor, String pointOptions, String metaColPoint, String imgName, String format, int dpi, String width) {
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "Plot.DCA.2D(NA" 
+                                            + ", \"" + color 
+                                            + "\", \"" + ellipse
+                                            + "\", \"" + varArrows
+                                            + "\", \"" + envArrows
+                                            + "\", \"" + envCent
+                                            + "\", \"" + sampleNames
+                                            + "\", \"" + metaColColor
+                                            + "\", \"" + pointOptions
+                                            + "\", \"" + metaColPoint
+                                            + "\", \"" + imgName 
+                                            + "\", \"" + format  
+                                            + "\", " + dpi 
+                                            + ", width=NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            sb.addGraphicsCMD("ord_dca_2d", rCommand);
+            RC.voidEval(rCommand);
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        }
+    }
+    
+    public static void PlotDCAScree(SessionBean1 sb, String imgName, String format, int dpi, String width) {
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "Plot.DCA.scree(NA" + ", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            sb.addGraphicsCMD("ord_dca_scree", rCommand);
             RC.voidEval(rCommand);
         } catch (RserveException rse) {
             System.out.println(rse);

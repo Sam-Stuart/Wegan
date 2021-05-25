@@ -105,6 +105,11 @@
             <redirect/>
         </navigation-case>                    
         <navigation-case>
+            <from-outcome>DCA</from-outcome>
+            <to-view-id>/Secure/ordination/DCAView.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
             <from-outcome>Bray</from-outcome>
             <to-view-id>/Secure/ordination/BrayCurtisView.xhtml</to-view-id>
             <redirect/>
@@ -406,7 +411,7 @@
         </navigation-case>
         <navigation-case>
             <from-outcome>PCA</from-outcome>
-            <to-view-id>/Secure/analysis/PCAView.xhtml</to-view-id>
+            <to-view-id>/Secure/ordination/PCAView.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         <navigation-case>

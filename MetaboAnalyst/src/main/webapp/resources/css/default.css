@@ -251,6 +251,29 @@
     font-bold: false;
 }
 
+.flipButton {
+    background: #fae12e !important; 
+    border: 5px #fae12e !important; 
+    color: black !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
+/*    width: 70px; 
+    height: 30px;*/
+    font-size: 18px;
+    font-bold: false;
+}
+.exportButton {
+    background: #4b2a00 !important; 
+    border: 5px #4b2a00 !important; 
+    color: white !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
+    width: 70px; 
+    height: 30px;
+    font-size: 18px;
+    font-bold: false;
+}
+
 .normButton {
     background: #75bafb !important; 
     border: 5px #75bafb !important; 
