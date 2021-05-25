@@ -45,21 +45,14 @@
                                             actionListener="#{clusterBean.somButton_action()}"/>                          
                         </h:panelGrid>
                         <h:panelGrid class="resultsBar" columns="2">
-                            <h:panelGroup>
-                                <h:panelGrid columns="1" style="text-align : left;">
-                                    Results
-                                </h:panelGrid>
-                            </h:panelGroup> 
-                            <h:panelGroup>
-                                <h:panelGrid columns="3" class="resultsImages">
-                                    <p:commandLink onclick="PF('detailDialog').show()" title="View the detailed data table">
-                                        <i class="fa fa-table"></i>
-                                    </p:commandLink>
-                                    
-                                </h:panelGrid>
-                            </h:panelGroup>                            
+                            <h:panelGrid columns="1" style="text-align : left;"> Results </h:panelGrid>                           
                         </h:panelGrid>
                         <h:panelGrid id="somPane1" style="width: 100%;">
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-table fa-2x" style="align: middle; width: 1px; padding-right: 3px">
+                                    <p:commandLink onclick="PF('detailDialog').show()" value="View the detailed SOM data table"></p:commandLink>
+                                 </i>
+                            </h:panelGrid>
                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
                                 <img onerror='this.style.display="none"' src="#{clusterBean.somImg}" alt="SOMimage"/>
                             </h:panelGrid>                           
