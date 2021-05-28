@@ -233,11 +233,35 @@
             <to-view-id>/Secure/process/SanityCheck.xhtml</to-view-id>
             <redirect/>
         </navigation-case> 
+        
+        
+        <!--DIVERSITY FUNCTIONS-->
         <navigation-case>
             <from-outcome>Diversity</from-outcome>
             <to-view-id>/Secure/diversity/DiversityView.xhtml</to-view-id>
             <redirect/>
-        </navigation-case>      
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>Alpha</from-outcome>
+            <to-view-id>/Secure/diversity/AlphaView.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case> 
+        <navigation-case>
+            <from-outcome>Beta</from-outcome>
+            <to-view-id>/Secure/diversity/BetaView.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case> 
+        <navigation-case>
+            <from-outcome>Gamma</from-outcome>
+            <to-view-id>/Secure/diversity/GammaView.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>         
+        <navigation-case>
+            <from-outcome>Species</from-outcome>
+            <to-view-id>/Secure/diversity/SpeciesView.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>                             
+                                                                       
         <navigation-case>
             <from-outcome>Clustering</from-outcome>
             <to-view-id>/Secure/clustering/ClusteringView.xhtml</to-view-id>

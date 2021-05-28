@@ -772,7 +772,11 @@ public class DataUtils {
         TreeNode nodeoa04 = new DefaultTreeNode("RDA", oaNode);
     }
     private static void addDiversityNodes(TreeNode parent) {
-        TreeNode dispersalNode = new DefaultTreeNode("Diversity", parent);  
+        TreeNode diversityNode = new DefaultTreeNode("Diversity", parent); 
+        TreeNode nodeDiv01 = new DefaultTreeNode("Alpha", diversityNode);
+        TreeNode nodeDiv02 = new DefaultTreeNode("Beta", diversityNode);
+        TreeNode nodeDiv03 = new DefaultTreeNode("Gamma", diversityNode);
+        TreeNode nodeDiv04 = new DefaultTreeNode("Species", diversityNode);
     }
     private static void addClusterNodes(TreeNode parent) {
         TreeNode dispersalNode = new DefaultTreeNode("Clustering", parent);  

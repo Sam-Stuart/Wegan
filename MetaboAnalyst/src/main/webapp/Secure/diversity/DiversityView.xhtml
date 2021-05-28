@@ -12,10 +12,25 @@
     <ui:define name="content">
         <h:form>
             <h:panelGrid style="padding:20px 40px 20px 40px; font-size: 13px; line-height: 25px; width:100%">
-                <h2>Select an analysis path to explore :</h2>
-                <h:panelGrid style="border: lightgray thin solid; width: 670px; margin-left: 36px; padding: 15px 20px 10px 25px; background-color: #F9F9FB; font-size: 13px;">
+                <h2>Select an analysis path to explore:</h2>
+                <h:panelGrid style="width:100%; background-color: #75bafb;"></h:panelGrid>
+                <h:panelGrid style="width:100%; background-color: white; "></h:panelGrid>
+                <h:panelGrid style="width:100%; background-color: #75bafb;"></h:panelGrid>
+                <h:panelGrid style="width:100%; background-color: white; "></h:panelGrid>
+
+                <h:panelGrid style="border: none; width: 100%; padding: 15px 20px 10px 25px; background-color: #8cbd4830; font-size: 14px;">
+
+                    <h:commandLink id="alpha" style="margin-left: 25px" action="Alpha" onclick="PF('statusDialog').show()" value="Alpha"/>
+                    <p:tooltip for="alpha" style="font-size: 11px;" value="TODO: Write Hoverover" />
                     
-                   <h2>Welcome to Diversity!!!</h2> 
+                    <h:commandLink id="beta" style="margin-left: 25px" action="Beta" onclick="PF('statusDialog').show()" value="Beta"/>
+                    <p:tooltip for="beta" style="font-size: 11px;" value="TODO: Write Hoverover" />
+                    
+                    <h:commandLink id="gamma" style="margin-left: 25px" action="Gamma" onclick="PF('statusDialog').show()" value="Gamma"/>
+                    <p:tooltip for="gamma" style="font-size: 11px;" value="TODO: Write Hoverover" />
+                    
+                    <h:commandLink id="species" style="margin-left: 25px" action="Species" onclick="PF('statusDialog').show()" value="Species"/>
+                    <p:tooltip for="species" style="font-size: 11px;" value="TODO: Write Hoverover" />
                     
                 </h:panelGrid>
             </h:panelGrid> 
