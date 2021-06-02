@@ -185,11 +185,10 @@ public class OACcaBean implements Serializable {
         this.doOriginal = doOriginal;
     }
     
-
     
 // ACTION BUTTONS //
     public void ccaUpdate_action() {
-//        OAUtils.CreateBray(sb, "NULL", "NULL", "NULL", "NULL");
+        OAUtils.CreateCCA(sb, doAbundance, doOriginal, envDataCol);
         OAUtils.PlotCCA(sb, color, addEllipse, varArrows, envArrows, envCentroid, sampleNames, groupCol, "NULL", "NULL", sb.getNewImage("ord_cca_2D"), "png", 72, "NULL");
     }
     

@@ -9,7 +9,7 @@
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2)
 #'@export
-ord.bray <- function(mSetObj=NA, abundance="NULL", distance="NULL", data=NULL, binary=NULL) { 
+ord.bray <- function(mSetObj=NA, abundance="false", distance="NULL", data="false", binary="false") { 
   
   library("natto")
   library("vegan")
@@ -17,7 +17,7 @@ ord.bray <- function(mSetObj=NA, abundance="NULL", distance="NULL", data=NULL, b
   
   #Obtain mSet dataset
   mSetObj <- .get.mSet(mSetObj)
-  if (is.null(data)) {
+  if (data=="false") {
     input <- mSetObj$dataSet$norm
   } else {
     input <- mSetObj$dataSet$orig
@@ -28,7 +28,7 @@ ord.bray <- function(mSetObj=NA, abundance="NULL", distance="NULL", data=NULL, b
   
   #Transform abundance data
   print("Should you have community species data, you may want to investigate the relative abundance (divide all values by column totals) versus absolute abundance (no change to data).")
-  if (abundance=="NULL") {
+  if (abundance=="false") {
     abundance1 <- "absolute"
     num_data1 <- num_data #Default abundance is absolute and no change is made to data
   } else {
@@ -44,7 +44,7 @@ ord.bray <- function(mSetObj=NA, abundance="NULL", distance="NULL", data=NULL, b
   } 
   
   #Generate dissimilarity matrix
-  if (is.null(binary)) {
+  if (binary=='false') {
     dist <- vegdist(num_data1, method=distance1, binary=FALSE) #Generate dissimilarity matrix
   } else {
     dist <- vegdist(num_data1, method=distance1, binary=TRUE) #Generate dissimilarity matrix for presence/absence data

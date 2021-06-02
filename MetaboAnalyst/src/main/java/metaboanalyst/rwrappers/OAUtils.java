@@ -184,11 +184,15 @@ public class OAUtils {
             System.out.println(rse);
         }
     }
-    
-    public static void CreateRDA(SessionBean1 sb, String abundance, String metaData, String envText, String data) {
+
+    public static void CreateRDA(SessionBean1 sb, Boolean abundance, String envText, Boolean data) {
         try {
             RConnection RC = sb.getRConnection();
-            String rCommand = "ord.rda(NA" + ", \"" + abundance + "\", \"" + metaData + "\", \"" + envText + "\" , \"" + data + "\")";
+            String rCommand = "ord.rda(NA" 
+                                        + ", \"" + abundance 
+                                        + "\", \"" + envText 
+                                        + "\" , \"" + data 
+                                        + "\")";
 //            String rCommand = "ord.rda(NA)";
             RCenter.recordRCommand(RC, rCommand);
             RC.voidEval(rCommand);
@@ -198,7 +202,7 @@ public class OAUtils {
     }
 
     
-    public static void PlotRDA2D(SessionBean1 sb, String color, String varArrows, String envArrows, String envCent, String sampleNames, String metaColColor, String pointOptions, String metaColPoint, String ellipse, String imgName, String format, int dpi, String width) {
+    public static void PlotRDA2D(SessionBean1 sb, String color, Boolean varArrows, Boolean envArrows, Boolean envCent, Boolean sampleNames, String metaColColor, Boolean pointOptions, String metaColPoint, Boolean ellipse, String imgName, String format, int dpi, String width) {
         try {
             RConnection RC = sb.getRConnection();
             String rCommand = "Plot.RDA.2D(NA" 
@@ -237,10 +241,15 @@ public class OAUtils {
         }
     }
     
-    public static void CreateBray(SessionBean1 sb, String abundance, String metaData, String envText, String data) {
+    public static void CreateBray(SessionBean1 sb, Boolean abundance, String distance, Boolean data, Boolean binary) {
         try {
             RConnection RC = sb.getRConnection();
-            String rCommand = "ord.bray(NA)";
+            String rCommand = "ord.bray(NA" 
+                                            + ", \"" + abundance 
+                                            + "\", \"" + distance
+                                            + "\", \"" + data
+                                            + "\", \"" + binary
+                                            + "\")";
 //            String rCommand = "ord.rda(NA)";
             RCenter.recordRCommand(RC, rCommand);
             RC.voidEval(rCommand);
@@ -296,11 +305,14 @@ public class OAUtils {
             System.out.println(rse);
         }
     }
-        
-    public static boolean CreateCCA(SessionBean1 sb) {
+
+    public static boolean CreateCCA(SessionBean1 sb, Boolean abundance, Boolean data, String env_text) {
         try {
             RConnection RC = sb.getRConnection();
-            String rCommand = "ord.cca(NA)";
+            String rCommand = "ord.cca(NA, NA"
+                                        + ", \"" + abundance 
+                                        + "\", \"" + data
+                                        + "\", \"" + env_text + ")";
             RCenter.recordRCommand(RC, rCommand);
             RC.voidEval(rCommand);
             return true;

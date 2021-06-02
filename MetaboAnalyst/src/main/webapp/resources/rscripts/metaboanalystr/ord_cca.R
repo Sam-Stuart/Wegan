@@ -10,19 +10,19 @@
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2)
 #'@export
-ord.cca <- function(mSetObj=NA, envData=NA, abundance="NULL", metaData="NULL", data="NULL", env_text="NULL") {
+ord.cca <- function(mSetObj=NA, envData=NA, abundance="false", data="false", env_text="NULL") {
 
   library("vegan")
   library("dplyr")
 
   #Extract input from mSetObj
   mSetObj <- .get.mSet(mSetObj)
-  if (data=="NULL") {
+  if (data=="false") {
     input <- mSetObj$dataSet$norm
   } else {
     input <- mSetObj$dataSet$orig
   }
-
+  metaData <- "NULL"
   #metaData <- mSetObj$dataSet$origMeta
   envData <- mSetObj$dataSet$origEnv
   print(envData)
@@ -34,7 +34,7 @@ ord.cca <- function(mSetObj=NA, envData=NA, abundance="NULL", metaData="NULL", d
   
   #Transform abundance data
   print("Should you have community species data, you may want to investigate the relative abundance (divide all values by column totals) versus absolute abundance (no change to data).")
-  if (abundance=="NULL") {
+  if (abundance=="false") {
     abundance1 <- "absolute"
     num_data1 <- num_data #Default abundance is absolute and no change is made to data
   } else {

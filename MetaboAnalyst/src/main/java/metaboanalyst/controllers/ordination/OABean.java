@@ -104,13 +104,13 @@ public class OABean implements Serializable {
 //    }
     
     private void doDefaultRDA(){
-        OAUtils.CreateRDA(sb, "NULL", "NULL", "NULL", "NULL");
-        OAUtils.PlotRDA2D(sb, "NULL", "NULL", "NULL", "NULL", "NULL", "NULL", "NULL", "NULL", "NULL", sb.getCurrentImage("ord_rda_2D"), "png", 72, "NULL");
+        OAUtils.CreateRDA(sb, false, "NULL", false);
+        OAUtils.PlotRDA2D(sb, "NULL", false, false, false, false, "NULL", false, "NULL", false, sb.getCurrentImage("ord_rda_2D"), "png", 72, "NULL");
         OAUtils.PlotRDAScree(sb, sb.getCurrentImage("ord_rda_scree"), "png", 72, "NULL");
     }
     
     private void doDefaultBray(){
-        OAUtils.CreateBray(sb, "NULL", "NULL", "NULL", "NULL");
+        OAUtils.CreateBray(sb, false, "euclidean", false, false);
         OAUtils.PlotBray2D(sb, "NULL", false, false, false, "NULL", "NULL", "NULL", sb.getCurrentImage("ord_bray_2D"), "png", 72, "NULL");
 //        OAUtils.PlotBray3D(sb, sb.getCurrentImage("ord_rda_scree"), "png", 72, "NULL");
         OAUtils.PlotBray3D(sb, sb.getCurrentImage("bray_score3d"), "json");
@@ -118,7 +118,7 @@ public class OABean implements Serializable {
     }
     
     private void doDefaultCCA(){
-        if (!OAUtils.CreateCCA(sb)){
+        if (!OAUtils.CreateCCA(sb, false, false, "NULL")){
             RConnection RC = sb.getRConnection();
             sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
         }
