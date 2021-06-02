@@ -14,10 +14,10 @@ import org.rosuda.REngine.Rserve.RserveException;
 
 public class OAUtils {
 
-    public static void CreateNMDSOrdination(SessionBean1 sb, String distance, Boolean abundance, Boolean data, String env_text) {
+    public static void CreateNMDSOrdination(SessionBean1 sb, Boolean data, String distance, String abundance, String env_text) {
         try {
             RConnection RC = sb.getRConnection();
-            String rCommand = "ord.NMDS(NA" + ", \"" + distance + "\", \"" + abundance + "\", \"" + data + "\", env_text=NULL)";
+            String rCommand = "ord.NMDS(NA" + ", \"" + data + "\"distance=NULL, abundance=NULL, env_text=NULL)";
             RCenter.recordRCommand(RC, rCommand);
             RC.voidEval(rCommand);
         } catch (RserveException rse) {
