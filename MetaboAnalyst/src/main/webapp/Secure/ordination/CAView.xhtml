@@ -7,48 +7,38 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="/frags/_anal_template.xhtml">
     <ui:define name="metaInfo">
-        <f:event type="preRenderView" listener="#{oaBean.performDefaultAnalysis('CCA')}"/> 
-    </ui:define>
-    <ui:define name="myscript">
-        <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/jscripts/canvasXpress.min.js"></script>
-        <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/jscripts/graphics.js"></script>
+        <f:event type="preRenderView" listener="#{oaBean.performDefaultAnalysis('CA')}"/> 
+        <f:event type="preRenderView" listener="#{downloader.setupDownloadTable()}"/>
     </ui:define>
     <ui:define name="content">
         <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
-            <p:tabView id="overviewcca">
+            <p:tabView id="overviewCA">
                 <p:tab title ="Biplot" titleStyleClass="p-tab-nav">
                     <h:form id="form1">
-                        <p>
-                            The use of data groupings will create more interesting plots. Load grouping data separately, where each row aligns with the rows in your data set, or include groupings as columns in your data set.
-                        </p>
                         <h:panelGrid columns="4" cellpadding="3" columnClasses="colBrayLong,colBrayShort,colBrayLong,colBrayShort" >
                             <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
-                            <p:selectBooleanCheckbox value ="#{ccaBean.doOriginal}"/> 
-                            <h:outputLabel style="font-weight: bold" value="Perform Relative Abundance Transformation:"/>
-                            <p:selectBooleanCheckbox value ="#{ccaBean.doAbundance}"/> 
-
+                            <p:selectBooleanCheckbox value ="#{caBean.doOriginal}"/>
+                            <h:outputLabel style="font-weight: bold" value="Variable Arrows:"/>
+                            <p:selectBooleanCheckbox value ="#{caBean.varArrows}"/> 
+                            <h:outputLabel style="font-weight: bold" value="Color Pallet:"/>
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ caBean.color}">
+                                <f:selectItems value="#{applicationBean1.ordColorPaletteOpts}" />
+                            </p:selectOneMenu>
                         </h:panelGrid>
                         <h:panelGrid columns="2" cellpadding="3">
                             <h:outputLabel style="font-weight: bold" value="Environmental Data Column Selection:"/>
-                            <p:inputText style="width:400px; height:100px; line-height:5px;" value="#{ccaBean.envDataCol}"/>
+                            <p:inputText style="width:400px; height:100px; line-height:5px;" value="#{caBean.envDataCol}"/>
 
                         </h:panelGrid>
                         <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
-                            
-                            <p:commandButton value="Customize Graph"
-                                             styleClass="graphicsButton"
-                                             style="box-shadow: none !important; text-shadow: none !important;"
-                                             actionListener="#{sessionBean1.graphicsLnk_action('pca_pair')}" 
-                                            oncomplete="PF('graphApperanceCca').show()"/>  
                             <p:commandButton value="Update" 
                                              styleClass="updateButton"
                                              style="box-shadow: none !important; text-shadow: none !important"
                                             onclick="PF('statusDialog').show()"
                                             oncomplete="PF('statusDialog').hide()"  
-                                            update=":overviewcca:form1:ccaPane1  :cmdPane" 
-                                            actionListener="#{ccaBean.ccaUpdate_action()}"/>
+                                            update=":overviewCA:form1:caPane1  :cmdPane" 
+                                            actionListener="#{caBean.caUpdate_action()}"/>
                         </h:panelGrid>
-                        
                         <h:panelGrid class="resultsBar" columns="2">
                             <h:panelGroup>
                                 <h:panelGrid columns="1" style="text-align : left;">
@@ -61,57 +51,44 @@
                                 </h:panelGrid>
                             </h:panelGroup>                            
                         </h:panelGrid>
-                        <h:panelGrid id="ccaPane1" style="width: 100%;">
+                        <h:panelGrid id="caPane1" style="width: 100%;">
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
                                 <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
-                                    <h:outputText style="padding-left: 0px" escape="false" value="#{ccaBean.fileRowScorePath}"/>
+                                    <h:outputText style="padding-left: 0px" escape="false" value="#{caBean.fileRowScorePath}"/>
                                 </i>
-                                
                             </h:panelGrid>
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
                                 <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
-                                    <h:outputText style="padding-left: 0px" escape="false" value="#{ccaBean.fileColScorePath}"/>
+                                    <h:outputText style="padding-left: 0px" escape="false" value="#{caBean.fileColScorePath}"/>
                                 </i>
                             </h:panelGrid>
-                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
-                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 2px">
-                                    <h:outputText style="padding-left: 0px" escape="false" value="#{ccaBean.fileEnvPath}"/>
-                                </i>
-                            </h:panelGrid>
-                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
-                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('ord_cca_2D')}" alt="ord2D"/>
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('ord_ca_2D')}" alt="ord2D"/>
                             </h:panelGrid>                            
-                        </h:panelGrid> 
+                        </h:panelGrid>
                     </h:form>
-                    
                 </p:tab>
                 <p:tab title ="Scree Plot" titleStyleClass="p-tab-nav">
                     <h:form id="form2">
-                        <p>
-                            The use of data groupings will create more interesting plots. Load grouping data separately, where each row aligns with the rows in your data set, or include groupings as columns in your data set.
-                        </p>
                         <h:panelGrid columns="4" cellpadding="3" columnClasses="colBrayLong,colBrayShort,colBrayLong,colBrayShort" >
                             <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
-                            <p:selectBooleanCheckbox value ="#{ccaBean.doOriginal}"/> 
-                            <h:outputLabel style="font-weight: bold" value="Perform Relative Abundance Transformation:"/>
-                            <p:selectBooleanCheckbox value ="#{ccaBean.doAbundance}"/> 
-
+                            <p:selectBooleanCheckbox value ="#{caBean.doOriginal}"/>
                         </h:panelGrid>
                         <h:panelGrid columns="2" cellpadding="3">
                             <h:outputLabel style="font-weight: bold" value="Environmental Data Column Selection:"/>
-                            <p:inputText style="width:400px; height:100px" value="#{ccaBean.envDataCol}"/>
+                            <p:inputText style="width:400px; height:100px; line-height:5px;" value="#{caBean.envDataCol}"/>
 
                         </h:panelGrid>
                         <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
+                             
                             <p:commandButton value="Update" 
                                              styleClass="updateButton"
                                              style="box-shadow: none !important; text-shadow: none !important"
                                             onclick="PF('statusDialog').show()"
                                             oncomplete="PF('statusDialog').hide()"  
-                                            update=":overviewcca:form2:ccaPane2  :cmdPane" 
-                                            actionListener="#{ccaBean.ccaUpdate_action()}"/>
+                                            update=":overviewCA:form1:caPane1  :cmdPane" 
+                                            actionListener="#{caBean.caUpdate_action()}"/>
                         </h:panelGrid>
-                        
                         <h:panelGrid class="resultsBar" columns="2">
                             <h:panelGroup>
                                 <h:panelGrid columns="1" style="text-align : left;">
@@ -124,26 +101,21 @@
                                 </h:panelGrid>
                             </h:panelGroup>                            
                         </h:panelGrid>
-                        <h:panelGrid id="ccaPane2" style="width: 100%;">
+                        <h:panelGrid id="caPane2" style="width: 100%;">
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
                                 <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
-                                    <h:outputText style="padding-left: 0px" escape="false" value="#{ccaBean.fileScreePath}"/>
+                                    <h:outputText style="padding-left: 0px" escape="false" value="#{caBean.fileScreePath}"/>    
                                 </i>
                                 
                             </h:panelGrid>
                              <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
-                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('ord_cca_scree')}" alt="ord2D"/>
+                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('ord_ca_scree')}" alt="ord2D"/>
                             </h:panelGrid>                            
-                        </h:panelGrid> 
+                        </h:panelGrid>
+                       
                     </h:form>
                 </p:tab>
-            </p:tabView>
-            <p:dialog modal="true" widgetVar="graphApperanceCca" 
-                style="width: 400px; height:400px;" 
-                appendTo="@(body)" header="Graphics Center"
-                draggable="false" closable="true" resizable="false"> 
-                <ui:include src="_color_palette_cca.xhtml" />
-            </p:dialog>
-        </h:panelGrid>
+            </p:tabView> 
+        </h:panelGrid> 
     </ui:define>
 </ui:composition>

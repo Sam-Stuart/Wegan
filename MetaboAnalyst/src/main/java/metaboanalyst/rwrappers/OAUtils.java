@@ -310,7 +310,7 @@ public class OAUtils {
         }
     }
      
-    public static void PlotCCA(SessionBean1 sb, String color, String ellipse, String varArrows, String envArrows, String envCent, String sampleNames, String metaColColor, String pointOptions, String metaColPoint, String imgName, String format, int dpi, String width) {
+    public static void PlotCCA(SessionBean1 sb, String color, Boolean ellipse, Boolean varArrows, Boolean envArrows, Boolean envCent, Boolean sampleNames, String metaColColor, String pointOptions, String metaColPoint, String imgName, String format, int dpi, String width) {
         try {
             RConnection RC = sb.getRConnection();
             String rCommand = "Plot.CCA.biplot(NA" 
@@ -328,13 +328,118 @@ public class OAUtils {
                                             + "\", " + dpi 
                                             + ", width=NA)";
             RCenter.recordRCommand(RC, rCommand);
-            sb.addGraphicsCMD("ord_bray_2D", rCommand);
+//            sb.addGraphicsCMD("ord_bray_2D", rCommand);
+            RC.voidEval(rCommand);
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        }
+    }  
+    
+    public static void PlotCcaScree(SessionBean1 sb, String imgName, String format, int dpi, String width) {
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "Plot.cca.scree(NA" + ", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
+//            String rCommand = "Plot.RDA.2D(NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            sb.addGraphicsCMD("ord_cca_scree", rCommand);
             RC.voidEval(rCommand);
         } catch (RserveException rse) {
             System.out.println(rse);
         }
     }
+    
+    public static boolean CreateCA(SessionBean1 sb) {
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "ord.ca(NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            RC.voidEval(rCommand);
+            return true;
+        } catch (RserveException rse) {
+            System.out.println(rse);
+            return false;
+        }
+    }
 
+    public static void PlotCA2D(SessionBean1 sb, String color, Boolean varArrows, Boolean pointOptions, String imgName, String format, int dpi, String width) {
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "Plot.ca.2D(NA" 
+                                            + ", \"" + color 
+                                            + "\", \"" + varArrows
+                                            + "\", \"" + pointOptions
+                                            + "\", \"" + imgName 
+                                            + "\", \"" + format  
+                                            + "\", " + dpi 
+                                            + ", width=NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            sb.addGraphicsCMD("ord_ca_2D", rCommand);
+            RC.voidEval(rCommand);
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        }
+    }
+    
+    public static void PlotCAScree(SessionBean1 sb, String imgName, String format, int dpi, String width) {
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "Plot.ca.scree(NA" + ", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            sb.addGraphicsCMD("ord_ca_scree", rCommand);
+            RC.voidEval(rCommand);
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        }
+    }
+    public static boolean CreateDCA(SessionBean1 sb) {
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "ord.dca(NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            RC.voidEval(rCommand);
+            return true;
+        } catch (RserveException rse) {
+            System.out.println(rse);
+            return false;
+        }
+    }
+
+    public static void PlotDCA2D(SessionBean1 sb, String color, Boolean ellipse, Boolean varArrows, Boolean envArrows, Boolean sampleNames, Boolean envCent, String metaColColor, String pointOptions, String metaColPoint, String imgName, String format, int dpi, String width) {
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "Plot.DCA.2D(NA" 
+                                            + ", \"" + color 
+                                            + "\", \"" + ellipse
+                                            + "\", \"" + varArrows
+                                            + "\", \"" + envArrows
+                                            + "\", \"" + envCent
+                                            + "\", \"" + sampleNames
+                                            + "\", \"" + metaColColor
+                                            + "\", \"" + pointOptions
+                                            + "\", \"" + metaColPoint
+                                            + "\", \"" + imgName 
+                                            + "\", \"" + format  
+                                            + "\", " + dpi 
+                                            + ", width=NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            sb.addGraphicsCMD("ord_dca_2d", rCommand);
+            RC.voidEval(rCommand);
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        }
+    }
+    
+    public static void PlotDCAScree(SessionBean1 sb, String imgName, String format, int dpi, String width) {
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "Plot.DCA.scree(NA" + ", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            sb.addGraphicsCMD("ord_dca_scree", rCommand);
+            RC.voidEval(rCommand);
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        }
+    }
     /////// ------------ Ordination helper functions --------------- //////////////
     
     public static String[] ciaGetMetaColumns(SessionBean1 sb){

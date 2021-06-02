@@ -381,11 +381,13 @@ Plot.bray.3D <- function(mSetObj=NA, color="NULL", var_arrows=NULL, meta_col_col
     cls <- paste("Group", cls)
   }
   bray3D_plot$score$facA <- cls
-  
+  print("before json")
+  print(bray3D_plot)
   imgName=paste(imgName, ".", format, sep="")
   json.obj <- RJSONIO::toJSON(bray3D_plot, .na='null')
   sink(imgName)
   cat(json.obj)
+  print("after json")
   sink()
   
   if(!.on.public.web){
