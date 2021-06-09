@@ -14,7 +14,8 @@ mummichog_files <- c("mummichog", "networks");
 metaanal_files <- c("meta_methods", "meta_data_utils");
 network_files <- c("networks", "enrich_integ", "enrich_name_match", "gene_fun_utils", "enrich_path_kegg");
 other_files <- c("others_batch_check", "others_lipomics", "enrich_name_match");
-nmds_files <- c("test-Vegan");
+nmds_files <- c("test-Vegan","diversity_new");
+
 LoadScripts <- function(module.nm = "nmds"){
     file.sources <- "";
     if(module.nm == "stat"){

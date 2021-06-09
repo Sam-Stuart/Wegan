@@ -6,16 +6,14 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
                 template="/frags/_anal_template.xhtml">
-    
     <ui:define name="metaInfo">
-        <f:event type="preRenderView" listener="#{analBean.performDefaultAnalysis('DCA')}"/> 
+        <f:event type="preRenderView" listener="#{analBean.performDefaultAnalysis('Diversity')}"/> 
     </ui:define>
- 
-    
+    <ui:define name="myscript">
+        <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/jscripts/canvasXpress.min.js"></script>
+        <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/jscripts/graphics.js"></script>
+    </ui:define>
     <ui:define name="content">
-        
-        
-        
         <h:inputHidden id="mydir" value="#{sessionBean1.getJsonDir('pca_score3d')}" />
         <script type="text/javascript">
             // for scatter plot
@@ -55,36 +53,45 @@
                 };
             }
         </script>
-        
-        
-        
         <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
+            
+            
+            <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('pca_pair')}" alt="PCAPairImage"/>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
             
         </h:panelGrid> 
         
         
         
         
-        
-        
-        
-        
-        
-        <!--  
-        <h:panelGrid style="padding: 20px 50px 20px 40px; font-size: 13px; line-height: 23px; width: 100%">
-            
-            <h:panelGrid style="text-align: center; width: 80%">
-                <img src="#{sessionBean1.getPath2()}/WeganDCA.png" width='400' height="400"
-                 alt="DCAplot"/>
-                
-                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('pca_pair')}" alt="PCAPairImage"/>
-
-                
-                
-                <p:commandButton value="Download" action="Download"/>
-               
-            </h:panelGrid>
-        </h:panelGrid>
-        -->
+        <p:dialog modal="true" widgetVar="exportDialog" style="width:600px; height: 580px" appendTo="@(body)">  
+            <h:outputLabel style="font-size: 13px; font-weight: bold" value="Right click the PNG image to save as your preferred name:"/><br/>
+            <image id="downloadimage"></image>  
+        </p:dialog>  
+        <h:form>
+            <p:remoteCommand name="remoteCall"  
+                             process="@this"
+                             partialSubmit="true"
+                             update=":ac:cmpdView  :cmdPane"
+                             actionListener="#{sessionBean1.setCurrentCmpdIndex}" 
+                             />
+        </h:form>
+        <script type="text/javascript">
+            showPCA3DScore();
+            $("[id='ac:chart']").bind('jqplotDataClick',
+                    function (ev, seriesIndex, pointIndex, data) {
+                        //note, we use the internal index, not point index 
+                        remoteCall([{name: 'cmpdIndex', value: data[0]}]);
+                    });
+        </script>
     </ui:define>
 </ui:composition>

@@ -398,7 +398,7 @@ public class DCAloadBean implements Serializable {
         return "Data check";
     }
     
-    
+    //Function no longer needed
     
     public boolean runDCaR(String inputData,String ext){
         RConnection RC = sb.getRConnection();

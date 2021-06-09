@@ -1,7 +1,7 @@
 #install.packages("vegan")
 #install.packages("ggplot2")
 library("vegan")
-
+library("ggplot2")
 
 NMDSWegan <- function(input,ext,Meta = NULL, metaExt = NULL){
 
@@ -175,13 +175,11 @@ transferToGGplot <- function(plot,name,metaData = NULL){
 }
 
 
+testing <- function(){
 
-
-
-transferToJSON <- function(){
-    
     mSetObj <- .get.mSet(mSetObj)
-    print(mSetObj)
-
+    dca = decorana(mSetObj$dataSet$norm)
+    print(dca)
+    transferToGGplot(dca,"DCA")
 }
 

@@ -108,7 +108,7 @@
         
         <navigation-case>
             <from-outcome>DCA</from-outcome>
-            <to-view-id>/docs/DCAOverview.xhtml</to-view-id>
+            <to-view-id>/Secure/process/DCAOverview.xhtml</to-view-id>
             <redirect/>
         </navigation-case> 
         

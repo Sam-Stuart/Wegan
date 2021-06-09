@@ -38,14 +38,14 @@ public class Ordiantion {
             
             
             
-            //String rCommand = "testDCA()";
+            String rCommand = "testing()";
             
             //String rCommand = "DCAWegan(\"" + inputData + "\", \"" + sb.getPath2()+ "\", \"" + ext + "\"   )";
 
             
             
             RConnection RC = sb.getRConnection();
-            String rCommand = "transferToJSON()";
+            //String rCommand = "testing()";
             RCenter.recordRCommand(RC, rCommand);
             RC.voidEval(rCommand);
         } catch (RserveException rse) {

@@ -1,3 +1,5 @@
+//Graphics done though the CanvasXpress Library
+
 function showPCA3D() {
     $.getJSON('/MetaboAnalyst' + document.getElementById("mydir").value,
             function (raw_data) {

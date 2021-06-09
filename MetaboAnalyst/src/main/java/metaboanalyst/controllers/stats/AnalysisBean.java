@@ -85,10 +85,27 @@ public class AnalysisBean implements Serializable {
                     break;
                 case "DCA":
                     doDefaultDCA();
-                    break;    
+                    break;  
+                case "Diversity":    
+                    doDefaultDiversity();
+                    break;   
             }
         }
     }
+    
+    private void doDefaultDiversity() {
+        //Diversity.InitDiversity(sb);
+
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
     private void doDefaultANOVA() {
         int res = UniVarTests.performANOVA(sb, "F", 0.05, "fisher");
