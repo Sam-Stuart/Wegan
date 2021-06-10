@@ -15,53 +15,96 @@
         <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/jscripts/graphics.js"></script>
     </ui:define>
     <ui:define name="content">
-       
-        <h:panelGrid style="padding:20px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%; align: center">
-            
-    <!--        <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('bgd1')}" alt="bgdispersal"/>
-                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('bgd2')}" alt="bgdispersal"/> 
-                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('bgd3')}" alt="bgdispersal"/> -->
+      
+        <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
+            <p:tabView id="linCA" style="border-bottom-color: #8cbd48 !important">
+                <p:tab title ="Overview" titleStyleClass="p-tab-nav">
+                    <h:form id="form1">  
+                        <p>
+                            The signs of the DD coefficients indicate the direction of dispersal, provided that the asymmetry is significant. A positive sign indicates dispersal from the first (row in DD tables) to the second region (column); a negative sign indicates the opposite. A McNemar test of asymmetry is computed from the presence-absence data to test the hypothesis of a significant asymmetry between the two areas under comparison. 
+                        </p>
+                        <p>
+                            In the input data table, the rows are sites or areas, the columns are taxa. Most often, the taxa are species, but the coefficients can be computed from genera or families as well. DD1 and DD2 only are computed for presence-absence data. The four types of coefficients are computed for quantitative data, which are converted to presence-absence for the computation of DD1 and DD2. 
+                        </p>
+                        
+                        <h:panelGrid class="resultsBar" columns="2">
+                            <h:panelGroup>
+                                <h:panelGrid columns="1" style="text-align : left;">
+                                    Results
+                                </h:panelGrid>
+                            </h:panelGroup> 
+                            <h:panelGroup>
+                                <h:panelGrid columns="3" class="resultsImages">
+                                    <i class="fas fa-palette"></i>
+                                    <i class="fa fa-table"></i>
+                                    <i class="fa fa-question-circle"></i>
+<!--                                                                       <i class="fas fa-table"></i>
+                                   <i class="fas fa-palette"></i>
+                                   <i class="far fa-question-circle"></i>-->
 
-                <h2> Coefficients of Biogeographcal Dispersal Direction: </h2>
-<!--                <div class ="tooltip">
-                    <span class="tooltiptext"> This is text</span>
-                </div>-->
-                <p:commandLink  value="DD1  " action="#{sessionBean1.detailsLnk_action('bgd1')}" title="DD1[j,k] = (a * (b - c))/((a + b + c)^2)">
-    <!--                <img src="#{facesContext.externalContext.requestContextPath}/resources/images/table.png"/>-->
-                </p:commandLink>
-                <p:commandLink  value="DD2 " action="#{sessionBean1.detailsLnk_action('bgd2')}" title="DD2[j,k] = (2*a * (b - c))/((2*a + b + c) * (a + b + c)) where a, b, and c have the same meaning as in the computation of binary similarity coefficients. ">
-    <!--                <img src="#{facesContext.externalContext.requestContextPath}/resources/images/table.png"/>-->
-                </p:commandLink>
-                <p:commandLink  value="DD3" action="#{sessionBean1.detailsLnk_action('bgd3')}" title="DD3[j,k] = W*(A-B) / (A+B-W)^2">
-    <!--                <img src="#{facesContext.externalContext.requestContextPath}/resources/images/table.png"/>-->
-                </p:commandLink>
-                <p:commandLink  value="DD4" action="#{sessionBean1.detailsLnk_action('bgd4')}" title="DD4[j,k] = 2*W*(A-B) / ((A+B)*(A+B-W)) where W = sum(pmin(vector1, vector2)), 
-                                A = sum(vector1), B = sum(vector2)">
-    <!--                <img src="#{facesContext.externalContext.requestContextPath}/resources/images/table.png"/>-->
-                </p:commandLink>
-                <p:commandLink  value="McNemar" action="#{sessionBean1.detailsLnk_action('bgd5')}" title="McNemar chi-square statistic of asymmetry (Sokal and Rohlf 1995):
-                                2*(b*log(b) + c*log(c) - (b+c)*log((b+c)/2)) / q, where q = 1 + 1/(2*(b+c)) (Williams correction for continuity) ">
-    <!--                <img src="#{facesContext.externalContext.requestContextPath}/resources/images/table.png"/>-->
-                </p:commandLink>
-                <p:commandLink  value="prob.McNemar" action="#{sessionBean1.detailsLnk_action('bgd6')}" title="probabilities associated with McNemar statistics, chi-square test. H0: no asymmetry in (b-c). ">
-    <!--                <img src="#{facesContext.externalContext.requestContextPath}/resources/images/table.png"/>-->
-                </p:commandLink>
-                <p:commandButton value="Download" action="Download" title="Download the R code and included tables"/>   
-            
+                                </h:panelGrid>
+                            
+                            </h:panelGroup>                            
+                        </h:panelGrid> 
+                        <p></p>
+                        <h2> DD1</h2>
+                        <h:panelGrid  style="width: 100%;">
+                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('bgd1')}" alt="bgdispersal"/>
+                            </h:panelGrid> 
+                        </h:panelGrid>
+                        <h2> DD2</h2>
+                        <h:panelGrid style="width: 100%;">
+                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('bgd2')}" alt="bgdispersal"/>
+                            </h:panelGrid> 
+                        </h:panelGrid>
+                        <h2> DD3</h2>
+                        <h:panelGrid  style="width: 100%;">
+                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('bgd3')}" alt="bgdispersal"/>
+                            </h:panelGrid> 
+                        </h:panelGrid>
+                        <h2> DD4</h2>
+                        <h:panelGrid style="width: 100%;">
+                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('bgd4')}" alt="bgdispersal"/>
+                            </h:panelGrid> 
+                        </h:panelGrid>
+                        <h1> McNemar</h1>
+                        <h:panelGrid style="width: 100%;">
+                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('bgd5')}" alt="bgdispersal"/>
+                            </h:panelGrid> 
+                        </h:panelGrid>
+
+                        <h2> Coefficients of Biogeographcal Dispersal Direction: </h2>
+                      
+                        <p:commandLink  value="DD1  " action="#{sessionBean1.detailsLnk_action('bgd1')}" title="DD1[j,k] = (a * (b - c))/((a + b + c)^2)">
+            <!--                <img src="#{facesContext.externalContext.requestContextPath}/resources/images/table.png"/>-->
+                        </p:commandLink>
+                        <p:commandLink  value="DD2 " action="#{sessionBean1.detailsLnk_action('bgd2')}" title="DD2[j,k] = (2*a * (b - c))/((2*a + b + c) * (a + b + c)) where a, b, and c have the same meaning as in the computation of binary similarity coefficients. ">
+            <!--                <img src="#{facesContext.externalContext.requestContextPath}/resources/images/table.png"/>-->
+                        </p:commandLink>
+                        <p:commandLink  value="DD3" action="#{sessionBean1.detailsLnk_action('bgd3')}" title="DD3[j,k] = W*(A-B) / (A+B-W)^2">
+            <!--                <img src="#{facesContext.externalContext.requestContextPath}/resources/images/table.png"/>-->
+                        </p:commandLink>
+                        <p:commandLink  value="DD4" action="#{sessionBean1.detailsLnk_action('bgd4')}" title="DD4[j,k] = 2*W*(A-B) / ((A+B)*(A+B-W)) where W = sum(pmin(vector1, vector2)), 
+                                        A = sum(vector1), B = sum(vector2)">
+            <!--                <img src="#{facesContext.externalContext.requestContextPath}/resources/images/table.png"/>-->
+                        </p:commandLink>
+                        <p:commandLink  value="McNemar" action="#{sessionBean1.detailsLnk_action('bgd5')}" title="McNemar chi-square statistic of asymmetry (Sokal and Rohlf 1995):
+                                        2*(b*log(b) + c*log(c) - (b+c)*log((b+c)/2)) / q, where q = 1 + 1/(2*(b+c)) (Williams correction for continuity) ">
+            <!--                <img src="#{facesContext.externalContext.requestContextPath}/resources/images/table.png"/>-->
+                        </p:commandLink>
+                        <p:commandLink  value="prob.McNemar" action="#{sessionBean1.detailsLnk_action('bgd6')}" title="probabilities associated with McNemar statistics, chi-square test. H0: no asymmetry in (b-c). ">
+            <!--                <img src="#{facesContext.externalContext.requestContextPath}/resources/images/table.png"/>-->
+                        </p:commandLink>
+                        <p:commandButton value="Download" action="Download" title="Download the R code and included tables"/>   
+
+                   </h:form>
+                </p:tab>
+            </p:tabView> 
         </h:panelGrid> 
-<!--        
-          <h:panelGroup>
-                                <h:outputLabel style="font-weight: bold" value="Display Matrices of BGD"/>
-                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:50px" value="{dispersalBean.dispersalBgdNum}">
-                                    <f:selectItems value="hello world" />
-                                </p:selectOneMenu>
-                                <h:outputLabel style="font-weight: bold" value="bgd"/>
-                            </h:panelGroup>
-                            <p:commandButton value="Update" update=":ac:form2:screePane  :cmdPane" actionListener="{pcaBean.pcaScreeBtn_action()}"/>   -->
-<!--        <h:panelGrid style="padding: 20px 50px 20px 40px; font-size: 13px; line-height: 23px; width: 100%">
-            <h1> Coefficients of Biogeographical Dispersal Direction </h1>
-            <h:panelGrid style="text-align: center; width: 80%">-->
-                
-            
-    </ui:define>
+     </ui:define>
 </ui:composition>
