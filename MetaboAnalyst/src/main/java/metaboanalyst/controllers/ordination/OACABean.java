@@ -19,7 +19,7 @@ import metaboanalyst.rwrappers.OAUtils;
 import metaboanalyst.utils.DataUtils;
 
 
-@ManagedBean(name = "caBean")
+@ManagedBean(name = "oaCaBean")
 public class OACABean implements Serializable {
 
     private final SessionBean1 sb = (SessionBean1) DataUtils.findBean("sessionBean1");
