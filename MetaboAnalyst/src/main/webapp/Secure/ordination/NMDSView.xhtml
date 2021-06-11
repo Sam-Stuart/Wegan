@@ -116,6 +116,13 @@
                         </h:panelGrid>   
                         
                         <h:panelGrid id="nmdsPane1" style="width: 100%;">
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <p:commandButton value="Export"
+                                    styleClass="exportButton"
+                                    style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                    actionListener="#{sessionBean1.graphicsLnk_action('ord_nmds_2D')}"
+                                    oncomplete="PF('graphDialog').show()"/>
+                            </h:panelGrid>                              
                              <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
                                 <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('ord_nmds_2D')}" alt="nmds2dimage"/>
                             </h:panelGrid>                           
@@ -179,7 +186,7 @@
                                 </h:panelGrid>
                             
                             </h:panelGroup>                            
-                        </h:panelGrid> 
+                        </h:panelGrid>                        
                         <h:panelGrid id="nmdsPane2" style="text-align: center; width: 100%;">
                             <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('ord_nmds_scree')}" alt="nmdsscreeimage"/>
                         </h:panelGrid>        

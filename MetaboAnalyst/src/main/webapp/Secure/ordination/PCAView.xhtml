@@ -88,6 +88,13 @@
                                 </h:panelGrid>
                             </h:panelGroup>                            
                         </h:panelGrid>
+                        <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                            <p:commandButton value="Export"
+                                styleClass="exportButton"
+                                style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                actionListener="#{sessionBean1.graphicsLnk_action('pca_pair')}"
+                                oncomplete="PF('graphDialog').show()"/>
+                        </h:panelGrid>                          
                         <h:panelGrid id="pairPane" style="text-align: center; width: 100%;">
                             <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('pca_pair')}" alt="PCAPairImage"/>
                         </h:panelGrid>        
@@ -186,7 +193,14 @@
                                     <i class="fa fa-question-circle"></i>
                                 </h:panelGrid>
                             </h:panelGroup>                            
-                        </h:panelGrid>                        
+                        </h:panelGrid>  
+                        <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                            <p:commandButton value="Export"
+                                styleClass="exportButton"
+                                style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                actionListener="#{sessionBean1.graphicsLnk_action('pca_score2d')}"
+                                oncomplete="PF('graphDialog').show()"/>
+                        </h:panelGrid>                          
                         <h:panelGrid id="score2dPane" style="text-align: center; width: 100%;">
                             <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('pca_score2d')}" alt="PCAScore2DImage"/>
                         </h:panelGrid>  
@@ -316,7 +330,14 @@
                                     <i class="fa fa-question-circle"></i>
                                 </h:panelGrid>
                             </h:panelGroup>                            
-                        </h:panelGrid>                        
+                        </h:panelGrid>   
+                        <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                            <p:commandButton value="Export"
+                                styleClass="exportButton"
+                                style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                actionListener="#{sessionBean1.graphicsLnk_action('pca_biplot')}"
+                                oncomplete="PF('graphDialog').show()"/>
+                        </h:panelGrid>                          
                         <h:panelGrid id="biplotPane" style="text-align: center; width: 100%;">
                             <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('pca_biplot')}" alt="PCABiplotImage"/>
                         </h:panelGrid>  

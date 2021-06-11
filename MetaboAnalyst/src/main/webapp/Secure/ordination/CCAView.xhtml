@@ -78,6 +78,13 @@
                                     <h:outputText style="padding-left: 0px" escape="false" value="#{ccaBean.fileEnvPath}"/>
                                 </i>
                             </h:panelGrid>
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <p:commandButton value="Export"
+                                    styleClass="exportButton"
+                                    style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                    actionListener="#{sessionBean1.graphicsLnk_action('ord_cca_2D')}"
+                                    oncomplete="PF('graphDialog').show()"/>
+                            </h:panelGrid>                              
                              <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
                                 <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('ord_cca_2D')}" alt="ord2D"/>
                             </h:panelGrid>                            
@@ -131,6 +138,13 @@
                                 </i>
                                 
                             </h:panelGrid>
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <p:commandButton value="Export"
+                                    styleClass="exportButton"
+                                    style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                    actionListener="#{sessionBean1.graphicsLnk_action('ord_cca_scree')}"
+                                    oncomplete="PF('graphDialog').show()"/>
+                            </h:panelGrid>                              
                              <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
                                 <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('ord_cca_scree')}" alt="ord2D"/>
                             </h:panelGrid>                            

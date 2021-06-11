@@ -95,6 +95,13 @@
                         </h:panelGrid>   
                         
                         <h:panelGrid id="ciaPane1" style="width: 100%;">
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <p:commandButton value="Export"
+                                    styleClass="exportButton"
+                                    style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                    actionListener="#{sessionBean1.graphicsLnk_action('ord_cia_scatter')}"
+                                    oncomplete="PF('graphDialog').show()"/>
+                            </h:panelGrid>                              
                              <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
                                 <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('ord_cia_scatter')}" alt="ciascatterimage"/>
                             </h:panelGrid>                           
@@ -159,6 +166,13 @@
                             
                             </h:panelGroup>                            
                         </h:panelGrid> 
+                        <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                            <p:commandButton value="Export"
+                                styleClass="exportButton"
+                                style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                actionListener="#{sessionBean1.graphicsLnk_action('ord_cia_scree')}"
+                                oncomplete="PF('graphDialog').show()"/>
+                        </h:panelGrid>                          
                         <h:panelGrid id="ciaPane2" style="text-align: center; width: 100%;">
                             <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('ord_cia_scree')}" alt="ciascreeimage"/>
                         </h:panelGrid>        
@@ -220,6 +234,13 @@
                             
                             </h:panelGroup>                            
                         </h:panelGrid> 
+                        <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                            <p:commandButton value="Export"
+                                styleClass="exportButton"
+                                style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                actionListener="#{sessionBean1.graphicsLnk_action('ord_cia_loading')}"
+                                oncomplete="PF('graphDialog').show()"/>
+                        </h:panelGrid>                          
                         <h:panelGrid id="ciaPane3" style="text-align: center; width: 100%;">
                             <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('ord_cia_loading')}" alt="cialoadingimage"/>
                         </h:panelGrid>        

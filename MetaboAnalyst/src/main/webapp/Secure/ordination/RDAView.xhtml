@@ -78,6 +78,13 @@
                                     <h:outputText style="padding-left: 0px" escape="false" value="#{rdaBean.fileEnvScorePath}"/>
                                 </i>
                             </h:panelGrid>
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <p:commandButton value="Export"
+                                    styleClass="exportButton"
+                                    style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                    actionListener="#{sessionBean1.graphicsLnk_action('ord_rda_2D')}"
+                                    oncomplete="PF('graphDialog').show()"/>
+                            </h:panelGrid>                              
                              <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
                                 <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('ord_rda_2D')}" alt="ord2D"/>
                             </h:panelGrid>                            
@@ -136,7 +143,14 @@
                                 <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
                                     <h:outputText style="padding-left: 0px" escape="false" value="#{rdaBean.fileScreePath}"/>
                                 </i>
-                            </h:panelGrid>                    
+                            </h:panelGrid>   
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <p:commandButton value="Export"
+                                    styleClass="exportButton"
+                                    style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                    actionListener="#{sessionBean1.graphicsLnk_action('ord_rda_scree')}"
+                                    oncomplete="PF('graphDialog').show()"/>
+                            </h:panelGrid>                              
                              <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
                                 <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('ord_rda_scree')}" alt="rdascree"/>
                             </h:panelGrid>                           
