@@ -261,7 +261,13 @@
             <to-view-id>/Secure/diversity/SpeciesView.xhtml</to-view-id>
             <redirect/>
         </navigation-case>                             
+        <navigation-case>
+            <from-outcome>Test_Tutorial</from-outcome>
+            <to-view-id>/Secure/diversity/TestTutorialView.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>  
                                                                        
+                                                                                                                                                                                                                    
         <navigation-case>
             <from-outcome>Clustering</from-outcome>
             <to-view-id>/Secure/clustering/ClusteringView.xhtml</to-view-id>

@@ -111,6 +111,34 @@ public class DiversityUtils {
             System.out.println(rse);
         }
     }
+    
+    
+    
+    public static boolean CreateTestTutorial(SessionBean1 sb) {
+        try {
+            RConnection RC = sb.getRConnection(); //Start R connection
+            String rCommand = "lin.reg.anal.one(NA)"; // Creates R command
+            RCenter.recordRCommand(RC, rCommand); // records r command
+            RC.voidEval(rCommand); // tells you want your r script returns  
+            return true;
+        } catch (RserveException rse) {
+            System.out.println(rse);
+            return false;
+        }
+    }
+    
+    public static void PlotTestTutorial(SessionBean1 sb, String imgName, String format, int dpi) {
+        try {
+            RConnection RC = sb.getRConnection();
+//            String rCommand = "plot.linReg1(NA)";
+            String rCommand = "plot.linReg1(NA" + ", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            sb.addGraphicsCMD("div_alpha", rCommand);
+            RC.voidEval(rCommand);
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        }
+    }
     /////// ------------ Diversity helper functions --------------- //////////////
     
         

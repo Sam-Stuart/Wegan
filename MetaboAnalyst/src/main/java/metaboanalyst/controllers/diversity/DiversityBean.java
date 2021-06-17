@@ -42,6 +42,9 @@ public class DiversityBean implements Serializable {
                     case "Gamma":
                         doDefaultGamma();
                         break;
+                    case "TestTutorial":
+                        doDefaultTestTutorial();
+                        break;
                 }
             }
 
@@ -78,5 +81,14 @@ public class DiversityBean implements Serializable {
             sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
         }
         DiversityUtils.PlotSpecies(sb);
+    }
+    
+    private void doDefaultTestTutorial(){
+//        if (!DiversityUtils.CreateTestTutorial(sb)){
+//            RConnection RC = sb.getRConnection();
+//            sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
+//        }
+        DiversityUtils.CreateTestTutorial(sb);
+        DiversityUtils.PlotTestTutorial(sb, sb.getCurrentImage("gamma_plot"), "png", 72);
     }
 }
