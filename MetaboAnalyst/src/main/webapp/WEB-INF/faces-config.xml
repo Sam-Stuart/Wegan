@@ -244,6 +244,11 @@
             <redirect/>
        </navigation-case>     
         <navigation-case>
+            <from-outcome>Geographical</from-outcome>
+            <to-view-id>/Secure/clustering/GeographicView.xhtml</to-view-id>
+            <redirect/>
+       </navigation-case>  
+       <navigation-case>
             <from-outcome>Plotting</from-outcome>
             <to-view-id>/Secure/plotting/PlottingMainView.xhtml</to-view-id>
             <redirect/>
