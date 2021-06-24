@@ -189,21 +189,6 @@ public class DispersalloadBean implements Serializable {
     
     //WEGAN FUCNTIONS 
     
-    //*********------------------------------------------------------
-    
-    private String NMDSTestDataOpt;
-    
-    public String getNMDSTestDataOpt() {
-        return NMDSTestDataOpt;
-    }
-
-    public void setNMDSTestDataOpt(String NMDSTestDataOpt) {
-        this.NMDSTestDataOpt = NMDSTestDataOpt;
-    }
-    
-
-    
-    //*********------------------------------------------------------
     public String getTestDataOpt() {
         return testDataOpt;
     }
@@ -212,66 +197,8 @@ public class DispersalloadBean implements Serializable {
         this.testDataOpt = testDataOpt;
     }
 
-    public String handleStatTestFileUpload() {
-        String format = "";
-        boolean paired = false;
-        boolean isZip = false;
-        String testFile = null;
-
-        
-        
-        if (testDataOpt == null) {
-            sb.updateMsg("Error", "No data set is selected!");
-            return null;
-        }
-
-        if (testDataOpt.equals("conccancer")) {
-            dataType = "conc";
-            testFile = ab.getTestConcHsaPath();
-            format = "rowu";
-        }
-        
-        //DUNE DATA SELECTED*********************************************************
-        else if (testDataOpt.equals("Dune")) {
-            dataType = "Dune";
-            sb.updateMsg("Error", "Dune data selected");
-
-            testFile = ab.getTestamf();
-            format = "rowu";
-            
-           
-        } else if (testDataOpt.equals("BCI")) {
-            testFile = ab.getTestBCI();
-            format = "rowu";
-        }
-
-        if (!sb.doLogin(dataType, "dispersal", false, paired)) {
-            //sb.updateMsg("Error", "No login return null?");
-            return null;
-        }
-
-        RConnection RC = sb.getRConnection();
-        if (isZip) {
-            if (!RDataUtils.readZipData(RC, testFile, dataType, "F")) {
-                sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
-                return null;
-            }
-        } else {
-            
-            //Tested cahnging Disc to cont
-            if (!RDataUtils.readTextData(RC, testFile, format, "disc")) {
-                sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
-                return null;
-            }
-        }
-        sb.setDataUploaded(true);
-        if (dataType.equals("conc") || dataType.equals("pktable") || dataType.equals("specbin")) {
-            return "Data check";
-        }
-        return dataType;
-    }
+ 
     
-    //----------------------------------------------------------------- Test loader 
     public String handleDispersalTestFileUpload() {
         String format = "";
         boolean paired = false;
@@ -283,15 +210,11 @@ public class DispersalloadBean implements Serializable {
         System.out.print(testDataOpt);  
         
         if (testDataOpt == null) {
-                    
-
             sb.updateMsg("Error", "No data set is selected!");
             return null;
         }
 
-        
-        //DUNE DATA SELECTED*********************************************************
-        else if (testDataOpt.equals("Dune")) {
+        else if (testDataOpt.equals("Dune")) { //DUNE DATA SELECTED
             dataType = "Dune";
             sb.updateMsg("Error", "Dune data selected");
 
@@ -306,7 +229,12 @@ public class DispersalloadBean implements Serializable {
             sb.updateMsg("Error", "Varespec data selected");
             testFile = ab.getTestVarespec();
             format = "rowu";
-        } else {
+        } else if (testDataOpt.equals("Iris")) {
+            dataType = "iris";
+            sb.updateMsg("Error", "Iris data selected");
+            testFile = ab.getTestVarespec();
+            format = "rowu";
+        }else {
             System.out.print(" Unknown data has been selected");
             System.out.print( dataType                       );
             sb.updateMsg("Error", "Unknown data selected");

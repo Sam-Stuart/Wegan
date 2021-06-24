@@ -8,6 +8,7 @@ package metaboanalyst.controllers.dispersal;
 import metaboanalyst.controllers.plotting.*;
 import java.io.File;
 import java.io.Serializable;
+import static java.lang.Boolean.TRUE;
 import java.util.Arrays;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
@@ -15,7 +16,9 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.model.SelectItem;
 import metaboanalyst.controllers.ApplicationBean1;
 import metaboanalyst.controllers.SessionBean1;
+import metaboanalyst.models.User;
 import metaboanalyst.rwrappers.CAUtils;
+import metaboanalyst.rwrappers.DispersalUtils;
 import metaboanalyst.rwrappers.PlottingUtils;
 import metaboanalyst.rwrappers.RDataUtils;
 import metaboanalyst.rwrappers.UniVarTests;
@@ -31,133 +34,117 @@ import org.rosuda.REngine.Rserve.RConnection;
  *
  * @author Leif
  */
-@ManagedBean(name = "beals")
+@ManagedBean(name = "bealsBean")
 @ViewScoped
 public class BealsBean implements Serializable {
-
+    
+    
+    
+    
     private final ApplicationBean1 ab = (ApplicationBean1) DataUtils.findBean("applicationBean1");
     private final SessionBean1 sb = (SessionBean1) DataUtils.findBean("sessionBean1");
 
+    private User usr = sb.getCurrentUser();
+    private String usrName = usr.getName();
     
-    private String linearPlotType = "l";
-
-    public String getLinearPlotType() {
-        return linearPlotType;
-    }
-
-    public void setLinearPlotType(String linearPlotType) {
-        this.linearPlotType = linearPlotType;
-    }
+    // String File names 
     
-    private int linNumLines = 1;
-
-    public int getLinNumLines() {
-        return linNumLines;
-    }
-
-    public void setLinNumLines(int linNumLines) {
-        this.linNumLines = linNumLines;
-    }
+    private String fileBealsMatrix= "beals_matrix.csv";
+    private String fileBealsMatrixPath  = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileBealsMatrix + "\">" + fileBealsMatrix + "</a>";
     
-    private String linColor = "black";
-
-    public String getLinColor() {
-        return linColor;
-    }
-
-    public void setLinColor(String linColor) {
-        this.linColor = linColor;
-    }
     
-    private int linWeight = 1;
+    // getters and setters
     
-    public int getLinWeight(){
-        return linWeight;
+    public String getFileBealsMatrixPath() {
+        return fileBealsMatrixPath;
     }
 
-    public void setLinWeight(int linWeight){
-        this.linWeight = linWeight; 
-    }
-    
-//    defines what shapes to use as points on the graph, default is filled in bullets.
-    private int linPchs = 21;  
-    
-    public int getLinPchs(){
-        return linPchs;
-    }
-
-    public void setLinPchs(int linPchs){
-        this.linPchs = linPchs; 
-    }
-    
-    private String linxLabel = "x axis";
-
-    public String getLinxLabel() {
-        return linxLabel;
-    }
-
-    public void setLinxLabel(String linxLabel) {
-        this.linxLabel = linxLabel;
-    }
-    
-    private String linyLabel = "y axis";
-
-    public String getLinyLabel() {
-        return linyLabel;
-    }
-
-    public void setLinyLabel(String linyLabel) {
-        this.linyLabel = linyLabel;
-    }
-    
-    private String linTitle = "Graph Title";
-
-    public String getLinTitle() {
-        return linTitle;
-    }
-
-    public void setLinTitle(String linTitle) {
-        this.linTitle = linTitle;
+    public void setFileBealsMatrixPath(String fileBealsMatrixPath) {
+        this.fileBealsMatrixPath = fileBealsMatrixPath;
     }
     
     
-    private SelectItem[] linColumnOpts = null;
+    private String bealsSpecies= "NA";
+
+    public String getBealsSpecies() {
+        return bealsSpecies;
+    }
+
+    public void setBealsSpecies(String bealsSpecies) {
+        this.bealsSpecies = bealsSpecies;
+    }
     
-    public SelectItem[] getLinColumnOpts(){
-        String[] columns = PlottingUtils.GetDataColumns(sb);
+    private int bealsType= 1;
+
+    public int getBealsType() {
+        return bealsType;
+    }
+
+    public void setBealsType(int bealsType) {
+        this.bealsType = bealsType;
+    }
+    private boolean bealsIncludeBoolean = true;
+    
+    public boolean getBealsInclude(){
+        return bealsIncludeBoolean;
+    }
+    
+    public void setBealsInclude(boolean bealsInclude){
+        this.bealsIncludeBoolean = bealsInclude;
+    }
+    
+    
+//    
+
+    private SelectItem[] bealsSpeciesTest = null;
+    
+    public SelectItem[] getBealsSpeciesTest(){
+        bealsSpeciesTest = new SelectItem[3];
+        bealsSpeciesTest[0] = new SelectItem("Na", "All");
+        bealsSpeciesTest[1] = new SelectItem("1", "1");
+        bealsSpeciesTest[2] = new SelectItem("2", "2");
+        return bealsSpeciesTest;
+    }
+    private SelectItem[] bealsSpeciesOpts = null;
+    
+    public SelectItem[] getBealsSpeciesOpts(){
+        String[] columns = DispersalUtils.GetDataColumns(sb);
         int columnsLen = columns.length;
-        linColumnOpts = new SelectItem[columnsLen];
+        bealsSpeciesOpts = new SelectItem[columnsLen+1];
         List<String> columnNames = Arrays.asList(columns);
-        for (int i = 0; i < columnsLen; i++) {
-            linColumnOpts[i] = new SelectItem(columnNames.get(i), columnNames.get(i));
+        bealsSpeciesOpts[0] = new SelectItem("All", "All");
+        for (int i = 0; i < (columnsLen); i++) {
+            bealsSpeciesOpts[i+1] = new SelectItem(columnNames.get(i), columnNames.get(i));
         }
+        
         //List<String> columnNames = Arrays.asList(columns);
-        return linColumnOpts;
+        return bealsSpeciesOpts;
     }
-    private String linColumnNameA = getLinColumnOpts()[0].getLabel();
+    private SelectItem[] bealsTypeOpts = null; 
     
-    public String getLinColumnNameA() {
-        return linColumnNameA;
-    }
-
-    public void setLinColumnNameA(String linColumnNameA) {
-        this.linColumnNameA = linColumnNameA;
+    public SelectItem[] getBealsTypeOpts(){
+        bealsTypeOpts = new SelectItem[4];
+        bealsTypeOpts[0] = new SelectItem("0", "0");
+        bealsTypeOpts[1] = new SelectItem("1", "1");
+        bealsTypeOpts[2] = new SelectItem("2", "2");
+        bealsTypeOpts[3] = new SelectItem("3", "3");
+        
+        return bealsTypeOpts;    
+        
     }
     
-    private String linColumnNameB = getLinColumnOpts()[1].getLabel();
     
-    public String getLinColumnNameB() {
-        return linColumnNameB;
-    }
-
-    public void setLinColumnNameB(String linColumnNameB) {
-        this.linColumnNameB = linColumnNameB;
-    }
-    public void linearBtn_action() {
-
-        PlottingUtils.PlotlinearGraph(sb, sb.getNewImage("lin"), "png", 72, 
-                linearPlotType, linNumLines, linColor, linWeight, linPchs, linxLabel, linyLabel, linTitle, linColumnNameA, linColumnNameB);
-        RequestContext.getCurrentInstance().scrollTo(":ac:form1:linPane");
+    public void bealsBtn_action() {
+        
+        String bealsIncludeString = bealsIncludeBoolean ? "TRUE" : "FALSE";
+        System.out.print("bealsButton action");
+        System.out.print(bealsSpecies);
+        System.out.print(bealsType);
+        System.out.print(bealsIncludeString);
+        DispersalUtils.CreateBeals(sb, bealsSpecies, "data", bealsType, bealsIncludeString);
+        DispersalUtils.PlotBeals(sb, sb.getNewImage("beals"), "png", 72, 5,bealsSpecies);
+              
+        //RequestContext.getCurrentInstance().scrollTo(":ac:form1:bealsPane");
     }
 
    

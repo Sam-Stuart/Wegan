@@ -8,8 +8,7 @@
 #'
 
 
-library(vegan)
-library(gt)
+
 
 # -------------Coefficients of Biogeographical Dispersal Direction-------------------------------------------------- 
 
@@ -41,7 +40,7 @@ PlotBGD <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, bgdnum)
         mat <- mSetObj$analSet$bgdispersal$DD2;
     }else if (imgName == "bgd3_0_"){
         mat <- mSetObj$analSet$bgdispersal$DD3;
-    else if (imgName == "bgd4_0_"){
+    }else if (imgName == "bgd4_0_"){
         mat <- mSetObj$analSet$bgdispersal$DD4;
     }else if (imgName == "bgd5_0_"){
         mat <- mSetObj$analSet$bgdispersal$McNemar;
@@ -51,7 +50,7 @@ PlotBGD <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, bgdnum)
     
     mat <- as.data.frame(round(mat,2));
     
-    gt_mat <- gt(mat) %>% tab_options(table.font.size = 2); 
+    gt_mat <- gt(mat) %>% tab_options(table.font.size = 8); 
     
    
     # save the image name
@@ -140,25 +139,43 @@ GetBGDSigFileName <- function(mSetObj=NA){
 
 ###### Beals smoothing function 
 bealsWegan <- function(mSetObj=NA, spcs = 'NA', ref = 'NA', type = 0, incld = TRUE){
-    
     mSetObj <- .get.mSet(mSetObj);
     
     # Call upon the beals smoothing function 
     data <- mSetObj$dataSet$orig;
-    #output <- beals(data, species = spcs, reference = ref, type = type, include = incld)
-    output <- beals(data);
+    # alter species if needed 
+
+    if((spcs == 'NA')||(tolower(spcs)=='all')){
+        spcs = NA
+    } 
+    if (incld =='TRUE'){
+        incld = TRUE
+    } else if (incld == 'FALSE'){
+        incld = FALSE
+    } else {
+        print ("ERROR with INCLUDE argument");
+    }
     
-    # store the item to the bgdispersal object
+    # call upon beals vegan function
+    
+    output <- beals(data, species = spcs, type = type, include = incld)
+    
+    
+    # save the new data set in the mSetObject
     mSetObj$analSet$beals <- output;
+    
+    #write csv of new data set
+    write.csv(output, file = "beals_matrix.csv");
     return(.set.mSet(mSetObj));
 }
 
 
-PlotBeals <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, pcnum=0){
+PlotBeals <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, pcnum=0, species = 'NA'){
   
   mSetObj <- .get.mSet(mSetObj);
   
   beals_matrix <- as.matrix(mSetObj$analSet$beals);
+  # Save Image name
   imgName = paste(imgName, "dpi", dpi, ".", format, sep="");
   if(is.na(width)){
     w <- 10;
@@ -167,11 +184,17 @@ PlotBeals <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, pcnum
   }else{
     w <- width;
   }
-  
+ 
   mSetObj$imgSet$defaultbeals<- imgName;
-  pa <- decostand(mSetObj$dataSet$orig, "pa");
+ # Use decostand
+  if ((species == 'NA')||(tolower(species) =='all')){
+    pa <- decostand(mSetObj$dataSet$orig, "pa");
+  } else {
+    pa <- decostand(mSetObj$dataSet$orig[,species],"pa");
+  }
 
   h <- w;
+  # plot boxplot
   Cairo::Cairo(file = imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white");
   boxplot(as.vector(beals_matrix) ~ unlist(pa), xlab="Presence", ylab="Beals");
 
@@ -231,4 +254,25 @@ PlotBetaDisper <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, 
   plot(mod, main = title);
   dev.off();
   return(.set.mSet(mSetObj));
+}
+
+
+### Other Functions : 
+
+# Get columns : 
+
+disp.reg.columns <- function(mSetObj=NA){
+  
+  mSetObj <- .get.mSet(mSetObj)
+  
+  data <- select_if(mSetObj$dataSet$orig, is.numeric)
+  count.all.numeric.cols <- ncol(data)
+  name.all.numeric.cols <- colnames(data)
+  
+  num.col.results <- list(
+    count=count.all.numeric.cols,
+    names=name.all.numeric.cols
+  )
+  return(name.all.numeric.cols)
+  
 }

@@ -9,7 +9,7 @@ import metaboanalyst.controllers.SessionBean1;
 import metaboanalyst.rwrappers.ChemoMetrics;
 import metaboanalyst.rwrappers.Classifying;
 import metaboanalyst.rwrappers.Clustering;
-import metaboanalyst.rwrappers.Dispersal;
+import metaboanalyst.rwrappers.DispersalUtils;
 import metaboanalyst.rwrappers.Ordiantion;
 import metaboanalyst.rwrappers.RCenter;
 import metaboanalyst.rwrappers.RDataUtils;
@@ -18,6 +18,7 @@ import metaboanalyst.rwrappers.UniVarTests;
 import metaboanalyst.utils.DataUtils;
 import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
+import javax.faces.context.FacesContext;
 import org.primefaces.context.RequestContext;
 /**
  *
@@ -28,51 +29,50 @@ public class DispersalBean implements Serializable {
     private final SessionBean1 sb = (SessionBean1) DataUtils.findBean("sessionBean1");
 
     public void performDefaultAnalysis(String pageID) {
-        System.out.print(" Currently printing at performDefaultAnalysis");
-        System.out.print(sb);
+        
         if (!sb.isAnalInit(pageID)) {
-            System.out.print(" pageID");
-                
-            //sb.registerPage(pageID);
-            switch (pageID) {
-                 
-                case "bgd":
-                    System.out.print(" case bgd      ");
-                             
-                    doDefaultBGD();
-                    break;
-                case "beals":
-                    doDefaultBeals();
-                    break;
-                case "betadisper":
-                    doDefaultBetaDisper();
-                    break;
+            if (!FacesContext.getCurrentInstance().isPostback()) {
+
+
+                //sb.registerPage(pageID);
+                switch (pageID) {
+                    case "bgd":
+                        doDefaultBGD();
+                        break;
+                    case "beals":
+                        doDefaultBeals();
+                        break;
+                    case "betadisper":
+                        doDefaultBetaDisper();
+                        break;
+                }
             }
         }
     }
-
+// Biogeographical Dispersal functions
     private void doDefaultBGD() {       
         
         
-        Dispersal.InitBGD(sb);
-        Dispersal.PlotBGD(sb, sb.getCurrentImage("bgd1"), "png", 72, dispersalBgdNum);
-        Dispersal.PlotBGD(sb, sb.getCurrentImage("bgd2"), "png", 72, dispersalBgdNum);
-        Dispersal.PlotBGD(sb, sb.getCurrentImage("bgd3"), "png", 72, dispersalBgdNum);
-        Dispersal.PlotBGD(sb, sb.getCurrentImage("bgd4"), "png", 72, dispersalBgdNum);
-        Dispersal.PlotBGD(sb, sb.getCurrentImage("bgd5"), "png", 72, dispersalBgdNum);
-        Dispersal.PlotBGD(sb, sb.getCurrentImage("bgd6"), "png", 72, dispersalBgdNum);
+        DispersalUtils.InitBGD(sb);
+        DispersalUtils.PlotBGD(sb, sb.getCurrentImage("bgd1"), "png", 72, dispersalBgdNum);
+        DispersalUtils.PlotBGD(sb, sb.getCurrentImage("bgd2"), "png", 72, dispersalBgdNum);
+        DispersalUtils.PlotBGD(sb, sb.getCurrentImage("bgd3"), "png", 72, dispersalBgdNum);
+        DispersalUtils.PlotBGD(sb, sb.getCurrentImage("bgd4"), "png", 72, dispersalBgdNum);
+        DispersalUtils.PlotBGD(sb, sb.getCurrentImage("bgd5"), "png", 72, dispersalBgdNum);
+        DispersalUtils.PlotBGD(sb, sb.getCurrentImage("bgd6"), "png", 72, dispersalBgdNum);
     }
-    
+ //    
     private void doDefaultBeals() {       
-        Dispersal.InitBeals(sb, "NA", "data", 0, "TRUE");
-        Dispersal.PlotBeals(sb, sb.getNewImage("beals"), "png", 72, dispersalBgdNum);
+        DispersalUtils.LoadDplyr(sb);
+        DispersalUtils.CreateBeals(sb, "NA", "data", 0, "TRUE");
+        DispersalUtils.PlotBeals(sb, sb.getNewImage("beals"), "png", 72, dispersalBgdNum, "NA");
         
     }
     
     private void doDefaultBetaDisper() {       
         
-        Dispersal.InitBetaDisper(sb);
-        Dispersal.PlotBetaDisper(sb, sb.getNewImage("betadisper"), "png", 72, dispersalBgdNum);
+        DispersalUtils.InitBetaDisper(sb);
+        DispersalUtils.PlotBetaDisper(sb, sb.getNewImage("betadisper"), "png", 72, dispersalBgdNum);
         
     }
     
