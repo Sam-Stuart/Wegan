@@ -20,16 +20,16 @@ import metaboanalyst.rwrappers.DiversityUtils;
 import metaboanalyst.utils.DataUtils;
 
 
-@ManagedBean(name = "betaBean")
-public class BetaBean implements Serializable {
+@ManagedBean(name = "alphaBean")
+public class AlphaBetaGammaBean implements Serializable {
 
     private final SessionBean1 sb = (SessionBean1) DataUtils.findBean("sessionBean1");
     
     
     
     // ACTION BUTTONS //
-    public void betaUpdate_action() {
-        DiversityUtils.PlotBeta(sb); 
+    public void alphaUpdate_action() {
+        DiversityUtils.PlotAlpha(sb); 
     }
     
     
