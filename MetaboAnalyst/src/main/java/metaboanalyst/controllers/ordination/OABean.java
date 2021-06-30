@@ -40,15 +40,15 @@ public class OABean implements Serializable {
                     case "NMDS":
                         doDefaultNMDS();
                         break;
-//                    case "PCOA":
-//                        doDefaultPCOA();
-//                        break;
+                    case "PCOA":
+                        doDefaultPCOA();
+                        break;
                     case "CIA":
                         doDefaultCIA();
                         break;
-//                    case "ANOSIM":
-//                        doDefaultANOSIM();
-//                        break;
+                    case "ANOSIM":
+                        doDefaultANOSIM();
+                        break;
                     case "RDA":
                         doDefaultRDA();
                         break;                
@@ -74,47 +74,47 @@ public class OABean implements Serializable {
     }
 
     private void doDefaultNMDS() {
-////        OAUtils.CreateNMDSOrdination(sb, "NULL", false, false, "NULL", "NULL", "NULL");
-//        OAUtils.PlotNMDS2DOrdination(sb, false, false, false, false, false, false, "NULL", "NULL", "NULL", sb.getCurrentImage("ord_nmds_2D"), "png", 72, "NULL");
-////        OAUtils.PlotNMDS3DOrdination(sb, "NULL", "NULL", "NULL", sb.getCurrentImage("ord_nmds_3D"), "png", 72, "NULL");
-//        OAUtils.PlotNMDSstressOrdination(sb, "NULL", sb.getCurrentImage("ord_nmds_stress"), "png", 72, "NULL");
-//        OAUtils.PlotNMDSscreeOrdination(sb, sb.getCurrentImage("ord_nmds_scree"), "png", 72, "NULL");
+        OAUtils.CreateNMDSOrdination(sb, false, "NULL", false, "");
+        OAUtils.PlotNMDS2DOrdination(sb, false, false, false, false, false, "NULL", "NULL", sb.getCurrentImage("ord_nmds_2D"), "png", 72);
+        OAUtils.PlotNMDS3DOrdination(sb, "NULL", false, "NULL", sb.getCurrentImage("ord_nmds_3D"), "png");
+        OAUtils.PlotNMDSstressOrdination(sb, "NULL", sb.getCurrentImage("ord_nmds_stress"), "png", 72);
+        OAUtils.PlotNMDSscreeOrdination(sb, sb.getCurrentImage("ord_nmds_scree"), "png", 72);
     }
-//    
-//
-//    private void doDefaultPCOA() {
+   
+
+    private void doDefaultPCOA() {
 //        OAUtils.CreatePCOAOrdination(sb, "NULL", false, false, false, "NULL", "NULL", "NULL");
-//        OAUtils.PlotPCOA2DOrdination(sb, false, false, false, false, false, false, "NULL", "NULL", "NULL", sb.getCurrentImage("ord_pcoa_2D"), "png", 72, "NULL");
-////        OAUtils.PlotPCOA3DOrdination(sb, "NULL", "NULL", "NULL", sb.getCurrentImage("ord_pcoa_3D"), "png", 72, "NULL");
-//        OAUtils.PlotPCOAstressOrdination(sb, sb.getCurrentImage("ord_pcoa_stress"), "png", 72, "NULL");
-//        OAUtils.PlotPCOAscreeOrdination(sb, sb.getCurrentImage("ord_pcoa_scree"), "png", 72, "NULL");
-//    }
+//        OAUtils.PlotPCOA2DOrdination(sb, false, false, false, false, false, false, "NULL", "NULL", "NULL", sb.getCurrentImage("ord_pcoa_2D"), "png", 72);
+//        OAUtils.PlotPCOA3DOrdination(sb, "NULL", "NULL", "NULL", sb.getCurrentImage("ord_pcoa_3D"), "png", 72);
+//        OAUtils.PlotPCOAstressOrdination(sb, sb.getCurrentImage("ord_pcoa_stress"), "png", 72);
+//        OAUtils.PlotPCOAscreeOrdination(sb, sb.getCurrentImage("ord_pcoa_scree"), "png", 72);
+    }
     
     
     private void doDefaultCIA() {
-        OAUtils.CreateCIAOrdination(sb, "NULL", "NULL", false);
-        OAUtils.PlotCIAscatterOrdination(sb, false, "NULL", "NULL", sb.getCurrentImage("ord_cia_scatter"), "png", 72);
-        OAUtils.PlotCIAloadingOrdination(sb, "NULL", sb.getCurrentImage("ord_cia_loading"), "png", 72);
-        OAUtils.PlotCIAscreeOrdination(sb, sb.getCurrentImage("ord_cia_scree"), "png", 72);  
+//        OAUtils.CreateCIAOrdination(sb, "NULL", "NULL", false);
+//        OAUtils.PlotCIAscatterOrdination(sb, false, "NULL", "NULL", sb.getCurrentImage("ord_cia_scatter"), "png", 72);
+//        OAUtils.PlotCIAloadingOrdination(sb, "NULL", sb.getCurrentImage("ord_cia_loading"), "png", 72);
+//        OAUtils.PlotCIAscreeOrdination(sb, sb.getCurrentImage("ord_cia_scree"), "png", 72);  
     }
-//    
-//    private void doDefaultANOSIM() {
+    
+    private void doDefaultANOSIM() {
 //        OAUtils.CreateANOSIMOrdination(sb);
 //        OAUtils.PlotANOSIMOrdination(sb, "NULL", sb.getCurrentImage("ord_cia_scatter"), "png", 72);
-//    }
+    }
     
     private void doDefaultRDA(){
         OAUtils.CreateRDA(sb, false, "NULL", false);
-        OAUtils.PlotRDA2D(sb, "NULL", false, false, false, false, "NULL", false, "NULL", false, sb.getCurrentImage("ord_rda_2D"), "png", 72, "NULL");
-        OAUtils.PlotRDAScree(sb, sb.getCurrentImage("ord_rda_scree"), "png", 72, "NULL");
+        OAUtils.PlotRDA2D(sb, "NULL", false, false, false, false, "NULL", false, "NULL", false, sb.getCurrentImage("ord_rda_2D"), "png", 72);
+        OAUtils.PlotRDAScree(sb, sb.getCurrentImage("ord_rda_scree"), "png", 72);
     }
     
     private void doDefaultBray(){
         OAUtils.CreateBray(sb, false, "euclidean", false, false);
-        OAUtils.PlotBray2D(sb, "NULL", false, false, false, "NULL", "NULL", "NULL", sb.getCurrentImage("ord_bray_2D"), "png", 72, "NULL");
+        OAUtils.PlotBray2D(sb, "NULL", false, false, false, "NULL", "NULL", "NULL", sb.getCurrentImage("ord_bray_2D"), "png", 72);
 //        OAUtils.PlotBray3D(sb, sb.getCurrentImage("ord_rda_scree"), "png", 72, "NULL");
         OAUtils.PlotBray3D(sb, sb.getCurrentImage("bray_score3d"), "json");
-        OAUtils.PlotBrayScree(sb, sb.getCurrentImage("ord_bray_scree"), "png", 72, "NULL");
+        OAUtils.PlotBrayScree(sb, sb.getCurrentImage("ord_bray_scree"), "png", 72);
     }
     
     private void doDefaultCCA(){
@@ -122,8 +122,8 @@ public class OABean implements Serializable {
             RConnection RC = sb.getRConnection();
             sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
         }
-        OAUtils.PlotCCA(sb, "NULL", false, false, false, false, false, "NULL", "NULL", "NULL", sb.getCurrentImage("ord_cca_2D"), "png", 72, "NULL");
-        OAUtils.PlotCcaScree(sb, sb.getCurrentImage("ord_cca_scree"), "png", 72, "NULL");
+        OAUtils.PlotCCA(sb, "NULL", false, false, false, false, false, "NULL", "NULL", "NULL", sb.getCurrentImage("ord_cca_2D"), "png", 72);
+        OAUtils.PlotCcaScree(sb, sb.getCurrentImage("ord_cca_scree"), "png", 72);
     }
     
     private void doDefaultCA(){
@@ -131,8 +131,8 @@ public class OABean implements Serializable {
 //            RConnection RC = sb.getRConnection();
 //            sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
 //        }
-//        OAUtils.PlotCA2D(sb, "NULL", false, false, sb.getCurrentImage("ord_ca_2D"), "png", 72, "NULL");
-//        OAUtils.PlotCAScree(sb, sb.getCurrentImage("ord_cca_scree"), "png", 72, "NULL");
+//        OAUtils.PlotCA2D(sb, "NULL", false, false, sb.getCurrentImage("ord_ca_2D"), "png", 72);
+//        OAUtils.PlotCAScree(sb, sb.getCurrentImage("ord_cca_scree"), "png", 72);
     }
     
     private void doDefaultPCA() {
@@ -145,12 +145,13 @@ public class OABean implements Serializable {
         // ChemoMetrics.PlotPCA3DScore(sb, sb.getCurrentImage("pca_score3d"), "png", 72, 1, 2, 3, 40);
         ChemoMetrics.PlotPCA3DScore(sb, sb.getCurrentImage("pca_score3d"), "json", 72, 1, 2, 3);
     }
+    
     private void doDefaultDCA(){
         if (!OAUtils.CreateDCA(sb)){
             RConnection RC = sb.getRConnection();
             sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
         }
-        OAUtils.PlotDCA2D(sb, "NULL", false, false, false, false, false, "NULL", "NULL", "NULL", sb.getCurrentImage("ord_dca_2D"), "png", 72, "NULL");
-        OAUtils.PlotDCAScree(sb, sb.getCurrentImage("ord_dca_scree"), "png", 72, "NULL");
+        OAUtils.PlotDCA2D(sb, "NULL", false, false, false, false, false, "NULL", "NULL", "NULL", sb.getCurrentImage("ord_dca_2D"), "png", 72);
+        OAUtils.PlotDCAScree(sb, sb.getCurrentImage("ord_dca_scree"), "png", 72);
     }
 }

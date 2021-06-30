@@ -233,7 +233,7 @@ public class ApplicationBean1 implements Serializable {
         
                 
         vegdistMeasureOpts = new SelectItem[14];
-        vegdistMeasureOpts[0] = new SelectItem("bray", "Bray-Curtis");
+        vegdistMeasureOpts[0] = new SelectItem("NULL", "Bray-Curtis");
         vegdistMeasureOpts[1] = new SelectItem("manhattan", "Manhattan");
         vegdistMeasureOpts[2] = new SelectItem("canberra", "Canberra");
         vegdistMeasureOpts[3] = new SelectItem("kulczynski", "Kulczynski");
@@ -257,13 +257,13 @@ public class ApplicationBean1 implements Serializable {
         ciaDataSetOpts[1] = new SelectItem("env", "Constraining Data Set");
                 
         ordColorPaletteOpts = new SelectItem[4];
-        ordColorPaletteOpts[0] = new SelectItem("viridis", "Viridis");
+        ordColorPaletteOpts[0] = new SelectItem("NULL", "Viridis");
         ordColorPaletteOpts[1] = new SelectItem("plasma", "Plasma");
         ordColorPaletteOpts[2] = new SelectItem("grey", "Grayscale");
         ordColorPaletteOpts[3] = new SelectItem("none", "No Color");
         
         ordStressDimensionOpts = new SelectItem[5];
-        ordStressDimensionOpts[0] = new SelectItem("1", "1");
+        ordStressDimensionOpts[0] = new SelectItem("NULL", "1");
         ordStressDimensionOpts[1] = new SelectItem("2", "2");
         ordStressDimensionOpts[2] = new SelectItem("3", "3");
         ordStressDimensionOpts[3] = new SelectItem("4", "4");
@@ -364,7 +364,7 @@ public class ApplicationBean1 implements Serializable {
         corrMethodsOpts[2] = new SelectItem("lasso", "Lasso");
         
         orgOpts = new SelectItem[4];
-        orgOpts[0] = new SelectItem("NA", "----Not specified----");
+        orgOpts[0] = new SelectItem("vegdistMeasureOpts", "----Not specified----");
         orgOpts[1] = new SelectItem("hsa", "Homo sapiens (human)");
         orgOpts[2] = new SelectItem("mmu", "Mus musculus (mouse)");
         orgOpts[3] = new SelectItem("rno", "Rattus norvegicus (rat)");

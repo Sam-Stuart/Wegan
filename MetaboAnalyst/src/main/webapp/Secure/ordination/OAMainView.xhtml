@@ -20,27 +20,27 @@
 
                 <h:panelGrid style="border: none; width: 100%; padding: 15px 20px 10px 25px; background-color: #8cbd4830; font-size: 14px;">
                     
-                    <h:panelGrid>
-                        <h:commandLink id="nmds" style="margin-left: 25px" action="NMDS" onclick="PF('statusDialog').show()" value="Non-metric Multidimensional Scaling (NMDS)"/>
-                        <p:tooltip for="nmds" style="font-size: 11px;" value="TODO: Rewrite nmds hoverover" />
-                                            
+                    <h:panelGrid>                  
                         <h:commandLink id="pca" style="margin-left: 25px" action="PCA" onclick="PF('statusDialog').show()" value="Principal Component Analysis (PCA)"/>
-                        <p:tooltip for="pca" style="font-size: 11px;" value="TODO: Rewrite pca hoverover" />
+                        <p:tooltip for="pca" style="font-size: 11px;" value="Reduces the dimensionality of multivariate data to a finite number of principal components that maximize the variation in the data" />
                         
                         <h:commandLink id="poca" style="margin-left: 25px" action="PCOA" onclick="PF('statusDialog').show()" value="Principal Coordinate Analysis (PCoA)"/>
                         <p:tooltip for="poca" style="font-size: 11px;" value="TODO: Rewrite pcoa hoverover" />
                         
+                        <h:commandLink id="nmds" style="margin-left: 25px" action="NMDS" onclick="PF('statusDialog').show()" value="Non-metric Multidimensional Scaling (NMDS)"/>
+                        <p:tooltip for="nmds" style="font-size: 11px;" value="TODO: Rewrite nmds hoverover" />
+                          
                         <h:commandLink id="rda" style="margin-left: 25px" action="RDA" onclick="PF('statusDialog').show()" value="Redundancy Analysis (RDA)"/>
                         <p:tooltip for="rda" style="font-size: 11px;" value="TODO: Rewrite rda hoverover" />
-                        
-                        <h:commandLink id="ca" style="margin-left: 25px" action="CA" onclick="PF('statusDialog').show()" value="Correspondence Analysis (CA)"/>
-                        <p:tooltip for="ca" style="font-size: 11px;" value="TODO: Rewrite ca hoverover" />   
                         
                         <h:commandLink id="cca" style="margin-left: 25px" action="CCA" onclick="PF('statusDialog').show()" value="Constrained Correspondence Analysis (CCA)"/>
                         <p:tooltip for="cca" style="font-size: 11px;" value="TODO: Rewrite cca hoverover" />                    
                         
                         <h:commandLink id="dca" style="margin-left: 25px" action="DCA" onclick="PF('statusDialog').show()" value="Detrended Correspondence Analysis (DCA)"/>
                         <p:tooltip for="dca" style="font-size: 11px;" value="TODO: Rewrite dca hoverover" />
+                        
+                        <h:commandLink id="ca" style="margin-left: 25px" action="CA" onclick="PF('statusDialog').show()" value="Correspondence Analysis (CA)"/>
+                        <p:tooltip for="ca" style="font-size: 11px;" value="TODO: Rewrite ca hoverover" />   
                         
                         <h:commandLink id="bray" style="margin-left: 25px" action="Bray" onclick="PF('statusDialog').show()" value="Bray-Curtis (Polar) Ordination"/>
                         <p:tooltip for="bray" style="font-size: 11px;" value="TODO: Rewrite bray hoverover" />                   

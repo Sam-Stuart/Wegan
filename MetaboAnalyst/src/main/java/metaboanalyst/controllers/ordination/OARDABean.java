@@ -185,8 +185,8 @@ public class OARDABean implements Serializable {
     // ACTION BUTTONS //
     public void rdaUpdate_action() {
         OAUtils.CreateRDA(sb, doAbundance, envDataCol, doOriginal);
-        OAUtils.PlotRDA2D(sb, color, varArrows, envArrows, envCentroid, sampleNames, groupCol, pointStyle, groupPoint, addEllipse, sb.getNewImage("ord_rda_2D"), "png", 72, "NULL");   
-        OAUtils.PlotRDAScree(sb, sb.getNewImage("ord_rda_scree"), "png", 72, "NULL");
+        OAUtils.PlotRDA2D(sb, color, varArrows, envArrows, envCentroid, sampleNames, groupCol, pointStyle, groupPoint, addEllipse, sb.getNewImage("ord_rda_2D"), "png", 72);   
+        OAUtils.PlotRDAScree(sb, sb.getNewImage("ord_rda_scree"), "png", 72);
     }
 
     

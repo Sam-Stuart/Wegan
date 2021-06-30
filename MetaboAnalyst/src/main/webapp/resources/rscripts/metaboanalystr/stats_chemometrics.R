@@ -214,7 +214,7 @@ PlotPCA2DScore <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, 
     lvs <- levels(cls);
     pts.array <- array(0, dim=c(100,2,length(lvs)));
     for(i in 1:length(lvs)){
-      print("12")
+      print("20")
       mSetObj$dataSet$cls <- lvs[i];
       inx <- mSetObj$dataSet$cls;
       print(inx)

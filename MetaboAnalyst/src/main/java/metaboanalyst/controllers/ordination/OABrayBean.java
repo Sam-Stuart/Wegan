@@ -179,8 +179,9 @@ public class OABrayBean implements Serializable {
     
     // ACTION BUTTONS //
     public void brayUpdate_action() {
+//        OAUtils.CreateBray(sb, "NULL", "NULL", "NULL", "NULL");
         OAUtils.CreateBray(sb, doAbundance, distOpts, doOriginal, dataAbsence);
-        OAUtils.PlotBray2D(sb, color, addEllipse, varArrows, sampleNames, "NULL", "NULL", "NULL", sb.getNewImage("ord_bray_2D"), "png", 72, "NULL"); 
+        OAUtils.PlotBray2D(sb, color, addEllipse, varArrows, sampleNames, "NULL", "NULL", "NULL", sb.getNewImage("ord_bray_2D"), "png", 72); 
     }
     
     
