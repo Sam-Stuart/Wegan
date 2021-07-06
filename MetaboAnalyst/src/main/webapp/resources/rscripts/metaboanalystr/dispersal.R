@@ -8,7 +8,7 @@
 #'
 
 
-
+library(gt)
 
 # -------------Coefficients of Biogeographical Dispersal Direction-------------------------------------------------- 
 
@@ -18,7 +18,8 @@ bgdispersalWegan <- function(mSetObj=NA){
     
     # Calculate the bg dispersal
     output <- bgdispersal(mSetObj$dataSet$orig);
-    
+
+       
     # Store the item to the bgdispersal object
     mSetObj$analSet$bgdispersal <- output; 
      
@@ -36,30 +37,50 @@ PlotBGD <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, bgdnum)
     # Check which matrix to plot : 
     if (imgName == "bgd1_0_"){
         mat <- mSetObj$analSet$bgdispersal$DD1;
+        mat <- data_check(mat);
+        write.csv(mat, file = "bgd_DD1.csv");
     }else if (imgName == "bgd2_0_"){
         mat <- mSetObj$analSet$bgdispersal$DD2;
+        mat <- data_check(mat);
+        write.csv(mat, file = "bgd_DD2.csv");
     }else if (imgName == "bgd3_0_"){
         mat <- mSetObj$analSet$bgdispersal$DD3;
+        mat <- data_check(mat);
+        write.csv(mat, file = "bgd_DD3.csv");
     }else if (imgName == "bgd4_0_"){
         mat <- mSetObj$analSet$bgdispersal$DD4;
+        mat <- data_check(mat);
+        write.csv(mat, file = "bgd_DD4.csv");
     }else if (imgName == "bgd5_0_"){
         mat <- mSetObj$analSet$bgdispersal$McNemar;
+        write.csv(mat, file = "bgd_McNemar.csv");
     }else if (imgName == "bgd6_0_"){
         mat <-mSetObj$analSet$bgdispersal$prob.McNemar;
+        write.csv(mat, file = "bgd_ProbMcNemar.csv");
     }
     
     mat <- as.data.frame(round(mat,2));
     
-    gt_mat <- gt(mat) %>% tab_options(table.font.size = 8); 
+    gt_mat <- gt(mat) %>% tab_options(table.font.size = 6); 
     
-   
+    # Fix the Formatting says Dana
+    if(is.na(width)){
+        w <- 10;
+    }else if(width == 0){
+        w <- 8;
+    }else{
+        w <- width;
+    }
+
     # save the image name
+    
+
     imgName = paste(imgName, "dpi", dpi, ".", format, sep="");
     mSetObj$imgSet$dispersal$bgd1 <- imgName;
 
     # Use the gt package to plot the data
     gtsave(gt_mat, filename = imgName)
-    dev.off();
+    #dev.off();
     return(.set.mSet(mSetObj));
 }
 
@@ -275,4 +296,26 @@ disp.reg.columns <- function(mSetObj=NA){
   )
   return(name.all.numeric.cols)
   
+}
+
+# Check that the first data rows and columns are not repeating 
+
+data_check <- function(mat){
+    # check first column
+   
+    mat <- as.matrix(mat)
+    
+    if (mat[1,1] == mat[1,2] && mat[2,1] == mat[2,2] && mat[3,1] == mat[3,2]){
+        mat <- mat[,-c(1)];
+    }
+    # check first row
+    if (mat[1,1] == mat[2,1] && mat[1,2] == mat[2,2] && mat[1,3] == mat[2,3]){
+        mat <- mat[-c(1),]
+    }
+
+    # rename columns and rows 
+    rownames(mat) <- 1:dim(mat)[1]
+    colnames(mat) <- 1:dim(mat)[2]
+
+    return (mat)
 }

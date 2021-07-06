@@ -43,13 +43,7 @@ public class BGDBean implements Serializable {
     private User usr = sb.getCurrentUser();
     private String usrName = usr.getName();
     
-    // String File names 
     
-    private String fileBGD1= "bgd_DD1.csv";
-    private String fileBGD1Path  = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileBGD1+ "\">" + fileBGD1+ "</a>";
-    ///home/leif/Wegan/MetaboAnalyst/src/main/java/metaboanalyst/controllers/dispersal/BGDBean.java
-    
-    // getters and setters
     
     public static double[][] GetBGDSigMat(SessionBean1 sb, String tableName) {
         System.out.print(tableName);
@@ -94,6 +88,75 @@ public class BGDBean implements Serializable {
         return null;
     }
     
+     // String File names 
+    //DD1
+    private String fileDD1= "bgd_DD1.csv";
+    private String fileDD1Path  = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileDD1 + "\">" + fileDD1 + "</a>";
+    //DD2
+    private String fileDD2= "bgd_DD2.csv";
+    private String fileDD2Path  = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileDD2 + "\">" + fileDD2 + "</a>";
+    //DD3
+    private String fileDD3= "bgd_DD3.csv";
+    private String fileDD3Path  = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileDD3 + "\">" + fileDD3 + "</a>";
+    //DD4
+    private String fileDD4= "bgd_DD4.csv";
+    private String fileDD4Path  = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileDD4 + "\">" + fileDD4 + "</a>";
+    //McNemar
+    private String fileMcNemar= "bgd_McNemar.csv";
+    private String fileMcNemarPath  = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileMcNemar + "\">" + fileMcNemar + "</a>";
+    //ProbMcNemar
+    private String fileProbMcNemar= "bgd_ProbMcNemar.csv";
+    private String fileProbMcNemarPath  = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileProbMcNemar + "\">" + fileProbMcNemar + "</a>";
+    
+    // getters and setters
+    //DD1
+    public String getFileDD1Path() {
+        return fileDD1Path;
+    }
+
+    public void setFileDD1Path(String fileDD1Path) {
+        this.fileDD1Path = fileDD1Path;
+    }
+    //DD2
+    public String getFileDD2Path() {
+        return fileDD2Path;
+    }
+
+    public void setFileDD2Path(String fileDD2Path) {
+        this.fileDD2Path = fileDD2Path;
+    }
+    //DD3
+    public String getFileDD3Path() {
+        return fileDD3Path;
+    }
+
+    public void setFileDD3Path(String fileDD3Path) {
+        this.fileDD3Path = fileDD3Path;
+    }
+    //DD4
+    public String getFileDD4Path() {
+        return fileDD4Path;
+    }
+
+    public void setFileDD4Path(String fileDD4Path) {
+        this.fileDD4Path = fileDD4Path;
+    }
+    //McNemar
+    public String getFileMcNemarPath() {
+        return fileMcNemarPath;
+    }
+
+    public void setFileMcNemarPath(String fileMcNemarPath) {
+        this.fileMcNemarPath = fileMcNemarPath;
+    }
+    //ProbMcNemar
+    public String getFileProbMcNemarPath() {
+        return fileProbMcNemarPath;
+    }
+
+    public void setFileProbMcNemarPath(String fileProbMcNemarPath) {
+        this.fileProbMcNemarPath = fileProbMcNemarPath;
+    }
     
     
 

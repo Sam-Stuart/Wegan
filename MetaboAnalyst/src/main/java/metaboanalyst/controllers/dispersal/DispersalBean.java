@@ -52,7 +52,7 @@ public class DispersalBean implements Serializable {
 // Biogeographical Dispersal functions
     private void doDefaultBGD() {       
         
-        
+        DispersalUtils.LoadDplyr(sb);
         DispersalUtils.InitBGD(sb);
         DispersalUtils.PlotBGD(sb, sb.getCurrentImage("bgd1"), "png", 72, dispersalBgdNum);
         DispersalUtils.PlotBGD(sb, sb.getCurrentImage("bgd2"), "png", 72, dispersalBgdNum);
