@@ -90,22 +90,22 @@ public class BGDBean implements Serializable {
     
      // String File names 
     //DD1
-    private String fileDD1= "bgd_DD1.csv";
+    private String fileDD1= "DD1.csv";
     private String fileDD1Path  = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileDD1 + "\">" + fileDD1 + "</a>";
     //DD2
-    private String fileDD2= "bgd_DD2.csv";
+    private String fileDD2= "DD2.csv";
     private String fileDD2Path  = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileDD2 + "\">" + fileDD2 + "</a>";
     //DD3
-    private String fileDD3= "bgd_DD3.csv";
+    private String fileDD3= "DD3.csv";
     private String fileDD3Path  = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileDD3 + "\">" + fileDD3 + "</a>";
     //DD4
-    private String fileDD4= "bgd_DD4.csv";
+    private String fileDD4= "DD4.csv";
     private String fileDD4Path  = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileDD4 + "\">" + fileDD4 + "</a>";
     //McNemar
-    private String fileMcNemar= "bgd_McNemar.csv";
+    private String fileMcNemar= "McNemar.csv";
     private String fileMcNemarPath  = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileMcNemar + "\">" + fileMcNemar + "</a>";
     //ProbMcNemar
-    private String fileProbMcNemar= "bgd_ProbMcNemar.csv";
+    private String fileProbMcNemar= "ProbMcNemar.csv";
     private String fileProbMcNemarPath  = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileProbMcNemar + "\">" + fileProbMcNemar + "</a>";
     
     // getters and setters

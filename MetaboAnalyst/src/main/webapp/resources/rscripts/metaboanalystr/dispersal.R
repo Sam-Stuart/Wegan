@@ -38,25 +38,25 @@ PlotBGD <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, bgdnum)
     if (imgName == "bgd1_0_"){
         mat <- mSetObj$analSet$bgdispersal$DD1;
         mat <- data_check(mat);
-        write.csv(mat, file = "bgd_DD1.csv");
+        write.csv(mat, file = "DD1.csv");
     }else if (imgName == "bgd2_0_"){
         mat <- mSetObj$analSet$bgdispersal$DD2;
         mat <- data_check(mat);
-        write.csv(mat, file = "bgd_DD2.csv");
+        write.csv(mat, file = "DD2.csv");
     }else if (imgName == "bgd3_0_"){
         mat <- mSetObj$analSet$bgdispersal$DD3;
         mat <- data_check(mat);
-        write.csv(mat, file = "bgd_DD3.csv");
+        write.csv(mat, file = "DD3.csv");
     }else if (imgName == "bgd4_0_"){
         mat <- mSetObj$analSet$bgdispersal$DD4;
         mat <- data_check(mat);
-        write.csv(mat, file = "bgd_DD4.csv");
+        write.csv(mat, file = "DD4.csv");
     }else if (imgName == "bgd5_0_"){
         mat <- mSetObj$analSet$bgdispersal$McNemar;
-        write.csv(mat, file = "bgd_McNemar.csv");
+        write.csv(mat, file = "McNemar.csv");
     }else if (imgName == "bgd6_0_"){
         mat <-mSetObj$analSet$bgdispersal$prob.McNemar;
-        write.csv(mat, file = "bgd_ProbMcNemar.csv");
+        write.csv(mat, file = "ProbMcNemar.csv");
     }
     
     mat <- as.data.frame(round(mat,2));
