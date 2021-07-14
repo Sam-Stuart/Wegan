@@ -16,24 +16,29 @@
                 <h:outputLabel style="font-weight: bold" value="Add Variable Arrows:"/>
                 <p:selectBooleanCheckbox value ="#{ordNMDSBean.var_arrowsOpts}"/> 
                 
-                <h:outputLabel style="font-weight: bold" value="Add Environmental Arrows:"/>
-                <p:selectBooleanCheckbox value ="#{ordNMDSBean.env_arrowsOpts}"/> 
-
-                <h:outputLabel style="font-weight: bold" value="Add Environmental Centroids:"/>
-                <p:selectBooleanCheckbox value ="#{ordNMDSBean.env_centOpts}"/> 
-                    
+                <h3>Grouping Options</h3>
+                <p:panelGrid></p:panelGrid>                
+                <h:outputLabel style="font-weight: bold" value="Grouping Variable:"/>
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordNMDSBean.nmdsMetaColumnName}">
+                    <f:selectItems value="#{ordNMDSBean.nmdsMetaColumnOpts}" />
+                </p:selectOneMenu> 
+                
                 <h:outputLabel style="font-weight: bold" value="Color Pallet:"/>
                 <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordNMDSBean.ordColorOpts}">
                     <f:selectItems value="#{applicationBean1.ordColorPaletteOpts}" />
                 </p:selectOneMenu> 
-                
-                <h:outputLabel style="font-weight: bold" value="Grouping Column:"/>
-                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordNMDSBean.nmdsMetaColumnName}">
-                    <f:selectItems value="#{ordNMDSBean.nmdsMetaColumnOpts}" />
-                </p:selectOneMenu> 
 
                 <h:outputLabel style="font-weight: bold" value="Add Ellipses:"/>
                 <p:selectBooleanCheckbox value ="#{ordNMDSBean.ellipseOpts}"/> 
+                
+                
+                <h3>Constraining Data Options</h3>
+                <p:panelGrid></p:panelGrid>
+                <h:outputLabel style="font-weight: bold" value="Add Arrows for Continuous Constraining Variables:"/>
+                <p:selectBooleanCheckbox value ="#{ordNMDSBean.env_arrowsOpts}"/> 
+
+                <h:outputLabel style="font-weight: bold" value="Add Centroids for Categorical Constraining Variables:"/>
+                <p:selectBooleanCheckbox value ="#{ordNMDSBean.env_centOpts}"/> 
                 
                 <p:panelGrid></p:panelGrid>  
 

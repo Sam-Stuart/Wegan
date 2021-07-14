@@ -74,20 +74,20 @@ public class OABean implements Serializable {
     }
 
     private void doDefaultNMDS() {
-        OAUtils.CreateNMDSOrdination(sb, false, "NULL", false, "");
+        OAUtils.CreateNMDSOrdination(sb, false, "NULL", false, " ");
         OAUtils.PlotNMDS2DOrdination(sb, false, false, false, false, false, "NULL", "NULL", sb.getCurrentImage("ord_nmds_2D"), "png", 72);
-        OAUtils.PlotNMDS3DOrdination(sb, "NULL", false, "NULL", sb.getCurrentImage("ord_nmds_3D"), "png");
+        OAUtils.PlotNMDS3DOrdination(sb, "NULL", false, "NULL", sb.getCurrentImage("ord_nmds_3D"));
         OAUtils.PlotNMDSstressOrdination(sb, "NULL", sb.getCurrentImage("ord_nmds_stress"), "png", 72);
         OAUtils.PlotNMDSscreeOrdination(sb, sb.getCurrentImage("ord_nmds_scree"), "png", 72);
     }
    
 
     private void doDefaultPCOA() {
-//        OAUtils.CreatePCOAOrdination(sb, "NULL", false, false, false, "NULL", "NULL", "NULL");
-//        OAUtils.PlotPCOA2DOrdination(sb, false, false, false, false, false, false, "NULL", "NULL", "NULL", sb.getCurrentImage("ord_pcoa_2D"), "png", 72);
-//        OAUtils.PlotPCOA3DOrdination(sb, "NULL", "NULL", "NULL", sb.getCurrentImage("ord_pcoa_3D"), "png", 72);
-//        OAUtils.PlotPCOAstressOrdination(sb, sb.getCurrentImage("ord_pcoa_stress"), "png", 72);
-//        OAUtils.PlotPCOAscreeOrdination(sb, sb.getCurrentImage("ord_pcoa_scree"), "png", 72);
+        OAUtils.CreatePCOAOrdination(sb, false, "NULL", false, false, " ");
+        OAUtils.PlotPCOA2DOrdination(sb, false, false, false, false, false, "NULL", "NULL", sb.getCurrentImage("ord_nmds_2D"), "png", 72);
+        OAUtils.PlotPCOA3DOrdination(sb, "NULL", false, "NULL", sb.getCurrentImage("ord_pcoa_3D"));
+        OAUtils.PlotPCOAstressOrdination(sb, sb.getCurrentImage("ord_pcoa_stress"), "png", 72);
+        OAUtils.PlotPCOAscreeOrdination(sb, sb.getCurrentImage("ord_pcoa_scree"), "png", 72);
     }
     
     
@@ -104,8 +104,8 @@ public class OABean implements Serializable {
     }
     
     private void doDefaultRDA(){
-        OAUtils.CreateRDA(sb, false, "NULL", false);
-        OAUtils.PlotRDA2D(sb, "NULL", false, false, false, false, "NULL", false, "NULL", false, sb.getCurrentImage("ord_rda_2D"), "png", 72);
+        OAUtils.CreateRDA(sb, false, " ", false);
+        OAUtils.PlotRDA2D(sb, "NULL", false, false, false, false, "NULL", false, sb.getCurrentImage("ord_rda_2D"), "png", 72);
         OAUtils.PlotRDAScree(sb, sb.getCurrentImage("ord_rda_scree"), "png", 72);
     }
     

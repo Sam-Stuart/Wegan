@@ -55,7 +55,7 @@
         </script>
         <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
             <p:tabView id="NMDS">
-                <p:tab title ="Biplot" titleStyleClass="p-tab-nav">
+                <p:tab title ="2D Biplot" titleStyleClass="p-tab-nav">
                     <h:form id="form1">
                         <p>
                             NMDS is performed on numeric data only. The use of data groupings will create more interesting plots. Load grouping data separately, where each row aligns with the rows in your data set, or include groupings as columns in your data set.
@@ -127,22 +127,24 @@
                                 <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
                                     <h:outputText escape="false" value="#{ordNMDSBean.file2DEnvScoresPath}"/>
                                 </i>
-                            </h:panelGrid> 
-                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
-                                <p:commandButton value="Export"
-                                    styleClass="exportButton"
-                                    style="box-shadow: none !important; float:right; text-shadow: none !important;"
-                                    actionListener="#{sessionBean1.graphicsLnk_action('ord_nmds_2D')}"
-                                    oncomplete="PF('graphDialog').show()"/>
-                            </h:panelGrid> 
-                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
-                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('ord_nmds_2D')}" alt="nmds2D"/>
-                            </h:panelGrid>                            
+                            </h:panelGrid>  
+                            
+                        <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                            <p:commandButton value="Export"
+                                styleClass="exportButton"
+                                style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                actionListener="#{sessionBean1.graphicsLnk_action('ord_nmds_2D')}"
+                                oncomplete="PF('graphDialog').show()"/>
+                        </h:panelGrid>      
+                            
+                        <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                            <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('ord_nmds_2D')}" alt="nmds2D"/>
+                        </h:panelGrid>
                         </h:panelGrid> 
                     </h:form>
                 </p:tab>
                 
-                <p:tab title ="3D Ordination Plot" titleStyleClass="p-tab-nav">
+                <p:tab title ="3D Biplot" titleStyleClass="p-tab-nav">
                     <h:form id="form2">
                         <p>
                             The use of data groupings will create more interesting plots. Load grouping data separately, where each row aligns with the rows in your data set, or include groupings as columns in your data set.
@@ -199,16 +201,18 @@
                                     <h:outputText escape="false" value="#{ordNMDSBean.file3DColScoresPath}"/>
                                 </i>    
                             </h:panelGrid>
+                            
                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
                                 <p:commandButton value="Export"
                                     styleClass="exportButton"
                                     style="box-shadow: none !important; float:right; text-shadow: none !important;"
                                     actionListener="#{sessionBean1.graphicsLnk_action('ord_nmds_3D')}"
                                     oncomplete="PF('graphDialog').show()"/>
-                            </h:panelGrid> 
-                            <h:panelGrid style="width: 100%; text-align: center">
-                                <canvas id='canvasNMDS' width='670px' height='630px'/>
-                            </h:panelGrid> 
+                            </h:panelGrid>                              
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('ord_nmds_3D')}" alt="nmds3D"/>
+                            </h:panelGrid>
+                            
                         </h:panelGrid> 
                     </h:form>
                 </p:tab> 
@@ -244,7 +248,7 @@
                                             onclick="PF('statusDialog').show()"
                                             oncomplete="PF('statusDialog').hide()"                                            
                                             update=":NMDS:form3:nmdsPane3  :cmdPane" 
-                                            actionListener="#{ordNMDSBean.nmdsUpdate_action1()}"/>                          
+                                            actionListener="#{ordNMDSBean.nmdsUpdate_action()}"/>                          
                         </h:panelGrid>
                         <h:panelGrid class="resultsBar" columns="2">
                             <h:panelGroup>
@@ -270,11 +274,10 @@
                                     style="box-shadow: none !important; float:right; text-shadow: none !important;"
                                     actionListener="#{sessionBean1.graphicsLnk_action('ord_nmds_scree')}"
                                     oncomplete="PF('graphDialog').show()"/>
-                            </h:panelGrid>                        
-                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                            </h:panelGrid>                              
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
                                 <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('ord_nmds_scree')}" alt="nmdsscree"/>
                             </h:panelGrid>                           
-                            
                         </h:panelGrid>  
                        
                     </h:form>
@@ -330,16 +333,17 @@
                             </h:panelGroup> 
                         </h:panelGrid>
                         <h:panelGrid id="nmdsPane4" style="width: 100%;">
+                            
                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
                                 <p:commandButton value="Export"
                                     styleClass="exportButton"
                                     style="box-shadow: none !important; float:right; text-shadow: none !important;"
                                     actionListener="#{sessionBean1.graphicsLnk_action('ord_nmds_stress')}"
                                     oncomplete="PF('graphDialog').show()"/>
-                            </h:panelGrid>                               
-                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                            </h:panelGrid>                              
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
                                 <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('ord_nmds_stress')}" alt="nmdsstress"/>
-                            </h:panelGrid>                           
+                            </h:panelGrid>                       
                             
                         </h:panelGrid>  
                        

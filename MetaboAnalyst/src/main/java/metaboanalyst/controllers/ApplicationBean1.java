@@ -234,19 +234,19 @@ public class ApplicationBean1 implements Serializable {
                 
         vegdistMeasureOpts = new SelectItem[14];
         vegdistMeasureOpts[0] = new SelectItem("NULL", "Bray-Curtis");
-        vegdistMeasureOpts[1] = new SelectItem("manhattan", "Manhattan");
-        vegdistMeasureOpts[2] = new SelectItem("canberra", "Canberra");
-        vegdistMeasureOpts[3] = new SelectItem("kulczynski", "Kulczynski");
-        vegdistMeasureOpts[4] = new SelectItem("jaccard", "Jaccard");
-        vegdistMeasureOpts[5] = new SelectItem("gower", "Gower");
-        vegdistMeasureOpts[6] = new SelectItem("horn", "Horn-Morisita");
-        vegdistMeasureOpts[7] = new SelectItem("mountford", "Mountford");
-        vegdistMeasureOpts[8] = new SelectItem("raup" , "Raup-Crick");
-        vegdistMeasureOpts[9] = new SelectItem("binomial", "Binomial");
-        vegdistMeasureOpts[10] = new SelectItem("chao", "Chao");
-        vegdistMeasureOpts[11] = new SelectItem("cao", "Cao");
-        vegdistMeasureOpts[12] = new SelectItem("mahalanobis", "Mahalanobis");
-        vegdistMeasureOpts[13] = new SelectItem("euclidean", "Euclidean");
+        vegdistMeasureOpts[1] = new SelectItem("euclidean", "Euclidean");
+        vegdistMeasureOpts[2] = new SelectItem("manhattan", "Manhattan");
+        vegdistMeasureOpts[3] = new SelectItem("canberra", "Canberra");
+        vegdistMeasureOpts[4] = new SelectItem("kulczynski", "Kulczynski");
+        vegdistMeasureOpts[5] = new SelectItem("jaccard", "Jaccard");
+        vegdistMeasureOpts[6] = new SelectItem("gower", "Gower");
+        vegdistMeasureOpts[7] = new SelectItem("horn", "Horn-Morisita");
+        vegdistMeasureOpts[8] = new SelectItem("mountford", "Mountford");
+        vegdistMeasureOpts[9] = new SelectItem("raup" , "Raup-Crick");
+        vegdistMeasureOpts[10] = new SelectItem("binomial", "Binomial");
+        vegdistMeasureOpts[11] = new SelectItem("chao", "Chao");
+        vegdistMeasureOpts[12] = new SelectItem("cao", "Cao");
+        vegdistMeasureOpts[13] = new SelectItem("mahalanobis", "Mahalanobis");
         
         ciaTypeOpts = new SelectItem[2];
         ciaTypeOpts[0] = new SelectItem("numeric", "Numeric Data Types");

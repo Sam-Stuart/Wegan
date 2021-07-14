@@ -208,8 +208,8 @@ ord.cca <- function(mSetObj=NA, envData=NA, abundance="false", data="false", env
   print(var_fit)
   sink()  
   
-  sink("environment_impact_on_cca.txt") 
-  cat("Environmental data may significantly impact constrained correspondence analysis\n")
+  sink("constraining_variables_impact_on_cca.txt") 
+  cat("Constraining data may significantly impact CCA\n")
   print(env_fit)
   sink()
   
@@ -418,6 +418,8 @@ Plot.cca.scree <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA) 
   eigenValues <- mSetObj$analSet$cca$eigenValues
   print("INSIDE SCREE")
   eigenValues_data <- cbind(eigenValues, eigenValues/sum(eigenValues))
+  maxVar <- max(eigenValues/sum(eigenValues))
+
   print("after")
   print(eigenValues_data)
   n <- nrow(eigenValues_data)
@@ -441,7 +443,7 @@ Plot.cca.scree <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA) 
   #Scree plot
   Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
   par(xpd=FALSE, mar=c(5.1, 4.1, 4.1, 2.1)) 
-  plot(x=eigenValues_data$Dimension, y=eigenValues_data$Variance_Explained, type="l", xlim=c(1, n), xlab="Dimension", ylab="Proportion of Variance Explained", main="Constrained Correspondence Analysis Scree Plot", xaxt="n", yaxt="n", col="blue", lwd=2)
+  plot(x=eigenValues_data$Dimension, y=eigenValues_data$Variance_Explained, type="l", xlim=c(1, n), ylim=c(0,maxVar+0.1), xlab="Dimension", ylab="Proportion of Variance Explained", main="Constrained Correspondence Analysis Scree Plot", xaxt="n", yaxt="n", col="blue", lwd=2)
   points(x=eigenValues_data$Dimension, y=eigenValues_data$Variance_Explained, cex=1.1, pch=19, col="blue")
   axis(2, las=2)
   axis(1, at=1:n)

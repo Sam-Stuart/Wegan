@@ -9,7 +9,7 @@
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2)
 #'@export
-ord.NMDS <- function(mSetObj=NA, data="false", distance="NULL", abundance="false", env_text="") { #2 drop downs, one text box, one checkbox
+ord.NMDS <- function(mSetObj=NA, data="false", distance="NULL", abundance="false", env_text=" ") { #2 drop downs, one text box, one checkbox
   
   library("vegan")
   library("dplyr")
@@ -30,11 +30,11 @@ ord.NMDS <- function(mSetObj=NA, data="false", distance="NULL", abundance="false
   #envData <- mSetObj$dataSet$origEnv
 
 
-
-  input <- input[-1,] #Remove duplicate rows
-  metaData <- .readDataTable("/home/louisa/Wegan1/MetaboAnalyst/src/main/webapp/resources/rscripts/metaboanalystr/test_data/dune_meta.csv") 
-  envData <- .readDataTable("/home/louisa/Wegan1/MetaboAnalyst/src/main/webapp/resources/rscripts/metaboanalystr/test_data/dune_env.csv")
-
+####TESTING####
+  input <- input[-1,] #Remove duplicate row
+  metaData <- .readDataTable("/home/louisa/Wegan/MetaboAnalyst/src/main/webapp/resources/rscripts/metaboanalystr/test_data/dune_meta.csv") 
+  envData <- .readDataTable("/home/louisa/Wegan/MetaboAnalyst/src/main/webapp/resources/rscripts/metaboanalystr/test_data/dune_env.csv")
+############
 
 
 
@@ -89,6 +89,7 @@ ord.NMDS <- function(mSetObj=NA, data="false", distance="NULL", abundance="false
   } else {  #User uplaoded environmental data
       envData1 <- envData
   }
+
   if (nrow(envData1)!=nrow(input)) {
     #AddErrMsg("Your meta data does not have the same number of rows as your numerical data! Please check that you meta data is correct.")
     stop("Your environmental data does not have the same number of rows as your numerical data! Please check that you environmental data is correct.")
@@ -101,7 +102,7 @@ ord.NMDS <- function(mSetObj=NA, data="false", distance="NULL", abundance="false
   
   #Set up environmental data using user selected columns
   if (is.data.frame(envData1)==TRUE) { #User uplaoded environmental data
-    if (env_text=="") { #Nothing typed in text box
+    if (env_text==" ") { #Nothing typed in text box
       env_text1 <- colnames(envData1) #Default is the all env columns
       cat(paste0("You have selected these constraining variables: ", paste(env_text1, collapse=", "), "."))
       cat("If the selection is not what you intended, reenter environmental variable(s) in the text box, using the column names with commas in between.")
@@ -228,8 +229,8 @@ ord.NMDS <- function(mSetObj=NA, data="false", distance="NULL", abundance="false
   print(var.fit2D)
   sink()  
   
-  sink("environment_impact_on_nmds_2D.txt") 
-  cat("Environmental factors may significantly impact NMDS\n")
+  sink("constraining_variables__impact_on_nmds_2D.txt") 
+  cat("Constraining data may significantly impact NMDS\n")
   cat("\nNMDS dimension=2\n\n")
   print(env.fit2D)
   sink()  
@@ -458,12 +459,11 @@ Plot.NMDS.2D <- function(mSetObj=NA, ellipse="false", var_arrows="false", env_ar
 #'@param var_arrows Boolean, TRUE to produce variable arrows, FALSE (default) to produce ordination plot without variable arrows
 #'@param meta_col_color Meta data column to use for plotting colors, Can be user inputted where options are given to java using function nmds.meta.columns()
 #'@param imgName Input the image name
-#'@param format Select the image format, "png" or "pdf", default is "png" 
 #'@author Louisa Normington\email{normingt@ualberta.ca}
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2)
 #'@export
-Plot.NMDS.3D <- function(mSetObj=NA, color="NULL", var_arrows="false", meta_col_color="NULL", imgName, format="png", width=NA) {
+Plot.NMDS.3D <- function(mSetObj=NA, color="NULL", var_arrows="false", meta_col_color="NULL", imgName) {
   
   library("viridis")
   library("RJSONIO")
@@ -563,7 +563,7 @@ Plot.NMDS.3D <- function(mSetObj=NA, color="NULL", var_arrows="false", meta_col_
 
   nmds3D_plot$score$facA <- cls
   
-  imgName=paste(imgName, ".", format, sep="")
+  imgName <- paste(imgName, ".json", sep="")
   json.obj <- RJSONIO::toJSON(nmds3D_plot, .na='null')
   sink(imgName)
   cat(json.obj)
@@ -685,7 +685,7 @@ Plot.NMDS.scree <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA)
   #Scree plot
   Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
   par(xpd=FALSE, mar=c(5.1, 4.1, 4.1, 2.1)) 
-  plot(x=scree_data$Dimension, y=scree_data$Stress, type="l", xlim=c(1, 5), ylim=c(0, stressMax+0.02), xlab="Number of Dimensions", ylab="Stress", main="Non-metric Multidimensional Scaling Scree Plot", yaxt="n", col="blue", lwd=2)
+  plot(x=scree_data$Dimension, y=scree_data$Stress, type="l", xlim=c(1, 5), ylim=c(0, stressMax+0.1), xlab="Number of Dimensions", ylab="Stress", main="Non-metric Multidimensional Scaling Scree Plot", yaxt="n", col="blue", lwd=2)
   points(x=scree_data$Dimension, y=scree_data$Stress, cex=1.1, pch=19, col="blue")
   axis(2, las=2)
   dev.off()

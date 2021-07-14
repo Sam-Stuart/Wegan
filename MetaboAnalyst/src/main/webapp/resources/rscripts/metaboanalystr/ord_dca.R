@@ -202,8 +202,8 @@ ord.dca <- function(mSetObj=NA, abundance="NULL", metaData="NULL", envData="NULL
   sink()  
   
   if (is.data.frame(envData1)==TRUE) { #If environmental data uploaded
-    sink("environment_impact_on_dca.txt") 
-    cat("Environmental data may significantly impact DCA\n")
+    sink("constraining_variables_impact_on_dca.txt") 
+    cat("Constraining data may significantly impact DCA\n")
     print(env_fit)
     sink()
   }
@@ -434,6 +434,7 @@ Plot.DCA.scree <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA) 
   eigenValues_data <- cbind(eigenValues, eigenValues/sum(eigenValues))
   eigenValues_data <- as.data.frame(cbind(1:4, eigenValues_data))
   colnames(eigenValues_data) <- c("Dimension", "Eigen_Value", "Variance_Explained")
+  maxVar <- max(eigenValues/sum(eigenValues))
 
   #Set plot dimensions
   if(is.na(width)){
@@ -452,7 +453,7 @@ Plot.DCA.scree <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA) 
   #Scree plot
   Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
   par(xpd=FALSE, mar=c(5.1, 4.1, 4.1, 2.1)) 
-  plot(x=eigenValues_data$Dimension, y=eigenValues_data$Variance_Explained, type="l", xlim=c(1, 4), ylim=c(0, 1), xlab="Dimension", ylab="Proportion of Variance Explained", main="Detrended Correspondence Analysis Scree Plot", yaxt="n", xaxt="n", col="blue", lwd=2)
+  plot(x=eigenValues_data$Dimension, y=eigenValues_data$Variance_Explained, type="l", xlim=c(1, 4), ylim=c(0, maxVar+0.1), xlab="Dimension", ylab="Proportion of Variance Explained", main="Detrended Correspondence Analysis Scree Plot", yaxt="n", xaxt="n", col="blue", lwd=2)
   points(x=eigenValues_data$Dimension, y=eigenValues_data$Variance_Explained, cex=1.1, pch=19, col="blue")
   axis(2, las=2)
   axis(1, at=1:4)

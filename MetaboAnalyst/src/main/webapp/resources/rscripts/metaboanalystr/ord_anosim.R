@@ -125,7 +125,7 @@ Plot.anosim <- function(mSetObj=NA, color=NULL, imgName, format="png", dpi=72, w
   imgName <- paste(imgName, "dpi", dpi, ".", format, sep="")
   mSetObj$imgSet$Plot.anosim <- imgName
   
-  #Scree plot
+  #ANOSIM plot
   Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
   par(xpd=FALSE, mar=c(5.1, 4.1, 4.1, 2.1)) 
   

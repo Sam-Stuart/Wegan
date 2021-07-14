@@ -55,7 +55,7 @@ public class OADcaBean implements Serializable {
     private String groupCol = "null";
     private String groupPoint = "null";
     private String color = "null";
-    private String envDataCol = "null";
+    private String envDataCol = " ";
     
     public String getColor() {
         return color;

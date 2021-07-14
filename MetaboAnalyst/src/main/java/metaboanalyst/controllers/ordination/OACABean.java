@@ -46,7 +46,7 @@ public class OACABean implements Serializable {
     
     private String groupPoint = "null";
     private String color = "null";
-    private String envDataCol = "null";
+    private String envDataCol = " ";
     
     public String getColor() {
         return color;

@@ -54,7 +54,7 @@ public class OAUtils {
     }
             
             
-    public static void PlotNMDS3DOrdination(SessionBean1 sb, String color, Boolean var_arrows, String meta_col_color, String imgName, String format) {
+    public static void PlotNMDS3DOrdination(SessionBean1 sb, String color, Boolean var_arrows, String meta_col_color, String imgName) {
         try {
             RConnection RC = sb.getRConnection();
             String rCommand = "Plot.NMDS.3D(NA"
@@ -62,7 +62,6 @@ public class OAUtils {
                                         + "\", \"" + var_arrows
                                         + "\", \"" + meta_col_color
                                         + "\", \"" + imgName 
-                                        + "\", \"" + format  
                                         + "\")";
             RCenter.recordRCommand(RC, rCommand);
             sb.addGraphicsCMD("ord_nmds_3D", rCommand);
@@ -105,13 +104,28 @@ public class OAUtils {
         }
     }
 
-    
-
-    
-    public static void CreatePCOAOrdination(SessionBean1 sb, String distance, Boolean abundance, Boolean data, Boolean binary, String metaData, String envData, String env_text) {
+    public static void PlotRDAScree(SessionBean1 sb, String imgName, String format, int dpi) {
         try {
             RConnection RC = sb.getRConnection();
-            String rCommand = "ord.pcoa(NA" + ", \"" + distance + "\", \"" + abundance + "\", \"" + data + "\", \"" + binary + "\", metaData=NULL, envData=NULL, env_text=NULL)";
+            String rCommand = "Plot.RDA.scree(NA" + ", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            sb.addGraphicsCMD("ord_rda_scree", rCommand);
+            RC.voidEval(rCommand);
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        }
+    }
+    
+    public static void CreatePCOAOrdination(SessionBean1 sb, Boolean data, String distance, Boolean binary, Boolean abundance, String env_text) {
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "ord.pcoa(NA"
+                                        + ", \"" + data 
+                                        + "\", \"" + distance
+                                        + "\", \"" + binary
+                                        + "\", \"" + abundance
+                                        + "\", \"" + env_text
+                                        + "\")";
             RCenter.recordRCommand(RC, rCommand);
             RC.voidEval(rCommand);
         } catch (RserveException rse) {
@@ -119,10 +133,21 @@ public class OAUtils {
         }
     }
         
-    public static void PlotPCOA2DOrdination(SessionBean1 sb, Boolean ellipse, Boolean var_arrows, Boolean env_arrows, Boolean env_cent, Boolean sampleNames, Boolean point_options, String color, String meta_col_color, String meta_col_point, String imgName, String format, int dpi) {
+    public static void PlotPCOA2DOrdination(SessionBean1 sb, Boolean ellipse, Boolean var_arrows, Boolean env_arrows, Boolean env_cent, Boolean sampleNames, String color, String meta_col_color, String imgName, String format, int dpi) {
         try {
             RConnection RC = sb.getRConnection();
-            String rCommand = "Plot.PCoA.2D(NA" + ", \"" + ellipse + "\", \"" + var_arrows + "\", \"" + env_arrows + "\", \"" + env_cent + "\", \"" + sampleNames + "\", \"" + point_options + "\", \"" + color + "\", meta_col_color=NULL, meta_col_point=NULL" + ", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
+            String rCommand = "Plot.PCOA.2D(NA"                                            
+                                        + ", \"" + ellipse 
+                                        + "\", \"" + var_arrows
+                                        + "\", \"" + env_arrows
+                                        + "\", \"" + env_cent
+                                        + "\", \"" + sampleNames
+                                        + "\", \"" + color
+                                        + "\", \"" + meta_col_color
+                                        + "\", \"" + imgName 
+                                        + "\", \"" + format  
+                                        + "\", " + dpi 
+                                        + ", width=NA)";
             RCenter.recordRCommand(RC, rCommand);
             sb.addGraphicsCMD("ord_pcoa_2D", rCommand);
             RC.voidEval(rCommand);
@@ -131,10 +156,15 @@ public class OAUtils {
         }
     }
         
-    public static void PlotPCOA3DOrdination(SessionBean1 sb, String color, String var_arrows, String meta_col_color, String imgName, String format, int dpi) {
+    public static void PlotPCOA3DOrdination(SessionBean1 sb, String color, Boolean var_arrows, String meta_col_color, String imgName) {
         try {
             RConnection RC = sb.getRConnection();
-            String rCommand = "Plot.PCoA.3D(NA, color=NULL, var_arrows=NULL, meta_col_color=NULL" + ", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
+            String rCommand = "Plot.PCOA.3D(NA"
+                                        + ", \"" + color
+                                        + "\", \"" + var_arrows
+                                        + "\", \"" + meta_col_color
+                                        + "\", \"" + imgName 
+                                        + "\")";
             RCenter.recordRCommand(RC, rCommand);
             sb.addGraphicsCMD("ord_pcoa_3D", rCommand);
             RC.voidEval(rCommand);
@@ -146,7 +176,11 @@ public class OAUtils {
     public static void PlotPCOAscreeOrdination(SessionBean1 sb, String imgName, String format, int dpi) {
         try {
             RConnection RC = sb.getRConnection();
-            String rCommand = "Plot.PCoA.scree(NA" + ", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
+            String rCommand = "Plot.PCOA.scree(NA"
+                                        + ", \"" + imgName
+                                        + "\", \"" + format  
+                                        + "\", " + dpi 
+                                        + ", width=NA)";
             RCenter.recordRCommand(RC, rCommand);
             sb.addGraphicsCMD("ord_pcoa_scree", rCommand);
             RC.voidEval(rCommand);
@@ -158,7 +192,11 @@ public class OAUtils {
     public static void PlotPCOAstressOrdination(SessionBean1 sb, String imgName, String format, int dpi) {
         try {
             RConnection RC = sb.getRConnection();
-            String rCommand = "Plot.PCoA.stress(NA" + ", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
+            String rCommand = "Plot.PCOA.stress(NA"
+                                        + ", \"" + imgName 
+                                        + "\", \"" + format  
+                                        + "\", " + dpi 
+                                        + ", width=NA)";
             RCenter.recordRCommand(RC, rCommand);
             sb.addGraphicsCMD("ord_pcoa_stress", rCommand);
             RC.voidEval(rCommand);
@@ -235,7 +273,7 @@ public class OAUtils {
     }
 
     
-    public static void PlotRDA2D(SessionBean1 sb, String color, Boolean varArrows, Boolean envArrows, Boolean envCent, Boolean sampleNames, String metaColColor, Boolean pointOptions, String metaColPoint, Boolean ellipse, String imgName, String format, int dpi) {
+    public static void PlotRDA2D(SessionBean1 sb, String color, Boolean varArrows, Boolean envArrows, Boolean envCent, Boolean sampleNames, String metaColColor, Boolean ellipse, String imgName, String format, int dpi) {
         try {
             RConnection RC = sb.getRConnection();
             String rCommand = "Plot.RDA.2D(NA" 
@@ -245,8 +283,6 @@ public class OAUtils {
                                             + "\", \"" + envCent
                                             + "\", \"" + sampleNames
                                             + "\", \"" + metaColColor
-                                            + "\", \"" + pointOptions
-                                            + "\", \"" + metaColPoint
                                             + "\", \"" + ellipse
                                             + "\", \"" + imgName 
                                             + "\", \"" + format  
@@ -260,19 +296,7 @@ public class OAUtils {
             System.out.println(rse);
         }
     }
-    
-    public static void PlotRDAScree(SessionBean1 sb, String imgName, String format, int dpi) {
-        try {
-            RConnection RC = sb.getRConnection();
-            String rCommand = "Plot.RDA.scree(NA" + ", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";;
-//            String rCommand = "Plot.RDA.2D(NA)";
-            RCenter.recordRCommand(RC, rCommand);
-            sb.addGraphicsCMD("ord_rda_scree", rCommand);
-            RC.voidEval(rCommand);
-        } catch (RserveException rse) {
-            System.out.println(rse);
-        }
-    }
+
     
 
     public static void CreateBray(SessionBean1 sb, Boolean abundance, String distance, Boolean data, Boolean binary) {
@@ -486,41 +510,14 @@ public class OAUtils {
             System.out.println(rse);
         }
     }
+    
+    
     /////// ------------ Ordination helper functions --------------- //////////////
     
-    public static String[] ciaGetMetaColumns(SessionBean1 sb){
+    public static String[] GetCIAMetaColumns(SessionBean1 sb){
         try {
             RConnection RC = sb.getRConnection();
             String rCommand = "cia.meta.columns(NA)";
-            RCenter.recordRCommand(RC, rCommand);
-            return RC.eval(rCommand).asStrings();
-        } catch (RserveException rse) {
-            System.out.println(rse);
-        } catch (REXPMismatchException ex) {
-            Logger.getLogger(OAUtils.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
-    }
-    
-    public static String[] GetOrdinationCIAResults(SessionBean1 sb){
-        try {
-            RConnection RC = sb.getRConnection();
-            String rCommand = "ord.cia.get.results(NA)";
-            RCenter.recordRCommand(RC, rCommand);
-            return RC.eval(rCommand).asStrings();
-        } catch (RserveException rse) {
-            System.out.println(rse);
-        } catch (REXPMismatchException ex) {
-            Logger.getLogger(OAUtils.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
-    }
-        
-       
-    public static String[] GetOrdinationPCOAResults(SessionBean1 sb){
-        try {
-            RConnection RC = sb.getRConnection();
-            String rCommand = "ord.pcoa.get.results(NA)";
             RCenter.recordRCommand(RC, rCommand);
             return RC.eval(rCommand).asStrings();
         } catch (RserveException rse) {
@@ -549,6 +546,49 @@ public class OAUtils {
         try {
             RConnection RC = sb.getRConnection();
             String rCommand = "nmds.meta.columns(NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            return RC.eval(rCommand).asStrings();
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        } catch (REXPMismatchException ex) {
+            Logger.getLogger(OAUtils.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+    public static String[] GetPCOAMetaColumns(SessionBean1 sb){
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "pcoa.meta.columns(NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            return RC.eval(rCommand).asStrings();
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        } catch (REXPMismatchException ex) {
+            Logger.getLogger(OAUtils.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+        
+    public static String[] GetOrdinationCIAResults(SessionBean1 sb){
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "ord.cia.get.results(NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            return RC.eval(rCommand).asStrings();
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        } catch (REXPMismatchException ex) {
+            Logger.getLogger(OAUtils.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+        
+       
+    public static String[] GetOrdinationPCOAResults(SessionBean1 sb){
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "ord.pcoa.get.results(NA)";
             RCenter.recordRCommand(RC, rCommand);
             return RC.eval(rCommand).asStrings();
         } catch (RserveException rse) {

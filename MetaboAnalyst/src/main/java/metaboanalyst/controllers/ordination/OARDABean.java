@@ -45,14 +45,12 @@ public class OARDABean implements Serializable {
     
     private boolean varArrows = false; 
     private boolean sampleNames = false;
-    private boolean pointStyle = false;
     
-    private String groupCol = "null"; //Grpup color
-    private String groupPoint = "null";
-    private String color = "null";
+    private String groupCol = "NULL"; //Grpup color
+    private String color = "NULL";
     private boolean addEllipse = false;
     
-    private String envDataCol = "null";
+    private String envDataCol = " ";
     private boolean envArrows = false;
     private boolean envCentroid = false;
     
@@ -127,13 +125,6 @@ public class OARDABean implements Serializable {
     public void setSampleNames(boolean sampleNames) {
         this.sampleNames = sampleNames;
     }
-    public boolean isPointStyle() {
-        return pointStyle;
-    }
-    
-    public void setPointStyle(boolean pointStyle) {
-        this.pointStyle = pointStyle;
-    }
     
     public boolean isAddEllipse() {
         return addEllipse;
@@ -166,13 +157,7 @@ public class OARDABean implements Serializable {
     public void setEnvArrows(boolean envArrows) {
         this.envArrows = envArrows;
     }    
-    public String getGroupPoint() {
-        return groupPoint;
-    }
 
-    public void setGroupPoint(String groupPoint) {
-        this.groupPoint = groupPoint;
-    } 
     
     public String getGroupCol() {
         return groupCol;
@@ -185,7 +170,7 @@ public class OARDABean implements Serializable {
     // ACTION BUTTONS //
     public void rdaUpdate_action() {
         OAUtils.CreateRDA(sb, doAbundance, envDataCol, doOriginal);
-        OAUtils.PlotRDA2D(sb, color, varArrows, envArrows, envCentroid, sampleNames, groupCol, pointStyle, groupPoint, addEllipse, sb.getNewImage("ord_rda_2D"), "png", 72);   
+        OAUtils.PlotRDA2D(sb, color, varArrows, envArrows, envCentroid, sampleNames, groupCol, addEllipse, sb.getNewImage("ord_rda_2D"), "png", 72);   
         OAUtils.PlotRDAScree(sb, sb.getNewImage("ord_rda_scree"), "png", 72);
     }
 
