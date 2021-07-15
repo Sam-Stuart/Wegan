@@ -226,29 +226,95 @@ PlotBeals <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, pcnum
 
 ####### BETA DISPERSAL ###### 
 
-betadisperWegan <- function(mSetObj=NA){
+betadisperWegan <- function(mSetObj=NA,groups = "NA", labels= "NA", anova = "FALSE" ){
     mSetObj <- .get.mSet(mSetObj);
        
     data <- mSetObj$dataSet$orig
     data_type <- mSetObj$dataSet$type;
-    
-    
-    ## Bray-Curtis distances between samples
-    dis <- vegdist(data);
-    ## First 16 sites grazed, remaining 8 sites ungrazed
-    if (data_type == 'Varespec'){
-        groups <- factor(c(rep(1,16), rep(2,8)), labels = c("grazed","ungrazed"))
-    }else if (data_type == 'Dune'){
-        
-        groups <- factor(c(rep(1,10), rep(2,10)), labels = c("group A","group B"))
+    ## data check
+    data <- data_check(data)
+
+    if(tolower(data_type) == "varespec"){ # Default for Varespec
+        if(groups=="NA"){
+            groups = "16,8"
+        }
+        if(labels == "NA"){
+            labels = "grazed,ungrazed";
+        }
     }
-    ## Calculate multivariate dispersions
-   
-    mod <- betadisper(dis, groups)
+    if(tolower(data_type) == "dune"){ # Default for Dune
+        if(groups=="NA"){
+            groups = "10,10"
+        }
+        if(labels == "NA"){
+            labels = "Group A,Group B";
+        }
+    }
+    if(tolower(data_type) == "bci"){ # Default for BCI
+        if(groups=="NA"){
+            groups = "15,20,15"
+        }
+        if(labels == "NA"){
+            labels = "Group A,Group B,Group C";
+        }
+    }
+
+    if(is.character(groups)){
+        if(grepl(",", groups[1])){
+          groups <-  strsplit(groups,",")[[1]]
+        }else if(grepl(";", groups)[1]){
+          groups <-  strsplit(groups,";")[[1]]
+        }
+        groups <- as.integer(groups)
+    }
+    if(is.character(labels)){
+      if(grepl(",", labels[1])){
+        labels <-  strsplit(labels,",")[[1]]
+      }
+      else if(grepl(";", labels[1])){
+        labels <-  strsplit(labels,";")[[1]]
+      }
+    }
+    numGroups <- length(groups)
+    if (labels == ""){  # catch if 'Groups' was updated but labels was not.
+        for (i in 1:numGroups){
+            label <- paste("Group ",LETTERS[i])
+            if (i == 1){
+                labels <- label
+            }
+            else{
+                labels <- c(labels,label)
+            }
+        }
+    }
+    numLabels <- length(labels)
+    if (sum(groups) != nrow(data)){
+      AddErrMsg("ERROR: Inputted group values does not sum up to number of rows in data")
+      stop();
+    }
+    if (numGroups != numLabels){
+      AddErrMsg("ERROR:  Number of groups does not equal number of labels")
+      stop();
+    }
+      ## Bray-Curtis distances between samples
+    dis <- vegdist(data);
+    reps <- c()
+    for(i in 1:numGroups){
+      reps <- c(reps,rep(i,groups[i]));
+    }
+    sets <- factor(reps, labels = labels)
+    mod <- betadisper(dis,sets)
     
+    eig <- mod$eig;
+    vectors <- mod$vectors;
+    distances <- mod$distances;
+    centroids <- mod$centroids;
+    write.csv(eig, "eigenvalues_betadispersal.csv");
+    write.csv(vectors,"vectors_betadispersal.csv");
+    write.csv(centroids, "centroids_betadispersal.csv");
     
     # store the item to the bgdispersal object
-    mSetObj$analSet$betadisper <- mod;
+    mSetObj$analSet$betadisper$mod <- mod;
     
     return(.set.mSet(mSetObj));
 }
@@ -257,9 +323,9 @@ betadisperWegan <- function(mSetObj=NA){
 PlotBetaDisper <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, pcnum=0){
   mSetObj <- .get.mSet(mSetObj);
   
-  mod <- mSetObj$analSet$betadisper;
-    
+  mod <- mSetObj$analSet$betadisper$mod;
   imgName = paste(imgName, "dpi", dpi, ".", format, sep="");
+    
   if(is.na(width)){
     w <- 10;
   }else if(width == 0){

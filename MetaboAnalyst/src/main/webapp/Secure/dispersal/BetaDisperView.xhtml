@@ -7,35 +7,73 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="/frags/_anal_template.xhtml">
     <ui:define name="metaInfo">
-
         <f:event type="preRenderView" listener="#{dispersalBean.performDefaultAnalysis('betadisper')}"/>
-        
-    </ui:define>
-    <ui:define name="myscript">
-        <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/jscripts/graphics.js"></script>
     </ui:define>
     <ui:define name="content">
-       
-        <h:panelGrid style="padding:20px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%; align: center">
-          
-            
-                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('betadisper')}" alt="betadisper"/>
-                                
-            
-        </h:panelGrid> 
-<!--        
-          <h:panelGroup>
-                                <h:outputLabel style="font-weight: bold" value="Display Matrices of BGD"/>
-                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:50px" value="{dispersalBean.dispersalBgdNum}">
-                                    <f:selectItems value="hello world" />
-                                </p:selectOneMenu>
-                                <h:outputLabel style="font-weight: bold" value="bgd"/>
+        <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
+            <p:tabView id="bealsView1" style="border-bottom-color: #8cbd48 !important">
+                <p:tab title ="Overview" titleStyleClass="p-tab-nav">
+                    <h:form id="form1">
+                        <p> 
+                            This function implements Marti Anderson's PERMDISP2 procedure for the analysis of multivariate homogeneity of group dispersions (variances). Beta dispersal is a multivariate analogue of Leverne's test for homogeneity of variances. The 'Groups' feature allows the user to input a vector describing the group structure, values need to sum to the number of data points in the data set, and need to be delimited by comma's (i.e '8,14' with the Dune data set). The 'Labels' feature allows user to input labels for each of the groups (also delimited by comma's).  
+                        </p>
+                        
+                        <h:panelGrid  style=" text-align: left; width: 50%" columns="4" cellpadding="3" columnClasses="colBrayLong,colBrayShort,colBrayLong,colBrayShort">
+                            <h:outputLabel style="font-weight: bold; " value="Groups: "/>
+                            <p:inputText style="left: -220px;" value="#{betadisperBean.groups}"></p:inputText>
+                            <h:outputLabel style="font-weight: bold" value="Labels: "/>
+                            <p:inputText value="#{betadisperBean.labels}" style="  align-content: left"></p:inputText>  
+                        </h:panelGrid> 
+<!--                        <h:panelGrid  style="width: 50%" columns="8" cellpadding="3" columnClasses="colBrayLong,colBrayShort,colBrayLong,colBrayShort">
+                            <h:outputLabel id ="include" style="font-weight: bold" value="Anova:"/>
+                            <p:selectBooleanCheckbox  style=" position: relative; left: -100px" value ="{betadisperBean.anovaBoolean}"/>
+                            <p></p>
+                            <p></p>
+
+                        </h:panelGrid>-->
+                        
+                        <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
+                            <p:commandButton value="Update" 
+                                            styleClass="updateButton"
+                                            style="box-shadow: none !important; text-shadow: none !important"
+                                            onclick="PF('statusDialog').show()"
+                                            oncomplete="PF('statusDialog').hide()"  
+                                            update=":bealsView1:form1:bealsPane1  :cmdPane" 
+                                            actionListener="#{betadisperBean.betadisperBtn_action()}"/>  
+                        
+                        </h:panelGrid>
+        
+                        <h:panelGrid class="resultsBar" columns="1">
+                            <h:panelGroup>
+                                <h:panelGrid columns="1" style="text-align : left;">
+                                    Results
+                                </h:panelGrid>
                             </h:panelGroup>
-                            <p:commandButton value="Update" update=":ac:form2:screePane  :cmdPane" actionListener="{pcaBean.pcaScreeBtn_action()}"/>   -->
-<!--        <h:panelGrid style="padding: 20px 50px 20px 40px; font-size: 13px; line-height: 23px; width: 100%">
-            <h1> Coefficients of Biogeographical Dispersal Direction </h1>
-            <h:panelGrid style="text-align: center; width: 80%">-->
-                
-            
+                        </h:panelGrid>
+                        <h:panelGrid id="bealsPane1" style="width: 100%;">
+                            <h:panelGrid columns="2" style="width: 100%;">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
+                                    <h:outputText style="padding-left: 8px" escape="false" value="#{betadisperBean.fileBetaEigPath}"/>
+                                </i>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" style="width: 100%;">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
+                                    <h:outputText style="padding-left: 8px" escape="false" value="#{betadisperBean.fileBetaVectorsPath}"/>
+                                </i>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
+                                    <h:outputText style="padding-left: 8px" escape="false" value="#{betadisperBean.fileBetaCentroidsPath}"/>
+                                </i>
+                            </h:panelGrid>
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('betadisper')}" alt="beals"/>
+                            </h:panelGrid>                           
+                            
+                        </h:panelGrid> 
+                    </h:form>
+                </p:tab>
+            </p:tabView> 
+        </h:panelGrid> 
     </ui:define>
 </ui:composition>

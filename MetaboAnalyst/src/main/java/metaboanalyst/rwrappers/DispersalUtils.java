@@ -92,14 +92,19 @@ public class DispersalUtils {
     
     
    // ### Beta Dispersal Functions #####
-    public static void InitBetaDisper(SessionBean1 sb) {
+    public static boolean CreateBetaDisper(SessionBean1 sb, String groups, String labels, String anova) {
         try {
-            String rCommand = "betadisperWegan(NA)";
+            System.out.println("Create Beta Disper");
+            System.out.println(groups);
+            String rCommand = "betadisperWegan(NA" + ", \"" + groups + "\", \"" + labels + "\", \"" + anova + "\")";
+            System.out.println(rCommand);
             RConnection RC = sb.getRConnection();
             RCenter.recordRCommand(RC, rCommand);
             RC.voidEval(rCommand);
+            return true;
         } catch (RserveException rse) {
             System.out.println(rse);
+            return false;
         }
     }
     

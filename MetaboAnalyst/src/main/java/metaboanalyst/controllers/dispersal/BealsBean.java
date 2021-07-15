@@ -137,10 +137,7 @@ public class BealsBean implements Serializable {
     public void bealsBtn_action() {
         
         String bealsIncludeString = bealsIncludeBoolean ? "TRUE" : "FALSE";
-        System.out.print("bealsButton action");
-        System.out.print(bealsSpecies);
-        System.out.print(bealsType);
-        System.out.print(bealsIncludeString);
+        
         DispersalUtils.CreateBeals(sb, bealsSpecies, "data", bealsType, bealsIncludeString);
         DispersalUtils.PlotBeals(sb, sb.getNewImage("beals"), "png", 72, 5,bealsSpecies);
               
