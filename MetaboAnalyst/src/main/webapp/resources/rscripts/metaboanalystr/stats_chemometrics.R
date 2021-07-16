@@ -8,6 +8,7 @@
 #'
 PCA.Anal <- function(mSetObj=NA){
   
+  options(error=traceback)
   mSetObj <- .get.mSet(mSetObj);
   
   pca <- prcomp(mSetObj$dataSet$norm, center=TRUE, scale=F);
@@ -36,7 +37,7 @@ PCA.Anal <- function(mSetObj=NA){
 #'@export
 
 PCA.Flip <- function(mSetObj=NA, axisOpt){
-  
+  options(error=traceback)
   mSetObj <- .get.mSet(mSetObj);
   
   pca<-mSetObj$analSet$pca;
@@ -74,7 +75,7 @@ PCA.Flip <- function(mSetObj=NA, axisOpt){
 #'@export
 #'
 PlotPCAPairSummary <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, pc.num){
-  
+  options(error=traceback)
   mSetObj <- .get.mSet(mSetObj);
   pclabels <- paste("PC", 1:pc.num, "\n", round(100*mSetObj$analSet$pca$variance[1:pc.num],1), "%");
   imgName = paste(imgName, "dpi", dpi, ".", format, sep="");
@@ -116,7 +117,7 @@ PlotPCAPairSummary <- function(mSetObj=NA, imgName, format="png", dpi=72, width=
 #'@export
 #'
 PlotPCAScree <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, scree.num){
-  
+  options(error=traceback)
   mSetObj <- .get.mSet(mSetObj);
   
   stds <-mSetObj$analSet$pca$std[1:scree.num];
@@ -178,13 +179,18 @@ PlotPCAScree <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, sc
 #'@export
 #'
 PlotPCA2DScore <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, pcx, pcy, reg = 0.95, show=1, grey.scale = 0){
+  options(error=traceback)
   print("O")
   mSetObj <- .get.mSet(mSetObj);
   
   xlabel = paste("PC",pcx, "(", round(100*mSetObj$analSet$pca$variance[pcx],1), "%)");
   ylabel = paste("PC",pcy, "(", round(100*mSetObj$analSet$pca$variance[pcy],1), "%)");
   pc1 = mSetObj$analSet$pca$x[, pcx];
+  print("pc1")
+  print(pc1)
   pc2 = mSetObj$analSet$pca$x[, pcy];
+  print("pc2")
+  print(pc2)
   text.lbls<-substr(names(pc1),1,14) # some names may be too long
   print("1")
   imgName = paste(imgName, "dpi", dpi, ".", format, sep="");
@@ -217,13 +223,16 @@ PlotPCA2DScore <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, 
       print("20")
       mSetObj$dataSet$cls <- lvs[i];
       inx <- mSetObj$dataSet$cls;
+      print("inx")
       print(inx)
       groupVar <- var(cbind(pc1[inx],pc2[inx]), na.rm=T);
+      print("groupVar")
       print(groupVar)
       groupMean <- cbind(mean(pc1[inx], na.rm=T),mean(pc2[inx], na.rm=T));
+      print("groupMean")
       print(groupMean)
       print(reg)
-      pts.array[,,i] <- ellipse::ellipse(groupVar, centre = groupMean, level = reg, npoints=100);
+      pts.array[,,i] <- ellipse::ellipse(groupVar, scale = c(1, 1), centre = groupMean, level = reg, npoints=100);
       print("15")
     }
     print("11")
@@ -313,6 +322,7 @@ PlotPCA2DScore <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, 
 #'@export
 #'
 PlotPCA3DScore <- function(mSetObj=NA, imgName, format="json", inx1, inx2, inx3){
+  options(error=traceback)
   print("INSIDE")
   library("RJSONIO")
   mSetObj <- .get.mSet(mSetObj);
@@ -383,7 +393,7 @@ PlotPCA3DScore <- function(mSetObj=NA, imgName, format="json", inx1, inx2, inx3)
 #'@importFrom plotly plot_ly add_markers layout
 
 PlotPCA3DScoreImg <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, inx1, inx2, inx3, angl){
-  
+  options(error=traceback)
   mSetObj <- .get.mSet(mSetObj);
   
   xlabel = paste("PC",inx1, "(", round(100*mSetObj$analSet$pca$variance[inx1],1), "%)");
@@ -481,7 +491,7 @@ PlotPCA3DScoreImg <- function(mSetObj=NA, imgName, format="png", dpi=72, width=N
 #'@export
 #'
 PlotPCALoading <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, inx1, inx2, plotType, lbl.feat=1){
-  
+  options(error=traceback)
   mSetObj <- .get.mSet(mSetObj);
   
   loadings<-signif(as.matrix(cbind(mSetObj$analSet$pca$rotation[,inx1],mSetObj$analSet$pca$rotation[,inx2])),5);
@@ -550,7 +560,7 @@ PlotPCALoading <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, 
 #'@export
 #'
 PlotPCABiplot <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, inx1, inx2){
-  
+  options(error=traceback)
   mSetObj <- .get.mSet(mSetObj);
   choices = c(inx1, inx2);
   scores <- mSetObj$analSet$pca$x;
