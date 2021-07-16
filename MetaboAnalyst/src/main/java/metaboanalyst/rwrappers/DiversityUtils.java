@@ -139,6 +139,39 @@ public class DiversityUtils {
             System.out.println(rse);
         }
     }
+    
+    
+        public static boolean CreateRarefactionDiv(SessionBean1 sb, Boolean data, String type, int sample, Boolean se, String MAGRIN) {
+        try {
+            RConnection RC = sb.getRConnection(); //Start R connection
+            String rCommand = "Rarefaction_div(NA)"; // Creates R command
+            RCenter.recordRCommand(RC, rCommand); // records r command
+            RC.voidEval(rCommand); // tells you want your r script returns  
+            return true;
+        } catch (RserveException rse) {
+            System.out.println(rse);
+            return false;
+        }
+    }
+    
+    public static void PlotRarefactionCurveDiversity(SessionBean1 sb, int step, String color, String color_text, String imgName, String format, int dpi, String width) {
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "RarefactionCurve(NA" 
+                                                 + "\", " + step 
+                                                 + ", \""  + color 
+                                                 + "\", \"" + color_text
+                                                 + "\", \"" + imgName 
+                                                 + "\", \"" + format 
+                                                 + "\", " + dpi 
+                                                 + ", width=NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            sb.addGraphicsCMD("div_Rarefact_curve", rCommand);
+            RC.voidEval(rCommand);
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        }
+    }
     /////// ------------ Diversity helper functions --------------- //////////////
     
         
