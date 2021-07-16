@@ -122,6 +122,12 @@
         </navigation-case> 
         
         <navigation-case>
+            <from-outcome>ANOSIM</from-outcome>
+            <to-view-id>/Secure/ordination/ANOSIMView.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case> 
+                
+        <navigation-case>
             <from-outcome>PCOA</from-outcome>
             <to-view-id>/Secure/ordination/PCOAView.xhtml</to-view-id>
             <redirect/>

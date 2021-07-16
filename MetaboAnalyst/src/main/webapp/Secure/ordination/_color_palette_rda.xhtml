@@ -20,8 +20,8 @@
                 <p:panelGrid></p:panelGrid>
                 
                 <h:outputLabel style="font-weight: bold" value="Grouping Variable:"/>
-                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ rdaBean.groupCol}">
-                        <f:selectItems value="#{rdaBean.groupCol}" />
+                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{rdaBean.rdaMetaColumnName}">
+                        <f:selectItems value="#{rdaBean.rdaMetaColumnOpts}" />
                     </p:selectOneMenu> 
                                 
                 <h:outputLabel style="font-weight: bold" value="Color Pallet:"/>
@@ -50,7 +50,7 @@
                                  style="box-shadow: none !important; text-shadow: none !important"
                                 onclick="PF('statusDialog').show()"
                                 oncomplete="PF('graphApperanceRda').hide(); PF('statusDialog').hide()"  
-                                update=":overviewRDA:form1:rdaPane1  :cmdPane" 
+                                update=":RDA:form1:rdaPane1  :cmdPane" 
                                 actionListener="#{rdaBean.rdaUpdate_action()}"/>
             </h:panelGrid>
         </h:panelGrid>

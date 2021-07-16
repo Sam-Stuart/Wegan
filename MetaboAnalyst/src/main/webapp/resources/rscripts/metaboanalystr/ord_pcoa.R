@@ -298,8 +298,11 @@ Plot.PCOA.2D <- function(mSetObj=NA, ellipse="false", var_arrows="false", env_ar
   input <- mSetObj$analSet$pcoa$input
   var.fit <- mSetObj$analSet$pcoa$var.fit
   env.fit.char <- mSetObj$analSet$pcoa$env.fit.char
+  print(env.fit.char)
   env.fit.num <- mSetObj$analSet$pcoa$env.fit.num
+  print(env.fit.num)
   env_data <- mSetObj$analSet$pcoa$env_data
+  print(env_data)
 
   #Set plot dimensions
   if(is.na(width)){
@@ -496,6 +499,9 @@ Plot.PCOA.3D <- function(mSetObj=NA, color="NULL", var_arrows="false", meta_col_
     pcoa3D_plot$scoreVar$nameVar <- "NA"
     pcoa3D_plot$scoreVar$colorVar <- "NA"
   } else {
+    #3D debug start
+    print(var.scores3D)
+    #3D debug end
     variableCoords <- data.frame(t(as.matrix(var.scores3D)))
     colnames(variableCoords) <- NULL
     pcoa3D_plot$scoreVar$axis <- paste("PCOA", c(1, 2, 3), sep="")

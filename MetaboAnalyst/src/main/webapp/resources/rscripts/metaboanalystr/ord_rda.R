@@ -67,7 +67,7 @@ ord.rda <- function(mSetObj=NA, abundance="false", env_text=" ", data="false") {
   
   #Text box instructions for selecting predictor variables. Text box should be interactive, meaning any change in text alters the result in real time. Default env_text is second column.
   if (is.data.frame(envData)==TRUE) { #User uplaoded environmental data  
-    cat("You uploaded environmental data. Identify environmental variables for DCA using the column names with commas in between.")
+    cat("You uploaded environmental data. Identify environmental variables for RDA using the column names with commas in between.")
   }
   
     #Set up environmental data using user selected columns
@@ -269,7 +269,7 @@ Plot.RDA.2D <- function(mSetObj=NA, color="NULL", var_arrows="false", env_arrows
   mSetObj <- .get.mSet(mSetObj)
   rda <- mSetObj$analSet$rda$rda
   metaData <- mSetObj$analSet$rda$metaData
-  env_data <- mSetObj$analSet$rda$envDataPlotting
+  env_data <- mSetObj$analSet$rda$env_data
   num_data <- mSetObj$analSet$rda$num_data
   var_fit <- mSetObj$analSet$rda$variable.fit
   env_fit_fac <- mSetObj$analSet$rda$enviroment.factor.fit
@@ -389,7 +389,7 @@ Plot.RDA.2D <- function(mSetObj=NA, color="NULL", var_arrows="false", env_arrows
     
     #Ellipse option
     if (ellipse!="false") { #if ellipses selected
-      with(metaData, ordiellipse(pcoa, meta_col_color_data, kind="sd", draw="polygon", border=colors, lwd=2)) # Include standard deviation ellipses that are the same color as the text.
+      with(metaData, ordiellipse(rda, meta_col_color_data, kind="sd", draw="polygon", border=colors, lwd=2)) # Include standard deviation ellipses that are the same color as the text.
     }
     
     #Legend for colors
@@ -472,7 +472,7 @@ Plot.RDA.scree <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA) 
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2)
 #'@export
-meta.columns <- function(mSetObj=NA) {
+rda.meta.columns <- function(mSetObj=NA) {
   
   mSetObj <- .get.mSet(mSetObj)
   

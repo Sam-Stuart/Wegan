@@ -249,11 +249,11 @@ public class ApplicationBean1 implements Serializable {
         vegdistMeasureOpts[13] = new SelectItem("mahalanobis", "Mahalanobis");
         
         ciaTypeOpts = new SelectItem[2];
-        ciaTypeOpts[0] = new SelectItem("numeric", "Numeric Data Types");
+        ciaTypeOpts[0] = new SelectItem("NULL", "Numeric Data Types");
         ciaTypeOpts[1] = new SelectItem("categorical", "Categorical Data Types");
                 
         ciaDataSetOpts = new SelectItem[2];
-        ciaDataSetOpts[0] = new SelectItem("main", "Main Data Set");
+        ciaDataSetOpts[0] = new SelectItem("NULL", "Main Data Set");
         ciaDataSetOpts[1] = new SelectItem("env", "Constraining Data Set");
                 
         ordColorPaletteOpts = new SelectItem[4];
