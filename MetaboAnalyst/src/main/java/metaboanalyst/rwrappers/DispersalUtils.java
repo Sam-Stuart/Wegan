@@ -92,12 +92,9 @@ public class DispersalUtils {
     
     
    // ### Beta Dispersal Functions #####
-    public static boolean CreateBetaDisper(SessionBean1 sb, String groups, String labels, String anova) {
+    public static boolean CreateBetaDisper(SessionBean1 sb, String groups, String labels, String dataOpts) {
         try {
-            System.out.println("Create Beta Disper");
-            System.out.println(groups);
-            String rCommand = "betadisperWegan(NA" + ", \"" + groups + "\", \"" + labels + "\", \"" + anova + "\")";
-            System.out.println(rCommand);
+            String rCommand = "betadisperWegan(NA" + ", \"" + groups + "\", \"" + labels + "\", \"" + dataOpts + "\")";
             RConnection RC = sb.getRConnection();
             RCenter.recordRCommand(RC, rCommand);
             RC.voidEval(rCommand);

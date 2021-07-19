@@ -134,7 +134,7 @@ public class ApplicationBean1 implements Serializable {
     private final SelectItem[] ciaDataSetOpts;
     private final SelectItem[] ciaTypeOpts;
     private final SelectItem[] plottingDataOpts;
-    
+    private final SelectItem[] betadisperDataOpts;
     
     //Wegan variables begin here (currently ot used, regulat TestDataOpt is used
     
@@ -230,7 +230,9 @@ public class ApplicationBean1 implements Serializable {
         
         
         
-        
+        betadisperDataOpts = new SelectItem[2];
+        betadisperDataOpts[0] = new SelectItem("org","Original Data set");
+        betadisperDataOpts[1] = new SelectItem("norm","Normalized Data set");
                 
         vegdistMeasureOpts = new SelectItem[14];
         vegdistMeasureOpts[0] = new SelectItem("bray", "Bray-Curtis");
@@ -877,6 +879,10 @@ public class ApplicationBean1 implements Serializable {
     
     public SelectItem[] getVegdistMeasureOpts() {
         return vegdistMeasureOpts;
+    }
+    
+    public SelectItem[] getBetadisperDataOpts() {
+        return betadisperDataOpts;
     }
       
     public SelectItem[] getCiaTypeOpts() {

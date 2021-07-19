@@ -24,13 +24,13 @@
                             <h:outputLabel style="font-weight: bold" value="Labels: "/>
                             <p:inputText value="#{betadisperBean.labels}" style="  align-content: left"></p:inputText>  
                         </h:panelGrid> 
-<!--                        <h:panelGrid  style="width: 50%" columns="8" cellpadding="3" columnClasses="colBrayLong,colBrayShort,colBrayLong,colBrayShort">
-                            <h:outputLabel id ="include" style="font-weight: bold" value="Anova:"/>
-                            <p:selectBooleanCheckbox  style=" position: relative; left: -100px" value ="{betadisperBean.anovaBoolean}"/>
-                            <p></p>
-                            <p></p>
+                        <h:panelGrid  style="width: 50%" columns="8" cellpadding="3" columnClasses="colBrayLong,colBrayShort,colBrayLong,colBrayShort">
+                            <h:outputLabel style="font-weight: bold" value="Data set:"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{betadisperBean.dataOpts}">
+                                    <f:selectItems value="#{applicationBean1.betadisperDataOpts}" />
+                                </p:selectOneMenu> 
 
-                        </h:panelGrid>-->
+                        </h:panelGrid>
                         
                         <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
                             <p:commandButton value="Update" 

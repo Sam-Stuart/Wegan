@@ -17,7 +17,7 @@ bgdispersalWegan <- function(mSetObj=NA){
     mSetObj <- .get.mSet(mSetObj);
     
     # Calculate the bg dispersal
-    output <- bgdispersal(mSetObj$dataSet$orig);
+    output <- bgdispersal(mSetObj$dataSet$norm);
 
        
     # Store the item to the bgdispersal object
@@ -37,7 +37,11 @@ PlotBGD <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, bgdnum)
     # Check which matrix to plot : 
     if (imgName == "bgd1_0_"){
         mat <- mSetObj$analSet$bgdispersal$DD1;
+        print("before data check:");
+        print(mat);
         mat <- data_check(mat);
+        print("after data check:");
+        print(mat);
         write.csv(mat, file = "DD1.csv");
     }else if (imgName == "bgd2_0_"){
         mat <- mSetObj$analSet$bgdispersal$DD2;
@@ -226,16 +230,24 @@ PlotBeals <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, pcnum
 
 ####### BETA DISPERSAL ###### 
 
-betadisperWegan <- function(mSetObj=NA,groups = "NA", labels= "NA", anova = "FALSE" ){
+betadisperWegan <- function(mSetObj=NA,groups = "NA", labels= "NA", dataOpts = "NA" ){
     mSetObj <- .get.mSet(mSetObj);
-       
-    data <- mSetObj$dataSet$orig
+    if (dataOpts == "norm"){
+        data <- mSetObj$dataSet$norm
+        print("Using Normal data set");
+        print(data)
+    } else {
+        data <- mSetObj$dataSet$orig 
+        print("Using Original data set");
+        print(data)
+    }
+    
     data_type <- mSetObj$dataSet$type;
     ## data check
     data <- data_check(data)
 
     if(tolower(data_type) == "varespec"){ # Default for Varespec
-        if(groups=="NA"){
+        if(groups=="NA"|| groups == ""){
             groups = "16,8"
         }
         if(labels == "NA"){
@@ -243,7 +255,7 @@ betadisperWegan <- function(mSetObj=NA,groups = "NA", labels= "NA", anova = "FAL
         }
     }
     if(tolower(data_type) == "dune"){ # Default for Dune
-        if(groups=="NA"){
+        if(groups=="NA"|| groups == ""){
             groups = "10,10"
         }
         if(labels == "NA"){
@@ -251,14 +263,14 @@ betadisperWegan <- function(mSetObj=NA,groups = "NA", labels= "NA", anova = "FAL
         }
     }
     if(tolower(data_type) == "bci"){ # Default for BCI
-        if(groups=="NA"){
+        if(groups=="NA"|| groups == ""){
             groups = "15,20,15"
         }
         if(labels == "NA"){
             labels = "Group A,Group B,Group C";
         }
     }
-
+    
     if(is.character(groups)){
         if(grepl(",", groups[1])){
           groups <-  strsplit(groups,",")[[1]]
@@ -367,21 +379,35 @@ disp.reg.columns <- function(mSetObj=NA){
 # Check that the first data rows and columns are not repeating 
 
 data_check <- function(mat){
-    # check first column
+    ## This function was created because for some reason the normalization code creates another row "1" and we have been unable to fix it yet.
+    ## This was my solution. 
    
     mat <- as.matrix(mat)
-    
+    print(dim(mat));
+    print(row.names(mat));
+    # check first column
     if (mat[1,1] == mat[1,2] && mat[2,1] == mat[2,2] && mat[3,1] == mat[3,2]){
         mat <- mat[,-c(1)];
+        colnames(mat) <- 1:dim(mat)[2]
     }
     # check first row
     if (mat[1,1] == mat[2,1] && mat[1,2] == mat[2,2] && mat[1,3] == mat[2,3]){
         mat <- mat[-c(1),]
+        rownames(mat) <- 1:dim(mat)[1]
     }
-
+    # check rows "1" and rows "2" , if normalization reordered the rows
+    else if (all.equal(mat["1",],mat["2",], check.attributes = FALSE)){
+        mat <- mat[!(row.names(mat)%in% "1"),]
+        #rename row names 
+        for (i in 1:nrow(mat)){
+            rowName <- row.names(mat)[i] # select row name at row "i" 
+            new_rowName <- as.integer(rowName)-1; # reduce the value of the row name by 1 
+            row.names(mat)[i]<- new_rowName;    # change row name to new value. 
+        }
+    }
     # rename columns and rows 
-    rownames(mat) <- 1:dim(mat)[1]
-    colnames(mat) <- 1:dim(mat)[2]
+    
+
 
     return (mat)
 }

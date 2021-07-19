@@ -54,7 +54,7 @@ public class BetaDisperBean implements Serializable {
     
     private boolean anovaBoolean = false;
     
-   
+    private String dataOpts = "org";
     
     private String fileBetaEig= "eigenvalues_betadispersal.csv";
     private String fileBetaEigPath  = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileBetaEig + "\">" + fileBetaEig + "</a>";
@@ -64,6 +64,8 @@ public class BetaDisperBean implements Serializable {
     
     private String fileBetaCentroids= "centroids_betadispersal.csv";
     private String fileBetaCentroidsPath  = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileBetaCentroids + "\">" + fileBetaCentroids + "</a>";
+    
+    
     
     
     // getters and setters
@@ -83,6 +85,13 @@ public class BetaDisperBean implements Serializable {
         return labels;
     }
     
+    public String getdataOpts() {
+        return dataOpts;
+    }
+
+    public void setdataOpts(String dataOpts) {
+        this.dataOpts = dataOpts;
+    }
     
      public boolean getAnovaBoolean(){
         return anovaBoolean;
@@ -125,11 +134,7 @@ public class BetaDisperBean implements Serializable {
     public void betadisperBtn_action() {
         
         String bealsIncludeString = anovaBoolean ? "TRUE" : "FALSE";
-        System.out.print("BetaDisperButton action");
-        System.out.print(groups);
-        System.out.print(labels);
-        System.out.print(bealsIncludeString);
-        if (!DispersalUtils.CreateBetaDisper(sb, groups, labels, anovaString)){
+        if (!DispersalUtils.CreateBetaDisper(sb, groups, labels, dataOpts)){
             RConnection RC = sb.getRConnection();
             sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
         }else {

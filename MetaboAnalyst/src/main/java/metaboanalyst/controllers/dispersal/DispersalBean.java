@@ -71,7 +71,7 @@ public class DispersalBean implements Serializable {
     
     private void doDefaultBetaDisper() {       
         DispersalUtils.LoadDplyr(sb);
-        DispersalUtils.CreateBetaDisper(sb, "NA", "NA", "FALSE");
+        DispersalUtils.CreateBetaDisper(sb, "NA", "NA", "NA");
         DispersalUtils.PlotBetaDisper(sb, sb.getNewImage("betadisper"), "png", 72, dispersalBgdNum);
         System.out.println("do default beta disper");
     }
