@@ -141,7 +141,7 @@ public class DiversityUtils {
     }
     
     
-        public static boolean CreateRarefactionDiv(SessionBean1 sb, Boolean data, String type, String sample, Boolean se, String MAGRIN) {
+        public static boolean CreateRarefactionDiv(SessionBean1 sb, Boolean data, String type, String sample, Boolean se, String MARGIN) {
         try {
             RConnection RC = sb.getRConnection(); //Start R connection
             String rCommand = "Rarefaction_div(NA"
@@ -179,6 +179,10 @@ public class DiversityUtils {
         }
     }
     /////// ------------ Diversity helper functions --------------- //////////////
+
+    public static void PlotRarefactionCurveDiversity(SessionBean1 sb, String currentImage, String png, int i) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
         
 }

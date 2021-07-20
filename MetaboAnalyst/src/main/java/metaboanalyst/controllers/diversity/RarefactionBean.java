@@ -48,7 +48,7 @@ public class RarefactionBean implements Serializable {
         return doSe;
     }
 
-    public void setDoSE(Boolean doS) {
+    public void setDoSe(Boolean doSe) {
         this.doSe = doSe;
     }
     
@@ -75,16 +75,15 @@ public class RarefactionBean implements Serializable {
     }
     
     
-    private String MARGIN = "NULL";
+    private String margin = "NULL";
     
-    public String getMARGIN() {
-        return MARGIN;
+    public String getMargin() {
+        return margin;
     }
 
-    public void setMARGIN(String MARGINOpts) {
-        this.MARGIN = MARGIN;
+    public void setMargin(String margin) {
+        this.margin = margin;
     }
-    
     
     private String Step = " ";
     
@@ -121,8 +120,8 @@ public class RarefactionBean implements Serializable {
     
     // ACTION BUTTON // 
     public void rareUpdate_action() {
-        DiversityUtils.CreateRarefactionDiv(sb, doOriginal, Type, Sample, doSE, Margin); 
-        DiversityUtils.PlotRarefactionCurveDiversity(sb, Step, Color, ColorText, sb.getNewImage("Rarefaction_Curve"), "png", 72);
+        DiversityUtils.CreateRarefactionDiv(sb, doOriginal, Type, Sample, doSe, margin);       
+        DiversityUtils.PlotRarefactionCurveDiversity(sb, Step, Color, ColorText, sb.getNewImage("Rarefaction_Curve"), "png", 72, "false");
     }
     
 }

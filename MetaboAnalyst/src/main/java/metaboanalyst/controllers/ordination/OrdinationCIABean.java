@@ -109,7 +109,7 @@ public class OrdinationCIABean implements Serializable {
     private SelectItem[] ciaMetaColumnOpts = null;
     
     public SelectItem[] getCiaMetaColumnOpts(){
-        String[] columns = OAUtils.ciaGetMetaColumns(sb);
+        String[] columns = OAUtils.GetCIAMetaColumns(sb);
         System.out.print(columns);
         int columnsLen = columns.length; 
         ciaMetaColumnOpts = new SelectItem[columnsLen];

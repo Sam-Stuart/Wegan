@@ -268,7 +268,7 @@
         </navigation-case>  
         <navigation-case>
             <from-outcome>Rarefaction</from-outcome>
-            <to-view-id>/Secure/diversity/Rarefaction.xhtml</to-view-id>
+            <to-view-id>/Secure/diversity/RarefactionView.xhtml</to-view-id>
             <redirect/>
         </navigation-case>  
                                                                        

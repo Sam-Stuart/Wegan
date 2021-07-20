@@ -97,7 +97,8 @@ public class DiversityBean implements Serializable {
             RConnection RC = sb.getRConnection();
             sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
         }
-        DiversityUtils.CreateRarefaction(sb);
-        DiversityUtils.PlotRarefaction(sb, sb.getCurrentImage("Rarefaction_curve"), "png", 72);
+
+        DiversityUtils.CreateRarefactionDiv(sb, false, "test", "test", false, "test");
+        DiversityUtils.PlotRarefactionCurveDiversity(sb, "test", "test", "test", sb.getCurrentImage("Rarefaction_curve"), "png", 72, "false");
     }
 }
