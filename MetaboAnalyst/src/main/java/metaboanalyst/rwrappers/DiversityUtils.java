@@ -143,11 +143,12 @@ public class DiversityUtils {
     
         public static boolean CreateRarefactionDiv(SessionBean1 sb, Boolean data, String type, String sample, Boolean se, String MARGIN) {
         try {
+            System.out.print("R RAREFACTION");
             RConnection RC = sb.getRConnection(); //Start R connection
             String rCommand = "Rarefaction_div(NA"
-                                                 + "\", \"" + type
+                                                 + ", \"" + type
                                                  + "\", \"" + sample
-                                                 + ", \""  + se
+                                                 + "\", \""  + se
                                                  + "\", \""  + MARGIN
                                                  + "\" , \"" + data
                                                  + "\")";
@@ -158,14 +159,13 @@ public class DiversityUtils {
             System.out.println(rse);
             return false;
         }
-    }
-    
+    }	//mSet<-Rarefaction_div(mSet, "NULL, ", "false", "NULL" , "false")
     public static void PlotRarefactionCurveDiversity(SessionBean1 sb, String step, String color, String color_text, String imgName, String format, int dpi, String width) {
         try {
             RConnection RC = sb.getRConnection();
             String rCommand = "RarefactionCurve(NA" 
-                                                 + "\", \"" + step 
-                                                 + ", \""  + color 
+                                                 + ", \"" + step 
+                                                 + "\", \""  + color 
                                                  + "\", \"" + color_text
                                                  + "\", \"" + imgName 
                                                  + "\", \"" + format 

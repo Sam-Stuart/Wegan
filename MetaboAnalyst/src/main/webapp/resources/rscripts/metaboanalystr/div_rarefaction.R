@@ -13,7 +13,7 @@
 
 
 Rarefaction_div <- function(mSetObj = NA, data = "false", type = "NULL", sample = "", se = "false", MARGIN = "NULL") {
-  
+  print("inside faction R file")
   #library("ade4")
   #library("adegraphics")
   library("dplyr")
@@ -26,21 +26,13 @@ Rarefaction_div <- function(mSetObj = NA, data = "false", type = "NULL", sample 
     input <- mSetObj$dataSet$orig
   }
 
-  input <- input[order(as.numeric(row.names(input))),] #Order rows
-####TESTING####
-  input <- input[-1,] #Remove duplicate row
-  metaData <- .readDataTable("/home/Wegan/MetaboAnalyst/src/main/webapp/resources/rscripts/metaboanalystr/test_data/dune_meta.csv") 
-  #envData <- .readDataTable("/home/Wegan/MetaboAnalyst/src/main/webapp/resources/rscripts/metaboanalystr/test_data/dune_env.csv")
-############
-
-
   # MARGIN = 1, data in rows; MARGIN = 2, data in columns
   if (is.na(MARGIN)) { 
     MARGIN1 <- 1
   } else {
     MARGIN1 <- 2
   }
-  
+  cat("after if margin statmentes")
   sample <- as.numeric(sample)
   if (sample == "") {
     #the minimum sample count achieved over the selected data columns
@@ -48,7 +40,7 @@ Rarefaction_div <- function(mSetObj = NA, data = "false", type = "NULL", sample 
   } else {
     sample1 = sample
   }
-  
+  cat("before se")
   if (se == "false") {
     se1 = FALSE
   } else {
@@ -159,7 +151,7 @@ RarefactionCurve <- function(mSetObj=NA, step = "", color="NULL", color_text="",
   dev.off()
  
   return(.set.mSet(mSetObj))
-  }
+}
 
 
 
