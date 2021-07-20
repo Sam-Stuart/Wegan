@@ -266,6 +266,11 @@
             <to-view-id>/Secure/diversity/TestTutorialView.xhtml</to-view-id>
             <redirect/>
         </navigation-case>  
+        <navigation-case>
+            <from-outcome>Rarefaction</from-outcome>
+            <to-view-id>/Secure/diversity/Rarefaction.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>  
                                                                        
                                                                                                                                                                                                                     
         <navigation-case>

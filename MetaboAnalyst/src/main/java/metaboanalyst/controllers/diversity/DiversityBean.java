@@ -84,11 +84,20 @@ public class DiversityBean implements Serializable {
     }
     
     private void doDefaultTestTutorial(){
-//        if (!DiversityUtils.CreateTestTutorial(sb)){
-//            RConnection RC = sb.getRConnection();
-//            sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
-//        }
+        if (!DiversityUtils.CreateTestTutorial(sb)){
+            RConnection RC = sb.getRConnection();
+            sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
+        }
         DiversityUtils.CreateTestTutorial(sb);
         DiversityUtils.PlotTestTutorial(sb, sb.getCurrentImage("gamma_plot"), "png", 72);
+    }
+    
+        private void doDefaultRarefaction(){
+        if (!DiversityUtils.CreateTestTutorial(sb)){
+            RConnection RC = sb.getRConnection();
+            sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
+        }
+        DiversityUtils.CreateRarefaction(sb);
+        DiversityUtils.PlotRarefaction(sb, sb.getCurrentImage("Rarefaction_curve"), "png", 72);
     }
 }

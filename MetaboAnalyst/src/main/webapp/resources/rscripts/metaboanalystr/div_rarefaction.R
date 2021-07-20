@@ -41,6 +41,7 @@ Rarefaction_div <- function(mSetObj = NA, data = "false", type = "NULL", sample 
     MARGIN1 <- 2
   }
   
+  sample <- as.numeric(sample)
   if (sample == "") {
     #the minimum sample count achieved over the selected data columns
     sample1 <-  min(rowSums(BCI)) 
@@ -100,7 +101,7 @@ Rarefaction_div <- function(mSetObj = NA, data = "false", type = "NULL", sample 
 
 
 
-RarefactionCurve <- function(mSetObj=NA, step = "", color="NULL", color_text="NULL", imgName, format="png", dpi=72, width=NA) {
+RarefactionCurve <- function(mSetObj=NA, step = "", color="NULL", color_text="", imgName, format="png", dpi=72, width=NA) {
   
   library(vegan)
   
@@ -144,6 +145,7 @@ RarefactionCurve <- function(mSetObj=NA, step = "", color="NULL", color_text="NU
   
   pars <- expand.grid(col = color1, stringsAsFactors = FALSE)
   
+  step <- as.numeric(step)
   if (is.na(step)) {
   cat("step has to be numeric data and can't be blank")
   } else {

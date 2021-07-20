@@ -13,6 +13,7 @@ import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.model.SelectItem;
 import metaboanalyst.controllers.DownloadBean;
+import metaboanalyst.controllers.ApplicationBean1;
 import metaboanalyst.controllers.SessionBean1;
 import metaboanalyst.models.User;
 import metaboanalyst.rwrappers.OAUtils;
@@ -25,9 +26,11 @@ import metaboanalyst.utils.DataUtils;
  */
 public class RarefactionBean implements Serializable {
     
-    public static final String PROP_SAMPLE_PROPERTY = "sampleProperty";
-    
-    // check box
+   private final SessionBean1 sb = (SessionBean1) DataUtils.findBean("sessionBean1");
+   private final ApplicationBean1 ab = (ApplicationBean1) DataUtils.findBean("applicationBean1");
+   
+   //public static final String PROP_SAMPLE_PROPERTY = "sampleProperty";
+  // check box
     private boolean doOriginal = false; 
     
     public boolean isdoOriginal() {
@@ -38,89 +41,88 @@ public class RarefactionBean implements Serializable {
         this.doOriginal = doOriginal;
     }
      
+   // check box 
+    private Boolean doSe = false;
     
-    private Boolean doRareSE = false;
-    
-    public Boolean isdoRareSE() {
-        return doRareSE;
+    public Boolean isdoSe() {
+        return doSe;
     }
 
-    public void setdoRareSE(Boolean doRareSE) {
-        this.doRareSE = doRareSE;
+    public void setDoSE(Boolean doS) {
+        this.doSe = doSe;
     }
     
-    // Textbox 
-    private String RareSample = "";
+    // textbox 
+    private String Sample = " ";
     
-    public String getRareSample() {
-        return RareSample;
-    }
-
-    public void setRareSample(String RareSample) {
-        this.RareSample = RareSample;
-    }
-    
-    
-    private String RareStep = "";
-    
-    public String getRareStep() {
-        return RareStep;
+    public String setSample() {
+        return Sample;
     }
 
-    public void setRareStep(String RareStep) {
-        this.RareStep = RareStep;
+    public void setSample(String Sample) {
+        this.Sample = Sample;
     }
     
+    // static dropdown
+    private String Type = "NULL"; // in the view, need to present the options //application bean 
     
-    
-    private String RareTypeOpts = "NULL";
-    
-    public String getRareTypeOpts() {
-        return RareTypeOpts;
-    }
-
-    public void setRareTypeOpts(String RareTypeOpts) {
-        this.RareTypeOpts = RareTypeOpts;
-    }
-    
-    
-    private String RareMarginOpts = "NULL";
-    
-    public String getRareMarginOpts() {
-        return RareMarginOpts;
+    public String getType() {
+        return Type;
     }
 
-    public void setrareMARGINOpts(String rareMARGINOpts) {
-        this.RareMarginOpts = RareMarginOpts;
+    public void setType(String Type) {
+        this.Type = Type;
     }
     
     
-    private String RareColorOpts = "NULL";
+    private String MARGIN = "NULL";
     
-    public String getRareColorOpts() {
-        return RareColorOpts;
-    }
-
-    public void setRareColorOpts(String RareColorOpts) {
-        this.RareColorOpts = RareColorOpts;
-    }
-    
-    
-    private String RareColTextOpts = "NULL";
-    
-    public String getRareColTextOpts() {
-        return RareColTextOpts;
+    public String getMARGIN() {
+        return MARGIN;
     }
 
-    public void setRareColTextOpts(String RareColTextOpts) {
-        this.RareColTextOpts = RareColTextOpts;
+    public void setMARGIN(String MARGINOpts) {
+        this.MARGIN = MARGIN;
+    }
+    
+    
+    private String Step = " ";
+    
+    public String getStep() {
+        return Step;
+    }
+
+    public void setStep(String Step) {
+        this.Step = Step;
+    }
+    
+    
+    private String Color = "NULL";
+    
+    public String getColor() {
+        return Color;
+    }
+
+    public void setColor(String Color) {
+        this.Color = Color;
+    }
+    
+    
+    private String ColorText = " ";
+    
+    public String getColorText() {
+        return ColorText;
+    }
+
+    public void setColorText(String ColorText) {
+        this.ColorText = ColorText;
     }
     
     
     // ACTION BUTTON // 
     public void rareUpdate_action() {
-        DiversityUtils.CreateRarefactionDiv(sb, RareTypeOpts, RareSample, doRareSE, RareMarginOpts); 
-        DiversityUtils.PlotRarefactionCurveDiversity(sb, RareStep, RareColorOpts, RareColTextOpts, sb.getNewImage("Rarefaction_Curve"), png, 72);
+        DiversityUtils.CreateRarefactionDiv(sb, doOriginal, Type, Sample, doSE, Margin); 
+        DiversityUtils.PlotRarefactionCurveDiversity(sb, Step, Color, ColorText, sb.getNewImage("Rarefaction_Curve"), "png", 72);
     }
     
 }

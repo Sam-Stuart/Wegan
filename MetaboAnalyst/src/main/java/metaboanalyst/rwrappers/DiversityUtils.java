@@ -141,10 +141,16 @@ public class DiversityUtils {
     }
     
     
-        public static boolean CreateRarefactionDiv(SessionBean1 sb, Boolean data, String type, int sample, Boolean se, String MAGRIN) {
+        public static boolean CreateRarefactionDiv(SessionBean1 sb, Boolean data, String type, String sample, Boolean se, String MAGRIN) {
         try {
             RConnection RC = sb.getRConnection(); //Start R connection
-            String rCommand = "Rarefaction_div(NA)"; // Creates R command
+            String rCommand = "Rarefaction_div(NA"
+                                                 + "\", \"" + type
+                                                 + "\", \"" + sample
+                                                 + ", \""  + se
+                                                 + "\", \""  + MARGIN
+                                                 + "\" , \"" + data
+                                                 + "\")";
             RCenter.recordRCommand(RC, rCommand); // records r command
             RC.voidEval(rCommand); // tells you want your r script returns  
             return true;
@@ -154,11 +160,11 @@ public class DiversityUtils {
         }
     }
     
-    public static void PlotRarefactionCurveDiversity(SessionBean1 sb, int step, String color, String color_text, String imgName, String format, int dpi, String width) {
+    public static void PlotRarefactionCurveDiversity(SessionBean1 sb, String step, String color, String color_text, String imgName, String format, int dpi, String width) {
         try {
             RConnection RC = sb.getRConnection();
             String rCommand = "RarefactionCurve(NA" 
-                                                 + "\", " + step 
+                                                 + "\", \"" + step 
                                                  + ", \""  + color 
                                                  + "\", \"" + color_text
                                                  + "\", \"" + imgName 
