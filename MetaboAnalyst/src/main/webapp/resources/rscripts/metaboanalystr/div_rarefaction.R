@@ -5,53 +5,66 @@
 #'@param type Set type for different types of rarefied community data, drop down options are "Species richness" (default), "Random rarefaction" or "Probability"
 #'@param sample Input subsample size for rarefying community, either a single value or a vector.default is not apply subsample
 #'@param se Input estimate standard errors, drop down options are "TRUE" or "FALSE" (default). 
-#'@param MARGIN Input the index is computed, drop down options are "1" (default) or "2" 
+#'@param margin Input the index is computed, drop down options are "1" (default) or "2" 
 #'@author Shiyang Zhao\email{shiyang1@ualberta.ca}
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2) ######
 #'@export
 
 
-Rarefaction_div <- function(mSetObj = NA, data = "false", type = "NULL", sample = "", se = "false", MARGIN = "NULL") {
+Rarefaction_div <- function(mSetObj = NA, data = "false", type = "NULL", sample = "", se = "false", margin = "NULL") {
+  
+  options(errors = traceback)
   print("inside faction R file")
+
   #library("ade4")
   #library("adegraphics")
+  library("plyr")
   library("dplyr")
   library("vegan")
   
+  print("setup mSetObj")
+
   #Extract input from mSetObj
+  mSetObj <- .get.mSet(mSetObj)
   if (data == "false") { #normalized data as input
     input <- mSetObj$dataSet$norm
   } else { #original data as input
     input <- mSetObj$dataSet$orig
   }
-
-  # MARGIN = 1, data in rows; MARGIN = 2, data in columns
-  if (is.na(MARGIN)) { 
-    MARGIN1 <- 1
+  input <- as.data.frame(input)
+  print("margin setup")
+  # margin = 1, data in rows; margin = 2, data in columns
+  if (margin == "NULL") { 
+    margin1 <- 1
   } else {
-    MARGIN1 <- 2
+    margin1 <- 2
   }
+
   cat("after if margin statmentes")
-  sample <- as.numeric(sample)
+  #sample <- as.numeric(sample)
   if (sample == "") {
     #the minimum sample count achieved over the selected data columns
-    sample1 <-  min(rowSums(BCI)) 
+    sample1 <-  min(rowSums(input)) 
   } else {
-    sample1 = sample
+    sample1 = as.numeric(sample)
   }
-  cat("before se")
+
+  print("before se")
   if (se == "false") {
     se1 = FALSE
   } else {
     se1 = TRUE
   }
-  
+ 
+
   cat("Rarefaction technique works on numeric data only")
   input.2 <- select_if(input, is.numeric)
-  
+
+
+  print("before real analysis")
   if (type == "NULL") {
-    Srare <- rarefy(input.2, sample = sample1, se = se1, MARGIN = MARGIN1)
+    Srare <- rarefy(input.2, sample = sample1, se = se1, MARGIN = margin1)
     cat ("Expected species richness in random subsamples of size 'samples' from the community")
   } else if (type == "Random rarefaction") {
     Srare <- rrarefy(input.2, sample = sample1)
@@ -60,7 +73,8 @@ Rarefaction_div <- function(mSetObj = NA, data = "false", type = "NULL", sample 
     Srare <- drarefy(input.2, sample = sample1)
     cat("Returns probabilities that species occur in a rarefied community of size 'sample'")  
     }
- 
+
+  print("transfer data")
   mSetObj$analset$result$name <- "Rarefaction"
   mSetObj$analset$result$type <- type
   mSetObj$analset$result$sample <- sample1
@@ -90,8 +104,6 @@ Rarefaction_div <- function(mSetObj = NA, data = "false", type = "NULL", sample 
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2)
 #'@export
-
-
 
 RarefactionCurve <- function(mSetObj=NA, step = "", color="NULL", color_text="", imgName, format="png", dpi=72, width=NA) {
   
@@ -137,11 +149,10 @@ RarefactionCurve <- function(mSetObj=NA, step = "", color="NULL", color_text="",
   
   pars <- expand.grid(col = color1, stringsAsFactors = FALSE)
   
-  step <- as.numeric(step)
-  if (is.na(step)) {
-  cat("step has to be numeric data and can't be blank")
+  if (step == "") {
+    step1 = 1
   } else {
-  step1 = as.numeric(step) 
+    step1 = as.numeric(step) 
   }  
   
   #windows(width = w, height = h)

@@ -102,7 +102,7 @@ public class DiversityBean implements Serializable {
 //        }
         System.out.print("INSIDE RAREFACTION");
         DiversityUtils.CreateRarefactionDiv(sb, false, "NULL", "", false, "NULL");
-        DiversityUtils.PlotRarefactionCurveDiversity(sb, "", "NULL", "", sb.getCurrentImage("Rarefaction_curve"), "png", 72, "false");
+        DiversityUtils.PlotRarefactionCurveDiversity(sb, "10", "NULL", "", sb.getCurrentImage("Rarefaction_curve"), "png", 72, "false");
         System.out.print("AFTER RAREFACTION");
     }
 }

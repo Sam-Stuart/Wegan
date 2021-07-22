@@ -37,7 +37,7 @@ public class RarefactionBean implements Serializable {
         return doOriginal;
     }
     
-    public void setDoOriginal(boolean doOriginal) {
+    public void setdoOriginal(boolean doOriginal) {
         this.doOriginal = doOriginal;
     }
      
@@ -48,7 +48,7 @@ public class RarefactionBean implements Serializable {
         return doSe;
     }
 
-    public void setDoSe(Boolean doSe) {
+    public void setdoSe(Boolean doSe) {
         this.doSe = doSe;
     }
     
@@ -75,14 +75,14 @@ public class RarefactionBean implements Serializable {
     }
     
     
-    private String margin = "NULL";
+    private String Margin = "NULL";
     
     public String getMargin() {
-        return margin;
+        return Margin;
     }
 
-    public void setMargin(String margin) {
-        this.margin = margin;
+    public void setMargin(String Margin) {
+        this.Margin = Margin;
     }
     
     private String Step = " ";
@@ -107,21 +107,21 @@ public class RarefactionBean implements Serializable {
     }
     
     
-    private String ColorText = " ";
+    private String Colortext = " ";
     
-    public String getColorText() {
-        return ColorText;
+    public String getColortext() {
+        return Colortext;
     }
 
-    public void setColorText(String ColorText) {
-        this.ColorText = ColorText;
+    public void setColortext(String Colortext) {
+        this.Colortext = Colortext;
     }
     
     
     // ACTION BUTTON // 
     public void rareUpdate_action() {
-        DiversityUtils.CreateRarefactionDiv(sb, doOriginal, Type, Sample, doSe, margin);       
-        DiversityUtils.PlotRarefactionCurveDiversity(sb, Step, Color, ColorText, sb.getNewImage("Rarefaction_Curve"), "png", 72, "false");
+        DiversityUtils.CreateRarefactionDiv(sb, doOriginal, Type, Sample, doSe, Margin);       
+        DiversityUtils.PlotRarefactionCurveDiversity(sb, Step, Color, Colortext, sb.getNewImage("Rarefaction_Curve"), "png", 72, "false");
     }
     
 }

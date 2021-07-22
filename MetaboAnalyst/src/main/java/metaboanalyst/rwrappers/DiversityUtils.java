@@ -141,16 +141,16 @@ public class DiversityUtils {
     }
     
     
-        public static boolean CreateRarefactionDiv(SessionBean1 sb, Boolean data, String type, String sample, Boolean se, String MARGIN) {
+        public static boolean CreateRarefactionDiv(SessionBean1 sb, Boolean data, String type, String sample, Boolean se, String margin) {
         try {
             System.out.print("R RAREFACTION");
             RConnection RC = sb.getRConnection(); //Start R connection
             String rCommand = "Rarefaction_div(NA"
-                                                 + ", \"" + type
+                                                 + ", \"" + data
+                                                 + "\", \"" + type
                                                  + "\", \"" + sample
                                                  + "\", \""  + se
-                                                 + "\", \""  + MARGIN
-                                                 + "\" , \"" + data
+                                                 + "\", \""  + margin                                                 
                                                  + "\")";
             RCenter.recordRCommand(RC, rCommand); // records r command
             RC.voidEval(rCommand); // tells you want your r script returns  
