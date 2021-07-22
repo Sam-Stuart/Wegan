@@ -19,8 +19,8 @@ import metaboanalyst.rwrappers.OAUtils;
 import metaboanalyst.utils.DataUtils;
 
 
-@ManagedBean(name = "brayBean")
-public class OABrayBean implements Serializable {
+@ManagedBean(name = "dcaBean")
+public class OADcaBean implements Serializable {
 
     private final SessionBean1 sb = (SessionBean1) DataUtils.findBean("sessionBean1");
     
@@ -28,32 +28,34 @@ public class OABrayBean implements Serializable {
     private String usrName = usr.getName();
     
 
-    private String fileSampleScores = "bray_curtis_row_scores.csv";
-    private String fileSampleScorePath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileSampleScores + "\">" + fileSampleScores + "</a>";
+    private String fileRowScores = "dca_row_scores.csv";
+    private String fileRowScorePath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileRowScores + "\">" + fileRowScores + "</a>";
     
-    private String fileColScores = "bray_curtis_column_scores.csv";
+    private String fileColScores = "dca_column_scores.csv";
     private String fileColScorePath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileColScores + "\">" + fileColScores + "</a>";
     
-    private String fileMat = "bray_curtis_" + getDistOpts() + "_dissimilarity_matrix.csv";
-    private String fileMatPath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileMat + "\">" + fileMat + "</a>";
-    private String fileScree = "bray_curtis_scree_data.csv";
-    private String fileScreePath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileScree + "\">" + fileScree + "</a>";
-            
-    private boolean doOriginal = false; 
-    private boolean doAbundance = false; 
+    private String fileEnv = "dca_environment_scores.csv";
+    private String fileEnvPath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileEnv + "\">" + fileEnv + "</a>";
     
+    private String fileScree = "dca_scree_data.csv";
+    private String fileScreePath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileScree + "\">" + fileScree + "</a>";
+       
     private boolean varArrows = false; 
+    private boolean envArrows = false;
+    private boolean envCentroid = false;
     private boolean sampleNames = false;
     private boolean addEllipse = false;
     
-    private boolean dataAbsence = false; 
+    private boolean doOriginal = false; 
+    private boolean doAbundance = false;
+    
     
     private boolean pointStyle = false; 
     
-    private String distOpts = "euclidean";
     private String groupCol = "null";
     private String groupPoint = "null";
     private String color = "null";
+    private String envDataCol = "null";
     
     public String getColor() {
         return color;
@@ -62,6 +64,13 @@ public class OABrayBean implements Serializable {
     public void setColor(String color) {
         this.color = color;
     }
+    public String getEnvDataCol() {
+        return envDataCol;
+    }
+
+    public void setEnvDataCol(String envDataCol) {
+        this.envDataCol = envDataCol;
+    } 
     
     public String getGroupCol() {
         return groupCol;
@@ -77,15 +86,7 @@ public class OABrayBean implements Serializable {
 
     public void setGroupPoint(String groupPoint) {
         this.groupPoint = groupPoint;
-    }
-    
-    public String getDistOpts() {
-        return distOpts;
-    }
-
-    public void setDistOpts(String distOpts) {
-        this.distOpts = distOpts;
-    }
+    } 
     
     public boolean isVarArrows() {
         return varArrows;
@@ -93,6 +94,22 @@ public class OABrayBean implements Serializable {
     
     public void setVarArrows(boolean varArrows) {
         this.varArrows = varArrows;
+    }
+
+    public boolean isEnvCentroid() {
+        return envCentroid;
+    }
+    
+    public void setEnvCentroid(boolean envCentroid) {
+        this.envCentroid = envCentroid;
+    }
+    
+    public boolean isEnvArrows() {
+        return envArrows;
+    }
+    
+    public void setEnvArrows(boolean envArrows) {
+        this.envArrows = envArrows;
     }
     
     public boolean isPointStyle() {
@@ -118,13 +135,39 @@ public class OABrayBean implements Serializable {
     public void setSampleNames(boolean sampleNames) {
         this.sampleNames = sampleNames;
     }    
-    public boolean isDataAbsence() {
-        return dataAbsence;
+
+    public String getFileScreePath() {
+        return fileScreePath;
     }
+
+    public void setFileScreePath(String fileScreePath) {
+        this.fileScreePath = fileScreePath;
+    } 
     
-    public void setDataAbsence(boolean dataAbsence) {
-        this.dataAbsence = dataAbsence;
+    
+    public String getFileRowScorePath() {
+        return fileRowScorePath;
     }
+
+    public void setFileRowScorePath(String fileRowScorePath) {
+        this.fileRowScorePath = fileRowScorePath;
+    } 
+    
+    public String getFileColScorePath() {
+        return fileColScorePath;
+    }
+
+    public void setFileColScorePath(String fileColScorePath) {
+        this.fileColScorePath = fileColScorePath;
+    }  
+    
+    public String getFileEnvPath() {
+        return fileEnvPath;
+    }
+
+    public void setFileEnvPath(String fileEnvPath) {
+        this.fileEnvPath = fileEnvPath;
+    }  
     
     public boolean isdoAbundance() {
         return doAbundance;
@@ -141,46 +184,13 @@ public class OABrayBean implements Serializable {
     public void setdoOriginal(boolean doOriginal) {
         this.doOriginal = doOriginal;
     }
-
-    public String getFileScreePath() {
-        return fileScreePath;
-    }
-
-    public void setFileScreePath(String fileScreePath) {
-        this.fileScreePath = fileScreePath;
-    } 
-    
-    
-    public String getFileSampleScorePath() {
-        return fileSampleScorePath;
-    }
-
-    public void setFileSampleScorePath(String fileSampleScorePath) {
-        this.fileSampleScorePath = fileSampleScorePath;
-    } 
-    
-    public String getFileColScorePath() {
-        return fileColScorePath;
-    }
-
-    public void setFileColScorePath(String fileColScorePath) {
-        this.fileColScorePath = fileColScorePath;
-    }  
-    
-    public String getFileMatPath() {
-        return fileMatPath;
-    }
-
-    public void setFileMatPath(String fileMatPath) {
-        this.fileMatPath = fileMatPath;
-    }  
     
 
     
-    // ACTION BUTTONS //
-    public void brayUpdate_action() {
-        OAUtils.CreateBray(sb, doAbundance, distOpts, doOriginal, dataAbsence);
-        OAUtils.PlotBray2D(sb, color, addEllipse, varArrows, sampleNames, "NULL", "NULL", "NULL", sb.getNewImage("ord_bray_2D"), "png", 72, "NULL"); 
+// ACTION BUTTONS //
+    public void ccaUpdate_action() {
+//        OAUtils.CreateBray(sb, "NULL", "NULL", "NULL", "NULL");
+        OAUtils.PlotCCA(sb, color, addEllipse, varArrows, envArrows, envCentroid, sampleNames, groupCol, "NULL", "NULL", sb.getNewImage("ord_cca_2D"), "png", 72, "NULL");
     }
     
     

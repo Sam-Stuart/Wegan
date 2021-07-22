@@ -12,7 +12,7 @@
     <h:head>
         <link rel="stylesheet" href="css/bootstrap.min.css"></link>
         <link rel="stylesheet" href="css/global.css"></link>
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous"></link>
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous"></link>
         <script type='text/javascript' src="/bootstrap.js"></script>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/> 
     
@@ -31,7 +31,7 @@
             </p:panelGrid>
 
             <span><a style="text-decoration:none" href="#{facesContext.externalContext.requestContextPath}/faces/upload/CaUploadView.xhtml">
-                <div id="corrBtn" class="card moduleButton" href="#{facesContext.externalContext.requestContextPath}/faces/upload/CaUploadView.xhtml">
+                <div id="corrBtn" class="card moduleButton tooltip" href="#{facesContext.externalContext.requestContextPath}/faces/upload/CaUploadView.xhtml">
                    
                     <div class="card-horizontal">
                         <div class="img-square-wrapper">
@@ -43,9 +43,9 @@
                             <!--<p class="card-text">Heatmap and Regression Analysis</p>-->
                         </div>
                     </div>
-                    <!--<p:tooltip for="corrBtn" style="font-size: 11px;" value="Two variables will be tested for correlation, an independent variable and a dependent variable. Both must have numeric values." />-->
+                   
                 </div>
-
+                 <!--<p:tooltip for="corrBtn" style="font-size: 11px;" value="Two variables will be tested for correlation, an independent variable and a dependent variable. Both must have numeric values." />-->
             </a></span>
 
             <span><a style="text-decoration:none" href="#{facesContext.externalContext.requestContextPath}/faces/upload/DiversityUploadView.xhtml">

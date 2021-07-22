@@ -64,7 +64,7 @@
                     
                     <h:outputLabel style="font-weight: bold" value="Ordination Analysis"/>
                     <h:panelGrid style="padding-left: 20px; padding-bottom: 6px">
-                        <h:commandLink action="DCA" onclick="PF('statusDialog').show()" value="Detrended Correspondence Analysis (DCA) "/>
+                        <h:commandLink action="DCA" onclick="PF('statusDialog').show()" value="Detrended Correspondence Analysis (DCA) -- DELETE ALTHOGETHER "/>
                         
                     </h:panelGrid>
                     
@@ -95,7 +95,7 @@
                     </h:panelGrid>
                     <h:outputLabel style="font-weight: bold" value="Chemometrics Analysis"/>
                     <h:panelGrid style="padding-left: 20px; padding-bottom: 6px">
-                        <h:commandLink action="PCA" onclick="PF('statusDialog').show()" value="Principal Component Analysis (PCA) "/>
+                        <h:commandLink action="PCA" onclick="PF('statusDialog').show()" value="Principal Component Analysis (PCA) -- MOVE To ORD "/>
                         <h:commandLink action="PLSDA" onclick="PF('statusDialog').show()" value="Partial Least Squares - Discriminant Analysis (PLS-DA)"/>
                         <h:commandLink action="sPLSDA" onclick="PF('statusDialog').show()" value="Sparse Partial Least Squares - Discriminant Analysis (sPLS-DA)"/>
                         <h:commandLink action="OrthoPLSDA" disabled="#{sessionBean1.multiGroup}" onclick="PF('statusDialog').show()" value="Orthogonal Partial Least Squares - Discriminant Analysis (orthoPLS-DA)"/>

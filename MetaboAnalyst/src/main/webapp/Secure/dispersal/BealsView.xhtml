@@ -9,88 +9,77 @@
     <ui:define name="metaInfo">
         <f:event type="preRenderView" listener="#{dispersalBean.performDefaultAnalysis('beals')}"/> 
     </ui:define>
- <ui:define name="myscript">
-        <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/jscripts/canvasXpress.min.js"></script>
-        <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/jscripts/graphics.js"></script>
-    </ui:define>
     <ui:define name="content">
-        <script type="text/javascript">
-            // for scatter plot
-            function addBind() {
-                mychart = $("[id='ac:chart']");
-                mychart.unbind('jqplotDataClick');
-                mychart.bind('jqplotDataClick',
-                        function (ev, seriesIndex, pointIndex, data) {
-                            //note, we use the internal index, not point index 
-                            remoteCall([{name: 'cmpdIndex', value: data[0]}]);
-                        });
-            }
-
-            function ext() {
-                this.cfg.seriesDefaults = {
-                    lineWidth: 1.0,
-                    linePattern: 'dashed',
-                    showMarker: false,
-                    markerOptions: {
-                        color: 'rgba(128, 0, 128, 0.5)'
-                    },
-                    shadow: false
-                };
-                this.cfg.axes = {
-                    yaxis: {
-                        showLabel: true,
-                        tickOptions: {
-                            formatString: "%#.2f"
-                        }
-                    },
-                    xaxis: {
-                        showLabel: true,
-                        tickOptions: {
-                            formatString: "%#.2f"
-                        }
-                    }
-                };
-            }
-        </script>
         <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
-            
+            <p:tabView id="bealsView1" style="border-bottom-color: #8cbd48 !important">
+                <p:tab title ="Overview" titleStyleClass="p-tab-nav">
                     <h:form id="form1">
-                         <h:outputLabel style="font-weight: bold" value="Beals Smoothing box plot"/>
-                        <h:panelGrid columns="2" style="width: 70%">
-                            <h:panelGroup>
-
-                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('beals')}" alt="beals"/>
-                                <h:outputLabel style="font-weight: bold" value="Beals"/>
-                                
-                      
-                            </h:panelGroup>
+                        <p>
+                            Beals smoothing replaces each entry in the community data with a probability of a target species occurring 
+                            in that particular site, based on the joint occurrences of the target species with the species that actually occur in the site. 
+                            Swan's (1970) degree of absence applies Beals smooothing to zero items so long that all zeros are replaced with smoothed values. 
+                        </p>
+                        <h:panelGrid id="panelGrid" columns="5" cellpadding="3" columnClasses="colLeft,colRight,colLeft,colRight, colLast">
                             
+                            <h:outputLabel id = "speciesOpts" style="font-weight: bold" value="Species:"/>
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{bealsBean.bealsSpecies}">
+                                <f:selectItems value="#{bealsBean.bealsSpeciesOpts}" />
+                            
+                            </p:selectOneMenu>
+                            
+
+                            <h:outputLabel id ="include" style="font-weight: bold" value="Include Target Species:"/>
+                            <p:selectBooleanCheckbox value ="#{bealsBean.bealsInclude}"/>
+                            
+                            <p:panelGrid></p:panelGrid>
+                            
+                            <h:outputLabel id = "typeOpts" style="font-weight: bold" value="Type:"/>
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{bealsBean.bealsType}">
+                                <f:selectItems value="#{bealsBean.bealsTypeOpts}" />
+                            </p:selectOneMenu>
+                        </h:panelGrid> 
+                        <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
+                            <p:commandButton value="Update" 
+                                            styleClass="updateButton"
+                                            style="box-shadow: none !important; text-shadow: none !important"
+                                            onclick="PF('statusDialog').show()"
+                                            oncomplete="PF('statusDialog').hide()"  
+                                            update=":bealsView1:form1:bealsPane1  :cmdPane" 
+                                            actionListener="#{bealsBean.bealsBtn_action()}"/>  
+                        
                         </h:panelGrid>
-                        <h:panelGrid id="pairPane" style="text-align: center; width: 100%;">
-                            <h:panelGrid style="text-align: right; padding-left: 700px; width: 760px;">
-                                <p:commandLink actionListener="#{sessionBean1.graphicsLnk_action('pca_pair')}" 
-                                               oncomplete="PF('graphDialog').show()"
-                                               title="Customize the graphics output">
-                                    <img src="#{facesContext.externalContext.requestContextPath}/resources/images/imgcenter.png"/>
-                                </p:commandLink>
+                        <p:tooltip for="speciesOpts" style="font-size: 11px;" value="Column index used to compute Beals function for a single species. The default 'All', indicates that the function will be computed for all species. "  />
+                        <p:tooltip for="include" style="font-size: 11px;" value="This logical flag indicates whether the target species has to be included when computing the mean of the conditioned probabilities."  />
+                        <p:tooltip for="typeOpts" style="font-size: 11px;" value="Specifies if and how abundance values have to be used in the beals function. 
+                                   '0': presence/absence mode. ;
+                                   '1': abundances in reference are used to compute conditioned probabilites. /\n
+                                   '2': abundances in x are used to compute weighted averages of conditioned probabilites. 
+                                   '3' abundances are used to compute both conditioned probabilities and weighted averages."  />                        
+                        <h:panelGrid class="resultsBar" columns="1">
+                            <h:panelGroup>
+                                <h:panelGrid columns="1" style="text-align : left;">
+                                    Results
+                                </h:panelGrid>
+                            </h:panelGroup>
+                        </h:panelGrid>
+                        <h:panelGrid id="bealsPane1" style="width: 100%;">
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
+                                    <h:outputText style="padding-left: 0px" escape="false" value="#{bealsBean.fileBealsMatrixPath}"/>
+                                </i>
+                                
                             </h:panelGrid>
-                            <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('pca_pair')}" alt="PCAPairImage"/>
-                        </h:panelGrid>        
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                
+                                <h2 style="padding: 2em 0 0 0; text-decoration: underline">Box plot of smoothed values against presence or absence of species</h2>
+                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('beals')}" alt="beals"/>
+                            </h:panelGrid>                           
+                            
+                        </h:panelGrid>         
                     </h:form>
-               
+                </p:tab>
+            </p:tabView> 
         </h:panelGrid> 
-        <p:dialog modal="true" widgetVar="exportDialog" style="width:600px; height: 580px" appendTo="@(body)">  
-            <h:outputLabel style="font-size: 13px; font-weight: bold" value="Right click the PNG image to save as your preferred name:"/><br/>
-            <image id="downloadimage"></image>  
-        </p:dialog>  
-   
-        <script type="text/javascript">
-            showPCA3DScore();
-            $("[id='ac:chart']").bind('jqplotDataClick',
-                    function (ev, seriesIndex, pointIndex, data) {
-                        //note, we use the internal index, not point index 
-                        remoteCall([{name: 'cmpdIndex', value: data[0]}]);
-                    });
-        </script>
     </ui:define>
 </ui:composition>
+

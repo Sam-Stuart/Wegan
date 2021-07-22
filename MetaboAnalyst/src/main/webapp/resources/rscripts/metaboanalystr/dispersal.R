@@ -8,7 +8,7 @@
 #'
 
 
-library(vegan)
+library(gt)
 
 # -------------Coefficients of Biogeographical Dispersal Direction-------------------------------------------------- 
 
@@ -17,8 +17,9 @@ bgdispersalWegan <- function(mSetObj=NA){
     mSetObj <- .get.mSet(mSetObj);
     
     # Calculate the bg dispersal
-    output <- bgdispersal(mSetObj$dataSet$orig);
-    
+    output <- bgdispersal(mSetObj$dataSet$norm);
+
+       
     # Store the item to the bgdispersal object
     mSetObj$analSet$bgdispersal <- output; 
      
@@ -29,38 +30,61 @@ bgdispersalWegan <- function(mSetObj=NA){
 
 PlotBGD <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, bgdnum){
     
-    bgdnum = bgdnum;
+
     mSetObj <- .get.mSet(mSetObj);
+    
 
     # Check which matrix to plot : 
     if (imgName == "bgd1_0_"){
-        print("------DD1 CHOSEN------");
-        mat <- as.matrix(mSetObj$analSet$bgdispersal$DD1);
-        
+        mat <- mSetObj$analSet$bgdispersal$DD1;
+        print("before data check:");
+        print(mat);
+        mat <- data_check(mat);
+        print("after data check:");
+        print(mat);
+        write.csv(mat, file = "DD1.csv");
     }else if (imgName == "bgd2_0_"){
-        print("------DD2 CHOSEN------");
-        mat <-mSetObj$analSet$bgdispersal$DD2 ;
-        
-    }else {
-        mat <-mSetObj$analSet$bgdispersal$DD3
-        print("------DD3 CHOSEN------");
-        }
-    
-    
-    imgName = paste(imgName, "dpi", dpi, ".", format, sep="");
-    if(is.na(width)){
-      w <- 10;
-    }else if(width == 0){
-      w <- 8;
-    }else{
-      w <- width;
+        mat <- mSetObj$analSet$bgdispersal$DD2;
+        mat <- data_check(mat);
+        write.csv(mat, file = "DD2.csv");
+    }else if (imgName == "bgd3_0_"){
+        mat <- mSetObj$analSet$bgdispersal$DD3;
+        mat <- data_check(mat);
+        write.csv(mat, file = "DD3.csv");
+    }else if (imgName == "bgd4_0_"){
+        mat <- mSetObj$analSet$bgdispersal$DD4;
+        mat <- data_check(mat);
+        write.csv(mat, file = "DD4.csv");
+    }else if (imgName == "bgd5_0_"){
+        mat <- mSetObj$analSet$bgdispersal$McNemar;
+        write.csv(mat, file = "McNemar.csv");
+    }else if (imgName == "bgd6_0_"){
+        mat <-mSetObj$analSet$bgdispersal$prob.McNemar;
+        write.csv(mat, file = "ProbMcNemar.csv");
     }
-    h <- w;
+    
+    mat <- as.data.frame(round(mat,2));
+    
+    gt_mat <- gt(mat) %>% tab_options(table.font.size = 6); 
+    
+    # Fix the Formatting says Dana
+    if(is.na(width)){
+        w <- 10;
+    }else if(width == 0){
+        w <- 8;
+    }else{
+        w <- width;
+    }
 
-    mSetObj$imgSet$dispersal.bgd1 <- imgName;
-    # Use the Cairo package to plot the data
-    Cairo::Cairo(file = imgName, unit="in",width=w, height=h, dpi=dpi, type=format, bg="white");
-    dev.off();
+    # save the image name
+    
+
+    imgName = paste(imgName, "dpi", dpi, ".", format, sep="");
+    mSetObj$imgSet$dispersal$bgd1 <- imgName;
+
+    # Use the gt package to plot the data
+    gtsave(gt_mat, filename = imgName)
+    #dev.off();
     return(.set.mSet(mSetObj));
 }
 
@@ -140,25 +164,43 @@ GetBGDSigFileName <- function(mSetObj=NA){
 
 ###### Beals smoothing function 
 bealsWegan <- function(mSetObj=NA, spcs = 'NA', ref = 'NA', type = 0, incld = TRUE){
-    
     mSetObj <- .get.mSet(mSetObj);
     
     # Call upon the beals smoothing function 
     data <- mSetObj$dataSet$orig;
-    #output <- beals(data, species = spcs, reference = ref, type = type, include = incld)
-    output <- beals(data);
+    # alter species if needed 
+
+    if((spcs == 'NA')||(tolower(spcs)=='all')){
+        spcs = NA
+    } 
+    if (incld =='TRUE'){
+        incld = TRUE
+    } else if (incld == 'FALSE'){
+        incld = FALSE
+    } else {
+        print ("ERROR with INCLUDE argument");
+    }
     
-    # store the item to the bgdispersal object
+    # call upon beals vegan function
+    
+    output <- beals(data, species = spcs, type = type, include = incld)
+    
+    
+    # save the new data set in the mSetObject
     mSetObj$analSet$beals <- output;
+    
+    #write csv of new data set
+    write.csv(output, file = "beals_matrix.csv");
     return(.set.mSet(mSetObj));
 }
 
 
-PlotBeals <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, pcnum=0){
+PlotBeals <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, pcnum=0, species = 'NA'){
   
   mSetObj <- .get.mSet(mSetObj);
   
   beals_matrix <- as.matrix(mSetObj$analSet$beals);
+  # Save Image name
   imgName = paste(imgName, "dpi", dpi, ".", format, sep="");
   if(is.na(width)){
     w <- 10;
@@ -167,11 +209,17 @@ PlotBeals <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, pcnum
   }else{
     w <- width;
   }
-  
+ 
   mSetObj$imgSet$defaultbeals<- imgName;
-  pa <- decostand(mSetObj$dataSet$orig, "pa");
+ # Use decostand
+  if ((species == 'NA')||(tolower(species) =='all')){
+    pa <- decostand(mSetObj$dataSet$orig, "pa");
+  } else {
+    pa <- decostand(mSetObj$dataSet$orig[,species],"pa");
+  }
 
   h <- w;
+  # plot boxplot
   Cairo::Cairo(file = imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white");
   boxplot(as.vector(beals_matrix) ~ unlist(pa), xlab="Presence", ylab="Beals");
 
@@ -182,29 +230,103 @@ PlotBeals <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, pcnum
 
 ####### BETA DISPERSAL ###### 
 
-betadisperWegan <- function(mSetObj=NA){
+betadisperWegan <- function(mSetObj=NA,groups = "NA", labels= "NA", dataOpts = "NA" ){
     mSetObj <- .get.mSet(mSetObj);
-       
-    data <- mSetObj$dataSet$orig
-    data_type <- mSetObj$dataSet$type;
-    
-    
-    ## Bray-Curtis distances between samples
-    dis <- vegdist(data);
-    ## First 16 sites grazed, remaining 8 sites ungrazed
-    if (data_type == 'Varespec'){
-        groups <- factor(c(rep(1,16), rep(2,8)), labels = c("grazed","ungrazed"))
-    }else if (data_type == 'Dune'){
-        
-        groups <- factor(c(rep(1,10), rep(2,10)), labels = c("group A","group B"))
+    if (dataOpts == "norm"){
+        data <- mSetObj$dataSet$norm
+        print("Using Normal data set");
+        print(data)
+    } else {
+        data <- mSetObj$dataSet$orig 
+        print("Using Original data set");
+        print(data)
     }
-    ## Calculate multivariate dispersions
-   
-    mod <- betadisper(dis, groups)
     
+    data_type <- mSetObj$dataSet$type;
+    ## data check
+    data <- data_check(data)
+
+    if(tolower(data_type) == "varespec"){ # Default for Varespec
+        if(groups=="NA"|| groups == ""){
+            groups = "16,8"
+        }
+        if(labels == "NA"){
+            labels = "grazed,ungrazed";
+        }
+    }
+    if(tolower(data_type) == "dune"){ # Default for Dune
+        if(groups=="NA"|| groups == ""){
+            groups = "10,10"
+        }
+        if(labels == "NA"){
+            labels = "Group A,Group B";
+        }
+    }
+    if(tolower(data_type) == "bci"){ # Default for BCI
+        if(groups=="NA"|| groups == ""){
+            groups = "15,20,15"
+        }
+        if(labels == "NA"){
+            labels = "Group A,Group B,Group C";
+        }
+    }
+    
+    if(is.character(groups)){
+        if(grepl(",", groups[1])){
+          groups <-  strsplit(groups,",")[[1]]
+        }else if(grepl(";", groups)[1]){
+          groups <-  strsplit(groups,";")[[1]]
+        }
+        groups <- as.integer(groups)
+    }
+    if(is.character(labels)){
+      if(grepl(",", labels[1])){
+        labels <-  strsplit(labels,",")[[1]]
+      }
+      else if(grepl(";", labels[1])){
+        labels <-  strsplit(labels,";")[[1]]
+      }
+    }
+    numGroups <- length(groups)
+    if (labels == ""){  # catch if 'Groups' was updated but labels was not.
+        for (i in 1:numGroups){
+            label <- paste("Group ",LETTERS[i])
+            if (i == 1){
+                labels <- label
+            }
+            else{
+                labels <- c(labels,label)
+            }
+        }
+    }
+    numLabels <- length(labels)
+    if (sum(groups) != nrow(data)){
+      AddErrMsg("ERROR: Inputted group values does not sum up to number of rows in data")
+      stop();
+    }
+    if (numGroups != numLabels){
+      AddErrMsg("ERROR:  Number of groups does not equal number of labels")
+      stop();
+    }
+      ## Bray-Curtis distances between samples
+    dis <- vegdist(data);
+    reps <- c()
+    for(i in 1:numGroups){
+      reps <- c(reps,rep(i,groups[i]));
+    }
+    sets <- factor(reps, labels = labels)
+    mod <- betadisper(dis,sets)
+    
+    eig <- mod$eig;
+    vectors <- mod$vectors;
+    distances <- mod$distances;
+    centroids <- mod$centroids;
+    write.csv(eig, "eigenvalues_betadispersal.csv");
+    write.csv(vectors,"vectors_betadispersal.csv");
+    write.csv(centroids, "centroids_betadispersal.csv");
     
     # store the item to the bgdispersal object
-    mSetObj$analSet$betadisper <- mod;
+    mSetObj$analSet$betadisper$mod <- mod;
     
     return(.set.mSet(mSetObj));
 }
@@ -213,9 +335,9 @@ betadisperWegan <- function(mSetObj=NA){
 PlotBetaDisper <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, pcnum=0){
   mSetObj <- .get.mSet(mSetObj);
   
-  mod <- mSetObj$analSet$betadisper;
-    
+  mod <- mSetObj$analSet$betadisper$mod;
   imgName = paste(imgName, "dpi", dpi, ".", format, sep="");
+    
   if(is.na(width)){
     w <- 10;
   }else if(width == 0){
@@ -231,4 +353,61 @@ PlotBetaDisper <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, 
   plot(mod, main = title);
   dev.off();
   return(.set.mSet(mSetObj));
+}
+
+
+### Other Functions : 
+
+# Get columns : 
+
+disp.reg.columns <- function(mSetObj=NA){
+  
+  mSetObj <- .get.mSet(mSetObj)
+  
+  data <- select_if(mSetObj$dataSet$orig, is.numeric)
+  count.all.numeric.cols <- ncol(data)
+  name.all.numeric.cols <- colnames(data)
+  
+  num.col.results <- list(
+    count=count.all.numeric.cols,
+    names=name.all.numeric.cols
+  )
+  return(name.all.numeric.cols)
+  
+}
+
+# Check that the first data rows and columns are not repeating 
+
+data_check <- function(mat){
+    ## This function was created because for some reason the normalization code creates another row "1" and we have been unable to fix it yet.
+    ## This was my solution. 
+   
+    mat <- as.matrix(mat)
+    print(dim(mat));
+    print(row.names(mat));
+    # check first column
+    if (mat[1,1] == mat[1,2] && mat[2,1] == mat[2,2] && mat[3,1] == mat[3,2]){
+        mat <- mat[,-c(1)];
+        colnames(mat) <- 1:dim(mat)[2]
+    }
+    # check first row
+    if (mat[1,1] == mat[2,1] && mat[1,2] == mat[2,2] && mat[1,3] == mat[2,3]){
+        mat <- mat[-c(1),]
+        rownames(mat) <- 1:dim(mat)[1]
+    }
+    # check rows "1" and rows "2" , if normalization reordered the rows
+    else if (all.equal(mat["1",],mat["2",], check.attributes = FALSE)){
+        mat <- mat[!(row.names(mat)%in% "1"),]
+        #rename row names 
+        for (i in 1:nrow(mat)){
+            rowName <- row.names(mat)[i] # select row name at row "i" 
+            new_rowName <- as.integer(rowName)-1; # reduce the value of the row name by 1 
+            row.names(mat)[i]<- new_rowName;    # change row name to new value. 
+        }
+    }
+    # rename columns and rows 
+    
+
+
+    return (mat)
 }
