@@ -64,16 +64,20 @@ public class RarefactionBean implements Serializable {
     }
     
     // static dropdown
-    private String Type = "NULL"; // in the view, need to present the options //application bean 
-    
-    public String getType() {
+    private final SelectItem[] Type; // in the view, need to present the options //application bean 
+    private String Typechosen;
+            
+    public SelectItem[] getType() {
         return Type;
     }
-
-    public void setType(String Type) {
-        this.Type = Type;
-    }
     
+    public String getTypechosen() {
+        return Typechosen;
+    } 
+
+    public void setTypechosen(String Typechosen) {
+        this.Typechosen = Typechosen;
+    }
     
     private String Margin = "NULL";
     
@@ -117,10 +121,20 @@ public class RarefactionBean implements Serializable {
         this.Colortext = Colortext;
     }
     
+    public RarefactionBean() {
+
+        Type = new SelectItem[3];
+        Type[0] = new SelectItem("NULL", "Species richness");
+        Type[1] = new SelectItem("Random rarefaction", "Random rarefaction");
+        Type[2] = new SelectItem("Probability", "Probability");
+     
+        
+  
+    }
     
     // ACTION BUTTON // 
     public void rareUpdate_action() {
-        DiversityUtils.CreateRarefactionDiv(sb, doOriginal, Type, Sample, doSe, Margin);       
+        DiversityUtils.CreateRarefactionDiv(sb, doOriginal, Typechosen, Sample, doSe, Margin);       
         DiversityUtils.PlotRarefactionCurveDiversity(sb, Step, Color, Colortext, sb.getNewImage("Rarefaction_Curve"), "png", 72, "false");
     }
     
