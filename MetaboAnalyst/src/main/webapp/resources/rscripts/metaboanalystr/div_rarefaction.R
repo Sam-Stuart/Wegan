@@ -18,7 +18,7 @@ Rarefaction_div <- function(mSetObj = NA, data = "false", type = "NULL", sample 
   print("inside faction R file")
 
   #library("ade4")
-  #library("adegraphics")
+  library("adegraphics")
   library("plyr")
   library("dplyr")
   library("vegan")
@@ -37,9 +37,10 @@ Rarefaction_div <- function(mSetObj = NA, data = "false", type = "NULL", sample 
   # margin = 1, data in rows; margin = 2, data in columns
   if (margin == "NULL") { 
     margin1 <- 1
-  } else {
-    margin1 <- 2
-  }
+  } else (margin == "2") {
+    margin1 <- "2"  
+}
+  margin1 <- as.numeric(margin1)
 
   cat("after if margin statmentes")
   #sample <- as.numeric(sample)
@@ -64,7 +65,7 @@ Rarefaction_div <- function(mSetObj = NA, data = "false", type = "NULL", sample 
 
   print("before real analysis")
   if (type == "NULL") {
-    Srare <- rarefy(input.2, sample = sample1, se = se1, MARGIN = margin1)
+    Srare <- rarefy(input.2, sample = sample1, se = se1, MARGIN = marginchosen)
     cat ("Expected species richness in random subsamples of size 'samples' from the community")
   } else if (type == "Random rarefaction") {
     Srare <- rrarefy(input.2, sample = sample1)
@@ -135,16 +136,19 @@ RarefactionCurve <- function(mSetObj=NA, step = "", color="NULL", color_text="",
   par(xpd=FALSE, mar=c(5.1, 4.1, 4.1, 2.1))
   
   if(color=="NULL") { 
-    color1 <- c("darkred", "forestgreen", "hotpink", "blue") #default fill palette is grayscale
-  } else if (color=="manual") { #manual user entry. Selection of this option causes text box to appear
+    color1 <- c("gray27", "green", "lightpink", "lightcoral", "midnightblue", "mediumpurple", "maroon", "lightyellow", "turquoise3", "tan3", "springgreen", "thistle1", "sienna3",
+                "orange", "dimgray", "burlywood", "darksalmon", "deeppink", "goldenrod", "forestgreen") #default fill palette is grayscale
+  } else if (color1 <- c("Viridis") {
+    color1 <- viridis
+  } else if (color1 <- c("Plasma") {
+    color1 <- c("plasma")
+  }else (color=="manual") { #manual user entry. Selection of this option causes text box to appear
     color1 <- "manual"
     color_text1 <- color_text #colors entered by user as string with commas between colors
     color_text1 <- gsub("\n", "", color_text1, fixed=TRUE) #Prepare colors list, fixed=TRUE means we are dealing with one string, versus a vector of strings (fixed=FALSE)
     color_text1 <- gsub(";", ",", color_text1, fixed=TRUE)
     color_text1 <- gsub(" ", "", color_text1, fixed=TRUE)
     color_text1 <- unlist(strsplit(color_text1, split=","))
-  } else { #User selected color palette
-    color1 <- color #user selects color palette from drop down menu (options are grayscale, viridis, plasma)
   }
   
   pars <- expand.grid(col = color1, stringsAsFactors = FALSE)
@@ -156,8 +160,8 @@ RarefactionCurve <- function(mSetObj=NA, step = "", color="NULL", color_text="",
   }  
   
   #windows(width = w, height = h)
-  rarecurve(input.2, step = step1, sample = sample1, col = color1,
-                          label = FALSE)
+  rarecurve(input.2, step = step1, sample = sample1, col = color1, label = FALSE, yaxt = "n')
+  axis(2, las = 2, labels = T)
   
   dev.off()
  
