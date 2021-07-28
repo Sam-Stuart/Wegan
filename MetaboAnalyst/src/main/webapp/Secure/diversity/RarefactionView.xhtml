@@ -34,13 +34,20 @@
                                 <p:selectBooleanCheckbox value ="#{rarefactionBean.doSe}"/> 
                                 <h:outputLabel style="font-weight: bold" value="Step"/>
                                 <p:inputText value = "#{rarefactionBean.step}"/>   
-                                <h:outputLabel style="font-weight: bold" value="Line Color:"/>
+                                <h:outputLabel style="font-weight: bold" value="Select line colors:"/>
                                 <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{rarefactionBean.colorchosen}">
                                     <f:selectItems value="#{rarefactionBean.color}"/>
                                 </p:selectOneMenu> 
-                                <h:outputLabel style="font-weight: bold" value="Colortext:"/>
+                                <h:outputLabel style="font-weight: bold" value="Input color names:"/>
                                 <p:inputText value = "#{rarefactionBean.colortext}"/>
-                        </h:panelGrid>                           
+                        </h:panelGrid>  
+                            <p:commandButton value="Customize Graph"
+                                             styleClass="graphicsButton"
+                                             style="box-shadow: none !important; text-shadow: none !important;"
+                                             actionListener="#{sessionBean1.graphicsLnk_action('pca_pair')}" 
+                                            oncomplete="PF('graphApperanceRare').show()"/>  
+                
+
                             <p:commandButton value="Update" 
                                              styleClass="updateButton"
                                              style="box-shadow: none !important; text-shadow: none !important"
@@ -60,16 +67,22 @@
                                     <i class="fa fa-question-circle"></i>
                                 </h:panelGrid>
                             </h:panelGroup>                            
-                        </h:panelGrid>
+                        </h:panelGrid>                         
+                        
                         <h:panelGrid id="rarefactionPane1" style="width: 100%;">
+<!--                        // <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                            //    
+                            // </h:panelGrid>-->
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
-                                
+                               <h:outputText escape="false" value="#{rarefactionBean.filerareresultpath}"/>
                             </h:panelGrid>
                                                     
                              <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
                                 <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('Rarefaction_curve')}" alt="TestPlot"/>
                              </h:panelGrid>                            
                         </h:panelGrid> 
+                                                    
+                                                 
                         
 
                     </h:form>

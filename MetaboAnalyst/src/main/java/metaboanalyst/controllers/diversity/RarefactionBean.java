@@ -30,6 +30,9 @@ public class RarefactionBean implements Serializable {
    private final SessionBean1 sb = (SessionBean1) DataUtils.findBean("sessionBean1");
    private final ApplicationBean1 ab = (ApplicationBean1) DataUtils.findBean("applicationBean1");
    
+   private User usr = sb.getCurrentUser();
+   private String usrName = usr.getName();
+   
    //public static final String PROP_SAMPLE_PROPERTY = "sampleProperty";
   // check box
     private boolean doOriginal = false; 
@@ -132,17 +135,28 @@ public class RarefactionBean implements Serializable {
         this.colortext = colortext;
     }
     
+    private String filerareresult = "Rarefaction.csv";
+    private String filerareresultpath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + filerareresult + "\">" + filerareresult + "</a>";
+    
+    public String getFilerareresultpath() {
+        return filerareresultpath;
+    }
+
+    public void setFilerareresultpath(String filerareresultpath) {
+        this.filerareresultpath = filerareresultpath;
+    }
+    
     public RarefactionBean() {
         type = new SelectItem[3];
         type[0] = new SelectItem("NULL", "Species richness");
-        type[1] = new SelectItem("Random rarefaction", "Random rarefaction");
+        type[1] = new SelectItem("Random_rarefaction", "Random rarefaction");
         type[2] = new SelectItem("Probability", "Probability");
         
         color = new SelectItem[4];
         color[0] = new SelectItem("NULL", "Default");
         color[1] = new SelectItem("viridis", "Viridis");
         color[2] = new SelectItem("plasma", "Plasma");
-        color[3] = new SelectItem("manul", "colortext");
+        color[3] = new SelectItem("manual", "colortext");
         
         margin = new SelectItem[2];
         margin[0] = new SelectItem("NULL", "1");
