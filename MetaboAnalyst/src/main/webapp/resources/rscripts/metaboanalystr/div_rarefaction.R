@@ -14,12 +14,12 @@
 
 Rarefaction_div <- function(mSetObj = NA, data = "false", type = "NULL", sample = "", se = "false", margin = "NULL") {
   
-  options(errors = traceback)
+  #options(errors = traceback)
   #print("inside faction R file")
 
   #library("ade4")
   #library("adegraphics")
-  install.packages("plyr")
+  #install.packages("plyr")
   library("plyr")
   #print("library plyr")
   library("dplyr")
@@ -73,32 +73,34 @@ Rarefaction_div <- function(mSetObj = NA, data = "false", type = "NULL", sample 
     cat ("Expected species richness in random subsamples of size 'samples' from the community")
     mSetObj$analset$result$name <- "Rarefaction"
     mSetObj$analset$result$type <- type1
-    mSetObj$analset$result$sample <- sample1
-    #mSetObj$analset$result$margin <- MARGIN1
+    mSetObj$analset$result$sample_size <- sample1
+    mSetObj$analset$result$margin <- MARGIN1
     mSetObj$analset$result$Output <- Srare
-  } else if (type == "Random_rarefaction") {
+    mSetObj$analset$Srare <- mSetObj$analset$result$Output
+  } else if (type == "Random rarefaction") {
     Srare <- rrarefy(input.2, sample = sample1)
     cat("Generates one randomly rarefied community data frame or vector of given 'sample' size")
-    mSetObj$analset$resdata$name <- "Rarefaction"
-    mSetObj$analset$resdata$type <- type
-    mSetObj$analset$resdata$sample <- sample1
-    #mSetObj$analset$result$margin <- MARGIN1
-    mSetObj$analset$resdata$Output <- Srare 
-    Srare.frame <- as.data.frame(cbind(mSetObj$analset$resdata$name, mSetObj$analset$resdata$type, 
-                                 mSetObj$analset$resdata$sample <- sample1, mSetObj$analset$resdata$Output <- Srare))
-    mSetObj$analset$result <- Srare.frame 
+    mSetObj$analset$result$name <- "Rarefaction"
+    mSetObj$analset$result$type <- type
+    mSetObj$analset$result$sample_size <- sample1
+    mSetObj$analset$result$margin <- MARGIN1
+    mSetObj$analset$result$Output <- Srare 
+    Srare.frame <- as.data.frame(cbind(mSetObj$analset$result$name, mSetObj$analset$result$type, 
+                                 mSetObj$analset$result$sample <- sample1, mSetObj$analset$result$Output <- Srare))
+    colnames(Srare.frame)[1:3] <- c("name", "type", "Sample_size")
+    mSetObj$analset$Srare <- Srare.frame 
   } else if (type == "Probability") {
     Srare <- drarefy(input.2, sample = sample1)
     cat("Returns probabilities that species occur in a rarefied community of size 'sample'") 
-    mSetObj$analset$resdata$name <- "Rarefaction"
-    mSetObj$analset$resdata$type <- type
-    mSetObj$analset$resdata$sample <- sample1
-    #mSetObj$analset$result$margin <- MARGIN1
-    mSetObj$analset$resdata$Output <- Srare 
-    Srare.frame <- as.data.frame(cbind(mSetObj$analset$resdata$name, mSetObj$analset$resdata$type, 
-                                       mSetObj$analset$resdata$sample <- sample1, mSetObj$analset$resdata$Output <- Srare))
-    mSetObj$analset$result <- Srare.frame 
-    
+    mSetObj$analset$result$name <- "Rarefaction"
+    mSetObj$analset$result$type <- type
+    mSetObj$analset$result$sample <- sample1
+    mSetObj$analset$result$margin <- MARGIN1
+    mSetObj$analset$result$Output <- Srare 
+    Srare.frame <- as.data.frame(cbind(mSetObj$analset$result$name, mSetObj$analset$result$type, 
+                                       mSetObj$analset$result$sample <- sample1, mSetObj$analset$result$Output <- Srare))
+    mSetObj$analset$Srare <- Srare.frame
+    colnames(mSetObj$analset$Srare)[1:3] <- c("name", "type", "Sample_size")
   }
 
   print("transfer data")
@@ -140,12 +142,11 @@ RarefactionCurve <- function(mSetObj=NA, step = "", color="NULL", color_text="",
   mSetObj <- .get.mSet(mSetObj)
   
   print("Get ready for plotting")
-  plot_data <- mSetObj$analset$result$Output
-  sample1 <- mSetObj$analset$result$sample
+  #sample1 <- mSetObj$analset$result$sample
   input.p <- mSetObj$analset$input
   
   #print("get richness value")
-  S <- specnumber(input.2)
+  #S <- specnumber(input.2)
   
   print("width and height")
   #Set plot dimensions
@@ -200,6 +201,7 @@ RarefactionCurve <- function(mSetObj=NA, step = "", color="NULL", color_text="",
   #windows(width = w, height = h)
   rarecurve(input.p, step = step1, sample = sample1, col = color1,label = T, yaxt = "n")
   axis(2, las = 2, labels = T)
+  title = "Rarefaction Curve" 
   
   dev.off()
  
@@ -207,5 +209,95 @@ RarefactionCurve <- function(mSetObj=NA, step = "", color="NULL", color_text="",
 }
 
 
+#'Produce a plot for rarefied species richness and un-rarefied richness 
+#'@description Produce rarefaction curve plot with user selected options
+#'@param mSetObj Input name of the created mSet Object
+#'@param color options include ("darkred", "forestgreen", "hotpink", "blue") (default), "plasma" and "grayscale"
+#'@param color_text Input name of the user selected colors' names. 
+#'@param step step size for sample sizes in rarefaction curves, user input the number of step.
+#'@param imgName Input the image name
+#'@param format Select the image format, "png" or "pdf", default is "png" 
+#'@param dpi Input the dpi. If the image format is "pdf", users need not define the dpi. For "png" images, 
+#'the default dpi is 72. It is suggested that for high-resolution images, select a dpi of 300.  
+#'@param width Input the width, there are 2 default widths. The first, width=NULL, is 10.5.
+#'The second default is width=0, where the width is 7.2. Otherwise users can input their own width
+#'@author Shiyang Zhao\email{shiyang1@ualberta.ca}
+#'University of Alberta, Canada
+#'License: GNU GPL (>= 2)
+#'@export
 
+RarefactionPlot <- function(mSetObj=NA, color_b="NULL", color_text_b="NULL", imgName, format="png", dpi=72, width=NA) {
+  
+  library(vegan)
+  
+  cat("Linear plot only works for univariate analysis")
+  mSetObj <- .get.mSet(mSetObj)
+  margin.p <- as.numeric(mSetObj$analset$result$margin)
+  plot_data <- mSetObj$analset$Srare
+  input.p <- mSetObj$analset$input
+  
+  #if (MARGIN2 == "2") {
+  #  plot_data <- mSetObj$analset$result$Output[1,]
+  #} else {
+  #  plot_data <- mSetObj$analset$result$Output
+  #}
+  
+   S <- specnumber(input.p, MARGIN = margin.p)
+  
+  #Set plot dimensions
+  if(is.na(width)){
+    w <- 10.5
+  } else if(width==0){
+    w <- 7.2
+  } else{
+    w <- width
+  }
+  h <- w
+  
+  #Name plot for download
+  imgName <- paste(imgName, "dpi", dpi, ".", format, sep="")
+  mSetObj$imgSet$Plot.Rarefaction <- imgName
+  
+  Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
+  par(xpd=FALSE, mar=c(5.1, 4.1, 4.1, 2.1))
+  #abline(0, 1)
+  
+  
+  if(color_b=="NULL") { 
+    color1_b <- c("black") #default fill palette is grayscale
+  } else if (color_b == "gray") {
+     color1_b <- c("gray") 
+  } else if (color_b == "blue") {
+     color1_b <- c("blue")
+  } else if (color_b == "manual") { #manual user entry. Selection of this option causes text box to appear
+    color1_b <- "manual"
+    color_text1_b <- color_text_b #colors entered by user as string with commas between colors
+    color_text1_b <- gsub("\n", "", color_text1, fixed=TRUE) #Prepare colors list, fixed=TRUE means we are dealing with one string, versus a vector of strings (fixed=FALSE)
+    color_text1_b <- gsub(";", ",", color_text1, fixed=TRUE)
+    color_text1_b <- gsub(" ", "", color_text1, fixed=TRUE)
+    color_text1_b <- unlist(strsplit(color_text1_b, split=","))
+  } else { #User selected color palette
+    color1_b <- color_b #user selects color palette from drop down menu (options are grayscale, viridis, plasma)
+  }
+  
+  pars <- expand.grid(col = color1_b, stringsAsFactors = FALSE)
+  
+  #if (is.na(step)) {
+  #  cat("step has to be numeric data and can't be blank")
+  #} else {
+  #  step1 = as.numeric(step) 
+  #}  
+  
+  #windows(width = w, height = h)
+  plot(plot_data ~ S, xaxt = "n", yaxt = "n", 
+       col = color1_b, xlab = "Observed No. of Species", ylab = "Rarefied No. of Species")
+  axis(1, labels = T)
+  axis(2, las = 2 )
+  #abline(0,1)
+  title = "Rarefaction Linear Plot"
+
+  dev.off()
+  
+  return(.set.mSet(mSetObj))
+}
 

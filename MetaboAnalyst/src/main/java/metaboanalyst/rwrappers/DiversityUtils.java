@@ -160,24 +160,43 @@ public class DiversityUtils {
             return false;
         }
     }	//mSet<-Rarefaction_div(mSet, "NULL, ", "false", "NULL" , "false")
-    public static void PlotRarefactionCurveDiversity(SessionBean1 sb, String step, String color, String color_text, String imgName, String format, int dpi, String width) {
+    public static void PlotRarefactionCurveDiversity(SessionBean1 sb, String step, String color, String colortext, String imgName, String format, int dpi, String width) {
         try {
             RConnection RC = sb.getRConnection();
             String rCommand = "RarefactionCurve(NA" 
                                                  + ", \"" + step 
                                                  + "\", \""  + color 
-                                                 + "\", \"" + color_text
+                                                 + "\", \"" + colortext
                                                  + "\", \"" + imgName 
                                                  + "\", \"" + format 
                                                  + "\", " + dpi 
                                                  + ", width=NA)";
             RCenter.recordRCommand(RC, rCommand);
-            sb.addGraphicsCMD("div_Rarefact_curve", rCommand);
+            sb.addGraphicsCMD("div_Rarefaction_curve", rCommand);
             RC.voidEval(rCommand);
         } catch (RserveException rse) {
             System.out.println(rse);
         }
     }
+        
+    public static void PlotRarefactionPlotDiversity(SessionBean1 sb, String colorb, String colortextb, String imgName, String format, int dpi, String width) {
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "RarefactionPlot(NA" 
+                                                 + ", \""  + colorb 
+                                                 + "\", \"" + colortextb
+                                                 + "\", \"" + imgName 
+                                                 + "\", \"" + format 
+                                                 + "\", " + dpi 
+                                                 + ", width=NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            sb.addGraphicsCMD("Rarefaction_Linear_Plot", rCommand);
+            RC.voidEval(rCommand);
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        }
+    }
+    
     /////// ------------ Diversity helper functions --------------- //////////////
 
     public static void PlotRarefactionCurveDiversity(SessionBean1 sb, String currentImage, String png, int i) {

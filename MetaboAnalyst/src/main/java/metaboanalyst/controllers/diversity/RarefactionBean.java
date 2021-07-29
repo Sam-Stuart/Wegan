@@ -124,7 +124,23 @@ public class RarefactionBean implements Serializable {
         this.colorchosen = colorchosen;
     }
     
-   
+    
+    private final SelectItem[] colorb;
+    private String colorchosen_b;
+    
+    public SelectItem[] getColorb() {
+        return colorb;
+    }
+    
+    public String getColorchosen_b() {
+        return colorchosen_b;
+    } 
+
+    public void setColorchosen_b(String colorchosen_b) {
+        this.colorchosen_b = colorchosen_b;
+    }
+
+    
     private String colortext = " ";
     
     public String getColortext() {
@@ -133,6 +149,17 @@ public class RarefactionBean implements Serializable {
 
     public void setColortext(String colortext) {
         this.colortext = colortext;
+    }
+    
+    
+    private String colortextb = " ";
+    
+    public String getColortextb() {
+        return colortextb;
+    }
+
+    public void setColortextb(String colortextb) {
+        this.colortextb = colortextb;
     }
     
     private String filerareresult = "Rarefaction.csv";
@@ -149,7 +176,7 @@ public class RarefactionBean implements Serializable {
     public RarefactionBean() {
         type = new SelectItem[3];
         type[0] = new SelectItem("NULL", "Species richness");
-        type[1] = new SelectItem("Random_rarefaction", "Random rarefaction");
+        type[1] = new SelectItem("Random rarefaction", "Random rarefaction");
         type[2] = new SelectItem("Probability", "Probability");
         
         color = new SelectItem[4];
@@ -161,6 +188,12 @@ public class RarefactionBean implements Serializable {
         margin = new SelectItem[2];
         margin[0] = new SelectItem("NULL", "1");
         margin[1] = new SelectItem("2", "2");
+        
+        colorb = new SelectItem[4];
+        colorb[0] = new SelectItem("NULL", "Default");
+        colorb[1] = new SelectItem("gray", "Gray");
+        colorb[2] = new SelectItem("blue", "Blue");
+        colorb[3] = new SelectItem("manual", "colortext");
     }
     
 //    public RarefactionBean() {
@@ -181,6 +214,7 @@ public class RarefactionBean implements Serializable {
     public void rareUpdate_action() {
         DiversityUtils.CreateRarefactionDiv(sb, doOriginal, typechosen, sample, doSe, marginchosen);       
         DiversityUtils.PlotRarefactionCurveDiversity(sb, step, colorchosen, colortext, sb.getNewImage("Rarefaction_Curve"), "png", 72, "false");
+        DiversityUtils.PlotRarefactionPlotDiversity(sb, colorchosen_b, colortextb, sb.getNewImage("Rarefaction_Linear_Plot"), "png", 72, "false");
     }
     
 }
