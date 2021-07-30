@@ -82,6 +82,12 @@
                              </h:panelGrid>                            
                         </h:panelGrid> 
                     </h:form>
+                    <p:dialog modal="true" widgetVar="graphApperanceRare" 
+                        style="width: 400px; height:400px;" 
+                        appendTo="@(body)" header="Graphics Center"
+                        draggable="false" closable="true" resizable="false"> 
+                        <ui:include src="_color_palette_rare_curve.xhtml" />
+                    </p:dialog>
                 </p:tab>
                 
                 <p:tab title ="Rarefaction Plot" titleStyleClass="p-tab-nav">
@@ -103,12 +109,7 @@
                                 </p:selectOneMenu> 
                                 <h:outputLabel style="font-weight: bold" value="Return Standard Error:"/>
                                 <p:selectBooleanCheckbox value ="#{rarefactionBean.doSe}"/> 
-                                <h:outputLabel style="font-weight: bold" value="Select line colors:"/>
-                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{rarefactionBean.colorchosen_b}">
-                                    <f:selectItems value="#{rarefactionBean.colorb}"/>
-                                </p:selectOneMenu> 
-                                <h:outputLabel style="font-weight: bold" value="Input color names:"/>
-                                <p:inputText value = "#{rarefactionBean.colortext}"/>
+                                
                         </h:panelGrid>  
                             <p:commandButton value="Customize Graph"
                                              styleClass="graphicsButton"
@@ -151,10 +152,14 @@
                              </h:panelGrid>                            
                         </h:panelGrid> 
                     </h:form>
+                    <p:dialog modal="true" widgetVar="graphApperanceRare" 
+                        style="width: 400px; height:400px;" 
+                        appendTo="@(body)" header="Graphics Center"
+                        draggable="false" closable="true" resizable="false"> 
+                    <ui:include src="_color_palette_rare_plot.xhtml" />
+                    </p:dialog>
                 </p:tab>
-            
-            </p:tabView>
-            
-        </h:panelGrid> 
+            </h:panelGrid>
+        </p:tabView>
     </ui:define>
 </ui:composition>

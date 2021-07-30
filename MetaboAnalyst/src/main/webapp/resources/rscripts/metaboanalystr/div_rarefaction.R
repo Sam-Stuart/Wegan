@@ -47,12 +47,6 @@ Rarefaction_div <- function(mSetObj = NA, data = "false", type = "NULL", sample 
 
   cat("after if margin statmentes")
   #sample <- as.numeric(sample)
-  if (sample == "") {
-    #the minimum sample count achieved over the selected data columns
-    sample1 <-  min(rowSums(input)) 
-  } else {
-    sample1 = as.numeric(sample)
-  }
 
   print("before se")
   if (se == "false") {
@@ -69,6 +63,12 @@ Rarefaction_div <- function(mSetObj = NA, data = "false", type = "NULL", sample 
   print("before real analysis")
   if (type == "NULL") {
     type1 <- "Rarefaction"
+    if (sample == "") {
+    #the minimum sample count achieved over the selected data columns
+      sample1 <-  as.numeric(min(rowSums(input))) 
+    } else {
+      sample1 = as.numeric(sample)
+    }
     Srare <- rarefy(input.2, sample = sample1, se = se1, MARGIN = MARGIN1)
     cat ("Expected species richness in random subsamples of size 'samples' from the community")
     mSetObj$analset$result$name <- "Rarefaction"
@@ -78,6 +78,12 @@ Rarefaction_div <- function(mSetObj = NA, data = "false", type = "NULL", sample 
     mSetObj$analset$result$Output <- Srare
     mSetObj$analset$Srare <- mSetObj$analset$result$Output
   } else if (type == "Random rarefaction") {
+    if (sample == "") {
+    #the minimum sample count achieved over the selected data columns
+      sample1 <-  as.numeric(min(rowSums(input))-2) 
+    } else {
+      sample1 = as.numeric(sample)
+    }
     Srare <- rrarefy(input.2, sample = sample1)
     cat("Generates one randomly rarefied community data frame or vector of given 'sample' size")
     mSetObj$analset$result$name <- "Rarefaction"
@@ -90,6 +96,12 @@ Rarefaction_div <- function(mSetObj = NA, data = "false", type = "NULL", sample 
     colnames(Srare.frame)[1:3] <- c("name", "type", "Sample_size")
     mSetObj$analset$Srare <- Srare.frame 
   } else if (type == "Probability") {
+    if (sample == "") {
+    #the minimum sample count achieved over the selected data columns
+      sample1 <-  as.numeric(min(rowSums(input))-2) 
+    } else {
+        sample1 = as.numeric(sample)
+    }
     Srare <- drarefy(input.2, sample = sample1)
     cat("Returns probabilities that species occur in a rarefied community of size 'sample'") 
     mSetObj$analset$result$name <- "Rarefaction"
@@ -142,8 +154,10 @@ RarefactionCurve <- function(mSetObj=NA, step = "", color="NULL", color_text="",
   mSetObj <- .get.mSet(mSetObj)
   
   print("Get ready for plotting")
+ 
   #sample1 <- mSetObj$analset$result$sample
   input.p <- mSetObj$analset$input
+  type <- mSetObj$analset$result$type
   
   #print("get richness value")
   #S <- specnumber(input.2)

@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="rareGraph">
+        <h:panelGrid columns="1" style="width:380px;">
+            <h:panelGrid id="panelGrid2" columns="2" cellpadding="5" columnClasses="colBrayLong,colBrayShort">
+                <h:outputLabel style="font-weight: bold" value="Select line colors:"/>
+                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{rarefactionBean.colorchosen_b}">
+                        <f:selectItems value="#{rarefactionBean.colorb}"/>
+                    </p:selectOneMenu> 
+                    <h:outputLabel style="font-weight: bold" value="Input color names:"/>
+                    <p:inputText value = "#{rarefactionBean.colortextb}"/>
+                <p:panelGrid></p:panelGrid>  
+
+
+            </h:panelGrid>
+            <h:panelGrid id="panelGrid4" columns="1" cellpadding="5" style="float: right">
+                <p:commandButton value="Update" 
+                                 styleClass="updateButton"
+                                 style="box-shadow: none !important; text-shadow: none !important"
+                                onclick="PF('statusDialog').show()"
+                                oncomplete="PF('graphApperanceRare').hide(); PF('statusDialog').hide()"  
+                                update=":rarefaction:form1:rarePane1  :cmdPane" 
+                                actionListener="#{rarefactionBean.rareUpdate_action()}"/>
+            </h:panelGrid>
+        </h:panelGrid>
+    </h:form>
+</ui:composition>
+
