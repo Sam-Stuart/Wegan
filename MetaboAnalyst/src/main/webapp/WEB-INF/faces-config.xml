@@ -270,6 +270,11 @@
             <from-outcome>Rarefaction</from-outcome>
             <to-view-id>/Secure/diversity/RarefactionView.xhtml</to-view-id>
             <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>Abunddist</from-outcome>
+            <to-view-id>/Secure/diversity/AbunddistView.xhtml</to-view-id>
+            <redirect/>
         </navigation-case>  
                                                                        
                                                                                                                                                                                                                     

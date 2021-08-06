@@ -67,6 +67,7 @@ public class RarefactionBean implements Serializable {
         this.sample = sample;
     }
     
+        
     // static dropdown
     private final SelectItem[] type; // in the view, need to present the options //application bean 
     private String typechosen;
@@ -213,7 +214,7 @@ public class RarefactionBean implements Serializable {
     // ACTION BUTTON // 
     public void rareUpdate_action() {
         DiversityUtils.CreateRarefactionDiv(sb, doOriginal, typechosen, sample, doSe, marginchosen);       
-        DiversityUtils.PlotRarefactionCurveDiversity(sb, step, colorchosen, colortext, sb.getNewImage("Rarefaction_Curve"), "png", 72, "false");
+        DiversityUtils.PlotRarefactionCurveDiversity(sb, step, colorchosen, colortext, sb.getNewImage("Rarefaction_Curve_Plot"), "png", 72, "false");
         DiversityUtils.PlotRarefactionPlotDiversity(sb, colorchosen_b, colortextb, sb.getNewImage("Rarefaction_Linear_Plot"), "png", 72, "false");
     }
     

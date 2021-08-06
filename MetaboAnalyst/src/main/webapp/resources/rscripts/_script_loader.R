@@ -17,7 +17,7 @@ correlation_files <- c("correlation_linear", "correlation_penalized", "correlati
 ordination_files <- c("ord_nmds", "ord_pcoa", "ord_cia", "ord_dca", "ord_anosim", "ord_rda", "ord_bray", "ord_cca");
 nmds_files <- c("test-Vegan", "dispersal", "plotting");
 dispersal_files <- c("dispersal");
-diversity_files <- c("div_rarefaction");
+diversity_files <- c("div_rarefaction", "div_abundance_dist");
 plotting_files <- c("plotting", "plotting_pie", "plot_bar", "plot_box", "plot_scatter");
 correlation_files <- c("correlation_linear", "correlation_penalized", "correlation_polynomial", "correlation_ml", "correlation_multivariate", "correlation_SVM", "correlation_logistic");
 ordination_files <- c("ord_nmds", "ord_pcoa", "ord_cia", "ord_dca", "ord_anosim", "ord_rda", "ord_bray", "ord_cca");

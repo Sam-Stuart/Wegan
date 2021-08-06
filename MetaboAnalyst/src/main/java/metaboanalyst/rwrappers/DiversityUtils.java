@@ -141,7 +141,7 @@ public class DiversityUtils {
     }
     
     
-        public static boolean CreateRarefactionDiv(SessionBean1 sb, Boolean data, String type, String sample, Boolean se, String margin) {
+    public static boolean CreateRarefactionDiv(SessionBean1 sb, Boolean data, String type, String sample, Boolean se, String margin) {
         try {
             System.out.print("R RAREFACTION");
             RConnection RC = sb.getRConnection(); //Start R connection
@@ -160,11 +160,12 @@ public class DiversityUtils {
             return false;
         }
     }	//mSet<-Rarefaction_div(mSet, "NULL, ", "false", "NULL" , "false")
+    
     public static void PlotRarefactionCurveDiversity(SessionBean1 sb, String step, String color, String colortext, String imgName, String format, int dpi, String width) {
         try {
             RConnection RC = sb.getRConnection();
             String rCommand = "RarefactionCurve(NA" 
-                                                 + ", \"" + step 
+                                                 + ", \"" + step
                                                  + "\", \""  + color 
                                                  + "\", \"" + colortext
                                                  + "\", \"" + imgName 
@@ -172,7 +173,7 @@ public class DiversityUtils {
                                                  + "\", " + dpi 
                                                  + ", width=NA)";
             RCenter.recordRCommand(RC, rCommand);
-            sb.addGraphicsCMD("div_Rarefaction_curve", rCommand);
+            sb.addGraphicsCMD("Rarefaction_Curve_Plot", rCommand);
             RC.voidEval(rCommand);
         } catch (RserveException rse) {
             System.out.println(rse);
@@ -191,6 +192,62 @@ public class DiversityUtils {
                                                  + ", width=NA)";
             RCenter.recordRCommand(RC, rCommand);
             sb.addGraphicsCMD("Rarefaction_Linear_Plot", rCommand);
+            RC.voidEval(rCommand);
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        }
+    }
+
+    public static boolean CreateAbundDistDiv(SessionBean1 sb, Boolean data, String community, Boolean tiesplit, String truncate) {
+        try {
+            System.out.print("R RAREFACTION");
+            RConnection RC = sb.getRConnection(); //Start R connection
+            String rCommand = "AbundanceModel(NA"
+                                                 + ", \"" + data
+                                                 + "\", \"" + community
+                                                 + "\", \"" + tiesplit
+                                                 + "\", \"" + truncate                                           
+                                                 + "\")";
+            RCenter.recordRCommand(RC, rCommand); // records r command
+            RC.voidEval(rCommand); // tells you want your r script returns  
+            return true;
+        } catch (RserveException rse) {
+            System.out.println(rse);
+            return false;
+        }
+    }
+    
+    public static void PlotAbundFisherPlotDiv(SessionBean1 sb, String bar_color, String line_color_addFit, String imgName, String format, int dpi, String width) {
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "AbundanceFisherPlot(NA" 
+                                                 + ", \""  + bar_color 
+                                                 + "\", \"" + line_color_addFit
+                                                 + "\", \"" + imgName 
+                                                 + "\", \"" + format 
+                                                 + "\", " + dpi 
+                                                 + ", width=NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            sb.addGraphicsCMD("Abundance_Fisher_Dist_Plot", rCommand);
+            RC.voidEval(rCommand);
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        }
+    }
+    
+    public static void PlotAbundPrestPlotDiv(SessionBean1 sb, String bar_color, String line_color_addPoi, String line_color_addMax, String imgName, String format, int dpi, String width) {
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "AbundancePrestPlot(NA" 
+                                                 + ", \""  + bar_color 
+                                                 + "\", \"" + line_color_addPoi
+                                                 + "\", \"" + line_color_addMax
+                                                 + "\", \"" + imgName 
+                                                 + "\", \"" + format 
+                                                 + "\", " + dpi 
+                                                 + ", width=NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            sb.addGraphicsCMD("Abundance_Prest_Dist_Plot", rCommand);
             RC.voidEval(rCommand);
         } catch (RserveException rse) {
             System.out.println(rse);

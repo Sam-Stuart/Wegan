@@ -7,22 +7,27 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="/frags/_anal_template.xhtml">
     <ui:define name="metaInfo">
-        <f:event type="preRenderView" listener="#{diversityBean.performDefaultAnalysis('Rarefaction')}"/> 
+        <f:event type="preRenderView" listener="#{diversityBean.performDefaultAnalysis('Abunddist')}"/> 
         <f:event type="preRenderView" listener="#{downloader.setupDownloadTable()}"/>
     </ui:define>
     <ui:define name="content">
         <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
-            <p:tabView id="rarefaction">
-                <p:tab title ="Rarefaction Curve Plot" titleStyleClass="p-tab-nav">
+            <p:tabView id="abundancedist">
+                <p:tab title ="Abundance Log series Distribution" titleStyleClass="p-tab-nav">
                     <h:form id="form1">
                         
                         <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
                             <h:panelGrid id="panelGrid" columns="6" cellpadding="3" >
                                 <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
-                                <p:selectBooleanCheckbox value ="#{rarefactionBean.doOriginal}"/> 
-                                <h:outputLabel style="font-weight: bold" value="Select samples size:"/>
-                                <p:inputText value = "#{rarefactionBean.sample}"/>
-                                <h:outputLabel style="font-weight: bold" value="Rarefaction Type:"/>
+                                <p:selectBooleanCheckbox value ="#{abunddistBean.doOriginal}"/> 
+                                <h:outputLabel style="font-weight: bold" value="Tiesplit:"/>
+                                <p:selectBooleanCheckbox value = "#{abunddistBean.doTiesplit}"/>
+                                <h:outputLabel style="font-weight: bold" value="Truncate"/>
+                                <p:inputText value = "#{abunddistBean.truncate}"/>  
+                                <h:outputLabel style="font-weight: bold" value="Select particular sampling plot:"/>
+                                <p:inputText value = "#{abunddistBean.community}"/>  
+                
+<!--                                <h:outputLabel style="font-weight: bold" value="Rarefaction Type:"/>
                                 <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{rarefactionBean.typechosen}">
                                     <f:selectItems value="#{rarefactionBean.type}"/>
                                 </p:selectOneMenu> 
@@ -31,13 +36,13 @@
                                     <f:selectItems value="#{rarefactionBean.margin}"/>
                                 </p:selectOneMenu> 
                                 <h:outputLabel style="font-weight: bold" value="Return Standard Error:"/>
-                                <p:selectBooleanCheckbox value ="#{rarefactionBean.doSe}"/> 
+                                <p:selectBooleanCheckbox value ="#{rarefactionBean.doSe}"/> -->
                             </h:panelGrid>  
                             <p:commandButton value="Customize Graph"
                                              styleClass="graphicsButton"
                                              style="box-shadow: none !important; text-shadow: none !important;"
                                              actionListener="#{sessionBean1.graphicsLnk_action('pca_pair')}" 
-                                            oncomplete="PF('graphApperanceRare').show()"/>  
+                                            oncomplete="PF('graphApperanceAbunddist').show()"/>  
                 
 
                             <p:commandButton value="Update" 
@@ -45,8 +50,8 @@
                                              style="box-shadow: none !important; text-shadow: none !important"
                                             onclick="PF('statusDialog').show()"
                                             oncomplete="PF('statusDialog').hide()"  
-                                            update=":rarefaction:form1:rarefactionPane1  :cmdPane" 
-                                            actionListener="#{rarefactionBean.rareUpdate_action()}"/>                          
+                                            update=":abundancedist:form1:abunddistPane1  :cmdPane" 
+                                            actionListener="#{abunddistBean.AbunddistUpdate_action()}"/>                          
                         </h:panelGrid>
                         <h:panelGrid class="resultsBar" columns="2">
                             <h:panelGroup>
@@ -61,47 +66,56 @@
                             </h:panelGroup>                            
                         </h:panelGrid>                         
                         
-                        <h:panelGrid id="rarefactionPane1" style="width: 100%;">
+                        <h:panelGrid id="abunddistPane1" style="width: 100%;">
 <!--                        // <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
                             //    
                             // </h:panelGrid>-->
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
-                               <h:outputText escape="false" value="#{rarefactionBean.filerareresultpath}"/>
+                               <h:outputText escape="false" value="#{abunddistBean.filefisheroutputresultpath}"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                               <h:outputText escape="false" value="#{abunddistBean.filepoissoncoefresultpath}"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                               <h:outputText escape="false" value="#{abunddistBean.filepoissonfreqresultpath}"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                               <h:outputText escape="false" value="#{abunddistBean.filepoissonextraresultpath}"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                               <h:outputText escape="false" value="#{abunddistBean.filemaxcoefresultpath}"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                               <h:outputText escape="false" value="#{abunddistBean.filemaxfreqresultpath}"/>
                             </h:panelGrid>
                                                     
                              <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
-                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('Rarefaction_Curve_Plot')}" alt="TestPlot"/>
+                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('Abundance_Fisher_Dist_Plot')}" alt="TestPlot"/>
                              </h:panelGrid>                            
                         </h:panelGrid> 
                     </h:form>
                 </p:tab>
                 
-                <p:tab title ="Rarefaction Scatter Plot" titleStyleClass="p-tab-nav">
+                <p:tab title ="Abundance Lognormal Distribution" titleStyleClass="p-tab-nav">
                     <h:form id="form2">
                         
                         <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
                             <h:panelGrid id="panelGrid" columns="6" cellpadding="3" >
                                 <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
-                                <p:selectBooleanCheckbox value ="#{rarefactionBean.doOriginal}"/> 
-                                <h:outputLabel style="font-weight: bold" value="Select samples size:"/>
-                                <p:inputText value = "#{rarefactionBean.sample}"/>
-                                <h:outputLabel style="font-weight: bold" value="Rarefaction Type:"/>
-                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{rarefactionBean.typechosen}">
-                                    <f:selectItems value="#{rarefactionBean.type}"/>
-                                </p:selectOneMenu> 
-                                <h:outputLabel style="font-weight: bold" value="Margin (select row or column):"/>
-                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{rarefactionBean.marginchosen}">
-                                    <f:selectItems value="#{rarefactionBean.margin}"/>
-                                </p:selectOneMenu> 
-                                <h:outputLabel style="font-weight: bold" value="Return Standard Error:"/>
-                                <p:selectBooleanCheckbox value ="#{rarefactionBean.doSe}"/> 
-                                
-                        </h:panelGrid>  
+                                <p:selectBooleanCheckbox value ="#{abunddistBean.doOriginal}"/> 
+                                <h:outputLabel style="font-weight: bold" value="Tiesplit:"/>
+                                <p:selectBooleanCheckbox value = "#{abunddistBean.doTiesplit}"/>
+                                <h:outputLabel style="font-weight: bold" value="Truncate"/>
+                                <p:inputText value = "#{abunddistBean.truncate}"/>  
+                                <h:outputLabel style="font-weight: bold" value="Select particular sampling plot:"/>
+                                <p:inputText value = "#{abunddistBean.community}"/>  
+                          
+                            </h:panelGrid>  
                             <p:commandButton value="Customize Graph"
                                              styleClass="graphicsButton"
                                              style="box-shadow: none !important; text-shadow: none !important;"
                                              actionListener="#{sessionBean1.graphicsLnk_action('pca_pair')}" 
-                                            oncomplete="PF('graphApperanceRare').show()"/>  
+                                            oncomplete="PF('graphApperanceAbunddist').show()"/>  
                 
 
                             <p:commandButton value="Update" 
@@ -109,8 +123,8 @@
                                              style="box-shadow: none !important; text-shadow: none !important"
                                             onclick="PF('statusDialog').show()"
                                             oncomplete="PF('statusDialog').hide()"  
-                                            update=":rarefaction:form2:rarefactionPane2  :cmdPane" 
-                                            actionListener="#{rarefactionBean.rareUpdate_action()}"/>                          
+                                            update=":abundancedist:form2:abunddistPane2  :cmdPane" 
+                                            actionListener="#{abunddistBean.AbunddistUpdate_action()}"/>                       
                         </h:panelGrid>
                         <h:panelGrid class="resultsBar" columns="2">
                             <h:panelGroup>
@@ -125,26 +139,41 @@
                             </h:panelGroup>                            
                         </h:panelGrid>                         
                         
-                        <h:panelGrid id="rarefactionPane2" style="width: 100%;">
+                        <h:panelGrid id="abunddistPane2" style="width: 100%;">
 <!--                        // <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
                             //    
                             // </h:panelGrid>-->
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
-                               <h:outputText escape="false" value="#{rarefactionBean.filerareresultpath}"/>
+                               <h:outputText escape="false" value="#{abunddistBean.filefisheroutputresultpath}"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                               <h:outputText escape="false" value="#{abunddistBean.filepoissoncoefresultpath}"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                               <h:outputText escape="false" value="#{abunddistBean.filepoissonfreqresultpath}"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                               <h:outputText escape="false" value="#{abunddistBean.filepoissonextraresultpath}"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                               <h:outputText escape="false" value="#{abunddistBean.filemaxcoefresultpath}"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                               <h:outputText escape="false" value="#{abunddistBean.filemaxfreqresultpath}"/>
                             </h:panelGrid>
                                                     
                              <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
-                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('Rarefaction_Linear_Plot')}" alt="TestPlot"/>
+                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('Abundance_Prest_Dist_Plot')}" alt="TestPlot"/>
                              </h:panelGrid>                            
                         </h:panelGrid> 
                     </h:form>
                </p:tab>
             </p:tabView>
-            <p:dialog modal="true" widgetVar="graphApperanceRare" 
+            <p:dialog modal="true" widgetVar="graphApperanceAbunddist" 
                 style="width: 400px; height:400px;" 
                 appendTo="@(body)" header="Graphics Center"
                 draggable="false" closable="true" resizable="false"> 
-                <ui:include src="_color_palette_rare.xhtml" />
+                <ui:include src="_color_palette_abunddist.xhtml" />
             </p:dialog>
  
         </h:panelGrid>

@@ -14,7 +14,7 @@
 
 Rarefaction_div <- function(mSetObj = NA, data = "false", type = "NULL", sample = "", se = "false", margin = "NULL") {
   
-  #options(errors = traceback)
+  options(errors = traceback)
   #print("inside faction R file")
 
   #library("ade4")
@@ -44,8 +44,9 @@ Rarefaction_div <- function(mSetObj = NA, data = "false", type = "NULL", sample 
     margin1 <- "2"  
   }
   margin1 <- as.numeric(margin1)
+  print(margin1)  
 
-  cat("after if margin statmentes")
+  cat("after if margin statement")
   #sample <- as.numeric(sample)
 
   print("before se")
@@ -53,34 +54,32 @@ Rarefaction_div <- function(mSetObj = NA, data = "false", type = "NULL", sample 
     se1 = FALSE
   } else {
     se1 = TRUE
-  }
- 
+  } 
 
   cat("Rarefaction technique works on numeric data only")
   input.2 <- select_if(input, is.numeric)
-
 
   print("before real analysis")
   if (type == "NULL") {
     type1 <- "Rarefaction"
     if (sample == "") {
     #the minimum sample count achieved over the selected data columns
-      sample1 <-  as.numeric(min(rowSums(input))) 
+      sample1 <- as.numeric(min(rowSums(input))) 
     } else {
       sample1 = as.numeric(sample)
     }
-    Srare <- rarefy(input.2, sample = sample1, se = se1, MARGIN = MARGIN1)
+    Srare <- rarefy(input.2, sample = sample1, se = se1, MARGIN = margin1)
     cat ("Expected species richness in random subsamples of size 'samples' from the community")
     mSetObj$analset$result$name <- "Rarefaction"
     mSetObj$analset$result$type <- type1
     mSetObj$analset$result$sample_size <- sample1
-    mSetObj$analset$result$margin <- MARGIN1
+    mSetObj$analset$result$margin <- margin1
     mSetObj$analset$result$Output <- Srare
     mSetObj$analset$Srare <- mSetObj$analset$result$Output
   } else if (type == "Random rarefaction") {
     if (sample == "") {
     #the minimum sample count achieved over the selected data columns
-      sample1 <-  as.numeric(min(rowSums(input))-2) 
+      sample1 <- as.numeric(min(rowSums(input))) 
     } else {
       sample1 = as.numeric(sample)
     }
@@ -88,8 +87,8 @@ Rarefaction_div <- function(mSetObj = NA, data = "false", type = "NULL", sample 
     cat("Generates one randomly rarefied community data frame or vector of given 'sample' size")
     mSetObj$analset$result$name <- "Rarefaction"
     mSetObj$analset$result$type <- type
-    mSetObj$analset$result$sample_size <- sample1
-    mSetObj$analset$result$margin <- MARGIN1
+    #mSetObj$analset$result$sample_size <- sample1
+    mSetObj$analset$result$margin <- margin1
     mSetObj$analset$result$Output <- Srare 
     Srare.frame <- as.data.frame(cbind(mSetObj$analset$result$name, mSetObj$analset$result$type, 
                                  mSetObj$analset$result$sample <- sample1, mSetObj$analset$result$Output <- Srare))
@@ -98,7 +97,7 @@ Rarefaction_div <- function(mSetObj = NA, data = "false", type = "NULL", sample 
   } else if (type == "Probability") {
     if (sample == "") {
     #the minimum sample count achieved over the selected data columns
-      sample1 <-  as.numeric(min(rowSums(input))-2) 
+      sample1 <- as.numeric(min(rowSums(input)))
     } else {
         sample1 = as.numeric(sample)
     }
@@ -107,7 +106,7 @@ Rarefaction_div <- function(mSetObj = NA, data = "false", type = "NULL", sample 
     mSetObj$analset$result$name <- "Rarefaction"
     mSetObj$analset$result$type <- type
     mSetObj$analset$result$sample <- sample1
-    mSetObj$analset$result$margin <- MARGIN1
+    #mSetObj$analset$result$margin <- margin1
     mSetObj$analset$result$Output <- Srare 
     Srare.frame <- as.data.frame(cbind(mSetObj$analset$result$name, mSetObj$analset$result$type, 
                                        mSetObj$analset$result$sample <- sample1, mSetObj$analset$result$Output <- Srare))
@@ -115,12 +114,14 @@ Rarefaction_div <- function(mSetObj = NA, data = "false", type = "NULL", sample 
     colnames(mSetObj$analset$Srare)[1:3] <- c("name", "type", "Sample_size")
   }
 
+  print(sample)
   print("transfer data")
   print(Srare)
   #mSetObj$analset$result$name <- "Rarefaction"
   #mSetObj$analset$result$type <- type
   #mSetObj$analset$result$sample <- sample1
   #mSetObj$analset$result$Output <- Srare
+  
   mSetObj$analset$input <- input.2
   
   write.csv(mSetObj$analset$result, "Rarefaction.csv")
@@ -155,7 +156,7 @@ RarefactionCurve <- function(mSetObj=NA, step = "", color="NULL", color_text="",
   
   print("Get ready for plotting")
  
-  #sample1 <- mSetObj$analset$result$sample
+  sample1 <- mSetObj$analset$result$sample_size
   input.p <- mSetObj$analset$input
   type <- mSetObj$analset$result$type
   
@@ -181,27 +182,22 @@ RarefactionCurve <- function(mSetObj=NA, step = "", color="NULL", color_text="",
   Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
   par(xpd=FALSE, mar=c(5.1, 4.1, 4.1, 2.1))
   
+  n <- length(input.p[1,])
   if (color=="NULL") { 
     color1 <- c("grey27", "green", "lightpink", "lightcoral", "midnightblue",
                 "mediumpurple", "maroon", "lightyellow", "turquoise3", "tan3", 
                 "springgreen", "thistle1", "sienna3", "orange", "dimgray",
                 "burlywood", "darksalmon", "deeppink", "goldenrod", "forestgreen")
   } else if (color == "viridis") {
-     color1 <- c("gray", "black", "red") 
+     color1 <- viridis(n) 
   } else if (color == "plasma") {
-     color1 <- c("green", "yellow", "blue")
-  }else if (color=="manual") { #manual user entry. Selection of this option causes text box to appear
-     color1 <- "manual"
-     color_text1 <- color_text #colors entered by user as string with commas between colors
-     color_text1 <- gsub("\n", "", color_text1, fixed=TRUE) #Prepare colors list, fixed=TRUE means we are dealing with one string, versus a vector of strings (fixed=FALSE)
-     color_text1 <- gsub(";", ",", color_text1, fixed=TRUE)
-     color_text1 <- gsub(" ", "", color_text1, fixed=TRUE)
-     color_text1 <- unlist(strsplit(color_text1, split=","))
-   } else { #User selected color palette
-     color1 <- color #user selects color palette from drop down menu (options are grayscale, viridis, plasma)
-   }
-  
-  pars <- expand.grid(col = color1, stringsAsFactors = FALSE)
+     color1 <- plasma(n)
+  } else if (color == "rainbow") { #manual user entry. Selection of this option causes text box to appear
+     color1 <- rainbow_hcl(n)
+  }
+  print(n)  
+
+  #pars <- expand.grid(col = color1, stringsAsFactors = FALSE)
   
   print("set up step")
   if (step == "") {
@@ -213,9 +209,9 @@ RarefactionCurve <- function(mSetObj=NA, step = "", color="NULL", color_text="",
   
   print("actually plotting")
   #windows(width = w, height = h)
-  rarecurve(input.p, step = step1, sample = sample1, col = color1,label = T, yaxt = "n")
+  rarecurve(input.p, step = step1, sample = sample1, col = color1, label = T, yaxt = "n")
   axis(2, las = 2, labels = T)
-  title = "Rarefaction Curve" 
+  title = "Rarefaction Curve Plot" 
   
   dev.off()
  
@@ -240,24 +236,33 @@ RarefactionCurve <- function(mSetObj=NA, step = "", color="NULL", color_text="",
 #'License: GNU GPL (>= 2)
 #'@export
 
-RarefactionPlot <- function(mSetObj=NA, color_b="NULL", color_text_b="NULL", imgName, format="png", dpi=72, width=NA) {
+RarefactionPlot <- function(mSetObj = NA, color_b = "NULL", color_text_b = "NULL", imgName, format = "png", dpi = 72, width = NA) {
   
   library(vegan)
   
   cat("Linear plot only works for univariate analysis")
   mSetObj <- .get.mSet(mSetObj)
-  margin.p <- as.numeric(mSetObj$analset$result$margin)
-  plot_data <- mSetObj$analset$Srare
+  #type.p <- mSetObj$analset$Srare$type
+  type.p <- mSetObj$analset$result$type
+  plot_data <- mSetObj$analset$result$Output
   input.p <- mSetObj$analset$input
-  
+  margin.p <- as.numeric(mSetObj$analset$result$margin)
+  print("gather plot data") 
+  print(margin.p) 
+
   #if (MARGIN2 == "2") {
   #  plot_data <- mSetObj$analset$result$Output[1,]
   #} else {
   #  plot_data <- mSetObj$analset$result$Output
   #}
   
-   S <- specnumber(input.p, MARGIN = margin.p)
-  
+  if (type.p == "Rarefaction") {
+    S <- specnumber(input.p, MARGIN = margin.p)
+  }  else {
+    S <- specnumber(input.p)
+  }
+  print(type.p)
+
   #Set plot dimensions
   if(is.na(width)){
     w <- 10.5
@@ -268,14 +273,13 @@ RarefactionPlot <- function(mSetObj=NA, color_b="NULL", color_text_b="NULL", img
   }
   h <- w
   
-  #Name plot for download
+  print("Name plot for download")
   imgName <- paste(imgName, "dpi", dpi, ".", format, sep="")
   mSetObj$imgSet$Plot.Rarefaction <- imgName
   
   Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
   par(xpd=FALSE, mar=c(5.1, 4.1, 4.1, 2.1))
   #abline(0, 1)
-  
   
   if(color_b=="NULL") { 
     color1_b <- c("black") #default fill palette is grayscale
@@ -286,14 +290,13 @@ RarefactionPlot <- function(mSetObj=NA, color_b="NULL", color_text_b="NULL", img
   } else if (color_b == "manual") { #manual user entry. Selection of this option causes text box to appear
     color1_b <- "manual"
     color_text1_b <- color_text_b #colors entered by user as string with commas between colors
-    color_text1_b <- gsub("\n", "", color_text1, fixed=TRUE) #Prepare colors list, fixed=TRUE means we are dealing with one string, versus a vector of strings (fixed=FALSE)
-    color_text1_b <- gsub(";", ",", color_text1, fixed=TRUE)
-    color_text1_b <- gsub(" ", "", color_text1, fixed=TRUE)
+    color_text1_b <- gsub("\n", "", color_text_b, fixed=TRUE) #Prepare colors list, fixed=TRUE means we are dealing with one string, versus a vector of strings (fixed=FALSE)
+    color_text1_b <- gsub(";", ",", color_text_b, fixed=TRUE)
+    color_text1_b <- gsub(" ", "", color_text_b, fixed=TRUE)
     color_text1_b <- unlist(strsplit(color_text1_b, split=","))
-  } else { #User selected color palette
-    color1_b <- color_b #user selects color palette from drop down menu (options are grayscale, viridis, plasma)
-  }
-  
+  } 
+  print(color1_b)
+
   pars <- expand.grid(col = color1_b, stringsAsFactors = FALSE)
   
   #if (is.na(step)) {
