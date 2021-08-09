@@ -48,6 +48,9 @@ public class DiversityBean implements Serializable {
                     case "Rarefaction":
                          doDefaultRarefaction();
                         break;
+                    case "Abunddist":
+                         doDefaultAbunddist();
+                        break;
                 }
             }
 
