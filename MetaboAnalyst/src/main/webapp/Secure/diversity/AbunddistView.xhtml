@@ -16,8 +16,8 @@
                 <p:tab title ="Abundance Log series Distribution" titleStyleClass="p-tab-nav">
                     <h:form id="form1">
                         
-                        <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
-                            <h:panelGrid id="panelGrid" columns="6" cellpadding="3" >
+<!--                        <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> -->
+                            <h:panelGrid id="panelGrid" columns="4" cellpadding="3" >
                                 <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
                                 <p:selectBooleanCheckbox value ="#{abunddistBean.doOriginal}"/> 
                                 <h:outputLabel style="font-weight: bold" value="Tiesplit:"/>
@@ -38,13 +38,6 @@
                                 <h:outputLabel style="font-weight: bold" value="Return Standard Error:"/>
                                 <p:selectBooleanCheckbox value ="#{rarefactionBean.doSe}"/> -->
                             </h:panelGrid>  
-                            <p:commandButton value="Customize Graph"
-                                             styleClass="graphicsButton"
-                                             style="box-shadow: none !important; text-shadow: none !important;"
-                                             actionListener="#{sessionBean1.graphicsLnk_action('pca_pair')}" 
-                                            oncomplete="PF('graphApperanceAbunddist').show()"/>  
-                
-
                             <p:commandButton value="Update" 
                                              styleClass="updateButton"
                                              style="box-shadow: none !important; text-shadow: none !important"
@@ -52,7 +45,13 @@
                                             oncomplete="PF('statusDialog').hide()"  
                                             update=":abundancedist:form1:abunddistPane1  :cmdPane" 
                                             actionListener="#{abunddistBean.AbunddistUpdate_action()}"/>                          
-                        </h:panelGrid>
+                            <p:commandButton value="Customize Graph"
+                                             styleClass="graphicsButton"
+                                             style="box-shadow: none !important; text-shadow: none !important;"
+                                             actionListener="#{sessionBean1.graphicsLnk_action('pca_pair')}" 
+                                            oncomplete="PF('graphApperanceAbunddist').show()"/>  
+                
+<!--                        </h:panelGrid>-->
                         <h:panelGrid class="resultsBar" columns="2">
                             <h:panelGroup>
                                 <h:panelGrid columns="1" style="text-align : left;">
@@ -71,6 +70,9 @@
                             //    
                             // </h:panelGrid>-->
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                               <h:outputText escape="false" value="#{abunddistBean.filefisherfreqresultpath}"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
                                <h:outputText escape="false" value="#{abunddistBean.filefisheroutputresultpath}"/>
                             </h:panelGrid>
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
@@ -88,6 +90,9 @@
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
                                <h:outputText escape="false" value="#{abunddistBean.filemaxfreqresultpath}"/>
                             </h:panelGrid>
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                               <h:outputText escape="false" value="#{abunddistBean.filemaxextraresultpath}"/>
+                            </h:panelGrid>
                                                     
                              <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
                                 <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('Abundance_Fisher_Dist_Plot')}" alt="TestPlot"/>
@@ -99,8 +104,8 @@
                 <p:tab title ="Abundance Lognormal Distribution" titleStyleClass="p-tab-nav">
                     <h:form id="form2">
                         
-                        <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
-                            <h:panelGrid id="panelGrid" columns="6" cellpadding="3" >
+<!--                        <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> -->
+                            <h:panelGrid id="panelGrid" columns="4" cellpadding="3" >
                                 <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
                                 <p:selectBooleanCheckbox value ="#{abunddistBean.doOriginal}"/> 
                                 <h:outputLabel style="font-weight: bold" value="Tiesplit:"/>
@@ -111,21 +116,21 @@
                                 <p:inputText value = "#{abunddistBean.community}"/>  
                           
                             </h:panelGrid>  
-                            <p:commandButton value="Customize Graph"
-                                             styleClass="graphicsButton"
-                                             style="box-shadow: none !important; text-shadow: none !important;"
-                                             actionListener="#{sessionBean1.graphicsLnk_action('pca_pair')}" 
-                                            oncomplete="PF('graphApperanceAbunddist').show()"/>  
-                
-
+                            
                             <p:commandButton value="Update" 
                                              styleClass="updateButton"
                                              style="box-shadow: none !important; text-shadow: none !important"
                                             onclick="PF('statusDialog').show()"
                                             oncomplete="PF('statusDialog').hide()"  
                                             update=":abundancedist:form2:abunddistPane2  :cmdPane" 
-                                            actionListener="#{abunddistBean.AbunddistUpdate_action()}"/>                       
-                        </h:panelGrid>
+                                            actionListener="#{abunddistBean.AbunddistUpdate_action()}"/>  
+                            <p:commandButton value="Customize Graph"
+                                             styleClass="graphicsButton"
+                                             style="box-shadow: none !important; text-shadow: none !important;"
+                                             actionListener="#{sessionBean1.graphicsLnk_action('pca_pair')}" 
+                                            oncomplete="PF('graphApperanceAbunddist').show()"/>  
+                
+<!--                        </h:panelGrid>-->
                         <h:panelGrid class="resultsBar" columns="2">
                             <h:panelGroup>
                                 <h:panelGrid columns="1" style="text-align : left;">
@@ -143,7 +148,7 @@
 <!--                        // <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
                             //    
                             // </h:panelGrid>-->
-                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+<!--                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
                                <h:outputText escape="false" value="#{abunddistBean.filefisheroutputresultpath}"/>
                             </h:panelGrid>
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
@@ -160,7 +165,7 @@
                             </h:panelGrid>
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
                                <h:outputText escape="false" value="#{abunddistBean.filemaxfreqresultpath}"/>
-                            </h:panelGrid>
+                            </h:panelGrid>-->
                                                     
                              <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
                                 <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('Abundance_Prest_Dist_Plot')}" alt="TestPlot"/>

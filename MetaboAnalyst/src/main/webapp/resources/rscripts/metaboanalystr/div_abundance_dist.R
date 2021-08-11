@@ -34,14 +34,14 @@ AbundanceModel <- function(mSetObj = NA, data = "false", community = "", tiespli
   } else {
     tiesplit = TRUE
   }
-  print(tiesplit)  
+  print(tiesplit1)  
 
   if(truncate == "")  {
     truncate1 = -1
   } else {
     truncate1 = as.numeric(truncate)
   }
-  print(truncate)  
+  print(truncate1)  
 
   if(community == "") {
     input.c <- input.2
@@ -49,28 +49,37 @@ AbundanceModel <- function(mSetObj = NA, data = "false", community = "", tiespli
     community1 <- as.numeric(community)
     input.c <- input.2[community1, ]
   }
-  print(community)
+  print(input.c)
   
   output.fisher <- fisherfit(input.c)
   output.fit <- prestonfit(input.c, tiesplit = tiesplit1)
   output.distr <- prestondistr(input.c, truncate = truncate1)
   output.ve.fit <- veiledspec(output.fit)
   output.ve.distr <- veiledspec(output.distr)
-  
+  print(output.fisher)
+  print(output.fisher$fisher)
+    
+
   mSetObj$analset$result$fisher$name <- "Species Abundance Model"
   mSetObj$analset$result$fisher$type <- "Fisher's logseries"
   mSetObj$analset$result$fisher$estimate <- output.fisher$estimate
   mSetObj$analset$result$fisher$No.of.species <- sum(output.fisher$fisher)
   mSetObj$analset$result$fisher$freq <- output.fisher$fisher
+  mSetObj$analset$result$fisher$freq <- as.list.data.frame(output.fisher$fisher)
+  mSetObj$analset$result$fisher$freq <- as.data.frame(mSetObj$analset$result$fisher$freq)
+  colnames(mSetObj$analset$result$fisher$freq) <- c("freq")
+  freq.row <- rownames(mSetObj$analset$result$fisher$freq)
+  mSetObj$analset$result$fisher$freq <- cbind(freq.row, mSetObj$analset$result$fisher$freq)
+  mSetObj$analset$result$fisher$freq.row <- as.numeric(mSetObj$analset$result$fisher$freq.row)
+  mSetObj$analset$result$fisher$n <- nrow(mSetObj$analset$result$fisher$freq)
   mSetObj$analset$result$fisher$output <- output.fisher
-  #mSetObj$analset$result$fisher$freq <- 
-  
   mSetObj$analset$result$fisher$com.result <- rbind(mSetObj$analset$result$fisher$name, 
                                                     mSetObj$analset$result$fisher$type,
                                                     mSetObj$analset$result$fisher$estimate,
                                                     mSetObj$analset$result$fisher$No.of.species)
   rownames(mSetObj$analset$result$fisher$com.result) <- c("Analysis", "Model Type", "Fisher_alpha Estimate", "No. of Sp.")
   
+
   mSetObj$analset$result$lognormal_fit$name <- "Species Abundance Model"
   mSetObj$analset$result$lognormal_fit$type <- "Poisson fit to octaves"
   mSetObj$analset$result$lognormal_fit$fitted <- output.fit$fitted
@@ -103,7 +112,7 @@ AbundanceModel <- function(mSetObj = NA, data = "false", community = "", tiespli
   colnames(mSetObj$analset$result$log_likelihood$output.r) <- c("Richness")
   
   
-  #write.csv(mSetObj$analset$result$fisher$freq, "Fisher frequency table.csv")
+  write.csv(mSetObj$analset$result$fisher$freq, "Fisher frequency table.csv")
   write.csv(mSetObj$analset$result$fisher$com.result, "Fisher log series model output.csv")
   write.csv(mSetObj$analset$result$lognormal_fit$coeffi, "Poisson coefficients.csv")
   write.csv(mSetObj$analset$result$lognormal_fit$frequencies, "Poisson frequencies by Octave.csv")
@@ -139,6 +148,8 @@ AbundanceFisherPlot <- function(mSetObj = NA, bar.color = "NULL", line.color.add
   mSetObj <- .get.mSet(mSetObj)
   
   plot_data.fisher <- mSetObj$analset$result$fisher$output
+  n <- as.numeric(mSetObj$analset$result$fisher$n)
+  print(n)
   
   #Set plot dimensions
   if(is.na(width)){
@@ -186,10 +197,10 @@ AbundanceFisherPlot <- function(mSetObj = NA, bar.color = "NULL", line.color.add
   }
   
   plot(plot_data.fisher, ann = T, axes = F, pch = 17, lty = 1, lwd = 2, cex = 2, xant = "n", yant = "n",
-       line.col = line.color.addFit1, bar.col = bar.color1, xlab = "Frequency", ylab = "Species")
-  axis(1, labels = T)
+       line.col = line.color.addFit1, bar.col = bar.color1, xlab = "Frequency", ylab = "Number of species")
+  axis(1, labels = T, at = 1:n)
   axis(2, las = 2)
-  
+  title("Fisher's Log-series Species Abundance Distribution ")
   dev.off()
   
   return(.set.mSet(mSetObj))
@@ -284,11 +295,15 @@ AbundancePrestPlot <- function(mSetObj=NA, bar.color="NULL", line.color.addPoi =
     line.color.addMax1 <- "deeppink1"
   } 
 
-  plot(plot_data.distr, ann = F, pch = 17, lty = 1, lwd = 2, cex = 2, yaxt = "n", xaxt = "n", labels = F,
-       line.col = line.color.addPoi1, bar.col = bar.color1,  ylab = "Species")
-  #axis(1, labels = T, xlab = "Frequency")
-  #axis(2, las = 2)    
-  lines(plot_data.fit, line.col = line.color.addMax1)
+  plot(plot_data.distr, ann = T, pch = 17, lty = 1, lwd = 2, cex = 2,
+       line.col = line.color.addPoi1, bar.col = bar.color1,  ylab = "Species", xlab = "Frequencies")
+  axis(1, labels = F, xlab = "Frequencies")
+  axis(2, labels = F, ylab = "Number of species")    
+  lines(plot_data.fit, line.col = line.color.addMax1, lty = 2)
+  legend("topright", legend = c("Traditional binning", "Without binning"), col = c(line.color.addPoi1, line.color.addMax1), 
+         lty = c(1,2), cex = 1, box.lty = 0)
+  title("Preston's Lognormal Species Abundance Distribution ")
+
 
   dev.off()
   

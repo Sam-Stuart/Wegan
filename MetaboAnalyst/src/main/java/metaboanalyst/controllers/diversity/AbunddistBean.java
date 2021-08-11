@@ -154,6 +154,16 @@ public class AbunddistBean implements Serializable {
 //        this.colortext = colortext;
 //    }
     
+    private String filefisherfreqresult = "Fisher frequency table.csv";
+    private String filefisherfreqresultpath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + filefisherfreqresult + "\">" + filefisherfreqresult + "</a>";
+    
+    public String getFilefisherfreqresultpath() {
+        return filefisherfreqresultpath;
+    }
+
+    public void setFilefisherfreqresultpath(String filefisherfreqresultpath) {
+        this.filefisherfreqresultpath = filefisherfreqresultpath;
+    }
     
     private String filefisheroutputresult = "Fisher log series model output.csv";
     private String filefisheroutputresultpath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + filefisheroutputresult + "\">" + filefisheroutputresult + "</a>";
@@ -231,6 +241,7 @@ public class AbunddistBean implements Serializable {
     public void setFilemaxextraresultpath(String filemaxextraresultpath) {
         this.filemaxextraresultpath = filemaxextraresultpath;
     }
+    
     
     public AbunddistBean() {
         bar_color = new SelectItem[6];
