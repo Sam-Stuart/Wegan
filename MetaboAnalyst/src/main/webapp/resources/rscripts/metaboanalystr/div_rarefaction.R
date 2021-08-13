@@ -297,7 +297,7 @@ RarefactionPlot <- function(mSetObj = NA, color_b = "NULL", color_text_b = "NULL
   } 
   print(color1_b)
 
-  pars <- expand.grid(col = color1_b, stringsAsFactors = FALSE)
+  #pars <- expand.grid(col = color1_b, stringsAsFactors = FALSE)
   
   #if (is.na(step)) {
   #  cat("step has to be numeric data and can't be blank")

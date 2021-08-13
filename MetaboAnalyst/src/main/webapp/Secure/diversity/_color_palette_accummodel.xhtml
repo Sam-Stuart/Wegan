@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="accummodelGraph">
+        <h:panelGrid columns="1" style="width:380px;">
+            <h:panelGrid id="panelGrid2" columns="2" cellpadding="6" columnClasses="colBrayLong,colBrayShort">
+                
+                <h:outputLabel style="font-weight: bold" value="Select an analytic model as base curve:"/>
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{accummodelBean.typechosen}">
+                    <f:selectItems value="#{accummodelBean.type}"/>
+                </p:selectOneMenu>  
+                <h:outputLabel style="font-weight: bold" value="Select base curve trend line color:"/>
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{accummodelBean.color}">
+                    <f:selectItems value="#{accummodelBean.color}"/>
+                </p:selectOneMenu>
+                <h:outputLabel style="font-weight: bold" value="Select type of confidence intervals:"/>
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{accummodelBean.ci_typechosen}">
+                    <f:selectItems value="#{accummodelBean.ci_type}"/>
+                </p:selectOneMenu>  
+                <h:outputLabel style="font-weight: bold" value="Select color for drawing lines or filling polygon area:"/>
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{accummodelBean.ci_colorchosen}">
+                    <f:selectItems value="#{accummodelBean.ci_color}"/>
+                </p:selectOneMenu>  
+                <h:outputLabel style="font-weight: bold" value="Select box color for random method:"/>
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{accummodelBean.box_colorchosen}">
+                    <f:selectItems value="#{accummodelBean.box_color}"/>
+                </p:selectOneMenu>
+                <h:outputLabel style="font-weight: bold" value="Select trend line color of the nonlinear self-starting species accumulation model:"/>
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{accummodelBean.line_colorchosen}">
+                    <f:selectItems value="#{accummodelBean.line_color}"/>
+                </p:selectOneMenu> 
+                <h:outputLabel style="font-weight: bold" value="Select trend color of selected analytic model prediction)"/>
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{accummodelBean.pred_colorchosen}">
+                    <f:selectItems value="#{accummodelBean.pred_color}"/>
+                </p:selectOneMenu> 
+                <h:outputLabel style="font-weight: bold" value="Select plot character for random method:"/>
+                <p:inputText value = "#{accummodelBean.pch}"/>  
+                
+                
+
+
+            </h:panelGrid>
+            <h:panelGrid id="panelGrid4" columns="1" cellpadding="6" style="float: right">
+                <p:commandButton value="Update" 
+                                 styleClass="updateButton"
+                                 style="box-shadow: none !important; text-shadow: none !important"
+                                onclick="PF('statusDialog').show()"
+                                oncomplete="PF('graphApperanceAccummodel').hide(); PF('statusDialog').hide()"  
+                                update=":accumulationcurve:form1:accummodelPane1  :cmdPane" 
+                                actionListener="#{abunddistBean.AccummodelUpdate_action()}"/>
+            </h:panelGrid>
+        </h:panelGrid>
+    </h:form>
+</ui:composition>
+

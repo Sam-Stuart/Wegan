@@ -275,6 +275,11 @@
             <from-outcome>Abunddist</from-outcome>
             <to-view-id>/Secure/diversity/AbunddistView.xhtml</to-view-id>
             <redirect/>
+        </navigation-case> 
+        <navigation-case>
+            <from-outcome>Accummodel</from-outcome>
+            <to-view-id>/Secure/diversity/AccummodelView.xhtml</to-view-id>
+            <redirect/>
         </navigation-case>  
                                                                        
                                                                                                                                                                                                                     

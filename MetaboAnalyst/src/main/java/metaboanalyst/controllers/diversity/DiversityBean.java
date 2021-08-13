@@ -51,6 +51,9 @@ public class DiversityBean implements Serializable {
                     case "Abunddist":
                          doDefaultAbunddist();
                         break;
+                    case "Accummodel":
+                         doDefaultAccummodel();
+                        break;
                 }
             }
 
@@ -120,6 +123,17 @@ public class DiversityBean implements Serializable {
         DiversityUtils.PlotAbundFisherPlotDiv(sb, "NULL", "NULL", sb.getCurrentImage("Abundance_Fisher_Dist_Plot"), "png", 72, "false");
         DiversityUtils.PlotAbundPrestPlotDiv(sb, "NULL", "NULL", "NULL", sb.getCurrentImage("Abundance_Prest_Dist_Plot"), "png", 72, "false");
         System.out.print("AFTER RAREFACTION");
+    }
+    
+    private void doDefaultAccummodel(){
+//        if (!DiversityUtils.CreateRarefactionDiv(sb, false, "test", "test", false, "test")){
+//            RConnection RC = sb.getRConnection();
+//            sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
+//        }
+        System.out.print("INSIDE ACCUMMODEL"); 
+        DiversityUtils.CreateAccumModelDiv(sb, false, " ", false, "NULL", "NULL", "NULL", "NULL");
+        DiversityUtils.PlotAccumCurveDiv(sb, "NULL", "NULL", "NULL", "NULL", "NULL","NULL", "NULL", " ", sb.getCurrentImage("Species_Accumulation_Model"), "png", 72, "false");
+        System.out.print("AFTER ACCUMMODEL");
     }
     
 }

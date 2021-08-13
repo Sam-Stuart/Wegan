@@ -200,7 +200,7 @@ public class DiversityUtils {
 
     public static boolean CreateAbundDistDiv(SessionBean1 sb, Boolean data, String community, Boolean tiesplit, String truncate) {
         try {
-            System.out.print("R RAREFACTION");
+            System.out.print("R Abundancedist");
             RConnection RC = sb.getRConnection(); //Start R connection
             String rCommand = "AbundanceModel(NA"
                                                  + ", \"" + data
@@ -254,11 +254,76 @@ public class DiversityUtils {
         }
     }
     
+    
+    public static boolean CreateAccumModelDiv(SessionBean1 sb, Boolean data, String permutations, Boolean conditioned, String gamma,
+                                              String models, String object, String interval) {
+        try {
+            System.out.print("R AccumulationModel");
+            RConnection RC = sb.getRConnection(); //Start R connection
+            String rCommand = "AccumulationModel(NA" 
+                                                 + ", \"" + data
+                                                 + "\", \"" + permutations
+                                                 + "\", \"" + conditioned
+                                                 + "\", \"" + gamma
+                                                 + "\", \"" + models
+                                                 + "\", \"" + object
+                                                 + "\", \"" + interval
+                                                 + "\")";
+            RCenter.recordRCommand(RC, rCommand); // records r command
+            RC.voidEval(rCommand); // tells you want your r script returns  
+            return true;
+        } catch (RserveException rse) {
+            System.out.println(rse);
+            return false;
+        }
+    }
+    
+    
+    public static void PlotAccumCurveDiv(SessionBean1 sb, String type, String color, String ci_color, String ci_type, String box_color,
+                            String line_color, String pred_color, String pch, String imgName, String format, int dpi, String width) {
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "AccumCurve(NA" 
+                                                 + ", \""  + type 
+                                                 + "\", \"" + color
+                                                 + "\", \"" + ci_color
+                                                 + "\", \"" + ci_type
+                                                 + "\", \"" + box_color
+                                                 + "\", \"" + line_color
+                                                 + "\", \"" + pred_color
+                                                 + "\", \"" + pch
+                                                 + "\", \"" + imgName 
+                                                 + "\", \"" + format 
+                                                 + "\", " + dpi 
+                                                 + ", width=NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            sb.addGraphicsCMD("Species_Accumulation_Model", rCommand);
+            RC.voidEval(rCommand);
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        }
+    }
+    
     /////// ------------ Diversity helper functions --------------- //////////////
 
     public static void PlotRarefactionCurveDiversity(SessionBean1 sb, String currentImage, String png, int i) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
+//    public static void PlotRarefactionPlotDiversity(SessionBean1 sb, String currentImage, String png, int i) {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
+    
+//    public static void PlotPlotAbundFisherPlotDiv(SessionBean1 sb, String currentImage, String png, int i) {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
+//    
+//    public static void PlotAbundPrestPlotDiv(SessionBean1 sb, String currentImage, String png, int i) {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
+//    
+//    public static void PlotAccumCurveDiv(SessionBean1 sb, String currentImage, String png, int i) {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
         
 }

@@ -36,14 +36,14 @@ AbundanceModel <- function(mSetObj = NA, data = "false", community = "", tiespli
   }
   print(tiesplit1)  
 
-  if(truncate == "")  {
+  if(truncate == " ")  {
     truncate1 = -1
   } else {
     truncate1 = as.numeric(truncate)
   }
   print(truncate1)  
 
-  if(community == "") {
+  if(community == " ") {
     input.c <- input.2
   } else {
     community1 <- as.numeric(community)
@@ -252,18 +252,18 @@ AbundancePrestPlot <- function(mSetObj=NA, bar.color="NULL", line.color.addPoi =
   #abline(0, 1)
   
   n = 1
-  if(bar.color == "NULL") { 
-    bar.color1 = "skyblue" #default fill palette is grayscale
-  } else if (bar.color == "gray") { #manual user entry. Selection of this option causes text box to appear
-    bar.color1 = "gray"
-  } else if (bar.color == "turquoise") {
-    bar.color1 = "turquoise4"
-  } else if (bar.color == "slateblue") {
-    bar.color1 = "slateblue4"
-  } else if (bar.color == "seagreen") {
-    bar.color1 = "darkseagreen1"
-  } else if (bar.color == "wheat") {
-    bar.color1 = rainbow(n)
+  if(box.color == "NULL") { 
+    box.color1 = "skyblue" #default fill palette is grayscale
+  } else if (box.color == "gray") { #manual user entry. Selection of this option causes text box to appear
+    box.color1 = "gray"
+  } else if (box.color == "turquoise") {
+    box.color1 = "turquoise4"
+  } else if (box.color == "slateblue") {
+    box.color1 = "slateblue4"
+  } else if (box.color == "seagreen") {
+    box.color1 = "darkseagreen1"
+  } else if (box.color == "wheat") {
+    box.color1 = rainbow(n)
   } 
   
   
