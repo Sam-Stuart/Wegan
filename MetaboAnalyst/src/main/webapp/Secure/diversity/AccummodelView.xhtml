@@ -13,11 +13,11 @@
     <ui:define name="content">
         <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
             <p:tabView id="accumulationcurve">
-                <p:tab title ="Species Accumulation Curve" titleStyleClass="p-tab-nav">
+                <p:tab title ="Species Accumulation Model" titleStyleClass="p-tab-nav">
                     <h:form id="form1">
                         
 <!--                        <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> -->
-                            <h:panelGrid id="panelGrid" columns="4" cellpadding="3" >
+                            <h:panelGrid id="panelGrid" columns="4" cellpadding="2" >
                                 <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
                                 <p:selectBooleanCheckbox value ="#{accummodelBean.doOriginal}"/> 
                                 <h:outputLabel style="font-weight: bold" value="permutations:"/>
@@ -41,6 +41,7 @@
                                     <f:selectItems value="#{accummodelBean.interval}"/>
                                 </p:selectOneMenu>
                             </h:panelGrid>  
+                            <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
                             <p:commandButton value="Update" 
                                              styleClass="updateButton"
                                              style="box-shadow: none !important; text-shadow: none !important"
@@ -53,7 +54,7 @@
                                              style="box-shadow: none !important; text-shadow: none !important;"
                                              actionListener="#{sessionBean1.graphicsLnk_action('pca_pair')}" 
                                             oncomplete="PF('graphApperanceAccummodel').show()"/>  
-             
+                            </h:panelGrid>             
                         <h:panelGrid class="resultsBar" columns="2">
                             <h:panelGroup>
                                 <h:panelGrid columns="1" style="text-align : left;">
@@ -72,37 +73,62 @@
                             //    
                             // </h:panelGrid>-->
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">
+                                    <h:outputText escape="false" value="#{accummodelBean.fileexactfreqresultpath}"/>
+                                </i>
+                            </h:panelGrid>
+<!--                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
                                <h:outputText escape="false" value="#{accummodelBean.fileexactfreqresultpath}"/>
+                            </h:panelGrid>-->
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">
+                                    <h:outputText escape="false" value="#{accummodelBean.fileexactcurveresultpath}"/>
+                                </i>
                             </h:panelGrid>
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
-                               <h:outputText escape="false" value="#{accummodelBean.fileexactcurveresultpath}"/>
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">
+                                    <h:outputText escape="false" value="#{accummodelBean.filecollectorcurveresultpath}"/>
+                                </i>
                             </h:panelGrid>
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
-                               <h:outputText escape="false" value="#{accummodelBean.filecollectorcurveresultpath}"/>
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">                             
+                                    <h:outputText escape="false" value="#{accummodelBean.filerandomfreqresultpath}"/>
+                                </i>
                             </h:panelGrid>
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
-                               <h:outputText escape="false" value="#{accummodelBean.filerandomfreqresultpath}"/>
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">                              
+                                    <h:outputText escape="false" value="#{accummodelBean.filerandomcurveresultpath}"/>
+                                </i>
                             </h:panelGrid>
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
-                               <h:outputText escape="false" value="#{accummodelBean.filerandomcurveresultpath}"/>
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">                              
+                                    <h:outputText escape="false" value="#{accummodelBean.filecolemancurveresultpath}"/>
+                                </i>
                             </h:panelGrid>
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
-                               <h:outputText escape="false" value="#{accummodelBean.filecolemancurveresultpath}"/>
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">                              
+                                    <h:outputText escape="false" value="#{accummodelBean.filerarefreqresultpath}"/>
+                                </i>
                             </h:panelGrid>
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
-                               <h:outputText escape="false" value="#{accummodelBean.filerarefreqresultpath}"/>
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">                              
+                                    <h:outputText escape="false" value="#{accummodelBean.filerareacmcurveresultpath}"/>
+                                </i>
                             </h:panelGrid>
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
-                               <h:outputText escape="false" value="#{accummodelBean.filerareacmcurveresultpath}"/>
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">                            
+                                    <h:outputText escape="false" value="#{accummodelBean.filenlmfreqresultpath}"/>
+                                </i>
                             </h:panelGrid>
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
-                               <h:outputText escape="false" value="#{accummodelBean.filenlmfreqresultpath}"/>
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">                              
+                                    <h:outputText escape="false" value="#{accummodelBean.filenlmresdresultpath}"/>
+                                </i>
                             </h:panelGrid>
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
-                               <h:outputText escape="false" value="#{accummodelBean.filenlmresdresultpath}"/>
-                            </h:panelGrid>
-                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
-                               <h:outputText escape="false" value="#{accummodelBean.filenlmfitresultpath}"/>
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">
+                                    <h:outputText escape="false" value="#{accummodelBean.filenlmfitresultpath}"/>
+                                </i>
                             </h:panelGrid>
                                                     
                              <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">

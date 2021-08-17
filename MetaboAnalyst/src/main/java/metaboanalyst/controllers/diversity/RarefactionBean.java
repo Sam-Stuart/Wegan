@@ -184,7 +184,7 @@ public class RarefactionBean implements Serializable {
         color[0] = new SelectItem("NULL", "Default");
         color[1] = new SelectItem("viridis", "Viridis");
         color[2] = new SelectItem("plasma", "Plasma");
-        color[3] = new SelectItem("manual", "colortext");
+        color[3] = new SelectItem("rainbow", "Rainbow");
         
         margin = new SelectItem[2];
         margin[0] = new SelectItem("NULL", "1");
@@ -194,7 +194,7 @@ public class RarefactionBean implements Serializable {
         colorb[0] = new SelectItem("NULL", "Default");
         colorb[1] = new SelectItem("gray", "Gray");
         colorb[2] = new SelectItem("blue", "Blue");
-        colorb[3] = new SelectItem("manual", "colortext");
+        colorb[3] = new SelectItem("red", "Red");
     }
     
 //    public RarefactionBean() {
@@ -214,8 +214,8 @@ public class RarefactionBean implements Serializable {
     // ACTION BUTTON // 
     public void rareUpdate_action() {
         DiversityUtils.CreateRarefactionDiv(sb, doOriginal, typechosen, sample, doSe, marginchosen);       
-        DiversityUtils.PlotRarefactionCurveDiversity(sb, step, colorchosen, colortext, sb.getNewImage("Rarefaction_Curve_Plot"), "png", 72, "false");
-        DiversityUtils.PlotRarefactionPlotDiversity(sb, colorchosen_b, colortextb, sb.getNewImage("Rarefaction_Linear_Plot"), "png", 72, "false");
+        DiversityUtils.PlotRarefactionCurveDiversity(sb, step, colorchosen, sb.getNewImage("Rarefaction_Curve_Plot"), "png", 72, "false");
+        DiversityUtils.PlotRarefactionPlotDiversity(sb, colorchosen_b, sb.getNewImage("Rarefaction_Linear_Plot"), "png", 72, "false");
     }
     
 }

@@ -13,16 +13,16 @@
 #'License: GNU GPL (>= 2) ######
 #'@export
 
-AccumulationModel <- function(mSetObj = NA, data = "false", permutations = "", conditioned = "false", gamma = "NULL",
+AccumulationModel <- function(mSetObj = NA, data = "false", permutations = " ", conditioned = "false", gamma = "NULL",
                             models = "NULL", object = "NULL", interval = "NULL") {
   print("start model")
   options(errors = traceback)   
 
   #library("ade4")
   #library("adegraphics")
-  library("plyr")
-  library("dplyr")
-  library("vegan")
+  library(plyr)
+  library(dplyr)
+  library(vegan)
 
   mSetObj <- .get.mSet(mSetObj)
   
@@ -173,6 +173,7 @@ AccumulationModel <- function(mSetObj = NA, data = "false", permutations = "", c
   mSetObj$analset$mods_SSmodel <- mods$SSmodel
   mSetObj$analset$mods_residuals <- mods_residuals
   mSetObj$analset$mods_fitted <- mods_fitted
+  #colnames(mSetObj$analset$mods_fitted) <- c("No", "fitted")
   
   mSetObj$analset$input <- input.2
   
@@ -227,26 +228,28 @@ AccumCurve <- function(mSetObj=NA, type = "NULL", color = "NULL", ci.color="NULL
   
   if (type == "NULL") {
     plot_data <- mSetObj$analset$sp.exact
-    type1 = "Exact method"
+    type1 = "exact method"
   } else if (type == "collector") {
     plot_data <- mSetObj$analset$sp.collector
-    type1 = "Collector method"
+    type1 = "collector method"
   } else if (type == "random") {
     plot_data <- mSetObj$analset$sp.random
-    type1 = "Random method"
+    type1 = "random method"
   } else if (type == "coleman") {
     plot_data <- mSetObj$analset$sp.coleman
-    type1 = "Coleman method"
+    type1 = "coleman method"
   } else if (type == "rarefaction") {
     plot_data <- mSetObj$analset$sp.rarefaction
-    type1 = "Rarefaction method"
+    type1 = "rarefaction method"
   }
   
   box_data <- mSetObj$analset$sp.random
   line_data <- mSetObj$analset$mods
   pred_data <- mSetObj$analset$pred
   SSmodel <- mSetObj$analset$mods_SSmodel
- 
+
+  n <- as.numeric(max(plot_data$sites)) 
+
   #Set plot dimensions
   if(is.na(width)){
     w <- 10.5
@@ -357,16 +360,18 @@ AccumCurve <- function(mSetObj=NA, type = "NULL", color = "NULL", ci.color="NULL
   par(xpd=FALSE, mar=c(5.1, 4.1, 4.1, 2.1))
   #abline(0, 1)
   
-  #pars <- expand.grid(col = color1, stringsAsFactors = FALSE)
+  pars <- expand.grid(col = color1, stringsAsFactors = FALSE)
   
   #windows(height = h, width = w)
   
-  plot(plot_data, ann = "T", ci.type = ci.type1, col = color1, lwd = 3, ci.lty = 0, ci.col = ci.color1, lty = 1)
+  plot(plot_data, ann = T, axes = F, ci.type = ci.type1, col = color1, lwd = 3, ci.lty = 0, 
+       ci.col = ci.color1, lty = 1, xant = "n", yant = "n", ylab = "Number of species")
+  axis(1, labels = T, at = 0:n)
+  axis(2, las = 2)
   boxplot(box_data, col = box.color1, add = TRUE, pch = pch1)
   lines(line_data, col = line.color1, lwd = 3, lty = 2)
   lines(pred_data, col = pred.color1, lwd = 3, lty = 3)
-
-  legend("bottomright", legend = c(type1, SSmodel, "Prediction"), col = c(color1, line.color1, pred.color1),
+  legend("bottomright", legend = c(type1, "nonlinear selfstarting", "prediction"), col = c(color1, line.color1, pred.color1),
          lty = 1:3, cex = 0.8, box.lty = 0)
   title("Species Accumulation Model")
 

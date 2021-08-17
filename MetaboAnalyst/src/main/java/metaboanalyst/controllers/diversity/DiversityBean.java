@@ -107,9 +107,9 @@ public class DiversityBean implements Serializable {
 //            sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
 //        }
         System.out.print("INSIDE RAREFACTION");
-        DiversityUtils.CreateRarefactionDiv(sb, false, "NULL", "", false, "NULL");
-        DiversityUtils.PlotRarefactionCurveDiversity(sb, "10", "NULL", "", sb.getCurrentImage("Rarefaction_Curve_Plot"), "png", 72, "false");
-        DiversityUtils.PlotRarefactionPlotDiversity(sb, "NULL", "", sb.getCurrentImage("Rarefaction_Linear_Plot"), "png", 72, "false");
+        DiversityUtils.CreateRarefactionDiv(sb, false, "NULL", " ", false, "NULL");
+        DiversityUtils.PlotRarefactionCurveDiversity(sb, " ", "NULL", sb.getCurrentImage("Rarefaction_Curve_Plot"), "png", 72, "false");
+        DiversityUtils.PlotRarefactionPlotDiversity(sb, "NULL", sb.getCurrentImage("Rarefaction_Linear_Plot"), "png", 72, "false");
         System.out.print("AFTER RAREFACTION");
     }
     

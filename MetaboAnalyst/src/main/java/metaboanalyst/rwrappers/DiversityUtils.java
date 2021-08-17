@@ -161,13 +161,12 @@ public class DiversityUtils {
         }
     }	//mSet<-Rarefaction_div(mSet, "NULL, ", "false", "NULL" , "false")
     
-    public static void PlotRarefactionCurveDiversity(SessionBean1 sb, String step, String color, String colortext, String imgName, String format, int dpi, String width) {
+    public static void PlotRarefactionCurveDiversity(SessionBean1 sb, String step, String color, String imgName, String format, int dpi, String width) {
         try {
             RConnection RC = sb.getRConnection();
             String rCommand = "RarefactionCurve(NA" 
                                                  + ", \"" + step
-                                                 + "\", \""  + color 
-                                                 + "\", \"" + colortext
+                                                 + "\", \""  + color
                                                  + "\", \"" + imgName 
                                                  + "\", \"" + format 
                                                  + "\", " + dpi 
@@ -180,12 +179,11 @@ public class DiversityUtils {
         }
     }
         
-    public static void PlotRarefactionPlotDiversity(SessionBean1 sb, String colorb, String colortextb, String imgName, String format, int dpi, String width) {
+    public static void PlotRarefactionPlotDiversity(SessionBean1 sb, String colorb, String imgName, String format, int dpi, String width) {
         try {
             RConnection RC = sb.getRConnection();
             String rCommand = "RarefactionPlot(NA" 
                                                  + ", \""  + colorb 
-                                                 + "\", \"" + colortextb
                                                  + "\", \"" + imgName 
                                                  + "\", \"" + format 
                                                  + "\", " + dpi 
