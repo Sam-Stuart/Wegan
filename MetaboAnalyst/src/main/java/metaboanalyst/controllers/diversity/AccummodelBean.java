@@ -59,7 +59,7 @@ public class AccummodelBean implements Serializable {
         
     
     // textbox 
-    private String permutations = " ";
+    private String permutations = "";
     
     public String getPermutations() {
         return permutations;
@@ -70,7 +70,7 @@ public class AccummodelBean implements Serializable {
     }
     
     
-    private String pch = " ";
+    private String pch = "";
     
     public String getPch() {
         return pch;

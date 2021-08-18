@@ -57,7 +57,7 @@ public class RarefactionBean implements Serializable {
     }
     
     // textbox 
-    private String sample = " ";
+    private String sample = "";
     
     public String getSample() {
         return sample;
@@ -92,14 +92,14 @@ public class RarefactionBean implements Serializable {
     }
     
     public String getMarginchosen() {
-        return colorchosen;
+        return marginchosen;
     } 
 
     public void setMarginchosen(String marginchosen) {
         this.marginchosen = marginchosen;
     }
         
-    private String step = " ";
+    private String step = "";
     
     public String getStep() {
         return step;
@@ -141,27 +141,6 @@ public class RarefactionBean implements Serializable {
         this.colorchosen_b = colorchosen_b;
     }
 
-    
-    private String colortext = " ";
-    
-    public String getColortext() {
-        return colortext;
-    }
-
-    public void setColortext(String colortext) {
-        this.colortext = colortext;
-    }
-    
-    
-    private String colortextb = " ";
-    
-    public String getColortextb() {
-        return colortextb;
-    }
-
-    public void setColortextb(String colortextb) {
-        this.colortextb = colortextb;
-    }
     
     private String filerareresult = "Rarefaction.csv";
     private String filerareresultpath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + filerareresult + "\">" + filerareresult + "</a>";

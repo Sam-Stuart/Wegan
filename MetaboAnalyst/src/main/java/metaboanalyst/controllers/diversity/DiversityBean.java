@@ -107,8 +107,8 @@ public class DiversityBean implements Serializable {
 //            sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
 //        }
         System.out.print("INSIDE RAREFACTION");
-        DiversityUtils.CreateRarefactionDiv(sb, false, "NULL", " ", false, "NULL");
-        DiversityUtils.PlotRarefactionCurveDiversity(sb, " ", "NULL", sb.getCurrentImage("Rarefaction_Curve_Plot"), "png", 72, "false");
+        DiversityUtils.CreateRarefactionDiv(sb, false, "NULL", "", false, "NULL");
+        DiversityUtils.PlotRarefactionCurveDiversity(sb, "", "NULL", sb.getCurrentImage("Rarefaction_Curve_Plot"), "png", 72, "false");
         DiversityUtils.PlotRarefactionPlotDiversity(sb, "NULL", sb.getCurrentImage("Rarefaction_Linear_Plot"), "png", 72, "false");
         System.out.print("AFTER RAREFACTION");
     }
@@ -131,8 +131,8 @@ public class DiversityBean implements Serializable {
 //            sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
 //        }
         System.out.print("INSIDE ACCUMMODEL"); 
-        DiversityUtils.CreateAccumModelDiv(sb, false, " ", false, "NULL", "NULL", "NULL", "NULL");
-        DiversityUtils.PlotAccumCurveDiv(sb, "NULL", "NULL", "NULL", "NULL", "NULL","NULL", "NULL", " ", sb.getCurrentImage("Species_Accumulation_Model"), "png", 72, "false");
+        DiversityUtils.CreateAccumModelDiv(sb, false, "", false, "NULL", "NULL", "NULL", "NULL");
+        DiversityUtils.PlotAccumCurveDiv(sb, "NULL", "NULL", "NULL", "NULL", "NULL","NULL", "NULL", "", sb.getCurrentImage("Species_Accumulation_Model"), "png", 72, "false");
         System.out.print("AFTER ACCUMMODEL");
     }
     

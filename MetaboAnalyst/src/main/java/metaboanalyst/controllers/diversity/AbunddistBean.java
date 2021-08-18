@@ -58,7 +58,7 @@ public class AbunddistBean implements Serializable {
     
     
     // textbox 
-    private String community = " ";
+    private String community = "";
     
     public String getCommunity() {
         return community;
@@ -69,7 +69,7 @@ public class AbunddistBean implements Serializable {
     }
     
     
-    private String truncate = " ";
+    private String truncate = "";
     
     public String getTruncate() {
         return truncate;

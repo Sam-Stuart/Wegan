@@ -12,7 +12,7 @@
 #'@export
 
 
-Rarefaction_div <- function(mSetObj = NA, data = "false", type = "NULL", sample = " ", se = "false", margin = "NULL") {
+Rarefaction_div <- function(mSetObj = NA, data = "false", type = "NULL", sample = "", se = "false", margin = "NULL") {
   
   options(errors = traceback)
   #print("inside faction R file")
@@ -62,7 +62,7 @@ Rarefaction_div <- function(mSetObj = NA, data = "false", type = "NULL", sample 
   print("before real analysis")
   if (type == "NULL") {
     type1 <- "Rarefaction"
-    if (sample == " ") {
+    if (sample == "") {
     #the minimum sample count achieved over the selected data columns
       sample1 <- as.numeric(min(rowSums(input))) 
     } else {
@@ -77,7 +77,7 @@ Rarefaction_div <- function(mSetObj = NA, data = "false", type = "NULL", sample 
     mSetObj$analset$result$Output <- Srare
     mSetObj$analset$Srare <- mSetObj$analset$result$Output
   } else if (type == "Random rarefaction") {
-    if (sample == " ") {
+    if (sample == "") {
     #the minimum sample count achieved over the selected data columns
       sample1 <- as.numeric(min(rowSums(input))) 
     } else {
@@ -95,7 +95,7 @@ Rarefaction_div <- function(mSetObj = NA, data = "false", type = "NULL", sample 
     colnames(Srare.frame)[1:3] <- c("name", "type", "Sample_size")
     mSetObj$analset$Srare <- Srare.frame 
   } else if (type == "Probability") {
-    if (sample == " ") {
+    if (sample == "") {
     #the minimum sample count achieved over the selected data columns
       sample1 <- as.numeric(min(rowSums(input)))
     } else {
@@ -148,7 +148,7 @@ Rarefaction_div <- function(mSetObj = NA, data = "false", type = "NULL", sample 
 #'License: GNU GPL (>= 2)
 #'@export
 
-RarefactionCurve <- function(mSetObj=NA, step = " ", color="NULL", imgName, format="png", dpi=72, width=NA) {
+RarefactionCurve <- function(mSetObj=NA, step = "", color="NULL", imgName, format="png", dpi=72, width=NA) {
   
   library(vegan)
   
@@ -182,25 +182,25 @@ RarefactionCurve <- function(mSetObj=NA, step = " ", color="NULL", imgName, form
   Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
   par(xpd=FALSE, mar=c(5.1, 4.1, 4.1, 2.1))
   
-  n <- length(input.p[1,])
+  #n <- length(input.p[1,])
   if (color=="NULL") { 
     color1 <- c("grey27", "green", "lightpink", "lightcoral", "midnightblue",
                 "mediumpurple", "maroon", "lightyellow", "turquoise3", "tan3", 
                 "springgreen", "thistle1", "sienna3", "orange", "dimgray",
                 "burlywood", "darksalmon", "deeppink", "goldenrod", "forestgreen")
   } else if (color == "viridis") {
-     color1 <- viridis(n) 
+     color1 <- c("red", "green", "blue")
   } else if (color == "plasma") {
-     color1 <- plasma(n)
+     color1 <- c("yellow", "pink")
   } else if (color == "rainbow") { #manual user entry. Selection of this option causes text box to appear
-     color1 <- rainbow_hcl(n)
+     color1 <- c("orange", "brown")
   }
-  print(n)  
+  print(color1)  
 
   pars <- expand.grid(col = color1, stringsAsFactors = FALSE)
   
   print("set up step")
-  if (step == " ") {
+  if (step == "") {
     step1 = 1
     step1 <- as.numeric(step1)
   } else {

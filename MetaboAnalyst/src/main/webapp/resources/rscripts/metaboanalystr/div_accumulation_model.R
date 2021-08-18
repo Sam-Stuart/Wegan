@@ -13,7 +13,7 @@
 #'License: GNU GPL (>= 2) ######
 #'@export
 
-AccumulationModel <- function(mSetObj = NA, data = "false", permutations = " ", conditioned = "false", gamma = "NULL",
+AccumulationModel <- function(mSetObj = NA, data = "false", permutations = "", conditioned = "false", gamma = "NULL",
                             models = "NULL", object = "NULL", interval = "NULL") {
   print("start model")
   options(errors = traceback)   
@@ -47,7 +47,7 @@ AccumulationModel <- function(mSetObj = NA, data = "false", permutations = " ", 
   print(gamma1)
 
 
-  if (permutations == " " ) {
+  if (permutations == "" ) {
     permutations1 <- 100
   } else {
     permutations1 <- as.numeric(permutations)
@@ -345,7 +345,7 @@ AccumCurve <- function(mSetObj=NA, type = "NULL", color = "NULL", ci.color="NULL
   } 
   
   
-  if (pch == " ") {
+  if (pch == "") {
     pch1 = "+"
   } else {
     pch1 = as.numeric(pch)

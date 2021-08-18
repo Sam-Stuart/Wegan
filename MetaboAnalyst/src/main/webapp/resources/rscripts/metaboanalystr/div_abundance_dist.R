@@ -10,7 +10,7 @@
 #'License: GNU GPL (>= 2) ######
 #'@export
 
-AbundanceModel <- function(mSetObj = NA, data = "false", community = " ", tiesplit = "false", truncate = " "){
+AbundanceModel <- function(mSetObj = NA, data = "false", community = "", tiesplit = "false", truncate = ""){
   print("start model")
   options(errors = traceback)                          
   #library("ade4")
@@ -30,7 +30,8 @@ AbundanceModel <- function(mSetObj = NA, data = "false", community = " ", tiespl
   }
 
   input.2 <- select_if(input, is.numeric)
-  
+  print(input.2)  
+
   if (tiesplit == "false") {
     tiesplit1 = FALSE
   } else {
@@ -38,7 +39,15 @@ AbundanceModel <- function(mSetObj = NA, data = "false", community = " ", tiespl
   }
   print(tiesplit1)  
 
-  if(truncate == " ")  {
+  if(community == "") {
+    input.c <- input.2
+  } else {
+    community1 <- as.numeric(community)
+    input.c <- input.2[community1, ]
+  }
+  print(input.c)
+
+  if(truncate == "")  {
     truncate1 = "-1"
   } else {
     truncate1 = truncate
@@ -46,13 +55,7 @@ AbundanceModel <- function(mSetObj = NA, data = "false", community = " ", tiespl
   truncate1 <- as.numeric(truncate1)
   print(truncate1)  
 
-  if(community == " ") {
-    input.c <- input.2
-  } else {
-    community1 <- as.numeric(community)
-    input.c <- input.2[community1, ]
-  }
-  print(input.c)
+  
   
   output.fisher <- fisherfit(input.c)
   output.fit <- prestonfit(input.c, tiesplit = tiesplit1)
