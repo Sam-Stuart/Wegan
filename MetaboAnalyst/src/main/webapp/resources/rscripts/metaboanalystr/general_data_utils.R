@@ -191,7 +191,6 @@ Read.TextData <- function(mSetObj=NA, filePath, format="colu", lbl.type="disc"){
         return(1);
       }
       cls.lbl <- smpl.nms;
-      #cls.lbl <- dat[,1];
       conc <- dat[,-1];
       var.nms <- colnames(conc);
     }else{ # sample in col
@@ -337,6 +336,39 @@ Read.TextData <- function(mSetObj=NA, filePath, format="colu", lbl.type="disc"){
   mSetObj$msgSet$read.msg <- c(msg, paste("The uploaded data file contains ", nrow(conc),
                                           " (samples) by ", ncol(conc), " (", tolower(GetVariableLabel(mSetObj$dataSet$type)), ") data matrix.", sep=""));
   
+  return(.set.mSet(mSetObj));
+}
+
+#'Constructor to read uploaded CSV or TXT files into the dataSet object
+#'@description This function handles reading in CSV or TXT files and filling in the dataSet object created using "InitDataObjects". 
+#'@usage Read.TextData(mSetObj=NA, filePath, format, lbl.type)
+#'@param mSetObj Input the name of the created mSetObj (see InitDataObjects).
+#'@param filePath Input the path name for the CSV/TXT files to read.
+#'@param format Specify if samples are paired and in rows (rowp), unpaired and in rows (rowu),
+#'in columns and paired (colp), or in columns and unpaired (colu).
+#'@param lbl.type Specify the data label type, either discrete (disc) or continuous (cont).
+#'@author Jeff Xia \email{jeff.xia@mcgill.ca}, Jasmine Chong
+#'McGill University, Canada
+#'License: GNU GPL (>= 2)
+#'@export
+
+Read.TextDataMeta <- function(mSetObj=NA, filePath, format="colu", lbl.type="disc"){
+  print("READING META")
+  mSetObj <- .get.mSet(mSetObj);
+
+  mSetObj$dataSet$origMeta <- .readDataTable(filePath);
+  
+  print(mSetObj$dataSet$origMeta)
+
+  return(.set.mSet(mSetObj));
+}
+
+Read.TextDataEnv <- function(mSetObj=NA, filePath, format="colu", lbl.type="disc"){
+  
+  mSetObj <- .get.mSet(mSetObj);
+
+  mSetObj$dataSet$origEnv <- .readDataTable(filePath);
+
   return(.set.mSet(mSetObj));
 }
 

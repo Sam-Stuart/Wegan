@@ -27,10 +27,13 @@ ord.rda <- function(mSetObj=NA, abundance="false", env_text=" ", data="false") {
   } else {
     input <- mSetObj$dataSet$orig
   }
-  
+  cat("beforeMeta")
   input <- input[order(as.numeric(row.names(input))),] #Order rows
-  #metaData <- mSetObj$dataSet$origMeta
-  #envData <- mSetObj$dataSet$origEnv
+  metaData <- mSetObj$dataSet$origMeta
+  envData <- mSetObj$dataSet$origEnv
+
+  cat("metaData")
+  print(metaData)
 
 
 ####TESTING####

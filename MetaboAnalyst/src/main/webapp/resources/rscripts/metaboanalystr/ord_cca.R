@@ -10,18 +10,22 @@
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2)
 #'@export
-ord.cca <- function(mSetObj=NA, envData=NA, abundance="NULL", metaData="NULL", data="NULL", env_text="NULL") {
+ord.cca <- function(mSetObj=NA, envData=NA, abundance="false", data="false", env_text="NULL") {
 
   library("vegan")
   library("dplyr")
 
   #Extract input from mSetObj
   mSetObj <- .get.mSet(mSetObj)
-  if (data=="NULL") {
+  if (data=="false") {
     input <- mSetObj$dataSet$norm
   } else {
     input <- mSetObj$dataSet$orig
   }
+  metaData <- "NULL"
+  #metaData <- mSetObj$dataSet$origMeta
+  envData <- mSetObj$dataSet$origEnv
+  print(envData)
 
   #Subset main data set for cca
   num_data <- select_if(input, is.numeric) #Numeric data for CCA
@@ -30,7 +34,7 @@ ord.cca <- function(mSetObj=NA, envData=NA, abundance="NULL", metaData="NULL", d
   
   #Transform abundance data
   print("Should you have community species data, you may want to investigate the relative abundance (divide all values by column totals) versus absolute abundance (no change to data).")
-  if (abundance=="NULL") {
+  if (abundance=="false") {
     abundance1 <- "absolute"
     num_data1 <- num_data #Default abundance is absolute and no change is made to data
   } else {
@@ -67,13 +71,42 @@ ord.cca <- function(mSetObj=NA, envData=NA, abundance="NULL", metaData="NULL", d
   }
 
   #Subset env data using user-selected columns
+  #env_cols <- unlist(strsplit(env_text1, "+", fixed=TRUE)) #Create character vector for use as column names
+  #print(env_cols)
+  #env_data <- as.data.frame(envData1[,which(colnames(envData1) %in% env_cols)]) #Subset envData to obtain user selected environmental data
+  #print(env_data)
+  #print("after column crap 2")
+  #env_data1 <- as.data.frame(env_data[zero_sum_logic,]) #Subset env_data removing any rows that were removed for the main data set
+  #print(env_data1)
+  #print("after column crap 1")
+  #env_cols <- colnames(env_data1)
+  #print(env_cols)
+  #print("after column crap")
+  
   env_cols <- unlist(strsplit(env_text1, "+", fixed=TRUE)) #Create character vector for use as column names
+  print("numba 1")
+  print(env_cols)
   env_data <- as.data.frame(envData1[,which(colnames(envData1) %in% env_cols)]) #Subset envData to obtain user selected environmental data
+  print("numba 2")
+  print(env_data)
   env_data1 <- as.data.frame(env_data[zero_sum_logic,]) #Subset env_data removing any rows that were removed for the main data set
-  colnames(env_data1) <- env_cols
-  
+  print("numba 3")
+  print(env_data1)
+  env_cols <- colnames(env_data1)
+  #Subset numerical data and constraining data to remove lines containing NA
+  print("numba 4")
+  print(env_cols)
+  env_data1 <- na.omit(env_data1)
+  print("numba 5")
+  print(env_data1)
+  num_data1 <- num_data1[row.names(num_data1) %in% row.names(env_data1),]
+  print("numba 6")
+  print(num_data1)
   cca <- cca(formula=num_data1~., data=env_data1) #Run CCA with subsetted env_data
-  
+
+  #cca <- cca(formula=num_data1~., data=env_data1, na.action=na.omit) #Run CCA with subsetted env_data
+  print(cca)
+  print("after cca")
   #meta data for input, used to group samples for plotting
   if (is.data.frame(metaData)==FALSE) { #No user uplaoded meta data
     fac_data <- select_if(input, is.factor)
@@ -82,13 +115,13 @@ ord.cca <- function(mSetObj=NA, envData=NA, abundance="NULL", metaData="NULL", d
       metaData1 <- as.data.frame(fac_data)
     } else {
       metaData1 <- "NA" #If main data set had no categorical columns, meta data is NULL
-      #AddErrMsg("No groupings columns were detected. If this is a mistake, make sure that groupings columns use characters and not numbers. For example, instead ofgrouping data using 1, 2, and 3, use I, II and III.")
+      AddErrMsg("No groupings columns were detected. If this is a mistake, make sure that groupings columns use characters and not numbers. For example, instead ofgrouping data using 1, 2, and 3, use I, II and III.")
       print("No groupings columns were detected! If this is a mistake, make sure that groupings columns use characters and not numbers. For example, instead of grouping data using 1, 2, and 3, use I, II and III.")
     }
   } else {  #User uploaded meta data
     metaData1 <- metaData #User uploaded like weights in correlation module
     if (nrow(metaData1)!=nrow(input)) {
-      #AddErrMsg("Your grouping data does not have the same number of rows as your numerical data! Please check that you grouping data is correct.")
+      AddErrMsg("Your grouping data does not have the same number of rows as your numerical data! Please check that you grouping data is correct.")
       stop("Your grouping data does not have the same number of rows as your numerical data! Please check that you grouping data is correct.")
     }
     for(i in 1:ncol(metaData1)) {
@@ -98,10 +131,12 @@ ord.cca <- function(mSetObj=NA, envData=NA, abundance="NULL", metaData="NULL", d
   
   #Fit variables to ordination plots for plotting arrows
   var_fit <- envfit(cca, num_data1, permutations=999, p.max=NULL, display="lc")
-
+  print(var_fit)
   #Fit environmental data to ordination plots for plotting arrows and centroids
   env_data_numeric <- select_if(env_data1, is.numeric)
-  env_data_factor <- select_if(env_data1, is.factor)
+  print(env_data_numeric)
+  env_data_factor <- select_if(env_data1, is.character)
+  print(env_data_factor)
   env_fit <- envfit(cca, env_data1, permutations=999, p.max=NULL, display="lc")
   if (ncol(env_data_factor)>0) {
     env_fit_fac <- envfit(cca, env_data_factor, permutations=999, p.max=NULL, display="lc")
@@ -173,8 +208,8 @@ ord.cca <- function(mSetObj=NA, envData=NA, abundance="NULL", metaData="NULL", d
   print(var_fit)
   sink()  
   
-  sink("environment_impact_on_cca.txt") 
-  cat("Environmental data may significantly impact constrained correspondence analysis\n")
+  sink("constraining_variables_impact_on_cca.txt") 
+  cat("Constraining data may significantly impact CCA\n")
   print(env_fit)
   sink()
   
@@ -255,22 +290,22 @@ Plot.CCA.biplot <- function(mSetObj=NA, color="NULL", ellipse="NULL", var_arrows
   if (is.data.frame(metaData)==FALSE) { #If no meta data
     
     #point options
-    if (sampleNames!="NULL") { #If display data as lables
+    if (sampleNames!="false") { #If display data as lables
       text(cca, display="sites") #Add text for samples
     } else {
       points(cca, display="sites", pch=19)
     }
     
     #Arrow options
-    if (var_arrows!="NULL") { #If variable arrows
+    if (var_arrows!="false") { #If variable arrows
       plot(var_fit, col="darkred", lwd=2, p.max=NULL, cex=0.9)
     }
     
-    if (env_arrows!="NULL") {
+    if (env_arrows!="false") {
       plot(env_fit_num, col="blue", lwd=2, p.max=NULL, cex=0.9)
     }
     
-    if (env_cent!="NULL") {
+    if (env_cent!="false") {
       plot(env_fit_fac, col="blue", lwd=2, p.max=NULL, cex=0.9)
     }
     
@@ -322,7 +357,7 @@ Plot.CCA.biplot <- function(mSetObj=NA, color="NULL", ellipse="NULL", var_arrows
       pchs <- pch_options[meta_col_point_data] #Otherwise point options applied for grouping of user's choice
     }
     
-    if (sampleNames!="NULL") { #If display data as lables
+    if (sampleNames!="false") { #If display data as lables
       with(metaData, text(cca, display="sites", col=cols, bg=cols)) # Text for samples
     } else { #display data as points
       if (point_options!="NULL") { #Engage point options
@@ -334,20 +369,20 @@ Plot.CCA.biplot <- function(mSetObj=NA, color="NULL", ellipse="NULL", var_arrows
     }
     
     #arrow options
-    if (var_arrows!="NULL") { #If variable arrows selected
+    if (var_arrows!="false") { #If variable arrows selected
       plot(var_fit, col="darkred", lwd=2, cex=0.9)
     }
     
-    if (env_arrows!="NULL") {
+    if (env_arrows!="false") {
       plot(env_fit_num, col="blue", lwd=2, p.max=NULL, cex=0.9)
     }
     
-    if (env_cent!="NULL") {
+    if (env_cent!="false") {
       plot(env_fit_fac, col="blue", lwd=2, p.max=NULL, cex=0.9)
     }
 
     #Ellipse option
-    if (ellipse!="NULL") { #if ellipses selected
+    if (ellipse!="false") { #if ellipses selected
       with(metaData, ordiellipse(cca, meta_col_color_data, display="sites", kind="sd", draw="polygon", border=colors, lwd=2)) # Include standard deviation ellipses that are the same color as the text.
     }
     
@@ -381,12 +416,16 @@ Plot.cca.scree <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA) 
   #Extract necessary objects from mSetObj
   mSetObj <- .get.mSet(mSetObj)
   eigenValues <- mSetObj$analSet$cca$eigenValues
-  
-  eigenValues_data <- cbind(cca$CCA$eig, cca$CCA$eig/sum(cca$CCA$eig))
+  print("INSIDE SCREE")
+  eigenValues_data <- cbind(eigenValues, eigenValues/sum(eigenValues))
+  maxVar <- max(eigenValues/sum(eigenValues))
+
+  print("after")
+  print(eigenValues_data)
   n <- nrow(eigenValues_data)
   eigenValues_data <- as.data.frame(cbind(1:nrow(eigenValues_data), eigenValues_data))
   colnames(eigenValues_data) <- c("Dimension", "Eigen_Value", "Variance_Explained")
-
+  print(colnames)
   #Set plot dimensions
   if(is.na(width)){
     w <- 10.5
@@ -404,7 +443,7 @@ Plot.cca.scree <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA) 
   #Scree plot
   Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
   par(xpd=FALSE, mar=c(5.1, 4.1, 4.1, 2.1)) 
-  plot(x=eigenValues_data$Dimension, y=eigenValues_data$Variance_Explained, type="l", xlim=c(1, n), xlab="Dimension", ylab="Proportion of Variance Explained", main="Constrained Correspondence Analysis Scree Plot", xaxt="n", yaxt="n", col="blue", lwd=2)
+  plot(x=eigenValues_data$Dimension, y=eigenValues_data$Variance_Explained, type="l", xlim=c(1, n), ylim=c(0,maxVar+0.1), xlab="Dimension", ylab="Proportion of Variance Explained", main="Constrained Correspondence Analysis Scree Plot", xaxt="n", yaxt="n", col="blue", lwd=2)
   points(x=eigenValues_data$Dimension, y=eigenValues_data$Variance_Explained, cex=1.1, pch=19, col="blue")
   axis(2, las=2)
   axis(1, at=1:n)

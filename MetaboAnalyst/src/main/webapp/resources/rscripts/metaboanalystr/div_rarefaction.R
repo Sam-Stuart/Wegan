@@ -27,8 +27,17 @@ Rarefaction_div <- function(mSetObj = NA, data = "false", type = "NULL", sample 
   
   print("setup mSetObj")
 
+
   #Extract input from mSetObj
   mSetObj <- .get.mSet(mSetObj)
+
+  metaData <- mSetObj$dataSet$origMeta
+  #envData <- mSetObj$dataSet$origEnv
+ 
+  print("BEFORE DATA TESTS")
+  print(metaData)
+  pint(envData)
+
   if (data == "false") { #normalized data as input
     input <- mSetObj$dataSet$norm
   } else { #original data as input

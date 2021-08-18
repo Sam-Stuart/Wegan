@@ -59,6 +59,25 @@ public class DiversityloadBean implements Serializable {
     public void setDataFile(UploadedFile dataFile) {
         this.dataFile = dataFile;
     }
+    
+    private UploadedFile dataFileMeta;
+
+    public UploadedFile getDataFileMeta() {
+        return dataFileMeta;
+    }
+
+    public void setDataFileMeta(UploadedFile dataFileMeta) {
+        this.dataFileMeta = dataFileMeta;
+    }
+    private UploadedFile dataFileEnv;
+
+    public UploadedFile getDataFileEnv() {
+        return dataFileEnv;
+    }
+
+    public void setDataFileEnv(UploadedFile dataFileEnv) {
+        this.dataFileEnv = dataFileEnv;
+    }
 
     /*
     Data upload for statistics module
@@ -74,8 +93,16 @@ public class DiversityloadBean implements Serializable {
             try {
                 RConnection RC = sb.getRConnection();
                 String fileName = DataUtils.uploadFile(dataFile, sb, null, ab.isOnPublicServer());
+                String fileNameMeta = DataUtils.uploadFile(dataFileMeta, sb, null, ab.isOnPublicServer());
+                String fileNameEnv = DataUtils.uploadFile(dataFileEnv, sb, null, ab.isOnPublicServer());
                 if (fileName == null) {
                     return null;
+                }
+                if (fileNameMeta != null){
+                    RDataUtils.readTextDataMeta(RC, fileNameMeta, dataFormat, "disc");
+                }
+                if (fileNameEnv != null){
+                    RDataUtils.readTextDataEnv(RC, fileNameMeta, dataFormat, "disc");
                 }
 
                 if (RDataUtils.readTextData(RC, fileName, dataFormat, "disc")) {
@@ -293,7 +320,6 @@ public class DiversityloadBean implements Serializable {
         else if (testDataOpt.equals("Dune")) {
             dataType = "Dune";
             //sb.updateMsg("Error", "Dune data selected");
-
             testFile = ab.getTestDune();
             format = "rowu";
             
@@ -316,7 +342,10 @@ public class DiversityloadBean implements Serializable {
                 return null;
             }
         } else {
-            
+            String testFileMeta = ab.getTestFileMeta();
+            RDataUtils.readTextDataMeta(RC, testFileMeta, dataFormat, "disc");
+            String testFileEnv = ab.getTestFileEnv();
+            RDataUtils.readTextDataEnv(RC, testFileEnv, dataFormat, "disc");
             //Tested cahnging Disc to cont
             if (!RDataUtils.readTextData(RC, testFile, format, "disc")) {
                 sb.updateMsg("Error", RDataUtils.getErrMsg(RC));

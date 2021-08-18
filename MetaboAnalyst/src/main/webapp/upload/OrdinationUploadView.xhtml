@@ -31,6 +31,14 @@
                         <p:outputLabel style="font-size:12px; font-weight: bold" value="Data File:"/>
                         <p:fileUpload value="#{Ordinationload.dataFile}" mode="simple"/>
                     </h:panelGrid>
+                    <h:panelGrid columns="2" style="padding: 10px">
+                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Grouping Data (optional):"/>
+                        <p:fileUpload value="#{Ordinationload.dataFileMeta}" mode="simple"/>
+                    </h:panelGrid>   
+                    <h:panelGrid columns="2" style="padding: 10px">
+                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Constraining Data (optional):"/>
+                        <p:fileUpload value="#{Ordinationload.dataFileEnv}" mode="simple"/>
+                    </h:panelGrid> 
                     <h:panelGrid columns="4" columnClasses="colLeft,colRight" style="padding: 10px">
                         <h:outputLabel style="font-weight: bold" value="Row Names:"/>
                             <p:selectBooleanCheckbox value ="NULL"/> 

@@ -92,15 +92,15 @@ public class OABean implements Serializable {
     
     
     private void doDefaultCIA() {
-//        OAUtils.CreateCIAOrdination(sb, "NULL", "NULL", false);
-//        OAUtils.PlotCIAscatterOrdination(sb, false, "NULL", "NULL", sb.getCurrentImage("ord_cia_scatter"), "png", 72);
-//        OAUtils.PlotCIAloadingOrdination(sb, "NULL", sb.getCurrentImage("ord_cia_loading"), "png", 72);
-//        OAUtils.PlotCIAscreeOrdination(sb, sb.getCurrentImage("ord_cia_scree"), "png", 72);  
+        OAUtils.CreateCIAOrdination(sb, false, "NULL", " ");
+        OAUtils.PlotCIAscatterOrdination(sb, false, "NULL", "NULL", sb.getCurrentImage("ord_cia_scatter"), "png", 72);
+        OAUtils.PlotCIAloadingOrdination(sb, "NULL", sb.getCurrentImage("ord_cia_loading"), "png", 72);
+        OAUtils.PlotCIAscreeOrdination(sb, sb.getCurrentImage("ord_cia_scree"), "png", 72);  
     }
     
     private void doDefaultANOSIM() {
-//        OAUtils.CreateANOSIMOrdination(sb);
-//        OAUtils.PlotANOSIMOrdination(sb, "NULL", sb.getCurrentImage("ord_cia_scatter"), "png", 72);
+        OAUtils.CreateANOSIM(sb, false, "NULL", false, "NULL");
+        OAUtils.PlotANOSIM(sb, "NULL", sb.getCurrentImage("ord_anosim_plot"), "png", 72);
     }
     
     private void doDefaultRDA(){

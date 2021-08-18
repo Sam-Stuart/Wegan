@@ -770,6 +770,9 @@ public class DataUtils {
         TreeNode nodeoa02 = new DefaultTreeNode("Co-Inerita", oaNode);
         TreeNode nodeoa03 = new DefaultTreeNode("PCoIA", oaNode);
         TreeNode nodeoa04 = new DefaultTreeNode("RDA", oaNode);
+        TreeNode nodeoa05 = new DefaultTreeNode("CCA", oaNode);
+        TreeNode nodeoa06 = new DefaultTreeNode("CA", oaNode);
+        TreeNode nodeoa07 = new DefaultTreeNode("Bray Curtis", oaNode);
     }
     private static void addDiversityNodes(TreeNode parent) {
         TreeNode diversityNode = new DefaultTreeNode("Diversity", parent); 

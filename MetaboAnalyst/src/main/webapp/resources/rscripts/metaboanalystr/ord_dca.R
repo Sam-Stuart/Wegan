@@ -202,8 +202,8 @@ ord.dca <- function(mSetObj=NA, abundance="NULL", metaData="NULL", envData="NULL
   sink()  
   
   if (is.data.frame(envData1)==TRUE) { #If environmental data uploaded
-    sink("environment_impact_on_dca.txt") 
-    cat("Environmental data may significantly impact DCA\n")
+    sink("constraining_variables_impact_on_dca.txt") 
+    cat("Constraining data may significantly impact DCA\n")
     print(env_fit)
     sink()
   }
@@ -252,7 +252,7 @@ ord.dca <- function(mSetObj=NA, abundance="NULL", metaData="NULL", envData="NULL
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2)
 #'@export
-Plot.DCA.2D <- function(mSetObj=NA, color=NULL, ellipse=NULL, var_arrows=NULL, env_arrows=NULL, env_cent=NULL, sampleNames=NULL, meta_col_color=NULL, point_options=NULL, meta_col_point=NULL, imgName, format="png", dpi=72, width=NA) { #5 check boxes, 3 drop downs
+Plot.DCA.2D <- function(mSetObj=NA, color=NULL, ellipse="false", var_arrows="false", env_arrows="false", env_cent="false", sampleNames="false", meta_col_color="NULL", point_options="NULL", meta_col_point="NULL", imgName, format="png", dpi=72, width=NA) { #5 check boxes, 3 drop downs
 
   library("vegan")
   library("viridis") 
@@ -298,23 +298,23 @@ Plot.DCA.2D <- function(mSetObj=NA, color=NULL, ellipse=NULL, var_arrows=NULL, e
   if (is.data.frame(metaData)==FALSE) { #If no grouping data uploaded
     
     #point text option
-    if (!is.null(sampleNames)) { #If display data as lables
+    if (sampleNames=="NULL") { #If display data as lables
       text(dca, display="sites") #Add text for samples
     } else {
       points(dca, display="sites", pch=19)
     }
     
     #Arrow options
-    if (!is.null(var_arrows)) { #If variable arrows selected
+    if (var_arrows=="true") { #If variable arrows selected
       plot(var_fit, col="darkred", lwd=2)
     }
     
     if (is.data.frame(env_data)==TRUE) { #If environment data uploaded
-      if (!is.null(env_arrows)) { #If environment arrows selected
+      if (env_arrows=="true") { #If environment arrows selected
         plot(env_fit_num, col="blue", lwd=2)
       }
       
-      if (!is.null(env_cent)) { #If environment constraints selected
+      if (env_cent=="true") { #If environment constraints selected
         plot(env_fit_fac, col="blue", lwd=2)
       }
     }
@@ -322,7 +322,7 @@ Plot.DCA.2D <- function(mSetObj=NA, color=NULL, ellipse=NULL, var_arrows=NULL, e
   } else { #If grouping data available
     
     #Set up grouping data column to use for colors
-    if (is.null(meta_col_color)) { #No column selected for grouping by color
+    if (meta_col_color=="NULL") { #No column selected for grouping by color
       meta_col_color_data <- as.factor(metaData[,1]) #Default grouping data column for grouping with color is the first
       meta_col_color_name <- colnames(metaData)[1] #Extract name
     } else { #column selected for grouping by color
@@ -331,7 +331,7 @@ Plot.DCA.2D <- function(mSetObj=NA, color=NULL, ellipse=NULL, var_arrows=NULL, e
     }
     
     #Set up grouping data column to use for points
-    if (is.null(meta_col_point)) { #No column selected for grouping by point shape
+    if (meta_col_point=="false") { #No column selected for grouping by point shape
       meta_col_point_data <- as.factor(metaData[,1]) #Default grouping data column for grouping with points is the first
       meta_col_point_name <- colnames(metaData)[1] #Extract name
     } else {
@@ -341,7 +341,7 @@ Plot.DCA.2D <- function(mSetObj=NA, color=NULL, ellipse=NULL, var_arrows=NULL, e
     
     #Color options
     n <- length(levels(meta_col_color_data)) #Determine how many different colors are needed based on the levels of the grouping data column selected for grouping
-    if (is.null(color)) { #Default palette 
+    if (color=="NULL") { #Default palette 
       colors <- viridis(n)#Assign a color to each level using the viridis pallete (viridis package)
     } else if (color=="plasma") {
       colors <- plasma(n+1)#Assign a color to each level using the plasma pallete (viridis package)
@@ -361,13 +361,13 @@ Plot.DCA.2D <- function(mSetObj=NA, color=NULL, ellipse=NULL, var_arrows=NULL, e
     #point options
     pch_options <- c(19, 17, 15, 18, 1, 2, 0, 5, 6, 3, 4, 7, 8, 9, 10, 11, 12, 13, 14)
     
-    if (is.null(point_options)) {
+    if (point_options=="NULL") {
       pchs <- 19 #No points option gets solid circle
     } else {
       pchs <- pch_options[meta_col_point_data] #Otherwise point options applied for grouping of user's choice
     }
     
-    if (!is.null(sampleNames)) { #If display data as lables
+    if (sampleNames=="true") { #If display data as lables
       with(metaData, text(dca, display="sites", col=cols, bg=cols)) # Text for samples
     } else { #display data as points
       if (!is.null(point_options)) { #Engage point options
@@ -379,21 +379,21 @@ Plot.DCA.2D <- function(mSetObj=NA, color=NULL, ellipse=NULL, var_arrows=NULL, e
     }
     
     #Ellipse option
-    if (!is.null(ellipse)) { #if ellipses selected
+    if (ellipse=="true") { #if ellipses selected
       with(metaData, ordiellipse(dca, meta_col_color_data, kind="sd", draw="polygon", border=colors, lwd=2)) # Include standard deviation ellipses that are the same color as the text.
     }
     
     #arrow options
-    if (!is.null(var_arrows)) { #If variable arrows selected
+    if (var_arrows=="true") { #If variable arrows selected
       plot(var_fit, col="darkred", lwd=2)
     }
     
     if (is.data.frame(env_data)==TRUE) { #If environment data uploaded
-      if (!is.null(env_arrows)) { #If environment arrows selected
+      if (env_arrows=="true") { #If environment arrows selected
         plot(env_fit_num, col="blue", lwd=2)
       }
       
-      if (!is.null(env_cent)) { #If environment centroids selected
+      if (env_cent=="true") { #If environment centroids selected
         plot(env_fit_fac, col="blue", lwd=2)
       }
     }
@@ -434,6 +434,7 @@ Plot.DCA.scree <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA) 
   eigenValues_data <- cbind(eigenValues, eigenValues/sum(eigenValues))
   eigenValues_data <- as.data.frame(cbind(1:4, eigenValues_data))
   colnames(eigenValues_data) <- c("Dimension", "Eigen_Value", "Variance_Explained")
+  maxVar <- max(eigenValues/sum(eigenValues))
 
   #Set plot dimensions
   if(is.na(width)){
@@ -452,7 +453,7 @@ Plot.DCA.scree <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA) 
   #Scree plot
   Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
   par(xpd=FALSE, mar=c(5.1, 4.1, 4.1, 2.1)) 
-  plot(x=eigenValues_data$Dimension, y=eigenValues_data$Variance_Explained, type="l", xlim=c(1, 4), ylim=c(0, 1), xlab="Dimension", ylab="Proportion of Variance Explained", main="Detrended Correspondence Analysis Scree Plot", yaxt="n", xaxt="n", col="blue", lwd=2)
+  plot(x=eigenValues_data$Dimension, y=eigenValues_data$Variance_Explained, type="l", xlim=c(1, 4), ylim=c(0, maxVar+0.1), xlab="Dimension", ylab="Proportion of Variance Explained", main="Detrended Correspondence Analysis Scree Plot", yaxt="n", xaxt="n", col="blue", lwd=2)
   points(x=eigenValues_data$Dimension, y=eigenValues_data$Variance_Explained, cex=1.1, pch=19, col="blue")
   axis(2, las=2)
   axis(1, at=1:4)
