@@ -353,12 +353,13 @@ Read.TextData <- function(mSetObj=NA, filePath, format="colu", lbl.type="disc"){
 #'@export
 
 Read.TextDataMeta <- function(mSetObj=NA, filePath, format="colu", lbl.type="disc"){
-  
+  print("READING META")
   mSetObj <- .get.mSet(mSetObj);
 
   mSetObj$dataSet$origMeta <- .readDataTable(filePath);
   
   print(mSetObj$dataSet$origMeta)
+
   return(.set.mSet(mSetObj));
 }
 
