@@ -60,6 +60,24 @@ public class OrdinationloadBean implements Serializable {
         this.dataFile = dataFile;
     }
 
+    private UploadedFile dataFileMeta;
+
+    public UploadedFile getDataFileMeta() {
+        return dataFileMeta;
+    }
+
+    public void setDataFileMeta(UploadedFile dataFileMeta) {
+        this.dataFileMeta = dataFileMeta;
+    }
+    private UploadedFile dataFileEnv;
+
+    public UploadedFile getDataFileEnv() {
+        return dataFileEnv;
+    }
+
+    public void setDataFileEnv(UploadedFile dataFileEnv) {
+        this.dataFileEnv = dataFileEnv;
+    }
     /*
     Data upload for statistics module
      */
@@ -74,9 +92,17 @@ public class OrdinationloadBean implements Serializable {
             try {
                 RConnection RC = sb.getRConnection();
                 String fileName = DataUtils.uploadFile(dataFile, sb, null, ab.isOnPublicServer());
+                String fileNameMeta = DataUtils.uploadFile(dataFileMeta, sb, null, ab.isOnPublicServer());
+                String fileNameEnv = DataUtils.uploadFile(dataFileEnv, sb, null, ab.isOnPublicServer());
                 if (fileName == null) {
                     return null;
                 }
+                if (fileNameMeta != null){
+                    RDataUtils.readTextDataMeta(RC, fileNameMeta, dataFormat, "disc");
+                }
+                if (fileNameEnv != null){
+                    RDataUtils.readTextDataEnv(RC, fileNameMeta, dataFormat, "disc");
+                }                 
 
                 if (RDataUtils.readTextData(RC, fileName, dataFormat, "disc")) {
                     sb.setDataUploaded(true);
@@ -210,67 +236,6 @@ public class OrdinationloadBean implements Serializable {
     public void setTestDataOpt(String testDataOpt) {
         this.testDataOpt = testDataOpt;
     }
-
-    public String handleStatTestFileUpload() {
-        System.out.print(" ------------------OVER HERE !!!! ------------------------------");
-        String format = "";
-        boolean paired = false;
-        boolean isZip = false;
-        String testFile = null;
-
-        
-        
-        if (testDataOpt == null) {
-            //sb.updateMsg("Error", "No data set is selected!");
-            return null;
-        }
-
-        if (testDataOpt.equals("conccancer")) {
-            dataType = "conc";
-            testFile = ab.getTestConcHsaPath();
-            format = "rowu";
-        }
-        
-        //DUNE DATA SELECTED*********************************************************
-        else if (testDataOpt.equals("Dune")) {
-            dataType = "Dune";
-            sb.updateMsg("Error", "Dune data selected");
-
-            testFile = ab.getTestamf();
-            format = "rowu";
-            
-           
-        } else if (testDataOpt.equals("BCI")) {
-            testFile = ab.getTestBCI();
-            format = "rowu";
-        }
-
-        if (!sb.doLogin(dataType, "ord", false, paired)) {
-            //sb.updateMsg("Error", "No login return null?");
-            return null;
-        }
-
-        RConnection RC = sb.getRConnection();
-        if (isZip) {
-            if (!RDataUtils.readZipData(RC, testFile, dataType, "F")) {
-                sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
-                return null;
-            }
-        } else {
-            
-            //Tested cahnging Disc to cont
-            if (!RDataUtils.readTextData(RC, testFile, format, "disc")) {
-                sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
-                return null;
-            }
-        }
-        sb.setDataUploaded(true);
-        if (dataType.equals("conc") || dataType.equals("pktable") || dataType.equals("specbin")) {
-            return "Data check";
-        }
-        return dataType;
-    }
-    
   
     
     //----------------------------------------------------------------- Test loader 
@@ -320,7 +285,10 @@ public class OrdinationloadBean implements Serializable {
                 return null;
             }
         } else {
-            
+            String testFileMeta = ab.getTestFileMeta();
+            RDataUtils.readTextDataMeta(RC, testFileMeta, dataFormat, "disc");
+            String testFileEnv = ab.getTestFileEnv();
+            RDataUtils.readTextDataEnv(RC, testFileEnv, dataFormat, "disc");
             //Tested cahnging Disc to cont
             if (!RDataUtils.readTextData(RC, testFile, format, "disc")) {
                 sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
@@ -328,22 +296,6 @@ public class OrdinationloadBean implements Serializable {
             }
         }
         sb.setDataUploaded(true);
-        //RC.Eval;
-        /*try {
-            //String rCommand = "InitDataObjects(\"" + dataType + "\", \"" + analType + "\", " + (isPaired ? "TRUE" : "FALSE") + ")";
-            //String rCommand = "NMDSWegan(\"" + dataType + "\")";
-            
-            //String rCommand = "DCAWegan(\"" + dataType + "\", \"" + sb.getPath2()+ "\"  )";
-            
-            
-            //RC.voidEval(rCommand);
-            //RCenter.recordRCommand(RC, rCommand);
-            
-        } catch (RserveException rse) {
-            System.out.println(rse);
-            return "";
-        }*/
-        //;
         return "Data check";
     }
     

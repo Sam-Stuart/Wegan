@@ -233,37 +233,37 @@ public class ApplicationBean1 implements Serializable {
         
                 
         vegdistMeasureOpts = new SelectItem[14];
-        vegdistMeasureOpts[0] = new SelectItem("bray", "Bray-Curtis");
-        vegdistMeasureOpts[1] = new SelectItem("manhattan", "Manhattan");
-        vegdistMeasureOpts[2] = new SelectItem("canberra", "Canberra");
-        vegdistMeasureOpts[3] = new SelectItem("kulczynski", "Kulczynski");
-        vegdistMeasureOpts[4] = new SelectItem("jaccard", "Jaccard");
-        vegdistMeasureOpts[5] = new SelectItem("gower", "Gower");
-        vegdistMeasureOpts[6] = new SelectItem("horn", "Horn-Morisita");
-        vegdistMeasureOpts[7] = new SelectItem("mountford", "Mountford");
-        vegdistMeasureOpts[8] = new SelectItem("raup" , "Raup-Crick");
-        vegdistMeasureOpts[9] = new SelectItem("binomial", "Binomial");
-        vegdistMeasureOpts[10] = new SelectItem("chao", "Chao");
-        vegdistMeasureOpts[11] = new SelectItem("cao", "Cao");
-        vegdistMeasureOpts[12] = new SelectItem("mahalanobis", "Mahalanobis");
-        vegdistMeasureOpts[13] = new SelectItem("euclidean", "Euclidean");
+        vegdistMeasureOpts[0] = new SelectItem("NULL", "Bray-Curtis");
+        vegdistMeasureOpts[1] = new SelectItem("euclidean", "Euclidean");
+        vegdistMeasureOpts[2] = new SelectItem("manhattan", "Manhattan");
+        vegdistMeasureOpts[3] = new SelectItem("canberra", "Canberra");
+        vegdistMeasureOpts[4] = new SelectItem("kulczynski", "Kulczynski");
+        vegdistMeasureOpts[5] = new SelectItem("jaccard", "Jaccard");
+        vegdistMeasureOpts[6] = new SelectItem("gower", "Gower");
+        vegdistMeasureOpts[7] = new SelectItem("horn", "Horn-Morisita");
+        vegdistMeasureOpts[8] = new SelectItem("mountford", "Mountford");
+        vegdistMeasureOpts[9] = new SelectItem("raup" , "Raup-Crick");
+        vegdistMeasureOpts[10] = new SelectItem("binomial", "Binomial");
+        vegdistMeasureOpts[11] = new SelectItem("chao", "Chao");
+        vegdistMeasureOpts[12] = new SelectItem("cao", "Cao");
+        vegdistMeasureOpts[13] = new SelectItem("mahalanobis", "Mahalanobis");
         
         ciaTypeOpts = new SelectItem[2];
-        ciaTypeOpts[0] = new SelectItem("numeric", "Numeric Data Types");
+        ciaTypeOpts[0] = new SelectItem("NULL", "Numeric Data Types");
         ciaTypeOpts[1] = new SelectItem("categorical", "Categorical Data Types");
                 
         ciaDataSetOpts = new SelectItem[2];
-        ciaDataSetOpts[0] = new SelectItem("main", "Main Data Set");
+        ciaDataSetOpts[0] = new SelectItem("NULL", "Main Data Set");
         ciaDataSetOpts[1] = new SelectItem("env", "Constraining Data Set");
                 
         ordColorPaletteOpts = new SelectItem[4];
-        ordColorPaletteOpts[0] = new SelectItem("viridis", "Viridis");
+        ordColorPaletteOpts[0] = new SelectItem("NULL", "Viridis");
         ordColorPaletteOpts[1] = new SelectItem("plasma", "Plasma");
         ordColorPaletteOpts[2] = new SelectItem("grey", "Grayscale");
         ordColorPaletteOpts[3] = new SelectItem("none", "No Color");
         
         ordStressDimensionOpts = new SelectItem[5];
-        ordStressDimensionOpts[0] = new SelectItem("1", "1");
+        ordStressDimensionOpts[0] = new SelectItem("NULL", "1");
         ordStressDimensionOpts[1] = new SelectItem("2", "2");
         ordStressDimensionOpts[2] = new SelectItem("3", "3");
         ordStressDimensionOpts[3] = new SelectItem("4", "4");
@@ -364,7 +364,7 @@ public class ApplicationBean1 implements Serializable {
         corrMethodsOpts[2] = new SelectItem("lasso", "Lasso");
         
         orgOpts = new SelectItem[4];
-        orgOpts[0] = new SelectItem("NA", "----Not specified----");
+        orgOpts[0] = new SelectItem("vegdistMeasureOpts", "----Not specified----");
         orgOpts[1] = new SelectItem("hsa", "Homo sapiens (human)");
         orgOpts[2] = new SelectItem("mmu", "Mus musculus (mouse)");
         orgOpts[3] = new SelectItem("rno", "Rattus norvegicus (rat)");
@@ -565,6 +565,13 @@ public class ApplicationBean1 implements Serializable {
         return realPath + test_amf;
     }
     
+    public String getTestFileMeta() {
+        return realPath + "/data/dune_meta.txt";
+    }
+    public String getTestFileEnv() {
+        return realPath + "/data/dune_env.txt";
+    }
+    
     public String getTestDune() {
         return realPath + test_dune;
     }
@@ -572,10 +579,7 @@ public class ApplicationBean1 implements Serializable {
     public String getTestIris() {
         return realPath + test_iris;
     }
-//    public String getTestLinear() {
-//        return realPath + test_linear;
-//    }
-//    
+
     public String getTestWeightDune() {
         return realPath + test_dune_weights;
     }

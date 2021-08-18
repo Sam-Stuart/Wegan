@@ -12,10 +12,10 @@ Soil Thickness,Moisture,Management,Use,Manure
 3.5,1,BF,Pasture,I
 5.8,4,SF,Haypastu,II
 6,5,SF,Haypastu,III
-9.3,5,NM,Pasture,NA
-11.5,5,NM,Haypastu,NA
+9.3,5,NM,Pasture,V
+11.5,5,NM,Haypastu,V
 5.7,5,SF,Pasture,III
-4,2,NM,Hayfield,NA
-4.6,1,NM,Hayfield,NA
-3.7,5,NM,Hayfield,NA
-3.5,5,NM,Hayfield,NA
+4,2,NM,Hayfield,V
+4.6,1,NM,Hayfield,V
+3.7,5,NM,Hayfield,V
+3.5,5,NM,Hayfield,V

@@ -37,35 +37,18 @@
             
                             <h:outputLabel style="font-weight: bold" value="Indicate Constraining Data Variables Using the Column Names with Commas in Between:"/>
                             <p:inputText style="width:400px; height:100px" value="#{ordCIABean.envInput}"/> 
-                                                        
-                            <p:panelGrid></p:panelGrid>
-                            <p:panelGrid></p:panelGrid>
-            
-                            <h:outputLabel style="font-weight: bold" value="Use Main Data Set Groupings in Plot:"/>
-                                <p:selectBooleanCheckbox value ="#{ordCIABean.doMetaGroup}"/> 
-                     
-                            <p:panelGrid></p:panelGrid>
-                            <p:panelGrid></p:panelGrid>
-            
-                            <h:outputLabel style="font-weight: bold" value="Column for Grouping Main Data Set:"/>
-                            
-                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordCIABean.ciaMetaColumnName}">
-                                <f:selectItems value="#{ordCIABean.ciaMetaColumnOpts}" />
-                            </p:selectOneMenu>
-                            
-                            <p:panelGrid></p:panelGrid>
-                            <p:panelGrid></p:panelGrid>
-                            
-                            <h:outputLabel style="font-weight: bold" value="Color Palette:"/>
-                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordCIABean.ordColorOpts}">
-                                    <f:selectItems value="#{applicationBean1.ordColorPaletteOpts}" />
-                                </p:selectOneMenu> 
-                                                        
+         
                             <p:panelGrid></p:panelGrid>
                             <p:panelGrid></p:panelGrid>
                             <p:panelGrid></p:panelGrid>
                             <p:panelGrid></p:panelGrid>
-                            
+                                                     
+                            <p:commandButton value="Customize Graph"
+                                             styleClass="graphicsButton"
+                                             style="box-shadow: none !important; text-shadow: none !important;"
+                                             actionListener="#{sessionBean1.graphicsLnk_action('pca_pair')}" 
+                                            oncomplete="PF('graphApperanceCIA').show()"/>  
+                                           
                             <p:commandButton value="Update" 
                                              style="background: #75bafb; border: 5px #75bafb; color: black"
                                             onclick="PF('statusDialog').show()"
@@ -84,17 +67,20 @@
                             <h:panelGroup>
                                 <h:panelGrid columns="3" class="resultsImages">
                                     <i class="fas fa-palette"></i>
-                                    <i class="fa fa-table"></i>
                                     <i class="fa fa-question-circle"></i>
-<!--                                                                       <i class="fas fa-table"></i>
-                                   <i class="fas fa-palette"></i>
-                                   <i class="far fa-question-circle"></i>-->
                                 </h:panelGrid>
                             
                             </h:panelGroup>                            
                         </h:panelGrid>   
                         
                         <h:panelGrid id="ciaPane1" style="width: 100%;">
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <p:commandButton value="Export"
+                                    styleClass="exportButton"
+                                    style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                    actionListener="#{sessionBean1.graphicsLnk_action('ord_cia_scatter')}"
+                                    oncomplete="PF('graphDialog').show()"/>
+                            </h:panelGrid>                              
                              <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
                                 <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('ord_cia_scatter')}" alt="ciascatterimage"/>
                             </h:panelGrid>                           
@@ -159,6 +145,13 @@
                             
                             </h:panelGroup>                            
                         </h:panelGrid> 
+                        <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                            <p:commandButton value="Export"
+                                styleClass="exportButton"
+                                style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                actionListener="#{sessionBean1.graphicsLnk_action('ord_cia_scree')}"
+                                oncomplete="PF('graphDialog').show()"/>
+                        </h:panelGrid>                          
                         <h:panelGrid id="ciaPane2" style="text-align: center; width: 100%;">
                             <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('ord_cia_scree')}" alt="ciascreeimage"/>
                         </h:panelGrid>        
@@ -187,6 +180,14 @@
                             <p:panelGrid></p:panelGrid>
                             <p:panelGrid></p:panelGrid>
             
+                            <h:outputLabel style="font-weight: bold" value="See Loadings Plot For:"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordCIABean.coiaDataSetOpts}">
+                                    <f:selectItems value="#{applicationBean1.ciaDataSetOpts}" />
+                                </p:selectOneMenu> 
+  
+                            <p:panelGrid></p:panelGrid>
+                            <p:panelGrid></p:panelGrid>
+                            
                             <h:outputLabel style="font-weight: bold" value="Indicate Constraining Data Variables Using the Column Names with Commas in Between:"/>
                             <p:inputText style="width:400px; height:100px" value="#{ordCIABean.envInput}"/>
 
@@ -211,15 +212,19 @@
                             <h:panelGroup>
                                 <h:panelGrid columns="3" class="resultsImages">
                                     <i class="fas fa-palette"></i>
-                                    <i class="fa fa-table"></i>
                                     <i class="fa fa-question-circle"></i>
-<!--                                                                       <i class="fas fa-table"></i>
-                                   <i class="fas fa-palette"></i>
-                                   <i class="far fa-question-circle"></i>-->
+
                                 </h:panelGrid>
                             
                             </h:panelGroup>                            
                         </h:panelGrid> 
+                        <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                            <p:commandButton value="Export"
+                                styleClass="exportButton"
+                                style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                actionListener="#{sessionBean1.graphicsLnk_action('ord_cia_loading')}"
+                                oncomplete="PF('graphDialog').show()"/>
+                        </h:panelGrid>                          
                         <h:panelGrid id="ciaPane3" style="text-align: center; width: 100%;">
                             <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('ord_cia_loading')}" alt="cialoadingimage"/>
                         </h:panelGrid>        
@@ -227,5 +232,11 @@
                 </p:tab>
             </p:tabView> 
         </h:panelGrid> 
+        <p:dialog modal="true" widgetVar="graphApperanceCIA" 
+            style="width: 400px; height:400px;" 
+            appendTo="@(body)" header="Graphics Center"
+            draggable="false" closable="true" resizable="false"> 
+            <ui:include src="_color_palette_cia.xhtml" />
+        </p:dialog>
     </ui:define>
 </ui:composition>

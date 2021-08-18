@@ -3,41 +3,52 @@
 #'@param mSetObj Input name of the created mSet Object
 #'@param distance Input distance as one of "bray" (default), "manhattan", "canberra", "euclidean", "kulczynski", "jaccard", "gower", "altGower", "morisita", "horn", "mountford", "raup" , "binomial", "chao", "cao", "mahalanobis"
 #'@param abundance Set abundance transformation, default is absolute (no change), else relative
-#'@param metaData  Set meta data, default is categorical columns in data set
-#'@param envData  Set environmental data (must be user uploaded), default is none
 #'@param env_text Input environmental data column names (java uses text box to obtain string)
 #'@param data Which data set to use, normalized (default) or original
 #'@author Louisa Normington\email{normingt@ualberta.ca}
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2)
 #'@export
-ord.NMDS <- function(mSetObj=NA, distance="NULL", abundance="NULL", data="NULL", metaData="NULL", envData="NULL", env_text="NULL") { #3 drop downs, one text box
+ord.NMDS <- function(mSetObj=NA, data="false", distance="NULL", abundance="false", env_text=" ") { #2 drop downs, one text box, one checkbox
   
   library("vegan")
   library("dplyr")
-  
+
   print("The use of data groupings will create more interesting plots. Load grouping data separately, where each row aligns with the rows in your data set, or include groupings as columns in your data set.")
   print("The use of environmental data, if available, will also create more interesting plots. Load environmental data separately, where each row aligns with the rows in your data set.")
   
   #Obtain mSet dataset
   mSetObj <- .get.mSet(mSetObj)
-  if (data=="NULL") {
+  if (data=="false") {
     input <- mSetObj$dataSet$norm
   } else {
     input <- mSetObj$dataSet$orig
   }
-  
+
+  input <- input[order(as.numeric(row.names(input))),] #Order rows
+  #metaData <- mSetObj$dataSet$origMeta
+  #envData <- mSetObj$dataSet$origEnv
+
+
+####TESTING####
+  input <- input[-1,] #Remove duplicate row
+  metaData <- .readDataTable("/home/louisa/Wegan/MetaboAnalyst/src/main/webapp/resources/rscripts/metaboanalystr/test_data/dune_meta.csv") 
+  envData <- .readDataTable("/home/louisa/Wegan/MetaboAnalyst/src/main/webapp/resources/rscripts/metaboanalystr/test_data/dune_env.csv")
+############
+
+
+
   #Obtain numeric data for ordination and categorical data for grouping data
   num_data <- select_if(input, is.numeric) #Numeric data only for NMDS
-  fac_data <- select_if(input, is.factor) #Any categorical data will be used for grouping
-  count.fac.cols <- ncol(fac_data)
+  char_data <- select_if(input, is.character) #Any categorical data will be used for grouping
+  count.char.cols <- ncol(char_data)
   
   print("Should you have community species data, you may want to investigate the relative abundance (divide all values by column totals) versus absolute abundance (no change to data).")
-  if (abundance=="NULL") {
-    abundance <- "absolute" #Default abundance is absolute and no change is made to data
+  if (abundance=="false") {
+    abundance1 <- "absolute" #Default abundance is absolute and no change is made to data
     num_data1 <- num_data
   } else {
-    abundance <- "relative"
+    abundance1 <- "relative"
     num_data1 <- decostand(num_data, method="total") #Alternative option is relative abundance, each value is divided by the column sum
   }
 
@@ -46,7 +57,7 @@ ord.NMDS <- function(mSetObj=NA, distance="NULL", abundance="NULL", data="NULL",
   } else {
     distance1 <- distance #USer selected from list "euclidean", "manhattan", "canberra", "bray", "kulczynski", "jaccard", "gower", "altGower", "morisita", "horn", "mountford", "raup" , "binomial", "chao", "cao", "mahalanobis"
   } 
-  
+
   #Run NMDS for 1D through 5D
   nmds1D <- metaMDS(num_data1, maxit=999, trymax=50, dist=distance1, k=1, trace=0)
   nmds2D <- metaMDS(num_data1, maxit=999, trymax=50, dist=distance1, k=2, trace=0)
@@ -55,9 +66,9 @@ ord.NMDS <- function(mSetObj=NA, distance="NULL", abundance="NULL", data="NULL",
   nmds5D <- metaMDS(num_data1, maxit=999, trymax=50, dist=distance1, k=5, trace=0)
 
   #meta data, used to group samples using colors or plotting symbols
-  if (is.data.frame(metaData)==FALSE) { #No user uplaoded meta data
-    if (count.fac.cols >= 1) { #If species data had at least one categorical column, call it meta data
-      metaData1 <- as.data.frame(fac_data)
+  if (is.data.frame(metaData)==FALSE) { #No user uploaded meta data
+    if (count.char.cols >= 1) { #If species data had at least one categorical column, call it meta data
+      metaData1 <- as.data.frame(char_data)
     } else {
       metaData1 <- "NA" #If species data had no categorical columns, meta data is NA
       #AddErrMsg("No groupings columns were detected. If this is a mistake, make sure that groupings columns use characters and not numbers. For example, instead ofgrouping data using 1, 2, and 3, use I, II and III.")
@@ -69,20 +80,19 @@ ord.NMDS <- function(mSetObj=NA, distance="NULL", abundance="NULL", data="NULL",
       #AddErrMsg("Your meta data does not have the same number of rows as your numerical data! Please check that you meta data is correct.")
       stop("Your grouping data does not have the same number of rows as your main data set! Please check that you meta data is correct.")
     }
-    for(i in 1:ncol(metaData1)) {
-      metaData1[,i] <- as.factor(metaData1[,i]) #Make sure all columns are read as factors
-    }
+    colnames(metaData1) <- colnames(metaData)
   }
   
   #environmental data, used to correlate with rows in main data set
   if (is.data.frame(envData)==FALSE) { #No user uplaoded environmental data
       envData1 <- "NA"
   } else {  #User uplaoded environmental data
-    envData1 <- envData #User uploaded (like weights in correlation module)
-    if (nrow(envData1)!=nrow(input)) {
-      #AddErrMsg("Your meta data does not have the same number of rows as your numerical data! Please check that you meta data is correct.")
-      stop("Your environmental data does not have the same number of rows as your numerical data! Please check that you environmental data is correct.")
-    }
+      envData1 <- envData
+  }
+
+  if (nrow(envData1)!=nrow(input)) {
+    #AddErrMsg("Your meta data does not have the same number of rows as your numerical data! Please check that you meta data is correct.")
+    stop("Your environmental data does not have the same number of rows as your numerical data! Please check that you environmental data is correct.")
   }
   
   #Text box instructions for selecting environmental variables. Text box should be interactive, meaning any change in text alters the result in real time. Default env_text is second column.
@@ -92,7 +102,7 @@ ord.NMDS <- function(mSetObj=NA, distance="NULL", abundance="NULL", data="NULL",
   
   #Set up environmental data using user selected columns
   if (is.data.frame(envData1)==TRUE) { #User uplaoded environmental data
-    if (env_text=="NULL") { 
+    if (env_text==" ") { #Nothing typed in text box
       env_text1 <- colnames(envData1) #Default is the all env columns
       cat(paste0("You have selected these constraining variables: ", paste(env_text1, collapse=", "), "."))
       cat("If the selection is not what you intended, reenter environmental variable(s) in the text box, using the column names with commas in between.")
@@ -101,7 +111,6 @@ ord.NMDS <- function(mSetObj=NA, distance="NULL", abundance="NULL", data="NULL",
       env_text1 <- gsub("\n", "", env_text1, fixed=TRUE) #fixed=TRUE means we are dealing with one string, versus a vector of strings (fixed=FALSE)
       env_text1 <- gsub(",", "+", env_text1, fixed=TRUE) 
       env_text1 <- gsub(";", "+", env_text1, fixed=TRUE)
-      env_text1 <- gsub(" ", "", env_text1, fixed=TRUE)
       env_text1 <- gsub(":", "+", env_text1, fixed=TRUE)
       env_text1 <- gsub("*", "+", env_text1, fixed=TRUE)
       cat(paste0("You have selected these constraining variables: ", gsub("+", ", ", env_text1, fixed=TRUE), "."))
@@ -120,17 +129,21 @@ ord.NMDS <- function(mSetObj=NA, distance="NULL", abundance="NULL", data="NULL",
   #Fit environmental data to ordination plots for plotting arrows
   if (is.data.frame(envData1)==FALSE) { #If environmental data not uploaded
     env.fit2D <- "NA"
-    env.fit2D.fac <- "NA"
+    env.fit2D.char <- "NA"
     env.fit2D.num <- "NA"
   } else { #If environmental data uploaded
     env_data_numeric <- select_if(env_data, is.numeric)
-    env_data_factor <- select_if(env_data, is.factor)
+    env_data_character <- select_if(env_data, is.character)
     env.fit2D <- envfit(nmds2D, env_data, permutations=999, p.max=NULL)
-    if (ncol(env_data_factor)>0) {
-      env.fit2D.fac <- envfit(nmds2D, env_data_factor, permutations=999, p.max=NULL)
+    if (ncol(env_data_character)>0) { #If categorical variables present
+      env.fit2D.char <- envfit(nmds2D, env_data_character, permutations=999, p.max=NULL) #Fit env data to species data
+    } else{
+      env.fit2D.char <- "NA"
     }
-    if (ncol(env_data_numeric)>0) {
-      env.fit2D.num <- envfit(nmds2D, env_data_numeric, permutations=999, p.max=NULL)
+    if (ncol(env_data_numeric)>0) { #If numeric variables present
+      env.fit2D.num <- envfit(nmds2D, env_data_numeric, permutations=999, p.max=NULL) #Fit env data to species data
+    } else{
+      env.fit2D.num <- "NA"
     }
   }
 
@@ -150,26 +163,30 @@ ord.NMDS <- function(mSetObj=NA, distance="NULL", abundance="NULL", data="NULL",
   if (is.data.frame(envData1)==FALSE) { #If environmental data not uploaded
     env.scores2D <- "NA"
   } else { #If environmental data uploaded
+
+    #Env scores for numeric env variables--> will be used for plotting arrows
     if (length(env_data_numeric)>0) {
       env.scores2D.num <- signif(scores(env.fit2D, display="vectors"), 5)
     } else {
       env.scores2D.num <- "NA"
     }
-    
-    if (length(env_data_factor)>0) {
-      env.scores2D.fac <- signif(scores(env.fit2D, display="factors"), 5)
+
+    #Env scores for categorical env variables--> will be used for plotting centroids   
+    if (length(env_data_character)>0) {
+      env.scores2D.char <- signif(scores(env.fit2D, display="factors"), 5)
     } else {
-      env.scores2D.fac <- "NA"
+      env.scores2D.char <- "NA"
     }
-    
-    if (is.matrix(env.scores2D.num)==TRUE) { #Numeric constraining variables
-      if (is.matrix(env.scores2D.fac)==TRUE) { #Categorical constraining variables
-        env.scores2D <- rbind(env.scores2D.num, env.scores2D.fac)
+
+    #Get env scores for all variables (regardless of type)--> putting it all together
+    if (is.matrix(env.scores2D.num)==TRUE) { #Numeric env variables present
+      if (is.matrix(env.scores2D.char)==TRUE) { #Categorical env variables present
+        env.scores2D <- rbind(env.scores2D.num, env.scores2D.char)
       } else {  #No categorical constraining variables
         env.scores2D <- env.scores2D.num
       }
     } else { #No numeric constraining variables
-      env.scores2D <- env.scores2D.fac
+      env.scores2D <- env.scores2D.char
     }
   }
   
@@ -181,24 +198,24 @@ ord.NMDS <- function(mSetObj=NA, distance="NULL", abundance="NULL", data="NULL",
   mSetObj$analSet$nmds$nmds4D <- nmds4D
   mSetObj$analSet$nmds$nmds5D <- nmds5D
   mSetObj$analSet$nmds$distance <- distance1 
-  mSetObj$analSet$nmds$abundance <- abundance
+  mSetObj$analSet$nmds$abundance <- abundance1
   mSetObj$analSet$nmds$input <- num_data1
   mSetObj$analSet$nmds$metaData <- metaData1
   mSetObj$analSet$nmds$env_data <- env_data
   mSetObj$analSet$nmds$var.fit2D <- var.fit2D
   mSetObj$analSet$nmds$env.fit2D <- env.fit2D
-  mSetObj$analSet$nmds$env.fit2D.fac <- env.fit2D.fac
+  mSetObj$analSet$nmds$env.fit2D.char <- env.fit2D.char
   mSetObj$analSet$nmds$env.fit2D.num <- env.fit2D.num
   mSetObj$analSet$nmds$sample.scores3D <- samp.scores3D
   mSetObj$analSet$nmds$var.scores3D <- var.scores3D
   
   #Export tables and text docs into working directory
-  write.csv(samp.scores2D, file="nmds_2D_row_scores.csv", row.names=TRUE)
-  write.csv(samp.scores3D, file="nmds_3D_row_scores.csv", row.names=TRUE)
-  write.csv(var.scores2D, file="nmds_2D_column_scores.csv", row.names=TRUE)
-  write.csv(var.scores3D, file="nmds_3D_column_scores.csv", row.names=TRUE)
+  write.csv(samp.scores2D, file="nmds_2D_sample_scores.csv", row.names=TRUE)
+  write.csv(samp.scores3D, file="nmds_3D_sample_scores.csv", row.names=TRUE)
+  write.csv(var.scores2D, file="nmds_2D_variable_scores.csv", row.names=TRUE)
+  write.csv(var.scores3D, file="nmds_3D_variable_scores.csv", row.names=TRUE)
   if (is.data.frame(envData1)==TRUE) {
-    write.csv(env.scores2D, file="nmds_2D_environment_scores.csv", row.names=TRUE)
+    write.csv(env.scores2D, file="nmds_2D_constraining_variable_scores.csv", row.names=TRUE)
   }
   
   stress_data <- c(nmds1D[["stress"]], nmds2D[["stress"]], nmds3D[["stress"]], nmds4D[["stress"]], nmds5D[["stress"]])
@@ -212,20 +229,20 @@ ord.NMDS <- function(mSetObj=NA, distance="NULL", abundance="NULL", data="NULL",
   print(var.fit2D)
   sink()  
   
-  sink("environment_impact_on_nmds_2D.txt") 
-  cat("Environmental factors may significantly impact NMDS\n")
+  sink("constraining_variables__impact_on_nmds_2D.txt") 
+  cat("Constraining data may significantly impact NMDS\n")
   cat("\nNMDS dimension=2\n\n")
   print(env.fit2D)
   sink()  
   
   sink("nmds_summary.txt")
   cat("Non-Metric Multidimensional Analysis\n")
-  if (abundance=="absolute") {
-    abundance1 <- "false"
-  } else {
-    abundance1 <- "true"
+  if (abundance=="absolute") { #no transformation
+    abundance2 <- "false"
+  } else { #Relative abundance transformation
+    abundance2 <- "true"
   }
-  cat(paste0("\n\nPerform relative abundance transformation: "), abundance1, "\n\n")
+  cat(paste0("\n\nPerform relative abundance transformation: "), abundance2, "\n\n")
   cat("NMDS 1D")
   print(nmds1D)
   cat("NMDS 2D")
@@ -249,15 +266,13 @@ ord.NMDS <- function(mSetObj=NA, distance="NULL", abundance="NULL", data="NULL",
 #'Produce NMDS 2D ordination plot with and without ellipses/sample labels/metadata options/variable arrows/env data arrows
 #'@description Produce NMDS ordination plot with user selected options
 #'@param mSetObj Input name of the created mSet Object
-#'@param color #Viridis pallete, options include "viridis" (default), "plasma" and "cividis"
+#'@param color #Viridis pallete, options include "viridis" (default), "plasma" and "grayscale"
 #'@param ellipse Boolean, TRUE to add confidence ellipses, FALSE (default) to not add confidence ellipses
 #'@param var_arrows Boolean, TRUE to produce variable arrows, FALSE (default) to produce ordination plot without variable arrows
 #'@param env_arrows Boolean, TRUE to produce environmental arrows, FALSE (default) to produce ordination plot without environmental arrows---only appear if env data uploaded
 #'@param env_cent Boolean, TRUE to produce display factor environmental data centroids, FALSE (default) to produce ordination plot without environmental centroids
 #'@param sampleNames Boolean, TRUE to display data as variable names, FALSE (default) to display data as points
-#'@param meta_col_color Meta data column to use for plotting colors, Can be user inputted where options are given to java using function meta.columns()
-#'@param point_options Boolean, TRUE to turn data into points, FALSE (default) uses row names as data points
-#'@param meta_col_point Meta data column to use for plotting points, Can be user inputted where options are given to java using function meta.columns()
+#'@param meta_col_color Meta data column to use for plotting colors, Can be user inputted where options are given to java using function nmds.meta.columns()
 #'@param imgName Input the image name
 #'@param format Select the image format, "png" or "pdf", default is "png" 
 #'@param dpi Input the dpi. If the image format is "pdf", users need not define the dpi. For "png" images, 
@@ -268,7 +283,7 @@ ord.NMDS <- function(mSetObj=NA, distance="NULL", abundance="NULL", data="NULL",
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2)
 #'@export
-Plot.NMDS.2D <- function(mSetObj=NA, ellipse=NULL, var_arrows=NULL, env_arrows=NULL, env_cent=NULL, sampleNames=NULL, point_options=NULL, color=NULL, meta_col_color=NULL, meta_col_point=NULL, imgName, format="png", dpi=72, width=NA) {
+Plot.NMDS.2D <- function(mSetObj=NA, ellipse="false", var_arrows="false", env_arrows="false", env_cent="false", sampleNames="false", color="NULL", meta_col_color="NULL", imgName, format="png", dpi=72, width=NA) {
 
   library("vegan")
   library("viridis") 
@@ -280,10 +295,10 @@ Plot.NMDS.2D <- function(mSetObj=NA, ellipse=NULL, var_arrows=NULL, env_arrows=N
   env_data <- mSetObj$analSet$nmds$env_data
   input <- mSetObj$analSet$nmds$input
   var.fit2D <- mSetObj$analSet$nmds$var.fit2D
-  env.fit2D.fac <- mSetObj$analSet$nmds$env.fit2D.fac
+  env.fit2D.char <- mSetObj$analSet$nmds$env.fit2D.char
   env.fit2D.num <- mSetObj$analSet$nmds$env.fit2D.num
   distance <- mSetObj$analSet$nmds$distance
-  
+
   #Set plot dimensions
   if(is.na(width)){
     w <- 10.5
@@ -301,119 +316,130 @@ Plot.NMDS.2D <- function(mSetObj=NA, ellipse=NULL, var_arrows=NULL, env_arrows=N
   #Produce 2D ordination plot
   Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
   par(xpd=FALSE, mar=c(5.1, 4.1, 4.1, 2.1))
-  
   if (distance=="euclidean") {
-    ordiplot(nmds2D, type="n", xlab="MDS 1", ylab="MDS 2", main="Multidimensional Scaling", yaxt="n") #Empty ordination plot
+    ordiplot(nmds2D, type="n", xlab="MDS 1", ylab="MDS 2", main="Metric Multidimensional Scaling", yaxt="n") #Empty ordination plot 
   } else {
-    ordiplot(nmds2D, type="n", xlab="NMDS 1", ylab="NMDS 2", main="Non-metric Multidimensional Scaling", yaxt="n") #Empty ordination plot
-  } 
+    ordiplot(nmds2D, type="n", xlab="NMDS 1", ylab="NMDS 2", main="Non-metric Multidimensional Scaling", yaxt="n") #Empty ordination plot 
+  }
   axis(2, las=2)
   
   #Plot with and without ellipses/sample labels/metadata options/variable arrows/env data arrows
   if (is.data.frame(metaData)==FALSE) { #If no meta data
 
-    #point options
-    if (is.null(sampleNames)) { #default
-      points(nmds2D, display="sites", pch=19) #Use points for samples
+    #Sample display options
+    if (sampleNames=="true") { #If display data as lables
+      text(nmds2D, display="sites") #Add text for samples
     } else {
-      text(nmds2D, display="sites") #Use text for samples
+      points(nmds2D, display="sites", pch=19) #Otherwise use points
     }
     
-    #arrow options
-    if (!is.null(var_arrows)) { #If variable arrows selected
+    #variable arrow options
+    if (var_arrows=="true") { #If variable arrows selected
       plot(var.fit2D, col="darkred")
     }
     
+    #env variable arrow options
     if (is.data.frame(env_data)==TRUE) { #If environment data uploaded
-      if (!is.null(env_arrows)) { #If environment arrows selected
-        plot(env.fit2D.num, col="blue", lwd=2)
+      if (env.fit2D.num!="NA") {
+        if (env_arrows=="true") { #If environment arrows selected
+          plot(env.fit2D.num, col="blue", lwd=2)
+        }
+      } else {
+      #AddErrMsg("Warning: No numeric constraining variables for constraining data arrows.")
+      print("Warning: No numeric constraining variables for constraining data arrows.")
       }
       
-      if (!is.null(env_cent)) { #If environment constraints selected
-        plot(env.fit2D.fac, col="blue", lwd=2)
+      #env variable centroid options
+      if (env.fit2D.char!="NA") {
+        if (env_cent=="true") { #If environment constraints selected
+          plot(env.fit2D.char, col="blue", lwd=2)
+        }
+      } else {
+      #AddErrMsg("Warning: No categorical constraining variables for constraining data centroids.")
+      print("Warning: No categorical constraining variables for constraining data centroids.")
       }
     }
   } else { #If meta data available
     
     #Set up meta data column to use for colors
-    if (is.null(meta_col_color)) { 
-      meta_col_color_data <- as.factor(metaData[,1]) #Default meta data column for labeling with color is the first
+    if (meta_col_color=="NULL") { 
+      meta_col_color_data <- as.data.frame(as.factor(metaData[,1])) #Default meta data column for labeling with color is the first
       meta_col_color_name <- colnames(metaData)[1]
     } else {
-      meta_col_color_data <- as.factor(metaData[,meta_col_color]) #User imputted meta data column for labeling with colors, options given to java using function meta.columns() below
-      meta_col_color_name <- meta_col_color
-    }
-    
-    #Set up meta data column to use for points
-    if (is.null(meta_col_point)) { 
-      meta_col_point_data <- as.factor(metaData[,1]) #Default meta data column for labeling with points is the first
-      meta_col_point_name <- colnames(metaData)[1]
-    } else {
-      meta_col_point_data <- as.factor(metaData[,meta_col_point]) #User imputted meta data column for labeling with points, options given to java using function meta.columns() below
-      meta_col_point_name <- meta_col_point #User defined
+      meta_col_color_data <- as.data.frame(as.factor(metaData[,meta_col_color])) #User inputted meta data column for labeling with colors, options given to java using function nmds.meta.columns() below
+      meta_col_color_name <- colnames(metaData[meta_col_color])
     }
     
     #Color options
-    n <- length(levels(meta_col_color_data)) #Determine how many different colors are needed based on the levels of the meta data
-    if (is.null(color)) { #Default
+    n <- nlevels(meta_col_color_data[,1]) #Determine how many different colors are needed based on the levels of the meta data
+    if (color=="NULL") { #Default
       colors <- viridis(n) #Assign a color to each level using the viridis pallete (viridis package)
+      cols <- colors[meta_col_color_data[,1]] #Color pallete applied for groupings of user's choice    
     } else if (color=="plasma") {
       colors <- plasma(n+1) #Assign a color to each level using the plasma pallete (viridis package)
+      cols <- colors[meta_col_color_data[,1]] #Color pallete applied for groupings of user's choice
     } else if (color=="grey") {
       colors <- grey.colors(n, start=0.1, end=0.75) #Assign a grey color to each level (grDevices package- automatically installed)
+      cols <- colors[meta_col_color_data[,1]] #Color pallete applied for groupings of user's choice
     } else { 
-      color <- "none"
+      colors <- c("black")
+      cols <- "black"
     }
-    
-    #Assign colors to points
-    if (color=="none") {
-      cols <- "black" #color none means black points
-    } else {
-      cols <- colors[meta_col_color_data] #Color pallete applied for groupings of user's choice
-    }
-    
-    #point options
-    pch_options <- c(19, 17, 15, 18, 1, 2, 0, 5, 6, 3, 4, 7, 8, 9, 10, 11, 12, 13, 14)
-    
-    if (is.null(point_options)) {
-      pchs <- 19 #No points option gets solid circle
-    } else {
-      pchs <- pch_options[meta_col_point_data] #Otherwise point options applied for grouping of user's choice
-    }
-     
-    if (!is.null(sampleNames)) { #If display data as lables
-      with(metaData, text(nmds2D, display="sites", col=cols, bg=cols)) # Text for samples
-    } else { #display data as points
-      if (!is.null(point_options)) { #Engage point options
-        with(metaData, points(nmds2D, display="sites", col=cols, pch=pchs, bg=cols)) 
-        with(metaData, legend("bottomright", legend=levels(meta_col_point_data), col="black", pch=unique(pchs), pt.bg="black", title=meta_col_point_name))
-      } else { #No point options
-        with(metaData, points(nmds2D, display="sites", col=cols, pch=pchs, bg=cols)) 
-      }
-    }
-    
-    #arrow options
-    if (!is.null(var_arrows)) { #If variable arrows selected
-      plot(var.fit2D, col="darkred", lwd=2)
-    }
-    
-    if (is.data.frame(envData)==TRUE) { #If environment data uploaded
-      if (!is.null(env_arrows)) { #If environment arrows selected
-        plot(env.fit2D.num, col="blue", lwd=2)
-      }
 
-      if (!is.null(env_cent)) { #If environment arrows selected
-        plot(env.fit2D.fac, col="blue", lwd=2)
+    if (sampleNames=="true") { #If display data as lables
+      with(metaData, text(nmds2D, display="sites", col=cols, bg=cols)) # DIsplay data as dataname
+    } else { #display data as points
+      with(metaData, points(nmds2D, display="sites", col=cols, pch=19, bg=cols)) 
+    }
+   
+    #variable arrow options
+    if (var_arrows=="true") { #If variable arrows selected
+        if (color=="plasma") {
+            plot(var.fit2D, col="black")
+        } else {
+            plot(var.fit2D, col="darkred") 
+        }
+    }
+    
+    #env variable arrow options
+    if (is.data.frame(env_data)==TRUE) { #If environment data uploaded
+      if (env.fit2D.num!="NA") {
+        if (env_arrows=="true") { #If environment arrows selected
+            if (color=="NULL") {
+                plot(env.fit2D.num, col="black", lwd=2)
+            } else {
+                plot(env.fit2D.num, col="blue", lwd=2)
+            }
+        }
+      } else {
+      #AddErrMsg("Warning: No numeric constraining variables for constraining data arrows.")
+      print("Warning: No numeric constraining variables for constraining data arrows.")
+      }
+      
+      #env variable centroid options
+      if (env.fit2D.char!="NA") {
+        if (env_cent=="true") { #If environment constraints selected
+            if (color=="NULL") {
+                plot(env.fit2D.char, col="black", lwd=2)
+            } else {
+                plot(env.fit2D.char, col="blue", lwd=2)
+            }
+        }
+      } else {
+      #AddErrMsg("Warning: No categorical constraining variables for constraining data centroids.")
+      print("Warning: No categorical constraining variables for constraining data centroids.")
       }
     }
     
     #Ellipse options
-    if (!is.null(ellipse)) { #if ellipses selected
-      with(metaData, ordiellipse(nmds2D, meta_col_color_data, display="sites", kind="sd", draw="polygon", border=colors, lwd=2)) # Include standard deviation ellipses that are the same color as the text.
+    if (ellipse=="true") { #if ellipses selected
+      with(metaData, ordiellipse(nmds2D, meta_col_color_data[,1], display="sites", kind="sd", draw="polygon", border=colors, lwd=2)) # Include standard deviation ellipses that are the same color as the text.
     }
     
     #Legend
-    with(metaData, legend("topright", legend=levels(meta_col_color_data), col=colors, pch=19, title=meta_col_color_name)) # Include legend for colors in figure   
+    if (cols!="black") {
+        with(metaData, legend("topright", legend=levels(meta_col_color_data[,1]), col=colors, pch=19, title=meta_col_color_name)) # Include legend for colors in figure   
+    }
   }
   
   dev.off()
@@ -425,25 +451,19 @@ Plot.NMDS.2D <- function(mSetObj=NA, ellipse=NULL, var_arrows=NULL, env_arrows=N
 
 
 
+
 #'Produce NMDS 3D ordination plot with and without ellipses/sample labels/metadata options/variable arrows/env data arrows
 #'@description Produce NMDS ordination plot with user selected options
 #'@param mSetObj Input name of the created mSet Object
 #'@param color #Viridis pallete, options include "viridis" (default), "plasma" and "cividis"
 #'@param var_arrows Boolean, TRUE to produce variable arrows, FALSE (default) to produce ordination plot without variable arrows
-#'@param meta_col_color Meta data column to use for plotting colors, Can be user inputted where options are given to java using function meta.columns()
-#'@param point_options Boolean, TRUE to turn data into points, FALSE (default) uses row names as data points
-#'@param meta_col_point Meta data column to use for plotting points, Can be user inputted where options are given to java using function meta.columns()
+#'@param meta_col_color Meta data column to use for plotting colors, Can be user inputted where options are given to java using function nmds.meta.columns()
 #'@param imgName Input the image name
-#'@param format Select the image format, "png" or "pdf", default is "png" 
-#'@param dpi Input the dpi. If the image format is "pdf", users need not define the dpi. For "png" images, 
-#'the default dpi is 72. It is suggested that for high-resolution images, select a dpi of 300.  
-#'@param width Input the width, there are 2 default widths. The first, width=NULL, is 10.5.
-#'The second default is width=0, where the width is 7.2. Otherwise users can input their own width
 #'@author Louisa Normington\email{normingt@ualberta.ca}
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2)
 #'@export
-Plot.NMDS.3D <- function(mSetObj=NA, color=NULL, var_arrows=NULL, meta_col_color=NULL, imgName, format="png", dpi=72, width=NA) {
+Plot.NMDS.3D <- function(mSetObj=NA, color="NULL", var_arrows="false", meta_col_color="NULL", imgName) {
   
   library("viridis")
   library("RJSONIO")
@@ -456,7 +476,7 @@ Plot.NMDS.3D <- function(mSetObj=NA, color=NULL, var_arrows=NULL, meta_col_color
   samp.scores3D <- mSetObj$analSet$nmds$sample.scores3D
   var.scores3D <- mSetObj$analSet$nmds$var.scores3D
   distance <- mSetObj$analSet$nmds$distance
-
+  
   #Create list to hold plot items
   nmds3D_plot <- list()
   
@@ -465,7 +485,7 @@ Plot.NMDS.3D <- function(mSetObj=NA, color=NULL, var_arrows=NULL, meta_col_color
     nmds3D_plot$score$axis <- paste("MDS", c(1, 2, 3), sep="")
   } else {
     nmds3D_plot$score$axis <- paste("NMDS", c(1, 2, 3), sep="")
-  } 
+  }
   
   sampleCoords <- data.frame(t(as.matrix(samp.scores3D)))
   colnames(sampleCoords) <- NULL
@@ -478,52 +498,61 @@ Plot.NMDS.3D <- function(mSetObj=NA, color=NULL, var_arrows=NULL, meta_col_color
   } else { #If meta data
     
     #Set up meta data column to use for colors
-    if (is.null(meta_col_color)) { 
-      meta_col_color_data <- as.factor(metaData[,1]) #Default meta data column for labeling with color is the first
+    if (meta_col_color=="NULL") { 
+      meta_col_color_data <- as.data.frame(as.factor(metaData[,1])) #Default meta data column for labeling with color is the first
       meta_col_color_name <- colnames(metaData)[1]
     } else {
-      meta_col_color_data <- as.factor(metaData[,meta_col_color]) #User imputted meta data column for labeling with colors, options given to java using function meta.columns() below
+      meta_col_color_data <- as.data.frame(as.factor(metaData[,meta_col_color])) #User inputted meta data column for labeling with colors, options given to java using function meta.columns() below
       meta_col_color_name <- meta_col_color
     }
 
     #Color options
-    n <- length(levels(meta_col_color_data)) #Determine how many different colors are needed based on the levels of the meta data
-    if (is.null(color)) {
-      color <- "viridis" #Default
+    n <- nlevels(meta_col_color_data[,1]) #Determine how many different colors are needed based on the levels of the meta data
+
+    if (color=="NULL") { #Default
       colors <- viridis(n) #Assign a color to each level using the viridis pallete (viridis package)
+      cols <- colors[meta_col_color_data[,1]]
     } else if (color=="plasma") {
       colors <- plasma(n+1) #Assign a color to each level using the plasma pallete (viridis package)
+      cols <- colors[meta_col_color_data[,1]]
     } else if (color=="grey") {
       colors <- grey.colors(n, start=0.1, end=0.75) #Assing a grey color to each level (grDevices package- automatically installed)
+      cols <- colors[meta_col_color_data[,1]]
     } else { 
-      color <- "none"
-    }
-    
-    #Assign colors
-    if (color=="none") {
+      colors <- c("black")
       cols <- "black"
-    } else {
-      cols <- colors[meta_col_color_data]
     }
-    nmds3D_plot$score$color <- col2rgb(cols)
 
+    #Assign colors
+    nmds3D_plot$score$color <- col2rgb(cols)
   }
   
   #Variables (columns)
-  variableCoords <- data.frame(t(as.matrix(var.scores3D)))
-  colnames(variableCoords) <- NULL
-  if (distance=="euclidean") {
-    nmds3D_plot$scoreVar$axis <- paste("MDS", c(1, 2, 3), sep="")
+  if (var_arrows=="false") {
+    nmds3D_plot$scoreVar$axis <- "NA"
+    nmds3D_plot$scoreVar$xyzVar <- "NA"
+    nmds3D_plot$scoreVar$nameVar <- "NA"
+    nmds3D_plot$scoreVar$colorVar <- "NA"
   } else {
-    nmds3D_plot$scoreVar$axis <- paste("NMDS", c(1, 2, 3), sep="")
-  } 
-  nmds3D_plot$scoreVar$xyzVar <- variableCoords
-  nmds3D_plot$scoreVar$nameVar <- colnames(input)
-  nmds3D_plot$scoreVar$colorVar <- col2rgb("darkred")
-  
+    variableCoords <- data.frame(t(as.matrix(var.scores3D)))
+    colnames(variableCoords) <- NULL
+    if (distance=="euclidean") {
+      nmds3D_plot$scoreVar$axis <- paste("MDS", c(1, 2, 3), sep="")
+    } else {
+      nmds3D_plot$scoreVar$axis <- paste("NMDS", c(1, 2, 3), sep="")
+    }
+    nmds3D_plot$scoreVar$xyzVar <- variableCoords
+    nmds3D_plot$scoreVar$nameVar <- colnames(input)
+    if (color=="plasma") {
+      nmds3D_plot$scoreVar$colorVar <- col2rgb("black")
+    } else {
+      nmds3D_plot$scoreVar$colorVar <- col2rgb("darkred")
+    }
+  }
+
   #From metaboanalyst, unclear what it does
   if(mSetObj$dataSet$type.cls.lbl=="integer"){
-    cls <- as.character(sort(as.factor(as.numeric(levels(mSetObj$dataSet$cls))[mSetObj$dataSet$cls])))
+    cls <- as.character(sort(as.factor(as.numeric(unique(mSetObj$dataSet$cls))[mSetObj$dataSet$cls])))
   }else{
     cls <- as.character(mSetObj$dataSet$cls)
   }
@@ -534,7 +563,7 @@ Plot.NMDS.3D <- function(mSetObj=NA, color=NULL, var_arrows=NULL, meta_col_color
 
   nmds3D_plot$score$facA <- cls
   
-  imgName=paste(imgName, ".", format, sep="")
+  imgName <- paste(imgName, ".json", sep="")
   json.obj <- RJSONIO::toJSON(nmds3D_plot, .na='null')
   sink(imgName)
   cat(json.obj)
@@ -544,6 +573,7 @@ Plot.NMDS.3D <- function(mSetObj=NA, color=NULL, var_arrows=NULL, meta_col_color
     return(.set.mSet(mSetObj))
   }
 }
+
 
 
 
@@ -561,16 +591,13 @@ Plot.NMDS.3D <- function(mSetObj=NA, color=NULL, var_arrows=NULL, meta_col_color
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2)
 #'@export
-Plot.NMDS.stress <- function(mSetObj=NA, k=NULL, imgName, format="png", dpi=72, width=NA) {
+Plot.NMDS.stress <- function(mSetObj=NA, k="NULL", imgName, format="png", dpi=72, width=NA) {
   
   library("vegan")
 
   #Extract necessary objects from mSetObj
   mSetObj <- .get.mSet(mSetObj)
-  distance <- mSetObj$analSet$nmds$distance
-
-
-  if (is.null(k)) {
+  if (k=="NULL") {
     k <- 1
     nmds <- mSetObj$analSet$nmds$nmds1D
   } else if (k=="2") {
@@ -603,15 +630,12 @@ Plot.NMDS.stress <- function(mSetObj=NA, k=NULL, imgName, format="png", dpi=72, 
   #Stress plot
   Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
   par(xpd=FALSE, mar=c(5.1, 4.1, 6.1, 2.1)) 
-  if (distance=="euclidean") {
-    stressplot(nmds, main=paste0("Multidimensional Scaling\nDimension ", k,"\nShepard Stress Plot\n\n"), yaxt="n")
-  } else {
-    stressplot(nmds, main=paste0("Non-metric Multidimensional Scaling\nDimension ", k,"\nShepard Stress Plot\n\n"), yaxt="n")
-  } 
-  
+  stressplot(nmds, main=paste0("Non-metric Multidimensional Scaling\nDimension ", k,"\nShepard Stress Plot\n\n"), yaxt="n")
   axis(2, las=2)
   mtext(stress_eq, side=3)
   dev.off()
+
+  return(.set.mSet(mSetObj))
 }
 
 
@@ -639,8 +663,6 @@ Plot.NMDS.scree <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA)
   nmds4D <- mSetObj$analSet$nmds$nmds4D
   nmds5D <- mSetObj$analSet$nmds$nmds5D
   input <- mSetObj$analSet$nmds$input
-  distance <- mSetObj$analSet$nmds$distance
-
   stressMax <- nmds1D[["stress"]]
   stress_data <- c(nmds1D[["stress"]], nmds2D[["stress"]], nmds3D[["stress"]], nmds4D[["stress"]], nmds5D[["stress"]])
   scree_data <- data.frame(1:5, stress_data)
@@ -663,14 +685,12 @@ Plot.NMDS.scree <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA)
   #Scree plot
   Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
   par(xpd=FALSE, mar=c(5.1, 4.1, 4.1, 2.1)) 
-  if (distance=="euclidean") {
-    plot(x=scree_data$Dimension, y=scree_data$Stress, type="l", xlim=c(1, 5), ylim=c(0, stressMax+0.02), xlab="Number of Dimensions", ylab="Stress", main="Multidimensional Scaling Scree Plot", yaxt="n", col="blue", lwd=2)
-  } else {
-    plot(x=scree_data$Dimension, y=scree_data$Stress, type="l", xlim=c(1, 5), ylim=c(0, stressMax+0.02), xlab="Number of Dimensions", ylab="Stress", main="Non-metric Multidimensional Scaling Scree Plot", yaxt="n", col="blue", lwd=2)
-  } 
+  plot(x=scree_data$Dimension, y=scree_data$Stress, type="l", xlim=c(1, 5), ylim=c(0, stressMax+0.1), xlab="Number of Dimensions", ylab="Stress", main="Non-metric Multidimensional Scaling Scree Plot", yaxt="n", col="blue", lwd=2)
   points(x=scree_data$Dimension, y=scree_data$Stress, cex=1.1, pch=19, col="blue")
   axis(2, las=2)
   dev.off()
+
+  return(.set.mSet(mSetObj))
 }
 
 
@@ -689,16 +709,18 @@ Plot.NMDS.scree <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA)
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2)
 #'@export
-
-meta.columns <- function(mSetObj=NA) {
+nmds.meta.columns <- function(mSetObj=NA) {
   
   mSetObj <- .get.mSet(mSetObj)
 
   metaData <- mSetObj$analSet$nmds$metaData
-  meta.col.names <- colnames(metaData)
+  if (is.data.frame(metaData)==FALSE) {
+    meta.col.names <- "No grouping data"
+  } else {
+    meta.col.names <- colnames(metaData)
+  }
 
   return(meta.col.names)
-  
 }
 
 
