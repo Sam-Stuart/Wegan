@@ -81,7 +81,7 @@ public class AbunddistBean implements Serializable {
     
     // static dropdown
     private final SelectItem[] bar_color; // in the view, need to present the options //application bean 
-    private String bar_colorchosen;
+    private String bar_colorchosen = "NULL";
             
     public SelectItem[] getBar_color() {
         return bar_color;
@@ -97,7 +97,7 @@ public class AbunddistBean implements Serializable {
     
     
     private final SelectItem[] line_color_addFit; // in the view, need to present the options //application bean 
-    private String line_color_addFitchosen;
+    private String line_color_addFitchosen = "NULL";
             
     public SelectItem[] getLine_color_addFit() {
         return line_color_addFit;
@@ -113,7 +113,7 @@ public class AbunddistBean implements Serializable {
      
     
     private final SelectItem[] line_color_addPoi;
-    private String line_color_addPoichosen;
+    private String line_color_addPoichosen = "NULL";
     
     public SelectItem[] getLine_color_addPoi() {
         return line_color_addPoi;
@@ -129,7 +129,7 @@ public class AbunddistBean implements Serializable {
     
     
     private final SelectItem[] line_color_addMax;
-    private String line_color_addMaxchosen;
+    private String line_color_addMaxchosen = "NULL";
     
     public SelectItem[] getLine_color_addMax() {
         return line_color_addMax;

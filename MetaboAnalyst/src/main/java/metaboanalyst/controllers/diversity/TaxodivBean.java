@@ -82,7 +82,7 @@ public class TaxodivBean implements Serializable {
             
     // static dropdown
     private final SelectItem[] dis; // in the view, need to present the options //application bean 
-    private String dischosen;
+    private String dischosen = "NULL";
             
     public SelectItem[] getDis() {
         return dis;
@@ -97,7 +97,7 @@ public class TaxodivBean implements Serializable {
     }
     
     private final SelectItem[] method_hc;
-    private String method_hcchosen;
+    private String method_hcchosen = "NULL";
     
     public SelectItem[] getMethod_hc() {
         return method_hc;
@@ -113,7 +113,7 @@ public class TaxodivBean implements Serializable {
           
     
     private final SelectItem[] color;
-    private String colorchosen;
+    private String colorchosen = "NULL";
     
     public SelectItem[] getColor() {
         return color;
@@ -129,7 +129,7 @@ public class TaxodivBean implements Serializable {
         
     
     private final SelectItem[] colorc;
-    private String colorcchosen;
+    private String colorcchosen = "NULL";
     
     public SelectItem[] getColorc() {
         return colorc;
@@ -144,7 +144,7 @@ public class TaxodivBean implements Serializable {
     }
     
     private final SelectItem[] colord;
-    private String colordchosen;
+    private String colordchosen = "NULL";
     
     public SelectItem[] getColord() {
         return colord;

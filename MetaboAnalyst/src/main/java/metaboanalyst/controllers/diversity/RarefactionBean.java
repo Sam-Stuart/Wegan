@@ -70,7 +70,7 @@ public class RarefactionBean implements Serializable {
         
     // static dropdown
     private final SelectItem[] type; // in the view, need to present the options //application bean 
-    private String typechosen;
+    private String typechosen = "NULL";
             
     public SelectItem[] getType() {
         return type;
@@ -85,7 +85,7 @@ public class RarefactionBean implements Serializable {
     }
     
     private final SelectItem[] margin;
-    private String marginchosen;
+    private String marginchosen = "NULL";
     
     public SelectItem[] getMargin() {
         return margin;
@@ -111,7 +111,7 @@ public class RarefactionBean implements Serializable {
     
     
     private final SelectItem[] color;
-    private String colorchosen;
+    private String colorchosen = "NULL";
     
     public SelectItem[] getColor() {
         return color;
@@ -127,7 +127,7 @@ public class RarefactionBean implements Serializable {
         
     
     private final SelectItem[] colorb;
-    private String colorbchosen;
+    private String colorbchosen = "NULL";
     
     public SelectItem[] getColorb() {
         return colorb;
@@ -160,8 +160,8 @@ public class RarefactionBean implements Serializable {
         type[2] = new SelectItem("Probability", "Probability");
         
         color = new SelectItem[4];
-        color[0] = new SelectItem("null", "Default");
-        color[1] = new SelectItem("viridis", "Viridis");
+        color[0] = new SelectItem("NULL", "Default");
+        color[1] = new SelectItem("red", "Red");
         color[2] = new SelectItem("plasma", "Plasma");
         color[3] = new SelectItem("rainbow", "Rainbow");
         
@@ -170,7 +170,7 @@ public class RarefactionBean implements Serializable {
         margin[1] = new SelectItem("2", "2");
         
         colorb = new SelectItem[4];
-        colorb[0] = new SelectItem("null", "Black");
+        colorb[0] = new SelectItem("NULL", "Black");
         colorb[1] = new SelectItem("gray", "Gray");
         colorb[2] = new SelectItem("blue", "Blue");
         colorb[3] = new SelectItem("red", "Red");

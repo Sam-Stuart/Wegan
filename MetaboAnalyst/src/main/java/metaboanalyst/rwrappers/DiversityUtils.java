@@ -141,7 +141,7 @@ public class DiversityUtils {
     }
     
     
-    public static boolean CreateRarefactionDiv(SessionBean1 sb, Boolean data, String type, String sample, Boolean se, String margin) {
+    public static boolean CreateRarefactionDiv(SessionBean1 sb, boolean data, String type, String sample, boolean se, String margin) {
         try {
             System.out.print("R RAREFACTION");
             RConnection RC = sb.getRConnection(); //Start R connection
@@ -196,7 +196,7 @@ public class DiversityUtils {
         }
     }
 
-    public static boolean CreateAbundDistDiv(SessionBean1 sb, Boolean data, String community, Boolean tiesplit, String truncate) {
+    public static boolean CreateAbundDistDiv(SessionBean1 sb, boolean data, String community, boolean tiesplit, String truncate) {
         try {
             System.out.print("R Abundancedist");
             RConnection RC = sb.getRConnection(); //Start R connection
@@ -253,7 +253,7 @@ public class DiversityUtils {
     }
     
     
-    public static boolean CreateAccumModelDiv(SessionBean1 sb, Boolean data, String permutations, Boolean conditioned, String gamma,
+    public static boolean CreateAccumModelDiv(SessionBean1 sb, boolean data, String permutations, boolean conditioned, String gamma,
                                               String models, String object, String interval) {
         try {
             System.out.print("R AccumulationModel");
@@ -303,7 +303,7 @@ public class DiversityUtils {
     }
     
     
-    public static boolean CreateTaxoDiv(SessionBean1 sb, Boolean data, String dis, Boolean match_force, Boolean varstep, String method_hc, Boolean check) {
+    public static boolean CreateTaxoDiv(SessionBean1 sb, boolean data, String dis, boolean match_force, boolean varstep, String method_hc, boolean check) {
         try {
             System.out.print("Taxo");
             RConnection RC = sb.getRConnection(); //Start R connection

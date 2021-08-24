@@ -83,7 +83,7 @@ public class AccummodelBean implements Serializable {
     
     // static dropdown
     private final SelectItem[] gamma; // in the view, need to present the options //application bean 
-    private String gammachosen;
+    private String gammachosen = "NULL";
             
     public SelectItem[] getGamma() {
         return gamma;
@@ -99,7 +99,7 @@ public class AccummodelBean implements Serializable {
     
     
     private final SelectItem[] models; // in the view, need to present the options //application bean 
-    private String modelschosen;
+    private String modelschosen = "NULL";
             
     public SelectItem[] getModels() {
         return models;
@@ -115,7 +115,7 @@ public class AccummodelBean implements Serializable {
     
     
     private final SelectItem[] object; // in the view, need to present the options //application bean 
-    private String objectchosen;
+    private String objectchosen = "NULL";
             
     public SelectItem[] getObject() {
         return object;
@@ -131,7 +131,7 @@ public class AccummodelBean implements Serializable {
     
     
     private final SelectItem[] interval; // in the view, need to present the options //application bean 
-    private String intervalchosen;
+    private String intervalchosen = "NULL";
             
     public SelectItem[] getInterval() {
         return interval;
@@ -147,7 +147,7 @@ public class AccummodelBean implements Serializable {
     
     
     private final SelectItem[] type; // in the view, need to present the options //application bean 
-    private String typechosen;
+    private String typechosen = "NULL";
             
     public SelectItem[] getType() {
         return type;
@@ -163,7 +163,7 @@ public class AccummodelBean implements Serializable {
     
     
     private final SelectItem[] color; // in the view, need to present the options //application bean 
-    private String colorchosen;
+    private String colorchosen = "NULL";
             
     public SelectItem[] getColor() {
         return color;
@@ -179,7 +179,7 @@ public class AccummodelBean implements Serializable {
             
     
     private final SelectItem[] ci_color; // in the view, need to present the options //application bean 
-    private String ci_colorchosen;
+    private String ci_colorchosen = "NULL";
             
     public SelectItem[] getCi_color() {
         return ci_color;
@@ -195,7 +195,7 @@ public class AccummodelBean implements Serializable {
     
     
     private final SelectItem[] ci_type; // in the view, need to present the options //application bean 
-    private String ci_typechosen;
+    private String ci_typechosen = "NULL";
             
     public SelectItem[] getCi_type() {
         return ci_type;
@@ -211,7 +211,7 @@ public class AccummodelBean implements Serializable {
     
     
     private final SelectItem[] box_color; // in the view, need to present the options //application bean 
-    private String box_colorchosen;
+    private String box_colorchosen = "NULL";
             
     public SelectItem[] getBox_color() {
         return box_color;
@@ -227,7 +227,7 @@ public class AccummodelBean implements Serializable {
     
     
     private final SelectItem[] line_color;
-    private String line_colorchosen;
+    private String line_colorchosen = "NULL";
     
     public SelectItem[] getLine_color() {
         return line_color;
@@ -243,7 +243,7 @@ public class AccummodelBean implements Serializable {
     
     
     private final SelectItem[] pred_color;
-    private String pred_colorchosen;
+    private String pred_colorchosen = "NULL";
     
     public SelectItem[] getPred_color() {
         return pred_color;

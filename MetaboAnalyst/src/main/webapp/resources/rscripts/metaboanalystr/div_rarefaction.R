@@ -193,13 +193,13 @@ RarefactionCurve <- function(mSetObj=NA, step = "", color="NULL", imgName, forma
   par(xpd=FALSE, mar=c(5.1, 4.1, 4.1, 2.1))
   
   #n <- length(input.p[1,])
-  if (color == "null") { 
+  if (color == "NULL") { 
     color1 <- c("grey27", "green", "lightpink", "lightcoral", "midnightblue",
                 "mediumpurple", "maroon", "lightyellow", "turquoise3", "tan3", 
                 "springgreen", "thistle1", "sienna3", "orange", "dimgray",
                 "burlywood", "darksalmon", "deeppink", "goldenrod", "forestgreen")
-  } else if (color == "viridis") {
-     color1 <- c("red", "green", "blue")
+  } else if (color == "red") {
+     color1 = "red"
   } else if (color == "plasma") {
      color1 <- c("yellow", "pink")
   } else if (color == "rainbow") { 
@@ -294,7 +294,7 @@ RarefactionPlot <- function(mSetObj = NA, colorb = "NULL", imgName, format = "pn
   par(xpd=FALSE, mar=c(5.1, 4.1, 4.1, 2.1))
   #abline(0, 1)
   
-  if(colorb == "null") { 
+  if(colorb == "NULL") { 
     colorb1 <- "black" #default fill palette is grayscale
   } else if (colorb == "gray") {
      colorb1 <- "gray" 
