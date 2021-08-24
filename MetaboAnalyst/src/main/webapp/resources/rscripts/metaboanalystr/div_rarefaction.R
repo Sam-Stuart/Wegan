@@ -31,12 +31,12 @@ Rarefaction_div <- function(mSetObj = NA, data = "false", type = "NULL", sample 
   #Extract input from mSetObj
   mSetObj <- .get.mSet(mSetObj)
 
-  metaData <- mSetObj$dataSet$origMeta
+  #metaData <- mSetObj$dataSet$origMeta
   #envData <- mSetObj$dataSet$origEnv
  
   print("BEFORE DATA TESTS")
-  print(metaData)
-  pint(envData)
+  #print(metaData)
+  #print(envData)
 
   if (data == "false") { #normalized data as input
     input <- mSetObj$dataSet$norm
@@ -132,6 +132,7 @@ Rarefaction_div <- function(mSetObj = NA, data = "false", type = "NULL", sample 
   #mSetObj$analset$result$Output <- Srare
   
   mSetObj$analset$input <- input.2
+  print(input.2)
   
   write.csv(mSetObj$analset$result, "Rarefaction.csv")
   
@@ -186,13 +187,13 @@ RarefactionCurve <- function(mSetObj=NA, step = "", color="NULL", imgName, forma
   print("image name")
   #Name plot for download
   imgName <- paste(imgName, "dpi", dpi, ".", format, sep="")
-  mSetObj$imgSet$Plot.Rarefaction <- imgName
+  mSetObj$imgSet$Plot.RarefactionCurve <- imgName
   
   Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
   par(xpd=FALSE, mar=c(5.1, 4.1, 4.1, 2.1))
   
   #n <- length(input.p[1,])
-  if (color=="NULL") { 
+  if (color == "null") { 
     color1 <- c("grey27", "green", "lightpink", "lightcoral", "midnightblue",
                 "mediumpurple", "maroon", "lightyellow", "turquoise3", "tan3", 
                 "springgreen", "thistle1", "sienna3", "orange", "dimgray",
@@ -201,7 +202,7 @@ RarefactionCurve <- function(mSetObj=NA, step = "", color="NULL", imgName, forma
      color1 <- c("red", "green", "blue")
   } else if (color == "plasma") {
      color1 <- c("yellow", "pink")
-  } else if (color == "rainbow") { #manual user entry. Selection of this option causes text box to appear
+  } else if (color == "rainbow") { 
      color1 <- c("orange", "brown")
   }
   print(color1)  
@@ -215,8 +216,10 @@ RarefactionCurve <- function(mSetObj=NA, step = "", color="NULL", imgName, forma
   } else {
     step1 <- as.numeric(step) 
   }  
+  print(step)
   
   print("actually plotting")
+  print(input.p)
   #windows(width = w, height = h)
   rarecurve(input.p, step = step1, sample = sample1, col = color1, label = T, yaxt = "n")
   axis(2, las = 2, labels = T)
@@ -245,7 +248,7 @@ RarefactionCurve <- function(mSetObj=NA, step = "", color="NULL", imgName, forma
 #'License: GNU GPL (>= 2)
 #'@export
 
-RarefactionPlot <- function(mSetObj = NA, color_b = "NULL", imgName, format = "png", dpi = 72, width = NA) {
+RarefactionPlot <- function(mSetObj = NA, colorb = "NULL", imgName, format = "png", dpi = 72, width = NA) {
   
   library(vegan)
   
@@ -258,6 +261,7 @@ RarefactionPlot <- function(mSetObj = NA, color_b = "NULL", imgName, format = "p
   margin.p <- as.numeric(mSetObj$analset$result$margin)
   print("gather plot data") 
   print(margin.p) 
+  
 
   #if (MARGIN2 == "2") {
   #  plot_data <- mSetObj$analset$result$Output[1,]
@@ -290,18 +294,18 @@ RarefactionPlot <- function(mSetObj = NA, color_b = "NULL", imgName, format = "p
   par(xpd=FALSE, mar=c(5.1, 4.1, 4.1, 2.1))
   #abline(0, 1)
   
-  if(color_b=="NULL") { 
-    color1_b <- "black" #default fill palette is grayscale
-  } else if (color_b == "gray") {
-     color1_b <- "gray" 
-  } else if (color_b == "blue") {
-     color1_b <- "blue"
-  } else if (color_b == "red") { #manual user entry. Selection of this option causes text box to appear
-     color1_b <- "red"
+  if(colorb == "null") { 
+    colorb1 <- "black" #default fill palette is grayscale
+  } else if (colorb == "gray") {
+     colorb1 <- "gray" 
+  } else if (colorb == "blue") {
+     colorb1 <- "blue"
+  } else if (colorb == "red") { #manual user entry. Selection of this option causes text box to appear
+     colorb1 <- "red"
   } 
-  print(color1_b)
+  print(colorb1)
 
-  pars <- expand.grid(col = color1_b, stringsAsFactors = FALSE)
+  pars <- expand.grid(col = colorb1, stringsAsFactors = FALSE)
   
   #if (is.na(step)) {
   #  cat("step has to be numeric data and can't be blank")
@@ -311,7 +315,7 @@ RarefactionPlot <- function(mSetObj = NA, color_b = "NULL", imgName, format = "p
   
   #windows(width = w, height = h)
   plot(plot_data ~ S, xaxt = "n", yaxt = "n", 
-       col = color1_b, xlab = "Observed No. of Species", ylab = "Rarefied No. of Species")
+       col = colorb1, xlab = "Observed No. of Species", ylab = "Rarefied No. of Species")
   axis(1, labels = T)
   axis(2, las = 2 )
   #abline(0,1)

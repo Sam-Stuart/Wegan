@@ -1,0 +1,267 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_anal_template.xhtml">
+    <ui:define name="metaInfo">
+        <f:event type="preRenderView" listener="#{diversityBean.performDefaultAnalysis('Taxodiv')}"/> 
+        <f:event type="preRenderView" listener="#{downloader.setupDownloadTable()}"/>
+    </ui:define>
+    <ui:define name="content">
+        <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
+            <p:tabView id="taxatree">
+                <p:tab title ="Taxa dendrogram graph" titleStyleClass="p-tab-nav">
+                    <h:form id="form1">
+                        
+<!--                        <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> -->
+                            <h:panelGrid id="panelGrid" columns="4" cellpadding="2" >
+                                <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
+                                <p:selectBooleanCheckbox value ="#{taxodivBean.doOriginal}"/> 
+                                <h:outputLabel style="font-weight: bold" value="Match.force:"/>
+                                <p:selectBooleanCheckbox value ="#{taxodivBean.doMatch_force}"/> 
+                                <h:outputLabel style="font-weight: bold" value="Varstep:"/>
+                                <p:selectBooleanCheckbox value = "#{taxodivBean.doVarstep}"/>  
+                                <h:outputLabel style="font-weight: bold" value="Check:"/>
+                                <p:selectBooleanCheckbox value = "#{taxodivBean.doCheck}"/>  
+                                <h:outputLabel style="font-weight: bold" value="Select taxonomic distances among taxa:"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{taxodivBean.dischosen}">
+                                    <f:selectItems value="#{taxodivBean.dis}"/>
+                                </p:selectOneMenu> 
+                                <h:outputLabel style="font-weight: bold" value="Select agglomeration method:"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{taxodivBean.method_hcchosen}">
+                                    <f:selectItems value="#{taxodivBean.method_hc}"/>
+                                </p:selectOneMenu> 
+                            </h:panelGrid>  
+                            <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
+                            <p:commandButton value="Update" 
+                                             styleClass="updateButton"
+                                             style="box-shadow: none !important; text-shadow: none !important"
+                                            onclick="PF('statusDialog').show()"
+                                            oncomplete="PF('statusDialog').hide()"  
+                                            update=":taxatree:form1:taxatreePane1  :cmdPane" 
+                                            actionListener="#{taxodivBean.taxodivUpdate_action()}"/>                          
+                            <p:commandButton value="Customize Graph"
+                                             styleClass="graphicsButton"
+                                             style="box-shadow: none !important; text-shadow: none !important;"
+                                             actionListener="#{sessionBean1.graphicsLnk_action('pca_pair')}" 
+                                            oncomplete="PF('graphApperanceTaxodiv').show()"/>  
+                            </h:panelGrid>             
+                        <h:panelGrid class="resultsBar" columns="2">
+                            <h:panelGroup>
+                                <h:panelGrid columns="1" style="text-align : left;">
+                                    Results
+                                </h:panelGrid>
+                            </h:panelGroup> 
+                            <h:panelGroup>
+                                <h:panelGrid columns="3" class="resultsImages">
+                                    <i class="fa fa-question-circle"></i>
+                                </h:panelGrid>
+                            </h:panelGroup>                            
+                        </h:panelGrid>                         
+                        
+                        <h:panelGrid id="taxatreePane1" style="width: 100%;">
+<!--                        // <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                            //    
+                            // </h:panelGrid>-->
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">
+                                    <h:outputText escape="false" value="#{taxodivBean.filetaxadistresultpath}"/>
+                                </i>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">
+                                    <h:outputText escape="false" value="#{taxodivBean.filetaxaindresultpath}"/>
+                                </i>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">
+                                    <h:outputText escape="false" value="#{taxodivBean.filedissiresultpath}"/>
+                                </i>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">                             
+                                    <h:outputText escape="false" value="#{taxodivBean.filecommatrixresultpath}"/>
+                                </i>
+                            </h:panelGrid>
+                                                                             
+                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('Taxa_Tree_Plot')}" alt="TestPlot"/>
+                             </h:panelGrid>                            
+                        </h:panelGrid> 
+                    </h:form>
+                </p:tab>
+                <p:tab title ="Taxonomic diversity vs. species richness" titleStyleClass="p-tab-nav">
+                    <h:form id="form2">
+                        
+<!--                        <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> -->
+                            <h:panelGrid id="panelGrid" columns="4" cellpadding="2" >
+                                <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
+                                <p:selectBooleanCheckbox value ="#{taxodivBean.doOriginal}"/> 
+                                <h:outputLabel style="font-weight: bold" value="Match.force:"/>
+                                <p:selectBooleanCheckbox value ="#{taxodivBean.doMatch_force}"/> 
+                                <h:outputLabel style="font-weight: bold" value="Varstep:"/>
+                                <p:selectBooleanCheckbox value = "#{taxodivBean.doVarstep}"/>  
+                                <h:outputLabel style="font-weight: bold" value="Check:"/>
+                                <p:selectBooleanCheckbox value = "#{taxodivBean.doCheck}"/>  
+                                <h:outputLabel style="font-weight: bold" value="Select taxonomic distances among taxa:"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{taxodivBean.dischosen}">
+                                    <f:selectItems value="#{taxodivBean.dis}"/>
+                                </p:selectOneMenu> 
+                                <h:outputLabel style="font-weight: bold" value="Select agglomeration method:"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{taxodivBean.method_hcchosen}">
+                                    <f:selectItems value="#{taxodivBean.method_hc}"/>
+                                </p:selectOneMenu> 
+                            </h:panelGrid>  
+                            <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
+                            <p:commandButton value="Update" 
+                                             styleClass="updateButton"
+                                             style="box-shadow: none !important; text-shadow: none !important"
+                                            onclick="PF('statusDialog').show()"
+                                            oncomplete="PF('statusDialog').hide()"  
+                                            update=":taxatree:form2:taxatreePane2  :cmdPane" 
+                                            actionListener="#{taxodivBean.taxodivUpdate_action()}"/>                          
+                            <p:commandButton value="Customize Graph"
+                                             styleClass="graphicsButton"
+                                             style="box-shadow: none !important; text-shadow: none !important;"
+                                             actionListener="#{sessionBean1.graphicsLnk_action('pca_pair')}" 
+                                            oncomplete="PF('graphApperanceTaxodiv').show()"/>  
+                            </h:panelGrid>             
+                        <h:panelGrid class="resultsBar" columns="2">
+                            <h:panelGroup>
+                                <h:panelGrid columns="1" style="text-align : left;">
+                                    Results
+                                </h:panelGrid>
+                            </h:panelGroup> 
+                            <h:panelGroup>
+                                <h:panelGrid columns="3" class="resultsImages">
+                                    <i class="fa fa-question-circle"></i>
+                                </h:panelGrid>
+                            </h:panelGroup>                            
+                        </h:panelGrid>                         
+                        
+                        <h:panelGrid id="taxatreePane2" style="width: 100%;">
+<!--                        // <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                            //    
+                            // </h:panelGrid>-->
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">
+                                    <h:outputText escape="false" value="#{taxodivBean.filetaxadistresultpath}"/>
+                                </i>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">
+                                    <h:outputText escape="false" value="#{taxodivBean.filetaxaindresultpath}"/>
+                                </i>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">
+                                    <h:outputText escape="false" value="#{taxodivBean.filedissiresultpath}"/>
+                                </i>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">                             
+                                    <h:outputText escape="false" value="#{taxodivBean.filecommatrixresultpath}"/>
+                                </i>
+                            </h:panelGrid>
+                                                                             
+                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('Taxa_Scatter_Plot')}" alt="TestPlot"/>
+                             </h:panelGrid>                            
+                        </h:panelGrid> 
+                    </h:form>
+                </p:tab>
+                <p:tab title ="Taxonomic Heatmap" titleStyleClass="p-tab-nav">
+                    <h:form id="form3">
+                        
+<!--                        <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> -->
+                            <h:panelGrid id="panelGrid" columns="4" cellpadding="2" >
+                                <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
+                                <p:selectBooleanCheckbox value ="#{taxodivBean.doOriginal}"/> 
+                                <h:outputLabel style="font-weight: bold" value="Match.force:"/>
+                                <p:selectBooleanCheckbox value ="#{taxodivBean.doMatch_force}"/> 
+                                <h:outputLabel style="font-weight: bold" value="Varstep:"/>
+                                <p:selectBooleanCheckbox value = "#{taxodivBean.doVarstep}"/>  
+                                <h:outputLabel style="font-weight: bold" value="Check:"/>
+                                <p:selectBooleanCheckbox value = "#{taxodivBean.doCheck}"/>  
+                                <h:outputLabel style="font-weight: bold" value="Select taxonomic distances among taxa:"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{taxodivBean.dischosen}">
+                                    <f:selectItems value="#{taxodivBean.dis}"/>
+                                </p:selectOneMenu> 
+                                <h:outputLabel style="font-weight: bold" value="Select agglomeration method:"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{taxodivBean.method_hcchosen}">
+                                    <f:selectItems value="#{taxodivBean.method_hc}"/>
+                                </p:selectOneMenu> 
+                            </h:panelGrid>  
+                            <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
+                            <p:commandButton value="Update" 
+                                             styleClass="updateButton"
+                                             style="box-shadow: none !important; text-shadow: none !important"
+                                            onclick="PF('statusDialog').show()"
+                                            oncomplete="PF('statusDialog').hide()"  
+                                            update=":taxatree:form3:taxatreePane3  :cmdPane" 
+                                            actionListener="#{taxodivBean.taxodivUpdate_action()}"/>                          
+                            <p:commandButton value="Customize Graph"
+                                             styleClass="graphicsButton"
+                                             style="box-shadow: none !important; text-shadow: none !important;"
+                                             actionListener="#{sessionBean1.graphicsLnk_action('pca_pair')}" 
+                                            oncomplete="PF('graphApperanceTaxodiv').show()"/>  
+                            </h:panelGrid>             
+                        <h:panelGrid class="resultsBar" columns="2">
+                            <h:panelGroup>
+                                <h:panelGrid columns="1" style="text-align : left;">
+                                    Results
+                                </h:panelGrid>
+                            </h:panelGroup> 
+                            <h:panelGroup>
+                                <h:panelGrid columns="3" class="resultsImages">
+                                    <i class="fa fa-question-circle"></i>
+                                </h:panelGrid>
+                            </h:panelGroup>                            
+                        </h:panelGrid>                         
+                        
+                        <h:panelGrid id="taxatreePane3" style="width: 100%;">
+<!--                        // <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                            //    
+                            // </h:panelGrid>-->
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">
+                                    <h:outputText escape="false" value="#{taxodivBean.filetaxadistresultpath}"/>
+                                </i>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">
+                                    <h:outputText escape="false" value="#{taxodivBean.filetaxaindresultpath}"/>
+                                </i>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">
+                                    <h:outputText escape="false" value="#{taxodivBean.filedissiresultpath}"/>
+                                </i>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">                             
+                                    <h:outputText escape="false" value="#{taxodivBean.filecommatrixresultpath}"/>
+                                </i>
+                            </h:panelGrid>
+                                                                             
+                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('Taxa_Heatmap_Plot')}" alt="TestPlot"/>
+                             </h:panelGrid>                            
+                        </h:panelGrid> 
+                    </h:form>
+                </p:tab>
+            </p:tabView>
+            <p:dialog modal="true" widgetVar="graphApperanceTaxodiv" 
+                style="width: 400px; height:400px;" 
+                appendTo="@(body)" header="Graphics Center"
+                draggable="false" closable="true" resizable="false"> 
+                <ui:include src="_color_palette_taxo.xhtml" />
+            </p:dialog>
+ 
+        </h:panelGrid>
+        
+    </ui:define>
+</ui:composition>

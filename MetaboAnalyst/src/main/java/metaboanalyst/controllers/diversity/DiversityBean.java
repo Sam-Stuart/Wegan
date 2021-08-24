@@ -54,6 +54,9 @@ public class DiversityBean implements Serializable {
                     case "Accummodel":
                          doDefaultAccummodel();
                         break;
+                    case "Taxodiv":
+                         doDefaultTaxodiv();
+                        break;
                 }
             }
 
@@ -136,4 +139,17 @@ public class DiversityBean implements Serializable {
         System.out.print("AFTER ACCUMMODEL");
     }
     
+    private void doDefaultTaxodiv(){
+//        if (!DiversityUtils.CreateRarefactionDiv(sb, false, "test", "test", false, "test")){
+//            RConnection RC = sb.getRConnection();
+//            sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
+//        }
+        System.out.print("INSIDE TAXO"); 
+        DiversityUtils.CreateTaxoDiv(sb, false, "NULL", false, false, "NULL", false);
+        DiversityUtils.PlotTaxaTree(sb, "NULL",sb.getCurrentImage("Taxa_Tree_Plot"), "png", 72, "false");
+        DiversityUtils.PlotTaxonScatter(sb, "NULL",sb.getCurrentImage("Taxa_Scatter_Plot"), "png", 72, "false");
+        DiversityUtils.PlotTaxonHeatmap(sb, "NULL",sb.getCurrentImage("Taxa_Heatmap_Plot"), "png", 72, "false");
+        System.out.print("AFTER TAXO");
+    }
+
 }

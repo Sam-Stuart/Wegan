@@ -124,21 +124,21 @@ public class RarefactionBean implements Serializable {
     public void setColorchosen(String colorchosen) {
         this.colorchosen = colorchosen;
     }
-    
+        
     
     private final SelectItem[] colorb;
-    private String colorchosen_b;
+    private String colorbchosen;
     
     public SelectItem[] getColorb() {
         return colorb;
     }
     
-    public String getColorchosen_b() {
-        return colorchosen_b;
+    public String getColorbchosen() {
+        return colorbchosen;
     } 
 
-    public void setColorchosen_b(String colorchosen_b) {
-        this.colorchosen_b = colorchosen_b;
+    public void setColorbchosen(String colorbchosen) {
+        this.colorbchosen = colorbchosen;
     }
 
     
@@ -160,7 +160,7 @@ public class RarefactionBean implements Serializable {
         type[2] = new SelectItem("Probability", "Probability");
         
         color = new SelectItem[4];
-        color[0] = new SelectItem("NULL", "Default");
+        color[0] = new SelectItem("null", "Default");
         color[1] = new SelectItem("viridis", "Viridis");
         color[2] = new SelectItem("plasma", "Plasma");
         color[3] = new SelectItem("rainbow", "Rainbow");
@@ -170,7 +170,7 @@ public class RarefactionBean implements Serializable {
         margin[1] = new SelectItem("2", "2");
         
         colorb = new SelectItem[4];
-        colorb[0] = new SelectItem("NULL", "Default");
+        colorb[0] = new SelectItem("null", "Black");
         colorb[1] = new SelectItem("gray", "Gray");
         colorb[2] = new SelectItem("blue", "Blue");
         colorb[3] = new SelectItem("red", "Red");
@@ -194,7 +194,7 @@ public class RarefactionBean implements Serializable {
     public void rareUpdate_action() {
         DiversityUtils.CreateRarefactionDiv(sb, doOriginal, typechosen, sample, doSe, marginchosen);       
         DiversityUtils.PlotRarefactionCurveDiversity(sb, step, colorchosen, sb.getNewImage("Rarefaction_Curve_Plot"), "png", 72, "false");
-        DiversityUtils.PlotRarefactionPlotDiversity(sb, colorchosen_b, sb.getNewImage("Rarefaction_Linear_Plot"), "png", 72, "false");
+        DiversityUtils.PlotRarefactionPlotDiversity(sb, colorbchosen, sb.getNewImage("Rarefaction_Linear_Plot"), "png", 72, "false");
     }
     
 }

@@ -295,9 +295,17 @@
             <from-outcome>Accummodel</from-outcome>
             <to-view-id>/Secure/diversity/AccummodelView.xhtml</to-view-id>
             <redirect/>
+        </navigation-case> 
+        <navigation-case>
+            <from-outcome>Taxodiv</from-outcome>
+            <to-view-id>/Secure/diversity/TaxodivView.xhtml</to-view-id>
+            <redirect/>
         </navigation-case>  
                                                                        
+                    
                                                                                                                                                                                                                     
+                                                                                                                                                                                                                                                                                                                                                                                                                   
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
         <navigation-case>
             <from-outcome>Clustering</from-outcome>
             <to-view-id>/Secure/clustering/ClusteringView.xhtml</to-view-id>

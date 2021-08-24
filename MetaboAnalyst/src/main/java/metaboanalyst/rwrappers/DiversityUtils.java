@@ -302,6 +302,86 @@ public class DiversityUtils {
         }
     }
     
+    
+    public static boolean CreateTaxoDiv(SessionBean1 sb, Boolean data, String dis, Boolean match_force, Boolean varstep, String method_hc, Boolean check) {
+        try {
+            System.out.print("Taxo");
+            RConnection RC = sb.getRConnection(); //Start R connection
+            String rCommand = "Taxonomic_div(NA"
+                                                 + ", \"" + data
+                                                 + "\", \"" + dis
+                                                 + "\", \"" + match_force
+                                                 + "\", \"" + varstep
+                                                 + "\", \"" + method_hc
+                                                 + "\", \"" + check
+                                                 + "\")";
+            RCenter.recordRCommand(RC, rCommand); // records r command
+            RC.voidEval(rCommand); // tells you want your r script returns  
+            return true;
+        } catch (RserveException rse) {
+            System.out.println(rse);
+            return false;
+        }
+    }
+    
+    public static boolean PlotTaxaTree(SessionBean1 sb, String color, String imgName, String format, int dpi, String width) {
+        try {
+            System.out.print("Taxo");
+            RConnection RC = sb.getRConnection(); //Start R connection
+            String rCommand = "taxa_tree(NA"
+                                                 + ", \"" + color
+                                                 + "\", \"" + imgName 
+                                                 + "\", \"" + format 
+                                                 + "\", " + dpi 
+                                                 + ", width=NA)";
+            RCenter.recordRCommand(RC, rCommand); // records r command
+            RC.voidEval(rCommand); // tells you want your r script returns  
+            return true;
+        } catch (RserveException rse) {
+            System.out.println(rse);
+            return false;
+        }
+    }
+    
+    public static boolean PlotTaxonScatter(SessionBean1 sb, String colorc, String imgName, String format, int dpi, String width) {
+        try {
+            System.out.print("Taxo");
+            RConnection RC = sb.getRConnection(); //Start R connection
+            String rCommand = "taxon_scatter(NA"
+                                                 + ", \"" + colorc
+                                                 + "\", \"" + imgName 
+                                                 + "\", \"" + format 
+                                                 + "\", " + dpi 
+                                                 + ", width=NA)";
+            RCenter.recordRCommand(RC, rCommand); // records r command
+            RC.voidEval(rCommand); // tells you want your r script returns  
+            return true;
+        } catch (RserveException rse) {
+            System.out.println(rse);
+            return false;
+        }
+    }
+    
+    public static boolean PlotTaxonHeatmap(SessionBean1 sb, String colord, String imgName, String format, int dpi, String width) {
+        try {
+            System.out.print("Taxo");
+            RConnection RC = sb.getRConnection(); //Start R connection
+            String rCommand = "taxon_heatmap(NA"
+                                                 + ", \"" + colord
+                                                 + "\", \"" + imgName 
+                                                 + "\", \"" + format 
+                                                 + "\", " + dpi 
+                                                 + ", width=NA)";
+            RCenter.recordRCommand(RC, rCommand); // records r command
+            RC.voidEval(rCommand); // tells you want your r script returns  
+            return true;
+        } catch (RserveException rse) {
+            System.out.println(rse);
+            return false;
+        }
+    }
+
+    
     /////// ------------ Diversity helper functions --------------- //////////////
 
     public static void PlotRarefactionCurveDiversity(SessionBean1 sb, String currentImage, String png, int i) {
