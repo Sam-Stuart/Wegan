@@ -384,8 +384,6 @@ Read.TextData <- function(mSetObj=NA, filePath, format="rowu", lbl.type="disc", 
     smpl.nms <- rownames(dat);
     all.nms <- colnames(dat);
     cls.lbl <- smpl.nms;
-    print("cls.lbl")
-    print(cls.lbl)
     facA <- dat[,1];
     facA.lbl <- all.nms[1];
     facB <- dat[,2];
@@ -410,23 +408,25 @@ Read.TextData <- function(mSetObj=NA, filePath, format="rowu", lbl.type="disc", 
   mSetObj$dataSet$orig <- dat1;
   mSetObj$dataSet$type.cls.lbl <- class(cls.lbl);
   
+  #I REMOVED THIS
   # try to remove empty line if present
   # identified if no sample names provided
-  empty.inx <- is.na(smpl.nms) | smpl.nms == ""
-  if(sum(empty.inx) > 0){
-    msg <- c(msg, paste("<font color=\"red\">", sum(empty.inx), "empty rows</font> were detected and excluded from your data."));
-    smpl.nms <- smpl.nms[!empty.inx];
-    cls.lbl <-  cls.lbl[!empty.inx];
-    dat1 <- dat1[!empty.inx, ];
-  }
+  #empty.inx <- is.na(smpl.nms) | smpl.nms == ""
+  #if(sum(empty.inx) > 0){
+  #  msg <- c(msg, paste("<font color=\"red\">", sum(empty.inx), "empty rows</font> were detected and excluded from your data."));
+  #  smpl.nms <- smpl.nms[!empty.inx];
+  #  cls.lbl <-  cls.lbl[!empty.inx];
+  #  dat1 <- dat1[!empty.inx, ];
+  #}
   
+  #I REMOVED THIS
   # try to check & remove empty lines if class label is empty
-  empty.inx <- is.na(cls.lbl) | cls.lbl == ""
-  if(sum(empty.inx) > 0){
-    # force all NA to empty string, otherwise NA will become "NA" class label
-    cls.lbl[is.na(cls.lbl)] <- "";
-    msg <- c(msg, paste("<font color=\"orange\">", sum(empty.inx), "new samples</font> were detected from your data."));
-  }
+  #empty.inx <- is.na(cls.lbl) | cls.lbl == ""
+  #if(sum(empty.inx) > 0){
+  #  # force all NA to empty string, otherwise NA will become "NA" class label
+  #  cls.lbl[is.na(cls.lbl)] <- "";
+  #  msg <- c(msg, paste("<font color=\"red\">", sum(empty.inx), "new samples</font> were detected from your data."));
+  #}
   
   # check for uniqueness of dimension name
   if(length(unique(smpl.nms))!=length(smpl.nms)){
@@ -436,13 +436,14 @@ Read.TextData <- function(mSetObj=NA, filePath, format="rowu", lbl.type="disc", 
     return(0);
   }
   
+  #I REMOVED THIS
   # try to remove check & remove empty line if variable name is empty
-  empty.inx <- is.na(var.nms) | var.nms == "";
-  if(sum(empty.inx) > 0){
-    msg <- c(msg, paste("<font color=\"red\">", sum(empty.inx), "empty variables</font> were detected and excluded from your data."));
-    var.nms <- var.nms[!empty.inx];
-    dat1 <- dat1[,!empty.inx];
-  }
+  #empty.inx <- is.na(var.nms) | var.nms == "";
+  #if(sum(empty.inx) > 0){
+  #  msg <- c(msg, paste("<font color=\"red\">", sum(empty.inx), "empty variables</font> were detected and excluded from your data."));
+  #  var.nms <- var.nms[!empty.inx];
+  #  dat1 <- dat1[,!empty.inx];
+  #}
   
   if(length(unique(var.nms))!=length(var.nms)){
     dup.nm <- paste(var.nms[duplicated(var.nms)], collapse=" ");
@@ -481,6 +482,7 @@ Read.TextData <- function(mSetObj=NA, filePath, format="rowu", lbl.type="disc", 
     mSetObj$dataSet$orig.cls <- mSetObj$dataSet$pairs <- cls.lbl;
   }else{
     if(lbl.type == "disc"){
+      #I REMOVED THIS
       # check for class labels at least two replicates per class
       #if(min(table(cls.lbl)) < 3){
       #  AddErrMsg(paste ("A total of", length(levels(as.factor(cls.lbl))), "groups found with", length(smpl.nms), "samples."));
@@ -489,8 +491,6 @@ Read.TextData <- function(mSetObj=NA, filePath, format="rowu", lbl.type="disc", 
       #  return(0);
       #}
       mSetObj$dataSet$orig.cls <- mSetObj$dataSet$cls <- cls.lbl;
-      print("orig.cls")
-      print(mSetObj$dataSet$orig.cls)
       mSetObj$dataSet$facA.type <- is.numeric(facA);
       mSetObj$dataSet$orig.facA <- mSetObj$dataSet$facA <- facA;
       mSetObj$dataSet$facA.lbl <- facA.lbl;
@@ -515,7 +515,6 @@ Read.TextData <- function(mSetObj=NA, filePath, format="rowu", lbl.type="disc", 
 
 
 #'
-#NEED TO ADJUST SO AS TO REMOVE LINES IF REMOVED IN MAIN DATA SET
 Read.TextDataMeta <- function(mSetObj=NA, filePath, format="rowu", lbl.type="disc", rowNames="false", colNames="false"){
   mSetObj <- .get.mSet(mSetObj);
     if (colNames!="false") { #yes column names
@@ -536,7 +535,6 @@ Read.TextDataMeta <- function(mSetObj=NA, filePath, format="rowu", lbl.type="dis
 }
 
 #'
-#NEED TO ADJUST SO AS TO REMOVE LINES IF REMOVED IN MAIN DATA SET
 Read.TextDataEnv <- function(mSetObj=NA, filePath, format="rowu", lbl.type="disc", rowNames="false", colNames="false"){
   mSetObj <- .get.mSet(mSetObj);
   if (colNames!="false") { #yes column names

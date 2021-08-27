@@ -231,20 +231,21 @@ public class ApplicationBean1 implements Serializable {
         rocFormatOpts[0] = new SelectItem("rowu", "Samples in rows");
         rocFormatOpts[1] = new SelectItem("colu", "Samples in columns");
 
-        testDataOpts = new SelectItem[3];
         //Changed for WEGAN
+        testDataOpts = new SelectItem[3];
         testDataOpts[0] = new SelectItem("Dune", "Dune");
-        testDataOpts[1] = new SelectItem("BCI", "BCI");
-        testDataOpts[2] = new SelectItem("Iris", "Iris");
-//        testDataOpts[2] = new SelectItem("nmrspecbin", "NMR spectral bins");
-//        testDataOpts[3] = new SelectItem("nmrpeaklist", "NMR peak lists");
-//        testDataOpts[4] = new SelectItem("concpair", "Concentrations (paired)");
-//        testDataOpts[5] = new SelectItem("mspkint", "MS peak intensities");
-//        testDataOpts[6] = new SelectItem("mspklist", "MS peak list");
-//        testDataOpts[7] = new SelectItem("lcmsspec", "LC-MS spectra");
-//        testDataOpts[8] = new SelectItem("gcmsspec", "GC-MS spectra");
-//        testDataOpts[9] = new SelectItem("Varespec", "Dispersal");
-//        testDataOpts[10] = new SelectItem("Linear", "Plotting");
+        testDataOpts[1] = new SelectItem("Iris", "Iris");
+        testDataOpts[2] = new SelectItem("BCI", "BCI");
+//        testDataOpts[3] = new SelectItem("Varespec", "Dispersal");
+//        testDataOpts[4] = new SelectItem("Linear", "Plotting");        
+//        testDataOpts[5] = new SelectItem("nmrspecbin", "NMR spectral bins");
+//        testDataOpts[6] = new SelectItem("nmrpeaklist", "NMR peak lists");
+//        testDataOpts[7] = new SelectItem("concpair", "Concentrations (paired)");
+//        testDataOpts[8] = new SelectItem("mspkint", "MS peak intensities");
+//        testDataOpts[9] = new SelectItem("mspklist", "MS peak list");
+//        testDataOpts[10] = new SelectItem("lcmsspec", "LC-MS spectra");
+//        testDataOpts[11] = new SelectItem("gcmsspec", "GC-MS spectra");
+
 
         
         caDataOpts = new SelectItem[2];

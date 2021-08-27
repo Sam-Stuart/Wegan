@@ -313,20 +313,13 @@ public class OrdinationloadBean implements Serializable {
     public void setTestDataOpt(String testDataOpt) {
         this.testDataOpt = testDataOpt;
     }
-        
     
     //----------------------------------------------------------------- Test loader 
     public String handleOrdinationTestFileUpload() {
-        boolean paired = false;
-        boolean isZip = false;
-        String testFile = null;
-       
-        if (testDataOpt == null) {
-            sb.updateMsg("Error", "No data set is selected!");
-            return null;
-        }
-
-        else if (testDataOpt.equals("Dune")) {
+        // TODO: Process the action. Return value is a navigation
+        // case name where null will return to the same page.
+        String dataType, testFile, dataFormat, dataNames;
+        if (testDataOpt.equals("Dune")) {
             dataType = "main";
             //sb.updateMsg("Error", "Dune data selected");
             testFile = ab.getTestDune();
@@ -353,31 +346,14 @@ public class OrdinationloadBean implements Serializable {
             return null;
         }
         
-        if (!sb.doLogin(dataType, "ord", false, paired)) {
+        if (!sb.doLogin(dataType, "ord", false, false)) {
             //sb.updateMsg("Error", "No login return null?");
             return null;
         }
-
-        RConnection RC = sb.getRConnection();
-        if (isZip) {
-            if (!RDataUtils.readZipData(RC, testFile, dataType, "F")) {
-                sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
-                return null;
-            }
-        } else {
-//            String testFileMeta = ab.getTestFileMeta();
-//            RDataUtils.readTextDataMeta(RC, testFileMeta, dataFormat, "disc", doRowNames, doColNames);
-//            String testFileEnv = ab.getTestFileEnv();
-//            RDataUtils.readTextDataEnv(RC, testFileEnv, dataFormat, "disc", doRowNames, doColNames);
-//            RDataUtils.readTextData(RC, testFile, dataFormat, "cont", doRowNames, doColNames);
-              RDataUtils.readTextData(RC, testFile, dataFormat, "disc", dataNames);
-
-//            if (!RDataUtils.readTextData(RC, testFile, dataFormat, "cont", doRowNames, doColNames)){
-//                sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
-//                return null;
-//            }
-        }
+        
         sb.setDataUploaded(true);
+        RConnection RC = sb.getRConnection();
+        RDataUtils.readTextData(RC, testFile, dataFormat, "disc", dataNames);
         return "Data check";
     }
     
