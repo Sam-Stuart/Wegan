@@ -112,8 +112,7 @@ SanityCheckData <- function(mSetObj=NA){
       cls.num <- length(levels(cls.lbl));
       if(cls.num/min.grp.size > 3){
         mSetObj$dataSet$small.smpl.size <- 1;
-        msg <- c(msg, "<font color='red'>Too many groups with very small number of replicates!</font>");
-        msg <- c(msg, "<font color='red'>Only a subset of methods will be available for analysis!</font>");
+        msg <- c(msg, "<font color='red'>Too many groups with very small number of replicates! Only a subset of methods will be available for analysis!</font>");
       }
       
       msg <- c(msg, paste(cls.num, "groups were detected in samples."));
@@ -153,7 +152,7 @@ SanityCheckData <- function(mSetObj=NA){
     }
   }
   msg<-c(msg,"Only English letters, numbers, underscore, hyphen and forward slash (/) are allowed.");
-  msg<-c(msg,"<font color=\"orange\">Other special characters or punctuations (if any) will be stripped off.</font>");
+  msg<-c(msg,"Other special characters or punctuations (if any) will be stripped off.");
   
   int.mat <- mSetObj$dataSet$orig;
   mSetObj$dataSet$test_cat <- mSetObj$dataSet$orig;
@@ -188,7 +187,7 @@ SanityCheckData <- function(mSetObj=NA){
   constCol <- (varCol == 0 | is.na(varCol));
   constNum <- sum(constCol, na.rm=T);
   if(constNum > 0){
-    msg<-c(msg, paste("<font color=\"red\">", constNum, "features with a constant or single value across samples were found and deleted.</font>"));
+    msg<-c(msg, paste("<font color=\"red\">", constNum, "variable(s) with a constant or single value across samples were found and deleted.</font>"));
     int.mat <- int.mat[,!constCol];
   }
   
@@ -197,8 +196,9 @@ SanityCheckData <- function(mSetObj=NA){
   naCount <- sum(is.na(int.mat));
   naPercent <- round(100*naCount/totalCount,1)
   
-  msg<-c(msg, paste("A total of ", naCount, " (", naPercent, "%) missing values were detected.", sep=""));
-  msg<-c(msg, "<u>By default, these values will be replaced by a small value.</u>",
+  msg<-c(msg, paste0("<font color=\"red\">", "A total of ", naCount, " (", naPercent, "%) missing values were detected.</font>"));
+
+  msg<-c(msg, "<u>By default, missing values will be left as is, though certain functionalities may not be available.</u>",
          "Click <b>Skip</b> button if you accept the default practice",
          "Or click <b>Missing value imputation</b> to use other methods");
   
@@ -494,7 +494,7 @@ FilterVariable <- function(mSetObj=NA, filter, qcFilter, rsd){
       rsd.vals <- abs(sds/mns);  
       gd.inx <- rsd.vals < rsd;
       int.mat <- int.mat[,gd.inx];
-      msg <- paste("Removed ", sum(!gd.inx), " features based on QC RSD values. QC samples are still kept. You can remove them later.");
+      msg <- paste("Removed ", sum(!gd.inx), " variables based on QC RSD values. QC samples are still kept. You can remove them later.");
     }else if(sum(qc.hits) > 0){
       AddErrMsg("RSD requires at least 3 QC samples, and only non-QC based filtering can be applied.");
       return(0);
@@ -556,7 +556,7 @@ FilterVariable <- function(mSetObj=NA, filter, qcFilter, rsd){
       msg <- paste(msg, "Further feature filtering based on", nm);
       if(sum(remain) > 8000){
         remain <-rk < 8000;
-        msg <- paste(msg, "Reduced to 8000 features based on", nm);
+        msg <- paste(msg, "Reduced to 8000 variables based on", nm);
       }
     }
   }

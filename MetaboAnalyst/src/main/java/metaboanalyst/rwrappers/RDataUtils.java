@@ -29,8 +29,8 @@ public class RDataUtils {
 
 
     /*
-     * data type: list, conc, specbin, pktable, nmrpeak, mspeak, msspec
-     * anal type: stat, pathora, pathqea, msetora, msetssp, msetqea, map, peaksearch
+     * data type: main, meta, env
+     * anal type: stat, ord, plot, stat, div, disp, clust, tax, corr
      *
      * */
     public static boolean initDataObjects(RConnection RC, String dataType, String analType, boolean isPaired) {
@@ -46,10 +46,13 @@ public class RDataUtils {
     }
 
     //should be in the same directory format specify sample in row or column
-    public static boolean readTextData(RConnection RC, String filePath, String format, String lblType) {
+//    public static boolean readTextData(RConnection RC, String filePath, String format, String lblType, boolean rowNames, boolean colNames) {
+    public static boolean readTextData(RConnection RC, String filePath, String format, String lblType, String dataNames) {
         try {
-            String rCommand = "Read.TextData(NA, \"" + filePath + "\", \"" + format + "\", \"" + lblType + "\");";
-            String rCommand2 = "Read.TextData(NA, \"" + "Replacing_with_your_file_path" + "\", \"" + format + "\", \"" + lblType + "\");";
+//            String rCommand = "Read.TextData(NA, \"" + filePath + "\", \"" + format + "\", \"" + lblType + "\", \"" + rowNames + "\", \"" + colNames + "\");";
+//            String rCommand2 = "Read.TextData(NA, \"" + "Replacing_with_your_file_path" + "\", \"" + format + "\", \"" + lblType + "\", \"" + rowNames + "\", \"" + colNames + "\");";
+            String rCommand = "Read.TextData(NA, \"" + filePath + "\", \"" + format + "\", \"" + lblType + "\", \"" + dataNames + "\");";
+            String rCommand2 = "Read.TextData(NA, \"" + "Replacing_with_your_file_path" + "\", \"" + format + "\", \"" + lblType + "\", \"" + dataNames + "\");";
             RCenter.recordRCommand(RC, rCommand2);
             return (RC.eval(rCommand).asInteger() == 1);
         } catch (Exception rse) {
@@ -59,10 +62,13 @@ public class RDataUtils {
     }
 
     //should be in the same directory format specify sample in row or column
-    public static boolean readTextDataMeta(RConnection RC, String filePath, String format, String lblType) {
+//    public static boolean readTextDataMeta(RConnection RC, String filePath, String format, String lblType, boolean rowNames, boolean colNames) {
+    public static boolean readTextDataMeta(RConnection RC, String filePath, String format, String lblType, String dataNames) {
         try {
-            String rCommand = "Read.TextDataMeta(NA, \"" + filePath + "\", \"" + format + "\", \"" + lblType + "\");";
-            String rCommand2 = "Read.TextDataMeta(NA, \"" + "Replacing_with_your_file_path" + "\", \"" + format + "\", \"" + lblType + "\");";
+//            String rCommand = "Read.TextDataMeta(NA, \"" + filePath + "\", \"" + format + "\", \"" + lblType + "\", \"" + rowNames + "\", \"" + colNames + "\");";
+//            String rCommand2 = "Read.TextDataMeta(NA, \"" + "Replacing_with_your_file_path" + "\", \"" + format + "\", \"" + lblType + "\", \"" + rowNames + "\", \"" + colNames + "\");";
+            String rCommand = "Read.TextDataMeta(NA, \"" + filePath + "\", \"" + format + "\", \"" + lblType + "\", \"" + dataNames + "\");";
+            String rCommand2 = "Read.TextDataMeta(NA, \"" + "Replacing_with_your_file_path" + "\", \"" + format + "\", \"" + lblType + "\", \"" + dataNames + "\");";
             RCenter.recordRCommand(RC, rCommand2);
             return (RC.eval(rCommand).asInteger() == 1);
         } catch (Exception rse) {
@@ -71,10 +77,13 @@ public class RDataUtils {
         }
     }    
 
-    public static boolean readTextDataEnv(RConnection RC, String filePath, String format, String lblType) {
+//    public static boolean readTextDataEnv(RConnection RC, String filePath, String format, String lblType, boolean rowNames, boolean colNames) {
+    public static boolean readTextDataEnv(RConnection RC, String filePath, String format, String lblType, String dataNames) {
         try {
-            String rCommand = "Read.TextDataEnv(NA, \"" + filePath + "\", \"" + format + "\", \"" + lblType + "\");";
-            String rCommand2 = "Read.TextDataEnv(NA, \"" + "Replacing_with_your_file_path" + "\", \"" + format + "\", \"" + lblType + "\");";
+//            String rCommand = "Read.TextDataEnv(NA, \"" + filePath + "\", \"" + format + "\", \"" + lblType + "\", \"" + rowNames + "\", \"" + colNames + "\");";
+//            String rCommand2 = "Read.TextDataEnv(NA, \"" + "Replacing_with_your_file_path" + "\", \"" + format + "\", \"" + lblType + "\", \"" + rowNames + "\", \"" + colNames + "\");";
+            String rCommand = "Read.TextDataEnv(NA, \"" + filePath + "\", \"" + format + "\", \"" + lblType + "\", \"" + dataNames + "\");";
+            String rCommand2 = "Read.TextDataEnv(NA, \"" + "Replacing_with_your_file_path" + "\", \"" + format + "\", \"" + lblType + "\", \"" + dataNames + "\");";            
             RCenter.recordRCommand(RC, rCommand2);
             return (RC.eval(rCommand).asInteger() == 1);
         } catch (Exception rse) {
@@ -2256,5 +2265,9 @@ public class RDataUtils {
         }
         return null;
     }
+
+//    public static void readTextData(RConnection RC, String testRocPath, String rowu, String disc, String afalse, String afalse0) {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
 
 }

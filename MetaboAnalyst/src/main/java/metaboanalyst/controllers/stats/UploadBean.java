@@ -27,7 +27,7 @@ public class UploadBean implements Serializable {
     /*
      * Handle file upoad (.csv or .txt)
      */
-    private String dataType = "conc";
+    private String dataType = "main";
 
     public String getDataType() {
         return dataType;
@@ -57,6 +57,17 @@ public class UploadBean implements Serializable {
         this.dataFile = dataFile;
     }
 
+        
+    private String dataNames = "colOnly";
+
+    public String getDataNames() {
+        return dataNames;
+    }
+
+    public void setDataNames(String dataNames) {
+        this.dataNames = dataNames;
+    }
+    
     /*
     Data upload for statistics module
      */
@@ -75,12 +86,12 @@ public class UploadBean implements Serializable {
                     return null;
                 }
 
-                if (RDataUtils.readTextData(RC, fileName, dataFormat, "disc")) {
+                if (RDataUtils.readTextData(RC, fileName, dataFormat, "disc", dataNames)) {
                     sb.setDataUploaded(true);
                     return "Data check";
                 } else {
                     String err = RDataUtils.getErrMsg(RC);
-                    sb.updateMsg("Error", "Failed to read in the CSV file." + err);
+                    sb.updateMsg("Error", "Failed to read in the main data file." + err);
                     return null;
                 }
             } catch (Exception e) {
@@ -290,54 +301,30 @@ public class UploadBean implements Serializable {
         }
 
         RConnection RC = sb.getRConnection();
-        if (isZip) {
-            if (!RDataUtils.readZipData(RC, testFile, dataType, "F")) {
-                sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
-                return null;
-            }
-        } else {
-            
-            //Tested cahnging Disc to cont
-            if (!RDataUtils.readTextData(RC, testFile, format, "cont")) {
-                sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
-                return null;
-            }
-        }
+//        if (isZip) {
+//            if (!RDataUtils.readZipData(RC, testFile, dataType, "F")) {
+//                sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
+//                return null;
+//            }
+//        } else {
+//            
+//            //Tested cahnging Disc to cont
+//            if (!RDataUtils.readTextData(RC, testFile, format, "cont")) {
+//                sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
+//                return null;
+//            }
+//        }
         sb.setDataUploaded(true);
-        if (dataType.equals("conc") || dataType.equals("pktable") || dataType.equals("specbin")) {
+        if (dataType.equals("main") || dataType.equals("meta") || dataType.equals("env")) {
             return "Data check";
         }
         return dataType;
     }
 
     
-    
-    
-    
-    
-    
-    
     //END IMPORTANT FUNCS***********************************************************************
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
     /*
     Handle data for power analysis
      */
@@ -369,7 +356,7 @@ public class UploadBean implements Serializable {
         if (sb.doLogin(dataType, "power", false, paired)) {
             RConnection RC = sb.getRConnection();
             String fileName = DataUtils.uploadFile(dataFile, sb, null, ab.isOnPublicServer());
-            if (RDataUtils.readTextData(RC, fileName, dataFormat, "disc")) {
+            if (RDataUtils.readTextData(RC, fileName, dataFormat, "disc", dataNames)) {
                 sb.setDataUploaded(true);
                 return "Data check";
             } else {
@@ -385,7 +372,7 @@ public class UploadBean implements Serializable {
             return null;
         }
         RConnection RC = sb.getRConnection();
-        RDataUtils.readTextData(RC, ab.getTestPowerPath(), "rowu", "disc");
+        RDataUtils.readTextData(RC, ab.getTestPowerPath(), "rowu", "disc", "colOnly");
         sb.setDataUploaded(true);
         return "Data check";
     }
@@ -417,7 +404,7 @@ public class UploadBean implements Serializable {
         if (sb.doLogin(dataType, "roc", false, false)) {
             RConnection RC = sb.getRConnection();
             String fileName = DataUtils.uploadFile(dataFile, sb, null, ab.isOnPublicServer());
-            if (RDataUtils.readTextData(RC, fileName, dataFormat, "disc")) {
+            if (RDataUtils.readTextData(RC, fileName, dataFormat, "disc", dataNames)) {
                 sb.setDataUploaded(true);
                 return "Data check";
             } else {
@@ -434,9 +421,9 @@ public class UploadBean implements Serializable {
         }
         RConnection RC = sb.getRConnection();
         if (dataOpt.equals("data1")) {
-            RDataUtils.readTextData(RC, ab.getTestRocPath(), "rowu", "disc");
+            RDataUtils.readTextData(RC, ab.getTestRocPath(), "rowu", "disc", "colOnly");
         } else {
-            RDataUtils.readTextData(RC, ab.getTestRocNewPath(), "rowu", "disc");
+            RDataUtils.readTextData(RC, ab.getTestRocNewPath(), "rowu", "disc", "colOnly");
         }
         sb.setDataUploaded(true);
         return "Data check";

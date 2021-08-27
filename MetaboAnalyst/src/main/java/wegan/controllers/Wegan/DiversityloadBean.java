@@ -30,7 +30,7 @@ public class DiversityloadBean implements Serializable {
     /*
      * Handle file upoad (.csv or .txt)
      */
-    private String dataType = "conc";
+    private String dataType = "main";
 
     public String getDataType() {
         return dataType;
@@ -40,7 +40,7 @@ public class DiversityloadBean implements Serializable {
         this.dataType = dataType;
     }
 
-    private String dataFormat = "colu";
+    private String dataFormat = "rowu";
 
     public String getDataFormat() {
         return dataFormat;
@@ -78,7 +78,7 @@ public class DiversityloadBean implements Serializable {
                     return null;
                 }
 
-                if (RDataUtils.readTextData(RC, fileName, dataFormat, "disc")) {
+                if (RDataUtils.readTextData(RC, fileName, dataFormat, "disc", dataNames)) {
                     sb.setDataUploaded(true);
                     sb.updateMsg("Error", "Data Uploaded successfully");
                     return "Data check";
@@ -200,7 +200,16 @@ public class DiversityloadBean implements Serializable {
         this.NMDSTestDataOpt = NMDSTestDataOpt;
     }
     
+        
+    private String dataNames = "colOnly";
 
+    public String getDataNames() {
+        return dataNames;
+    }
+
+    public void setDataNames(String dataNames) {
+        this.dataNames = dataNames;
+    }
     
     //*********------------------------------------------------------
     public String getTestDataOpt() {
@@ -258,7 +267,7 @@ public class DiversityloadBean implements Serializable {
         } else {
             
             //Tested cahnging Disc to cont
-            if (!RDataUtils.readTextData(RC, testFile, format, "disc")) {
+            if (!RDataUtils.readTextData(RC, testFile, "rowu", "disc", "colOnly")) {
                 sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
                 return null;
             }
@@ -318,7 +327,7 @@ public class DiversityloadBean implements Serializable {
         } else {
             
             //Tested cahnging Disc to cont
-            if (!RDataUtils.readTextData(RC, testFile, format, "disc")) {
+            if (!RDataUtils.readTextData(RC, testFile, "rowu", "disc", "colOnly")) {
                 sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
                 return null;
             }
@@ -417,7 +426,7 @@ public class DiversityloadBean implements Serializable {
         if (sb.doLogin(dataType, "power", false, paired)) {
             RConnection RC = sb.getRConnection();
             String fileName = DataUtils.uploadFile(dataFile, sb, null, ab.isOnPublicServer());
-            if (RDataUtils.readTextData(RC, fileName, dataFormat, "disc")) {
+            if (RDataUtils.readTextData(RC, fileName, dataFormat, "disc", dataNames)) {
                 sb.setDataUploaded(true);
                 return "Data check";
             } else {
@@ -433,7 +442,7 @@ public class DiversityloadBean implements Serializable {
             return null;
         }
         RConnection RC = sb.getRConnection();
-        RDataUtils.readTextData(RC, ab.getTestPowerPath(), "rowu", "disc");
+        RDataUtils.readTextData(RC, ab.getTestPowerPath(), "rowu", "disc", "colOnly");
         sb.setDataUploaded(true);
         return "Data check";
     }
@@ -465,7 +474,7 @@ public class DiversityloadBean implements Serializable {
         if (sb.doLogin(dataType, "roc", false, false)) {
             RConnection RC = sb.getRConnection();
             String fileName = DataUtils.uploadFile(dataFile, sb, null, ab.isOnPublicServer());
-            if (RDataUtils.readTextData(RC, fileName, dataFormat, "disc")) {
+            if (RDataUtils.readTextData(RC, fileName, dataFormat, "disc", dataNames)) {
                 sb.setDataUploaded(true);
                 return "Data check";
             } else {
@@ -482,9 +491,9 @@ public class DiversityloadBean implements Serializable {
         }
         RConnection RC = sb.getRConnection();
         if (dataOpt.equals("data1")) {
-            RDataUtils.readTextData(RC, ab.getTestRocPath(), "rowu", "disc");
+            RDataUtils.readTextData(RC, ab.getTestRocPath(), "rowu", "disc", "colOnly");
         } else {
-            RDataUtils.readTextData(RC, ab.getTestRocNewPath(), "rowu", "disc");
+            RDataUtils.readTextData(RC, ab.getTestRocNewPath(), "rowu", "disc", "colOnly");
         }
         sb.setDataUploaded(true);
         return "Data check";

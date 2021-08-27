@@ -33,6 +33,72 @@ CleanDataMatrix <- function(ndata){
 #'McGill University, Canada
 #'@export
 #'
+#BestNormalize <- function(mSetObj=NA, rowNorm, transNorm, scaleNorm, ref=NULL, ratio=FALSE, ratioNum=20){
+#  
+#  mSetObj <- .get.mSet(mSetObj);
+#  
+#  data <- mSetObj
+#  library("bestNormalize")
+#    openssl (sudo apt-get install libcurl4-openssl-dev libssl-dev)
+#    credentials
+#    codetools
+#    httr
+#    gert
+#    usethis
+#    gh
+#    doParallel
+#    doRNG
+#    butcher
+#
+#  if(is.null(mSetObj$dataSet[["procr"]])){
+#    data<-mSetObj$dataSet$preproc
+#  }else if(is.null(mSetObj$dataSet[["prenorm"]])){
+#    data<- mSetObj$dataSet$procr;
+#  }else{
+#    data<-mSetObj$dataSet$prenorm
+#  }
+#  
+#  if(is.null(mSetObj$dataSet[["prenorm.cls"]])){ # can be so for regression 
+#    mSetObj$dataSet$prenorm.cls <- mSetObj$dataSet$proc.cls;
+#  }
+#    
+#  normData <- bestNormalize(data)
+#
+#  colNames <- colnames(data);
+#  rowNames <- rownames(data);
+#  
+#  
+#  # need to do some sanity check, for log there may be Inf values introduced
+#  data <- CleanData(normData, T, F);
+#  
+#  mSetObj$dataSet$norm <- as.data.frame(normData);
+#  mSetObj$dataSet$best.method <- FALSE;
+#  return(.set.mSet(mSetObj));
+#}
+
+#'Normalization
+#'@description This function performs row-wise normalization, transformation, and 
+#'scaling of your metabolomic data. 
+#'@usage Normalization(mSetObj, rowNorm, transNorm, scaleNorm, ref=NULL, ratio=FALSE, ratioNum=20)
+#'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
+#'@param rowNorm Select the option for row-wise normalization, "QuantileNorm" for Quantile Normalization, 
+#'"ProbNormT" for Probabilistic Quotient Normalization without using a reference sample,
+#'"ProbNormF" for Probabilistic Quotient Normalization based on a reference sample, 
+#'"CompNorm" for Normalization by a reference feature,
+#'"SumNorm" for Normalization to constant sum, 
+#'"MedianNorm" for Normalization to sample median, and 
+#'"SpecNorm" for Normalization by a sample-specific factor.
+#'@param transNorm Select option to transform the data, "LogNorm" for Log Normalization,
+#'and "CrNorm" for Cubic Root Transformation. 
+#'@param scaleNorm Select option for scaling the data, "MeanCenter" for Mean Centering,
+#'"AutoNorm" for Autoscaling, "ParetoNorm" for Pareto Scaling, amd "RangeNorm" for Range Scaling.
+#'@param ref Input the name of the reference sample or the reference feature, use " " around the name.  
+#'@param ratio This option is only for biomarker analysis.
+#'@param ratioNum Relevant only for biomarker analysis.  
+#'@author Jeff Xia \email{jeff.xia@mcgill.ca}, Jasmine Chong
+#'McGill University, Canada
+#'@export
+#'
 Normalization <- function(mSetObj=NA, rowNorm, transNorm, scaleNorm, ref=NULL, ratio=FALSE, ratioNum=20){
   
   mSetObj <- .get.mSet(mSetObj);
@@ -317,6 +383,9 @@ RangeNorm<-function(x){
 #'
 PlotNormSummary <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA){
   mSetObj <- .get.mSet(mSetObj);
+print("1")
+print(mSetObj$dataSet$procr)
+
   imgName = paste(imgName, "dpi", dpi, ".", format, sep="");
   if(is.na(width)){
     w <- 10.5; h <- 12.5;
