@@ -5,7 +5,7 @@
 #'@param dis Set dissimilarity index, drop down options are "taxa2dist" (default), "euclidean", "manhattan", "binary", or "minkowski"
 #'@param match.force Boolean force matching of column names in comm and labels in dis, options are "TRUE" or "FALSE" (default).
 #'@param varstep Boolean vary step lengths between successive levels relative to proportional loss of the number of distinct classes, drop down options are "TRUE" or "FALSE" (default). 
-#'@param method.hc the agglomeration method, drop down options "ward.D", "ward.D2", "single", "complete", "average" (= UPGMA) (default), "mcquitty" (= WPGMA), "median" (= WPGMC) or "centroid" (= UPGMC)
+#'@param aggme the agglomeration method, drop down options "ward.D", "ward.D2", "single", "complete", "average" (= UPGMA) (default), "mcquitty" (= WPGMA), "median" (= WPGMC) or "centroid" (= UPGMC)
 #'@param check Boolean if TRUE, remove all redundant levels which are different for all rows or constant for all rows and regard each row as a different basal taxon (species). If FALSE (default) all levels are retained and basal taxa (species) also must be coded as variables (columns)
 #'@author Shiyang Zhao\email{shiyang1@ualberta.ca}
 #'University of Alberta, Canada
@@ -13,7 +13,7 @@
 #'@export
 
 
-Taxonomic_div <- function(mSetObj = NA, data = "false", dis = "NULL", match.force = "false", varstep = "false", method.hc = "NULL", check = "false") {
+Taxonomic_div <- function(mSetObj = NA, data = "false", dis = "NULL", match.force = "false", varstep = "false", aggme = "NULL", check = "false") {
 
   options(errors = traceback)
   
@@ -95,22 +95,22 @@ Taxonomic_div <- function(mSetObj = NA, data = "false", dis = "NULL", match.forc
   }
   print(dis1)
   
-  if (method.hc == "NULL") {
-    method.hc1 <- "average"
+  if (aggme == "NULL") {
+    aggme1 = "average"
   } else {
-    method.hc1 <- method.hc
+    aggme1 = aggme
   }
-  print(method.hc1)
+  print(aggme1)
 
   taxon <- taxondive(input.2, dis1, match.force = match.force1)
   summary.taxon <- summary(taxon)
   
-  tr <- hclust(taxdis, method = method.hc1)
+  tr <- hclust(taxdis, method = "average")
   dtree <- treedist(input.2, tr)
   mod <- treedive(input.2, tr)
-  plottree <- hclust(vegdist(input.2), method = method.hc1)
+  plottree <- hclust(vegdist(input.2), method = aggme1)
   taxontree <- hclust(taxdis)
-  print("mod")  
+  print("plottree")  
 
   mSetObj$analset$taxa2dist$name <- "Distance"
   mSetObj$analset$taxa2dist$taxdis <- taxdis

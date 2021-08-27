@@ -245,36 +245,36 @@ public class AbunddistBean implements Serializable {
     
     public AbunddistBean() {
         bar_color = new SelectItem[6];
-        bar_color[0] = new SelectItem("NULL", "skyblue");
-        bar_color[1] = new SelectItem("gray", "gray");
-        bar_color[2] = new SelectItem("turquoise", "turquoise");
-        bar_color[3] = new SelectItem("slateblue", "slateblue");
-        bar_color[4] = new SelectItem("seagreen", "seagreen");
-        bar_color[5] = new SelectItem("wheat", "wheat");
+        bar_color[0] = new SelectItem("NULL", "Skyblue");
+        bar_color[1] = new SelectItem("gray", "Gray");
+        bar_color[2] = new SelectItem("turquoise", "Turquoise");
+        bar_color[3] = new SelectItem("slateblue", "Slateblue");
+        bar_color[4] = new SelectItem("seagreen", "Seagreen");
+        bar_color[5] = new SelectItem("wheat", "Wheat");
                    
         line_color_addFit = new SelectItem[6];
-        line_color_addFit[0] = new SelectItem("NULL", "red");
-        line_color_addFit[1] = new SelectItem("coral", "coral");
-        line_color_addFit[2] = new SelectItem("brown", "brown");
-        line_color_addFit[3] = new SelectItem("salmon", "salmon");
-        line_color_addFit[4] = new SelectItem("tomato", "tomato");
-        line_color_addFit[5] = new SelectItem("sienna", "sienna");
+        line_color_addFit[0] = new SelectItem("NULL", "Red");
+        line_color_addFit[1] = new SelectItem("coral", "Coral");
+        line_color_addFit[2] = new SelectItem("brown", "Brown");
+        line_color_addFit[3] = new SelectItem("salmon", "Salmon");
+        line_color_addFit[4] = new SelectItem("tomato", "Tomato");
+        line_color_addFit[5] = new SelectItem("sienna", "Sienna");
        
         line_color_addPoi = new SelectItem[6];
-        line_color_addPoi[0] = new SelectItem("NULL", "green");
-        line_color_addPoi[1] = new SelectItem("olive", "olive");
-        line_color_addPoi[2] = new SelectItem("springgreen", "spring green");
-        line_color_addPoi[3] = new SelectItem("yellowgreen", "yellow green");
-        line_color_addPoi[4] = new SelectItem("gold", "gold");
-        line_color_addPoi[5] = new SelectItem("orange", "orange");
+        line_color_addPoi[0] = new SelectItem("NULL", "Green");
+        line_color_addPoi[1] = new SelectItem("olive", "Olive");
+        line_color_addPoi[2] = new SelectItem("springgreen", "Spring green");
+        line_color_addPoi[3] = new SelectItem("yellowgreen", "Yellow green");
+        line_color_addPoi[4] = new SelectItem("gold", "Gold");
+        line_color_addPoi[5] = new SelectItem("orange", "Orange");
        
         line_color_addMax = new SelectItem[6];
-        line_color_addMax[0] = new SelectItem("NULL", "purple");
-        line_color_addMax[1] = new SelectItem("violetred", "violetred");
-        line_color_addMax[2] = new SelectItem("orchid", "orchid");
-        line_color_addMax[3] = new SelectItem("maroon", "maroon");
-        line_color_addMax[4] = new SelectItem("hotpink", "hotpink");
-        line_color_addMax[5] = new SelectItem("deeppink", "deeppink");
+        line_color_addMax[0] = new SelectItem("NULL", "Purple");
+        line_color_addMax[1] = new SelectItem("violetred", "Violetred");
+        line_color_addMax[2] = new SelectItem("orchid", "Orchid");
+        line_color_addMax[3] = new SelectItem("maroon", "Maroon");
+        line_color_addMax[4] = new SelectItem("hotpink", "Hotpink");
+        line_color_addMax[5] = new SelectItem("deeppink", "Deeppink");
     }
    
     
