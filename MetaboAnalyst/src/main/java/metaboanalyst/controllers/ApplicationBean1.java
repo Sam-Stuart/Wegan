@@ -59,7 +59,7 @@ public class ApplicationBean1 implements Serializable {
     private static final String test_dune = "/data/dune.csv";
     private static final String test_BCI = "/data/BCI.txt";
     private static final String test_varespec = "/data/varespec.txt";
-    private static final String test_linear = "/data/linear_test_data4.txt"; // linear plot test data 
+    private static final String test_linear = "/data/linear_test_data.txt"; // linear plot test data 
     private static final String test_iris = "/data/iris.csv";
     private static final String test_dune_weights = "/data/dune_weights.txt";
 //    private static final String test_iris = "/data/iris.txt";
@@ -228,12 +228,12 @@ public class ApplicationBean1 implements Serializable {
         rocFormatOpts[1] = new SelectItem("colu", "Samples in columns");
 
         //Changed for WEGAN
-        testDataOpts = new SelectItem[3];
+        testDataOpts = new SelectItem[5];
         testDataOpts[0] = new SelectItem("Dune", "Dune");
         testDataOpts[1] = new SelectItem("Iris", "Iris");
         testDataOpts[2] = new SelectItem("BCI", "BCI");
-//        testDataOpts[3] = new SelectItem("Varespec", "Dispersal");
-//        testDataOpts[4] = new SelectItem("Linear", "Plotting");        
+        testDataOpts[3] = new SelectItem("Varespec", "Varespec");
+        testDataOpts[4] = new SelectItem("Linear", "Simple plotting example");        
 //        testDataOpts[5] = new SelectItem("nmrspecbin", "NMR spectral bins");
 //        testDataOpts[6] = new SelectItem("nmrpeaklist", "NMR peak lists");
 //        testDataOpts[7] = new SelectItem("concpair", "Concentrations (paired)");

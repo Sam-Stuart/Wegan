@@ -130,27 +130,6 @@ public class OrdinationloadBean implements Serializable {
         this.envNames = envNames;
     }
     
-//    private boolean doRowNames = false; 
-//    
-//    public boolean isDoRowNames() {
-//        return doRowNames;
-//    }
-//    
-//    public void setDoRowNames(boolean doRowNames) {
-//        this.doRowNames = doRowNames;
-//    }
-//        
-//    private boolean doColNames = false; 
-//    
-//    public void setDoColNames(boolean doColNames) {
-//        this.doColNames = doColNames;
-//    }
-//
-//    public boolean isDoColNames() {
-//        return doColNames;
-//    }
-    
-    
     
     /*
     Data upload for ordination module
@@ -181,7 +160,6 @@ public class OrdinationloadBean implements Serializable {
                     RDataUtils.readTextDataEnv(RC, fileNameEnv, envFormat, "disc", envNames);
                 }                 
 
-//                if (RDataUtils.readTextData(RC, fileName, dataFormat, "cont", doRowNames, doColNames)) {
                 if (RDataUtils.readTextData(RC, fileName, dataFormat, "disc", dataNames)) {
                     sb.setDataUploaded(true);
                     sb.updateMsg("Error", "Data Uploaded successfully");
@@ -316,22 +294,16 @@ public class OrdinationloadBean implements Serializable {
     
     //----------------------------------------------------------------- Test loader 
     public String handleOrdinationTestFileUpload() {
-        // TODO: Process the action. Return value is a navigation
-        // case name where null will return to the same page.
-        
-        String dataFormat = "";
-        String testFile = null;
-        String dataType = "";
-        String dataNames = "";
 
+        String testFile = null;
+        
         if (testDataOpt == null) {
-            //sb.updateMsg("Error", "No data set is selected!");
+            sb.updateMsg("Error", "No data set is selected!");
             return null;
         }
 
         if (testDataOpt.equals("Dune")) {
             dataType = "main";
-            //sb.updateMsg("Error", "Dune data selected");
             testFile = ab.getTestDune();
             dataFormat = "rowu";
             dataNames = "colOnly";
