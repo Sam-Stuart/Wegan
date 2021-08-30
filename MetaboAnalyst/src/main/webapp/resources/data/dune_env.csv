@@ -1,21 +1,21 @@
-Thickness	Moisture	Management	Use	Manure
-2.8	1	SF	Haypastu	IV
-3.5	1	BF	Haypastu	II
-4.3	2	SF	Haypastu	IV
-4.2	2	SF	Haypastu	IV
-6.3	1	HF	Hayfield	II
-4.3	1	HF	Haypastu	II
-2.8	1	HF	Pasture	III
-4.2	5	HF	Pasture	III
-3.7	4	HF	Hayfield	I
-3.3	2	BF	Hayfield	I
-3.5	1	BF	Pasture	I
-5.8	4	SF	Haypastu	II
-6	5	SF	Haypastu	III
-9.3	5	NM	Pasture	NA
-11.5	5	NM	Haypastu	NA
-5.7	5	SF	Pasture	III
-4	2	NM	Hayfield	NA
-4.6	1	NM	Hayfield	NA
-3.7	5	NM	Hayfield	NA
-3.5	5	NM	Hayfield	NA
+Thickness,Moisture,Management,Use,Manure
+2.8,1,SF,Haypastu,IV
+3.5,1,BF,Haypastu,II
+4.3,2,SF,Haypastu,IV
+4.2,2,SF,Haypastu,IV
+6.3,1,HF,Hayfield,II
+4.3,1,HF,Haypastu,II
+2.8,1,HF,Pasture,III
+4.2,5,HF,Pasture,III
+3.7,4,HF,Hayfield,I
+3.3,2,BF,Hayfield,I
+3.5,1,BF,Pasture,I
+5.8,4,SF,Haypastu,II
+6,5,SF,Haypastu,III
+9.3,5,NM,Pasture,NA
+11.5,5,NM,Haypastu,NA
+5.7,5,SF,Pasture,III
+4,2,NM,Hayfield,NA
+4.6,1,NM,Hayfield,NA
+3.7,5,NM,Hayfield,NA
+3.5,5,NM,Hayfield,NA

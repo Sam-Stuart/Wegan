@@ -30,7 +30,7 @@ public class CAloadBean implements Serializable {
     /*
      * Handle file upoad (.csv or .txt)
      */
-    private String dataType = "conc";
+    private String dataType = "main";
 
     public String getDataType() {
         return dataType;
@@ -60,6 +60,17 @@ public class CAloadBean implements Serializable {
         this.dataFile = dataFile;
     }
 
+        
+    private String dataNames = "colOnly";
+
+    public String getDataNames() {
+        return dataNames;
+    }
+
+    public void setDataNames(String dataNames) {
+        this.dataNames = dataNames;
+    }
+    
     /*
     Data upload for statistics module
      */
@@ -78,7 +89,7 @@ public class CAloadBean implements Serializable {
                     return null;
                 }
                 //RDataUtils.readTextData(RC, fileName, dataFormat, "disc")
-                if (RDataUtils.readTextData(RC, fileName, dataFormat, "disc")) {
+                if (RDataUtils.readTextData(RC, fileName, dataFormat, "cont", dataNames)) {
                     sb.setDataUploaded(true);
                     return "Download";
                 } else {
@@ -243,18 +254,19 @@ public class CAloadBean implements Serializable {
                 sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
                 return null;
             }
-        } else {
-            
-            //Tested cahnging Disc to cont
-            if (!RDataUtils.readTextData(RC, testFile, format, "disc")) {
-                sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
-                return null;
-            }
+        } 
+//        else {
+//            
+//            //Tested cahnging Disc to cont
+//            if (!RDataUtils.readTextData(RC, testFile, format, "disc", dataNames)) {
+//                sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
+//                return null;
+//            }
 //            if (!RDataUtils.readTextData(RC, testWeightFile, format, "disc")) {
 //                sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
 //                return null;
 //            }
-        }
+//        }
         sb.setDataUploaded(true);
         return "Data check";
     }

@@ -58,40 +58,44 @@ load_xcms <- function(){
   suppressMessages(library(xcms))
 }
 
-#------------------------------------WEGAN STUFF
+
+#---------------WEGAN LIBRARIES---------------
 #Load Vegan
 load_vegan <- function(){
   library(vegan)
 }
 
-load_caret <- function(){
-  library(caret)
-}
-
+#Load 
 load_glmnet <- function(){
   library(glmnet)
 }
 
+#Load 
 load_dplyr <- function(){
   library(dplyr)
 }
 
+#Load 
 load_viridis <- function(){
   library(viridis)
 }
 
+#Load 
 load_RJSONIO <- function(){
   library(RJSONIO)
 }
 
+#Load 
 load_Metrics <- function(){
   library(Metrics)
 }
 
+#Load 
 load_ade4 <- function(){
   library(ade4)
 }
 
+#Load 
 load_adegraphics <- function(){
   library(adegraphics)
 }

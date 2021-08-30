@@ -13,6 +13,7 @@
 #'
 SanityCheckData <- function(mSetObj=NA){
   
+  load_dplyr()
   mSetObj <- .get.mSet(mSetObj);
   
   msg <- NULL;
@@ -102,7 +103,7 @@ SanityCheckData <- function(mSetObj=NA){
           mSetObj$dataSet$orig <- mSetObj$dataSet$orig[index,];
         }
       }else{
-        msg <- c(msg,"Samples are not paired.");
+        #msg <- c(msg,"Samples are not paired."); #I COMMENTED THIS OUT
       }
       
       # checking if too many groups but a few samples in each group
@@ -110,50 +111,52 @@ SanityCheckData <- function(mSetObj=NA){
       min.grp.size <- min(table(cls.lbl));
       
       cls.num <- length(levels(cls.lbl));
-      if(cls.num/min.grp.size > 3){
-        mSetObj$dataSet$small.smpl.size <- 1;
-        msg <- c(msg, "<font color='red'>Too many groups with very small number of replicates!</font>");
-        msg <- c(msg, "<font color='red'>Only a subset of methods will be available for analysis!</font>");
-      }
+      #if(cls.num/min.grp.size > 3){
+      #  mSetObj$dataSet$small.smpl.size <- 1;
+      #  msg <- c(msg, "<font color='red'>Too many groups with very small number of replicates! Only a subset of methods will be available for analysis!</font>");
+      #}
       
-      msg <- c(msg, paste(cls.num, "groups were detected in samples."));
+      #msg <- c(msg, paste(cls.num, "groups were detected in samples.")); #I COMMENTED THIS OUT
       mSetObj$dataSet$cls.num <- cls.num;
       mSetObj$dataSet$min.grp.size <- min.grp.size;
     }
     
+    #I REMOVED THIS
     #samples may not be sorted properly, need to do some sorting at the beginning 
-    if(substring(mSetObj$dataSet$format,4,5)=="ts"){
-      nfacA <- mSetObj$dataSet$facA;
-      nfacB <- mSetObj$dataSet$facB;
-      if(mSetObj$dataSet$design.type =="time" | mSetObj$dataSet$design.type =="time0"){
-        # determine time factor and should order first by subject then by each time points
-        if(tolower(mSetObj$dataSet$facA.lbl) == "time"){ 
-          time.fac <- nfacA;
-          exp.fac <- nfacB;
-        }else{
-          time.fac <- nfacB;
-          exp.fac <- nfacA;
-        }
-        # update with new index
-        ord.inx <- order(exp.fac);
-      }else{
-        ord.inx <- order(nfacA);
-      }
-      mSetObj$dataSet$orig.cls <- mSetObj$dataSet$orig.cls[ord.inx];
-      mSetObj$dataSet$orig <- mSetObj$dataSet$orig[ord.inx, ];
-      mSetObj$dataSet$facA <- mSetObj$dataSet$orig.facA <- mSetObj$dataSet$facA[ord.inx];
-      mSetObj$dataSet$facB <- mSetObj$dataSet$orig.facB <- mSetObj$dataSet$facB[ord.inx];
-    }else{
-      ord.inx <- order(mSetObj$dataSet$orig.cls);
-      mSetObj$dataSet$orig.cls <- cls[ord.inx];
-      mSetObj$dataSet$orig <- mSetObj$dataSet$orig[ord.inx, ];
-      if(mSetObj$dataSet$paired){
-        mSetObj$dataSet$pairs <- mSetObj$dataSet$pairs[ord.inx];
-      }
-    }
+    #if(substring(mSetObj$dataSet$format,4,5)=="ts"){
+    #  nfacA <- mSetObj$dataSet$facA;
+    #  nfacB <- mSetObj$dataSet$facB;
+    #  if(mSetObj$dataSet$design.type =="time" | mSetObj$dataSet$design.type =="time0"){
+    #    # determine time factor and should order first by subject then by each time points
+    #    if(tolower(mSetObj$dataSet$facA.lbl) == "time"){ 
+    #      time.fac <- nfacA;
+    #      exp.fac <- nfacB;
+    #   }else{
+    #     time.fac <- nfacB;
+    #     exp.fac <- nfacA;
+    #   }
+    #   # update with new index
+    #   ord.inx <- order(exp.fac);
+    # }else{
+    #    ord.inx <- order(nfacA);
+    #  }
+    #  mSetObj$dataSet$orig.cls <- mSetObj$dataSet$orig.cls[ord.inx];
+    #  mSetObj$dataSet$orig <- mSetObj$dataSet$orig[ord.inx, ];
+    #  mSetObj$dataSet$facA <- mSetObj$dataSet$orig.facA <- mSetObj$dataSet$facA[ord.inx];
+    #  mSetObj$dataSet$facB <- mSetObj$dataSet$orig.facB <- mSetObj$dataSet$facB[ord.inx];
+    #}else{
+    #  ord.inx <- order(mSetObj$dataSet$orig.cls);
+    #  mSetObj$dataSet$orig.cls <- cls[ord.inx];
+    #  mSetObj$dataSet$orig <- mSetObj$dataSet$orig[ord.inx, ];
+    #  if(mSetObj$dataSet$paired){
+    #    mSetObj$dataSet$pairs <- mSetObj$dataSet$pairs[ord.inx];
+    #  }
+    #}
   }
-  msg<-c(msg,"Only English letters, numbers, underscore, hyphen and forward slash (/) are allowed.");
-  msg<-c(msg,"<font color=\"orange\">Other special characters or punctuations (if any) will be stripped off.</font>");
+
+  #I REMOVED THIS AND MOVED TO UPPER PANEL IN VIEW
+  #msg<-c(msg,"Only English letters, numbers, underscore, hyphen and forward slash (/) are allowed.");
+  #msg<-c(msg,"Other special characters or punctuations (if any) will be stripped off.");
   
   int.mat <- mSetObj$dataSet$orig;
   mSetObj$dataSet$test_cat <- mSetObj$dataSet$orig;
@@ -165,7 +168,7 @@ SanityCheckData <- function(mSetObj=NA){
   
   num.mat <- apply(int.mat, 2, as.numeric)
   
-  # TODO: REMOVED THIS TO SEE IF WE CAN KEEP CATEGORICAL DATA
+  # DANA REMOVED THIS TO SEE IF WE CAN KEEP CATEGORICAL DATA
   #if(sum(is.na(num.mat)) > naNms){
     # try to remove "," in thousand seperator if it is the cause
   #  num.mat <- apply(int.mat,2,function(x) as.numeric(gsub(",", "", x)));
@@ -177,33 +180,42 @@ SanityCheckData <- function(mSetObj=NA){
   #}else{
   #  msg<-c(msg,"All data values are numeric.");
   #}
+  #
+  #int.mat <- num.mat;
+  #rownames(int.mat) <- rowNms;
+  #colnames(int.mat)<- colNms;
+  #
+  ## check for columns with all constant (var =0)
+  #varCol <- apply(int.mat, 2, var, na.rm=T);
+  #
+  #constCol <- (varCol == 0 | is.na(varCol));
+  #constNum <- sum(constCol, na.rm=T);
+  #if(constNum > 0){
+  #  msg<-c(msg, paste("<font color=\"red\">", constNum, "variable(s) with a constant or single value across samples were found and deleted.</font>"));
+  #  int.mat <- int.mat[,!constCol];
+  #}
   
-  int.mat <- num.mat;
-  rownames(int.mat) <- rowNms;
-  colnames(int.mat)<- colNms;
-  
-  # check for columns with all constant (var =0)
-  varCol <- apply(int.mat, 2, var, na.rm=T);
-  
-  constCol <- (varCol == 0 | is.na(varCol));
-  constNum <- sum(constCol, na.rm=T);
-  if(constNum > 0){
-    msg<-c(msg, paste("<font color=\"red\">", constNum, "features with a constant or single value across samples were found and deleted.</font>"));
-    int.mat <- int.mat[,!constCol];
-  }
-  
+  #I ADDED THIS
+  # check numeric and categorical variables
+  numCount <- length(select_if(int.mat, is.numeric))
+  catCount <- length(select_if(int.mat, is.character))
+  msg<-c(msg, paste0("A total of ", numCount, " numeric and ", catCount, " categorical variables were detected."));
+
   # check zero, NA values
   totalCount <- nrow(int.mat)*ncol(int.mat);
   naCount <- sum(is.na(int.mat));
   naPercent <- round(100*naCount/totalCount,1)
   
-  msg<-c(msg, paste("A total of ", naCount, " (", naPercent, "%) missing values were detected.", sep=""));
-  msg<-c(msg, "<u>By default, these values will be replaced by a small value.</u>",
+  msg<-c(msg, paste0("<font color=\"red\">", "A total of ", naCount, " (", naPercent, "%) missing values were detected.</font>"));
+
+  msg<-c(msg, "<u>By default, missing values will be left as is, though certain functionalities may be unavailable, including normalization.</u>",
          "Click <b>Skip</b> button if you accept the default practice",
          "Or click <b>Missing value imputation</b> to use other methods");
   
-  # obtain original half of minimal positive value (threshold)
-  minConc<-min(int.mat[int.mat>0], na.rm=T)/2;
+  #I CHANGED THIS FOR WEGAN WHICH ALLOWS CATEGORICAL VARS
+  # obtain original half of minimal positive value (threshold) for numeric columns
+  numVars <- select_if(int.mat, is.numeric)
+  minConc<-min(numVars[numVars>0], na.rm=T)/2;
 
 
   mSetObj$dataSet$minConc <- minConc;
@@ -244,9 +256,11 @@ ReplaceMin <- function(mSetObj=NA){
   
   mSetObj <- .get.mSet(mSetObj);
   
+  #I CHANGED THIS FOR WEGAN
   if(!is.null(mSetObj$dataSet$norm)){
     int.mat <- mSetObj$dataSet$norm
-    minConc <- min(int.mat[int.mat>0], na.rm=T)/2;
+    numVars <- select_if(int.mat, is.numeric)
+    minConc<-min(numVars[numVars>0], na.rm=T)/2;
     
     # replace zero and missing values
     # we leave nagative values unchanged! ? not sure if this is the best way
@@ -255,7 +269,7 @@ ReplaceMin <- function(mSetObj=NA){
     # note, this is last step of processing, replace norm and save to procr
     mSetObj$dataSet$procr <- as.data.frame(int.mat);
     mSetObj$dataSet$norm <- as.data.frame(int.mat);
-    mSetObj$msgSet$replace.msg <- paste("Zero or missing variables were replaced with a small value:", minConc);
+    #mSetObj$msgSet$replace.msg <- paste("Zero or missing variables were replaced with a small value:", minConc);
     rm(int.mat);
     invisible(gc()); # suppress gc output
     return(.set.mSet(mSetObj));
@@ -269,7 +283,7 @@ ReplaceMin <- function(mSetObj=NA){
     
     # note, this is last step of processing, also save to proc
     mSetObj$dataSet$procr <- as.data.frame(int.mat);
-    mSetObj$msgSet$replace.msg <- paste("Zero or missing variables were replaced with a small value:", minConc);
+    #mSetObj$msgSet$replace.msg <- paste("Zero or missing variables were replaced with a small value:", minConc);
     rm(int.mat);
     invisible(gc()); # suppress gc output
 
@@ -277,6 +291,8 @@ ReplaceMin <- function(mSetObj=NA){
   }
 }
 
+
+#TODO: UPDATE FROM HERE TO LINE 583!!!!!!!!!!!!!!
 #'Data processing: remove variables with missing values
 #'@description Remove variables containing a user-defined percentage cut-off of missing values.
 #'@usage RemoveMissingPercent(mSetObj, percent)
@@ -494,7 +510,7 @@ FilterVariable <- function(mSetObj=NA, filter, qcFilter, rsd){
       rsd.vals <- abs(sds/mns);  
       gd.inx <- rsd.vals < rsd;
       int.mat <- int.mat[,gd.inx];
-      msg <- paste("Removed ", sum(!gd.inx), " features based on QC RSD values. QC samples are still kept. You can remove them later.");
+      msg <- paste("Removed ", sum(!gd.inx), " variables based on QC RSD values. QC samples are still kept. You can remove them later.");
     }else if(sum(qc.hits) > 0){
       AddErrMsg("RSD requires at least 3 QC samples, and only non-QC based filtering can be applied.");
       return(0);
@@ -556,7 +572,7 @@ FilterVariable <- function(mSetObj=NA, filter, qcFilter, rsd){
       msg <- paste(msg, "Further feature filtering based on", nm);
       if(sum(remain) > 8000){
         remain <-rk < 8000;
-        msg <- paste(msg, "Reduced to 8000 features based on", nm);
+        msg <- paste(msg, "Reduced to 8000 variables based on", nm);
       }
     }
   }

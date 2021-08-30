@@ -272,19 +272,20 @@ public class NMDSloadBean implements Serializable {
         }
 
         RConnection RC = sb.getRConnection();
-        if (isZip) {
-            if (!RDataUtils.readZipData(RC, testFile, dataType, "F")) {
-                sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
-                return null;
-            }
-        } else {
-            
-            //Tested cahnging Disc to cont
-            if (!RDataUtils.readTextData(RC, testFile, format, "cont")) {
-                sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
-                return null;
-            }
-        }
+//        if (isZip) {
+//            if (!RDataUtils.readZipData(RC, testFile, dataType, "F")) {
+//                sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
+//                return null;
+//            }
+//        } else {
+//            
+//            //Tested cahnging Disc to cont
+//            if (!RDataUtils.readTextData(RC, testFile, format, "cont")) {
+//                sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
+//                return null;
+//            }
+//        }
+        
         sb.setDataUploaded(true);
         //RC.Eval;
         try {

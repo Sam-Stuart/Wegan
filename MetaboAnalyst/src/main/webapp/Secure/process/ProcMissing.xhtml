@@ -14,23 +14,25 @@
             <h:panelGrid style="padding:20px 40px 20px 50px; font-size: 12px; line-height: 23px">
                 <h2>Missing value estimation:</h2>
                 <p>
-                    Too many missing values will cause difficulties for downstream analysis. There are several different 
-                    methods for this purpose. The default method replaces all the missing values with a small values (the half of the 
-                    minimum positive values in the original data) assuming to be the detection limit. Click <b>next</b>
-                    if you want to use the default method. The assumption of this approach is that most missing values are caused 
-                    by low abundance metabolites (i.e.below the detection limit). 
+                    Too many missing values (i.e. NAs) or zeros may cause difficulties for downstream analyses. There are several different 
+                    methods to prevent future issues. The first method removes all variables and samples with >50% missing values. It also replaces all zeros with one half of the smallest value. Click <b>Process</b> if you want to use the default method.
                 </p>
                 <p>   
-                    MetaboAnalyst also offers other methods, such as replace by mean/median, k-nearest neighbour (KNN), 
+                    Ecologystics also offers other methods, such as replace by mean/median, k-nearest neighbour (KNN), 
                     probabilistic PCA (PPCA), Bayesian PCA (BPCA) method, Singular Value Decomposition (SVD) method to 
                     impute the missing values (<a href="http://www.ncbi.nlm.nih.gov/pubmed/17344241">ref.</a>). 
                     Please choose the one that is the most appropriate for your data. 
                 </p>
                 <h:panelGrid style="border: 1px dashed black; padding: 10px; background-color: #F9F9FB; width: 100%; line-height: 23px">
-                    <p:outputLabel value="Step 1. Remove features with too many missing values" style="font-size: 13px; font-weight: bold"/>
+                    <p:outputLabel value="Step 1. Remove variables and samples with too many missing values" style="font-size: 13px; font-weight: bold"/>
                     <h:panelGrid columns="4" style="padding-bottom: 12px">
                         <p:selectBooleanCheckbox value="#{procBean.removeMissing}"/> 
-                        <p:outputLabel value="Remove features with &gt;"/> 
+                        <p:outputLabel value="Remove variables with &gt;"/> 
+                        <p:inputText style="width:40px" value="#{procBean.missingPercent}"/>
+                        <p:outputLabel value="% missing values"/>
+                        
+                        <p:selectBooleanCheckbox value="#{procBean.removeMissing}"/> 
+                        <p:outputLabel value="Remove samples with &gt;"/> 
                         <p:inputText style="width:40px" value="#{procBean.missingPercent}"/>
                         <p:outputLabel value="% missing values"/>
                     </h:panelGrid>

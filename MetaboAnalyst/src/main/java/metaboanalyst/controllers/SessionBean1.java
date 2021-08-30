@@ -118,32 +118,10 @@ public class SessionBean1 implements Serializable {
     
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     /*
      * Log in and out
-     * dataType: list, conc, specbin, pktable, nmrpeak, mspeak, msspec
-     * analType: WEGAN,stat, pathora, pathqea, msetora, msetssp, msetqea, msetview, cmpdmap, peaksearch, smpmap
+     * dataType: main, meta, env
+     * analType: "ca", "plotting", "diversity", "dispersal", "ord", "cluster"
      * */
     public boolean doLogin(String dataType, String analType, boolean isRegression, boolean paired) {
 
@@ -296,23 +274,23 @@ public class SessionBean1 implements Serializable {
 
         switch (naviKey) {
             case "Pre-process":
-                if (dataType.equals("conc") || dataType.equals("specbin") || dataType.equals("pktable")) {
+                if (dataType.equals("meta") || dataType.equals("env")) {
                     updateMsg("Error", "Your data type does not need this procedure!");
                     RequestContext.getCurrentInstance().execute("PF('statusDialog').hide()");
                     return;
                 }
                 break;
             case "Data check":
-                if (dataType.equals("conc") || dataType.equals("specbin") || dataType.equals("pktable")) {
+                if (dataType.equals("main")) {
                     break;
                 } else if (!dataProcessed) {
-                    updateMsg("Error", "Your need to pre-process your data first!");
+                    updateMsg("Error", "You need to pre-process your data first!");
                     RequestContext.getCurrentInstance().execute("PF('statusDialog').hide()");
                     return;
                 }
             case "Name check":
-                if (!dataType.equals("conc")) {
-                    updateMsg("Error", "The procedure is only applicable to compound concentration data!");
+                if (!dataType.equals("main")) {
+                    updateMsg("Error", "The procedure is only applicable to the main dataset data!");
                     RequestContext.getCurrentInstance().execute("PF('statusDialog').hide()");
                     return;
                 }
@@ -336,7 +314,7 @@ public class SessionBean1 implements Serializable {
             case "Image options":
             case "Normalization":
                 if (!integChecked) {
-                    updateMsg("Error", "The data need to pass integrity check first!");
+                    updateMsg("Error", "The data needs to pass integrity check first!");
                     RequestContext.getCurrentInstance().execute("PF('statusDialog').hide()");
                     return;
                 }
@@ -540,6 +518,7 @@ public class SessionBean1 implements Serializable {
         return key + "_" + imgMap.get(key) + "_";
     }
 
+
     /**
      * Get images for display
      *
@@ -552,13 +531,6 @@ public class SessionBean1 implements Serializable {
     }
 
     
-    
-    
-    
-    
-    
-    
-    
     /**
      * get JSON files for interactive
      *
@@ -568,6 +540,7 @@ public class SessionBean1 implements Serializable {
     public String getJsonDir(String name) {
         return currentUser.getRelativeDir() + "/" + getCurrentImage(name) + ".json";
     }
+
 
     /**
      * To record all commands that produce the images
@@ -706,7 +679,6 @@ public class SessionBean1 implements Serializable {
         return "featuredetails";
     }
     
-   
 
     public String getSigSource() {
         return sigVec.get(sigVec.size() - 1);

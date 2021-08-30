@@ -138,6 +138,17 @@ public class PathUploadBean implements Serializable {
         this.usePathDataExample = usePathDataExample;
     }
 
+        
+    private String dataNames = "colOnly";
+
+    public String getDataNames() {
+        return dataNames;
+    }
+
+    public void setDataNames(String dataNames) {
+        this.dataNames = dataNames;
+    }
+    
     public String pathQeaBn_action() {
         if (usePathDataExample) {
             if (!sb.doLogin("conc", "pathqea", false, false)) {
@@ -145,7 +156,7 @@ public class PathUploadBean implements Serializable {
                 return null;
             }
             sb.setDataUploaded(true);
-            return processPathQeaData(ab.getDisreteDataPath(), "name", "rowu", "disc");
+            return processPathQeaData(ab.getDisreteDataPath(), "name", "rowu", "disc", "colOnly");
         } else {
             if (qeaCmpdIDType.equals("na")) {
                 sb.updateMsg("Error", "Please specify the ID type for your data input!");
@@ -168,7 +179,7 @@ public class PathUploadBean implements Serializable {
                 String fileName = DataUtils.getJustFileName(csvFile.getFileName());
                 DataUtils.uploadFile(csvFile, sb, null, ab.isOnPublicServer());
                 sb.setDataUploaded(true);
-                return processPathQeaData(fileName, qeaCmpdIDType, dataFormat, clsOpt);
+                return processPathQeaData(fileName, qeaCmpdIDType, dataFormat, clsOpt, dataNames);
             } catch (Exception e) {
                 e.printStackTrace();
                 return null;
@@ -176,9 +187,9 @@ public class PathUploadBean implements Serializable {
         }
     }
 
-    private String processPathQeaData(String fileName, String cmpdType, String dataFormat, String lblType) {
+    private String processPathQeaData(String fileName, String cmpdType, String dataFormat, String lblType, String dataNames) {
         RConnection RC = sb.getRConnection();
-        if (RDataUtils.readTextData(RC, fileName, dataFormat, lblType)) {
+        if (RDataUtils.readTextData(RC, fileName, dataFormat, lblType, dataNames)) {
             if (RDataUtils.getGroupNumber(RC) > 2) {
                 sb.updateMsg("Error", "Enrichment analysis for multiple-group data is "
                                 + "not well-defined. Please subset your data to two groups to proceed!");
