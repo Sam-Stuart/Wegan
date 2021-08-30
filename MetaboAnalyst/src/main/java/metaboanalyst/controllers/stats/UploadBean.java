@@ -243,21 +243,22 @@ public class UploadBean implements Serializable {
             format = "rowu";
         }
         
-        //DUNE DATA SELECTED*********************************************************
+        //WEGAN DATA SELECTED*********************************************************
         else if (testDataOpt.equals("Dune")) {
-            dataType = "Dune";
+            dataType = "main";
             //sb.updateMsg("Error", "Dune data selected");
-
-            testFile = ab.getTestamf();
-            format = "rowu";
+            testFile = ab.getTestDune();
+            dataFormat = "rowu";
+            dataNames = "colOnly";
             
-            
-        //****************************************************************************   
         } else if (testDataOpt.equals("Iris")) {
-            dataType = "iris";
+            dataType = "main";
             testFile = ab.getTestIris();
-            format = "rowu";
+            dataFormat = "rowu";
+            dataNames = "colOnly";
         
+        //*********************************************************
+
         } else if (testDataOpt.equals("conccow")) {
             dataType = "conc";
             testFile = ab.getTestConcCowPath();
@@ -315,7 +316,7 @@ public class UploadBean implements Serializable {
 //            }
 //        }
         sb.setDataUploaded(true);
-        if (dataType.equals("main") || dataType.equals("meta") || dataType.equals("env")) {
+        if (dataType.equals("main")) {
             return "Data check";
         }
         return dataType;

@@ -61,17 +61,13 @@ public class ApplicationBean1 implements Serializable {
     private static final String test_varespec = "/data/varespec.txt";
     private static final String test_linear = "/data/linear_test_data4.txt"; // linear plot test data 
     private static final String test_iris = "/data/iris.csv";
-//    private static final String test_linear = "/data/linear.txt";
     private static final String test_dune_weights = "/data/dune_weights.txt";
 //    private static final String test_iris = "/data/iris.txt";
     
     
     //**************************************************************************
     
-    
-    
-    
-    
+
     private static final String qc_cmp_data = "/data/qc_compare.csv";
     private static final String path_lib = "/libs/smp_path.csv";
     private static final String mset_dir = "/libs/msets";

@@ -342,44 +342,59 @@ GetRCommandHistory <- function(mSetObj=NA){
 #  
 #  return(.set.mSet(mSetObj));
 #}
-Read.TextData <- function(mSetObj=NA, filePath, format="rowu", lbl.type="disc", dataNames="colOnly"){
+Read.TextData <- function(mSetObj=NA, filePath, dataFormat="rowu", lbl.type="disc", dataNames="colOnly"){
   mSetObj <- .get.mSet(mSetObj);
   mSetObj$dataSet$cls.type <- lbl.type;
-  mSetObj$dataSet$format <- format;
+  mSetObj$dataSet$format <- dataFormat;
 
   if (dataNames=="colOnly") { #yes column names, no row names
     dat <- .readDataTable(filePath, dataNames="colOnly");
     print("colOnly")
     print(dat)
+    print("colnames")
+    print(colnames(dat))
+    print("rownames")
+    print(rownames(dat))
   } else if (dataNames=="rowOnly") { #no col names, yes row names
     dat <- .readDataTable(filePath, dataNames="rowOnly"); 
     print("rowOnly")
     print(dat)
+    print("colnames")
+    print(colnames(dat))
+    print("rownames")
+    print(rownames(dat))
   } else if (dataNames=="bothNames") { #yes col names, yes row names
     dat <- .readDataTable(filePath, dataNames="bothNames");
     print("both")
     print(dat)
+    print("colnames")
+    print(colnames(dat))
+    print("rownames")
+    print(rownames(dat))
   } else { #no col names, no row names
     dat <- .readDataTable(filePath, dataNames="noNames");
     print("none")
     print(dat)
+    print("colnames")
+    print(colnames(dat))
+    print("rownames")
+    print(rownames(dat))
   }
 
 
   if(class(dat) == "try-error" || ncol(dat) == 1){
-    AddErrMsg("Data format error. Failed to read in the data!");
-    AddErrMsg("Make sure the data table is saved in tab separated values (.txt) or comma separated values (.csv) format.");
-    AddErrMsg("Please also check the following: ");
-    AddErrMsg("Either sample or variable names must in UTF-8 encoding; Latin, Greek letters are not allowed.");
-    AddErrMsg("We recommend to use a combination of English letters, underscore, and numbers for naming purpose.");
-    AddErrMsg("Make sure sample names and variable names are unique.");
-    AddErrMsg("Missing values should be blank or NA without quote.");
+    AddErrMsg("Data format error. Failed to read in the data!
+                /nMake sure the data table is saved in tab separated values (.txt) or comma separated values (.csv) format.
+                /nPlease also check the following:
+                /nBoth sample and variable names must in UTF-8 encoding.
+                #####Make sure sample names and variable names are unique. TODO: ADD TO TEXT ON PAGE
+                /nMissing values should be blank or NA without quote.");
     return(0);
   }
   
   msg <- NULL;
 
-  if(substring(format,1,3)=="row"){ # sample in row
+  if(substring(dataFormat,1,3)=="row"){ # sample in row
     msg<-c(msg, "Samples in rows and variables in columns");
     smpl.nms <- rownames(dat);
     all.nms <- colnames(dat);
@@ -390,7 +405,6 @@ Read.TextData <- function(mSetObj=NA, filePath, format="rowu", lbl.type="disc", 
     facB.lbl <- all.nms[2];
     var.nms <- all.nms;
     dat1 <- dat;
-    conc <- dat1
   }else{ # sample in col
     msg<-c(msg, "Samples in columns and variables in rows.");
     all.nms <- rownames(dat);
@@ -402,7 +416,6 @@ Read.TextData <- function(mSetObj=NA, filePath, format="rowu", lbl.type="disc", 
     facB.lbl <- cls.lbl[2];
     var.nms <- all.nms;
     dat1<-as.data.frame(t(dat));
-    conc <- dat1
   }
 
   mSetObj$dataSet$orig <- dat1;
@@ -515,42 +528,66 @@ Read.TextData <- function(mSetObj=NA, filePath, format="rowu", lbl.type="disc", 
 
 
 #'
-Read.TextDataMeta <- function(mSetObj=NA, filePath, format="rowu", lbl.type="disc", rowNames="false", colNames="false"){
+Read.TextDataMeta <- function(mSetObj=NA, filePath, metaFormat="rowu", lbl.type="disc", metaNames="colOnly"){
   mSetObj <- .get.mSet(mSetObj);
-    if (colNames!="false") { #yes column names
-      if (rowNames!="false") { #yes row names
-        mSetObj$dataSet$origMeta$dat <- .readDataTable(filePath, rowNames="true", colNames="true");
-      } else { #no row names
-        mSetObj$dataSet$origMeta$dat <- .readDataTable(filePath, rowNames="false", colNames="true");
-      }
-    } else { #no column names
-      if (rowNames!="false") { #yes row names
-        mSetObj$dataSet$origMeta$dat <- .readDataTable(filePath, rowNames="true", colNames="false");
-      } else { #no row names
-        mSetObj$dataSet$origMeta$dat <- .readDataTable(filePath, rowNames="false", colNames="false");
-      }
-    }
-  mSetObj$dataSet$origMeta$type <- "meta"
+
+  if (dataNames=="colOnly") { #yes column names, no row names
+    dat <- .readDataTable(filePath, metaNames="colOnly");
+    print("colOnly")
+    print(dat)
+  } else if (dataNames=="rowOnly") { #no col names, yes row names
+    dat <- .readDataTable(filePath, metaNames="rowOnly"); 
+    print("rowOnly")
+    print(dat)
+  } else if (dataNames=="bothNames") { #yes col names, yes row names
+    dat <- .readDataTable(filePath, metaNames="bothNames");
+    print("both")
+    print(dat)
+  } else { #no col names, no row names
+    dat <- .readDataTable(filePath, metaNames="noNames");
+    print("none")
+    print(dat)
+  }
+
+  if(substring(metaFormat,1,3)=="row"){ # sample in row
+    dat1 <- dat;
+  }else{ # sample in col
+    dat1<-as.data.frame(t(dat));
+  }
+
+  mSetObj$dataSet$origMeta <- dat1;
   return(.set.mSet(mSetObj));
 }
 
 #'
-Read.TextDataEnv <- function(mSetObj=NA, filePath, format="rowu", lbl.type="disc", rowNames="false", colNames="false"){
+Read.TextDataEnv <- function(mSetObj=NA, filePath, envFormat="rowu", lbl.type="disc", envNames="colOnly"){
   mSetObj <- .get.mSet(mSetObj);
-  if (colNames!="false") { #yes column names
-    if (rowNames!="false") { #yes row names
-      mSetObj$dataSet$origEnv$dat <- .readDataTable(filePath, rowNames="true", colNames="true");
-    } else { #no row names
-      mSetObj$dataSet$origEnv$dat <- .readDataTable(filePath, rowNames="false", colNames="true");
-    }
-  } else { #no column names
-    if (rowNames!="false") { #yes row names
-      mSetObj$dataSet$origEnv$dat <- .readDataTable(filePath, rowNames="true", colNames="false");
-    } else { #no row names
-      mSetObj$dataSet$origEnv$dat <- .readDataTable(filePath, rowNames="false", colNames="false");
-    }
-  }  
-  mSetObj$dataSet$origEnv$type <- "env"
+
+  if (dataNames=="colOnly") { #yes column names, no row names
+    dat <- .readDataTable(filePath, envNames="colOnly");
+    print("colOnly")
+    print(dat)
+  } else if (dataNames=="rowOnly") { #no col names, yes row names
+    dat <- .readDataTable(filePath, envNames="rowOnly"); 
+    print("rowOnly")
+    print(dat)
+  } else if (dataNames=="bothNames") { #yes col names, yes row names
+    dat <- .readDataTable(filePath, envNames="bothNames");
+    print("both")
+    print(dat)
+  } else { #no col names, no row names
+    dat <- .readDataTable(filePath, envNames="noNames");
+    print("none")
+    print(dat)
+  }
+
+  if(substring(envFormat,1,3)=="row"){ # sample in row
+    dat1 <- dat;
+  }else{ # sample in col
+    dat1<-as.data.frame(t(dat));
+  }
+
+  mSetObj$dataSet$origEnv <- dat1;
   return(.set.mSet(mSetObj));
 }
 

@@ -274,7 +274,7 @@ public class SessionBean1 implements Serializable {
 
         switch (naviKey) {
             case "Pre-process":
-                if (dataType.equals("main") || dataType.equals("meta") || dataType.equals("env")) {
+                if (dataType.equals("meta") || dataType.equals("env")) {
                     updateMsg("Error", "Your data type does not need this procedure!");
                     RequestContext.getCurrentInstance().execute("PF('statusDialog').hide()");
                     return;
@@ -284,13 +284,13 @@ public class SessionBean1 implements Serializable {
                 if (dataType.equals("main")) {
                     break;
                 } else if (!dataProcessed) {
-                    updateMsg("Error", "Your need to pre-process your data first!");
+                    updateMsg("Error", "You need to pre-process your data first!");
                     RequestContext.getCurrentInstance().execute("PF('statusDialog').hide()");
                     return;
                 }
             case "Name check":
-                if (!dataType.equals("conc")) {
-                    updateMsg("Error", "The procedure is only applicable to compound concentration data!");
+                if (!dataType.equals("main")) {
+                    updateMsg("Error", "The procedure is only applicable to the main dataset data!");
                     RequestContext.getCurrentInstance().execute("PF('statusDialog').hide()");
                     return;
                 }
@@ -314,7 +314,7 @@ public class SessionBean1 implements Serializable {
             case "Image options":
             case "Normalization":
                 if (!integChecked) {
-                    updateMsg("Error", "The data need to pass integrity check first!");
+                    updateMsg("Error", "The data needs to pass integrity check first!");
                     RequestContext.getCurrentInstance().execute("PF('statusDialog').hide()");
                     return;
                 }

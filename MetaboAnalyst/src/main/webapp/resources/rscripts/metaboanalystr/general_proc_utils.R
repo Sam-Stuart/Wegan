@@ -13,7 +13,7 @@
 #'
 SanityCheckData <- function(mSetObj=NA){
   
-  library(dplyr)
+  load_dplyr()
   mSetObj <- .get.mSet(mSetObj);
   
   msg <- NULL;

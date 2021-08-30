@@ -318,29 +318,36 @@ public class OrdinationloadBean implements Serializable {
     public String handleOrdinationTestFileUpload() {
         // TODO: Process the action. Return value is a navigation
         // case name where null will return to the same page.
-        String dataType, testFile, dataFormat, dataNames;
+        
+        String dataFormat = "";
+        String testFile = null;
+        String dataType = "";
+        String dataNames = "";
+
+        if (testDataOpt == null) {
+            //sb.updateMsg("Error", "No data set is selected!");
+            return null;
+        }
+
         if (testDataOpt.equals("Dune")) {
             dataType = "main";
             //sb.updateMsg("Error", "Dune data selected");
             testFile = ab.getTestDune();
             dataFormat = "rowu";
             dataNames = "colOnly";
-//            doRowNames = false;
-//            doColNames = true;
+
         } else if (testDataOpt.equals("Iris")) {
             dataType = "main";
             testFile = ab.getTestIris();
             dataFormat = "rowu";       
             dataNames = "colOnly";
-//            doRowNames = false;
-//            doColNames = true;
+
         } else if (testDataOpt.equals("BCI")) {
             dataType = "main";
             testFile = ab.getTestBCI();
             dataFormat = "rowu";
-            dataNames = "both";
-//            doRowNames = false;
-//            doColNames = true;
+            dataNames = "colOnly";
+
         } else {
             sb.updateMsg("Error", "Unknown data selected?");
             return null;
