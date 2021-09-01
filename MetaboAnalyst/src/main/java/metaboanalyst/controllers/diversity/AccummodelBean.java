@@ -381,17 +381,17 @@ public class AccummodelBean implements Serializable {
     
     public AccummodelBean() {
         gamma = new SelectItem[5];
-        gamma[0] = new SelectItem("NULL", "jack1");
-        gamma[1] = new SelectItem("jack2", "jack2");
-        gamma[2] = new SelectItem("chao", "chao");
-        gamma[3] = new SelectItem("boot", "boot");
+        gamma[0] = new SelectItem("NULL", "Jack1");
+        gamma[1] = new SelectItem("jack2", "Jack2");
+        gamma[2] = new SelectItem("chao", "Chao");
+        gamma[3] = new SelectItem("boot", "Boot");
         gamma[4] = new SelectItem("Species", "Species");
         
         models = new SelectItem[4];
-        models[0] = new SelectItem("NULL", "arrhenius");
-        models[1] = new SelectItem("gleason", "gleason");
-        models[2] = new SelectItem("gitay", "gitay");
-        models[3] = new SelectItem("lomolino", "lomolino");
+        models[0] = new SelectItem("NULL", "Arrhenius");
+        models[1] = new SelectItem("gleason", "Gleason");
+        models[2] = new SelectItem("gitay", "Gitay");
+        models[3] = new SelectItem("lomolino", "Lomolino");
         
         object = new SelectItem[6];
         object[0] = new SelectItem("NULL", "Exact");
@@ -402,9 +402,9 @@ public class AccummodelBean implements Serializable {
         object[5] = new SelectItem("input_data", "Uploaded data");
         
         interval = new SelectItem[3];
-        interval[0] = new SelectItem("NULL", "none");
-        interval[1] = new SelectItem("confidence", "confidence");
-        interval[2] = new SelectItem("prediction", "prediction");
+        interval[0] = new SelectItem("NULL", "None");
+        interval[1] = new SelectItem("confidence", "Confidence");
+        interval[2] = new SelectItem("prediction", "Prediction");
         
         type = new SelectItem[5];
         type[0] = new SelectItem("NULL", "Exact");        
@@ -414,49 +414,49 @@ public class AccummodelBean implements Serializable {
         type[4] = new SelectItem("rarefaction", "Rarefaction");
         
         ci_type = new SelectItem[3];
-        ci_type[0] = new SelectItem("NULL", "polygon");        
-        ci_type[2] = new SelectItem("bar", "bar");
-        ci_type[1] = new SelectItem("line", "line");
+        ci_type[0] = new SelectItem("NULL", "Polygon");        
+        ci_type[2] = new SelectItem("bar", "Bar");
+        ci_type[1] = new SelectItem("line", "Line");
         
         color = new SelectItem[6];
-        color[0] = new SelectItem("NULL", "black");
-        color[1] = new SelectItem("slateblue", "slateblue");
-        color[2] = new SelectItem("steelblue", "steelblue");
-        color[3] = new SelectItem("royalblue", "royalblue");
-        color[4] = new SelectItem("navyblue", "navyblue");
-        color[5] = new SelectItem("darkslategray", "darkslategray");
+        color[0] = new SelectItem("NULL", "Black");
+        color[1] = new SelectItem("slateblue", "Slateblue");
+        color[2] = new SelectItem("steelblue", "Steelblue");
+        color[3] = new SelectItem("royalblue", "Royalblue");
+        color[4] = new SelectItem("navyblue", "Navyblue");
+        color[5] = new SelectItem("darkslategray", "Darkslategray");
         
         box_color = new SelectItem[6];
-        box_color[0] = new SelectItem("NULL", "skyblue");
-        box_color[1] = new SelectItem("palegreen", "palegreen");
-        box_color[2] = new SelectItem("turquoise", "turquoise");
-        box_color[3] = new SelectItem("lightsteelblue", "lightsteelblue");
-        box_color[4] = new SelectItem("peachpuff", "peachpuff");
-        box_color[5] = new SelectItem("wheat", "wheat");
+        box_color[0] = new SelectItem("NULL", "Skyblue");
+        box_color[1] = new SelectItem("palegreen", "Palegreen");
+        box_color[2] = new SelectItem("turquoise", "Turquoise");
+        box_color[3] = new SelectItem("lightsteelblue", "Lightsteelblue");
+        box_color[4] = new SelectItem("peachpuff", "Peachpuff");
+        box_color[5] = new SelectItem("wheat", "Wheat");
         
         ci_color = new SelectItem[6];
-        ci_color[0] = new SelectItem("NULL", "gray88");
-        ci_color[1] = new SelectItem("honeydew", "honeydew");
-        ci_color[2] = new SelectItem("lightcyan", "lightcyan");
-        ci_color[3] = new SelectItem("thistle", "thistle");
-        ci_color[4] = new SelectItem("ivory", "ivory");
-        ci_color[5] = new SelectItem("azure", "azure");
+        ci_color[0] = new SelectItem("NULL", "Gray88");
+        ci_color[1] = new SelectItem("honeydew", "Honeydew");
+        ci_color[2] = new SelectItem("lightcyan", "Lightcyan");
+        ci_color[3] = new SelectItem("thistle", "Thistle");
+        ci_color[4] = new SelectItem("ivory", "Ivory");
+        ci_color[5] = new SelectItem("azure", "Azure");
                    
         line_color = new SelectItem[6];
-        line_color[0] = new SelectItem("NULL", "red");
-        line_color[1] = new SelectItem("coral", "coral");
-        line_color[2] = new SelectItem("brown", "brown");
-        line_color[3] = new SelectItem("salmon", "salmon");
-        line_color[4] = new SelectItem("tomato", "tomato");
-        line_color[5] = new SelectItem("sienna", "sienna");
+        line_color[0] = new SelectItem("NULL", "Red");
+        line_color[1] = new SelectItem("coral", "Coral");
+        line_color[2] = new SelectItem("brown", "Brown");
+        line_color[3] = new SelectItem("salmon", "Salmon");
+        line_color[4] = new SelectItem("tomato", "Tomato");
+        line_color[5] = new SelectItem("sienna", "Sienna");
        
         pred_color = new SelectItem[6];
-        pred_color[0] = new SelectItem("NULL", "purple");
-        pred_color[1] = new SelectItem("violetred", "violetred");
-        pred_color[2] = new SelectItem("orchid", "orchid");
-        pred_color[3] = new SelectItem("maroon", "maroon");
-        pred_color[4] = new SelectItem("hotpink", "hotpink");
-        pred_color[5] = new SelectItem("deeppink", "deeppink");
+        pred_color[0] = new SelectItem("NULL", "Purple");
+        pred_color[1] = new SelectItem("violetred", "Violetred");
+        pred_color[2] = new SelectItem("orchid", "Orchid");
+        pred_color[3] = new SelectItem("maroon", "Maroon");
+        pred_color[4] = new SelectItem("hotpink", "Hotpink");
+        pred_color[5] = new SelectItem("deeppink", "Deeppink");
     }
    
     

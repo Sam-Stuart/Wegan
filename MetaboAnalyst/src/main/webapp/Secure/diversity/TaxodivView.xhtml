@@ -20,7 +20,7 @@
                             <h:panelGrid id="panelGrid" columns="4" cellpadding="2" >
                                 <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
                                 <p:selectBooleanCheckbox value ="#{taxodivBean.doOriginal}"/> 
-                                <h:outputLabel style="font-weight: bold" value="Match.force:"/>
+                                <h:outputLabel style="font-weight: bold" value="Match force:"/>
                                 <p:selectBooleanCheckbox value ="#{taxodivBean.doMatch_force}"/> 
                                 <h:outputLabel style="font-weight: bold" value="Varstep:"/>
                                 <p:selectBooleanCheckbox value = "#{taxodivBean.doVarstep}"/>  
@@ -31,8 +31,8 @@
                                     <f:selectItems value="#{taxodivBean.dis}"/>
                                 </p:selectOneMenu> 
                                 <h:outputLabel style="font-weight: bold" value="Select agglomeration method:"/>
-                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{taxodivBean.method_hcchosen}">
-                                    <f:selectItems value="#{taxodivBean.method_hc}"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{taxodivBean.aggmechosen}">
+                                    <f:selectItems value="#{taxodivBean.aggme}"/>
                                 </p:selectOneMenu> 
                             </h:panelGrid>  
                             <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
@@ -67,22 +67,22 @@
                             //    
                             // </h:panelGrid>-->
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
-                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
                                     <h:outputText escape="false" value="#{taxodivBean.filetaxadistresultpath}"/>
                                 </i>
                             </h:panelGrid>
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
-                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
                                     <h:outputText escape="false" value="#{taxodivBean.filetaxaindresultpath}"/>
                                 </i>
                             </h:panelGrid>
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
-                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
                                     <h:outputText escape="false" value="#{taxodivBean.filedissiresultpath}"/>
                                 </i>
                             </h:panelGrid>
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
-                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">                             
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">                             
                                     <h:outputText escape="false" value="#{taxodivBean.filecommatrixresultpath}"/>
                                 </i>
                             </h:panelGrid>
@@ -111,8 +111,8 @@
                                     <f:selectItems value="#{taxodivBean.dis}"/>
                                 </p:selectOneMenu> 
                                 <h:outputLabel style="font-weight: bold" value="Select agglomeration method:"/>
-                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{taxodivBean.method_hcchosen}">
-                                    <f:selectItems value="#{taxodivBean.method_hc}"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{taxodivBean.aggmechosen}">
+                                    <f:selectItems value="#{taxodivBean.aggme}"/>
                                 </p:selectOneMenu> 
                             </h:panelGrid>  
                             <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
@@ -147,22 +147,22 @@
                             //    
                             // </h:panelGrid>-->
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
-                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
                                     <h:outputText escape="false" value="#{taxodivBean.filetaxadistresultpath}"/>
                                 </i>
                             </h:panelGrid>
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
-                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
                                     <h:outputText escape="false" value="#{taxodivBean.filetaxaindresultpath}"/>
                                 </i>
                             </h:panelGrid>
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
-                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
                                     <h:outputText escape="false" value="#{taxodivBean.filedissiresultpath}"/>
                                 </i>
                             </h:panelGrid>
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
-                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">                             
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">                             
                                     <h:outputText escape="false" value="#{taxodivBean.filecommatrixresultpath}"/>
                                 </i>
                             </h:panelGrid>
@@ -191,8 +191,8 @@
                                     <f:selectItems value="#{taxodivBean.dis}"/>
                                 </p:selectOneMenu> 
                                 <h:outputLabel style="font-weight: bold" value="Select agglomeration method:"/>
-                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{taxodivBean.method_hcchosen}">
-                                    <f:selectItems value="#{taxodivBean.method_hc}"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{taxodivBean.aggmechosen}">
+                                    <f:selectItems value="#{taxodivBean.aggme}"/>
                                 </p:selectOneMenu> 
                             </h:panelGrid>  
                             <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
@@ -227,22 +227,22 @@
                             //    
                             // </h:panelGrid>-->
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
-                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
                                     <h:outputText escape="false" value="#{taxodivBean.filetaxadistresultpath}"/>
                                 </i>
                             </h:panelGrid>
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
-                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
                                     <h:outputText escape="false" value="#{taxodivBean.filetaxaindresultpath}"/>
                                 </i>
                             </h:panelGrid>
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
-                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
                                     <h:outputText escape="false" value="#{taxodivBean.filedissiresultpath}"/>
                                 </i>
                             </h:panelGrid>
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
-                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">                             
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">                             
                                     <h:outputText escape="false" value="#{taxodivBean.filecommatrixresultpath}"/>
                                 </i>
                             </h:panelGrid>

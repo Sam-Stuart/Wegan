@@ -30,7 +30,7 @@ AbundanceModel <- function(mSetObj = NA, data = "false", community = "", tiespli
   }
 
   input.2 <- select_if(input, is.numeric)
-  print(input.2)  
+  #print(input.2)  
 
   if (tiesplit == "false") {
     tiesplit1 = FALSE
@@ -45,7 +45,7 @@ AbundanceModel <- function(mSetObj = NA, data = "false", community = "", tiespli
     community1 <- as.numeric(community)
     input.c <- input.2[community1, ]
   }
-  print(input.c)
+  #print(input.c)
 
   if(truncate == "")  {
     truncate1 = "-1"
@@ -62,9 +62,12 @@ AbundanceModel <- function(mSetObj = NA, data = "false", community = "", tiespli
   output.distr <- prestondistr(input.c, truncate = truncate1)
   output.ve.fit <- veiledspec(output.fit)
   output.ve.distr <- veiledspec(output.distr)
-  print(output.fisher)
-  print(output.fisher$fisher)
-    
+  #print(AIC(output.fisher))
+  #print(AIC(output.fit))
+  #print(AIC(output.distr))
+  #print(BIC(output.fisher))
+  #print(BIC(output.fit))
+  #print(BIC(output.distr))
 
   mSetObj$analset$result$fisher$name <- "Species Abundance Model"
   mSetObj$analset$result$fisher$type <- "Fisher's logseries"
@@ -202,10 +205,11 @@ AbundanceFisherPlot <- function(mSetObj = NA, bar.color = "NULL", line.color.add
     line.color.addFit1 <- "sienna1"
   }
   
-  plot(plot_data.fisher, ann = T, axes = F, pch = 17, lty = 1, lwd = 2, cex = 2, xant = "n", yant = "n",
-       line.col = line.color.addFit1, bar.col = bar.color1, xlab = "Frequency", ylab = "Number of species")
-  axis(1, labels = T, at = 1:n)
-  axis(2, las = 2)
+  m <- max(plot_data.fisher$fisher) + 10
+  plot(plot_data.fisher, ann = T, axes = F, lty = 1, lwd = 2, cex = 2, yant = "n", xant = "n",
+       line.col = line.color.addFit1, bar.col = bar.color1, xlab = "Abundance Octave", ylab = "No. of Species")
+  #axis(1, labels = T, at = 0:n)
+  axis(2, las = 2, at = seq(0, m, by = 5))
   title("Fisher's Log-series Species Abundance Distribution ")
   dev.off()
   
@@ -232,12 +236,14 @@ AbundanceFisherPlot <- function(mSetObj = NA, bar.color = "NULL", line.color.add
 #'@export
 AbundancePrestPlot <- function(mSetObj=NA, bar.color="NULL", line.color.addPoi = "NULL", line.color.addMax = "NULL", imgName, format="png", dpi=72, width=NA) {
   
+  library(plyr)
+  library(dplyr)
   library(vegan)
   
   mSetObj <- .get.mSet(mSetObj)
   
-  plot_data.fit <- mSetObj$analset$result$lognormal_fit$output
-  plot_data.distr <- mSetObj$analset$result$log_likelihood$output
+  #plot_data.fit <- mSetObj$analset$result$lognormal_fit$output
+  #plot_data.distr <- mSetObj$analset$result$log_likelihood$output
   
   #Set plot dimensions
   if(is.na(width)){
@@ -257,7 +263,7 @@ AbundancePrestPlot <- function(mSetObj=NA, bar.color="NULL", line.color.addPoi =
   par(xpd=FALSE, mar=c(5.1, 4.1, 4.1, 2.1))
   #abline(0, 1)
   
-  n = 1
+  #n = 1
   if(bar.color == "NULL") { 
     bar.color1 = "skyblue" #default fill palette is grayscale
   } else if (bar.color == "gray") { #manual user entry. Selection of this option causes text box to appear
@@ -269,9 +275,9 @@ AbundancePrestPlot <- function(mSetObj=NA, bar.color="NULL", line.color.addPoi =
   } else if (bar.color == "seagreen") {
     bar.color1 = "darkseagreen1"
   } else if (bar.color == "wheat") {
-    bar.color1 = rainbow(n)
+    bar.color1 = wheat1
   } 
-  
+  print(bar.color1)
   
   if (line.color.addPoi == "NULL") { 
     line.color.addPoi1 = "green" #default fill palette is grayscale
@@ -286,6 +292,7 @@ AbundancePrestPlot <- function(mSetObj=NA, bar.color="NULL", line.color.addPoi =
   } else if (line.color.addPoi == "orange") { 
     line.color.addPoi1 <- "orange"
   } 
+  print(line.color.addPoi1)
   
   if (line.color.addMax == "NULL") { 
     line.color.addMax1 = "purple3" #default fill palette is grayscale
@@ -300,16 +307,33 @@ AbundancePrestPlot <- function(mSetObj=NA, bar.color="NULL", line.color.addPoi =
   } else if (line.color.addMax == "deeppink") { 
     line.color.addMax1 <- "deeppink1"
   } 
+  print(line.color.addMax1)
 
-  plot(plot_data.distr, ann = T, pch = 17, lty = 1, lwd = 2, cex = 2,
-       line.col = line.color.addPoi1, bar.col = bar.color1,  ylab = "Species", xlab = "Frequencies")
-  axis(1, labels = F, xlab = "Frequencies")
-  axis(2, labels = F, ylab = "Number of species")    
-  lines(plot_data.fit, line.col = line.color.addMax1, lty = 2)
-  legend("topright", legend = c("Traditional binning", "Without binning"), col = c(line.color.addPoi1, line.color.addMax1), 
-         lty = c(1,2), cex = 1, box.lty = 0)
-  title("Preston's Lognormal Species Abundance Distribution ")
-
+  a <- as.data.frame(mSetObj$analset$result$log_likelihood$frequencies)
+  m <- round(max(a$Fitted) + 10, digits = -1)
+  n <- length(a$Observed)
+  b <- a%>%
+    select(Fitted)%>%
+    mutate(row = seq(0.5, n, by = 1))
+  print(b)
+  c <- as.data.frame(mSetObj$analset$result$lognormal_fit$frequencies)
+  d <- c%>%
+    select(Fitted)%>%
+    mutate(row <- seq(0.5, n, by = 1))
+  print(d)
+  #windows(height = h, width = w)
+  barplot(a$Observed, axes = F, space = 0, col = bar.color1, ylim = c(0,m), 
+          names.arg = c(""), xlab = "Abundance Octave", ylab = "No. of Species")
+  #axis(1, xlab = "Abundance Octave")
+  axis(2, at = seq(0, m, by = 10), las = 2, ylab = "No. of Species")
+  points(x = b$row, y = b$Fitted, pch = 1, col = line.color.addPoi1)
+  lines(x = b$row, y = b$Fitted, lwd = 2, col = line.color.addPoi1)
+  points(x = d$row, y = d$Fitted, pch = 1, col = line.color.addMax1)
+  lines(x = d$row, y = d$Fitted, lwd = 2, col = line.color.addMax1)
+  legend("topright", legend=c("Traditional binning", "Without binning"),
+         col=c(line.color.addPoi1, line.color.addMax1), lty=2, cex=1,
+         box.lty=0)
+  title("Species Abundance Distribution Maximization of log-likelihood")
 
   dev.off()
   

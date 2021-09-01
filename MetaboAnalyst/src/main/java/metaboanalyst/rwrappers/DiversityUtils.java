@@ -303,7 +303,7 @@ public class DiversityUtils {
     }
     
     
-    public static boolean CreateTaxoDiv(SessionBean1 sb, boolean data, String dis, boolean match_force, boolean varstep, String method_hc, boolean check) {
+    public static boolean CreateTaxoDiv(SessionBean1 sb, boolean data, String dis, boolean match_force, boolean varstep, String aggme, boolean check) {
         try {
             System.out.print("Taxo");
             RConnection RC = sb.getRConnection(); //Start R connection
@@ -312,7 +312,7 @@ public class DiversityUtils {
                                                  + "\", \"" + dis
                                                  + "\", \"" + match_force
                                                  + "\", \"" + varstep
-                                                 + "\", \"" + method_hc
+                                                 + "\", \"" + aggme
                                                  + "\", \"" + check
                                                  + "\")";
             RCenter.recordRCommand(RC, rCommand); // records r command

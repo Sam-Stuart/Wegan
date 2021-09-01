@@ -314,10 +314,27 @@ RarefactionPlot <- function(mSetObj = NA, colorb = "NULL", imgName, format = "pn
   #}  
   
   #windows(width = w, height = h)
-  plot(plot_data ~ S, xaxt = "n", yaxt = "n", 
+  minnx = round(as.numeric(min(S)-5), digits = -1)
+  if (minnx >= 0) {
+     minnx1 <- minnx
+  } else {
+     minnx1 = 0
+  } 
+  print(minnx1)
+  maxnx = round(as.numeric(max(S)+5), digits = -1)
+  minmy = round(as.numeric(min(plot_data)-10), digits = -1)
+  if (minmy >= 0) {
+     minmy1 <- minmy
+  } else {
+     minmy1 = 0
+  }
+  print(minmy1)
+  maxmy = round(as.numeric(max(plot_data)+10), digits = -1)
+  #windows(width = w, height = h)
+  plot(plot_data ~ S, ann = F, axes = F, xlim = c(minnx1, maxnx), ylim = c(minmy1, maxmy),
        col = colorb1, xlab = "Observed No. of Species", ylab = "Rarefied No. of Species")
-  axis(1, labels = T)
-  axis(2, las = 2 )
+  axis(1, labels = T, at = seq(minnx1, maxnx, by = 5))
+  axis(2, las = 2, at = seq(minmy1, maxmy, by = 5) )
   #abline(0,1)
   title = "Rarefaction Linear Plot"
 

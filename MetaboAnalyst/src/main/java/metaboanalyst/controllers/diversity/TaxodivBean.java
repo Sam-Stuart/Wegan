@@ -32,7 +32,7 @@ public class TaxodivBean implements Serializable {
    
    private User usr = sb.getCurrentUser();
    private String usrName = usr.getName();
-   
+
    //public static final String PROP_SAMPLE_PROPERTY = "sampleProperty";
   // check box
     private boolean doOriginal = false; 
@@ -96,19 +96,19 @@ public class TaxodivBean implements Serializable {
         this.dischosen = dischosen;
     }
     
-    private final SelectItem[] method_hc;
-    private String method_hcchosen = "NULL";
+    private final SelectItem[] aggme;
+    private String aggmechosen = "NULL";
     
-    public SelectItem[] getMethod_hc() {
-        return method_hc;
+    public SelectItem[] getAggme() {
+        return aggme;
     }
     
-    public String getMethod_hcchosen() {
-        return method_hcchosen;
+    public String getAggmechosen() {
+        return aggmechosen;
     } 
 
-    public void setMethod_hcchosen(String method_hcchosen) {
-        this.method_hcchosen = method_hcchosen;
+    public void setAggmechosen(String aggmechosen) {
+        this.aggmechosen = aggmechosen;
     }
           
     
@@ -207,21 +207,21 @@ public class TaxodivBean implements Serializable {
         dis = new SelectItem[7];
         dis[0] = new SelectItem("NULL", "Taxonomic hierarchies");
         dis[1] = new SelectItem("euclidean", "Euclidean");
-        dis[2] = new SelectItem("maximum", "maximum");
+        dis[2] = new SelectItem("maximum", "Maximum");
         dis[3] = new SelectItem("manhattan", "Manhattan");
-        dis[4] = new SelectItem("canberra", "canberra");
-        dis[5] = new SelectItem("binary", "binary");
-        dis[6] = new SelectItem("minkowski", "minkowski");
+        dis[4] = new SelectItem("canberra", "Canberra");
+        dis[5] = new SelectItem("binary", "Binary");
+        dis[6] = new SelectItem("minkowski", "Minkowski");
         
-        method_hc = new SelectItem[8];
-        method_hc[0] = new SelectItem("NULL", "Average");
-        method_hc[1] = new SelectItem("ward.D", "Ward.D");
-        method_hc[2] = new SelectItem("ward.D2", "Ward.D2");
-        method_hc[3] = new SelectItem("single", "Single");
-        method_hc[4] = new SelectItem("complete", "Complete");
-        method_hc[5] = new SelectItem("mcquitty", "Mcquitty");
-        method_hc[6] = new SelectItem("median", "Median");
-        method_hc[7] = new SelectItem("centroid", "Centroid");
+        aggme = new SelectItem[8];
+        aggme[0] = new SelectItem("NULL", "Average");
+        aggme[1] = new SelectItem("ward.D", "Ward.D");
+        aggme[2] = new SelectItem("ward.D2", "Ward.D2");
+        aggme[3] = new SelectItem("single", "Single");
+        aggme[4] = new SelectItem("complete", "Complete");
+        aggme[5] = new SelectItem("mcquitty", "Mcquitty");
+        aggme[6] = new SelectItem("median", "Median");
+        aggme[7] = new SelectItem("centroid", "Centroid");
         
         color = new SelectItem[3];
         color[0] = new SelectItem("NULL", "Grayscale");
@@ -234,19 +234,17 @@ public class TaxodivBean implements Serializable {
         colorc[2] = new SelectItem("red", "Red");
         
         colord = new SelectItem[3];
-        colord[0] = new SelectItem("NULL", "cm.colors(256)");
-        colord[1] = new SelectItem("rainbow", "rainbow(256)");
-        colord[2] = new SelectItem("brewer", "brewer.pal(8)");
+        colord[0] = new SelectItem("NULL", "Cm.colors(256)");
+        colord[1] = new SelectItem("rainbow", "Rainbow(256)");
+        colord[2] = new SelectItem("brewer", "Brewer.pal(8)");
         
         
     }
     
-//taxa_tree <- function(mSetObj=NA, color="NULL", imgName, format="png", dpi=72, width=NA) {
-    //    Taxonomic_div <- function(mSetObj = NA, data = "false", dis = "NULL", match.force = "false", varstep = "false", method.hc = "NULL", check = "false") {
 
     // ACTION BUTTON // 
     public void taxodivUpdate_action() {
-        DiversityUtils.CreateTaxoDiv(sb, doOriginal, dischosen, doMatch_force, doVarstep, method_hcchosen, doCheck);       
+        DiversityUtils.CreateTaxoDiv(sb, doOriginal, dischosen, doMatch_force, doVarstep, aggmechosen, doCheck);       
         DiversityUtils.PlotTaxaTree(sb, colorchosen, sb.getNewImage("Taxa_Tree_Plot"), "png", 72, "false");
         DiversityUtils.PlotTaxonScatter(sb, colorcchosen, sb.getNewImage("Taxa_Scatter_Plot"), "png", 72, "false");
         DiversityUtils.PlotTaxonHeatmap(sb, colordchosen, sb.getNewImage("Taxa_Heatmap_Plot"), "png", 72, "false");
