@@ -2,8 +2,15 @@
 # based on the modules user selected
 general_files <- c("general_data_utils","general_misc_utils","general_load_libs");
 general_stat_files <- c("general_norm_utils","general_proc_utils");
-general_anot_files <- "general_anot_utils";
 stats_files <- c("stats_chemometrics","stats_classification","stats_clustering", "stats_correlations", "stats_sigfeatures","stats_univariates");
+correlation_files <- c("correlation_linear", "correlation_penalized", "correlation_polynomial", "correlation_ml", "correlation_multivariate", "correlation_SVM", "correlation_RF", "correlation_logistic");
+dispersal_files <- c("dispersal");
+plotting_files <- c("plotting", "plotting_pie", "plot_bar", "plot_box", "plot_scatter");
+ordination_files <- c("ord_nmds", "ord_pcoa", "ord_cia", "ord_dca", "ord_anosim", "ord_rda", "ord_bray", "ord_cca", "ord_ca", "ord_dca");
+diversity_files <- c();
+taxonomy_files <- c();
+cluster_files <- c();
+general_anot_files <- "general_anot_utils";
 enrich_files <- c("enrich_graphics","enrich_mset","enrich_name_match","enrich_stats");
 pathway_files <- c("enrich_mset","enrich_stats","enrich_name_match","enrich_path_graphics","enrich_path_kegg","enrich_path_stats")
 integmex_files <- c("enrich_integ","enrich_path_kegg","enrich_stats","enrich_name_match")
@@ -13,18 +20,14 @@ mummichog_files <- c("mummichog", "networks");
 metaanal_files <- c("meta_methods", "meta_data_utils");
 network_files <- c("networks", "enrich_integ", "enrich_name_match", "gene_fun_utils", "enrich_path_kegg");
 other_files <- c("others_batch_check", "others_lipomics", "enrich_name_match");
-correlation_files <- c("correlation_linear", "correlation_penalized", "correlation_polynomial", "correlation_ml", "correlation_multivariate", "correlation_SVM", "correlation_RF", "correlation_logistic");
-ordination_files <- c("ord_nmds", "ord_pcoa", "ord_cia", "ord_dca", "ord_anosim", "ord_rda", "ord_bray", "ord_cca", "ord_ca");
 nmds_files <- c("test-Vegan", "dispersal", "plotting");
-dispersal_files <- c("dispersal");
-plotting_files <- c("plotting", "plotting_pie", "plot_bar", "plot_box", "plot_scatter");
-correlation_files <- c("correlation_linear", "correlation_penalized", "correlation_polynomial", "correlation_ml", "correlation_multivariate", "correlation_SVM", "correlation_logistic");
-ordination_files <- c("ord_nmds", "ord_pcoa", "ord_cia", "ord_dca", "ord_anosim", "ord_rda", "ord_bray", "ord_cca", "ord_ca", "ord_dca");
 nmds_files <- c("test-Vegan","Dispersal");
 LoadScripts <- function(module.nm = "nmds"){
     file.sources <- "";
+
     if(module.nm == "stat"){
         file.sources <- c(general_files, general_stat_files, stats_files);
+
     }else if(module.nm == "ts"){
         file.sources <- c(general_files, general_stat_files, time_files);
     }else if(module.nm == "pathinteg"){
@@ -59,10 +62,13 @@ LoadScripts <- function(module.nm = "nmds"){
         file.sources <- c(general_files, general_stat_files, stats_files, ordination_files);
 
     }else if(module.nm == "diversity"){
-        file.sources <- c(general_files, general_stat_files, stats_files, plotting_files);
+        file.sources <- c(general_files, general_stat_files, stats_files, diversity_files);
     
     }else if(module.nm == "cluster"){
-        file.sources <- c(general_files, general_stat_files, stats_files, plotting_files);
+        file.sources <- c(general_files, general_stat_files, stats_files, cluster_files);
+    
+    }else if(module.nm == "taxon"){
+        file.sources <- c(general_files, general_stat_files, stats_files, taxonomy_files);
 
     }else{
         print(paste("Unknown module code: ", module.nm));

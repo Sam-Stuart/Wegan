@@ -23,17 +23,17 @@
                     <h2 style="margin-top: 10px; margin-bottom: 4px">Data table: Plain text file (.csv or .txt)</h2>
                     <h:panelGrid columns="2" style="padding: 10px">
                         <p:outputLabel style="font-size:14px; font-weight: bold" value="Data File:"/>
-                        <p:fileUpload value="#{Plottingload.dataFile}" mode="simple"/>
+                        <p:fileUpload value="#{Ordinationload.dataFile}" mode="simple"/>
                     </h:panelGrid>                   
                     <h:panelGrid columns="3" style="padding: 10px; margin-left: 40px">
                         <p:outputLabel style="font-size:12px; font-weight: bold" value="Format:"/>
-                        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:170px" value="#{Plottingload.dataFormat}">
+                        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:170px" value="#{Ordinationload.dataFormat}">
                             <f:selectItems value="#{applicationBean1.csvFormatOpts}" />
                         </p:selectOneMenu> 
                     </h:panelGrid>                     
                     <h:panelGrid columns="3" style="padding: 10px; margin-left: 40px">
                         <p:outputLabel style="font-size:12px; font-weight: bold" value="Labels:"/>
-                        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:170px" value="#{Plottingload.dataNames}">
+                        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:170px" value="#{Ordinationload.dataNames}">
                             <f:selectItems value="#{applicationBean1.dataNamesOpts}" />
                         </p:selectOneMenu> 
                     </h:panelGrid>
@@ -49,6 +49,49 @@
                         
                     </h:panelGrid>
                     
+                </h:panelGrid>
+                
+                <p:spacer style="width: 30px"/>
+                
+                <h:panelGrid style="border: none; width: 100%; padding: 15px 20px 10px 25px; background-color: #8cbd4830; font-size: 14px;">
+
+                    <h2 style="margin-top: 20px; margin-bottom: 4px">Try our test data :</h2>
+                    <p:selectOneRadio id="customRadio" value="#{Ordinationload.testDataOpt}" layout="custom">  
+                        <f:selectItems value="#{applicationBean1.testDataOpts}"/> 
+                    </p:selectOneRadio> 
+                    <h:panelGrid columns="3" style="padding: 10px 30px 20px 10px;line-height: 21px; width:760px">
+                        <p:radioButton for="customRadio" itemIndex="0"/>
+                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Linear"/>
+                        <h:panelGrid>
+                            Theoretical data set consisting of 10 samples (rows) and 2 variables (columns), t and z. While rows are not labeled, columns are.                        
+                        </h:panelGrid>
+                        <p:radioButton for="customRadio" itemIndex="1"/>
+                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Dune"/>
+                        <h:panelGrid>
+                            Grass species counts in Dutch dune meadows. Data consists of 30 species (variables/columns) and 20 plots of land (samples/rows). Species are labeled, but land plots are not. (<a href="https://rdrr.io/cran/vegan/man/dune.html">ref.</a>)                                       
+                        </h:panelGrid>
+                        <p:radioButton for="customRadio" itemIndex="2"/>
+                        <p:outputLabel style="font-size:12px; font-weight: bold" value="BCI"/>
+                        <h:panelGrid>
+                            Barro Colorado Island tree species counts. Data consists of 225 species (variables/columns) and 50 plots of land (samples/rows). Species are labeled, but land plots are not. (<a href="https://rdrr.io/cran/vegan/man/BCI.html">ref.</a>)                                       
+                        </h:panelGrid>                        
+                   </h:panelGrid>
+                    <h:panelGrid style="float:right">
+                        <p:commandButton value="Submit" 
+                                         styleClass="updateButton"
+                                         style="box-shadow: none !important; text-shadow: none !important"
+                                         ajax="false" 
+                                         onclick="PF('statusDialog').show()" 
+                                         oncomplete="PF('statusDialog').hide()"                                         
+                                         action="#{Plottingload.handlePlottingTestFileUpload}"/>                      
+                    </h:panelGrid>
+
+                </h:panelGrid>
+            </h:panelGrid>
+        </h:form>
+    </ui:define>
+</ui:composition>
+
 <!--<?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
@@ -90,11 +133,11 @@
                                          oncomplete="PF('statusDialog').hide()"
                                          action="#{Plottingload.handleFileUpload()}"/>                         
                     </h:panelGrid>
-
--->             </h:panelGrid>
+-->
+<!--             </h:panelGrid>
             </h:panelGrid>
 
-<!--            <h:panelGrid style="padding: 20px; font-size: 12px;  height:100%; width: 100%; line-height: 180%;">
+            <h:panelGrid style="padding: 20px; font-size: 12px;  height:100%; width: 100%; line-height: 180%;">
                 
                 <h2 style="margin-top: 20px; margin-bottom: 4px"> 2) Try our test data :</h2>
                 <p:selectOneRadio id="customRadio" value="#{Plottingload.testDataOpt}" layout="custom">  
@@ -136,45 +179,4 @@
                                      action="#{Plottingload.handlePlottingTestFileUpload}"/>  
                 </h:panelGrid>-->
                 
-                <p:spacer style="width: 30px"/>
-                
-                <h:panelGrid style="border: none; width: 100%; padding: 15px 20px 10px 25px; background-color: #8cbd4830; font-size: 14px;">
-
-                    <h2 style="margin-top: 20px; margin-bottom: 4px">Try our test data :</h2>
-                    <p:selectOneRadio id="customRadio" value="#{Plottingload.testDataOpt}" layout="custom">  
-                        <f:selectItems value="#{applicationBean1.testDataOpts}"/> 
-                    </p:selectOneRadio> 
-                    <h:panelGrid columns="3" style="padding: 10px 30px 20px 10px;line-height: 21px; width:760px">
-                        <p:radioButton for="customRadio" itemIndex="0"/>
-                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Dune"/>
-                        <h:panelGrid>
-                            Grass species counts in Dutch dune meadows. Data consists of 20 plots of land (samples) and 30 species (variables), where species are labeled, but land plots are not. (<a href="https://rdrr.io/cran/vegan/man/dune.html">ref.</a>)                                       
-                        </h:panelGrid>
-                        <p:radioButton for="customRadio" itemIndex="12"/>
-                        <p:outputLabel style="font-size:12px; font-weight: bold" value="BCI"/>
-                        <h:panelGrid>
-                            Barro Colorado Island tree species counts. Data consists of 50 plots of land (samples) and 225 species (variables). Species are labeled, but land plots are not. (<a href="https://rdrr.io/cran/vegan/man/BCI.html">ref.</a>)                                       
-                        </h:panelGrid> 
-                        <p:radioButton for="customRadio" itemIndex="11"/>
-                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Linear"/>
-                        <h:panelGrid>
-                            Theoretical data set consisting of 10 samples and 2 variables, t and z. While variables are labeled, samples are not. 
-                        </h:panelGrid>                       
-
-                    </h:panelGrid>
-                    <h:panelGrid style="float:right">
-                        <p:commandButton value="Submit" 
-                                         styleClass="updateButton"
-                                         style="box-shadow: none !important; text-shadow: none !important"
-                                         ajax="false" 
-                                         onclick="PF('statusDialog').show()" 
-                                         oncomplete="PF('statusDialog').hide()"                                         
-                                         action="#{Plottingload.handlePlottingTestFileUpload}"/>                      
-                    </h:panelGrid>
-
-                </h:panelGrid>
-        </h:form>
-    </ui:define>
-</ui:composition>
-
 

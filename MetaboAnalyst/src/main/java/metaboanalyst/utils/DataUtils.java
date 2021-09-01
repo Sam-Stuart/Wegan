@@ -603,7 +603,9 @@ public class DataUtils {
                 } else if (type.equalsIgnoreCase("diversity")) {
                     addDiversityNodes(naviTree);                
                 } else if (type.equalsIgnoreCase("cluster")) {
-                    addClusterNodes(naviTree);   
+                    addClusterNodes(naviTree); 
+                } else if (type.equalsIgnoreCase("taxon")) {
+                    addClusterNodes(naviTree);  
                 } else {
                     System.out.println("You need to define the navigation tree for this analysis type: " + type);
                 }
@@ -776,6 +778,12 @@ public class DataUtils {
     }
     private static void addDiversityNodes(TreeNode parent) {
         TreeNode dispersalNode = new DefaultTreeNode("Diversity", parent);  
+    }    
+    private static void addTaxonomyNodes(TreeNode parent) {
+        TreeNode dispersalNode = new DefaultTreeNode("Taxonomy", parent);  
+    }
+    private static void addCorrelationNodes(TreeNode parent) {
+        TreeNode dispersalNode = new DefaultTreeNode("Correlation", parent);  
     }
     private static void addClusterNodes(TreeNode parent) {
         TreeNode dispersalNode = new DefaultTreeNode("Clustering", parent);  

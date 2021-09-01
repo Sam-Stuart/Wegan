@@ -307,23 +307,26 @@ public class OrdinationloadBean implements Serializable {
             testFile = ab.getTestDune();
             dataFormat = "rowu";
             dataNames = "colOnly";
-
-        } else if (testDataOpt.equals("Iris")) {
+        } 
+        
+        if (testDataOpt.equals("Iris")) {
             dataType = "main";
             testFile = ab.getTestIris();
             dataFormat = "rowu";       
             dataNames = "colOnly";
-
-        } else if (testDataOpt.equals("BCI")) {
+        } 
+        
+        if (testDataOpt.equals("BCI")) {
             dataType = "main";
             testFile = ab.getTestBCI();
             dataFormat = "rowu";
             dataNames = "colOnly";
-
-        } else {
-            sb.updateMsg("Error", "Unknown data selected?");
-            return null;
         }
+        
+//        else {
+//            sb.updateMsg("Error", "Unknown data selected?");
+//            return null;
+//        }
         
         if (!sb.doLogin(dataType, "ord", false, false)) {
             //sb.updateMsg("Error", "No login return null?");
