@@ -30,7 +30,7 @@ public class DiversityloadBean implements Serializable {
     /*
      * Handle file upoad (.csv or .txt)
      */
-    private String dataType = "main";
+        private String dataType = "main";
 
     public String getDataType() {
         return dataType;
@@ -45,9 +45,29 @@ public class DiversityloadBean implements Serializable {
     public String getDataFormat() {
         return dataFormat;
     }
-
+        
     public void setDataFormat(String dataFormat) {
         this.dataFormat = dataFormat;
+    }
+    
+    private String metaFormat = "rowu";
+
+    public String getMetaFormat() {
+        return metaFormat;
+    }
+
+    public void setMetaFormat(String metaFormat) {
+        this.metaFormat = metaFormat;
+    }
+    
+    private String envFormat = "rowu";
+
+    public String getEnvFormat() {
+        return envFormat;
+    }
+
+    public void setEnvFormat(String envFormat) {
+        this.envFormat = envFormat;
     }
 
     private UploadedFile dataFile;
@@ -58,6 +78,56 @@ public class DiversityloadBean implements Serializable {
 
     public void setDataFile(UploadedFile dataFile) {
         this.dataFile = dataFile;
+    }
+
+    private UploadedFile dataFileMeta;
+
+    public UploadedFile getDataFileMeta() {
+        return dataFileMeta;
+    }
+
+    public void setDataFileMeta(UploadedFile dataFileMeta) {
+        this.dataFileMeta = dataFileMeta;
+    }
+    
+    private UploadedFile dataFileEnv;
+
+    public UploadedFile getDataFileEnv() {
+        return dataFileEnv;
+    }
+
+    public void setDataFileEnv(UploadedFile dataFileEnv) {
+        this.dataFileEnv = dataFileEnv;
+    }
+    
+    private String dataNames = "colOnly";
+
+    public String getDataNames() {
+        return dataNames;
+    }
+
+    public void setDataNames(String dataNames) {
+        this.dataNames = dataNames;
+    }
+    
+    private String metaNames = "colOnly";
+
+    public String getMetaNames() {
+        return metaNames;
+    }
+
+    public void setMetaNames(String metaNames) {
+        this.metaNames = metaNames;
+    }
+    
+    private String envNames = "colOnly";
+
+    public String getEnvNames() {
+        return envNames;
+    }
+
+    public void setEnvNames(String envNames) {
+        this.envNames = envNames;
     }
 
     /*
@@ -74,8 +144,16 @@ public class DiversityloadBean implements Serializable {
             try {
                 RConnection RC = sb.getRConnection();
                 String fileName = DataUtils.uploadFile(dataFile, sb, null, ab.isOnPublicServer());
+                String fileNameMeta = DataUtils.uploadFile(dataFileMeta, sb, null, ab.isOnPublicServer());
+                String fileNameEnv = DataUtils.uploadFile(dataFileEnv, sb, null, ab.isOnPublicServer());
                 if (fileName == null) {
                     return null;
+                }
+                if (fileNameMeta != null){
+                    RDataUtils.readTextDataMeta(RC, fileNameMeta, metaFormat, "disc", metaNames);
+                }
+                if (fileNameEnv != null){
+                    RDataUtils.readTextDataEnv(RC, fileNameMeta, envFormat, "disc", envNames);
                 }
 
                 if (RDataUtils.readTextData(RC, fileName, dataFormat, "disc", dataNames)) {
@@ -200,16 +278,7 @@ public class DiversityloadBean implements Serializable {
         this.NMDSTestDataOpt = NMDSTestDataOpt;
     }
     
-        
-    private String dataNames = "colOnly";
-
-    public String getDataNames() {
-        return dataNames;
-    }
-
-    public void setDataNames(String dataNames) {
-        this.dataNames = dataNames;
-    }
+ 
     
     //*********------------------------------------------------------
     public String getTestDataOpt() {
@@ -302,7 +371,6 @@ public class DiversityloadBean implements Serializable {
         else if (testDataOpt.equals("Dune")) {
             dataType = "Dune";
             //sb.updateMsg("Error", "Dune data selected");
-
             testFile = ab.getTestDune();
             format = "rowu";
             
@@ -325,7 +393,10 @@ public class DiversityloadBean implements Serializable {
                 return null;
             }
         } else {
-            
+            String testFileMeta = ab.getTestFileMeta();
+            RDataUtils.readTextDataMeta(RC, testFileMeta, metaFormat, "disc", metaNames);
+            String testFileEnv = ab.getTestFileEnv();
+            RDataUtils.readTextDataEnv(RC, testFileEnv, envFormat, "disc", envNames);
             //Tested cahnging Disc to cont
             if (!RDataUtils.readTextData(RC, testFile, "rowu", "disc", "colOnly")) {
                 sb.updateMsg("Error", RDataUtils.getErrMsg(RC));

@@ -131,7 +131,7 @@ public class OrdinationCIABean implements Serializable {
     }
     
     
-// ACTION BUTTON //
+// ACTION BUTTON // 
     public void ciaUpdate_action() {
         OAUtils.CreateCIAOrdination(sb, doOriginal, coiaTypeOpts, envInput); 
         OAUtils.PlotCIAscatterOrdination(sb, doMetaGroup, ciaMetaColumnName, ordColorOpts, sb.getNewImage("ord_cia_scatter"), "png", 72); //ordMetaColnameOpts is a dynamic dropdown

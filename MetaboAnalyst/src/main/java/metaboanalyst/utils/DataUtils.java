@@ -777,7 +777,11 @@ public class DataUtils {
         TreeNode nodeoa07 = new DefaultTreeNode("Bray Curtis", oaNode);
     }
     private static void addDiversityNodes(TreeNode parent) {
-        TreeNode dispersalNode = new DefaultTreeNode("Diversity", parent);  
+        TreeNode diversityNode = new DefaultTreeNode("Diversity", parent); 
+        TreeNode nodeDiv01 = new DefaultTreeNode("Alpha", diversityNode);
+        TreeNode nodeDiv02 = new DefaultTreeNode("Beta", diversityNode);
+        TreeNode nodeDiv03 = new DefaultTreeNode("Gamma", diversityNode);
+        TreeNode nodeDiv04 = new DefaultTreeNode("Species", diversityNode);    
     }    
     private static void addTaxonomyNodes(TreeNode parent) {
         TreeNode dispersalNode = new DefaultTreeNode("Taxonomy", parent);  

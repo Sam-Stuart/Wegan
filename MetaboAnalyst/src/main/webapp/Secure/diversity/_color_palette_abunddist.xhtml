@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="abunddistGraph">
+        <h:panelGrid columns="1" style="width:380px;">
+            <h:panelGrid id="panelGrid2" columns="2" cellpadding="6" columnClasses="colBrayLong,colBrayShort">
+                
+                <h:outputLabel style="font-weight: bold" value="Select bar colors:"/>
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{abunddistBean.bar_colorchosen}">
+                    <f:selectItems value="#{abunddistBean.bar_color}"/>
+                </p:selectOneMenu>   
+                <h:outputLabel style="font-weight: bold" value="Select color of Fisher's log-series trend line:"/>
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{abunddistBean.line_color_addFitchosen}">
+                    <f:selectItems value="#{abunddistBean.line_color_addFit}"/>
+                </p:selectOneMenu> 
+                <h:outputLabel style="font-weight: bold" value="Select color of Preston’s lognormal model trend line (traditional binning)"/>
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{abunddistBean.line_color_addPoichosen}">
+                    <f:selectItems value="#{abunddistBean.line_color_addPoi}"/>
+                </p:selectOneMenu> 
+                <h:outputLabel style="font-weight: bold" value="Select color of Preston’s lognormal model trend line (without bining):"/>
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{abunddistBean.line_color_addMaxchosen}">
+                    <f:selectItems value="#{abunddistBean.line_color_addMax}"/>
+                </p:selectOneMenu> 
+                
+
+
+            </h:panelGrid>
+            <h:panelGrid id="panelGrid4" columns="1" cellpadding="6" style="float: right">
+                <p:commandButton value="Update" 
+                                 styleClass="updateButton"
+                                 style="box-shadow: none !important; text-shadow: none !important"
+                                onclick="PF('statusDialog').show()"
+                                oncomplete="PF('graphApperanceAbunddist').hide(); PF('statusDialog').hide()"  
+                                update=":abundancedist:form1:abunddistPane1  :cmdPane" 
+                                actionListener="#{abunddistBean.AbunddistUpdate_action()}"/>
+            </h:panelGrid>
+        </h:panelGrid>
+    </h:form>
+</ui:composition>
+

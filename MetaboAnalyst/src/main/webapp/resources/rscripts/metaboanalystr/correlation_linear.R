@@ -9,7 +9,7 @@
 #'License: GNU GPL (>= 2)
 #'@export
 
-lin.reg.anal.one <- function(mSetObj=NA, facA=NULL, facB=NULL, weights=NULL){
+lin.reg.anal.one <- function(mSetObj=NA, facA="NULL", facB="NULL", weights=NULL){
   
   mSetObj <- .get.mSet(mSetObj)
   mSetObj$dataSet$norm <- mSetObj$dataSet$norm[order(as.numeric(rownames(mSetObj$dataSet$norm))),,drop=FALSE]

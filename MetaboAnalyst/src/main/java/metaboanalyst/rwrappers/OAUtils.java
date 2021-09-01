@@ -265,7 +265,6 @@ public class OAUtils {
         }
     }
 
-    
     //RDA
     public static void CreateRDA(SessionBean1 sb, Boolean abundance, String envText, Boolean data) {
         try {
@@ -316,7 +315,6 @@ public class OAUtils {
             System.out.println(rse);
         }
     }
-    
     
     //BRAY-CURTIS
     public static void CreateBray(SessionBean1 sb, Boolean abundance, String distance, Boolean data, Boolean binary) {
@@ -382,7 +380,6 @@ public class OAUtils {
         }
     }
 
-    
     //CCA
     public static boolean CreateCCA(SessionBean1 sb, Boolean abundance, Boolean data, String env_text) {
         try {
@@ -496,6 +493,20 @@ public class OAUtils {
             return false;
         }
     }
+    
+    //CA
+//    public static boolean CreateCA(SessionBean1 sb) {
+//        try {
+//            RConnection RC = sb.getRConnection();
+//            String rCommand = "ord.ca(NA)";
+//            RCenter.recordRCommand(RC, rCommand);
+//            RC.voidEval(rCommand);
+//            return true;
+//        } catch (RserveException rse) {
+//            System.out.println(rse);
+//            return false;
+//        }
+//    }
 
     public static void PlotDCA2D(SessionBean1 sb, String color, Boolean ellipse, Boolean varArrows, Boolean envArrows, Boolean sampleNames, Boolean envCent, String metaColColor, String pointOptions, String metaColPoint, String imgName, String format, int dpi) {
         try {
@@ -551,7 +562,6 @@ public class OAUtils {
             System.out.println(rse);
         }
     }
-        
     public static void PlotANOSIM(SessionBean1 sb, String color, String imgName, String format, int dpi) {
         try {
             RConnection RC = sb.getRConnection();
@@ -642,4 +652,4 @@ public class OAUtils {
         return null;
     }
 }
-        
+
