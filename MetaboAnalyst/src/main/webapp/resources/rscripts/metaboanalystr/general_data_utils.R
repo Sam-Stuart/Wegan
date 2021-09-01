@@ -387,7 +387,7 @@ Read.TextData <- function(mSetObj=NA, filePath, dataFormat="rowu", lbl.type="dis
                 /nMake sure the data table is saved in tab separated values (.txt) or comma separated values (.csv) format.
                 /nPlease also check the following:
                 /nBoth sample and variable names must in UTF-8 encoding.
-                #####Make sure sample names and variable names are unique. TODO: ADD TO TEXT ON PAGE
+                ############# Make sure sample names and variable names are unique. TODO: ADD TO TEXT ON PAGE!!!!!!!!!!!! ###############
                 /nMissing values should be blank or NA without quote.");
     return(0);
   }
@@ -531,7 +531,7 @@ Read.TextData <- function(mSetObj=NA, filePath, dataFormat="rowu", lbl.type="dis
 #'
 Read.TextDataMeta <- function(mSetObj=NA, filePath, metaFormat="rowu", lbl.type="disc", metaNames="colOnly"){
   mSetObj <- .get.mSet(mSetObj);
-
+  
   if (dataNames=="colOnly") { #yes column names, no row names
     dat <- .readDataTable(filePath, metaNames="colOnly");
     print("colOnly")
@@ -556,7 +556,19 @@ Read.TextDataMeta <- function(mSetObj=NA, filePath, metaFormat="rowu", lbl.type=
     dat1<-as.data.frame(t(dat));
   }
 
+
+  msg <- mSetObj$msgSet$read.msg
+  mSetObj$msgSet$read.msg <- c(msg, "Grouping data has been uploaded")
+  ##############TO DO: CHECK DIMENSIONS MATCH MAIN DATA!!!!!!!!#######################
+  
+  
+  lbls.meta <- as.data.frame(c(1:nrow(dat1)))
+  colnames(lbls.meta) <- c("Sample")
+  orig.meta<-cbind(lbls.meta, dat1);
+  write.csv(orig.meta, file="grouping_data.csv", row.names=FALSE); 
+  
   mSetObj$dataSet$origMeta <- dat1;
+  
   return(.set.mSet(mSetObj));
 }
 
@@ -588,6 +600,17 @@ Read.TextDataEnv <- function(mSetObj=NA, filePath, envFormat="rowu", lbl.type="d
     dat1<-as.data.frame(t(dat));
   }
 
+  
+  msg <- mSetObj$msgSet$read.msg
+  mSetObj$msgSet$read.msg <- c(msg, "Constraining data has been uploaded")
+  ##############TO DO: CHECK DIMENSIONS MATCH MAIN DATA!!!!!!!!#######################
+  
+  
+  lbls.env <- as.data.frame(c(1:nrow(dat1)))
+  colnames(lbls.env) <- c("Sample")
+  orig.env<-cbind(lbls.env, dat1);
+  write.csv(orig.env, file="constraining_data.csv", row.names=FALSE); 
+  
   mSetObj$dataSet$origEnv <- dat1;
   return(.set.mSet(mSetObj));
 }
