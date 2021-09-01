@@ -30,7 +30,7 @@ public class DiversityloadBean implements Serializable {
     /*
      * Handle file upoad (.csv or .txt)
      */
-        private String dataType = "main";
+    private String dataType = "main";
 
     public String getDataType() {
         return dataType;
@@ -145,16 +145,16 @@ public class DiversityloadBean implements Serializable {
                 RConnection RC = sb.getRConnection();
                 String fileName = DataUtils.uploadFile(dataFile, sb, null, ab.isOnPublicServer());
                 String fileNameMeta = DataUtils.uploadFile(dataFileMeta, sb, null, ab.isOnPublicServer());
-                String fileNameEnv = DataUtils.uploadFile(dataFileEnv, sb, null, ab.isOnPublicServer());
+//                String fileNameEnv = DataUtils.uploadFile(dataFileEnv, sb, null, ab.isOnPublicServer());
                 if (fileName == null) {
                     return null;
                 }
                 if (fileNameMeta != null){
                     RDataUtils.readTextDataMeta(RC, fileNameMeta, metaFormat, "disc", metaNames);
                 }
-                if (fileNameEnv != null){
-                    RDataUtils.readTextDataEnv(RC, fileNameMeta, envFormat, "disc", envNames);
-                }
+//                if (fileNameEnv != null){
+//                    RDataUtils.readTextDataEnv(RC, fileNameMeta, envFormat, "disc", envNames);
+//                }
 
                 if (RDataUtils.readTextData(RC, fileName, dataFormat, "disc", dataNames)) {
                     sb.setDataUploaded(true);
@@ -352,31 +352,29 @@ public class DiversityloadBean implements Serializable {
     
     //----------------------------------------------------------------- Test loader 
     public String handleDiversityTestFileUpload() {
-        String format = "";
         boolean paired = false;
         boolean isZip = false;
         String testFile = null;
 
-        
         if (testDataOpt == null) {
-                    
-
             sb.updateMsg("Error", "No data set is selected!");
             return null;
         }
 
-
-        
-        //DUNE DATA SELECTED*********************************************************
         else if (testDataOpt.equals("Dune")) {
             dataType = "Dune";
             //sb.updateMsg("Error", "Dune data selected");
             testFile = ab.getTestDune();
-            format = "rowu";
-            
+            dataFormat = "rowu";
+            dataNames = "colOnly";
+        } else if (testDataOpt.equals("Iris")) {
+            testFile = ab.getTestIris();
+            dataFormat = "rowu";
+            dataNames = "colOnly";
         } else if (testDataOpt.equals("BCI")) {
             testFile = ab.getTestBCI();
-            format = "rowu";
+            dataFormat = "rowu";
+            dataNames = "colOnly";
         } else {
             sb.updateMsg("Error", "Unknown data selected?");
             return null;
@@ -393,12 +391,12 @@ public class DiversityloadBean implements Serializable {
                 return null;
             }
         } else {
-            String testFileMeta = ab.getTestFileMeta();
-            RDataUtils.readTextDataMeta(RC, testFileMeta, metaFormat, "disc", metaNames);
-            String testFileEnv = ab.getTestFileEnv();
-            RDataUtils.readTextDataEnv(RC, testFileEnv, envFormat, "disc", envNames);
+//            String testFileMeta = ab.getTestFileMeta();
+//            RDataUtils.readTextDataMeta(RC, testFileMeta, metaFormat, "disc", metaNames);
+//            String testFileEnv = ab.getTestFileEnv();
+//            RDataUtils.readTextDataEnv(RC, testFileEnv, envFormat, "disc", envNames);
             //Tested cahnging Disc to cont
-            if (!RDataUtils.readTextData(RC, testFile, "rowu", "disc", "colOnly")) {
+            if (!RDataUtils.readTextData(RC, testFile, dataFormat, "disc", dataNames)) {
                 sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
                 return null;
             }

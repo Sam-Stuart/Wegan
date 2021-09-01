@@ -7,6 +7,128 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="/frags/_anal_template.xhtml">
     <ui:define name="metaInfo">
+        <f:event type="preRenderView" listener="#{sessionBean1.setAnalType('diversity')}"/> 
+        <f:event type="preRenderView" listener="#{sessionBean1.registerPage('Upload')}"/> 
+    </ui:define>
+    <ui:define name="content">
+        <h:form id="form" enctype="multipart/form-data"> 
+            <h:panelGrid style="padding:20px 40px 20px 40px; font-size: 13px; line-height: 25px; width:100%">
+                <h1 style="margin-top: 10px; margin-bottom: 4px">Upload your data</h1>
+                <h:panelGrid style="width:100%; background-color: #75bafb;"></h:panelGrid>
+                <h:panelGrid style="width:100%; background-color: white; "></h:panelGrid>
+                <h:panelGrid style="width:100%; background-color: #75bafb;"></h:panelGrid>
+                <h:panelGrid style="width:100%; background-color: white; "></h:panelGrid>
+
+                <h:panelGrid style="border: none; width: 100%; padding: 15px 20px 10px 25px; background-color: #8cbd4830; font-size: 14px;">
+                    <h2 style="margin-top: 10px; margin-bottom: 4px">Data table: Plain text file (.csv or .txt)</h2>
+                    <h:panelGrid columns="2" style="padding: 10px">
+                        <p:outputLabel style="font-size:14px; font-weight: bold" value="Data File (diversity data OR tussock data for functional diversity):"/>
+                        <p:fileUpload value="#{Diversityload.dataFile}" mode="simple"/>
+                    </h:panelGrid>                   
+                    <h:panelGrid columns="3" style="padding: 10px; margin-left: 40px">
+                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Format:"/>
+                        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:170px" value="#{Diversityload.dataFormat}">
+                            <f:selectItems value="#{applicationBean1.csvFormatOpts}" />
+                        </p:selectOneMenu> 
+                    </h:panelGrid>                     
+                    <h:panelGrid columns="3" style="padding: 10px; margin-left: 40px">
+                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Labels:"/>
+                        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:170px" value="#{Diversityload.dataNames}">
+                            <f:selectItems value="#{applicationBean1.dataNamesOpts}" />
+                        </p:selectOneMenu> 
+                    </h:panelGrid>                  
+                    <h:panelGrid></h:panelGrid>
+                    <h2 style="margin-top: 10px; margin-bottom: 4px">Supplemental data table: Plain text files (.csv or .txt)</h2>    
+                    <h:panelGrid columns="2" style="padding: 10px">
+                        <p:outputLabel style="font-size:14px; font-weight: bold" value="Dummy Data File (required for functional diversity):"/>
+                        <p:fileUpload value="#{Ordinationload.dataFileMeta}" mode="simple"/>
+                    </h:panelGrid>   
+                    <h:panelGrid columns="2" style="padding: 10px; margin-left: 40px">
+                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Format:"/>
+                        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:170px" value="#{Diversityload.metaFormat}">
+                            <f:selectItems value="#{applicationBean1.metaFormatOpts}" />
+                        </p:selectOneMenu> 
+                    </h:panelGrid> 
+                    <h:panelGrid columns="2" style="padding: 10px; margin-left: 40px">
+                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Labels:"/>
+                        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:170px" value="#{Diversityload.metaNames}">
+                            <f:selectItems value="#{applicationBean1.metaNamesOpts}" />
+                        </p:selectOneMenu> 
+                    </h:panelGrid>
+                    <h:panelGrid style="padding: 10px; float:right">
+                        <p:commandButton value="Submit" 
+                                         styleClass="updateButton"
+                                         style="box-shadow: none !important; text-shadow: none !important"
+                                         ajax="false"
+                                         onclick="PF('statusDialog').show()" 
+                                         oncomplete="PF('statusDialog').hide()"
+                                         action="#{Diversityload.handleFileUpload()}"/>   
+                        
+                    </h:panelGrid>
+                    
+                </h:panelGrid>
+                
+                <p:spacer style="width: 30px"/>
+                
+                <h:panelGrid style="border: none; width: 100%; padding: 15px 20px 10px 25px; background-color: #8cbd4830; font-size: 14px;">
+
+                    <h2 style="margin-top: 20px; margin-bottom: 4px">Try our test data :</h2>
+                    <p:selectOneRadio id="customRadio" value="#{Diversityload.testDataOpt}" layout="custom">  
+                        <f:selectItems value="#{applicationBean1.testDataOpts}"/> 
+                    </p:selectOneRadio> 
+                    <h:panelGrid columns="3" style="padding: 10px 30px 20px 10px;line-height: 21px; width:760px">
+                        <p:radioButton for="customRadio" itemIndex="0"/>
+                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Dune"/>
+                        <h:panelGrid>
+                            Grass species counts in Dutch dune meadows. Data consists of 30 species (variables/columns) and 20 plots of land (samples/rows), where species are labeled, but land plots are not. (<a href="https://rdrr.io/cran/vegan/man/dune.html">ref.</a>)                                       
+                        </h:panelGrid>
+                        <p:radioButton for="customRadio" itemIndex="11"/>
+                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Iris"/>
+                        <h:panelGrid>
+                            Iris flower measurements with species data. Data consists of 4 measurements (petal width, petal length, sepal width, sepal length) and species groupings (variables/columns) for 150 iris flowers (samples/rows). There are 50 flowers from each of 3 species of iris: Iris setosa, Iris versicolor, and Iris virginica. Variables are labeled, but iris flowers are not. (<a href="https://www.rdocumentation.org/packages/datasets/versions/3.6.2/topics/iris">ref.</a>)                                       
+                        </h:panelGrid>
+                        <p:radioButton for="customRadio" itemIndex="12"/>
+                        <p:outputLabel style="font-size:12px; font-weight: bold" value="BCI"/>
+                        <h:panelGrid>
+                            Barro Colorado Island tree species counts. Data consists of 225 species (variables/columns) and 50 plots of land (samples/rows). Species are labeled, but land plots are not. (<a href="https://rdrr.io/cran/vegan/man/BCI.html">ref.</a>)                                       
+                        </h:panelGrid>                        
+<!--
+                        <p:outputLabel style="font-size:12px; font-weight: bold" value="AMF"/>
+                        <h:panelGrid>
+                            Arbuscular Mycorrhizal fungal data (insert citation here)                                       
+                        </h:panelGrid>
+                        <p:radioButton for="customRadio" itemIndex="3"/>
+                        <p:outputLabel style="font-size:12px; font-weight: bold" value="EMF"/>
+                        <h:panelGrid>
+                            Ectomycorrhizal fungal data (insert citation here)                                       
+                        </h:panelGrid>-->
+                   </h:panelGrid>
+                    <h:panelGrid style="float:right">
+                        <p:commandButton value="Submit" 
+                                         styleClass="updateButton"
+                                         style="box-shadow: none !important; text-shadow: none !important"
+                                         ajax="false" 
+                                         onclick="PF('statusDialog').show()" 
+                                         oncomplete="PF('statusDialog').hide()"                                         
+                                         action="#{Diversityload.handleDiversityTestFileUpload}"/>                      
+                    </h:panelGrid>
+
+                </h:panelGrid>
+            </h:panelGrid>
+        </h:form>
+    </ui:define>
+</ui:composition>
+
+
+<!--<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_anal_template.xhtml">
+    <ui:define name="metaInfo">
         <f:event type="preRenderView" listener="#{sessionBean1.setAnalType('diversity')}"/>   
         <f:event type="preRenderView" listener="#{sessionBean1.registerPage('Upload')}"/> 
     </ui:define>
@@ -132,6 +254,4 @@
             </h:panelGrid>
         </h:form>
     </ui:define>
-</ui:composition>
-
-
+</ui:composition>-->
