@@ -379,7 +379,57 @@ public class DiversityUtils {
             System.out.println(rse);
             return false;
         }
+        
+    }//boolean calc_FDiv, boolean calc_FRic, boolean calc_CWM,
+
+        public static boolean CreateFdDiv(SessionBean1 sb, boolean data, String w, String corr, boolean w_abun, boolean stand_x, String m,  boolean stand_FRic, boolean print_pco, boolean messages, String asym_bin, String ord) {
+        try {
+            System.out.print("FD");
+            RConnection RC = sb.getRConnection(); //Start R connection
+            String rCommand = "functionalDiv(NA"
+                                                 + ", \"" + data
+                                                 + "\", \"" + w
+                                                 + "\", \"" + corr
+                                                 + "\", \"" + w_abun
+                                                 + "\", \"" + stand_x
+                                                 + "\", \"" + m
+//                                                 + "\", \"" + calc_FDiv
+//                                                 + "\", \"" + calc_FRic
+                                                 + "\", \"" + stand_FRic
+//                                                 + "\", \"" + calc_CWM
+                                                 + "\", \"" + print_pco
+                                                 + "\", \"" + messages
+                                                 + "\", \"" + asym_bin
+                                                 + "\", \"" + ord
+                                                 + "\")";
+            RCenter.recordRCommand(RC, rCommand); // records r command
+            RC.voidEval(rCommand); // tells you want your r script returns  
+            return true;
+        } catch (RserveException rse) {
+            System.out.println(rse);
+            return false;
+        }
     }
+    
+    public static boolean PlotFdTree(SessionBean1 sb, String color, String imgName, String format, int dpi, String width) {
+        try {
+            System.out.print("FD");
+            RConnection RC = sb.getRConnection(); //Start R connection
+            String rCommand = "FD_cluster_plot(NA"
+                                                 + ", \"" + color
+                                                 + "\", \"" + imgName 
+                                                 + "\", \"" + format 
+                                                 + "\", " + dpi 
+                                                 + ", width=NA)";
+            RCenter.recordRCommand(RC, rCommand); // records r command
+            RC.voidEval(rCommand); // tells you want your r script returns  
+            return true;
+        } catch (RserveException rse) {
+            System.out.println(rse);
+            return false;
+        }
+    }
+ 
 
     
     /////// ------------ Diversity helper functions --------------- //////////////

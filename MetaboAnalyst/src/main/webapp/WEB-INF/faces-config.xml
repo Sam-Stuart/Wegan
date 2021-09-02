@@ -300,6 +300,11 @@
             <from-outcome>Taxodiv</from-outcome>
             <to-view-id>/Secure/diversity/TaxodivView.xhtml</to-view-id>
             <redirect/>
+        </navigation-case> 
+        <navigation-case>
+            <from-outcome>Fddiv</from-outcome>
+            <to-view-id>/Secure/diversity/FddivView.xhtml</to-view-id>
+            <redirect/>
         </navigation-case>  
                                                                        
                     

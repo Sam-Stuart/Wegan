@@ -57,6 +57,9 @@ public class DiversityBean implements Serializable {
                     case "Taxodiv":
                          doDefaultTaxodiv();
                         break;
+                    case "Fddiv":
+                         doDefaultFddiv();
+                        break;
                 }
             }
 
@@ -151,5 +154,16 @@ public class DiversityBean implements Serializable {
         DiversityUtils.PlotTaxonHeatmap(sb, "NULL",sb.getCurrentImage("Taxa_Heatmap_Plot"), "png", 72, "false");
         System.out.print("AFTER TAXO");
     }
+    
 
+    private void doDefaultFddiv(){
+//        if (!DiversityUtils.CreateRarefactionDiv(sb, false, "test", "test", false, "test")){
+//            RConnection RC = sb.getRConnection();
+//            sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
+//        }
+        System.out.print("INSIDE FD"); 
+        DiversityUtils.CreateFdDiv(sb, false, "", "NULL", false, false, "", false, false, false, "", "NULL");
+        DiversityUtils.PlotFdTree(sb, "NULL",sb.getCurrentImage("Cluster_Plot"), "png", 72, "false");
+        System.out.print("AFTER FD");
+    }
 }

@@ -1,5 +1,5 @@
-#'Perform taxonomic and functional diversity
-#'@description Perform taxonomic and functional diversity 
+#'Perform taxonomic diversity or distinctness indices calculation
+#'@description Perform taxonomic diversity or distinctness indices calculation
 #'@param mSetObj Input name of the created mSet Object
 #'@param data Boolean for which data set to use, normalized (default) or original
 #'@param dis Set dissimilarity index, drop down options are "taxa2dist" (default), "euclidean", "manhattan", "binary", or "minkowski"
@@ -225,6 +225,7 @@ taxa_tree <- function(mSetObj = NA, color = "NULL", imgName, format = "png", dpi
   plot(hcd, hang = -1, nodePar = nodePar, ylab = "Height", edgePar = list(col = color1, lwd = 2:1), las = 2)
   #title("")
   dev.off()
+  return(.set.mSet(mSetObj))
 }
 
 #'Produce a scatter graph comparing taxonomic diversity vs. species richness 
@@ -293,7 +294,9 @@ taxon_scatter <- function(mSetObj=NA, colorc="NULL", imgName, format="png", dpi=
   axis(1, labels = T, at = 0:m)
   axis(2, at = seq(0, n, by = 5), las = 2)
 
-  dev.off()  
+  dev.off() 
+  
+  return(.set.mSet(mSetObj)) 
 }
 
 #'Produce a taxonomic heatmap 
@@ -359,6 +362,7 @@ taxon_heatmap <- function(mSetObj=NA, colord="NULL", imgName, format="png", dpi=
   
   dev.off()
   
+  return(.set.mSet(mSetObj))
 }
 
 
