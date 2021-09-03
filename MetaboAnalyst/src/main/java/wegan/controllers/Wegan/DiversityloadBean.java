@@ -367,10 +367,10 @@ public class DiversityloadBean implements Serializable {
             testFile = ab.getTestDune();
             dataFormat = "rowu";
             dataNames = "colOnly";
-        } else if (testDataOpt.equals("Iris")) {
-            testFile = ab.getTestIris();
-            dataFormat = "rowu";
-            dataNames = "colOnly";
+        } else if (testDataOpt.equals("Pitlatrine")) {
+            testFile = ab.getTestPitlatrine();
+            dataFormat = "colu";
+            dataNames = "both";
         } else if (testDataOpt.equals("BCI")) {
             testFile = ab.getTestBCI();
             dataFormat = "rowu";

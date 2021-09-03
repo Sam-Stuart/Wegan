@@ -106,22 +106,21 @@ SanityCheckData <- function(mSetObj=NA){
         #msg <- c(msg,"Samples are not paired."); #I COMMENTED THIS OUT
       }
       
+      #I COMMENTED THIS OUT SINCE DATASETS MAY NOT HAVE GROUPS
       # checking if too many groups but a few samples in each group
       cls.lbl <- mSetObj$dataSet$orig.cls;
-      min.grp.size <- min(table(cls.lbl));
-      
       cls.num <- length(levels(cls.lbl));
+      min.grp.size <- min(table(cls.lbl));
       #if(cls.num/min.grp.size > 3){
       #  mSetObj$dataSet$small.smpl.size <- 1;
       #  msg <- c(msg, "<font color='red'>Too many groups with very small number of replicates! Only a subset of methods will be available for analysis!</font>");
       #}
-      
-      #msg <- c(msg, paste(cls.num, "groups were detected in samples.")); #I COMMENTED THIS OUT
+      #msg <- c(msg, paste(cls.num, "groups were detected in samples.")); 
       mSetObj$dataSet$cls.num <- cls.num;
       mSetObj$dataSet$min.grp.size <- min.grp.size;
     }
     
-    #I REMOVED THIS
+    #I REMOVED THIS BC WE DO NOT WANT AUTO SORTING
     #samples may not be sorted properly, need to do some sorting at the beginning 
     #if(substring(mSetObj$dataSet$format,4,5)=="ts"){
     #  nfacA <- mSetObj$dataSet$facA;
@@ -159,16 +158,16 @@ SanityCheckData <- function(mSetObj=NA){
   #msg<-c(msg,"Other special characters or punctuations (if any) will be stripped off.");
   
   int.mat <- mSetObj$dataSet$orig;
-  mSetObj$dataSet$test_cat <- mSetObj$dataSet$orig;
-  
-  # check numerical matrix
-  rowNms <- rownames(int.mat);
-  colNms <- colnames(int.mat);
-  naNms <- sum(is.na(int.mat));
-  
-  num.mat <- apply(int.mat, 2, as.numeric)
-  
-  # DANA REMOVED THIS TO SEE IF WE CAN KEEP CATEGORICAL DATA
+    print("int.mat")
+    print(int.mat)
+  #I COMMENTED THIS OUT BC ITS UNUSED
+  # check matrix
+  #rowNms <- rownames(int.mat);
+  #colNms <- colnames(int.mat);
+  #naNms <- sum(is.na(int.mat));
+    
+  # DANA REMOVED THIS TO KEEP CATEGORICAL DATA
+  #num.mat <- apply(int.mat, 2, as.numeric)
   #if(sum(is.na(num.mat)) > naNms){
     # try to remove "," in thousand seperator if it is the cause
   #  num.mat <- apply(int.mat,2,function(x) as.numeric(gsub(",", "", x)));
@@ -212,15 +211,12 @@ SanityCheckData <- function(mSetObj=NA){
          "Click <b>Skip</b> button if you accept the default practice",
          "Or click <b>Missing value imputation</b> to use other methods");
   
-  #I CHANGED THIS FOR WEGAN WHICH ALLOWS CATEGORICAL VARS
   # obtain original half of minimal positive value (threshold) for numeric columns
-  numVars <- select_if(int.mat, is.numeric)
+  numVars <- select_if(int.mat, is.numeric) #I ADDED THIS FOR WEGAN WHICH ALLOWS CATEGORICAL VARS
   minConc<-min(numVars[numVars>0], na.rm=T)/2;
-
-
   mSetObj$dataSet$minConc <- minConc;
-  mSetObj$dataSet$preproc <- as.data.frame(int.mat);
 
+  mSetObj$dataSet$preproc <- as.data.frame(int.mat);
   mSetObj$dataSet$proc.cls <- mSetObj$dataSet$cls <- mSetObj$dataSet$orig.cls;
   
   if(substring(mSetObj$dataSet$format,4,5)=="ts"){

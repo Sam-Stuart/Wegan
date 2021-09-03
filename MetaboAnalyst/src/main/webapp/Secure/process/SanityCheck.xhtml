@@ -22,11 +22,16 @@
                 <h:panelGrid columns="2" style=" border: none; width: 100%; padding: 15px 10px 10px 5px; background-color: #8cbd4830; font-size: 14px">
                     <ol>
                         <li>
-                            Checking for the presence of missing values or variables with constant values (i.e. all zeros)                
+                            Checking for the presence of missing values (i.e. blanks or NAs) or variables with constant values (i.e. all zeros).                
                         </li>
                         <li>
-                            Checking the sample and variable labels - only English letters, numbers, underscore, hyphen and forward slash (/) are allowed.
-                            Other special characters or punctuations (if any) will be stripped off.
+                            Checking the sample and variable labels:
+                            <ul>
+                                - Duplicate labels are not allowed. 
+                            </ul>
+                            <ul>
+                                - Only English letters, numbers, underscore, hyphen and forward slash (/) are allowed. Other special characters or punctuations (if any) will be stripped off.
+                            </ul>
                         </li>
 
                     </ol>

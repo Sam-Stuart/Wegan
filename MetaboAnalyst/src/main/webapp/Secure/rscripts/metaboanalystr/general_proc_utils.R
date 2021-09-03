@@ -18,6 +18,8 @@ SanityCheckData <- function(mSetObj=NA){
 
   msg <- NULL;
   cls <- mSetObj$dataSet$orig.cls;
+print("cls")
+print(cls)
   mSetObj$dataSet$small.smpl.size <- 0;
 
   #REMOVED BC WE HAVE NO TIME SERIES OR PAIRED DATA
@@ -109,13 +111,12 @@ SanityCheckData <- function(mSetObj=NA){
   #    }
   #   
   #    # checking if too many groups but a few samples in each group
-  #    cls.lbl <- mSetObj$dataSet$orig.cls;
-  #    min.grp.size <- min(table(cls.lbl));
-  #    
-  #    cls.num <- length(levels(cls.lbl));
+      cls.lbl <- mSetObj$dataSet$orig.cls;
+      min.grp.size <- min(table(cls.lbl));
+      cls.num <- length(levels(cls.lbl));
   #    msg <- c(msg, paste(cls.num, "groups were detected in samples."));
-  #    mSetObj$dataSet$cls.num <- cls.num;
-  #    mSetObj$dataSet$min.grp.size <- min.grp.size;
+      mSetObj$dataSet$cls.num <- cls.num;
+      mSetObj$dataSet$min.grp.size <- min.grp.size;
   #    if(cls.num/min.grp.size > 3){
   #      mSetObj$dataSet$small.smpl.size <- 1;
   #      msg <- c(msg, "<font color='red'>Too many groups with very small number of replicates! Only a subset of methods may be available for analysis!</font>");
@@ -210,7 +211,6 @@ SanityCheckData <- function(mSetObj=NA){
   mSetObj$dataSet$minConc <- minConc;
 
   mSetObj$dataSet$preproc <- as.data.frame(int.mat);
-
   mSetObj$dataSet$proc.cls <- mSetObj$dataSet$cls <- mSetObj$dataSet$orig.cls;
   
 #REMOVED BC WE HAVE NO TIME SERIES DATA
@@ -220,7 +220,6 @@ SanityCheckData <- function(mSetObj=NA){
 #  }
   
   mSetObj$msgSet$check.msg <- c(mSetObj$msgSet$read.msg, msg);
-  #print(mSetObj$dataSet$min.grp.size);
   
   if(.on.public.web==TRUE){
     .set.mSet(mSetObj);

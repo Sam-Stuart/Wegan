@@ -853,9 +853,9 @@ SaveTransformedData <- function(mSetObj=NA){
       lbls <- cbind("Sample"= as.character(mSetObj$dataSet$orig.cls));
     }
     orig.data<-cbind(lbls, mSetObj$dataSet$orig);
-    if(dim(orig.data)[2]>200){
-      orig.data<-t(orig.data);
-    }
+    #if(dim(orig.data)[2]>200){
+    #  orig.data<-t(orig.data);
+    #}
     write.csv(orig.data, file="data_original.csv", row.names=FALSE);
     if(!is.null(mSetObj$dataSet[["procr"]])){
       if(tsFormat){
@@ -865,9 +865,9 @@ SaveTransformedData <- function(mSetObj=NA){
         lbls <- cbind("Sample"= as.character(mSetObj$dataSet$proc.cls));
       }
       proc.data<-cbind(lbls, mSetObj$dataSet$procr);
-      if(dim(proc.data)[2]>200){
-       proc.data<-t(proc.data);
-     }
+     #if(dim(proc.data)[2]>200){
+     #  proc.data<-t(proc.data);
+     #}
       write.csv(proc.data, file="data_processed.csv", row.names=FALSE);
       if(!is.null(mSetObj$dataSet[["norm"]])){
         if(tsFormat){
@@ -887,9 +887,9 @@ SaveTransformedData <- function(mSetObj=NA){
       #}
         
         norm.data<-cbind(lbls, mSetObj$dataSet$norm);
-        if(dim(norm.data)[2]>200){
-          norm.data<-t(norm.data);
-        }
+        #if(dim(norm.data)[2]>200){
+        #  norm.data<-t(norm.data);
+        #}
        write.csv(norm.data, file="data_normalized.csv", row.names=FALSE);
      }
     }

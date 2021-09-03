@@ -636,8 +636,8 @@ public class DataUtils {
         TreeNode nodep4 = new DefaultTreeNode("Data check", processNode);
         TreeNode nodep5 = new DefaultTreeNode("Missing value", processNode);
         TreeNode nodep6 = new DefaultTreeNode("Data filter", processNode);
-        TreeNode nodep7 = new DefaultTreeNode("Data editor", processNode);
-        TreeNode nodep8 = new DefaultTreeNode("Image options", processNode);
+//        TreeNode nodep7 = new DefaultTreeNode("Data editor", processNode);
+//        TreeNode nodep8 = new DefaultTreeNode("Image options", processNode);
     }
     
     private static void addCANodes(TreeNode parent) {

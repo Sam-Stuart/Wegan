@@ -151,40 +151,54 @@ RemoveDuplicates <- function(data, lvlOpt="mean", quiet=TRUE){
     formatStr <- substr(fileName, nchar(fileName)-2, nchar(fileName)) #last 3 letters in file name
     if (formatStr == "txt") {
       if (dataNames=="colOnly") { #yes col names, no row names
-        dat1 <- try(read.table(fileName, header=TRUE, comment.char = "", check.names=FALSE))
+        dat <- try(read.table(fileName, header=FALSE, comment.char = "", check.names=FALSE))
+        cols <- dat[1,]
+        colnames(dat) <- cols
+        rownames(dat) <- c(1:nrow(dat))
+        dat1 <- dat[-1,]
       } else if (dataNames=="rowOnly") { #no col names, yes row names
         dat <- try(read.table(fileName, header=FALSE, comment.char = "", check.names=FALSE))
-        rows <- as.character(dat[,1])
-        unique.rows <- make.unique(rows, sep=".")
+        rows <- dat[,1]
+        rownames(dat) <- rows
+        colnames(dat) <- paste0("V",1:ncol(dat))
         dat1 <- dat[,-1]
-        rownames(dat1) <- unique.rows
       } else if (dataNames=="bothNames") { #yes col names, yes row names
         dat <- try(read.table(fileName, header=FALSE, comment.char = "", check.names=FALSE))
-        rows <- as.character(dat[,1])
-        unique.rows <- make.unique(rows, sep=".")
-        dat1 <- dat[,-1]
-        rownames(dat1) <- unique.rows
+        cols <- dat[1,]
+        rows <- dat[,1]
+        colnames(dat) <- cols
+        rownames(dat) <- rows
+        dat1 <- dat[-1,-1]
       } else if (dataNames=="noNames") { #no col names, no row names
         dat1 <- try(read.table(fileName, header=FALSE, comment.char = "", check.names=FALSE))
+        rownames(dat1) <- c(1:nrow(dat1))
+        colnames(dat1) <- paste0("V",1:ncol(dat1))
       }
     }
     if (formatStr == "csv") {
       if (dataNames=="colOnly") { #yes col names, no row names
-        dat1 <- try(read.csv(fileName, header=TRUE, comment.char = "", check.names=FALSE))
+        dat <- try(read.csv(fileName, header=FALSE, comment.char = "", check.names=FALSE))
+        cols <- dat[1,]
+        colnames(dat) <- cols
+        dat1 <- dat[-1,]
+        rownames(dat1) <- c(1:nrow(dat1))
       } else if (dataNames=="rowOnly") { #no col names, yes row names
         dat <- try(read.csv(fileName, header=FALSE, comment.char = "", check.names=FALSE))
-        rows <- as.character(dat[,1])
-        unique.rows <- make.unique(rows, sep=".")
+        rows <- dat[,1]
+        rownames(dat) <- rows
         dat1 <- dat[,-1]
-        rownames(dat1) <- unique.rows
+        colnames(dat1) <- paste0("V",1:ncol(dat1))
       } else if (dataNames=="bothNames") { #yes col names, yes row names
-        dat <- try(read.csv(fileName, header=TRUE, comment.char = "", check.names=FALSE))
-        rows <- as.character(dat[,1])
-        unique.rows <- make.unique(rows, sep="_")
-        dat1 <- dat[,-1]
-        rownames(dat1) <- unique.rows
+        dat <- try(read.csv(fileName, header=FALSE, comment.char = "", check.names=FALSE))
+        cols <- dat[1,]
+        rows <- dat[,1]
+        colnames(dat) <- cols
+        rownames(dat) <- rows
+        dat1 <- dat[-1,-1]
       } else if (dataNames=="noNames") { #no col names, no row names
         dat1 <- try(read.csv(fileName, header=FALSE, comment.char = "", check.names=FALSE))
+        rownames(dat1) <- c(1:nrow(dat1))
+        colnames(dat1) <- paste0("V",1:ncol(dat1))
       }
     }
   return(dat1)
