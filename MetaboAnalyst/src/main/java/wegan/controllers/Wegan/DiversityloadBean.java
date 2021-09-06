@@ -59,16 +59,6 @@ public class DiversityloadBean implements Serializable {
     public void setMetaFormat(String metaFormat) {
         this.metaFormat = metaFormat;
     }
-    
-    private String envFormat = "rowu";
-
-    public String getEnvFormat() {
-        return envFormat;
-    }
-
-    public void setEnvFormat(String envFormat) {
-        this.envFormat = envFormat;
-    }
 
     private UploadedFile dataFile;
 
@@ -90,16 +80,6 @@ public class DiversityloadBean implements Serializable {
         this.dataFileMeta = dataFileMeta;
     }
     
-    private UploadedFile dataFileEnv;
-
-    public UploadedFile getDataFileEnv() {
-        return dataFileEnv;
-    }
-
-    public void setDataFileEnv(UploadedFile dataFileEnv) {
-        this.dataFileEnv = dataFileEnv;
-    }
-    
     private String dataNames = "colOnly";
 
     public String getDataNames() {
@@ -119,19 +99,10 @@ public class DiversityloadBean implements Serializable {
     public void setMetaNames(String metaNames) {
         this.metaNames = metaNames;
     }
-    
-    private String envNames = "colOnly";
 
-    public String getEnvNames() {
-        return envNames;
-    }
-
-    public void setEnvNames(String envNames) {
-        this.envNames = envNames;
-    }
 
     /*
-    Data upload for statistics module
+    Data upload for diversity module
      */
     public String handleFileUpload() {
 
@@ -151,6 +122,7 @@ public class DiversityloadBean implements Serializable {
                 }
                 if (fileNameMeta != null){
                     RDataUtils.readTextDataMeta(RC, fileNameMeta, metaFormat, "disc", metaNames);
+                    sb.setDataUploaded(true);
                 }
 //                if (fileNameEnv != null){
 //                    RDataUtils.readTextDataEnv(RC, fileNameMeta, envFormat, "disc", envNames);
@@ -257,15 +229,11 @@ public class DiversityloadBean implements Serializable {
     }
 
     /*
-     * Handle test examples for statistics mode
+     * Handle test examples for diversity mode
      */
     private String testDataOpt;
-    
-    
-    
-    
-    //WEGAN FUCNTIONS 
-    
+
+    //WEGAN  
     //*********------------------------------------------------------
     
     private String NMDSTestDataOpt;
@@ -278,8 +246,7 @@ public class DiversityloadBean implements Serializable {
         this.NMDSTestDataOpt = NMDSTestDataOpt;
     }
     
- 
-    
+
     //*********------------------------------------------------------
     public String getTestDataOpt() {
         return testDataOpt;
@@ -289,68 +256,66 @@ public class DiversityloadBean implements Serializable {
         this.testDataOpt = testDataOpt;
     }
 
-    public String handleStatTestFileUpload() {
-        String format = "";
-        boolean paired = false;
-        boolean isZip = false;
-        String testFile = null;
-
-        
-        
-        if (testDataOpt == null) {
-            //sb.updateMsg("Error", "No data set is selected!");
-            return null;
-        }
-
-        if (testDataOpt.equals("conccancer")) {
-            dataType = "conc";
-            testFile = ab.getTestConcHsaPath();
-            format = "rowu";
-        }
-        
-        //DUNE DATA SELECTED*********************************************************
-        else if (testDataOpt.equals("Dune")) {
-            dataType = "Dune";
-            sb.updateMsg("Error", "Dune data selected");
-
-            testFile = ab.getTestamf();
-            format = "rowu";
-            
-           
-        } else if (testDataOpt.equals("BCI")) {
-            testFile = ab.getTestBCI();
-            format = "rowu";
-        }
-
-        if (!sb.doLogin(dataType, "diversity", false, paired)) {
-            //sb.updateMsg("Error", "No login return null?");
-            return null;
-        }
-
-        RConnection RC = sb.getRConnection();
-        if (isZip) {
-            if (!RDataUtils.readZipData(RC, testFile, dataType, "F")) {
-                sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
-                return null;
-            }
-        } else {
-            
-            //Tested cahnging Disc to cont
-            if (!RDataUtils.readTextData(RC, testFile, "rowu", "disc", "colOnly")) {
-                sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
-                return null;
-            }
-        }
-        sb.setDataUploaded(true);
-        if (dataType.equals("conc") || dataType.equals("pktable") || dataType.equals("specbin")) {
-            return "Data check";
-        }
-        return dataType;
-    }
-   
-  
     
-    //----------------------------------------------------------------- Test loader 
+//    public String handleStatTestFileUpload() {
+//        String format = "";
+//        boolean paired = false;
+//        boolean isZip = false;
+//        String testFile = null;
+//
+//        if (testDataOpt == null) {
+//            //sb.updateMsg("Error", "No data set is selected!");
+//            return null;
+//        }
+//
+//        if (testDataOpt.equals("conccancer")) {
+//            dataType = "conc";
+//            testFile = ab.getTestConcHsaPath();
+//            format = "rowu";
+//        }
+//        
+//        //DUNE DATA SELECTED*********************************************************
+//        else if (testDataOpt.equals("Dune")) {
+//            dataType = "Dune";
+//            sb.updateMsg("Error", "Dune data selected");
+//
+//            testFile = ab.getTestamf();
+//            format = "rowu";
+//            
+//           
+//        } else if (testDataOpt.equals("BCI")) {
+//            testFile = ab.getTestBCI();
+//            format = "rowu";
+//        }
+//
+//        if (!sb.doLogin(dataType, "stat", false, paired)) {
+//            //sb.updateMsg("Error", "No login return null?");
+//            return null;
+//        }
+//
+//        RConnection RC = sb.getRConnection();
+//        if (isZip) {
+//            if (!RDataUtils.readZipData(RC, testFile, dataType, "F")) {
+//                sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
+//                return null;
+//            }
+//        } else {
+//            
+//            //Tested cahnging Disc to cont
+//            if (!RDataUtils.readTextData(RC, testFile, "rowu", "disc", "colOnly")) {
+//                sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
+//                return null;
+//            }
+//        }
+//        sb.setDataUploaded(true);
+//        if (dataType.equals("conc") || dataType.equals("pktable") || dataType.equals("specbin")) {
+//            return "Data check";
+//        }
+//        return dataType;
+//    }
+   
+
+    //--------------Test data loader------------------- 
     public String handleDiversityTestFileUpload() {
         boolean paired = false;
         boolean isZip = false;
@@ -393,8 +358,6 @@ public class DiversityloadBean implements Serializable {
         } else {
 //            String testFileMeta = ab.getTestFileMeta();
 //            RDataUtils.readTextDataMeta(RC, testFileMeta, metaFormat, "disc", metaNames);
-//            String testFileEnv = ab.getTestFileEnv();
-//            RDataUtils.readTextDataEnv(RC, testFileEnv, envFormat, "disc", envNames);
             //Tested cahnging Disc to cont
             if (!RDataUtils.readTextData(RC, testFile, dataFormat, "disc", dataNames)) {
                 sb.updateMsg("Error", RDataUtils.getErrMsg(RC));

@@ -18,7 +18,7 @@ CleanDataMatrix <- function(ndata){
 #'@param rowNorm Select the option for row-wise normalization, "QuantileNorm" for Quantile Normalization, 
 #'"ProbNormT" for Probabilistic Quotient Normalization without using a reference sample,
 #'"ProbNormF" for Probabilistic Quotient Normalization based on a reference sample, 
-#'"CompNorm" for Normalization by a reference feature,
+#'"CompNorm" for Normalization by a reference variable,
 #'"SumNorm" for Normalization to constant sum, 
 #'"MedianNorm" for Normalization to sample median, and 
 #'"SpecNorm" for Normalization by a sample-specific factor.
@@ -26,7 +26,7 @@ CleanDataMatrix <- function(ndata){
 #'and "CrNorm" for Cubic Root Transformation. 
 #'@param scaleNorm Select option for scaling the data, "MeanCenter" for Mean Centering,
 #'"AutoNorm" for Autoscaling, "ParetoNorm" for Pareto Scaling, amd "RangeNorm" for Range Scaling.
-#'@param ref Input the name of the reference sample or the reference feature, use " " around the name.  
+#'@param ref Input the name of the reference sample or the reference variable, use " " around the name.  
 #'@param ratio This option is only for biomarker analysis.
 #'@param ratioNum Relevant only for biomarker analysis.  
 #'@author Jeff Xia \email{jeff.xia@mcgill.ca}, Jasmine Chong
@@ -84,7 +84,7 @@ CleanDataMatrix <- function(ndata){
 #'@param rowNorm Select the option for row-wise normalization, "QuantileNorm" for Quantile Normalization, 
 #'"ProbNormT" for Probabilistic Quotient Normalization without using a reference sample,
 #'"ProbNormF" for Probabilistic Quotient Normalization based on a reference sample, 
-#'"CompNorm" for Normalization by a reference feature,
+#'"CompNorm" for Normalization by a reference variable,
 #'"SumNorm" for Normalization to constant sum, 
 #'"MedianNorm" for Normalization to sample median, and 
 #'"SpecNorm" for Normalization by a sample-specific factor.
@@ -92,7 +92,7 @@ CleanDataMatrix <- function(ndata){
 #'and "CrNorm" for Cubic Root Transformation. 
 #'@param scaleNorm Select option for scaling the data, "MeanCenter" for Mean Centering,
 #'"AutoNorm" for Autoscaling, "ParetoNorm" for Pareto Scaling, amd "RangeNorm" for Range Scaling.
-#'@param ref Input the name of the reference sample or the reference feature, use " " around the name.  
+#'@param ref Input the name of the reference sample or the reference variable, use " " around the name.  
 #'@param ratio This option is only for biomarker analysis.
 #'@param ratioNum Relevant only for biomarker analysis.  
 #'@author Jeff Xia \email{jeff.xia@mcgill.ca}, Jasmine Chong
@@ -156,7 +156,7 @@ Normalization <- function(mSetObj=NA, rowNorm, transNorm, scaleNorm, ref=NULL, r
     constCol <- (varCol == 0 | is.na(varCol));
     constNum <- sum(constCol, na.rm=T);
     if(constNum > 0){
-      print(paste("After quantile normalization", constNum, "features with a constant value were found and deleted."));
+      print(paste("After quantile normalization", constNum, "variables with a constant value were found and deleted."));
       data <- data[,!constCol];
       colNames <- colnames(data);
       rowNames <- rownames(data);
@@ -173,7 +173,7 @@ Normalization <- function(mSetObj=NA, rowNorm, transNorm, scaleNorm, ref=NULL, r
     rownm<-"Probabilistic Quotient Normalization by a reference sample";
   }else if(rowNorm=="CompNorm"){
     data<-t(apply(data, 1, CompNorm, ref));
-    rownm<-"Normalization by a reference feature";
+    rownm<-"Normalization by a reference variable";
   }else if(rowNorm=="SumNorm"){
     data<-t(apply(data, 1, SumNorm));
     rownm<-"Normalization to constant sum";
@@ -205,7 +205,7 @@ Normalization <- function(mSetObj=NA, rowNorm, transNorm, scaleNorm, ref=NULL, r
   # minConc<-round(min(data)/2, 5);
   # data[dataSet$fill.inx]<-minConc;
   
-  # if the reference by feature, the feature column should be removed, since it is all 1
+  # if the reference by variable, the variable column should be removed, since it is all 1
   if(rowNorm=="CompNorm" && !is.null(ref)){
     inx<-match(ref, colnames(data));
     data<-data[,-inx];
@@ -367,7 +367,7 @@ RangeNorm<-function(x){
   }
 }
 
-#'Two plot summary plot: Feature View of before and after normalization
+#'Two plot summary plot: Variable View of before and after normalization
 #'@description For each plot, the top is a box plot, bottom is a density plot
 #'@usage PlotNormSummary(mSetObj, imgName, format, dpi, width)
 #'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
@@ -631,19 +631,19 @@ UpdateSampleItems <- function(mSetObj=NA, smpl.nm.vec){
   }
 }
 
-#' Remove feature items
-#' @description This function removes user-selected features from the data set. 
+#' Remove variable items
+#' @description This function removes user-selected variables from the data set. 
 #' This must be performed following data processing and filtering.
 #' If the data was normalized prior to removal, you must re-normalize the data.  
-#' @usage UpdateFeatureItems(mSetObj=NA, feature.nm.vec)
+#' @usage UpdateFeatureItems(mSetObj=NA, variable.nm.vec)
 #'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
-#' @param feature.nm.vec Input the name of the feature to remove from the data in quotation marks. 
-#' The name must be identical to the feature names found in the data set.  
+#' @param variable.nm.vec Input the name of the variable to remove from the data in quotation marks. 
+#' The name must be identical to the variable names found in the data set.  
 #'@author Jeff Xia \email{jeff.xia@mcgill.ca}, Jasmine Chong 
 #'McGill University, Canada
 #'@export
 #'
-UpdateFeatureItems <- function(mSetObj=NA, feature.nm.vec){
+UpdateFeatureItems <- function(mSetObj=NA, variable.nm.vec){
   
   mSetObj <- .get.mSet(mSetObj);
   if(is.null(mSetObj$dataSet$filt)){
@@ -662,11 +662,11 @@ UpdateFeatureItems <- function(mSetObj=NA, feature.nm.vec){
     }
   }
   
-  hit.inx <- colnames(data) %in% feature.nm.vec;
+  hit.inx <- colnames(data) %in% variable.nm.vec;
   mSetObj$dataSet$prenorm <- CleanDataMatrix(data[,!hit.inx,drop=FALSE]);
   mSetObj$dataSet$prenorm.cls <- cls; # this is the same
   
-  AddMsg("Successfully updated the feature items!");
+  AddMsg("Successfully updated the variable items!");
   return(.set.mSet(mSetObj));
 }
 

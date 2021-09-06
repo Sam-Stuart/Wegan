@@ -260,7 +260,7 @@ GetRCommandHistory <- function(mSetObj=NA){
 #  
 #
 #
-#  # try to remove check & remove empty line if feature name is empty
+#  # try to remove check & remove empty line if variable name is empty
 #  empty.inx <- is.na(var.nms) | var.nms == "";
 #  if(sum(empty.inx) > 0){
 #    msg <- c(msg, paste("<font color=\"red\">", sum(empty.inx), "empty variables</font> were detected and excluded from your data."));
@@ -270,7 +270,7 @@ GetRCommandHistory <- function(mSetObj=NA){
 #  
 #  #if(length(unique(var.nms))!=length(var.nms)){
 #  #  dup.nm <- paste(var.nms[duplicated(var.nms)], collapse=" ");
-#  #  AddErrMsg("Duplicate feature names are not allowed!");
+#  #  AddErrMsg("Duplicate variable names are not allowed!");
 #  #  AddErrMsg(dup.nm);
 #  # return(0);
 #  #}
@@ -286,7 +286,7 @@ GetRCommandHistory <- function(mSetObj=NA){
 #  if(sum(is.na(iconv(var.nms)))>0){
 #    na.inx <- is.na(iconv(var.nms));
 #    nms <- paste(var.nms[na.inx], collapse="; ");
-#    AddErrMsg(paste("No special letters (i.e. Latin, Greek) are allowed in feature names!", nms, collapse=" "));
+#    AddErrMsg(paste("No special letters (i.e. Latin, Greek) are allowed in variable names!", nms, collapse=" "));
 #    return(0);
 #  }
 #  
@@ -342,6 +342,7 @@ GetRCommandHistory <- function(mSetObj=NA){
 #  
 #  return(.set.mSet(mSetObj));
 #}
+
 Read.TextData <- function(mSetObj=NA, filePath, dataFormat="rowu", lbl.type="disc", dataNames="colOnly"){
   mSetObj <- .get.mSet(mSetObj);
   mSetObj$dataSet$cls.type <- lbl.type;
@@ -349,46 +350,21 @@ Read.TextData <- function(mSetObj=NA, filePath, dataFormat="rowu", lbl.type="dis
 
   if (dataNames=="colOnly") { #yes column names, no row names
     dat <- .readDataTable(filePath, dataNames="colOnly");
-    print("colOnly")
-    print(dat)
-    print("colnames")
-    print(colnames(dat))
-    print("rownames")
-    print(rownames(dat))
   } else if (dataNames=="rowOnly") { #no col names, yes row names
     dat <- .readDataTable(filePath, dataNames="rowOnly"); 
-    print("rowOnly")
-    print(dat)
-    print("colnames")
-    print(colnames(dat))
-    print("rownames")
-    print(rownames(dat))
   } else if (dataNames=="bothNames") { #yes col names, yes row names
     dat <- .readDataTable(filePath, dataNames="bothNames");
-    print("both")
-    print(dat)
-    print("colnames")
-    print(colnames(dat))
-    print("rownames")
-    print(rownames(dat))
   } else { #no col names, no row names
     dat <- .readDataTable(filePath, dataNames="noNames");
-    print("none")
-    print(dat)
-    print("colnames")
-    print(colnames(dat))
-    print("rownames")
-    print(rownames(dat))
   }
-
 
   if(class(dat) == "try-error" || ncol(dat) == 1){
     AddErrMsg("Data format error. Failed to read in the data!
                 /nMake sure the data table is saved in tab separated values (.txt) or comma separated values (.csv) format.
                 /nPlease also check the following:
-                /nBoth sample and variable names must in UTF-8 encoding.
-                ############# Make sure sample names and variable names are unique. TODO: ADD TO TEXT ON PAGE!!!!!!!!!!!! ###############
-                /nMissing values should be blank or NA without quote.");
+                /n/tBoth sample and variable names must in UTF-8 encoding.
+                /n/tMake sure sample names and variable names are unique.
+                /n/tMissing values should be blank or NA without quote.");
     return(0);
   }
   
@@ -405,6 +381,7 @@ Read.TextData <- function(mSetObj=NA, filePath, dataFormat="rowu", lbl.type="dis
     facB.lbl <- all.nms[2];
     var.nms <- all.nms;
     dat1 <- dat;
+    conc <- dat1
   }else{ # sample in col
     msg<-c(msg, "Samples in columns and variables in rows.");
     all.nms <- rownames(dat);
@@ -416,30 +393,28 @@ Read.TextData <- function(mSetObj=NA, filePath, dataFormat="rowu", lbl.type="dis
     facB.lbl <- cls.lbl[2];
     var.nms <- all.nms;
     dat1<-as.data.frame(t(dat));
+    conc <- dat1
   }
-
   mSetObj$dataSet$orig <- dat1;
   mSetObj$dataSet$type.cls.lbl <- class(cls.lbl);
   
-  #I REMOVED THIS
   # try to remove empty line if present
   # identified if no sample names provided
-  #empty.inx <- is.na(smpl.nms) | smpl.nms == ""
-  #if(sum(empty.inx) > 0){
-  #  msg <- c(msg, paste("<font color=\"red\">", sum(empty.inx), "empty rows</font> were detected and excluded from your data."));
-  #  smpl.nms <- smpl.nms[!empty.inx];
-  #  cls.lbl <-  cls.lbl[!empty.inx];
-  #  dat1 <- dat1[!empty.inx, ];
-  #}
+  empty.inx <- is.na(smpl.nms) | smpl.nms == ""
+  if(sum(empty.inx) > 0){
+    msg <- c(msg, paste("<font color=\"red\">", sum(empty.inx), "empty rows</font> were detected and excluded from your data."));
+    smpl.nms <- smpl.nms[!empty.inx];
+    cls.lbl <-  cls.lbl[!empty.inx];
+    dat1 <- dat1[!empty.inx, ];
+  }
   
-  #I REMOVED THIS
   # try to check & remove empty lines if class label is empty
-  #empty.inx <- is.na(cls.lbl) | cls.lbl == ""
-  #if(sum(empty.inx) > 0){
-  #  # force all NA to empty string, otherwise NA will become "NA" class label
-  #  cls.lbl[is.na(cls.lbl)] <- "";
-  #  msg <- c(msg, paste("<font color=\"red\">", sum(empty.inx), "new samples</font> were detected from your data."));
-  #}
+  empty.inx <- is.na(cls.lbl) | cls.lbl == ""
+  if(sum(empty.inx) > 0){
+    # force all NA to empty string, otherwise NA will become "NA" class label
+    cls.lbl[is.na(cls.lbl)] <- "";
+    msg <- c(msg, paste("<font color=\"orange\">", sum(empty.inx), "new samples</font> were detected from your data."));
+  }
   
   # check for uniqueness of dimension name
   if(length(unique(smpl.nms))!=length(smpl.nms)){
@@ -448,15 +423,6 @@ Read.TextData <- function(mSetObj=NA, filePath, dataFormat="rowu", lbl.type="dis
     AddErrMsg(dup.nm);
     return(0);
   }
-  
-  #I REMOVED THIS
-  # try to remove check & remove empty line if variable name is empty
-  #empty.inx <- is.na(var.nms) | var.nms == "";
-  #if(sum(empty.inx) > 0){
-  #  msg <- c(msg, paste("<font color=\"red\">", sum(empty.inx), "empty variables</font> were detected and excluded from your data."));
-  #  var.nms <- var.nms[!empty.inx];
-  #  dat1 <- dat1[,!empty.inx];
-  #}
   
   if(length(unique(var.nms))!=length(var.nms)){
     dup.nm <- paste(var.nms[duplicated(var.nms)], collapse=" ");
@@ -495,26 +461,17 @@ Read.TextData <- function(mSetObj=NA, filePath, dataFormat="rowu", lbl.type="dis
     mSetObj$dataSet$orig.cls <- mSetObj$dataSet$pairs <- cls.lbl;
   }else{
     if(lbl.type == "disc"){
-      #I REMOVED THIS
-      # check for class labels at least two replicates per class
-      #if(min(table(cls.lbl)) < 3){
-      #  AddErrMsg(paste ("A total of", length(levels(as.factor(cls.lbl))), "groups found with", length(smpl.nms), "samples."));
-      #  AddErrMsg("At least three replicates are required in each group!");
-      #  AddErrMsg("Or maybe you forgot to specify the data format?");
-      #  return(0);
-      #}
       mSetObj$dataSet$orig.cls <- mSetObj$dataSet$cls <- cls.lbl;
-      mSetObj$dataSet$facA.type <- is.numeric(facA);
+      mSetObj$dataSet$facA.type <- class(facA);
       mSetObj$dataSet$orig.facA <- mSetObj$dataSet$facA <- facA;
       mSetObj$dataSet$facA.lbl <- facA.lbl;
-      mSetObj$dataSet$facB.type <- is.numeric(facB);
+      mSetObj$dataSet$facB.type <- class(facB);
       mSetObj$dataSet$orig.facB <- mSetObj$dataSet$facB <- facB;
       mSetObj$dataSet$facB.lbl <- facB.lbl;
     }else{ # continuous
       mSetObj$dataSet$orig.cls <- mSetObj$dataSet$cls <- cls.lbl;
     }
   }
-  
   mSetObj$dataSet$design.type <- "regular";
   mSetObj$analSet$type <- "NA";
   mSetObj$dataSet$cmpd <- "NA";
@@ -522,7 +479,6 @@ Read.TextData <- function(mSetObj=NA, filePath, dataFormat="rowu", lbl.type="dis
   mSetObj$dataSet$orig <- dat1; # copy to be processed in the downstream
   mSetObj$msgSet$read.msg <- c(msg, paste("The uploaded data file contains a ", nrow(dat1),
                                           " (samples) by ", ncol(dat1), " (variables) data matrix.", sep=""));
-  
   return(.set.mSet(mSetObj));
 }
 
@@ -550,22 +506,21 @@ Read.TextDataMeta <- function(mSetObj=NA, filePath, metaFormat="rowu", lbl.type=
     print(dat)
   }
 
+  if(class(dat) == "try-error" || ncol(dat) == 1){
+    AddErrMsg("Data format error. Failed to read in the data!
+                /nMake sure the data table is saved in tab separated values (.txt) or comma separated values (.csv) format.
+                /nPlease also check the following:
+                /n/tBoth sample and variable names must in UTF-8 encoding.
+                /n/tMake sure sample names and variable names are unique.
+                /n/tMissing values should be blank or NA without quote.");
+    return(0);
+  }
+
   if(substring(metaFormat,1,3)=="row"){ # sample in row
     dat1 <- dat;
   }else{ # sample in col
     dat1<-as.data.frame(t(dat));
   }
-
-
-  msg <- mSetObj$msgSet$read.msg
-  mSetObj$msgSet$read.msg <- c(msg, "Grouping data has been uploaded")
-  ##############TO DO: CHECK DIMENSIONS MATCH MAIN DATA!!!!!!!!#######################
-  
-  
-  lbls.meta <- as.data.frame(c(1:nrow(dat1)))
-  colnames(lbls.meta) <- c("Sample")
-  orig.meta<-cbind(lbls.meta, dat1);
-  write.csv(orig.meta, file="grouping_data.csv", row.names=FALSE); 
   
   mSetObj$dataSet$origMeta <- dat1;
   
@@ -594,22 +549,21 @@ Read.TextDataEnv <- function(mSetObj=NA, filePath, envFormat="rowu", lbl.type="d
     print(dat)
   }
 
+  if(class(dat) == "try-error" || ncol(dat) == 1){
+    AddErrMsg("Data format error. Failed to read in the data!
+                /nMake sure the data table is saved in tab separated values (.txt) or comma separated values (.csv) format.
+                /nPlease also check the following:
+                /n/tBoth sample and variable names must in UTF-8 encoding.
+                /n/tMake sure sample names and variable names are unique.
+                /n/tMissing values should be blank or NA without quote.");
+    return(0);
+  }
+
   if(substring(envFormat,1,3)=="row"){ # sample in row
     dat1 <- dat;
   }else{ # sample in col
     dat1<-as.data.frame(t(dat));
-  }
-
-  
-  msg <- mSetObj$msgSet$read.msg
-  mSetObj$msgSet$read.msg <- c(msg, "Constraining data has been uploaded")
-  ##############TO DO: CHECK DIMENSIONS MATCH MAIN DATA!!!!!!!!#######################
-  
-  
-  lbls.env <- as.data.frame(c(1:nrow(dat1)))
-  colnames(lbls.env) <- c("Sample")
-  orig.env<-cbind(lbls.env, dat1);
-  write.csv(orig.env, file="constraining_data.csv", row.names=FALSE); 
+  } 
   
   mSetObj$dataSet$origEnv <- dat1;
   return(.set.mSet(mSetObj));
@@ -857,6 +811,21 @@ SaveTransformedData <- function(mSetObj=NA){
     #  orig.data<-t(orig.data);
     #}
     write.csv(orig.data, file="data_original.csv", row.names=FALSE);
+
+    if(!is.null(mSetObj$dataSet[["origMeta"]])){
+        lbls.meta <- as.data.frame(c(1:nrow(mSetObj$dataSet$origMeta)))
+        colnames(lbls.meta) <- c("Sample")
+        orig.meta<-cbind(lbls.meta, mSetObj$dataSet$origMeta);
+        write.csv(orig.meta, file="data_grouping.csv", row.names=FALSE); 
+     }
+
+    if(!is.null(mSetObj$dataSet[["origEnv"]])){
+        lbls.env <- as.data.frame(c(1:nrow(mSetObj$dataSet$origEnv)))
+        colnames(lbls.env) <- c("Sample")
+        orig.env<-cbind(lbls.env, mSetObj$dataSet$origEnv);
+        write.csv(orig.env, file="data_constraining.csv", row.names=FALSE); 
+     }
+
     if(!is.null(mSetObj$dataSet[["procr"]])){
       if(tsFormat){
         lbls <- cbind(as.character(mSetObj$dataSet$proc.facA),as.character(mSetObj$dataSet$proc.facB));
@@ -869,7 +838,8 @@ SaveTransformedData <- function(mSetObj=NA){
      #  proc.data<-t(proc.data);
      #}
       write.csv(proc.data, file="data_processed.csv", row.names=FALSE);
-      if(!is.null(mSetObj$dataSet[["norm"]])){
+      
+    if(!is.null(mSetObj$dataSet[["norm"]])){
         if(tsFormat){
           lbls <- cbind(as.character(mSetObj$dataSet$facA),as.character(mSetObj$dataSet$facB));
           colnames(lbls) <- c(mSetObj$dataSet$facA.lbl, mSetObj$dataSet$facB.lbl);

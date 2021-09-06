@@ -61,7 +61,7 @@ public class ApplicationBean1 implements Serializable {
     private static final String test_duneEnv = "/data/dune_env.csv";
     private static final String test_duneTaxon = "/data/dune_taxon.csv";
     private static final String test_BCI = "/data/BCI.txt";
-    private static final String test_varespec = "/data/varespec.txt";
+    private static final String test_varespec = "/data/varespec.csv";
     private static final String test_linear = "/data/linear_test_data.csv"; // linear plot test data 
     private static final String test_iris = "/data/iris.csv";
     private static final String test_dune_weights = "/data/dune_weights.txt";
