@@ -382,13 +382,13 @@ public class DiversityUtils {
         
     }//boolean calc_FDiv, boolean calc_FRic, boolean calc_CWM,
 
-        public static boolean CreateFdDiv(SessionBean1 sb, boolean data, String w, String corr, boolean w_abun, boolean stand_x, String m,  boolean stand_FRic, boolean print_pco, boolean messages, String asym_bin, String ord) {
+        public static boolean CreateFdDiv(SessionBean1 sb, boolean data, String w_text, String corr, boolean w_abun, boolean stand_x, String m,  boolean stand_FRic, boolean print_pco, boolean messages, String asym_bin, String ord) {
         try {
             System.out.print("FD");
             RConnection RC = sb.getRConnection(); //Start R connection
             String rCommand = "functionalDiv(NA"
                                                  + ", \"" + data
-                                                 + "\", \"" + w
+                                                 + "\", \"" + w_text
                                                  + "\", \"" + corr
                                                  + "\", \"" + w_abun
                                                  + "\", \"" + stand_x

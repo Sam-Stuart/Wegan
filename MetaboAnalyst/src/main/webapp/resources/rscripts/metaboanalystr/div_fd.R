@@ -136,14 +136,15 @@ functionalDiv <- function(mSetObj = NA, data = "false", w_text = "", corr = "NUL
                m = m1, stand.FRic = stand.FRic1, 
                print.pco = print.pco1, messages = messages1)     
   } else {
+     print(w_text)
      w_text1 <- w_text #taken from text box by java, fed as string into R code
-     w_text1 <- gsub("\n", "", w_text1, fixed=TRUE) #fixed=TRUE means we are dealing with one string, versus a vector of strings (fixed=FALSE)
-     w_text1 <- gsub(",", "+", w_text1, fixed=TRUE) 
-     w_text1 <- gsub(";", "+", w_text1, fixed=TRUE)
-     w_text1 <- gsub(":", "+", w_text1, fixed=TRUE)
-     w_text1 <- gsub("*", "+", w_text1, fixed=TRUE)
-     cat(paste0("You have selected these constraining variables: ", gsub("+", ", ", w_text1, fixed=TRUE), "."))
-     cat("If the selection is not what you intended, reenter environmental variable(s) in the text box, using the column names with commas in between.")
+     #w_text1 <- gsub("\n", "", w_text1, fixed=TRUE) #fixed=TRUE means we are dealing with one string, versus a vector of strings (fixed=FALSE)
+     #w_text1 <- gsub(",", "+", w_text1, fixed=TRUE) 
+     #w_text1 <- gsub(";", "+", w_text1, fixed=TRUE)
+     #w_text1 <- gsub(":", "+", w_text1, fixed=TRUE)
+     #w_text1 <- gsub("*", "+", w_text1, fixed=TRUE)
+     #cat(paste0("You have selected these constraining variables: ", gsub("+", ", ", w_text1, fixed=TRUE), "."))
+     #cat("If the selection is not what you intended, reenter environmental variable(s) in the text box, using the column names with commas in between.")
      print(w_text1)
      w1 <- as.numeric(w_text1)
      print(w1)
@@ -159,21 +160,21 @@ functionalDiv <- function(mSetObj = NA, data = "false", w_text = "", corr = "NUL
 
   FRic <- as.data.frame(ex10$FRic)
   #colnames(FRic) <- c ("functional_richness")
-  print(FRic)
+  print("FRic")
   FEve <- as.data.frame(ex10$FEve)
   colnames(FEve) <- c ("functional_evenness")
-  print(FEve)
+  print("FEve")
   FDiv <- as.data.frame(ex10$FDiv)
   colnames(FDiv) <- c ("functional_divergence")
-  print(FDiv)
+  print("FDiv")
   FDis <- as.data.frame(ex10$FDis)
   colnames(FDis) <- c ("functional_dispersion")
-  print(FDis)
+  print("FDis")
   RaoQ <- as.data.frame(ex10$RaoQ)
   colnames(RaoQ) <- c ("Rao's_quadratic_entropy")
-  print(RaoQ)
+  print("RaoQ")
   CWM <- as.data.frame(ex10$CWM)
-  print(CWM)
+  print("CWM")
   print(asym.bin)
 
   if(w_text == "") {
@@ -195,6 +196,7 @@ functionalDiv <- function(mSetObj = NA, data = "false", w_text = "", corr = "NUL
         }
     }
 } else {
+    print(w_text1)  
     if (asym.bin == "") {
         if (ord == "NULL") {
            exg <- gowdis(metaData, w1)
@@ -215,8 +217,9 @@ functionalDiv <- function(mSetObj = NA, data = "false", w_text = "", corr = "NUL
 }
   #print(asym.bin1)
   #print(ord1)
-  print(exg)
+  #print(exg)
   
+
   exg1 <- as.matrix(exg)
   
   mSetObj$analset$FRic <- FRic
@@ -264,7 +267,7 @@ FD_cluster_plot <- function(mSetObj=NA, color="NULL", imgName, format="png", dpi
   mSetObj <- .get.mSet(mSetObj)
   
   plot_data <- mSetObj$analse$exg
-  print(plot_data)  
+  #print(plot_data)  
 
   #Set plot dimensions
   if(is.na(width)){

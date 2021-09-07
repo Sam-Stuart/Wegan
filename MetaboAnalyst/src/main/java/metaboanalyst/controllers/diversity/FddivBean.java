@@ -183,14 +183,14 @@ public class FddivBean implements Serializable {
         
 
     // textbox
-    private String w = "";
+    private String w_text = null;
     
-    public String getW() {
-        return w;
+    public String getW_text() {
+        return w_text;
     }
 
-    public void setW(String w) {
-        this.w = w;
+    public void setW_text(String w_text) {
+        this.w_text = w_text;
     }
     
     
@@ -313,10 +313,10 @@ public class FddivBean implements Serializable {
         
     }
     
-    
+                                   //sb, false, "", "NULL", false, false, "", false, false, false, "", "NULL"
     // ACTION BUTTON // 
     public void fddivUpdate_action() {
-        DiversityUtils.CreateFdDiv(sb, doOriginal, w, corrchosen, doW_abun, doStand_x, m, doStand_FRic, doPrint_pco, doMessages, asym_bin, ordchosen);       
+        DiversityUtils.CreateFdDiv(sb, doOriginal, w_text, corrchosen, doW_abun, doStand_x, m, doStand_FRic, doPrint_pco, doMessages, asym_bin, ordchosen);       
         DiversityUtils.PlotFdTree(sb, colorchosen, sb.getNewImage("Cluster_Plot"), "png", 72, "false");
     }
     
