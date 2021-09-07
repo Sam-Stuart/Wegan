@@ -35,20 +35,7 @@ CleanDataMatrix <- function(ndata){
 #'
 #BestNormalize <- function(mSetObj=NA, rowNorm, transNorm, scaleNorm, ref=NULL, ratio=FALSE, ratioNum=20){
 #  
-#  mSetObj <- .get.mSet(mSetObj);
-#  
-#  data <- mSetObj
-#  library("bestNormalize")
-#    openssl (sudo apt-get install libcurl4-openssl-dev libssl-dev)
-#    credentials
-#    codetools
-#    httr
-#    gert
-#    usethis
-#    gh
-#    doParallel
-#    doRNG
-#    butcher
+#  data <- .get.mSet(mSetObj);
 #
 #  if(is.null(mSetObj$dataSet[["procr"]])){
 #    data<-mSetObj$dataSet$preproc
@@ -56,10 +43,6 @@ CleanDataMatrix <- function(ndata){
 #    data<- mSetObj$dataSet$procr;
 #  }else{
 #    data<-mSetObj$dataSet$prenorm
-#  }
-#  
-#  if(is.null(mSetObj$dataSet[["prenorm.cls"]])){ # can be so for regression 
-#    mSetObj$dataSet$prenorm.cls <- mSetObj$dataSet$proc.cls;
 #  }
 #    
 #  normData <- bestNormalize(data)
@@ -102,7 +85,8 @@ CleanDataMatrix <- function(ndata){
 Normalization <- function(mSetObj=NA, rowNorm, transNorm, scaleNorm, ref=NULL, ratio=FALSE, ratioNum=20){
   
   mSetObj <- .get.mSet(mSetObj);
-  
+  load_dplyr()
+
   if(is.null(mSetObj$dataSet[["procr"]])){
     data<-mSetObj$dataSet$preproc
   }else if(is.null(mSetObj$dataSet[["prenorm"]])){
@@ -111,6 +95,9 @@ Normalization <- function(mSetObj=NA, rowNorm, transNorm, scaleNorm, ref=NULL, r
     data<-mSetObj$dataSet$prenorm
   }
   
+  numData <- select_if(data, is.numeric)
+  charData <- select_if(data, is.character)
+
   if(is.null(mSetObj$dataSet[["prenorm.cls"]])){ # can be so for regression 
     mSetObj$dataSet$prenorm.cls <- mSetObj$dataSet$proc.cls;
   }
@@ -143,82 +130,81 @@ Normalization <- function(mSetObj=NA, rowNorm, transNorm, scaleNorm, ref=NULL, r
     }
   }
   
-  colNames <- colnames(data);
-  rowNames <- rownames(data);
+  colNames <- colnames(numData);
+  rowNames <- rownames(numData);
   
   # row-wise normalization
   if(rowNorm=="QuantileNorm"){
-    data<-QuantileNormalize(data);
+    numData<-QuantileNormalize(numData);
     # this can introduce constant variables if a variable is 
     # at the same rank across all samples (replaced by its average across all)
     
-    varCol <- apply(data, 2, var, na.rm=T);
+    varCol <- apply(numData, 2, var, na.rm=T);
     constCol <- (varCol == 0 | is.na(varCol));
     constNum <- sum(constCol, na.rm=T);
     if(constNum > 0){
       print(paste("After quantile normalization", constNum, "variables with a constant value were found and deleted."));
-      data <- data[,!constCol];
-      colNames <- colnames(data);
-      rowNames <- rownames(data);
+      numData <- numData[,!constCol];
+      colNames <- colnames(numData);
+      rowNames <- rownames(numData);
     }
     rownm<-"Quantile Normalization";
   }else if(rowNorm=="GroupPQN"){
     grp.inx <- cls == ref;
-    ref.smpl <- apply(data[grp.inx, ], 2, mean);
-    data<-t(apply(data, 1, ProbNorm, ref.smpl));
+    ref.smpl <- apply(numData[grp.inx, ], 2, mean);
+    numData<-t(apply(numData, 1, ProbNorm, ref.smpl));
     rownm<-"Probabilistic Quotient Normalization by a reference group";
   }else if(rowNorm=="SamplePQN"){
-    ref.smpl <- data[ref,];
-    data<-t(apply(data, 1, ProbNorm, ref.smpl));
+    ref.smpl <- numData[ref,];
+    numData<-t(apply(numData, 1, ProbNorm, ref.smpl));
     rownm<-"Probabilistic Quotient Normalization by a reference sample";
   }else if(rowNorm=="CompNorm"){
-    data<-t(apply(data, 1, CompNorm, ref));
+    numData<-t(apply(numData, 1, CompNorm, ref));
     rownm<-"Normalization by a reference variable";
   }else if(rowNorm=="SumNorm"){
-    data<-t(apply(data, 1, SumNorm));
+    numData<-t(apply(numData, 1, SumNorm));
     rownm<-"Normalization to constant sum";
   }else if(rowNorm=="MedianNorm"){
-    data<-t(apply(data, 1, MedianNorm));
+    numData<-t(apply(numData, 1, MedianNorm));
     rownm<-"Normalization to sample median";
   }else if(rowNorm=="SpecNorm"){
     if(!exists("norm.vec")){
-      norm.vec <- rep(1,nrow(data)); # default all same weight vec to prevent error
+      norm.vec <- rep(1,nrow(numData)); # default all same weight vec to prevent error
       print("No sample specific information were given, all set to 1.0");
     }
     rownm<-"Normalization by sample-specific factor";
-    data<-data/norm.vec;
+    numData<-numData/norm.vec;
   }else{
     # nothing to do
     rownm<-"N/A";
   }
   
   # use apply will lose dimesion info (i.e. row names and colnames)
-  rownames(data)<-rowNames;
-  colnames(data)<-colNames;
+  rownames(numData)<-rowNames;
+  colnames(numData)<-colNames;
   
   # note: row-normed data is based on biological knowledge, since the previous
   # replacing zero/missing values by half of the min positive (a constant) 
   # now may become different due to different norm factor, which is artificial
   # variance and should be corrected again
-  #
   # stopped, this step cause troubles
-  # minConc<-round(min(data)/2, 5);
-  # data[dataSet$fill.inx]<-minConc;
+  # minConc<-round(min(numData)/2, 5);
+  # numData[dataSet$fill.inx]<-minConc;
   
   # if the reference by variable, the variable column should be removed, since it is all 1
   if(rowNorm=="CompNorm" && !is.null(ref)){
-    inx<-match(ref, colnames(data));
-    data<-data[,-inx];
+    inx<-match(ref, colnames(numData));
+    numData<-numData[,-inx];
     colNames <- colNames[-inx];
   }
   
   # record row-normed data for fold change analysis (b/c not applicable for mean-centered data)
-  mSetObj$dataSet$row.norm <- as.data.frame(CleanData(data, T, T)); #moved below ratio 
+  mSetObj$dataSet$row.norm <- as.data.frame(CleanData(numData, T, T)); #moved below ratio 
   
   # this is for biomarker analysis only (for compound concentration data)
   if(ratio){
-    min.val <- min(abs(data[data!=0]))/2;
-    norm.data <- log2((data + sqrt(data^2 + min.val))/2);
+    min.val <- min(abs(numData[numData!=0]))/2;
+    norm.data <- log2((numData + sqrt(numData^2 + min.val))/2);
     transnm<-"Log Normalization";
     ratio.mat <- CalculatePairwiseDiff(norm.data);
     
@@ -227,25 +213,25 @@ Normalization <- function(mSetObj=NA, rowNorm, transNorm, scaleNorm, ref=NULL, r
     
     ratio.mat <- ratio.mat[, hit.inx];
     
-    data <- cbind(norm.data, ratio.mat);
+    numData <- cbind(norm.data, ratio.mat);
     
-    colNames <- colnames(data);
-    rowNames <- rownames(data);
-    #mSetObj$dataSet$procr <- data;
+    colNames <- colnames(numData);
+    rowNames <- rownames(numData);
+    #mSetObj$dataSet$procr <- numData;
     mSetObj$dataSet$use.ratio <- TRUE;
-    mSetObj$dataSet$proc.ratio <- data;
+    mSetObj$dataSet$proc.ratio <- numData;
 
   }else{
     mSetObj$dataSet$use.ratio <- FALSE;
     # transformation
     if(transNorm=='LogNorm'){
-      min.val <- min(abs(data[data!=0]))/10;
-      data<-apply(data, 2, LogNorm, min.val);
+      min.val <- min(abs(numData[numData!=0]))/10;
+      numData<-apply(numData, 2, LogNorm, min.val);
       transnm<-"Log Normalization";
     }else if(transNorm=='CrNorm'){
-      norm.data <- abs(data)^(1/3);
-      norm.data[data<0] <- - norm.data[data<0];
-      data <- norm.data;
+      norm.data <- abs(numData)^(1/3);
+      norm.data[numData<0] <- - norm.data[numData<0];
+      numData <- norm.data;
       transnm<-"Cubic Root Transformation";
     }else{
       transnm<-"N/A";
@@ -254,33 +240,35 @@ Normalization <- function(mSetObj=NA, rowNorm, transNorm, scaleNorm, ref=NULL, r
   
   # scaling
   if(scaleNorm=='MeanCenter'){
-    data<-apply(data, 2, MeanCenter);
+    numData<-apply(numData, 2, MeanCenter);
     scalenm<-"Mean Centering";
   }else if(scaleNorm=='AutoNorm'){
-    data<-apply(data, 2, AutoNorm);
+    numData<-apply(numData, 2, AutoNorm);
     scalenm<-"Autoscaling";
   }else if(scaleNorm=='ParetoNorm'){
-    data<-apply(data, 2, ParetoNorm);
+    numData<-apply(numData, 2, ParetoNorm);
     scalenm<-"Pareto Scaling";
   }else if(scaleNorm=='RangeNorm'){
-    data<-apply(data, 2, RangeNorm);
+    numData<-apply(numData, 2, RangeNorm);
     scalenm<-"Range Scaling";
   }else{
     scalenm<-"N/A";
   }
   
   # note after using "apply" function, all the attribute lost, need to add back
-  rownames(data)<-rowNames;
-  colnames(data)<-colNames;
+  rownames(numData)<-rowNames;
+  colnames(numData)<-colNames;
   
   # need to do some sanity check, for log there may be Inf values introduced
-  data <- CleanData(data, T, F);
+  numData <- CleanData(numData, T, F);
   
   if(ratio){
     mSetObj$dataSet$ratio <- CleanData(ratio.mat, T, F)
   }
   
-  mSetObj$dataSet$norm <- as.data.frame(data);
+  dataNorm <- cbind(data, charData)
+
+  mSetObj$dataSet$norm <- as.data.frame(dataNorm);
   mSetObj$dataSet$cls <- cls;
   
   mSetObj$dataSet$rownorm.method <- rownm;

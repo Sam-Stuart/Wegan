@@ -19,105 +19,108 @@ SanityCheckData <- function(mSetObj=NA){
   msg <- NULL;
   cls <- mSetObj$dataSet$orig.cls;
   mSetObj$dataSet$small.smpl.size <- 0;
+
   # check class info
   if(mSetObj$dataSet$cls.type == "disc"){
-    if(substring(mSetObj$dataSet$format,4,5)=="ts"){
-      if(mSetObj$dataSet$design.type =="time"){
-        msg<-c(msg, "The data is time-series data.");
-      }else if(mSetObj$dataSet$design.type =="time0"){
-        msg<-c(msg, "The data is time-series only data.");
-      }else{
-        msg<-c(msg, "The data is not time-series data.");
-      }
-      clsA.num <- length(levels(mSetObj$dataSet$facA));
-      clsB.num <- length(levels(mSetObj$dataSet$facB));
-      msg<-c(msg, paste(clsA.num, "groups were detected in samples for factor", mSetObj$dataSet$facA.lbl));
-      msg<-c(msg, paste(clsB.num, "groups were detected in samples for factor", mSetObj$dataSet$facB.lbl));
-    }else{
-      if(mSetObj$dataSet$paired){
-        msg<-c(msg,"Samples are paired.");
-        # need to first set up pair information if not csv file
-        if(!(mSetObj$dataSet$type=="conc" | mSetObj$dataSet$type=="specbin" | mSetObj$dataSet$type=="pktable" )){
-          pairs <- ReadPairFile();
-          # check if they are of the right length
-          if(length(pairs)!=nrow(mSetObj$dataSet$orig)){
-            AddErrMsg("Error: the total paired names are not equal to sample names.");
-            return(0);
-          }else{
-            # matching the names of the files
-            inx<-match(rownames(mSetObj$dataSet$orig), names(pairs));
-            #check if all matched exactly
-            if(sum(is.na(inx))>0){
-              AddErrMsg("Error: some paired names not match the sample names.");
-              return(0);
-            }else{
-              mSetObj$dataSet$pairs <- pairs[inx];
-            }
-          }
-        }
-        
-        pairs <- mSetObj$dataSet$pairs;
-        
-        # check if QC samples are present
-        qc.hits <- tolower(as.character(cls)) %in% "qc";
-        mSetObj$dataSet$orig <- mSetObj$dataSet$orig;
-        if(sum(qc.hits) > 0){
-          AddErrMsg("<font color='red'>Error: QC samples not supported in paired analysis mode.</font>");
-          AddErrMsg("You can perform QC filtering using regular two-group labels.");
-          AddErrMsg("Then re-upload your data (without QC samples) for paired analysis.");
-          return(0);
-        }else{
-          pairs <- as.numeric(pairs);
-        }
-        
-        label <- as.numeric(pairs);
-        cls <- as.factor(ifelse(label>0,1,0));
-        mSetObj$dataSet$pairs <- label;
-        
-        lev <- unique(pairs);
-        uni.cl <- length(lev);
-        uni.cl.abs <- uni.cl/2;             
-        sorted.pairs <- sort(pairs,index=TRUE);
-        
-        if(!all(sorted.pairs$x==c(-uni.cl.abs:-1,1:uni.cl.abs))){
-          AddErrMsg("There are some problems in paired sample labels! ");
-          if(uni.cl.abs != round(uni.cl.abs)){
-            AddErrMsg("The total samples must be of even number!");
-          }else{
-            AddErrMsg(paste("And class labels between ",-uni.cl.abs,
-                            " and 1, and between 1 and ",uni.cl.abs,".",sep=""));
-          }
-          return(0);
-        }else{  
-          msg <- c(msg,"The labels of paired samples passed sanity check.");
-          msg <- c(msg, paste("A total of", uni.cl.abs, "pairs were detected."));
-          # make sure paired samples are sorted 1:n/2 and -1:-n/2
-          
-          x<-sorted.pairs$ix[(uni.cl.abs+1):uni.cl]
-          y<-sorted.pairs$ix[uni.cl.abs:1]
-          index<-as.vector(cbind(x,y));
-          cls<-cls[index];
-          pairs <- pairs[index];
-          mSetObj$dataSet$pairs <- pairs;
-          mSetObj$dataSet$orig.cls <- cls;
-          mSetObj$dataSet$orig <- mSetObj$dataSet$orig[index,];
-        }
-      }else{
-        #msg <- c(msg,"Samples are not paired."); #I COMMENTED THIS OUT
-      }
-      
-      #I COMMENTED THIS OUT SINCE DATASETS MAY NOT HAVE GROUPS
+    if(substring(mSetObj$dataSet$format,4,5)=="ts"){ #I COMMENTED THIS SECTION OUT BC IT IS UNUSED BY WEGAN
+    #  if(mSetObj$dataSet$design.type =="time"){
+    #    msg<-c(msg, "The data is time-series data.");
+    #  }else if(mSetObj$dataSet$design.type =="time0"){
+    #    msg<-c(msg, "The data is time-series only data.");
+    #  }else{
+    #    msg<-c(msg, "The data is not time-series data.");
+    #  }
+    #  clsA.num <- length(levels(mSetObj$dataSet$facA));
+    #  clsB.num <- length(levels(mSetObj$dataSet$facB));
+    #  msg<-c(msg, paste(clsA.num, "groups were detected in samples for factor", mSetObj$dataSet$facA.lbl));
+    #  msg<-c(msg, paste(clsB.num, "groups were detected in samples for factor", mSetObj$dataSet$facB.lbl));
+    } else {
+    #  if(mSetObj$dataSet$paired){
+    #    msg<-c(msg,"Samples are paired.");
+    #    # need to first set up pair information if not csv file
+    #    if(!(mSetObj$dataSet$type=="conc" | mSetObj$dataSet$type=="specbin" | mSetObj$dataSet$type=="pktable" )){
+    #      pairs <- ReadPairFile();
+    #      # check if they are of the right length
+    #      if(length(pairs)!=nrow(mSetObj$dataSet$orig)){
+    #        AddErrMsg("Error: the total paired names are not equal to sample names.");
+    #        return(0);
+    #      }else{
+    #        # matching the names of the files
+    #        inx<-match(rownames(mSetObj$dataSet$orig), names(pairs));
+    #        #check if all matched exactly
+    #        if(sum(is.na(inx))>0){
+    #          AddErrMsg("Error: some paired names not match the sample names.");
+    #          return(0);
+    #        }else{
+    #          mSetObj$dataSet$pairs <- pairs[inx];
+    #        }
+    #      }
+    #    }
+    #    
+    #    pairs <- mSetObj$dataSet$pairs;
+    #    
+    #    # check if QC samples are present
+    #    qc.hits <- tolower(as.character(cls)) %in% "qc";
+    #    mSetObj$dataSet$orig <- mSetObj$dataSet$orig;
+    #    if(sum(qc.hits) > 0){
+    #      AddErrMsg("<font color='red'>Error: QC samples not supported in paired analysis mode.</font>");
+    #      AddErrMsg("You can perform QC filtering using regular two-group labels.");
+    #      AddErrMsg("Then re-upload your data (without QC samples) for paired analysis.");
+    #      return(0);
+    #    }else{
+    #      pairs <- as.numeric(pairs);
+    #    }
+    #    
+    #    label <- as.numeric(pairs);
+    #    cls <- as.factor(ifelse(label>0,1,0));
+    #    mSetObj$dataSet$pairs <- label;
+    #    
+    #    lev <- unique(pairs);
+    #    uni.cl <- length(lev);
+    #    uni.cl.abs <- uni.cl/2;             
+    #    sorted.pairs <- sort(pairs,index=TRUE);
+    #    
+    #    if(!all(sorted.pairs$x==c(-uni.cl.abs:-1,1:uni.cl.abs))){
+    #      AddErrMsg("There are some problems in paired sample labels! ");
+    #      if(uni.cl.abs != round(uni.cl.abs)){
+    #        AddErrMsg("The total samples must be of even number!");
+    #      }else{
+    #        AddErrMsg(paste("And class labels between ",-uni.cl.abs,
+    #                        " and 1, and between 1 and ",uni.cl.abs,".",sep=""));
+    #      }
+    #      return(0);
+    #    }else{  
+    #      msg <- c(msg,"The labels of paired samples passed sanity check.");
+    #      msg <- c(msg, paste("A total of", uni.cl.abs, "pairs were detected."));
+    #      # make sure paired samples are sorted 1:n/2 and -1:-n/2
+    #      
+    #      x<-sorted.pairs$ix[(uni.cl.abs+1):uni.cl]
+    #      y<-sorted.pairs$ix[uni.cl.abs:1]
+    #      index<-as.vector(cbind(x,y));
+    #      cls<-cls[index];
+    #      pairs <- pairs[index];
+    #      mSetObj$dataSet$pairs <- pairs;
+    #      mSetObj$dataSet$orig.cls <- cls;
+    #      mSetObj$dataSet$orig <- mSetObj$dataSet$orig[index,];
+    #    }
+    #  }else{
+    #    msg <- c(msg,"Samples are not paired."); #I COMMENTED THIS OUT
+    #  }
+            
       # checking if too many groups but a few samples in each group
       cls.lbl <- mSetObj$dataSet$orig.cls;
       cls.num <- length(levels(cls.lbl));
+      mSetObj$dataSet$cls.num <- cls.num;
       min.grp.size <- min(table(cls.lbl));
+      mSetObj$dataSet$min.grp.size <- min.grp.size;
+      
+
+      #I COMMENTED THIS OUT SINCE DATASETS MAY NOT HAVE GROUPS
       #if(cls.num/min.grp.size > 3){
       #  mSetObj$dataSet$small.smpl.size <- 1;
       #  msg <- c(msg, "<font color='red'>Too many groups with very small number of replicates! Only a subset of methods will be available for analysis!</font>");
       #}
       #msg <- c(msg, paste(cls.num, "groups were detected in samples.")); 
-      mSetObj$dataSet$cls.num <- cls.num;
-      mSetObj$dataSet$min.grp.size <- min.grp.size;
     }
     
     #I REMOVED THIS BC WE DO NOT WANT AUTO SORTING
@@ -158,8 +161,7 @@ SanityCheckData <- function(mSetObj=NA){
   #msg<-c(msg,"Other special characters or punctuations (if any) will be stripped off.");
   
   int.mat <- mSetObj$dataSet$orig;
-    print("int.mat")
-    print(int.mat)
+
   #I COMMENTED THIS OUT BC ITS UNUSED
   # check matrix
   #rowNms <- rownames(int.mat);
@@ -217,6 +219,16 @@ SanityCheckData <- function(mSetObj=NA){
   mSetObj$dataSet$minConc <- minConc;
 
   mSetObj$dataSet$preproc <- as.data.frame(int.mat);
+    print("preproc")
+    print(mSetObj$dataSet$preproc)
+    print("colnames")
+    print(colnames(mSetObj$dataSet$preproc))
+    print("rownames")
+    print(rownames(mSetObj$dataSet$preproc))
+    print("number numeric cols")
+    print(length(select_if(mSetObj$dataSet$preproc, is.numeric)))
+    print("number character cols")
+    print(length(select_if(mSetObj$dataSet$preproc, is.character)))
   mSetObj$dataSet$proc.cls <- mSetObj$dataSet$cls <- mSetObj$dataSet$orig.cls;
   
   if(substring(mSetObj$dataSet$format,4,5)=="ts"){
@@ -234,6 +246,7 @@ SanityCheckData <- function(mSetObj=NA){
   
   return(.set.mSet(mSetObj));
 }
+
 
 #'Replace missing or zero values
 #'@description This function will replace zero/missing values by half of the smallest
