@@ -53,7 +53,16 @@ public class ApplicationBean1 implements Serializable {
     private static final String test_currency_data = "/data/currency.txt";
     private static final String test_pos_adduct_data = "/data/pos_add_list.txt";
     private static final String test_neg_adduct_data = "/data/neg_add_list.txt";
-    //WEGAN TEST DATA PATHS ----------------------------------------------------
+    private static final String qc_cmp_data = "/data/qc_compare.csv";
+    private static final String path_lib = "/libs/smp_path.csv";
+    private static final String mset_dir = "/libs/msets";
+    private static final String cmpd_conc_data = "/libs/cmpd_conc.csv";
+    private static final String kegg_dir = "/libs/kegg";
+    private static final String test_powerdata = "/data/human_cachexia.csv";
+    private static final String test_rocdata = "/data/plasma_nmr.csv";
+    private static final String test_rocnewdata = "/data/plasma_nmr_new.csv";
+    private static final String bg_image = "/images/background.png";
+        //WEGAN TEST DATA PATHS ----------------------------------------------------
     
     private static final String test_amf = "/data/WeganTestAMF.csv";
     private static final String test_dune = "/data/dune.csv";
@@ -67,27 +76,11 @@ public class ApplicationBean1 implements Serializable {
     private static final String test_dune_weights = "/data/dune_weights.txt";
     private static final String test_pitlatrine = "/data/SPE_pitlatrine.csv";
     private static final String test_pitlatrineEnv = "/data/ENV_pitlatrine.csv";
+    private static final String test_WolvesElk = "/data/Wolves_Elk.csv";
+
     
-    
+  
     //**************************************************************************
-    
-
-    private static final String qc_cmp_data = "/data/qc_compare.csv";
-    private static final String path_lib = "/libs/smp_path.csv";
-    private static final String mset_dir = "/libs/msets";
-    private static final String cmpd_conc_data = "/libs/cmpd_conc.csv";
-    private static final String kegg_dir = "/libs/kegg";
-    private static final String test_powerdata = "/data/human_cachexia.csv";
-    private static final String test_rocdata = "/data/plasma_nmr.csv";
-    private static final String test_rocnewdata = "/data/plasma_nmr_new.csv";
-    
-    
-    //private static final String test_Dune = "/data/plasma_nmr_new.csv";
-    
-    
-    
-
-    private static final String bg_image = "/images/background.png";
 
     private final SelectItem[] csvOpts;
     private final SelectItem[] cmpdIDOpts;
@@ -232,20 +225,21 @@ public class ApplicationBean1 implements Serializable {
         rocFormatOpts[1] = new SelectItem("colu", "Samples in columns");
 
         //Changed for WEGAN
-        testDataOpts = new SelectItem[6];
+        testDataOpts = new SelectItem[7];
         testDataOpts[0] = new SelectItem("Dune", "Dune");
         testDataOpts[1] = new SelectItem("Iris", "Iris");
         testDataOpts[2] = new SelectItem("BCI", "BCI");
         testDataOpts[3] = new SelectItem("Varespec", "Varespec");
         testDataOpts[4] = new SelectItem("Linear", "Linear");  
         testDataOpts[5] = new SelectItem("Pitlatrine", "Pitlatrine");
-//        testDataOpts[5] = new SelectItem("nmrspecbin", "NMR spectral bins");
-//        testDataOpts[6] = new SelectItem("nmrpeaklist", "NMR peak lists");
-//        testDataOpts[7] = new SelectItem("concpair", "Concentrations (paired)");
-//        testDataOpts[8] = new SelectItem("mspkint", "MS peak intensities");
-//        testDataOpts[9] = new SelectItem("mspklist", "MS peak list");
-//        testDataOpts[10] = new SelectItem("lcmsspec", "LC-MS spectra");
-//        testDataOpts[11] = new SelectItem("gcmsspec", "GC-MS spectra");
+        testDataOpts[6] = new SelectItem("WolvesElk", "WolvesElk");
+//        testDataOpts[4] = new SelectItem("nmrspecbin", "NMR spectral bins");
+//        testDataOpts[5] = new SelectItem("nmrpeaklist", "NMR peak lists");
+//        testDataOpts[6] = new SelectItem("concpair", "Concentrations (paired)");
+//        testDataOpts[7] = new SelectItem("mspkint", "MS peak intensities");
+//        testDataOpts[8] = new SelectItem("mspklist", "MS peak list");
+//        testDataOpts[9] = new SelectItem("lcmsspec", "LC-MS spectra");
+//        testDataOpts[10] = new SelectItem("gcmsspec", "GC-MS spectra");
 
 
         
@@ -253,12 +247,9 @@ public class ApplicationBean1 implements Serializable {
         caDataOpts[0] = new SelectItem("Dune", "Dune");
         caDataOpts[1] = new SelectItem("BCI", "BCI");
         
-        //WEGAN TEST FUNCTIONS START HERE
-        
+        //WEGAN TEST FUNCTION
         NMDSTestDataOpts = new SelectItem[1];
         NMDSTestDataOpts[0] = new SelectItem("Dune");
-
-        // Plotting Test Functions 
 
         betadisperDataOpts = new SelectItem[2];
         betadisperDataOpts[0] = new SelectItem("org","Original Data set");
@@ -608,6 +599,10 @@ public class ApplicationBean1 implements Serializable {
     
     public String getTestPitlatrineEnv() {
         return realPath + test_pitlatrineEnv;
+    }
+           
+    public String getTestWolvesElk() {
+        return realPath + test_WolvesElk;
     }
             
     public String getTestIris() {

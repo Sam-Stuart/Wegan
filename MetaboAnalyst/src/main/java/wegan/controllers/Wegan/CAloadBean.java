@@ -81,7 +81,7 @@ public class CAloadBean implements Serializable {
             paired = true;
         }
 
-        if (sb.doLogin(dataType, "nmds", false, paired)) {
+        if (sb.doLogin(dataType, "ca", false, paired)) {
             try {
                 RConnection RC = sb.getRConnection();
                 String fileName = DataUtils.uploadFile(dataFile, sb, null, ab.isOnPublicServer());
@@ -89,9 +89,9 @@ public class CAloadBean implements Serializable {
                     return null;
                 }
                 //RDataUtils.readTextData(RC, fileName, dataFormat, "disc")
-                if (RDataUtils.readTextData(RC, fileName, dataFormat, "cont", dataNames)) {
+                if (RDataUtils.readTextData(RC, fileName, dataFormat, "disc", dataNames)) {
                     sb.setDataUploaded(true);
-                    return "Download";
+                    return "Data Check";
                 } else {
                     String err = RDataUtils.getErrMsg(RC);
                     sb.updateMsg("Error", "Failed to read in the CSV file." + err);
@@ -192,13 +192,6 @@ public class CAloadBean implements Serializable {
      * Handle test examples for statistics mode
      */
     private String testDataOpt;
-    
-    
-    
-    
-    //WEGAN FUCNTIONS 
-    
-    //*********------------------------------------------------------
      
     public String getTestDataOpt() {
         return testDataOpt;
@@ -208,37 +201,27 @@ public class CAloadBean implements Serializable {
         this.testDataOpt = testDataOpt;
     }
  
+    
+    
     //Function for grrabbing the Test files for CA
     public String handleCATestFileUpload() {
-        String format = "";
         boolean paired = false;
         boolean isZip = false;
         String testFile = null;
         String testWeightFile = null;
         
-        if (testDataOpt == null) {
-                    
-
+        if (testDataOpt == null) {                   
             sb.updateMsg("Error", "No data set is selected!");
             return null;
-        }
-        else if (testDataOpt.equals("Dune")) {
-            
-            System.out.println("DUNE DATASET");
-            dataType = "Dune";
-            testFile = ab.getTestDune();
-//            testWeightFile = ab.getTestWeightDune();
-            format = "rowu";
-            
         } else if (testDataOpt.equals("Iris")) {
-            System.out.println("IRIS DATASET");
             dataType = "Iris";
             testFile = ab.getTestIris();
-            format = "rowu";    
-           
-        } else if (testDataOpt.equals("BCI")) {
-            testFile = ab.getTestBCI();
-            format = "rowu";
+            dataFormat = "rowu";    
+            dataNames = "colOnly";
+        } else if (testDataOpt.equals("WolvesElk")) {
+            testFile = ab.getTestWolvesElk();
+            dataFormat = "rowu";
+            dataNames = "bothNames";
         } else {
             sb.updateMsg("Error", "Unknown data selected?");
             return null;
@@ -255,100 +238,98 @@ public class CAloadBean implements Serializable {
                 return null;
             }
         } 
-//        else {
-//            
-//            //Tested cahnging Disc to cont
-//            if (!RDataUtils.readTextData(RC, testFile, format, "disc", dataNames)) {
-//                sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
-//                return null;
-//            }
+        else {
+            if (!RDataUtils.readTextData(RC, testFile, dataFormat, "disc", dataNames)) {
+                sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
+                return null;
+            }
 //            if (!RDataUtils.readTextData(RC, testWeightFile, format, "disc")) {
 //                sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
 //                return null;
 //            }
-//        }
+        }
         sb.setDataUploaded(true);
         return "Data check";
     }
     
     
-     
-     
-     
-        //Handling CA user file upload---------------
-    public String handleCAFileUpload() {
-
-        boolean paired = false;
-        if (dataFormat.endsWith("p")) {
-            paired = true;
-        }
-
-        if (sb.doLogin(dataType, "nmds", false, paired)) {
-            
-            try {
-                RConnection RC = sb.getRConnection();
-                String fileName = DataUtils.uploadFile(dataFile, sb, null, ab.isOnPublicServer());
-                if (fileName == null) {
-                    return null;
-                }
-                
-                //Gets if the file is in Csv or Txt format, allow for use of proper R reader later
-                //Already know it must be one of those based on uploading it to the server without error
-                String fileExt = fileName.substring(fileName.length() - 4);
-                
-                
-                if(runCaR(fileName,fileExt)){
-                    //sb.updateMsg("Error", "CA run successfully");
-                    return "CA";
-                    
-                }else{
-                    sb.updateMsg("Error", "CA not run succesffully");
-
-                    return "";
-                }
-                
-                
-                /*
-                //RDataUtils.readTextData(RC, fileName, dataFormat, "disc")
-                if (RDataUtils.readTextData(RC, fileName, dataFormat, "disc")) {
-                    sb.setDataUploaded(true);
-                    return "Download";
-                } else {
-                    String err = RDataUtils.getErrMsg(RC);
-                    sb.updateMsg("Error", "Failed to read in the CSV file." + err);
-                    return null;
-                }*/
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        sb.updateMsg("Error", "Log in failed. Please check errors in your R codes or the Rserve permission setting!");
-
-        return null;
-    }
-        
-        
-        
-        
-        
-        public boolean runCaR(String inputData,String ext){
-            RConnection RC = sb.getRConnection();
-            try {
-                //String rCommand = "InitDataObjects(\"" + dataType + "\", \"" + analType + "\", " + (isPaired ? "TRUE" : "FALSE") + ")";
-            
-                //String rCommand = "CAWegan(\"" + inputData + "\", \"" + sb.getPath2()+ "\"  )";
-                
-                String rCommand = "CAWegan(\"" + inputData + "\", \"" + sb.getPath2()+ "\", \"" + ext + "\"   )";
-                RC.voidEval(rCommand);
-                RCenter.recordRCommand(RC, rCommand);
-            
-            } catch (RserveException rse) {
-                System.out.println(rse);
-                return false;
-            }
-            //;
-            return true ;
-            
-        }
+//     
+//     
+//     
+//        //Handling CA user file upload---------------
+//    public String handleCAFileUpload() {
+//
+//        boolean paired = false;
+//        if (dataFormat.endsWith("p")) {
+//            paired = true;
+//        }
+//
+//        if (sb.doLogin(dataType, "ca", false, paired)) {
+//            
+//            try {
+//                RConnection RC = sb.getRConnection();
+//                String fileName = DataUtils.uploadFile(dataFile, sb, null, ab.isOnPublicServer());
+//                if (fileName == null) {
+//                    return null;
+//                }
+//                
+//                //Gets if the file is in Csv or Txt format, allow for use of proper R reader later
+//                //Already know it must be one of those based on uploading it to the server without error
+//                String fileExt = fileName.substring(fileName.length() - 4);
+//                
+//                
+//                if(runCaR(fileName,fileExt)){
+//                    //sb.updateMsg("Error", "CA run successfully");
+//                    return "CA";
+//                    
+//                }else{
+//                    sb.updateMsg("Error", "CA not run succesffully");
+//
+//                    return "";
+//                }
+//                
+//                
+//                /*
+//                //RDataUtils.readTextData(RC, fileName, dataFormat, "disc")
+//                if (RDataUtils.readTextData(RC, fileName, dataFormat, "disc")) {
+//                    sb.setDataUploaded(true);
+//                    return "Download";
+//                } else {
+//                    String err = RDataUtils.getErrMsg(RC);
+//                    sb.updateMsg("Error", "Failed to read in the CSV file." + err);
+//                    return null;
+//                }*/
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }
+//        sb.updateMsg("Error", "Log in failed. Please check errors in your R codes or the Rserve permission setting!");
+//
+//        return null;
+//    }
+//        
+//        
+//        
+//        
+//        
+//        public boolean runCaR(String inputData,String ext){
+//            RConnection RC = sb.getRConnection();
+//            try {
+//                //String rCommand = "InitDataObjects(\"" + dataType + "\", \"" + analType + "\", " + (isPaired ? "TRUE" : "FALSE") + ")";
+//            
+//                //String rCommand = "CAWegan(\"" + inputData + "\", \"" + sb.getPath2()+ "\"  )";
+//                
+//                String rCommand = "CAWegan(\"" + inputData + "\", \"" + sb.getPath2()+ "\", \"" + ext + "\"   )";
+//                RC.voidEval(rCommand);
+//                RCenter.recordRCommand(RC, rCommand);
+//            
+//            } catch (RserveException rse) {
+//                System.out.println(rse);
+//                return false;
+//            }
+//            //;
+//            return true ;
+//            
+//        }
        
 }

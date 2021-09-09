@@ -194,11 +194,6 @@ public class DispersalloadBean implements Serializable {
      */
     private String testDataOpt;
     
-    
-    
-    
-    //WEGAN FUCNTIONS 
-    
     public String getTestDataOpt() {
         return testDataOpt;
     }
@@ -207,64 +202,6 @@ public class DispersalloadBean implements Serializable {
         this.testDataOpt = testDataOpt;
     }
 
-//    public String handleStatTestFileUpload() {
-//        String format = "";
-//        boolean paired = false;
-//        boolean isZip = false;
-//        String testFile = null;
-//
-//        
-//        
-//        if (testDataOpt == null) {
-//            sb.updateMsg("Error", "No data set is selected!");
-//            return null;
-//        }
-//
-//        if (testDataOpt.equals("conccancer")) {
-//            dataType = "conc";
-//            testFile = ab.getTestConcHsaPath();
-//            format = "rowu";
-//        }
-//        
-//        //DUNE DATA SELECTED*********************************************************
-//        else if (testDataOpt.equals("Dune")) {
-//            dataType = "Dune";
-//            sb.updateMsg("Error", "Dune data selected");
-//
-//            testFile = ab.getTestamf();
-//            format = "rowu";
-//            
-//           
-//        } else if (testDataOpt.equals("BCI")) {
-//            testFile = ab.getTestBCI();
-//            format = "rowu";
-//        }
-//
-//        if (!sb.doLogin(dataType, "dispersal", false, paired)) {
-//            //sb.updateMsg("Error", "No login return null?");
-//            return null;
-//        }
-//
-//        RConnection RC = sb.getRConnection();
-//        if (isZip) {
-//            if (!RDataUtils.readZipData(RC, testFile, dataType, "F")) {
-//                sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
-//                return null;
-//            }
-//        } else {
-//            
-//            //Tested cahnging Disc to cont
-//            if (!RDataUtils.readTextData(RC, testFile, format, "disc", dataNames)) {
-//                sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
-//                return null;
-//            }
-//        }
-//        sb.setDataUploaded(true);
-//        if (dataType.equals("conc") || dataType.equals("pktable") || dataType.equals("specbin")) {
-//            return "Data check";
-//        }
-//        return dataType;
-//    }
     
     //--------------Test data loader------------------- 
      public String handleDispersalTestFileUpload() {
@@ -317,25 +254,4 @@ public class DispersalloadBean implements Serializable {
     }
     
     
-//    public boolean runDispersalR(String inputData,String ext){
-//        RConnection RC = sb.getRConnection();
-//        try {
-//            //String rCommand = "InitDataObjects(\"" + dataType + "\", \"" + analType + "\", " + (isPaired ? "TRUE" : "FALSE") + ")";
-//
-//            //String rCommand = "CAWegan(\"" + inputData + "\", \"" + sb.getPath2()+ "\"  )";
-//
-//            String rCommand = "DispersalWegan(\"" + inputData + "\", \"" + sb.getPath2()+ "\", \"" + ext + "\"   )";
-//            RC.voidEval(rCommand);
-//            RCenter.recordRCommand(RC, rCommand);
-//
-//        } catch (RserveException rse) {
-//            System.out.println(rse);
-//            return false;
-//        }
-//        //;
-//        return true ;
-//            
-//    }    
-//    
-
 }
