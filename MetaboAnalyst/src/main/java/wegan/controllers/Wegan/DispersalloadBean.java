@@ -199,21 +199,6 @@ public class DispersalloadBean implements Serializable {
     
     //WEGAN FUCNTIONS 
     
-    //*********------------------------------------------------------
-    
-    private String NMDSTestDataOpt;
-    
-    public String getNMDSTestDataOpt() {
-        return NMDSTestDataOpt;
-    }
-
-    public void setNMDSTestDataOpt(String NMDSTestDataOpt) {
-        this.NMDSTestDataOpt = NMDSTestDataOpt;
-    }
-    
-
-    
-    //*********------------------------------------------------------
     public String getTestDataOpt() {
         return testDataOpt;
     }
@@ -290,9 +275,7 @@ public class DispersalloadBean implements Serializable {
         if (testDataOpt == null) {
             sb.updateMsg("Error", "No data set is selected!");
             return null;
-        }
-
-        else if (testDataOpt.equals("Dune")) {
+        } else if (testDataOpt.equals("Dune")) {
             dataType = "Dune";
             //sb.updateMsg("Error", "Dune data selected");
             testFile = ab.getTestDune();
@@ -308,6 +291,7 @@ public class DispersalloadBean implements Serializable {
             dataNames = "colOnly";
         } else {
             sb.updateMsg("Error", "Unknown data selected?");
+
             return null;
         }
         if (!sb.doLogin(dataType, "dispersal", false, paired)) {

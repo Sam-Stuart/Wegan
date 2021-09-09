@@ -18,7 +18,7 @@ import metaboanalyst.rwrappers.RDataUtils;
 import metaboanalyst.rwrappers.SigVarSelect;
 import metaboanalyst.rwrappers.UniVarTests;
 import metaboanalyst.rwrappers.Ordiantion;
-import metaboanalyst.rwrappers.Dispersal;
+import metaboanalyst.rwrappers.DispersalUtils;
 import metaboanalyst.utils.DataUtils;
 
 /**
