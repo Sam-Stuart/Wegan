@@ -491,19 +491,19 @@ Read.TextDataMeta <- function(mSetObj=NA, filePath, metaFormat="rowu", lbl.type=
   
   if (dataNames=="colOnly") { #yes column names, no row names
     dat <- .readDataTable(filePath, metaNames="colOnly");
-    print("colOnly")
+    print("MetaColOnly")
     print(dat)
   } else if (dataNames=="rowOnly") { #no col names, yes row names
     dat <- .readDataTable(filePath, metaNames="rowOnly"); 
-    print("rowOnly")
+    print("MetaRowOnly")
     print(dat)
   } else if (dataNames=="bothNames") { #yes col names, yes row names
     dat <- .readDataTable(filePath, metaNames="bothNames");
-    print("both")
+    print("MetaBoth")
     print(dat)
   } else { #no col names, no row names
     dat <- .readDataTable(filePath, metaNames="noNames");
-    print("none")
+    print("MetaNone")
     print(dat)
   }
 
@@ -534,19 +534,19 @@ Read.TextDataEnv <- function(mSetObj=NA, filePath, envFormat="rowu", lbl.type="d
 
   if (dataNames=="colOnly") { #yes column names, no row names
     dat <- .readDataTable(filePath, envNames="colOnly");
-    print("colOnly")
+    print("EnvColOnly")
     print(dat)
   } else if (dataNames=="rowOnly") { #no col names, yes row names
     dat <- .readDataTable(filePath, envNames="rowOnly"); 
-    print("rowOnly")
+    print("EnvRowOnly")
     print(dat)
   } else if (dataNames=="bothNames") { #yes col names, yes row names
     dat <- .readDataTable(filePath, envNames="bothNames");
-    print("both")
+    print("EnvBoth")
     print(dat)
   } else { #no col names, no row names
     dat <- .readDataTable(filePath, envNames="noNames");
-    print("none")
+    print("EnvNone")
     print(dat)
   }
 

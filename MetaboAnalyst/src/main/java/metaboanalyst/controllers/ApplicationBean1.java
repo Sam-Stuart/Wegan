@@ -77,8 +77,9 @@ public class ApplicationBean1 implements Serializable {
     private static final String test_pitlatrine = "/data/SPE_pitlatrine.csv";
     private static final String test_pitlatrineEnv = "/data/ENV_pitlatrine.csv";
     private static final String test_WolvesElk = "/data/Wolves_Elk.csv";
+    private static final String test_pitlatrineMeta = "/data/META_pitlatrine.csv";
+    private static final String test_missing = "/data/missing_data_test.csv";
 
-    
   
     //**************************************************************************
 
@@ -225,7 +226,7 @@ public class ApplicationBean1 implements Serializable {
         rocFormatOpts[1] = new SelectItem("colu", "Samples in columns");
 
         //Changed for WEGAN
-        testDataOpts = new SelectItem[7];
+        testDataOpts = new SelectItem[8];
         testDataOpts[0] = new SelectItem("Dune", "Dune");
         testDataOpts[1] = new SelectItem("Iris", "Iris");
         testDataOpts[2] = new SelectItem("BCI", "BCI");
@@ -233,6 +234,7 @@ public class ApplicationBean1 implements Serializable {
         testDataOpts[4] = new SelectItem("Linear", "Linear");  
         testDataOpts[5] = new SelectItem("Pitlatrine", "Pitlatrine");
         testDataOpts[6] = new SelectItem("WolvesElk", "WolvesElk");
+        testDataOpts[7] = new SelectItem("Missing", "Missing");
 //        testDataOpts[4] = new SelectItem("nmrspecbin", "NMR spectral bins");
 //        testDataOpts[5] = new SelectItem("nmrpeaklist", "NMR peak lists");
 //        testDataOpts[6] = new SelectItem("concpair", "Concentrations (paired)");
@@ -600,7 +602,15 @@ public class ApplicationBean1 implements Serializable {
     public String getTestPitlatrineEnv() {
         return realPath + test_pitlatrineEnv;
     }
-           
+    
+    public String getTestPitlatrineMeta() {
+        return realPath + test_pitlatrineMeta;
+    }
+    
+    public String getTestMissing() {
+        return realPath + test_missing;
+    }
+
     public String getTestWolvesElk() {
         return realPath + test_WolvesElk;
     }

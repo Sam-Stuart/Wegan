@@ -23,11 +23,17 @@
                     <ol>
                         <li>
                             Checking for the presence of missing values (i.e. blanks or NAs) or variables with constant values (i.e. all zeros).                
+                            <ul>
+                                - Missing values must either be empty or filled with NA without quotations. 
+                            </ul>
                         </li>
                         <li>
                             Checking the sample and variable labels:
                             <ul>
                                 - Duplicate labels are not allowed. 
+                            </ul>
+                            <ul>
+                                - All text must be UTF-8 encoded.
                             </ul>
                             <ul>
                                 - Only English letters, numbers, underscore, hyphen and forward slash (/) are allowed. Other special characters or punctuations (if any) will be stripped off.

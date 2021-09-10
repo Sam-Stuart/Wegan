@@ -39,7 +39,7 @@ public class OrdinationloadBean implements Serializable {
     public void setDataType(String dataType) {
         this.dataType = dataType;
     }
-
+    
     private String dataFormat = "rowu";
 
     public String getDataFormat() {
@@ -277,6 +277,8 @@ public class OrdinationloadBean implements Serializable {
     public String handleOrdinationTestFileUpload() {
 
         String testFile = null;
+        String metaTestFile = null;
+        String envTestFile = null;
         
         if (testDataOpt == null) {
             sb.updateMsg("Error", "No data set is selected!");
@@ -288,6 +290,12 @@ public class OrdinationloadBean implements Serializable {
             testFile = ab.getTestDune();
             dataFormat = "rowu";
             dataNames = "colOnly";
+            metaTestFile = ab.getTestDuneMeta();
+            metaFormat = "rowu";
+            metaNames = "colOnly";
+            envTestFile = ab.getTestDuneEnv();
+            envFormat = "rowu";
+            envNames = "colOnly";
         } 
         
         else if (testDataOpt.equals("Iris")) {
@@ -295,6 +303,12 @@ public class OrdinationloadBean implements Serializable {
             testFile = ab.getTestIris();
             dataFormat = "rowu";       
             dataNames = "colOnly";
+            metaTestFile = null;
+            metaFormat = null;
+            metaNames = null;
+            envTestFile = null;
+            envFormat = null;
+            envNames = null;
         } 
         
         else if (testDataOpt.equals("Pitlatrine")) {
@@ -302,6 +316,12 @@ public class OrdinationloadBean implements Serializable {
             testFile = ab.getTestPitlatrine();
             dataFormat = "colu";
             dataNames = "bothNames";
+            metaTestFile = ab.getTestPitlatrineMeta();
+            metaFormat = "rowu";
+            metaNames = "bothNames";
+            envTestFile = ab.getTestPitlatrineEnv();
+            envFormat = "rowu";
+            envNames = "bothNames";
         }
         
         else {
@@ -317,6 +337,12 @@ public class OrdinationloadBean implements Serializable {
         sb.setDataUploaded(true);
         RConnection RC = sb.getRConnection();
         RDataUtils.readTextData(RC, testFile, dataFormat, "disc", dataNames);
+        if (metaTestFile != null) {
+            RDataUtils.readTextDataMeta(RC, metaTestFile, metaFormat, "disc", metaNames);
+        }
+        if (metaTestFile != null) {
+            RDataUtils.readTextDataEnv(RC, envTestFile, envFormat, "disc", envNames);
+        }
         return "Data check";
     }
     

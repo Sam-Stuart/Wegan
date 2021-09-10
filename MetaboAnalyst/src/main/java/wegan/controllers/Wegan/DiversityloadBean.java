@@ -203,7 +203,7 @@ public class DiversityloadBean implements Serializable {
             paired = true;
         }
 
-        if (sb.doLogin(zipDataType, "diversity", false, paired)) {
+        if (sb.doLogin(zipDataType, "stat", false, paired)) {
             try {
                 RConnection RC = sb.getRConnection();
                 //String homeDir = sb.getCurrentUser().getHomeDir();
@@ -265,6 +265,10 @@ public class DiversityloadBean implements Serializable {
             dataNames = "bothNames";
         } else if (testDataOpt.equals("BCI")) {
             testFile = ab.getTestBCI();
+            dataFormat = "rowu";
+            dataNames = "colOnly";
+        } else if (testDataOpt.equals("Missing")) {
+            testFile = ab.getTestMissing();
             dataFormat = "rowu";
             dataNames = "colOnly";
         } else {
