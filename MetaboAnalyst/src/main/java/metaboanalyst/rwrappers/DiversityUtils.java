@@ -429,6 +429,77 @@ public class DiversityUtils {
             return false;
         }
     }
+    
+    public static boolean CreateUnseenDiv(SessionBean1 sb, boolean data, String pool, boolean smallsample, String index, String permutations, String minsize,  String parallel) {
+        try {
+            System.out.print("FD");
+            RConnection RC = sb.getRConnection(); //Start R connection
+            String rCommand = "sp_pool(NA"
+                                                 + ", \"" + data
+                                                 + "\", \"" + pool
+                                                 + "\", \"" + smallsample
+                                                 + "\", \"" + index
+                                                 + "\", \"" + permutations
+                                                 + "\", \"" + minsize
+//                                                 + "\", \"" + calc_FDiv
+//                                                 + "\", \"" + calc_FRic
+                                                 + "\", \"" + parallel
+//                                                 + "\", \"" + calc_CWM
+                                                 + "\")";
+            RCenter.recordRCommand(RC, rCommand); // records r command
+            RC.voidEval(rCommand); // tells you want your r script returns  
+            return true;
+        } catch (RserveException rse) {
+            System.out.println(rse);
+            return false;
+        }
+    }
+    
+    
+    public static boolean PlotPoolBoxplot(SessionBean1 sb, String plot_data, String fac_data, String box_color, String xlab,
+                                          String ylab, String border_col, String imgName, String format, int dpi, String width) {
+        try {
+            System.out.print("FD");
+            RConnection RC = sb.getRConnection(); //Start R connection
+            String rCommand = "pool_boxplot(NA"
+                                                 + ", \"" + plot_data
+                                                 + "\", \"" + fac_data
+                                                 + "\", \"" + box_color
+                                                 + "\", \"" + xlab
+                                                 + "\", \"" + ylab
+                                                 + "\", \"" + border_col
+                                                 + "\", \"" + imgName 
+                                                 + "\", \"" + format 
+                                                 + "\", " + dpi 
+                                                 + ", width=NA)";
+            RCenter.recordRCommand(RC, rCommand); // records r command
+            RC.voidEval(rCommand); // tells you want your r script returns  
+            return true;
+        } catch (RserveException rse) {
+            System.out.println(rse);
+            return false;
+        }
+    }
+    
+    public static boolean PlotUnseenCurve(SessionBean1 sb, String color, String imgName, String format, int dpi, String width) {
+        try {
+            System.out.print("FD");
+            RConnection RC = sb.getRConnection(); //Start R connection
+            String rCommand = "rich_est_curve(NA"
+                                                 + ", \"" + color
+                                                 + "\", \"" + imgName 
+                                                 + "\", \"" + format 
+                                                 + "\", " + dpi 
+                                                 + ", width=NA)";
+            RCenter.recordRCommand(RC, rCommand); // records r command
+            RC.voidEval(rCommand); // tells you want your r script returns  
+            return true;
+        } catch (RserveException rse) {
+            System.out.println(rse);
+            return false;
+        }
+    }
+    
  
 
     

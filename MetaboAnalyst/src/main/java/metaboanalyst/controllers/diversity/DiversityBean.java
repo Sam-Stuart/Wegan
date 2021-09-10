@@ -60,6 +60,9 @@ public class DiversityBean implements Serializable {
                     case "Fddiv":
                          doDefaultFddiv();
                         break;
+                    case "Unseendiv":
+                         doDefaultUnseendiv();
+                        break;
                 }
             }
 
@@ -165,5 +168,18 @@ public class DiversityBean implements Serializable {
         DiversityUtils.CreateFdDiv(sb, false, "", "NULL", false, false, "", false, false, false, "", "NULL");
         DiversityUtils.PlotFdTree(sb, "NULL",sb.getCurrentImage("Cluster_Plot"), "png", 72, "false");
         System.out.print("AFTER FD");
+    }
+    
+ 
+    private void doDefaultUnseendiv(){
+//        if (!DiversityUtils.CreateRarefactionDiv(sb, false, "test", "test", false, "test")){
+//            RConnection RC = sb.getRConnection();
+//            sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
+//        }
+        System.out.print("INSIDE UD"); 
+        DiversityUtils.CreateUnseenDiv(sb, false, "", false, "NULL", "", "", "");
+        DiversityUtils.PlotPoolBoxplot(sb, "NULL", "", "NULL", "", "", "NULL", sb.getCurrentImage("boxplot_richness"), "png", 72, "false");
+        DiversityUtils.PlotUnseenCurve(sb, "NULL",sb.getCurrentImage("plot_matrices"), "png", 72, "false");
+        System.out.print("AFTER UD");
     }
 }
