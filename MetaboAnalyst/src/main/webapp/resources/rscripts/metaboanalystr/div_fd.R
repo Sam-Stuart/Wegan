@@ -6,10 +6,7 @@
 #'@param w.abun Boolean weight FDis, Rao's Q, FEve, FDiv, and CWM by the relative abundances of the species, options are "TRUE" or "FALSE" (default)
 #'@param stand.x Boolean if all traits are numeric, standardized to mean 0 and unit variance; if not, automatically use Gower's standardization by the range, options are "TRUE" of "FALSE" (default)
 #'@param m the number of PCoA axes to keep as ‘traits’ for calculating FRic and FDiv, options are "min" (default), "max" or integer (over 1)
-#'@param calc.FDiv Boolean compute functional divergence, options are TRUE or FALSE(default)
-#'@param calc.FRic Boolean compute functional richness, options are TRUE or FALSE(default)
 #'@param stand.FRic Boolean standardize FRic by the ‘global’ FRic that include all species, options are TRUE or FALSE(default)
-#'@param calc.CWM Boolean compute community-level weighted means of trait values, options are TRUE or FALSE(default)
 #'@param print.pco Boolean return the eigenvalues and PCoA axes, options are TRUE or FALSE(default)
 #'@param messages Boolean print warning messages in the console, options are TRUE or FALSE(default)
 #'@param asym.bin set vector listing the asymmetric binary variables in data

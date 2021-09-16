@@ -242,6 +242,61 @@ public class AbunddistBean implements Serializable {
         this.filemaxextraresultpath = filemaxextraresultpath;
     }
     
+    private String filenullresult = "Perimeters of brokenstick models of species abundance.csv";
+    private String filenullresultpath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + filenullresult + "\">" + filenullresult + "</a>";
+    
+    public String getFilenullresultpath() {
+        return filenullresultpath;
+    }
+
+    public void setFilenullresultpath(String filenullresultpath) {
+        this.filenullresultpath = filenullresultpath;
+    }
+    
+    private String fileperiresult = "Perimeters of preemption models of species abundance.csv";
+    private String fileperiresultpath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileperiresult + "\">" + fileperiresult + "</a>";
+    
+    public String getFileperiresultpath() {
+        return fileperiresultpath;
+    }
+
+    public void setFileperiresultpath(String fileperiresultpath) {
+        this.fileperiresultpath = fileperiresultpath;
+    }
+    
+    private String filelogresult = "Perimeters of log-Normal models of species abundance.csv";
+    private String filelogresultpath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + filelogresult + "\">" + filelogresult + "</a>";
+    
+    public String getFilelogresultpath() {
+        return filelogresultpath;
+    }
+
+    public void setFilelogresultpath(String filelogresultpath) {
+        this.filelogresultpath = filelogresultpath;
+    }
+    
+    private String filezipfresult = "Perimeters of Zipf models of species abundance.csv";
+    private String filezipfresultpath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + filezipfresult + "\">" + filezipfresult + "</a>";
+    
+    public String getFilezipfresultpath() {
+        return filezipfresultpath;
+    }
+
+    public void setFilezipfresultpath(String filezipfresultpath) {
+        this.filezipfresultpath = filezipfresultpath;
+    }
+    
+    private String filemanresult = "Perimeters of Zipf-Mandelbrot models of species abundance.csv";
+    private String filemanresultpath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + filemanresult + "\">" + filemanresult + "</a>";
+    
+    public String getFilemanresultpath() {
+        return filemanresultpath;
+    }
+
+    public void setFilemanresultpath(String filemanresultpath) {
+        this.filemanresultpath = filemanresultpath;
+    }
+    
     
     public AbunddistBean() {
         bar_color = new SelectItem[6];
@@ -283,6 +338,7 @@ public class AbunddistBean implements Serializable {
         DiversityUtils.CreateAbundDistDiv(sb, doOriginal, community, doTiesplit, truncate);       
         DiversityUtils.PlotAbundFisherPlotDiv(sb, bar_colorchosen, line_color_addFitchosen, sb.getNewImage("Abundance_Fisher_Dist_Plot"), "png", 72, "false");
         DiversityUtils.PlotAbundPrestPlotDiv(sb, bar_colorchosen, line_color_addPoichosen, line_color_addMaxchosen, sb.getNewImage("Abundance_Prest_Dist_Plot"), "png", 72, "false");
+        DiversityUtils.PlotAbundRankPlotDiv(sb, sb.getNewImage("Abundance_Rank_Dist_Plot"), "png", 72, "false");
     } 
     
 }

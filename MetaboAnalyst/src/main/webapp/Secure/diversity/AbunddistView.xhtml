@@ -64,59 +64,25 @@
                                     <h:outputText escape="false" value="#{abunddistBean.filefisheroutputresultpath}"/>
                                 </i>
                             </h:panelGrid>
-                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
-                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">
-                                    <h:outputText escape="false" value="#{abunddistBean.filepoissoncoefresultpath}"/>
-                                </i>
-                            </h:panelGrid>
-                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
-                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">
-                                    <h:outputText escape="false" value="#{abunddistBean.filepoissonfreqresultpath}"/>
-                                </i>
-                            </h:panelGrid>
-                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
-                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">
-                                    <h:outputText escape="false" value="#{abunddistBean.filepoissonextraresultpath}"/>
-                                </i>
-                            </h:panelGrid>
-                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
-                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">
-                                    <h:outputText escape="false" value="#{abunddistBean.filemaxcoefresultpath}"/>
-                                </i>
-                            </h:panelGrid>
-                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
-                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">
-                                    <h:outputText escape="false" value="#{abunddistBean.filemaxfreqresultpath}"/>
-                                </i>
-                            </h:panelGrid>
-                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
-                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">
-                                    <h:outputText escape="false" value="#{abunddistBean.filemaxextraresultpath}"/>
-                                </i>
-                            </h:panelGrid>
-                                                    
+                                                                               
                              <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
                                 <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('Abundance_Fisher_Dist_Plot')}" alt="TestPlot"/>
                              </h:panelGrid>                            
                         </h:panelGrid> 
                     </h:form>
-                </p:tab>
-                
+                </p:tab>              
                 <p:tab title ="Abundance Lognormal Distribution" titleStyleClass="p-tab-nav">
                     <h:form id="form2">
-                        
-<!--                        <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> -->
-                            <h:panelGrid id="panelGrid" columns="4" cellpadding="3" >
-                                <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
-                                <p:selectBooleanCheckbox value ="#{abunddistBean.doOriginal}"/> 
-                                <h:outputLabel style="font-weight: bold" value="Tiesplit:"/>
-                                <p:selectBooleanCheckbox value = "#{abunddistBean.doTiesplit}"/>
-                                <h:outputLabel style="font-weight: bold" value="Truncate"/>
-                                <p:inputText value = "#{abunddistBean.truncate}"/>  
-                                <h:outputLabel style="font-weight: bold" value="Select particular sampling plot:"/>
-                                <p:inputText value = "#{abunddistBean.community}"/>  
-                          
-                            </h:panelGrid>  
+                        <h:panelGrid id="panelGrid" columns="4" cellpadding="3" >
+                            <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
+                            <p:selectBooleanCheckbox value ="#{abunddistBean.doOriginal}"/> 
+                            <h:outputLabel style="font-weight: bold" value="Tiesplit:"/>
+                            <p:selectBooleanCheckbox value = "#{abunddistBean.doTiesplit}"/>
+                            <h:outputLabel style="font-weight: bold" value="Truncate"/>
+                            <p:inputText value = "#{abunddistBean.truncate}"/>  
+                            <h:outputLabel style="font-weight: bold" value="Select particular sampling plot:"/>
+                            <p:inputText value = "#{abunddistBean.community}"/>   
+                        </h:panelGrid>  
                             
                             <p:commandButton value="Update" 
                                              styleClass="updateButton"
@@ -144,18 +110,7 @@
                                 </h:panelGrid>
                             </h:panelGroup>                            
                         </h:panelGrid>                         
-                        
                         <h:panelGrid id="abunddistPane2" style="width: 100%;">
-                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
-                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">
-                                    <h:outputText escape="false" value="#{abunddistBean.filefisherfreqresultpath}"/>
-                                </i>
-                            </h:panelGrid>
-                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
-                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">
-                                    <h:outputText escape="false" value="#{abunddistBean.filefisheroutputresultpath}"/>
-                                </i>
-                            </h:panelGrid>
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
                                 <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">
                                     <h:outputText escape="false" value="#{abunddistBean.filepoissoncoefresultpath}"/>
@@ -192,7 +147,80 @@
                              </h:panelGrid>                            
                         </h:panelGrid> 
                     </h:form>
-               </p:tab>
+                </p:tab>
+                <p:tab title ="Rank Abundance Model" titleStyleClass="p-tab-nav">
+                    <h:form id="form3">
+                        
+<!--                        <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> -->
+                            <h:panelGrid id="panelGrid" columns="4" cellpadding="3" >
+                                <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
+                                <p:selectBooleanCheckbox value ="#{abunddistBean.doOriginal}"/> 
+                                <h:outputLabel style="font-weight: bold" value="Tiesplit:"/>
+                                <p:selectBooleanCheckbox value = "#{abunddistBean.doTiesplit}"/>
+                                <h:outputLabel style="font-weight: bold" value="Truncate"/>
+                                <p:inputText value = "#{abunddistBean.truncate}"/>  
+                                <h:outputLabel style="font-weight: bold" value="Select particular sampling plot:"/>
+                                <p:inputText value = "#{abunddistBean.community}"/>  
+                            </h:panelGrid>  
+                            <p:commandButton value="Update" 
+                                             styleClass="updateButton"
+                                             style="box-shadow: none !important; text-shadow: none !important"
+                                            onclick="PF('statusDialog').show()"
+                                            oncomplete="PF('statusDialog').hide()"  
+                                            update=":abundancedist:form3:abunddistPane3  :cmdPane" 
+                                            actionListener="#{abunddistBean.AbunddistUpdate_action()}"/>  
+<!--                            <p:commandButton value="Customize Graph"
+                                             styleClass="graphicsButton"
+                                             style="box-shadow: none !important; text-shadow: none !important;"
+                                             actionListener="#{sessionBean1.graphicsLnk_action('pca_pair')}" 
+                                            oncomplete="PF('graphApperanceAbunddist').show()"/>  
+                -->
+<!--                        </h:panelGrid>-->
+                        <h:panelGrid class="resultsBar" columns="2">
+                            <h:panelGroup>
+                                <h:panelGrid columns="1" style="text-align : left;">
+                                    Results
+                                </h:panelGrid>
+                            </h:panelGroup> 
+                            <h:panelGroup>
+                                <h:panelGrid columns="3" class="resultsImages">
+                                    <i class="fa fa-question-circle"></i>
+                                </h:panelGrid>
+                            </h:panelGroup>                            
+                        </h:panelGrid>                         
+                        <h:panelGrid id="abunddistPane3" style="width: 100%;">
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">
+                                    <h:outputText escape="false" value="#{abunddistBean.filenullresultpath}"/>
+                                </i>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">
+                                    <h:outputText escape="false" value="#{abunddistBean.fileperiresultpath}"/>
+                                </i>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">
+                                    <h:outputText escape="false" value="#{abunddistBean.filelogresultpath}"/>
+                                </i>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">
+                                    <h:outputText escape="false" value="#{abunddistBean.filezipfresultpath}"/>
+                                </i>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">
+                                    <h:outputText escape="false" value="#{abunddistBean.filemanresultpath}"/>
+                                </i>
+                            </h:panelGrid>
+                                                                                
+                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('Abundance_Rank_Dist_Plot')}" alt="TestPlot"/>
+                             </h:panelGrid>                            
+                        </h:panelGrid> 
+                    </h:form>
+                </p:tab>
             </p:tabView>
             <p:dialog modal="true" widgetVar="graphApperanceAbunddist" 
                 style="width: 400px; height:400px;" 

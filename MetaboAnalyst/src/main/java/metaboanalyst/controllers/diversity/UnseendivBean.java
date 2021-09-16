@@ -182,15 +182,15 @@ public class UnseendivBean implements Serializable {
     }
     
     
-    private String fac_data = "";
-    
-    public String getFac_data() {
-        return fac_data;
-    }
-
-    public void setFac_data(String fac_data) {
-        this.fac_data = fac_data;
-    }
+//    private String fac_data = "";
+//    
+//    public String getFac_data() {
+//        return fac_data;
+//    }
+//
+//    public void setFac_data(String fac_data) {
+//        this.fac_data = fac_data;
+//    }
     
     
     private String xlab = "";
@@ -238,6 +238,16 @@ public class UnseendivBean implements Serializable {
         this.fileunfreqinresultpath = fileunfreqinresultpath;
     }
     
+    private String fileunfreqinsresult = "Incidence-based estimates_freq_selected variable_small sample.csv";
+    private String fileunfreqinsresultpath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileunfreqinsresult + "\">" + fileunfreqinsresult + "</a>";
+    
+    public String getFileunfreqinsresultpath() {
+        return fileunfreqinsresultpath;
+    }
+
+    public void setFileunfreqinsresultpath(String fileunfreqinsresultpath) {
+        this.fileunfreqinsresultpath = fileunfreqinsresultpath;
+    }
     
     private String fileuncountresult = "Abundance-based estimates_counts.csv";
     private String fileuncountresultpath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileuncountresult + "\">" + fileuncountresult + "</a>";
@@ -308,19 +318,18 @@ public class UnseendivBean implements Serializable {
     
     public UnseendivBean() {
         index = new SelectItem[5];
-        index[0] = new SelectItem("NULL", "jack1");
-        index[1] = new SelectItem("jack2", "jack2");
-        index[2] = new SelectItem("chao", "chao");
-        index[3] = new SelectItem("boot", "boot");
+        index[0] = new SelectItem("NULL", "Jack1");
+        index[1] = new SelectItem("jack2", "Jack2");
+        index[2] = new SelectItem("chao", "Chao");
+        index[3] = new SelectItem("boot", "Boot");
         index[4] = new SelectItem("Species", "Species");
         
-        plot_data = new SelectItem[5];
-        plot_data[0] = new SelectItem("NULL", "jack1");
-        plot_data[1] = new SelectItem("jack2", "jack2");
-        plot_data[2] = new SelectItem("chao", "chao");
-        plot_data[3] = new SelectItem("boot", "boot");
-        plot_data[4] = new SelectItem("Species", "Species");
-        
+        plot_data = new SelectItem[4];
+        plot_data[0] = new SelectItem("NULL", "Richness");
+        plot_data[1] = new SelectItem("S", "Species");
+        plot_data[2] = new SelectItem("chao", "Chao");
+        plot_data[3] = new SelectItem("ace", "ACE");
+                
         box_color = new SelectItem[6];
         box_color[0] = new SelectItem("NULL", "Skyblue");
         box_color[1] = new SelectItem("green", "Green");
@@ -355,7 +364,7 @@ public class UnseendivBean implements Serializable {
     // ACTION BUTTON // 
     public void unseendivUpdate_action() {
         DiversityUtils.CreateUnseenDiv(sb, doOriginal, pool, doSmallsample, indexchosen, permutations, minsize, parallel); 
-        DiversityUtils.PlotPoolBoxplot(sb, plot_datachosen, fac_data, box_colorchosen, xlab, ylab, border_colchosen, sb.getNewImage("boxplot_richness"), "png", 72, "false");
+        DiversityUtils.PlotPoolBoxplot(sb, plot_datachosen, box_colorchosen, xlab, ylab, border_colchosen, sb.getNewImage("boxplot_richness"), "png", 72, "false");
         DiversityUtils.PlotUnseenCurve(sb, colorchosen, sb.getNewImage("plot_matrices"), "png", 72, "false");
     }
     

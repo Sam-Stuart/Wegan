@@ -55,8 +55,146 @@ AbundanceModel <- function(mSetObj = NA, data = "false", community = "", tiespli
   truncate1 <- as.numeric(truncate1)
   print(truncate1)  
 
+  mod.radfit_all <- radfit(input.2)
   
+  null.data <- data.frame()
+  prep.data <- data.frame()
+  log.data <- data.frame()
+  zipf.data <- data.frame()
+  man.data <- data.frame()
+  null.list <- list()  
+  prep.list <- list()
+  log.list <- list()
+  zipf.list <- list()
+  man.list <- list()
+  null.aic.data <- data.frame()
+  prep.aic.data <- data.frame()
+  log.aic.data <- data.frame()
+  zipf.aic.data <- data.frame()
+  man.aic.data <- data.frame()
+  null.aic.list <- list()  
+  prep.aic.list <- list()
+  log.aic.list <- list()
+  zipf.aic.list <- list()
+  man.aic.list <- list()
+  prep.alpha.data <- data.frame()
+  prep.alpha.list <- list()
+  log.mu.data <- data.frame()
+  log.signal.data <- data.frame()
+  log.mu.list <- list()
+  log.signal.list <- list()
+  zipf.gamma.data <- data.frame()
+  zipf.gamma.list <- list()
+  man.beta.data <- data.frame()
+  man.beta.list <- list()
+  man.gamma.data <- data.frame()
+  man.gamma.list <- list()
   
+  c <- as.numeric(nrow(input.2))
+  print(c)  
+
+  for (i in 1:c) {
+    null <- rad.null(input.2[i,])$deviance
+    prep <- rad.preempt(input.2[i,])$deviance
+    log <- rad.lognormal(input.2[i,])$deviance
+    zipf <- rad.zipf(input.2[i,])$deviance
+    man <- rad.zipfbrot(input.2[i,])$deviance
+    null.aic <- rad.null(input.2[i,])$aic
+    prep.aic <- rad.preempt(input.2[i,])$aic
+    log.aic <- rad.lognormal(input.2[i,])$aic
+    zipf.aic <- rad.zipf(input.2[i,])$aic
+    man.aic <- rad.zipfbrot(input.2[i,])$aic
+    prep.alpha <- rad.preempt(input.2[i,])$coefficients
+    log.mu <- rad.lognormal(input.2[i,])$coefficients[1]
+    log.signal <- rad.lognormal(input.2[i,])$coefficients[2]
+    zipf.gamma <- rad.zipf(input.2[i,])$coefficients[2]
+    man.beta <- rad.zipfbrot(input.2[i,])$coefficients[2]
+    man.gamma <- rad.zipfbrot(input.2[i,])$coefficients[3]
+    null.de <- data.frame(null)
+    prep.de <- data.frame(prep)
+    log.de <- data.frame(log)
+    zipf.de <- data.frame(zipf)
+    man.de <- data.frame(man)
+    null.aicA <- data.frame(null.aic)
+    prep.aicA <- data.frame(prep.aic)
+    log.aicA <- data.frame(log.aic)
+    zipf.aicA <- data.frame(zipf.aic)
+    man.aicA <- data.frame(man.aic)
+    prep.alphaA <- data.frame(prep.alpha)
+    log.muA <- data.frame(log.mu)
+    log.signalA <- data.frame(log.signal)
+    zipf.gammaA <- data.frame(zipf.gamma)
+    man.betaA <- data.frame(man.beta)
+    man.gammaA <- data.frame(man.gamma)
+    null.list[[i]] <- null.de
+    prep.list[[i]] <- prep.de
+    log.list[[i]] <- log.de
+    zipf.list[[i]] <- zipf.de
+    man.list[[i]] <- man.de
+    null.aic.list[[i]] <- null.aicA
+    prep.aic.list[[i]] <- prep.aicA
+    log.aic.list[[i]] <- log.aicA
+    zipf.aic.list[[i]] <- zipf.aicA
+    man.aic.list[[i]] <- man.aicA
+    prep.alpha.list[[i]] <- prep.alphaA
+    log.mu.list[[i]] <- log.muA
+    log.signal.list[[i]] <- log.signalA
+    zipf.gamma.list[[i]] <- zipf.gammaA
+    man.beta.list[[i]] <- man.betaA
+    man.gamma.list[[i]] <- man.gammaA
+    null.data <- rbind(null.data, null.list[[i]])
+    prep.data <- rbind(prep.data, prep.list[[i]])
+    log.data <- rbind(log.data, log.list[[i]])
+    zipf.data <- rbind(zipf.data, zipf.list[[i]])
+    man.data <- rbind(man.data, man.list[[i]])
+    null.aic.data <- rbind(null.aic.data, null.aic.list[[i]])
+    prep.aic.data <- rbind(prep.aic.data, prep.aic.list[[i]])
+    log.aic.data <- rbind(log.aic.data, log.aic.list[[i]])
+    zipf.aic.data <- rbind(zipf.aic.data, zipf.aic.list[[i]])
+    man.aic.data <- rbind(man.aic.data, man.aic.list[[i]])
+    prep.alpha.data <- rbind(prep.alpha.data, prep.alpha.list[[i]])
+    log.mu.data <- rbind(log.mu.data, log.mu.list[[i]])
+    log.signal.data <- rbind(log.signal.data, log.signal.list[[i]])
+    zipf.gamma.data <- rbind(zipf.gamma.data, zipf.gamma.list[[i]])
+    man.beta.data <- rbind(man.beta.data, man.beta.list[[i]])
+    man.gamma.data <- rbind(man.gamma.data, man.gamma.list[[i]])
+  }
+  
+  null.data.set <- cbind(null.data, null.aic.data)
+  colnames(null.data.set) <- c("Deviance", "AIC")
+  prep.data.set <- cbind(prep.data, prep.aic.data, prep.alpha.data)
+  rownames(prep.data.set) <- c(1:c)
+  colnames(prep.data.set) <- c("Deviance", "AIC", "Alpha")
+  log.data.set <- cbind(log.data, log.aic.data, log.mu.data, log.signal.data)
+  rownames(log.data.set) <- c(1:c)
+  colnames(log.data.set) <- c("Deviance", "AIC", "log.mu", "log.signal")
+  zipf.data.set <- cbind(zipf.data, zipf.aic.data, zipf.gamma.data)
+  rownames(zipf.data.set) <- c(1:c)
+  colnames(zipf.data.set) <- c("Deviance", "AIC", "Gamma")
+  man.data.set <- cbind(man.data, man.aic.data, man.beta.data, man.gamma.data)
+  rownames(man.data.set) <- c(1:c)
+  colnames(man.data.set) <- c("Deviance", "AIC", "Beta", "Gamma")
+  print(man.data.set)  
+
+  if (community == "") {
+    mod.radfit <- radfit(input.2[1,])
+    mod.null <- rad.null(input.2[1,])
+    mod.pree <- rad.preempt(input.2[1,])
+    mod.log <- rad.lognormal(input.2[1,])
+    mod.zipf <- rad.zipf(input.2[1,])
+    mod.man <- rad.zipfbrot(input.2[1,])
+  } else {
+    community1 <- as.numeric(community)
+    input.c <- input.2[community1, ]
+    mod.radfit <- radfit(input.c)
+    mod.null <- rad.null(input.c)
+    mod.pree <- rad.preempt(input.c)
+    mod.log <- rad.lognormal(input.c)
+    mod.zipf <- rad.zipf(input.c)
+    mod.man <- rad.zipfbrot(input.c)
+  }
+  print(community)  
+
   output.fisher <- fisherfit(input.c)
   output.fit <- prestonfit(input.c, tiesplit = tiesplit1)
   output.distr <- prestondistr(input.c, truncate = truncate1)
@@ -68,6 +206,19 @@ AbundanceModel <- function(mSetObj = NA, data = "false", community = "", tiespli
   #print(BIC(output.fisher))
   #print(BIC(output.fit))
   #print(BIC(output.distr))
+
+  mSetObj$analset$result$mod.radfit <- mod.radfit
+  mSetObj$analset$result$mod.radfit_all <- mod.radfit_all
+  mSetObj$analset$result$mod.null <- mod.null
+  mSetObj$analset$result$mod.pree <- mod.pree
+  mSetObj$analset$result$mod.log <- mod.log
+  mSetObj$analset$result$mod.zipf <- mod.zipf
+  mSetObj$analset$result$mod.man <- mod.man
+  mSetObj$analset$result$null.data.set <- null.data.set
+  mSetObj$analset$result$prep.data.set <- prep.data.set
+  mSetObj$analset$result$log.data.set <- log.data.set
+  mSetObj$analset$result$zipf.data.set <- zipf.data.set
+  mSetObj$analset$result$man.data.set <- man.data.set
 
   mSetObj$analset$result$fisher$name <- "Species Abundance Model"
   mSetObj$analset$result$fisher$type <- "Fisher's logseries"
@@ -129,7 +280,12 @@ AbundanceModel <- function(mSetObj = NA, data = "false", community = "", tiespli
   write.csv(mSetObj$analset$result$log_likelihood$coeffi, "Max_likelihood coefficients.csv")
   write.csv(mSetObj$analset$result$log_likelihood$frequencies, "Max_likelihood frequencies by Octave.csv")
   write.csv(mSetObj$analset$result$log_likelihood$output.r, "Max_likelihood_Total extrapolated richness.csv")
-    
+  write.csv(mSetObj$analset$result$null.data.set, "Perimeters of brokenstick models of species abundance.csv")
+  write.csv(mSetObj$analset$result$prep.data.set, "Perimeters of preemption models of species abundance.csv")
+  write.csv(mSetObj$analset$result$log.data.set, "Perimeters of log-Normal models of species abundance.csv")
+  write.csv(mSetObj$analset$result$zipf.data.set, "Perimeters of Zipf models of species abundance.csv")
+  write.csv(mSetObj$analset$result$man.data.set, "Perimeters of Zipf-Mandelbrot models of species abundance.csv")
+  
   return(.set.mSet(mSetObj)) 
 }
 
@@ -235,7 +391,7 @@ AbundanceFisherPlot <- function(mSetObj = NA, bar.color = "NULL", line.color.add
 #'License: GNU GPL (>= 2) ######
 #'@export
 AbundancePrestPlot <- function(mSetObj=NA, bar.color="NULL", line.color.addPoi = "NULL", line.color.addMax = "NULL", imgName, format="png", dpi=72, width=NA) {
-  
+
   library(plyr)
   library(dplyr)
   library(vegan)
@@ -320,6 +476,7 @@ AbundancePrestPlot <- function(mSetObj=NA, bar.color="NULL", line.color.addPoi =
   d <- c%>%
     select(Fitted)%>%
     mutate(row <- seq(0.5, n, by = 1))
+  colnames(d) <- c("Fitted", "row") 
   print(d)
   #windows(height = h, width = w)
   barplot(a$Observed, axes = F, space = 0, col = bar.color1, ylim = c(0,m), 
@@ -336,8 +493,82 @@ AbundancePrestPlot <- function(mSetObj=NA, bar.color="NULL", line.color.addPoi =
   title("Species Abundance Distribution Maximization of log-likelihood")
 
   dev.off()
-  
-  return(.set.mSet(mSetObj))
+  print("really?")
+  return(.set.mSet(mSetObj))  
 }
 
+#'Perform rank abundance or dominance/diversity models
+#'@description rank abundance distribution graph 
+#'@param mSetObj Input name of the created mSet Object
+#'@param imgName Input the image name
+#'@param format Select the image format, "png" or "pdf", default is "png" 
+#'@param dpi Input the dpi. If the image format is "pdf", users need not define the dpi. For "png" images, 
+#'the default dpi is 72. It is suggested that for high-resolution images, select a dpi of 300.  
+#'@param width Input the width, there are 2 default widths. The first, width=NULL, is 10.5.
+#'The second default is width=0, where the width is 7.2. Otherwise users can input their own width
+#'@author Shiyang Zhao\email{shiyang1@ualberta.ca}
+#'University of Alberta, Canada
+#'License: GNU GPL (>= 2) ######
+#'@export
+AbundanceRankPlot <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA) {
+  
+  library(plyr)
+  library(vegan)
+  library(dplyr)
+  library(ggplot2)
+  print("ggplot2")
+  
+  mSetObj <- .get.mSet(mSetObj)
+  
+  mod.radfit <- mSetObj$analset$result$mod.radfit
+  print(mod.radfit)
+  
 
+  null.data <- cbind(mod.radfit$models$Null$y, mod.radfit$models$Null$fitted.values)
+  null.c <- as.numeric(nrow(null.data))  
+  null.c.data <- cbind("Null", null.data, c(1:null.c))
+  colnames(null.c.data) <- c("Index", "yvalue", "Fitted", "Rank")
+
+  prep.data <- cbind(mod.radfit$models$Preemption$y, mod.radfit$models$Preemption$fitted.values)
+  prep.c <- as.numeric(nrow(prep.data)) 
+  prep.c.data <- cbind("Prep", prep.data, c(1:prep.c))
+  colnames(prep.c.data) <- c("Index", "yvalue", "Fitted", "Rank")
+  
+  log.data <- cbind(mod.radfit$models$Lognormal$y, mod.radfit$models$Lognormal$fitted.values)
+  log.c <- as.numeric(nrow(log.data))  
+  log.c.data <- cbind("Lognormal", log.data, c(1:log.c))
+  colnames(log.c.data) <- c("Index", "yvalue", "Fitted", "Rank")
+
+  zipf.data <- cbind(mod.radfit$models$Zipf$y, mod.radfit$models$Zipf$fitted.values)
+  zipf.c <- as.numeric(nrow(zipf.data))  
+  zipf.c.data <- cbind("Zipf", zipf.data, c(1:zipf.c))
+  colnames(zipf.c.data) <- c("Index", "yvalue", "Fitted", "Rank")
+  
+  man.data <- cbind(mod.radfit$models$Mandelbrot$y, mod.radfit$models$Mandelbrot$fitted.values)
+  man.c <- as.numeric(nrow(man.data))  
+  man.c.data <- cbind("Mandelbrot", man.data, c(1:man.c))
+  colnames(man.c.data) <- c("Index", "yvalue", "Fitted", "Rank")
+  
+  total <- as.data.frame(rbind(null.c.data, prep.c.data, log.c.data, zipf.c.data, man.c.data))
+  total
+  print(total)
+  rownames(total) <- c(1:nrow(total))
+  total$Index <- as.factor(total$Index)
+  total$yvalue <- as.numeric(total$yvalue)
+  total$Fitted <- as.numeric(total$Fitted)
+  total$Rank <- as.numeric(total$Rank)
+  
+  #plot(yvalue ~ Rank, data = total)
+
+  #windows ( w = 10, h = 10)
+  gg <- ggplot(total, aes(x = Rank, y = log(yvalue), group = 1)) +
+    geom_point(aes(color = Index)) +
+    facet_grid(Index ~ ., scales = "free_y") +
+    geom_line(aes(x = Rank, y = log(Fitted), color = Index)) 
+  print(gg + labs(y="Abundance (log)", x = "Rank"))
+  
+  dev.off()
+  
+  return(.set.mSet(mSetObj))
+
+}

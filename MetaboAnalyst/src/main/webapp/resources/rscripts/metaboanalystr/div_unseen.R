@@ -94,26 +94,35 @@ sp_pool <- function(mSetObj = NA, data = "false", pool = "", smallsample = "fals
   #input.2 <- select_if(input, is.numeric)
   cat("Input dataset has to be pure numeric data")
   
-  sp1_all <- specpool(input.2, smallsample = smallsample1)
-  #print(sp1_all)
+  sp1_all <- specpool(input.2)
+  sp1_all_small <- specpool(input.2, smallsample = smallsample1)
   if (pool == "") {
-    sp1_in <- specpool(input.2, pool = metaData[,2], smallsample = smallsample1)
+    pool1 <- metaData[,2]
+    sp1_in <- specpool(input.2, pool = pool1)
+    sp1_in_small <- specpool(input.2, pool = pool1, smallsample = smallsample1)
   } else {
-    pool1 <- as.numeric(pool)
-    sp1_in <- specpool(input.2, pool = metaData[,pool1], smallsample = smallsample1)
+    pool1 <- metaData[, as.numeric(pool)]
+    #pool2 <- metaData[,pool1]
+    sp1_in <- specpool(input.2, pool = pool2)
+    sp1_in_small <- specpool(input.2, pool = pool2, smallsample = smallsample1)
+    print(pool2)
   }
-  #print(pool1)
-  print(sp1_in)
+  #spec <- with(metaData, sp1_in)
+  #sp1_in <- specpool(input.2, pool = pool1, smallsample = smallsample1)
   est <- estimateR(input.2)
   sp2 <- specpool2vect(sp1_in, index = index1)
-  print(sp2)
   pool.ac <- poolaccum(input.2, permutations = permutations1, minsize = minsize1)
   est.ac <- estaccumR(input.2, permutations = permutations1, parallel = parallel1)
   sum.sp_all <- summary(sp1_all, alpha = 0.05)
   sum.sp_in <- summary(sp1_in, alpha = 0.05)
   
+  rare <- specnumber(input.2)
+  
   mSetObj$analset$sp1_all <- sp1_all
+  mSetObj$analset$sp1_all_small <- sp1_all_small
   mSetObj$analset$sp1_in <- sp1_in
+  mSetObj$analset$sp1_in_small <- sp1_in_small
+  #mSetObj$analset$spec <- spec
   mSetObj$analset$est <- est
   mSetObj$analset$sp2 <- sp2
   mSetObj$analset$pool.ac <- pool.ac
@@ -122,9 +131,13 @@ sp_pool <- function(mSetObj = NA, data = "false", pool = "", smallsample = "fals
   mSetObj$analset$sum.sp_in <- sum.sp_in
   mSetObj$analset$input <- input
   mSetObj$analset$env.data <- metaData
+  mSetObj$analset$rare <- rare
+  mSetObj$analset$fac_data <- pool1
   
   write.csv(mSetObj$analset$sp1_all, "Incidence-based estimates_freq_all sites.csv")
+  write.csv(mSetObj$analset$sp1_all_small, "Incidence-based estimates_freq_all sites_smallsample.csv")
   write.csv(mSetObj$analset$sp1_in, "Incidence-based estimates_freq_selected variable.csv")
+  write.csv(mSetObj$analset$sp1_in_small, "Incidence-based estimates_freq_selected variable_smallsample.csv")
   write.csv(mSetObj$analset$est, "Abundance-based estimates_counts.csv")
   write.csv(mSetObj$analset$sp2, "Pooled values.csv")
   write.csv(mSetObj$analset$pool.ac$means, "Extrapolated richness indices.csv")
@@ -141,7 +154,6 @@ sp_pool <- function(mSetObj = NA, data = "false", pool = "", smallsample = "fals
 #'@description Produce a boxplot between the pooled values and selected groups
 #'@param mSetObj Input name of the created mSet Object
 #'@param plot_data Input the y-axis values, drop down options are pooled values using index "jack1" (default),"jack2", "chao", "boot" or "Species"
-#'@param fac_data Input the row number in metaData, default is 1
 #'@param box.color Input box color of boxplot, options are "skyblue" (default), "green", "turquoise", "steelblue", "peach", "wheat"  
 #'@param border.col options include "blue" (default), "green", "turquoise" & "steelblue", "peach" & "wheat"
 #'@param xlab Input x axis title, default is "Treatment"
@@ -157,7 +169,7 @@ sp_pool <- function(mSetObj = NA, data = "false", pool = "", smallsample = "fals
 #'License: GNU GPL (>= 2)
 #'@export
 
-pool_boxplot <- function(mSetObj=NA, plot_data = "NULL", fac_data = "", box.color = "NULL", xlab = "", ylab = "",
+pool_boxplot <- function(mSetObj=NA, plot_data = "NULL", box.color = "NULL", xlab = "", ylab = "",
                       border.col = "NULL", imgName, format="png", dpi=72, width=NA) {
   library(plyr)
   library(vegan)
@@ -166,7 +178,7 @@ pool_boxplot <- function(mSetObj=NA, plot_data = "NULL", fac_data = "", box.colo
   mSetObj <- .get.mSet(mSetObj)
   
   if (plot_data == "NULL") {
-    plot_data1 <- mSetObj$analset$sp2
+    plot_data1 <- mSetObj$analset$rare/specpool2vect(mSetObj$analset$sp1_in)
   } else if (plot_data == "S") {
     plot_data1 <- mSetObj$analset$est.ac$S
   } else if (plot_data == "chao") {
@@ -175,18 +187,9 @@ pool_boxplot <- function(mSetObj=NA, plot_data = "NULL", fac_data = "", box.colo
     plot_data1 <- mSetObj$analset$est.ac$ace
   }
   print(plot_data1)
-  metaData <- mSetObj$analset$env.data
   
-  #metaData1 <- select_if(metaData, is.factor)
-  if (fac_data == "") {
-    treat = metaData[,1]
-    treat <- factor(treat, levels = unique(treat))
-  } else {
-    fac_data1 <- as.numeric(fac_data)
-    treat = metaData[ ,fac_data1]
-    treat <- factor(treat, levels = unique(treat))
-  }
-  print(treat)
+  treat <- factor(mSetObj$analset$fac_data)
+  #print(treat)
   #treat <- as.character(treat)
   
   #Set plot dimensions
@@ -244,22 +247,27 @@ pool_boxplot <- function(mSetObj=NA, plot_data = "NULL", fac_data = "", box.colo
   } else {
     xlab1 = xlab
   }
+  print(xlab1)
   
   if (ylab == "") {
     ylab1 = "Estimate"
   } else {
     ylab1 = ylab
   }
-  print(plot_data1)
+  print(ylab1)
+
+  #print(plot_data1)
+  #print(treat)
+  print("ready for boxplot")
 
   #windows(height = h, width = w)
   #ylim = c(0, max(plot_data1))
   boxplot(plot_data1 ~ treat, ann = T, yaxt = "n", col = box.color1, border = border.col1, xlab = xlab1, ylab = ylab1)
   axis(2, las = 2)
   title("boxplot of extrapolated species richness and selected groups")
-  
+  print("finish boxplot")  
+
   dev.off()
-  
   return(.set.mSet(mSetObj))
 }
 
@@ -267,7 +275,7 @@ pool_boxplot <- function(mSetObj=NA, plot_data = "NULL", fac_data = "", box.colo
 #'Produce a series of line graphs between the matrices of permutation results for each richness estimator and sample size
 #'@description Produce a series of line graphs between the matrices of permutation results for each richness estimator and sample size
 #'@param mSetObj Input name of the created mSet Object
-#'@param color Input box color of lines and CI, options are "black/gray" (default), "green", "red", "royalblue", "wheat", "darkslategray"  
+#'@param color Input lines of min & max, options are "azure2" (default), "green", "red", "gray", "wheat", "orange"  
 #'@param imgName Input the image name
 #'@param format Select the image format, "png" or "pdf", default is "png" 
 #'@param dpi Input the dpi. If the image format is "pdf", users need not define the dpi. For "png" images, 
@@ -282,15 +290,177 @@ pool_boxplot <- function(mSetObj=NA, plot_data = "NULL", fac_data = "", box.colo
 rich_est_curve <- function(mSetObj=NA, color="NULL", imgName, format="png", dpi=72, width=NA) {
 
   library(plyr)
-  library(dplyr)
   library(vegan)
+  library(dplyr)
+  library(lattice)
+  library(ggplot2)
+  #library("viridis")
+  #library("stringr")
+  #library(lettice)
+  #library(reshape2)
   
   mSetObj <- .get.mSet(mSetObj)
   
-  line_data <- mSetObj$analset$pool.ac
-  print(line_data) 
+  plot_data <- mSetObj$analset$pool.ac
+  print(plot_data)  
 
-  #Set plot dimensions
+  Smean <- as.data.frame(rowMeans(plot_data$S))
+  Smean <- cbind(plot_data$N, Smean, "S")
+  colnames(Smean) <- c("Size", "Richness", "Index")
+  x.max <- as.numeric(max(as.numeric(Smean$Size)))
+  y.max <- as.numeric(max(Smean$Richness))
+  min.data <- data.frame()
+  max.data <- data.frame()
+  min.list <- list()  
+  max.list <- list()
+  c <- nrow(plot_data$S)
+  print(Smean)
+  print(c)  
+
+  for (i in 1:c) {
+    a <- plot_data$S[i,]
+    b <- summary(a)
+    min.S <- as.numeric(b[1])
+    max.S <- as.numeric(b[6])
+    min1 <- data.frame(min.S)
+    max1 <- data.frame(max.S)
+    min.list[[i]] <- min1
+    max.list[[i]] <- max1
+    min.data <- rbind(min.data, min.list[[i]])
+    max.data <- rbind(max.data, max.list[[i]])
+  }
+  min.data <- cbind(min.data, max.data)
+  colnames(min.data) <- c("min", "max")
+  Sgg <- cbind(Smean, min.data) 
+  print(Sgg)
+  
+  Chmean <- as.data.frame(rowMeans(plot_data$chao))
+  Chmean <- cbind(plot_data$N, Chmean, "chao")
+  colnames(Chmean) <- c("Size", "Richness", "Index")
+  x.max.ch <- as.numeric(max(as.numeric(Chmean$Size)))
+  y.max.ch <- as.numeric(max(Chmean$Richness))
+  min.data.ch <- data.frame()
+  max.data.ch <- data.frame()
+  min.list.ch <- list()  
+  max.list.ch <- list()
+  ch <- nrow(plot_data$chao)
+  print(Chmean)
+  print(ch)
+
+  for (i in 1:ch) {
+    a.ch <- plot_data$chao[i,]
+    b.ch <- summary(a.ch)
+    min.ch <- as.numeric(b.ch[1])
+    max.ch <- as.numeric(b.ch[6])
+    min.ch1 <- data.frame(min.ch)
+    max.ch1 <- data.frame(max.ch)
+    min.list.ch[[i]] <- min.ch1
+    max.list.ch[[i]] <- max.ch1
+    min.data.ch <- rbind(min.data.ch, min.list.ch[[i]])
+    max.data.ch <- rbind(max.data.ch, max.list.ch[[i]])
+  }
+  min.data.ch <- cbind(min.data.ch, max.data.ch)
+  colnames(min.data.ch) <- c("min", "max")
+  chgg <- cbind(Chmean, min.data.ch)
+  print(chgg)
+
+  
+  j1mean <- as.data.frame(rowMeans(plot_data$jack1))
+  j1mean <- cbind(plot_data$N, j1mean, "jack1")
+  colnames(j1mean) <- c("Size", "Richness", "Index")
+  x.max.j1 <- as.numeric(max(as.numeric(j1mean$Size)))
+  y.max.j1 <- as.numeric(max(j1mean$Richness))
+  min.data.j1 <- data.frame()
+  max.data.j1 <- data.frame()
+  min.list.j1 <- list()  
+  max.list.j1 <- list()
+  j1 <- nrow(plot_data$jack1)
+  print(j1mean)
+  print(j1)
+
+  for (i in 1:j1) {
+    a.j1 <- plot_data$jack1[i,]
+    b.j1 <- summary(a.j1)
+    min.j1 <- as.numeric(b.j1[1])
+    max.j1 <- as.numeric(b.j1[6])
+    min.j11 <- data.frame(min.j1)
+    max.j11 <- data.frame(max.j1)
+    min.list.j1[[i]] <- min.j11
+    max.list.j1[[i]] <- max.j11
+    min.data.j1 <- rbind(min.data.j1, min.list.j1[[i]])
+    max.data.j1 <- rbind(max.data.j1, max.list.j1[[i]])
+  }
+  min.data.j1 <- cbind(min.data.j1, max.data.j1)
+  colnames(min.data.j1) <- c("min", "max")
+  j1gg <- cbind(j1mean, min.data.j1)
+  print(j1gg)
+
+  
+  j2mean <- as.data.frame(rowMeans(plot_data$jack2))
+  j2mean <- cbind(plot_data$N, j2mean, "jack2")
+  colnames(j2mean) <- c("Size", "Richness", "Index")
+  x.max.j2 <- as.numeric(max(as.numeric(j2mean$Size)))
+  y.max.j2 <- as.numeric(max(j2mean$Richness))
+  min.data.j2 <- data.frame()
+  max.data.j2 <- data.frame()
+  min.list.j2 <- list()  
+  max.list.j2 <- list()
+  j2 <- nrow(plot_data$jack2)
+  print(j2mean)
+  print(j2)
+
+  for (i in 1:j2) {
+    a.j2 <- plot_data$jack2[i,]
+    b.j2 <- summary(a.j2)
+    min.j2 <- as.numeric(b.j2[1])
+    max.j2 <- as.numeric(b.j2[6])
+    min.j21 <- data.frame(min.j2)
+    max.j21 <- data.frame(max.j2)
+    min.list.j2[[i]] <- min.j21
+    max.list.j2[[i]] <- max.j21
+    min.data.j2 <- rbind(min.data.j2, min.list.j2[[i]])
+    max.data.j2 <- rbind(max.data.j2, max.list.j2[[i]])
+  }
+  min.data.j2 <- cbind(min.data.j2, max.data.j2)
+  colnames(min.data.j2) <- c("min", "max")
+  j2gg <- cbind(j2mean, min.data.j2)
+  print(j2gg)
+
+  
+  bmean <- as.data.frame(rowMeans(plot_data$boot))
+  bmean <- cbind(plot_data$N, bmean, "boot")
+  colnames(bmean) <- c("Size", "Richness", "Index")
+  x.max.b <- as.numeric(max(as.numeric(bmean$Size)))
+  y.max.b <- as.numeric(max(bmean$Richness))
+  min.data.b <- data.frame()
+  max.data.b <- data.frame()
+  min.list.b <- list()  
+  max.list.b <- list()
+  bt <- nrow(plot_data$boot)
+  print(bmean)
+  print(bt)
+
+  for (i in 1:bt) {
+    a.b <- plot_data$boot[i,]
+    b.b <- summary(a.b)
+    min.b <- as.numeric(b.b[1])
+    max.b <- as.numeric(b.b[6])
+    min.b1 <- data.frame(min.b)
+    max.b1 <- data.frame(max.b)
+    min.list.b[[i]] <- min.b1
+    max.list.b[[i]] <- max.b1
+    min.data.b <- rbind(min.data.b, min.list.b[[i]])
+    max.data.b <- rbind(max.data.b, max.list.b[[i]])
+  }
+  min.data.b<- cbind(min.data.b, max.data.b)
+  colnames(min.data.b) <- c("min", "max")
+  bgg <- cbind(bmean, min.data.b)
+  print(bgg)  
+
+  plot_dataA <- rbind(Sgg, chgg, j1gg, j2gg, bgg)
+  print(plot_dataA)
+
+   #Set plot dimensions
   if(is.na(width)){
     w <- 10.5
   } else if(width==0){
@@ -298,50 +468,46 @@ rich_est_curve <- function(mSetObj=NA, color="NULL", imgName, format="png", dpi=
   } else{
     w <- width
   }
-  h <- w/2
-  
-  if (color == "NULL") { 
-    color1 = c("black", "gray") #default fill palette is grayscale
-  } else if (color == "green") { #manual user entry. Selection of this option causes text box to appear
-    color1 <- c("forestgreen", "lightgreen")
-  } else if (color == "red") { 
-    color1 <- c("indianred1", "lightpink")
-  } else if (color == "royalblue") { 
-    color1 <- c("slateblue4", "lightsteelblue1")
-  } else if (color == "wheat") { 
-    color1 <- c("sienna1", "wheat1")
-  } else if (color == "darkslategray") { 
-    color1 <- c("darkorchid4", "plum")
-  } 
+  h <- w
   
   #Name plot for download
   imgName <- paste(imgName, "dpi", dpi, ".", format, sep="")
   mSetObj$imgSet$pool.plot <- imgName
   
   Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
-  par(xpd=FALSE, mar=c(5.1, 4.1, 4.1, 2.1))
-  #abline(0, 1)
   
-  pars <- expand.grid(col = color1, stringsAsFactors = FALSE)
+  if (color == "NULL") { 
+    color1 <- c("azure2") #default fill palette is grayscale
+  } else if (color == "green") { #manual user entry. Selection of this option causes text box to appear
+    color1 <- c("darkseagreen")
+  } else if (color == "red") { 
+    color1 <- c("bisque")
+  } else if (color == "gray") { 
+    color1 <- c("darkslategray2")
+  } else if (color == "wheat") { 
+    color1 <- c("cornsilk2")
+  } else if (color == "orange") { 
+    color1 <- c("coral")
+  } 
+  print(color1)
+ 
+  #pars <- expand.grid(col = color1, stringsAsFactors = FALSE)
+   
+  print("ready for ggplot") 
+  ggplot(plot_dataA, aes(x = Size, y = Richness)) +
+    geom_line(aes(color = Index)) +
+    facet_grid(Index ~ ., scales = "free_y") +
+    geom_line(aes(x = Size, y = min, color = color1), linetype = "dotdash") +
+    geom_line(aes(x = Size, y = max, color = color1), linetype = "dotdash") + 
+    xlim(0,20)
   
-  #windows(height = h, width = w)
-  plot.new()
-  title("matrices of permutation results for each richness estimator")
-  par(mfrow = c(2,3))
-  S <- line_data$S
-  S1 <- rowMeans(S)
-  N <- line_data$N
-  plot(S1 ~ N, ann = F, axes = F)
-  lines(S1 ~ line_data$N, color = color1) 
-  axis(2, lwd = 2, ylab = "Richness")
-  axis(1, xlab = "S")
-  #plot(line_data, lwd = 2, col = color1)
-  
+  # Suppress the legend since color isn't actually providing any information
+  #  opts(legend.position = "none")
+  print("after ggplot")
   
   dev.off()
   
   return(.set.mSet(mSetObj))
 }
-
 
 

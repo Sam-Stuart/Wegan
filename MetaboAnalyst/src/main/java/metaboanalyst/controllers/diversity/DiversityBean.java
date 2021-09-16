@@ -127,11 +127,12 @@ public class DiversityBean implements Serializable {
 //            RConnection RC = sb.getRConnection();
 //            sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
 //        }
-        System.out.print("INSIDE RAREFACTION"); 
+        System.out.print("INSIDE ABUNDDIST"); 
         DiversityUtils.CreateAbundDistDiv(sb, false, "", false, "");
         DiversityUtils.PlotAbundFisherPlotDiv(sb, "NULL", "NULL", sb.getCurrentImage("Abundance_Fisher_Dist_Plot"), "png", 72, "false");
         DiversityUtils.PlotAbundPrestPlotDiv(sb, "NULL", "NULL", "NULL", sb.getCurrentImage("Abundance_Prest_Dist_Plot"), "png", 72, "false");
-        System.out.print("AFTER RAREFACTION");
+        DiversityUtils.PlotAbundRankPlotDiv(sb, sb.getCurrentImage("Abundance_Rank_Dist_Plot"), "png", 72, "false");
+        System.out.print("AFTER ABUNDDIST");
     }
     
     private void doDefaultAccummodel(){
@@ -178,7 +179,7 @@ public class DiversityBean implements Serializable {
 //        }
         System.out.print("INSIDE UD"); 
         DiversityUtils.CreateUnseenDiv(sb, false, "", false, "NULL", "", "", "");
-        DiversityUtils.PlotPoolBoxplot(sb, "NULL", "", "NULL", "", "", "NULL", sb.getCurrentImage("boxplot_richness"), "png", 72, "false");
+        DiversityUtils.PlotPoolBoxplot(sb, "NULL", "NULL", "", "", "NULL", sb.getCurrentImage("boxplot_richness"), "png", 72, "false");
         DiversityUtils.PlotUnseenCurve(sb, "NULL",sb.getCurrentImage("plot_matrices"), "png", 72, "false");
         System.out.print("AFTER UD");
     }

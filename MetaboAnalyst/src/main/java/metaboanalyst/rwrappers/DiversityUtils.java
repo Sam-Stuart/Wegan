@@ -252,6 +252,22 @@ public class DiversityUtils {
         }
     }
     
+    public static void PlotAbundRankPlotDiv(SessionBean1 sb, String imgName, String format, int dpi, String width) {
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "AbundanceRankPlot(NA" 
+                                                 + "\", \"" + imgName 
+                                                 + "\", \"" + format 
+                                                 + "\", " + dpi 
+                                                 + ", width=NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            sb.addGraphicsCMD("Abundance_Rank_Dist_Plot", rCommand);
+            RC.voidEval(rCommand);
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        }
+    }
+    
     
     public static boolean CreateAccumModelDiv(SessionBean1 sb, boolean data, String permutations, boolean conditioned, String gamma,
                                               String models, String object, String interval) {
@@ -456,14 +472,14 @@ public class DiversityUtils {
     }
     
     
-    public static boolean PlotPoolBoxplot(SessionBean1 sb, String plot_data, String fac_data, String box_color, String xlab,
+    public static boolean PlotPoolBoxplot(SessionBean1 sb, String plot_data, String box_color, String xlab,
                                           String ylab, String border_col, String imgName, String format, int dpi, String width) {
         try {
             System.out.print("FD");
             RConnection RC = sb.getRConnection(); //Start R connection
             String rCommand = "pool_boxplot(NA"
                                                  + ", \"" + plot_data
-                                                 + "\", \"" + fac_data
+                                                 //+ "\", \"" + fac_data
                                                  + "\", \"" + box_color
                                                  + "\", \"" + xlab
                                                  + "\", \"" + ylab
