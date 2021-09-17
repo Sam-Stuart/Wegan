@@ -10,6 +10,7 @@ import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
 import metaboanalyst.controllers.ApplicationBean1;
 import metaboanalyst.controllers.SessionBean1;
+import metaboanalyst.models.User;
 import metaboanalyst.rwrappers.RCenter;
 import metaboanalyst.rwrappers.RDataUtils;
 import metaboanalyst.utils.DataUtils;
@@ -116,17 +117,13 @@ public class DiversityloadBean implements Serializable {
                 RConnection RC = sb.getRConnection();
                 String fileName = DataUtils.uploadFile(dataFile, sb, null, ab.isOnPublicServer());
                 String fileNameMeta = DataUtils.uploadFile(dataFileMeta, sb, null, ab.isOnPublicServer());
-//                String fileNameEnv = DataUtils.uploadFile(dataFileEnv, sb, null, ab.isOnPublicServer());
+                
                 if (fileName == null) {
                     return null;
                 }
                 if (fileNameMeta != null){
                     RDataUtils.readTextDataMeta(RC, fileNameMeta, metaFormat, "disc", metaNames);
-                    sb.setDataUploaded(true);
                 }
-//                if (fileNameEnv != null){
-//                    RDataUtils.readTextDataEnv(RC, fileNameMeta, envFormat, "disc", envNames);
-//                }
 
                 if (RDataUtils.readTextData(RC, fileName, dataFormat, "disc", dataNames)) {
                     sb.setDataUploaded(true);
@@ -134,7 +131,7 @@ public class DiversityloadBean implements Serializable {
                     return "Data check";
                 } else {
                     String err = RDataUtils.getErrMsg(RC);
-                    sb.updateMsg("Error", "Failed to read in the CSV file." + err);
+                    sb.updateMsg("Error", "Failed to read in the data file." + err);
                     return null;
                 }
             } catch (Exception e) {
@@ -298,28 +295,6 @@ public class DiversityloadBean implements Serializable {
         sb.setDataUploaded(true);
         return "Data check";
     }
-    
-    
-    
-    public boolean runDCaR(String inputData,String ext){
-        RConnection RC = sb.getRConnection();
-        try {
-            //String rCommand = "InitDataObjects(\"" + dataType + "\", \"" + analType + "\", " + (isPaired ? "TRUE" : "FALSE") + ")";
-
-            //String rCommand = "CAWegan(\"" + inputData + "\", \"" + sb.getPath2()+ "\"  )";
-
-            String rCommand = "DCAWegan(\"" + inputData + "\", \"" + sb.getPath2()+ "\", \"" + ext + "\"   )";
-            RC.voidEval(rCommand);
-            RCenter.recordRCommand(RC, rCommand);
-
-        } catch (RserveException rse) {
-            System.out.println(rse);
-            return false;
-        }
-        //;
-        return true ;
-            
-    }    
-    
+        
     
 }

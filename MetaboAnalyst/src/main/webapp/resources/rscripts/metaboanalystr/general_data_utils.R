@@ -489,22 +489,14 @@ mSetObj <- .get.mSet(mSetObj);
 Read.TextDataMeta <- function(mSetObj=NA, filePath, metaFormat="rowu", lbl.type="disc", metaNames="colOnly"){
   mSetObj <- .get.mSet(mSetObj);
   
-  if (dataNames=="colOnly") { #yes column names, no row names
-    dat <- .readDataTable(filePath, metaNames="colOnly");
-    print("MetaColOnly")
-    print(dat)
-  } else if (dataNames=="rowOnly") { #no col names, yes row names
-    dat <- .readDataTable(filePath, metaNames="rowOnly"); 
-    print("MetaRowOnly")
-    print(dat)
-  } else if (dataNames=="bothNames") { #yes col names, yes row names
-    dat <- .readDataTable(filePath, metaNames="bothNames");
-    print("MetaBoth")
-    print(dat)
+  if (metaNames=="colOnly") { #yes column names, no row names
+    dat <- .readMetaDataTable(filePath, metaNames="colOnly");
+  } else if (metaNames=="rowOnly") { #no col names, yes row names
+    dat <- .readMetaDataTable(filePath, metaNames="rowOnly"); 
+  } else if (metaNames=="bothNames") { #yes col names, yes row names
+    dat <- .readMetaDataTable(filePath, metaNames="bothNames");
   } else { #no col names, no row names
-    dat <- .readDataTable(filePath, metaNames="noNames");
-    print("MetaNone")
-    print(dat)
+    dat <- .readMetaDataTable(filePath, metaNames="noNames");
   }
 
   if(class(dat) == "try-error" || ncol(dat) == 1){
@@ -524,7 +516,7 @@ Read.TextDataMeta <- function(mSetObj=NA, filePath, metaFormat="rowu", lbl.type=
   }
   
   mSetObj$dataSet$origMeta <- dat1;
-  
+
   return(.set.mSet(mSetObj));
 }
 
@@ -533,21 +525,13 @@ Read.TextDataEnv <- function(mSetObj=NA, filePath, envFormat="rowu", lbl.type="d
   mSetObj <- .get.mSet(mSetObj);
 
   if (dataNames=="colOnly") { #yes column names, no row names
-    dat <- .readDataTable(filePath, envNames="colOnly");
-    print("EnvColOnly")
-    print(dat)
+    dat <- .readEnvDataTable(filePath, envNames="colOnly");
   } else if (dataNames=="rowOnly") { #no col names, yes row names
-    dat <- .readDataTable(filePath, envNames="rowOnly"); 
-    print("EnvRowOnly")
-    print(dat)
+    dat <- .readEnvDataTable(filePath, envNames="rowOnly"); 
   } else if (dataNames=="bothNames") { #yes col names, yes row names
-    dat <- .readDataTable(filePath, envNames="bothNames");
-    print("EnvBoth")
-    print(dat)
+    dat <- .readEnvDataTable(filePath, envNames="bothNames");
   } else { #no col names, no row names
-    dat <- .readDataTable(filePath, envNames="noNames");
-    print("EnvNone")
-    print(dat)
+    dat <- .readEnvDataTable(filePath, envNames="noNames");
   }
 
   if(class(dat) == "try-error" || ncol(dat) == 1){

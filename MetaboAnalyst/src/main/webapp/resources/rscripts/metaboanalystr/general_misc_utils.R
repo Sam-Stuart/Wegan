@@ -191,6 +191,94 @@ RemoveDuplicates <- function(data, lvlOpt="mean", quiet=TRUE){
 }
 
 
+#'
+.readMetaDataTable <- function(fileName, metaNames="colOnly"){
+    formatStr <- substr(fileName, nchar(fileName)-2, nchar(fileName)) #last 3 letters in file name
+    if (formatStr == "txt") {
+      if (metaNames=="colOnly") { #yes col names, no row names
+        dat1 <- try(read.table(fileName, header=TRUE, comment.char = "", check.names=FALSE));
+        rownames(dat1) <- as.character(c(1:nrow(dat1)));
+      } else if (metaNames=="rowOnly") { #no col names, yes row names
+        dat <- try(read.table(fileName, header=FALSE, comment.char = "", check.names=FALSE));
+        rownames(dat) <- as.character(dat[,1]);
+        dat1 <- dat[-1,];
+        colnames(dat1) <- paste0("V",1:ncol(dat1));
+      } else if (metaNames=="bothNames") { #yes col names, yes row names
+        dat <- try(read.table(fileName, header=TRUE, comment.char = "", check.names=FALSE));
+        rownames(dat) <- as.character(dat[,1]);
+        dat1 <- dat[,-1];
+      } else { #no col names, no row names
+        dat1 <- try(read.table(fileName, header=TRUE, comment.char = "", check.names=FALSE));
+        rownames(dat1) <- as.character(c(1:nrow(dat1)));
+        colnames(dat1) <- paste0("V",1:ncol(dat1));
+      }
+    }
+    if (formatStr == "csv") {
+      if (metaNames=="colOnly") { #yes col names, no row names
+        dat1 <- try(read.csv(fileName, header=TRUE, comment.char = "", check.names=FALSE));
+        rownames(dat1) <- as.character(c(1:nrow(dat1)));
+      } else if (metaNames=="rowOnly") { #no col names, yes row names
+        dat <- try(read.csv(fileName, header=FALSE, comment.char = "", check.names=FALSE));
+        rownames(dat) <- as.character(dat[,1]);
+        dat1 <- dat[-1,];
+        colnames(dat1) <- paste0("V",1:ncol(dat1));
+      } else if (metaNames=="bothNames") { #yes col names, yes row names
+        dat <- try(read.csv(fileName, header=TRUE, comment.char = "", check.names=FALSE));
+        rownames(dat) <- as.character(dat[,1]);
+        dat1 <- dat[,-1];
+      } else { #no col names, no row names
+        dat1 <- try(read.csv(fileName, header=TRUE, comment.char = "", check.names=FALSE));
+        rownames(dat1) <- as.character(c(1:nrow(dat1)));
+        colnames(dat1) <- paste0("V",1:ncol(dat1));
+      }
+    }
+  return(dat1);
+}
+
+
+#'
+.readEnvDataTable <- function(fileName, envNames="colOnly"){
+    formatStr <- substr(fileName, nchar(fileName)-2, nchar(fileName)) #last 3 letters in file name
+    if (formatStr == "txt") {
+      if (envNames=="colOnly") { #yes col names, no row names
+        dat1 <- try(read.table(fileName, header=TRUE, comment.char = "", check.names=FALSE));
+        rownames(dat1) <- as.character(c(1:nrow(dat1)));
+      } else if (envNames=="rowOnly") { #no col names, yes row names
+        dat <- try(read.table(fileName, header=FALSE, comment.char = "", check.names=FALSE));
+        rownames(dat) <- as.character(dat[,1]);
+        dat1 <- dat[-1,];
+        colnames(dat1) <- paste0("V",1:ncol(dat1));
+      } else if (envNames=="bothNames") { #yes col names, yes row names
+        dat <- try(read.table(fileName, header=TRUE, comment.char = "", check.names=FALSE));
+        rownames(dat) <- as.character(dat[,1]);
+        dat1 <- dat[,-1];
+      } else { #no col names, no row names
+        dat1 <- try(read.table(fileName, header=TRUE, comment.char = "", check.names=FALSE));
+        rownames(dat1) <- as.character(c(1:nrow(dat1)));
+        colnames(dat1) <- paste0("V",1:ncol(dat1));
+      }
+    }
+    if (formatStr == "csv") {
+      if (envNames=="colOnly") { #yes col names, no row names
+        dat1 <- try(read.csv(fileName, header=TRUE, comment.char = "", check.names=FALSE));
+        rownames(dat1) <- as.character(c(1:nrow(dat1)));
+      } else if (envNames=="rowOnly") { #no col names, yes row names
+        dat <- try(read.csv(fileName, header=FALSE, comment.char = "", check.names=FALSE));
+        rownames(dat) <- as.character(dat[,1]);
+        dat1 <- dat[-1,];
+        colnames(dat1) <- paste0("V",1:ncol(dat1));
+      } else if (envNames=="bothNames") { #yes col names, yes row names
+        dat <- try(read.csv(fileName, header=TRUE, comment.char = "", check.names=FALSE));
+        rownames(dat) <- as.character(dat[,1]);
+        dat1 <- dat[,-1];
+      } else { #no col names, no row names
+        dat1 <- try(read.csv(fileName, header=TRUE, comment.char = "", check.names=FALSE));
+        rownames(dat1) <- as.character(c(1:nrow(dat1)));
+        colnames(dat1) <- paste0("V",1:ncol(dat1));
+      }
+    }
+  return(dat1);
+}
 
 
 #'Permutation

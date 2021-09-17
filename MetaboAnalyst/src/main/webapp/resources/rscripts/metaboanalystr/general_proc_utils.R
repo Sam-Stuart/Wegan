@@ -219,16 +219,6 @@ SanityCheckData <- function(mSetObj=NA){
   mSetObj$dataSet$minConc <- minConc;
 
   mSetObj$dataSet$preproc <- as.data.frame(int.mat);
-    print("preproc")
-    print(mSetObj$dataSet$preproc)
-    print("colnames")
-    print(colnames(mSetObj$dataSet$preproc))
-    print("rownames")
-    print(rownames(mSetObj$dataSet$preproc))
-    print("number numeric cols")
-    print(length(select_if(mSetObj$dataSet$preproc, is.numeric)))
-    print("number character cols")
-    print(length(select_if(mSetObj$dataSet$preproc, is.character)))
   mSetObj$dataSet$proc.cls <- mSetObj$dataSet$cls <- mSetObj$dataSet$orig.cls;
   
   if(substring(mSetObj$dataSet$format,4,5)=="ts"){
