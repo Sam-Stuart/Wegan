@@ -33,62 +33,63 @@ BestNormalize <- function(mSetObj=NA){
     
   numData <- select_if(data, is.numeric)
   colNamesNum <- colnames(numData)
+  rowNamesNum <- rownames(numData)
 
   charData <- select_if(data, is.character)
   colNamesChar <- colnames(charData)
 
   #QuantileNorm
   numDataQuantileNorm <- QuantileNormalize(numData);
+  colnames(numDataQuantileNorm) <- colNamesNum;
+  rownames(numDataQuantileNorm) <- rowNamesNum;
 
   #ProbNormGroup
   grp.inx <- cls == ref;
-  grp.ref.smpl <- numData[grp.inx,]; #I CHANGED THIS
-  numDataGroupPQN<-t(apply(numData, 2, ProbNorm, grp.ref.smpl));
-  normName <- "ProbNormGroup"
+  grp.ref.smpl <- numData[,grp.inx]; #I CHANGED THIS TO COLS
+  numDataGroupPQN <- apply(numData, 2, ProbNorm, grp.ref.smpl);
+  colnames(numDataGroupPQN) <- colNamesNum;
+  rownames(numDataGroupPQN) <- rowNamesNum;
 
   #ProbNormSample
   samp.ref.smpl <- numData[ref,];
-  numDataSamplePQN<-t(apply(numData, 2, ProbNorm, samp.ref.smpl));
+  numDataSamplePQN <- apply(numData, 1, ProbNorm, samp.ref.smpl); #I CHANGED THIS TO ROWS
   colnames(numDataSamplePQN) <- colNamesNum;
   rownames(numDataSamplePQN) <- rowNamesNum;
-  normName <- "ProbNormSample"
 
   #SumNorm
-  numDataSumNorm<-t(apply(numData, 2, SumNorm));
+  numDataSumNorm<-apply(numData, 2, SumNorm);
   colnames(numDataSumNorm) <- colNamesNum;
   rownames(numDataSumNorm) <- rowNamesNum;
-  normName <- "SumNorm"
 
   #MedianNorm
-  numDataMedianNorm<-t(apply(numData, 2, MedianNorm));
+  numDataMedianNorm<-apply(numData, 2, MedianNorm);
   colnames(numDataMedianNorm) <- colNamesNum;
   rownames(numDataMedianNorm) <- rowNamesNum;
-  normName <- "MedianNorm"
 
-  #BoxNorm- WRITE FUNCTION!!!!!!!
-  numDataBoxNorm<-t(apply(numData, 2, BoxNorm));
+  #BoxNorm
+  if(sum(as.numeric(numData<0)) > 0){
+    numDataBoxNorm<-apply(numData, 2, YeoNorm);
+  } else {
+    numDataBoxNorm<-apply(numData, 2, BoxNorm);
+  }
   colnames(numDataBoxNorm) <- colNamesNum;
   rownames(numDataBoxNorm) <- rowNamesNum;
-  normName <- "BoxNorm"
 
   numDataNormList <- list(numDataQuantileNorm, numDataGroupPQN, numDataSamplePQN, numDataSumNorm, numDataMedianNorm, numDataBoxNorm)
-  normNames <- c("QuantileNorm", "GroupPQN", "SamplePQN", "SumNorm", "MedianNorm", "BoxNorm")
+  normNames <- c("QuantileNorm", "CompNorm", "SamplePQN", "SumNorm", "MedianNorm", "BoxNorm")
 
   SWList <- list()
   for (i in 1:length(numDataNormList)) {
-    SWList[[normNames[i]]] <- shapiro(numDataNormList[[i]]) #WRITE SW FUNCTION!!!!
-    Next: generate p-value for each column and then count the number of p-values above 0.05. The highest count wins.
+    SWList[[normNames[i]]] <- apply(numDataNormList[[i]], 2, shapiroWilk) #FINISH WRITING SW FUNCTION!!!!
+  }    
+    Next: count the number of p-values above 0.05. The highest count wins.
     If there is a tie, sum the p-values and the highest number wins.
     Whoever wins, record i.
-  }
-
   normBest <- numDataNormList[[i]]
   numDataNorm <- normNames[i]
 
-  CLEAN DATA TO REMOVE COLS OF ALL NAS!!!!!!!!!!!!!!
-
   data_1 <- cbind(numDataNorm, charData)
-  colNames <- append(colNamesNum, colNamesChar)
+  colNames <- c(colNamesNum, colNamesChar)
   colnames(data_1) <- colNames
   rownames(data_1) <- rownames(data)
 
@@ -564,6 +565,48 @@ PlotSampleNormSummary <- function(mSetObj=NA, imgName, format="png", dpi=72, wid
   dev.off();
   return(.set.mSet(mSetObj));
 }
+
+
+#'Box-Cox normalization
+#'@description performs Box-Cox (data must be 0 or positive values)
+#'@usage BoxNorm(x)
+#'@param x is the column being normalized 
+#'@author Louisa Normington \email{normingt@ualberta.ca}
+#'University of Alberta, Canada
+#'@export
+BoxNorm <- function(data, x) {
+  library(EnvStats)
+  boxcox(x, lambda=seq(-6, 6, 0.1))
+}
+
+
+#'Yeo-Johnson normalization
+#'@description performs Yeo-Johnson normalization (data can have negative values)
+#'@usage YeoNorm(x)
+#'@param x is the column being normalized 
+#'@author Louisa Normington \email{normingt@ualberta.ca}
+#'University of Alberta, Canada
+#'@export
+YeoNorm <- function(x) {
+  library(VGAM)
+  yeo.johnson(x, lambda=seq(-6,6,0.1))
+}
+
+
+#'Shapiro Wilk test for normality
+#'@usage shapiroWilk(x)
+#'@param x is the column being normalized 
+#'@author Louisa Normington \email{normingt@ualberta.ca}
+#'University of Alberta, Canada
+#'@export
+shapiroWilk <- function(x) {
+  shapiro <- shapiro.test(x) #Perform the test
+  #extract the p_value!!!!!!!!!!!!!
+  return(p)
+}
+
+
+
 
 ##############################################
 ##############################################

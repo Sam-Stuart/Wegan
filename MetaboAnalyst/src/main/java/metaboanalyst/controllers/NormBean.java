@@ -114,7 +114,7 @@ public class NormBean implements Serializable {
             return;
         }
         if (rowNormOpt.equals("CompNorm") && refVar == null) {
-            sb.updateMsg("Error", "You need to manually specify a reference feature for normalization");
+            sb.updateMsg("Error", "You need to manually specify a reference variable for normalization");
             return;
         }
         if (rowNormOpt.equals("GroupPQN") && refGrp == null) {

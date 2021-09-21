@@ -688,7 +688,7 @@ PlotPLSPairSummary <- function(mSetObj=NA, imgName, format="png", dpi=72, width=
 #'@export
 #'
 PlotPLS2DScore <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, inx1, inx2, reg=0.95, show=1, grey.scale=0, use.sparse=FALSE){
-  print("0")
+  
   mSetObj <- .get.mSet(mSetObj);
   
   imgName = paste(imgName, "dpi", dpi, ".", format, sep="");
