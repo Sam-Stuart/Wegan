@@ -203,7 +203,7 @@ print(cls)
   msg<-c(msg, paste0("<font color=\"red\">", "A total of ", naCount, " (", naPercent, "%) missing values were detected.</font>"));
   msg<-c(msg, "<u>By default, missing or constant values (e.g. NAs or all 0s) will be left as is, though certain methods will be unavailable, including normalization techniques.</u>",
          "Click <b>Skip</b> button if you accept the default practice,",
-         "Or click <b>Missing value imputation</b> to use other methods.");
+         "Or click <b>Missing value estimation</b> to use other methods.");
   
   # obtain original half of minimal positive value (threshold) for numeric data
   num.mat <- select_if(int.mat, is.numeric)
@@ -344,7 +344,7 @@ RemoveMissingPercentVar <- function(mSetObj=NA, percent=perct){
 #'License: GNU GPL (>= 2)
 #'@export
 #'
-ImputeVar <- function(mSetObj=NA, method="min"){
+ImputeVar <- function(mSetObj=NA, method="none"){
   
   mSetObj <- .get.mSet(mSetObj);
   
@@ -357,7 +357,10 @@ ImputeVar <- function(mSetObj=NA, method="min"){
   new.mat <- NULL;
   msg <- mSetObj$msgSet$replace.msg;
   
-  if(method=="exclude"){
+ if (method=="none" {
+    new.mat<-int.mat
+    msg <- c(msg,"Variables with missing values were left as is.");
+ }else if(method=="exclude"){
     good.inx<-apply(is.na(int.mat), 2, sum)==0
     new.mat<-int.mat[,good.inx];
     msg <- c(msg,"Variables with missing values were excluded.");

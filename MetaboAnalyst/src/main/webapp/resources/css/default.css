@@ -298,6 +298,18 @@
     font-bold: false;
 }
 
+.autoNormButton {
+    background: #8cbd48 !important; 
+    border: 5px #8cbd48 !important; 
+    color: black !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
+    width: 150px; 
+    height: 30px;
+    font-size: 18px;
+    font-bold: false;
+}
+
 .sanityButton {
     background: #8cbd48 !important; 
     border: 5px #8cbd48 !important; 

@@ -51,15 +51,21 @@
                         <f:selectItem itemLabel="Mean" itemValue="mean" /> 
                         <f:selectItem itemLabel="Median" itemValue="median" /> 
                     </p:selectOneRadio>
-                </h:panelGrid>
-                <h:panelGrid columns="2" style="width: 100%; text-align: center">
-                    <p:commandButton value="Submit" 
-                                     onclick="PF('statusDialog').show()"
-                                     oncomplete="PF('statusDialog').hide()"   
-                                     update=":cmdPane"
-                                     actionListener="#{procBean.filterButton_action()}"/>   
-                    <p:commandButton value="Proceed" ajax="false" action="Normalization"/>    
                 </h:panelGrid> 
+                <h:panelGrid style="position:absolute; right: 5px; width: 320px">
+                    <h:panelGrid columns="2" style="width: 280px; text-align: right">
+                        <p:commandButton value="Submit"
+                                         style="padding: 4px 7px 4px 7px; width: 100px; background: #75bafb; border-color: #75bafb; color: black; box-shadow: none !important; text-shadow: none !important;"                     
+                                         onclick="PF('statusDialog').show()"
+                                         oncomplete="PF('statusDialog').hide()"   
+                                         update=":cmdPane"
+                                         action="#{procBean.filterButton_action()}"/> 
+<!--
+                        <p:commandButton value="Proceed" ajax="false" 
+                                         style="padding: 4px 7px 4px 7px; width: 150px; background: #8cbd48; border-color: #8cbd48; color: black; box-shadow: none !important; text-shadow: none !important;"                     
+                                         action="Normalization"/>    -->
+                    </h:panelGrid> 
+                </h:panelGrid>
             </h:panelGrid> 
         </h:form>
     </ui:define>

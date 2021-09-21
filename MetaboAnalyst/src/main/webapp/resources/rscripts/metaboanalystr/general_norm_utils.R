@@ -10,54 +10,93 @@ CleanDataMatrix <- function(ndata){
   return(ndata[,!constCol, drop=FALSE]); # got an error of incorrect number of dimensions, added drop=FALSE to avoid vector conversion
 }
 
-#'Normalization
-#'@description This function performs row-wise normalization, transformation, and 
-#'scaling of your metabolomic data. 
-#'@usage Normalization(mSetObj, rowNorm, transNorm, scaleNorm, ref=NULL, ratio=FALSE, ratioNum=20)
+
+#'BestNormalize
+#'@description This function performs column-wise normalization using all methods and selects the "best" (ie highest SW p-value).
+#'@usage Normalization(mSetObj, rowNorm)
 #'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
-#'@param rowNorm Select the option for row-wise normalization, "QuantileNorm" for Quantile Normalization, 
-#'"ProbNormT" for Probabilistic Quotient Normalization without using a reference sample,
-#'"ProbNormF" for Probabilistic Quotient Normalization based on a reference sample, 
-#'"CompNorm" for Normalization by a reference variable,
-#'"SumNorm" for Normalization to constant sum, 
-#'"MedianNorm" for Normalization to sample median, and 
-#'"SpecNorm" for Normalization by a sample-specific factor.
-#'@param transNorm Select option to transform the data, "LogNorm" for Log Normalization,
-#'and "CrNorm" for Cubic Root Transformation. 
-#'@param scaleNorm Select option for scaling the data, "MeanCenter" for Mean Centering,
-#'"AutoNorm" for Autoscaling, "ParetoNorm" for Pareto Scaling, amd "RangeNorm" for Range Scaling.
-#'@param ref Input the name of the reference sample or the reference variable, use " " around the name.  
-#'@param ratio This option is only for biomarker analysis.
-#'@param ratioNum Relevant only for biomarker analysis.  
-#'@author Jeff Xia \email{jeff.xia@mcgill.ca}, Jasmine Chong
-#'McGill University, Canada
+#'@author Louisa Normington \email{normingt@ualberta.ca}
+#'University of Alberta, Canada
 #'@export
 #'
-#BestNormalize <- function(mSetObj=NA, rowNorm, transNorm, scaleNorm, ref=NULL, ratio=FALSE, ratioNum=20){
-#  
-#  data <- .get.mSet(mSetObj);
-#
-#  if(is.null(mSetObj$dataSet[["procr"]])){
-#    data<-mSetObj$dataSet$preproc
-#  }else if(is.null(mSetObj$dataSet[["prenorm"]])){
-#    data<- mSetObj$dataSet$procr;
-#  }else{
-#    data<-mSetObj$dataSet$prenorm
-#  }
-#    
-#  normData <- bestNormalize(data)
-#
-#  colNames <- colnames(data);
-#  rowNames <- rownames(data);
-#  
-#  
-#  # need to do some sanity check, for log there may be Inf values introduced
-#  data <- CleanData(normData, T, F);
-#  
-#  mSetObj$dataSet$norm <- as.data.frame(normData);
-#  mSetObj$dataSet$best.method <- FALSE;
-#  return(.set.mSet(mSetObj));
-#}
+BestNormalize <- function(mSetObj=NA){
+  
+  mSetObj <- .get.mSet(mSetObj);
+
+  if(is.null(mSetObj$dataSet[["procr"]])){
+    data<-mSetObj$dataSet$preproc
+  }else if(is.null(mSetObj$dataSet[["prenorm"]])){
+    data<- mSetObj$dataSet$procr
+  }else{
+    data<-mSetObj$dataSet$prenorm
+  }
+    
+  numData <- select_if(data, is.numeric)
+  colNamesNum <- colnames(numData)
+
+  charData <- select_if(data, is.character)
+  colNamesChar <- colnames(charData)
+
+  #QuantileNorm
+  numDataQuantileNorm <- QuantileNormalize(numData);
+
+  #ProbNormGroup
+  grp.inx <- cls == ref;
+  grp.ref.smpl <- numData[grp.inx,]; #I CHANGED THIS
+  numDataGroupPQN<-t(apply(numData, 2, ProbNorm, grp.ref.smpl));
+  normName <- "ProbNormGroup"
+
+  #ProbNormSample
+  samp.ref.smpl <- numData[ref,];
+  numDataSamplePQN<-t(apply(numData, 2, ProbNorm, samp.ref.smpl));
+  colnames(numDataSamplePQN) <- colNamesNum;
+  rownames(numDataSamplePQN) <- rowNamesNum;
+  normName <- "ProbNormSample"
+
+  #SumNorm
+  numDataSumNorm<-t(apply(numData, 2, SumNorm));
+  colnames(numDataSumNorm) <- colNamesNum;
+  rownames(numDataSumNorm) <- rowNamesNum;
+  normName <- "SumNorm"
+
+  #MedianNorm
+  numDataMedianNorm<-t(apply(numData, 2, MedianNorm));
+  colnames(numDataMedianNorm) <- colNamesNum;
+  rownames(numDataMedianNorm) <- rowNamesNum;
+  normName <- "MedianNorm"
+
+  #BoxNorm- WRITE FUNCTION!!!!!!!
+  numDataBoxNorm<-t(apply(numData, 2, BoxNorm));
+  colnames(numDataBoxNorm) <- colNamesNum;
+  rownames(numDataBoxNorm) <- rowNamesNum;
+  normName <- "BoxNorm"
+
+  numDataNormList <- list(numDataQuantileNorm, numDataGroupPQN, numDataSamplePQN, numDataSumNorm, numDataMedianNorm, numDataBoxNorm)
+  normNames <- c("QuantileNorm", "GroupPQN", "SamplePQN", "SumNorm", "MedianNorm", "BoxNorm")
+
+  SWList <- list()
+  for (i in 1:length(numDataNormList)) {
+    SWList[[normNames[i]]] <- shapiro(numDataNormList[[i]]) #WRITE SW FUNCTION!!!!
+    Next: generate p-value for each column and then count the number of p-values above 0.05. The highest count wins.
+    If there is a tie, sum the p-values and the highest number wins.
+    Whoever wins, record i.
+  }
+
+  normBest <- numDataNormList[[i]]
+  numDataNorm <- normNames[i]
+
+  CLEAN DATA TO REMOVE COLS OF ALL NAS!!!!!!!!!!!!!!
+
+  data_1 <- cbind(numDataNorm, charData)
+  colNames <- append(colNamesNum, colNamesChar)
+  colnames(data_1) <- colNames
+  rownames(data_1) <- rownames(data)
+
+  mSetObj$dataSet$norm <- data_1;
+  mSetObj$dataSet$best.method <- normBest;
+  return(.set.mSet(mSetObj));
+}
+
 
 #'Normalization
 #'@description This function performs row-wise normalization, transformation, and 
@@ -98,6 +137,13 @@ Normalization <- function(mSetObj=NA, rowNorm, transNorm, scaleNorm, ref=NULL, r
   numData <- select_if(data, is.numeric)
   charData <- select_if(data, is.character)
 
+  if(!is.null(mSetObj$dataSet[["origMeta"]])){
+    meta <-mSetObj$dataSet$origMeta
+  }
+  if(!is.null(mSetObj$dataSet[["origEnv"]])){
+    env <-mSetObj$dataSet$origEnv
+  }
+
   if(is.null(mSetObj$dataSet[["prenorm.cls"]])){ # can be so for regression 
     mSetObj$dataSet$prenorm.cls <- mSetObj$dataSet$proc.cls;
   }
@@ -133,39 +179,38 @@ Normalization <- function(mSetObj=NA, rowNorm, transNorm, scaleNorm, ref=NULL, r
   colNames <- colnames(numData);
   rowNames <- rownames(numData);
   
-  # row-wise normalization
+  # row-wise normalization #CHANGED TO COLUMN-WISE FOR WEGAN!!!!
   if(rowNorm=="QuantileNorm"){
     numData<-QuantileNormalize(numData);
     # this can introduce constant variables if a variable is 
     # at the same rank across all samples (replaced by its average across all)
-    
-    varCol <- apply(numData, 2, var, na.rm=T);
-    constCol <- (varCol == 0 | is.na(varCol));
-    constNum <- sum(constCol, na.rm=T);
-    if(constNum > 0){
-      print(paste("After quantile normalization", constNum, "variables with a constant value were found and deleted."));
-      numData <- numData[,!constCol];
-      colNames <- colnames(numData);
-      rowNames <- rownames(numData);
-    }
+    #varCol <- apply(numData, 2, var, na.rm=T); #I REMOVED THIS
+    #constCol <- (varCol == 0 | is.na(varCol));
+    #constNum <- sum(constCol, na.rm=T);
+    #if(constNum > 0){
+    #  print(paste("After quantile normalization", constNum, "variables with a constant value were found and deleted."));
+    #  numData <- numData[,!constCol];
+    #  colNames <- colnames(numData);
+    #  rowNames <- rownames(numData);
+    #}
     rownm<-"Quantile Normalization";
   }else if(rowNorm=="GroupPQN"){
     grp.inx <- cls == ref;
-    ref.smpl <- apply(numData[grp.inx, ], 2, mean);
-    numData<-t(apply(numData, 1, ProbNorm, ref.smpl));
-    rownm<-"Probabilistic Quotient Normalization by a reference group";
+    ref.smpl <- apply(numData[grp.inx, ], 1, mean);
+    numData<-t(apply(numData, 2, ProbNorm, ref.smpl));
+    rownm<-"Probabilistic Quotient Normalization by a reference variable";
   }else if(rowNorm=="SamplePQN"){
     ref.smpl <- numData[ref,];
-    numData<-t(apply(numData, 1, ProbNorm, ref.smpl));
+    numData<-t(apply(numData, 2, ProbNorm, ref.smpl));
     rownm<-"Probabilistic Quotient Normalization by a reference sample";
   }else if(rowNorm=="CompNorm"){
-    numData<-t(apply(numData, 1, CompNorm, ref));
+    numData<-t(apply(numData, 2, CompNorm, ref));
     rownm<-"Normalization by a reference variable";
   }else if(rowNorm=="SumNorm"){
-    numData<-t(apply(numData, 1, SumNorm));
+    numData<-t(apply(numData, 2, SumNorm));
     rownm<-"Normalization to constant sum";
   }else if(rowNorm=="MedianNorm"){
-    numData<-t(apply(numData, 1, MedianNorm));
+    numData<-t(apply(numData, 2, MedianNorm));
     rownm<-"Normalization to sample median";
   }else if(rowNorm=="SpecNorm"){
     if(!exists("norm.vec")){
@@ -199,8 +244,8 @@ Normalization <- function(mSetObj=NA, rowNorm, transNorm, scaleNorm, ref=NULL, r
   }
   
   # record row-normed data for fold change analysis (b/c not applicable for mean-centered data)
-  mSetObj$dataSet$row.norm <- as.data.frame(CleanData(numData, T, T)); #moved below ratio 
-  
+  #mSetObj$dataSet$row.norm <- as.data.frame(CleanData(numData, T, T)); #I REMOVED THIS
+
   # this is for biomarker analysis only (for compound concentration data)
   if(ratio){
     min.val <- min(abs(numData[numData!=0]))/2;
@@ -217,7 +262,7 @@ Normalization <- function(mSetObj=NA, rowNorm, transNorm, scaleNorm, ref=NULL, r
     
     colNames <- colnames(numData);
     rowNames <- rownames(numData);
-    #mSetObj$dataSet$procr <- numData;
+    mSetObj$dataSet$procr <- numData;
     mSetObj$dataSet$use.ratio <- TRUE;
     mSetObj$dataSet$proc.ratio <- numData;
 
@@ -260,8 +305,11 @@ Normalization <- function(mSetObj=NA, rowNorm, transNorm, scaleNorm, ref=NULL, r
   colnames(numData)<-colNames;
   
   # need to do some sanity check, for log there may be Inf values introduced
-  numData <- CleanData(numData, T, F);
-  
+  #numData <- CleanData(numData, T, F, F); #I REMOVED THIS FOR NOW
+  #meta <- meta[rownames(numData),]
+  #env <- env[rownames(numData),]
+  #charData <- charData[rownames(numData),]
+
   if(ratio){
     mSetObj$dataSet$ratio <- CleanData(ratio.mat, T, F)
   }
@@ -278,6 +326,7 @@ Normalization <- function(mSetObj=NA, rowNorm, transNorm, scaleNorm, ref=NULL, r
   mSetObj$dataSet$norm.all <- NULL; # this is only for biomarker ROC analysis
   return(.set.mSet(mSetObj));
 }
+
 
 #'Row-wise Normalization
 #'@description Row-wise norm methods, when x is a row.
@@ -556,6 +605,7 @@ UpdateGroupItems <- function(mSetObj=NA, grp.nm.vec){
   
   hit.inx <- cls %in% grp.nm.vec;
   mSetObj$dataSet$prenorm <- CleanDataMatrix(data[!hit.inx,,drop=FALSE]);
+
   mSetObj$dataSet$prenorm.cls <- droplevels(factor(cls[!hit.inx])); 
   
   if(substring(mSetObj$dataSet$format,4,5)=="ts"){
@@ -603,6 +653,7 @@ UpdateSampleItems <- function(mSetObj=NA, smpl.nm.vec){
   
   hit.inx <- rownames(data) %in% smpl.nm.vec;
   mSetObj$dataSet$prenorm <- CleanDataMatrix(data[!hit.inx,,drop=FALSE]);
+
   mSetObj$dataSet$prenorm.cls <- as.factor(as.character(cls[!hit.inx]));
   if(substring(mSetObj$dataSet$format,4,5)=="ts"){
     mSetObj$dataSet$prenorm.facA <- as.factor(as.character(facA[!hit.inx]));
@@ -652,6 +703,7 @@ UpdateFeatureItems <- function(mSetObj=NA, variable.nm.vec){
   
   hit.inx <- colnames(data) %in% variable.nm.vec;
   mSetObj$dataSet$prenorm <- CleanDataMatrix(data[,!hit.inx,drop=FALSE]);
+
   mSetObj$dataSet$prenorm.cls <- cls; # this is the same
   
   AddMsg("Successfully updated the variable items!");

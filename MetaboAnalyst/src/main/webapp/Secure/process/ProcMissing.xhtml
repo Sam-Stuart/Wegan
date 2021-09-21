@@ -37,6 +37,7 @@
                     </h:panelGrid>
                     <p:outputLabel value="Step 2. Estimate the remaining missing values" style="font-size: 13px; font-weight: bold"/>
                     <p:selectOneRadio id="rowRadio" value="#{procBean.missingImputeOpt}" layout="custom">
+                        <f:selectItem itemLabel="None" itemValue="none"/> 
                         <f:selectItem itemLabel="Replace by a small value (half of the minimum positive value in the original data)" itemValue="min"/>                         
                         <f:selectItem itemLabel="Exclude variables with missing value" itemValue="exclude"/> 
                         <f:selectItem itemLabel="Replace by variable mode" itemValue="replaceCol"/> 
@@ -44,10 +45,12 @@
                     </p:selectOneRadio>
                     <h:panelGrid columns="2">
                         <p:radioButton for="rowRadio" itemIndex="0"/>
-                        <p:outputLabel value="Replace by a small value (half of the minimum positive value in the original data)"/>                        
+                        <p:outputLabel value="No estimation or exclusion."/>                         
                         <p:radioButton for="rowRadio" itemIndex="1"/>
-                        <p:outputLabel value="Exclude variables with missing values"/>
+                        <p:outputLabel value="Replace by a small value (half of the minimum positive value in the original data)"/>                        
                         <p:radioButton for="rowRadio" itemIndex="2"/>
+                        <p:outputLabel value="Exclude variables with missing values"/>
+                        <p:radioButton for="rowRadio" itemIndex="3"/>
                         <h:panelGroup>
                             <p:outputLabel value="Replace by variable"/>  
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{procBean.replaceVarOpt}">
@@ -56,7 +59,7 @@
                                 <f:selectItem itemLabel="min" itemValue="colmin"/> 
                             </p:selectOneMenu>
                         </h:panelGroup>
-                        <p:radioButton for="rowRadio" itemIndex="3"/>
+                        <p:radioButton for="rowRadio" itemIndex="4"/>
                         <h:panelGroup>
                             <p:outputLabel value="Estimate missing values using "/>        
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{procBean.imputeAlgOpt}">
@@ -68,8 +71,13 @@
                         </h:panelGroup>
                     </h:panelGrid>
                 </h:panelGrid>
-                <h:panelGrid style="width: 100%; text-align: center">
-                    <p:commandButton value="Process" ajax="false" onclick="PF('statusDialog').show()" action="#{procBean.performMissingImpute()}"/>       
+                <h:panelGrid style="width: 100%; text-align: right">
+                    <p:commandButton
+                        value="Submit"                
+                        style="padding: 4px 7px 4px 7px; width: 100px; background: #75bafb; border-color: #75bafb; color: black; box-shadow: none !important; text-shadow: none !important;"                     
+                        ajax="false" 
+                        onclick="PF('statusDialog').show()" 
+                        action="#{procBean.performMissingImpute()}"/>         
                 </h:panelGrid> 
             </h:panelGrid> 
         </h:form>

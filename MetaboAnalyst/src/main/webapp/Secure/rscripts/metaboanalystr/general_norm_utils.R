@@ -110,6 +110,13 @@ Normalization <- function(mSetObj=NA, rowNorm, transNorm, scaleNorm, ref=NULL, r
     data<-mSetObj$dataSet$prenorm
   }
   
+  if(!is.null(mSetObj$dataSet[["origMeta"]])){
+    meta <-mSetObj$dataSet$origMeta
+  }
+  if(!is.null(mSetObj$dataSet[["origEnv"]])){
+    meta <-mSetObj$dataSet$origEnv
+  }
+
   if(is.null(mSetObj$dataSet[["prenorm.cls"]])){ # can be so for regression 
     mSetObj$dataSet$prenorm.cls <- mSetObj$dataSet$proc.cls;
   }
@@ -213,7 +220,8 @@ Normalization <- function(mSetObj=NA, rowNorm, transNorm, scaleNorm, ref=NULL, r
   
   # record row-normed data for fold change analysis (b/c not applicable for mean-centered data)
   mSetObj$dataSet$row.norm <- as.data.frame(CleanData(data, T, T)); #moved below ratio 
-  
+  DEAL WITH CleanData!!!!!!!!!!!!!!!
+
   # this is for biomarker analysis only (for compound concentration data)
   if(ratio){
     min.val <- min(abs(data[data!=0]))/2;
@@ -274,7 +282,8 @@ Normalization <- function(mSetObj=NA, rowNorm, transNorm, scaleNorm, ref=NULL, r
   
   # need to do some sanity check, for log there may be Inf values introduced
   data <- CleanData(data, T, F);
-  
+    DEAL WITH CleanData!!!!!!!!!!!!!!!
+
   if(ratio){
     mSetObj$dataSet$ratio <- CleanData(ratio.mat, T, F)
   }
@@ -567,6 +576,8 @@ UpdateGroupItems <- function(mSetObj=NA, grp.nm.vec){
   
   hit.inx <- cls %in% grp.nm.vec;
   mSetObj$dataSet$prenorm <- CleanDataMatrix(data[!hit.inx,,drop=FALSE]);
+  DEAL WITH CleanData!!!!!!!!!!!!!!!
+
   mSetObj$dataSet$prenorm.cls <- droplevels(factor(cls[!hit.inx])); 
   
   if(substring(mSetObj$dataSet$format,4,5)=="ts"){
@@ -614,6 +625,8 @@ UpdateSampleItems <- function(mSetObj=NA, smpl.nm.vec){
   
   hit.inx <- rownames(data) %in% smpl.nm.vec;
   mSetObj$dataSet$prenorm <- CleanDataMatrix(data[!hit.inx,,drop=FALSE]);
+  DEAL WITH CleanData!!!!!!!!!!!!!!!
+
   mSetObj$dataSet$prenorm.cls <- as.factor(as.character(cls[!hit.inx]));
   if(substring(mSetObj$dataSet$format,4,5)=="ts"){
     mSetObj$dataSet$prenorm.facA <- as.factor(as.character(facA[!hit.inx]));
@@ -663,6 +676,8 @@ UpdateFeatureItems <- function(mSetObj=NA, feature.nm.vec){
   
   hit.inx <- colnames(data) %in% feature.nm.vec;
   mSetObj$dataSet$prenorm <- CleanDataMatrix(data[,!hit.inx,drop=FALSE]);
+  DEAL WITH CleanData!!!!!!!!!!!!!!!
+
   mSetObj$dataSet$prenorm.cls <- cls; # this is the same
   
   AddMsg("Successfully updated the feature items!");

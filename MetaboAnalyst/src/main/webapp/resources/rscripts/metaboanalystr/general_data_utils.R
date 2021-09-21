@@ -516,6 +516,10 @@ Read.TextDataMeta <- function(mSetObj=NA, filePath, metaFormat="rowu", lbl.type=
   }
   
   mSetObj$dataSet$origMeta <- dat1;
+  lbls.meta <- as.data.frame(c(1:nrow(mSetObj$dataSet$origMeta)))
+  colnames(lbls.meta) <- c("Sample")
+  orig.meta<-cbind(lbls.meta, mSetObj$dataSet$origMeta);
+  write.csv(orig.meta, file="data_grouping.csv", row.names=FALSE); 
 
   return(.set.mSet(mSetObj));
 }
@@ -551,6 +555,11 @@ Read.TextDataEnv <- function(mSetObj=NA, filePath, envFormat="rowu", lbl.type="d
   } 
   
   mSetObj$dataSet$origEnv <- dat1;
+  lbls.env <- as.data.frame(c(1:nrow(mSetObj$dataSet$origEnv)))
+  colnames(lbls.env) <- c("Sample")
+  orig.env<-cbind(lbls.env, mSetObj$dataSet$origEnv);
+  write.csv(orig.env, file="data_constraining.csv", row.names=FALSE); 
+
   return(.set.mSet(mSetObj));
 }
 
