@@ -241,4 +241,17 @@ public class NormBean implements Serializable {
         }
     }
 
+    
+    public String performAutoNormalization() {
+        RConnection RC = sb.getRConnection();
+        int res = RDataUtils.autoNormalize(RC);
+        String msg = RDataUtils.getCurrentMsg(RC);
+        if (res == 0) {
+            sb.updateMsg("Error", msg);
+        } else {
+            sb.updateMsg("OK", msg);
+        }
+        return "Normalization";
+    }
+    
 }

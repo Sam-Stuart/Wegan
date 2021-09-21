@@ -96,10 +96,10 @@
                             <p:spacer/>
                             <p:radioButton for="transRadio" itemIndex="1"/>
                             <p:outputLabel style="font-size:12px; font-weight: bold" value="Log transformation"/>
-                            <h:outputLabel value="(generalized logarithm transformation or glog)"/>
+                            <h:outputLabel value="(only for positive, non-zero data)"/>
                             <p:radioButton for="transRadio" itemIndex="2"/>
                             <p:outputLabel style="font-size:12px; font-weight: bold" value="Cube root transformation"/>
-                            <h:outputLabel value="(takes the cube root of data values)"/>
+<!--                            <h:outputLabel value="(takes the cube root of data values)"/>-->
                         </h:panelGrid>
                         <b>Data scaling</b>
                         <h:panelGrid columns="3" style="padding:2px 12px 10px 10px">
@@ -108,7 +108,7 @@
                             <p:spacer/>
                             <p:radioButton for="scaleRadio" itemIndex="1"/>
                             <p:outputLabel style="font-size:12px; font-weight: bold" value="Mean centering"/>
-                            <h:outputLabel value="(mean-centered only)"/>
+<!--                            <h:outputLabel value="(mean-centered only)"/>-->
                             <p:radioButton for="scaleRadio" itemIndex="2"/>
                             <p:outputLabel style="font-size:12px; font-weight: bold" value="Auto scaling"/>
                             <h:outputLabel value="(mean-centered and divided by the standard deviation of each variable)"/>

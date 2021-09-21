@@ -413,6 +413,18 @@ public class RDataUtils {
     }
 
     //plot a boxplot and density for each compound
+    public static int autoNormalize(RConnection RC) {
+        try {
+            String rCommand = "BestNormalize(NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            return RC.eval(rCommand).asInteger();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+    
+    //plot a boxplot and density for each compound
     public static void plotNormSummaryGraph(SessionBean1 sb, String imgName, String format, int dpi) {
         try {
             RConnection RC = sb.getRConnection();
