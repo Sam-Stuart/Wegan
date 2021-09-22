@@ -5,11 +5,10 @@
 #'
 CleanDataMatrix <- function(ndata){
   # make sure no costant columns crop up
-  varCol <- apply(data.frame(ndata), 2, var, na.rm=T); # getting an error of dim(X) must have a positive length, fixed by data.frame
+  varCol <- apply(data.frame(ndata), 2, var, na.rm=T); # getting an error of dim(X) must have a positive length, fixed by data.frame 
   constCol <- (varCol == 0 | is.na(varCol));
   return(ndata[,!constCol, drop=FALSE]); # got an error of incorrect number of dimensions, added drop=FALSE to avoid vector conversion
 }
-
 
 #'BestNormalize
 #'@description This function performs column-wise normalization using all methods and selects the "best" (ie highest SW p-value).
@@ -85,22 +84,20 @@ BestNormalize <- function(mSetObj=NA){
   return(.set.mSet(mSetObj));
 }
 
-
-
 #'Normalization
-#'@description This function performs row-wise normalization, transformation, and
-#'scaling of your metabolomic data.
+#'@description This function performs row-wise normalization, transformation, and 
+#'scaling of your metabolomic data. 
 #'@usage Normalization(mSetObj, rowNorm, transNorm, scaleNorm, ref=NULL, ratio=FALSE, ratioNum=20)
 #'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
-#'@param rowNorm Select the option for row-wise normalization, "QuantileNorm" for Quantile Normalization,
+#'@param rowNorm Select the option for row-wise normalization, "QuantileNorm" for Quantile Normalization, 
 #'"ProbNormT" for Probabilistic Quotient Normalization without using a reference sample,
-#'"ProbNormF" for Probabilistic Quotient Normalization based on a reference sample,
+#'"ProbNormF" for Probabilistic Quotient Normalization based on a reference sample, 
 #'"CompNorm" for Normalization by a reference feature,
-#'"SumNorm" for Normalization to constant sum,
-#'"MedianNorm" for Normalization to sample median, and
+#'"SumNorm" for Normalization to constant sum, 
+#'"MedianNorm" for Normalization to sample median, and 
 #'"SpecNorm" for Normalization by a sample-specific factor.
 #'@param transNorm Select option to transform the data, "LogNorm" for Log Normalization,
-#'and "CrNorm" for Cubic Root Transformation.
+#'and "CrNorm" for Cubic Root Transformation. 
 #'@param scaleNorm Select option for scaling the data, "MeanCenter" for Mean Centering,
 #'"AutoNorm" for Autoscaling, "ParetoNorm" for Pareto Scaling, amd "RangeNorm" for Range Scaling.
 #'@param ref Input the name of the reference sample or the reference feature, use " " around the name.  
@@ -351,12 +348,6 @@ CompNorm<-function(x, ref){
   1000*x/x[ref];
 }
 
-#Function used in quantile normalization below
-index_to_mean <- function(my_index, my_mean){
-    return(my_mean[my_index])
-}
-
-
 # perform quantile normalization on the raw data (can be log transformed later by user)
 # https://stat.ethz.ch/pipermail/bioconductor/2005-April/008348.html
 QuantileNormalize <- function(data){
@@ -369,11 +360,10 @@ QuantileNormalize <- function(data){
   return(data_final)
 }
 
-
 #'Column-wise Normalization
 #'@description Column-wise norm methods, when x is a column
 #'Options for log, zero mean and unit variance, and
-#'several zero mean and variance/SE
+#'several zero mean and variance/SE 
 #'@param x Input data
 #'@param min.val Input minimum value
 #'@author Jeff Xia \email{jeff.xia@mcgill.ca}
@@ -609,8 +599,6 @@ shapiroWilk <- function(x) {
   p <- shapiro[["p.value"]]
   return(p)
 }
-
-
 ##############################################
 ##############################################
 ########## Utilities for web-server ##########
@@ -618,20 +606,20 @@ shapiroWilk <- function(x) {
 ##############################################
 
 
-#'Remove a group from the data
+#'Remove a group from the data 
 #'@description This function removes a user-specified group from the data set.
 #'This must be performed following data processing and filtering. If the data was normalized prior to removal,
-#'you must re-normalize the data.
+#'you must re-normalize the data. 
 #'@usage UpdateGroupItems(mSetObj=NA, grp.nm.vec)  
 #'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
-#'@param grp.nm.vec Input the name of the group you would like to remove from the data set in quotation marks
-#'(ex: "Disease B") The name must be identical to a class label.
-#'@author Jeff Xia \email{jeff.xia@mcgill.ca}, Jasmine Chong
+#'@param grp.nm.vec Input the name of the group you would like to remove from the data set in quotation marks 
+#'(ex: "Disease B") The name must be identical to a class label. 
+#'@author Jeff Xia \email{jeff.xia@mcgill.ca}, Jasmine Chong 
 #'McGill University, Canada
 #'@export
 #'
 UpdateGroupItems <- function(mSetObj=NA, grp.nm.vec){
- 
+  
   mSetObj <- .get.mSet(mSetObj);
   if(is.null(mSetObj$dataSet$filt)){
     data <- mSetObj$dataSet$procr;
@@ -648,16 +636,16 @@ UpdateGroupItems <- function(mSetObj=NA, grp.nm.vec){
       facB <- mSetObj$dataSet$filt.facB;
     }
   }
- 
+  
   hit.inx <- cls %in% grp.nm.vec;
   mSetObj$dataSet$prenorm <- CleanDataMatrix(data[!hit.inx,,drop=FALSE]);
-  mSetObj$dataSet$prenorm.cls <- droplevels(factor(cls[!hit.inx]));
- 
+  mSetObj$dataSet$prenorm.cls <- droplevels(factor(cls[!hit.inx])); 
+  
   if(substring(mSetObj$dataSet$format,4,5)=="ts"){
     mSetObj$dataSet$prenorm.facA <- droplevels(factor(facA[!hit.inx]));
     mSetObj$dataSet$prenorm.facB <- droplevels(factor(facB[!hit.inx]));
   }
- 
+  
   AddMsg("Successfully updated the group items!");
   if(.on.public.web){
     .set.mSet(mSetObj);
@@ -672,9 +660,9 @@ UpdateGroupItems <- function(mSetObj=NA, grp.nm.vec){
 #'If the data was normalized prior to removal, you must re-normalize the data.  
 #'@usage UpdateSampleItems(mSetObj=NA, smpl.nm.vec)
 #'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
-#'@param smpl.nm.vec Input the name of the sample to remove from the data in quotation marks. The name must be identical to the
+#'@param smpl.nm.vec Input the name of the sample to remove from the data in quotation marks. The name must be identical to the 
 #'sample names found in the data set.  
-#'@author Jeff Xia \email{jeff.xia@mcgill.ca}, Jasmine Chong
+#'@author Jeff Xia \email{jeff.xia@mcgill.ca}, Jasmine Chong 
 #'McGill University, Canada
 #'@export
 #'
@@ -695,7 +683,7 @@ UpdateSampleItems <- function(mSetObj=NA, smpl.nm.vec){
       facB <- mSetObj$dataSet$filt.facB;
     }
   }
- 
+  
   hit.inx <- rownames(data) %in% smpl.nm.vec;
   mSetObj$dataSet$prenorm <- CleanDataMatrix(data[!hit.inx,,drop=FALSE]);
   mSetObj$dataSet$prenorm.cls <- as.factor(as.character(cls[!hit.inx]));
@@ -703,31 +691,31 @@ UpdateSampleItems <- function(mSetObj=NA, smpl.nm.vec){
     mSetObj$dataSet$prenorm.facA <- as.factor(as.character(facA[!hit.inx]));
     mSetObj$dataSet$prenorm.facB <- as.factor(as.character(facB[!hit.inx]));
   }
- 
+  
   AddMsg("Successfully updated the sample items!");
- 
+  
   if(.on.public.web){
     .set.mSet(mSetObj);
     return(length(levels(mSetObj$dataSet$prenorm.cls)));
   }else{
-    return(.set.mSet(mSetObj));
+    return(.set.mSet(mSetObj)); 
   }
 }
 
 #' Remove feature items
-#' @description This function removes user-selected features from the data set.
+#' @description This function removes user-selected features from the data set. 
 #' This must be performed following data processing and filtering.
 #' If the data was normalized prior to removal, you must re-normalize the data.  
 #' @usage UpdateFeatureItems(mSetObj=NA, feature.nm.vec)
 #'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
-#' @param feature.nm.vec Input the name of the feature to remove from the data in quotation marks.
+#' @param feature.nm.vec Input the name of the feature to remove from the data in quotation marks. 
 #' The name must be identical to the feature names found in the data set.  
-#'@author Jeff Xia \email{jeff.xia@mcgill.ca}, Jasmine Chong
+#'@author Jeff Xia \email{jeff.xia@mcgill.ca}, Jasmine Chong 
 #'McGill University, Canada
 #'@export
 #'
 UpdateFeatureItems <- function(mSetObj=NA, feature.nm.vec){
- 
+  
   mSetObj <- .get.mSet(mSetObj);
   if(is.null(mSetObj$dataSet$filt)){
     data <- mSetObj$dataSet$procr;
@@ -744,11 +732,11 @@ UpdateFeatureItems <- function(mSetObj=NA, feature.nm.vec){
       facB <- mSetObj$dataSet$filt.facB;
     }
   }
- 
+  
   hit.inx <- colnames(data) %in% feature.nm.vec;
   mSetObj$dataSet$prenorm <- CleanDataMatrix(data[,!hit.inx,drop=FALSE]);
   mSetObj$dataSet$prenorm.cls <- cls; # this is the same
- 
+  
   AddMsg("Successfully updated the feature items!");
   return(.set.mSet(mSetObj));
 }
