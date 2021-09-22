@@ -413,12 +413,12 @@ RangeNorm<-function(x){
 #'@usage PlotNormSummary(mSetObj, imgName, format, dpi, width)
 #'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
 #'@param imgName Input a name for the plot
-#'@param format Select the image format, "png", or "pdf".
-#'@param dpi Input the dpi. If the image format is "pdf", users need not define the dpi. For "png" images,
+#'@param format Select the image format, "png", or "pdf". 
+#'@param dpi Input the dpi. If the image format is "pdf", users need not define the dpi. For "png" images, 
 #'the default dpi is 72. It is suggested that for high-resolution images, select a dpi of 300.  
 #'@param width Input the width, there are 2 default widths, the first, width = NULL, is 10.5.
-#'The second default is width = 0, where the width is 7.2. Otherwise users can input their own width.  
-#'@author Jeff Xia \email{jeff.xia@mcgill.ca}, Jasmine Chong
+#'The second default is width = 0, where the width is 7.2. Otherwise users can input their own width.   
+#'@author Jeff Xia \email{jeff.xia@mcgill.ca}, Jasmine Chong 
 #'McGill University, Canada
 #'@export
 #'
@@ -435,55 +435,55 @@ PlotNormSummary <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA)
     h = width*1.25
     # w <- 7.2; h <- 9;
   }
- 
+  
   mSetObj$imgSet$norm <- imgName
- 
+  
   Cairo::Cairo(file = imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white");
   layout(matrix(c(1,2,2,2,3,4,4,4), 4, 2, byrow = FALSE))
- 
+  
   # since there may be too many compounds, only plot a subsets (50) in box plot
   # but density plot will use all the data
- 
+  
   pre.inx<-GetRandomSubsetIndex(ncol(mSetObj$dataSet$procr), sub.num=50);
   namesVec <- colnames(mSetObj$dataSet$procr[,pre.inx]);
- 
+  
   # only get common ones
   nm.inx <- namesVec %in% colnames(mSetObj$dataSet$norm)
   namesVec <- namesVec[nm.inx];
   pre.inx <- pre.inx[nm.inx];
- 
+  
   norm.inx<-match(namesVec, colnames(mSetObj$dataSet$norm));
   namesVec <- substr(namesVec, 1, 12); # use abbreviated name
- 
+  
   rangex.pre <- range(mSetObj$dataSet$procr[, pre.inx], na.rm=T);
   rangex.norm <- range(mSetObj$dataSet$norm[, norm.inx], na.rm=T);
- 
+  
   x.label<-GetAbundanceLabel(mSetObj$dataSet$type);
   y.label<-GetVariableLabel(mSetObj$dataSet$type);
- 
+  
   # fig 1
   op<-par(mar=c(4,7,4,0), xaxt="s");
   plot(density(apply(mSetObj$dataSet$procr, 2, mean, na.rm=TRUE)), col='darkblue', las =2, lwd=2, main="", xlab="", ylab="");
   mtext("Density", 2, 5);
   mtext("Before Normalization",3, 1)
- 
+  
   # fig 2
   op<-par(mar=c(7,7,0,0), xaxt="s");
   boxplot(mSetObj$dataSet$procr[,pre.inx], names= namesVec, ylim=rangex.pre, las = 2, col="lightgreen", horizontal=T);
-  #mtext("Counts", 1, 5); #I REMOVED THIS
- 
+  #mtext(x.label, 1, 5);
+  
   # fig 3
   op<-par(mar=c(4,7,4,2), xaxt="s");
   plot(density(apply(mSetObj$dataSet$norm, 2, mean, na.rm=TRUE)), col='darkblue', las=2, lwd =2, main="", xlab="", ylab="");
   mtext("After Normalization",3, 1);
- 
+  
   # fig 4
   op<-par(mar=c(7,7,0,2), xaxt="s");
   boxplot(mSetObj$dataSet$norm[,norm.inx], names=namesVec, ylim=rangex.norm, las = 2, col="lightgreen", horizontal=T);
-  #mtext("Normalized Counts",1, 5); #I REMOVED THIS
- 
+  #mtext(paste("Normalized",x.label),1, 5);
+  
   dev.off();
- 
+  
   return(.set.mSet(mSetObj));
 }
 
@@ -492,17 +492,17 @@ PlotNormSummary <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA)
 #'@usage PlotSampleNormSummary(mSetObj=NA, imgName, format="png", dpi=72, width=NA)
 #'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
 #'@param imgName Input a name for the plot
-#'@param format Select the image format, "png", of "pdf".
-#'@param dpi Input the dpi. If the image format is "pdf", users need not define the dpi. For "png" images,
+#'@param format Select the image format, "png", of "pdf". 
+#'@param dpi Input the dpi. If the image format is "pdf", users need not define the dpi. For "png" images, 
 #'the default dpi is 72. It is suggested that for high-resolution images, select a dpi of 300.  
 #'@param width Input the width, there are 2 default widths, the first, width = NULL, is 10.5.
-#'The second default is width = 0, where the width is 7.2. Otherwise users can input their own width.  
-#'@author Jeff Xia \email{jeff.xia@mcgill.ca}, Jasmine Chong
+#'The second default is width = 0, where the width is 7.2. Otherwise users can input their own width.   
+#'@author Jeff Xia \email{jeff.xia@mcgill.ca}, Jasmine Chong 
 #'McGill University, Canada
 #'@export
 
 PlotSampleNormSummary <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA){
- 
+  
   mSetObj <- .get.mSet(mSetObj);
   imgName = paste(imgName, "dpi", dpi, ".", format, sep="");
   if(is.na(width)){
@@ -514,54 +514,54 @@ PlotSampleNormSummary <- function(mSetObj=NA, imgName, format="png", dpi=72, wid
     h = width*1.25
     # w <- 7.2; h <- 9;
   }
- 
+  
   mSetObj$imgSet$summary_norm <-imgName;
- 
+  
   Cairo::Cairo(file = imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white");
   layout(matrix(c(1,1,1,2,3,3,3,4), 4, 2, byrow = FALSE))
- 
+  
   # since there may be too many samples, only plot a subsets (50) in box plot
   # but density plot will use all the data
- 
+  
   pre.inx<-GetRandomSubsetIndex(nrow(mSetObj$dataSet$procr), sub.num=50);
   namesVec <- rownames(mSetObj$dataSet$procr[pre.inx,]);
- 
+  
   # only get common ones
   nm.inx <- namesVec %in% rownames(mSetObj$dataSet$norm)
   namesVec <- namesVec[nm.inx];
   pre.inx <- pre.inx[nm.inx];
- 
+  
   norm.inx<-match(namesVec, rownames(mSetObj$dataSet$norm));
   namesVec <- substr(namesVec, 1, 12); # use abbreviated name
- 
+  
   rangex.pre <- range(mSetObj$dataSet$procr[pre.inx,], na.rm=T);
   rangex.norm <- range(mSetObj$dataSet$norm[norm.inx,], na.rm=T);
- 
+  
   x.label<-GetAbundanceLabel(mSetObj$dataSet$type);
   y.label<-"Samples";
- 
+  
   # fig 1
   op<-par(mar=c(5.75,8,4,0), xaxt="s");
   boxplot(t(mSetObj$dataSet$procr[pre.inx, ]), names= namesVec, ylim=rangex.pre, las = 2, col="lightgreen", horizontal=T);
   mtext("Before Normalization", 3,1)
- 
+  
   # fig 2
   op<-par(mar=c(6.5,7,0,0), xaxt="s");
   plot(density(apply(mSetObj$dataSet$procr, 1, mean, na.rm=TRUE)), col='darkblue', las =2, lwd=2, main="", xlab="", ylab="");
-  #mtext("Counts", 1, 4); #I REMOVED THIS
+  #mtext(x.label, 1, 4);
   mtext("Density", 2, 5);
- 
+  
   # fig 3
- 
+  
   op<-par(mar=c(5.75,8,4,2), xaxt="s");
   boxplot(t(mSetObj$dataSet$norm[norm.inx,]), names=namesVec, ylim=rangex.norm, las = 2, col="lightgreen", ylab="", horizontal=T);
   mtext("After Normalization", 3, 1);
- 
+  
   # fig 4
   op<-par(mar=c(6.5,7,0,2), xaxt="s");
   plot(density(apply(mSetObj$dataSet$norm, 1, mean, na.rm=TRUE)), col='darkblue', las=2, lwd =2, main="", xlab="", ylab="");
-  #mtext("Normalized Counts",1, 4) #I REMOVED THIS
- 
+  #mtext(paste("Normalized",x.label),1, 4)
+  
   dev.off();
   return(.set.mSet(mSetObj));
 }

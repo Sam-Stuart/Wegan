@@ -205,7 +205,7 @@ SanityCheckData <- function(mSetObj=NA){
   #Check for 0s and neg numbers
   zeroCount <- sum(int.mat==0);
   negCount <- sum(int.mat<0);
-  msg<-c(msg, paste0("A total of ", zeroCount, " zero values and ", negCount, " negative values were detected. This may impact which transformations are available."));
+  msg<-c(msg, paste0("A total of ", zeroCount, " zero values and ", negCount, " negative values were detected. Zero and negative values will impact which transformations are available."));
 
 
   # check NA values
@@ -215,7 +215,7 @@ SanityCheckData <- function(mSetObj=NA){
   
   msg<-c(msg, paste0("<font color=\"red\">", "A total of ", naCount, " (", naPercent, "%) missing values were detected.</font>"));
 
-  msg<-c(msg, "<u>By default, missing values will be left as is, though certain functionalities may be unavailable, including normalization.</u>",
+  msg<-c(msg, "<u>By default, missing values will be left as is, though certain functionalities may be unavailable.</u>",
          "Click <b>Skip</b> button if you accept the default practice",
          "Or click <b>Missing value estimation</b> to estimate values and filter data");
   
