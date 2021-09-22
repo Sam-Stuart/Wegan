@@ -141,6 +141,59 @@ public class DiversityUtils {
     }
     
     
+    public static boolean CreateIndicesDiv(SessionBean1 sb, boolean data, String group, String margin) {
+        try {
+            System.out.print("R RAREFACTION");
+            RConnection RC = sb.getRConnection(); //Start R connection
+            String rCommand = "div_index(NA"
+                                                 + ", \"" + data
+                                                 + "\", \"" + group
+                                                 + "\", \""  + margin                                                 
+                                                 + "\")";
+            RCenter.recordRCommand(RC, rCommand); // records r command
+            RC.voidEval(rCommand); // tells you want your r script returns  
+            return true;
+        } catch (RserveException rse) {
+            System.out.println(rse);
+            return false;
+        }
+    }	
+    
+    public static void PlotAlphaDiversity(SessionBean1 sb, String color, String imgName, String format, int dpi, String width) {
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "AlphaPlot(NA" 
+                                                 + ", \""  + color
+                                                 + "\", \"" + imgName 
+                                                 + "\", \"" + format 
+                                                 + "\", " + dpi 
+                                                 + ", width=NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            sb.addGraphicsCMD("Alpha_Plot", rCommand);
+            RC.voidEval(rCommand);
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        }
+    }
+    
+    public static void PlotBetaDiversity(SessionBean1 sb, String colorb, String imgName, String format, int dpi, String width) {
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "BetaPlot(NA" 
+                                                 + ", \""  + colorb
+                                                 + "\", \"" + imgName 
+                                                 + "\", \"" + format 
+                                                 + "\", " + dpi 
+                                                 + ", width=NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            sb.addGraphicsCMD("Beta_Plot", rCommand);
+            RC.voidEval(rCommand);
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        }
+    }
+    
+    
     public static boolean CreateRarefactionDiv(SessionBean1 sb, boolean data, String type, String sample, boolean se, String margin) {
         try {
             System.out.print("R RAREFACTION");
@@ -256,7 +309,7 @@ public class DiversityUtils {
         try {
             RConnection RC = sb.getRConnection();
             String rCommand = "AbundanceRankPlot(NA" 
-                                                 + "\", \"" + imgName 
+                                                 + ", \"" + imgName 
                                                  + "\", \"" + format 
                                                  + "\", " + dpi 
                                                  + ", width=NA)";

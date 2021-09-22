@@ -45,6 +45,9 @@ public class DiversityBean implements Serializable {
                     case "TestTutorial":
                         doDefaultTestTutorial();
                         break;
+                    case "Indices":
+                        doDefaultIndices();
+                        break;
                     case "Rarefaction":
                          doDefaultRarefaction();
                         break;
@@ -109,6 +112,20 @@ public class DiversityBean implements Serializable {
         DiversityUtils.CreateTestTutorial(sb);
         DiversityUtils.PlotTestTutorial(sb, sb.getCurrentImage("gamma_plot"), "png", 72);
     }
+    
+    
+    private void doDefaultIndices(){
+//        if (!DiversityUtils.CreateRarefactionDiv(sb, false, "test", "test", false, "test")){
+//            RConnection RC = sb.getRConnection();
+//            sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
+//        }
+        System.out.print("INSIDE INDICES");
+        DiversityUtils.CreateIndicesDiv(sb, false, "", "NULL");
+        DiversityUtils.PlotAlphaDiversity(sb, "NULL", sb.getCurrentImage("Alpha_Plot"), "png", 72, "false");
+        DiversityUtils.PlotBetaDiversity(sb, "NULL", sb.getCurrentImage("Beta_Plot"), "png", 72, "false");
+        System.out.print("AFTER INDICES");
+    }
+    
     
     private void doDefaultRarefaction(){
 //        if (!DiversityUtils.CreateRarefactionDiv(sb, false, "test", "test", false, "test")){

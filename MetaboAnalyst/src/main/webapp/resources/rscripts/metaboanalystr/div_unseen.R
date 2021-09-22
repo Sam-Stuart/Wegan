@@ -293,6 +293,8 @@ rich_est_curve <- function(mSetObj=NA, color="NULL", imgName, format="png", dpi=
   library(vegan)
   library(dplyr)
   library(lattice)
+  #install.packages("tidyverse")
+  #library(tidyverse)
   library(ggplot2)
   #library("viridis")
   #library("stringr")
@@ -494,7 +496,7 @@ rich_est_curve <- function(mSetObj=NA, color="NULL", imgName, format="png", dpi=
   #pars <- expand.grid(col = color1, stringsAsFactors = FALSE)
    
   print("ready for ggplot") 
-  ggplot(plot_dataA, aes(x = Size, y = Richness)) +
+  p <- ggplot(plot_dataA, aes(x = Size, y = Richness)) +
     geom_line(aes(color = Index)) +
     facet_grid(Index ~ ., scales = "free_y") +
     geom_line(aes(x = Size, y = min, color = color1), linetype = "dotdash") +
@@ -503,7 +505,13 @@ rich_est_curve <- function(mSetObj=NA, color="NULL", imgName, format="png", dpi=
   
   # Suppress the legend since color isn't actually providing any information
   #  opts(legend.position = "none")
-  print("after ggplot")
+  png(imgName)
+  print(p)
+
+  #print("after ggplot")
+
+  #ggsave(mSetObj$imgSet$pool.plot)
+  #ggsave("whatever.png")
   
   dev.off()
   

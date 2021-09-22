@@ -6,7 +6,7 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:p="http://primefaces.org/ui">
 
-    <h:form id="unseenGraph">
+    <h:form id="unseenGraph_1">
         <h:panelGrid columns="1" style="width:380px;">
             <h:panelGrid id="panelGrid2" columns="2" cellpadding="6" columnClasses="colBrayLong,colBrayShort">
                 
@@ -39,9 +39,9 @@
                                  styleClass="updateButton"
                                  style="box-shadow: none !important; text-shadow: none !important"
                                 onclick="PF('statusDialog').show()"
-                                oncomplete="PF('graphApperanceFddiv').hide(); PF('statusDialog').hide()"  
-                                update=":unseendiv:form1:unseendivPane1  :cmdPane" 
-                                actionListener="#{unseendivBean.unseendivUpdateBox_action()}"/>
+                                oncomplete="PF('graphApperanceUnseendiv2').hide(); PF('statusDialog').hide()"  
+                                update=":unseendiv:form2:unseendivPane2 :cmdPane" 
+                                actionListener="#{unseendivBean.unseendivUpdateLine_action()}"/>
             </h:panelGrid>
         </h:panelGrid>
     </h:form>

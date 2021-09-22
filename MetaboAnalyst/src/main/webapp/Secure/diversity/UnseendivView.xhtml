@@ -149,7 +149,7 @@
                                              styleClass="graphicsButton"
                                              style="box-shadow: none !important; text-shadow: none !important;"
                                              actionListener="#{sessionBean1.graphicsLnk_action('pca_pair')}" 
-                                            oncomplete="PF('graphApperanceUnseendiv').show()"/>  
+                                            oncomplete="PF('graphApperanceUnseendiv2').show()"/>  
                             </h:panelGrid>             
                         <h:panelGrid class="resultsBar" columns="2">
                             <h:panelGroup>
@@ -226,7 +226,12 @@
                 draggable="false" closable="true" resizable="false"> 
                 <ui:include src="_color_palette_unseen.xhtml" />
             </p:dialog>
- 
+            <p:dialog modal="true" widgetVar="graphApperanceUnseendiv2" 
+                style="width: 400px; height:400px;" 
+                appendTo="@(body)" header="Graphics Center"
+                draggable="false" closable="true" resizable="false"> 
+                <ui:include src="_color_palette_unseenTab2.xhtml" />
+            </p:dialog>
         </h:panelGrid>
         
     </ui:define>

@@ -362,9 +362,13 @@ public class UnseendivBean implements Serializable {
     //    DiversityUtils.PlotUnseenCurve(sb, "NULL",sb.getCurrentImage("plot_matrices"), "png", 72, "false");
         
     // ACTION BUTTON // 
-    public void unseendivUpdate_action() {
+    public void unseendivUpdateBox_action() {
         DiversityUtils.CreateUnseenDiv(sb, doOriginal, pool, doSmallsample, indexchosen, permutations, minsize, parallel); 
-        DiversityUtils.PlotPoolBoxplot(sb, plot_datachosen, box_colorchosen, xlab, ylab, border_colchosen, sb.getNewImage("boxplot_richness"), "png", 72, "false");
+        DiversityUtils.PlotPoolBoxplot(sb, plot_datachosen, box_colorchosen, xlab, ylab, border_colchosen, sb.getNewImage("boxplot_richness"), "png", 72, "false");        DiversityUtils.PlotUnseenCurve(sb, colorchosen, sb.getNewImage("plot_matrices"), "png", 72, "false");
+    }
+    
+    public void unseendivUpdateLine_action() {
+        DiversityUtils.CreateUnseenDiv(sb, doOriginal, pool, doSmallsample, indexchosen, permutations, minsize, parallel); 
         DiversityUtils.PlotUnseenCurve(sb, colorchosen, sb.getNewImage("plot_matrices"), "png", 72, "false");
     }
     

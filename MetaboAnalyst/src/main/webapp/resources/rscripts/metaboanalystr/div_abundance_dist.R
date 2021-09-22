@@ -557,6 +557,22 @@ AbundanceRankPlot <- function(mSetObj=NA, imgName, format="png", dpi=72, width=N
   total$yvalue <- as.numeric(total$yvalue)
   total$Fitted <- as.numeric(total$Fitted)
   total$Rank <- as.numeric(total$Rank)
+
+  if(is.na(width)){
+    w <- 10.5
+  } else if(width==0){
+    w <- 7.2
+  } else{
+    w <- width
+  }
+  h <- w
+  
+  #Name plot for download
+  imgName <- paste(imgName, "dpi", dpi, ".", format, sep="")
+  mSetObj$imgSet$AbundanceRankPlot <- imgName
+  
+  Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
+  par(xpd=FALSE, mar=c(5.1, 4.1, 4.1, 2.1))
   
   #plot(yvalue ~ Rank, data = total)
 
@@ -565,8 +581,11 @@ AbundanceRankPlot <- function(mSetObj=NA, imgName, format="png", dpi=72, width=N
     geom_point(aes(color = Index)) +
     facet_grid(Index ~ ., scales = "free_y") +
     geom_line(aes(x = Rank, y = log(Fitted), color = Index)) 
+  #print(gg + labs(y="Abundance (log)", x = "Rank"))
+  png(imgName)
   print(gg + labs(y="Abundance (log)", x = "Rank"))
-  
+  #print(gg)
+
   dev.off()
   
   return(.set.mSet(mSetObj))
