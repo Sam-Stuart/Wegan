@@ -242,16 +242,16 @@ public class NormBean implements Serializable {
     }
 
     
-    public String performAutoNormalization() {
+    public void performAutoNormalization() {
         RConnection RC = sb.getRConnection();
         int res = RDataUtils.autoNormalize(RC);
         String msg = RDataUtils.getCurrentMsg(RC);
         if (res == 0) {
-            sb.updateMsg("Error", msg);
+            sb.updateMsg("Error", "Unknown error happened during data normalization process!");
         } else {
-            sb.updateMsg("OK", msg);
-        }
-        return "Normalization";
+            sb.updateMsg("OK", "You can click <b>View Result</b> button to view the effect, or <b>Proceed</b> button to analysis page!");
+            normPerformed = true;
+        }            
     }
     
 }

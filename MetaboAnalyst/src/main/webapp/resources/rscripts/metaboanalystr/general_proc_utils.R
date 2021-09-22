@@ -202,7 +202,13 @@ SanityCheckData <- function(mSetObj=NA){
   catCount <- length(select_if(int.mat, is.character))
   msg<-c(msg, paste0("A total of ", numCount, " numeric and ", catCount, " categorical variables were detected."));
 
-  # check zero, NA values
+  #Check for 0s and neg numbers
+  zeroCount <- sum(int.mat==0);
+  negCount <- sum(int.mat<0);
+  msg<-c(msg, paste0("A total of ", zeroCount, " zero values and ", negCount, " negative values were detected. This may impact which transformations are available."));
+
+
+  # check NA values
   totalCount <- nrow(int.mat)*ncol(int.mat);
   naCount <- sum(is.na(int.mat));
   naPercent <- round(100*naCount/totalCount,1)
@@ -211,7 +217,7 @@ SanityCheckData <- function(mSetObj=NA){
 
   msg<-c(msg, "<u>By default, missing values will be left as is, though certain functionalities may be unavailable, including normalization.</u>",
          "Click <b>Skip</b> button if you accept the default practice",
-         "Or click <b>Missing value imputation</b> to use other methods");
+         "Or click <b>Missing value estimation</b> to estimate values and filter data");
   
   # obtain original half of minimal positive value (threshold) for numeric columns
   numVars <- select_if(int.mat, is.numeric) #I ADDED THIS FOR WEGAN WHICH ALLOWS CATEGORICAL VARS
@@ -252,42 +258,40 @@ SanityCheckData <- function(mSetObj=NA){
 #'@export
 #'
 ReplaceMin <- function(mSetObj=NA){
-  
+#THIS ACTION WAS DESIGNED TO OCCUR AUTOMATICALLY. IT WAS REMOVED FOR WEGAN.
   mSetObj <- .get.mSet(mSetObj);
-  
-  #I CHANGED THIS FOR WEGAN
-  if(!is.null(mSetObj$dataSet$norm)){
-    int.mat <- mSetObj$dataSet$norm
-    numVars <- select_if(int.mat, is.numeric)
-    minConc<-min(numVars[numVars>0], na.rm=T)/2;
-    
-    # replace zero and missing values
-    # we leave nagative values unchanged! ? not sure if this is the best way
-    #int.mat[int.mat==0 | is.na(int.mat)] <- minConc; # I COMMENTED OUT THIS LINE
-    
-    # note, this is last step of processing, replace norm and save to procr
-    mSetObj$dataSet$procr <- as.data.frame(int.mat);
-    mSetObj$dataSet$norm <- as.data.frame(int.mat);
-    #mSetObj$msgSet$replace.msg <- paste("Zero or missing variables were replaced with a small value:", minConc);
-    rm(int.mat);
-    invisible(gc()); # suppress gc output
-    return(.set.mSet(mSetObj));
-  }else{
-    int.mat <- as.matrix(mSetObj$dataSet$preproc)
-    minConc <- mSetObj$dataSet$minConc;
-    
-    # replace zero and missing values
-    # we leave nagative values unchanged! ? not sure if this is the best way
-    #int.mat[int.mat==0 | is.na(int.mat)] <- minConc; # I COMMENTED OUT THIS LINE
-    
-    # note, this is last step of processing, also save to proc
-    mSetObj$dataSet$procr <- as.data.frame(int.mat);
-    #mSetObj$msgSet$replace.msg <- paste("Zero or missing variables were replaced with a small value:", minConc);
-    rm(int.mat);
-    invisible(gc()); # suppress gc output
+
+  #if(!is.null(mSetObj$dataSet$norm)){
+  #  int.mat <- mSetObj$dataSet$norm
+  #  minConc <- min(int.mat[int.mat>0], na.rm=T)/2;
+  #  
+  #  # replace zero and missing values
+  #  # we leave nagative values unchanged! ? not sure if this is the best way
+  #  #int.mat[int.mat==0 | is.na(int.mat)] <- minConc; # I COMMENTED OUT THIS LINE
+  #  
+  #  # note, this is last step of processing, replace norm and save to procr
+  #  mSetObj$dataSet$procr <- as.data.frame(int.mat);
+  #  mSetObj$dataSet$norm <- as.data.frame(int.mat);
+  #  mSetObj$msgSet$replace.msg <- paste("Zero or missing variables were replaced with a small value:", minConc);
+  #  rm(int.mat);
+  #  invisible(gc()); # suppress gc output
+  #  return(.set.mSet(mSetObj));
+  #}else{
+  #  int.mat <- as.matrix(mSetObj$dataSet$preproc)
+  #  minConc <- mSetObj$dataSet$minConc;
+  #  
+  #  # replace zero and missing values
+  #  # we leave nagative values unchanged! ? not sure if this is the best way
+  #  #int.mat[int.mat==0 | is.na(int.mat)] <- minConc; # I COMMENTED OUT THIS LINE
+  #  
+  #  # note, this is last step of processing, also save to proc
+  #  mSetObj$dataSet$procr <- as.data.frame(int.mat);
+  #  mSetObj$msgSet$replace.msg <- paste("Variables of all zeros were replaced with a small value:", minConc);
+  #  rm(int.mat);
+  #  invisible(gc()); # suppress gc output
 
     return(.set.mSet(mSetObj));
-  }
+#  }
 }
 
 
