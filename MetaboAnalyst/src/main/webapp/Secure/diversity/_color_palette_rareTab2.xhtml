@@ -6,16 +6,10 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:p="http://primefaces.org/ui">
 
-    <h:form id="rareGraph">
+    <h:form id="rareGraph_scatter">
         <h:panelGrid columns="1" style="width:380px;">
             <h:panelGrid id="panelGrid2" columns="2" cellpadding="6" columnClasses="colBrayLong,colBrayShort">
                 
-                <h:outputLabel style="font-weight: bold" value="Step"/>
-                <p:inputText value = "#{rarefactionBean.step}"/>   
-                <h:outputLabel style="font-weight: bold" value="Select line colors:"/>
-                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{rarefactionBean.colorchosen}">
-                    <f:selectItems value="#{rarefactionBean.color}"/>
-                </p:selectOneMenu> 
                 <h:outputLabel style="font-weight: bold" value="Select point colors:"/>
                 <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{rarefactionBean.colorbchosen}">
                     <f:selectItems value="#{rarefactionBean.colorb}"/>
@@ -29,9 +23,9 @@
                                  styleClass="updateButton"
                                  style="box-shadow: none !important; text-shadow: none !important"
                                 onclick="PF('statusDialog').show()"
-                                oncomplete="PF('graphApperanceRare').hide(); PF('statusDialog').hide()"  
-                                update=":rarefaction:form1:rarefactionPane1  :cmdPane" 
-                                actionListener="#{rarefactionBean.rareUpdate_action()}"/>
+                                oncomplete="PF('graphApperanceRare2').hide(); PF('statusDialog').hide()"  
+                                update=":rarefaction:form2:rarefactionPane2  :cmdPane" 
+                                actionListener="#{rarefactionBean.rareScatterUpdate_action()}"/>
             </h:panelGrid>
         </h:panelGrid>
     </h:form>

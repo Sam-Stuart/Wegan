@@ -32,7 +32,7 @@
                                              onclick="PF('statusDialog').show()"
                                              oncomplete="PF('statusDialog').hide()"  
                                              update=":abundancedist:form1:abunddistPane1  :cmdPane" 
-                                             actionListener="#{abunddistBean.AbunddistUpdate_action()}"/>                          
+                                             actionListener="#{abunddistBean.AbunddistFisherUpdate_action()}"/>                          
                             <p:commandButton value="Customize Graph"
                                              styleClass="graphicsButton"
                                              style="box-shadow: none !important; text-shadow: none !important;"
@@ -55,12 +55,12 @@
                         <h:panelGrid id="abunddistPane1" style="width: 100%;">
 
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
-                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
                                     <h:outputText escape="false" value="#{abunddistBean.filefisherfreqresultpath}"/>
                                 </i>
                             </h:panelGrid>
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
-                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 2px">
                                     <h:outputText escape="false" value="#{abunddistBean.filefisheroutputresultpath}"/>
                                 </i>
                             </h:panelGrid>
@@ -83,21 +83,21 @@
                             <h:outputLabel style="font-weight: bold" value="Select particular sampling plot:"/>
                             <p:inputText value = "#{abunddistBean.community}"/>   
                         </h:panelGrid>  
-                            
+                        <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;">     
                             <p:commandButton value="Update" 
                                              styleClass="updateButton"
                                              style="box-shadow: none !important; text-shadow: none !important"
                                             onclick="PF('statusDialog').show()"
                                             oncomplete="PF('statusDialog').hide()"  
                                             update=":abundancedist:form2:abunddistPane2  :cmdPane" 
-                                            actionListener="#{abunddistBean.AbunddistUpdate_action()}"/>  
+                                            actionListener="#{abunddistBean.AbunddistPrestUpdate_action()}"/>  
                             <p:commandButton value="Customize Graph"
                                              styleClass="graphicsButton"
                                              style="box-shadow: none !important; text-shadow: none !important;"
                                              actionListener="#{sessionBean1.graphicsLnk_action('pca_pair')}" 
-                                            oncomplete="PF('graphApperanceAbunddist').show()"/>  
+                                            oncomplete="PF('graphApperanceAbunddist2').show()"/>  
                 
-<!--                        </h:panelGrid>-->
+                        </h:panelGrid>
                         <h:panelGrid class="resultsBar" columns="2">
                             <h:panelGroup>
                                 <h:panelGrid columns="1" style="text-align : left;">
@@ -112,32 +112,32 @@
                         </h:panelGrid>                         
                         <h:panelGrid id="abunddistPane2" style="width: 100%;">
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
-                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
                                     <h:outputText escape="false" value="#{abunddistBean.filepoissoncoefresultpath}"/>
                                 </i>
                             </h:panelGrid>
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
-                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 3px">
                                     <h:outputText escape="false" value="#{abunddistBean.filepoissonfreqresultpath}"/>
                                 </i>
                             </h:panelGrid>
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
-                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 3.5px">
                                     <h:outputText escape="false" value="#{abunddistBean.filepoissonextraresultpath}"/>
                                 </i>
                             </h:panelGrid>
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
-                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 2px">
                                     <h:outputText escape="false" value="#{abunddistBean.filemaxcoefresultpath}"/>
                                 </i>
                             </h:panelGrid>
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
-                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 3.8px">
                                     <h:outputText escape="false" value="#{abunddistBean.filemaxfreqresultpath}"/>
                                 </i>
                             </h:panelGrid>
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
-                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 4px">
                                     <h:outputText escape="false" value="#{abunddistBean.filemaxextraresultpath}"/>
                                 </i>
                             </h:panelGrid>
@@ -162,20 +162,21 @@
                                 <h:outputLabel style="font-weight: bold" value="Select particular sampling plot:"/>
                                 <p:inputText value = "#{abunddistBean.community}"/>  
                             </h:panelGrid>  
-                            <p:commandButton value="Update" 
+                            <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
+                                <p:commandButton value="Update" 
                                              styleClass="updateButton"
                                              style="box-shadow: none !important; text-shadow: none !important"
                                             onclick="PF('statusDialog').show()"
                                             oncomplete="PF('statusDialog').hide()"  
                                             update=":abundancedist:form3:abunddistPane3  :cmdPane" 
-                                            actionListener="#{abunddistBean.AbunddistUpdate_action()}"/>  
+                                            actionListener="#{abunddistBean.AbunddistRankUpdate_action()}"/>  
 <!--                            <p:commandButton value="Customize Graph"
                                              styleClass="graphicsButton"
                                              style="box-shadow: none !important; text-shadow: none !important;"
                                              actionListener="#{sessionBean1.graphicsLnk_action('pca_pair')}" 
-                                            oncomplete="PF('graphApperanceAbunddist').show()"/>  
-                -->
-<!--                        </h:panelGrid>-->
+                                            oncomplete="PF('graphApperanceAbunddist3').show()"/>  
+                
+-->                         </h:panelGrid>
                         <h:panelGrid class="resultsBar" columns="2">
                             <h:panelGroup>
                                 <h:panelGrid columns="1" style="text-align : left;">
@@ -190,27 +191,27 @@
                         </h:panelGrid>                         
                         <h:panelGrid id="abunddistPane3" style="width: 100%;">
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
-                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 8px">
                                     <h:outputText escape="false" value="#{abunddistBean.filenullresultpath}"/>
                                 </i>
                             </h:panelGrid>
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
-                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 8px">
                                     <h:outputText escape="false" value="#{abunddistBean.fileperiresultpath}"/>
                                 </i>
                             </h:panelGrid>
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
-                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 8px">
                                     <h:outputText escape="false" value="#{abunddistBean.filelogresultpath}"/>
                                 </i>
                             </h:panelGrid>
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
-                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 6px">
                                     <h:outputText escape="false" value="#{abunddistBean.filezipfresultpath}"/>
                                 </i>
                             </h:panelGrid>
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
-                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 8px">
                                     <h:outputText escape="false" value="#{abunddistBean.filemanresultpath}"/>
                                 </i>
                             </h:panelGrid>
@@ -226,8 +227,20 @@
                 style="width: 400px; height:400px;" 
                 appendTo="@(body)" header="Graphics Center"
                 draggable="false" closable="true" resizable="false"> 
-                <ui:include src="_color_palette_abunddist.xhtml" />
+                <ui:include src="_color_palette_abunddistTab1.xhtml" />
             </p:dialog>
+            <p:dialog modal="true" widgetVar="graphApperanceAbunddist2" 
+                style="width: 400px; height:400px;" 
+                appendTo="@(body)" header="Graphics Center"
+                draggable="false" closable="true" resizable="false"> 
+                <ui:include src="_color_palette_abunddistTab2.xhtml" />
+            </p:dialog>
+<!--            <p:dialog modal="true" widgetVar="graphApperanceAbunddist3" 
+                style="width: 400px; height:400px;" 
+                appendTo="@(body)" header="Graphics Center"
+                draggable="false" closable="true" resizable="false"> 
+                <ui:include src="_color_palette_abunddistTab3.xhtml" />
+            </p:dialog>-->
  
         </h:panelGrid>
         

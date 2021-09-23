@@ -15,7 +15,7 @@
                     <f:selectItems value="#{accummodelBean.type}"/>
                 </p:selectOneMenu>  
                 <h:outputLabel style="font-weight: bold" value="Select base curve trend line color:"/>
-                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{accummodelBean.color}">
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{accummodelBean.colorchosen}">
                     <f:selectItems value="#{accummodelBean.color}"/>
                 </p:selectOneMenu>
                 <h:outputLabel style="font-weight: bold" value="Select type of confidence intervals:"/>
@@ -40,10 +40,6 @@
                 </p:selectOneMenu> 
                 <h:outputLabel style="font-weight: bold" value="Select plot character for random method:"/>
                 <p:inputText value = "#{accummodelBean.pch}"/>  
-                
-                
-
-
             </h:panelGrid>
             <h:panelGrid id="panelGrid4" columns="1" cellpadding="6" style="float: right">
                 <p:commandButton value="Update" 
@@ -52,7 +48,7 @@
                                 onclick="PF('statusDialog').show()"
                                 oncomplete="PF('graphApperanceAccummodel').hide(); PF('statusDialog').hide()"  
                                 update=":accumulationcurve:form1:accummodelPane1  :cmdPane" 
-                                actionListener="#{abunddistBean.AccummodelUpdate_action()}"/>
+                                actionListener="#{accummodelBean.AccummodelUpdate_action()}"/>
             </h:panelGrid>
         </h:panelGrid>
     </h:form>

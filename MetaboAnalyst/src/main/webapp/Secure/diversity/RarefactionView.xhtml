@@ -38,12 +38,12 @@
                                             onclick="PF('statusDialog').show()"
                                             oncomplete="PF('statusDialog').hide()"  
                                             update=":rarefaction:form1:rarefactionPane1  :cmdPane" 
-                                            actionListener="#{rarefactionBean.rareUpdate_action()}"/>                          
+                                            actionListener="#{rarefactionBean.rareCurveUpdate_action()}"/>                          
                             <p:commandButton value="Customize Graph"
                                              styleClass="graphicsButton"
                                              style="box-shadow: none !important; text-shadow: none !important;"
                                              actionListener="#{sessionBean1.graphicsLnk_action('pca_pair')}" 
-                                            oncomplete="PF('graphApperanceRare').show()"/> 
+                                            oncomplete="PF('graphApperanceRare1').show()"/> 
                         </h:panelGrid>
                         <h:panelGrid class="resultsBar" columns="2">
                             <h:panelGroup>
@@ -59,7 +59,7 @@
                         </h:panelGrid>                         
                         <h:panelGrid id="rarefactionPane1" style="width: 100%;">
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
-                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
                                     <h:outputText escape="false" value="#{rarefactionBean.filerareresultpath}"/>
                                 </i>
                             </h:panelGrid>                
@@ -95,12 +95,12 @@
                                             onclick="PF('statusDialog').show()"
                                             oncomplete="PF('statusDialog').hide()"  
                                             update=":rarefaction:form2:rarefactionPane2  :cmdPane" 
-                                            actionListener="#{rarefactionBean.rareUpdate_action()}"/>                          
+                                            actionListener="#{rarefactionBean.rareScatterUpdate_action()}"/>                          
                             <p:commandButton value="Customize Graph"
                                              styleClass="graphicsButton"
                                              style="box-shadow: none !important; text-shadow: none !important;"
                                              actionListener="#{sessionBean1.graphicsLnk_action('pca_pair')}" 
-                                            oncomplete="PF('graphApperanceRare').show()"/>  
+                                            oncomplete="PF('graphApperanceRare2').show()"/>  
                
                         </h:panelGrid>
                         <h:panelGrid class="resultsBar" columns="2">
@@ -118,7 +118,7 @@
            
                         <h:panelGrid id="rarefactionPane2" style="width: 100%;">
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
-                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
                                     <h:outputText escape="false" value="#{rarefactionBean.filerareresultpath}"/>
                                 </i>
                             </h:panelGrid>
@@ -130,11 +130,17 @@
                     </h:form>
                 </p:tab>
             </p:tabView>
-            <p:dialog modal="true" widgetVar="graphApperanceRare" 
+            <p:dialog modal="true" widgetVar="graphApperanceRare1" 
                 style="width: 400px; height:400px;" 
                 appendTo="@(body)" header="Graphics Center"
                 draggable="false" closable="true" resizable="false"> 
-                <ui:include src="_color_palette_rare.xhtml" />
+                <ui:include src="_color_palette_rareTab1.xhtml" />
+            </p:dialog>
+            <p:dialog modal="true" widgetVar="graphApperanceRare2" 
+                style="width: 400px; height:400px;" 
+                appendTo="@(body)" header="Graphics Center"
+                draggable="false" closable="true" resizable="false"> 
+                <ui:include src="_color_palette_rareTab2.xhtml" />
             </p:dialog>
  
         </h:panelGrid>

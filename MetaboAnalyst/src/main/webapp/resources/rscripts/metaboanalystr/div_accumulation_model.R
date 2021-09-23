@@ -360,7 +360,7 @@ AccumCurve <- function(mSetObj=NA, type = "NULL", color = "NULL", ci.color="NULL
   par(xpd=FALSE, mar=c(5.1, 4.1, 4.1, 2.1))
   #abline(0, 1)
   
-  pars <- expand.grid(col = color1, stringsAsFactors = FALSE)
+  #pars <- expand.grid(col = color1, stringsAsFactors = FALSE)
   
   #windows(height = h, width = w)
   

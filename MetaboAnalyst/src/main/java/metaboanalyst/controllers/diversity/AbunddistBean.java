@@ -334,10 +334,18 @@ public class AbunddistBean implements Serializable {
    
     
     // ACTION BUTTON // 
-    public void AbunddistUpdate_action() {
+    public void AbunddistFisherUpdate_action() {
         DiversityUtils.CreateAbundDistDiv(sb, doOriginal, community, doTiesplit, truncate);       
         DiversityUtils.PlotAbundFisherPlotDiv(sb, bar_colorchosen, line_color_addFitchosen, sb.getNewImage("Abundance_Fisher_Dist_Plot"), "png", 72, "false");
+    } 
+    
+    public void AbunddistPrestUpdate_action() {
+        DiversityUtils.CreateAbundDistDiv(sb, doOriginal, community, doTiesplit, truncate);       
         DiversityUtils.PlotAbundPrestPlotDiv(sb, bar_colorchosen, line_color_addPoichosen, line_color_addMaxchosen, sb.getNewImage("Abundance_Prest_Dist_Plot"), "png", 72, "false");
+    } 
+    
+    public void AbunddistRankUpdate_action() {
+        DiversityUtils.CreateAbundDistDiv(sb, doOriginal, community, doTiesplit, truncate);       
         DiversityUtils.PlotAbundRankPlotDiv(sb, sb.getNewImage("Abundance_Rank_Dist_Plot"), "png", 72, "false");
     } 
     

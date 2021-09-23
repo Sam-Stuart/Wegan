@@ -191,10 +191,15 @@ public class RarefactionBean implements Serializable {
 //    }
     
     // ACTION BUTTON // 
-    public void rareUpdate_action() {
+    public void rareCurveUpdate_action() {
         DiversityUtils.CreateRarefactionDiv(sb, doOriginal, typechosen, sample, doSe, marginchosen);       
         DiversityUtils.PlotRarefactionCurveDiversity(sb, step, colorchosen, sb.getNewImage("Rarefaction_Curve_Plot"), "png", 72, "false");
+    }
+    
+    public void rareScatterUpdate_action() {
+        DiversityUtils.CreateRarefactionDiv(sb, doOriginal, typechosen, sample, doSe, marginchosen);       
         DiversityUtils.PlotRarefactionPlotDiversity(sb, colorbchosen, sb.getNewImage("Rarefaction_Linear_Plot"), "png", 72, "false");
     }
+    
     
 }
