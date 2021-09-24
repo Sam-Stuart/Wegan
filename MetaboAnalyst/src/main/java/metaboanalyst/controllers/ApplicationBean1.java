@@ -339,7 +339,7 @@ public class ApplicationBean1 implements Serializable {
         designOpts[1] = new SelectItem("time", "Time-series + one experimental factor");
         designOpts[2] = new SelectItem("g2", "Two-factor independent samples");
 
-        dataNormOpts = new SelectItem[10];
+        dataNormOpts = new SelectItem[11];
         dataNormOpts[0] = new SelectItem("NULL", "None");
         dataNormOpts[1] = new SelectItem("SpecNorm", "Sample-specific normalization");
         dataNormOpts[2] = new SelectItem("SumNorm", "Normalization by sum");
@@ -350,6 +350,7 @@ public class ApplicationBean1 implements Serializable {
         dataNormOpts[7] = new SelectItem("QuantileNorm", "Quantile normalization");
         dataNormOpts[8] = new SelectItem("BoxNorm", "Box-Cox normalization");
         dataNormOpts[9] = new SelectItem("ZNorm", "Z-score normalization");
+        dataNormOpts[10] = new SelectItem("MaxMinNorm", "Max-Min (linear) normalization");
 
 
         probNormOpts = new SelectItem[2];

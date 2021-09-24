@@ -93,7 +93,7 @@ public class ProcessBean implements Serializable {
         msgVec.addAll(Arrays.asList(msgArray));
 
         String msg = "<table face=\"times\" size = \"3\">";
-        msg = msg + "<tr><th> Data processing information: " + "</th></tr>";
+        msg = msg + "<tr><th> Data Processing Information: " + "</th></tr>";
         for (int i = 0; i < msgVec.size(); i++) {
             msg = msg + "<tr><td align=\"left\">" + msgVec.get(i) + "</td></tr>";
         }

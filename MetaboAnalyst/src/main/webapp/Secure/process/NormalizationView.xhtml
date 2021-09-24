@@ -40,25 +40,28 @@
                 
                 <h:panelGrid columns="2" style=" border: none; width: 100%; padding: 5px 10px 10px 5px; background-color: #8cbd4830; font-size: 14px; position:relative">
                     <h:panelGrid>
-                        <b>Data normalization</b>
-                        <h:panelGrid columns="2" style="padding:2px 12px 10px 10px">
+                        <b>Data Normalization</b>
+                        <h:panelGrid columns="3" style="padding:2px 12px 10px 10px; font-size: 14px">
                             <p:radioButton for="rowRadio" itemIndex="0"/>
-                            <p:outputLabel style="font-size:12px; font-weight: bold" value="None"/>
+                            <p:outputLabel style="font-size:13px; font-weight: bold" value="None"/>
+                            <p:spacer/>
 
                             <p:radioButton for="rowRadio" itemIndex="2"/>
-                            <p:outputLabel style="font-size:12px; font-weight: bold" value="Normalization by sum"/>
+                            <p:outputLabel style="font-size:13px; font-weight: bold" value="Normalization by sum"/>
+                            <h:outputLabel value="(Divide each value by the sum of the variable)"/>
 
                             <p:radioButton for="rowRadio" itemIndex="3"/>
-                            <p:outputLabel style="font-size:12px; font-weight: bold" value="Normalization by median"/>
+                            <p:outputLabel style="font-size:13px; font-weight: bold" value="Normalization by median"/>
+                            <h:outputLabel value="(Divide each value by the median of the variable)"/>
 
                             <p:radioButton for="rowRadio" itemIndex="7"/>
-                            <p:outputLabel style="font-size:12px; font-weight: bold" value="Quantile normalization"/>
+                            <p:outputLabel style="font-size:13px; font-weight: bold" value="Quantile normalization"/>
+                            <h:outputLabel value="(Create identical distributions between variables using ranking and means)"/>
 
                             <p:radioButton for="rowRadio" itemIndex="8"/>
-                            <p:outputLabel style="font-size:12px; font-weight: bold" value="Box-Cox normalization"/>         
-                        
-                            <p:radioButton for="rowRadio" itemIndex="9"/>
-                            <p:outputLabel style="font-size:12px; font-weight: bold" value="Z-Score normalization"/>  
+                            <p:outputLabel style="font-size:13px; font-weight: bold" value="Box-Cox normalization"/>         
+                            <h:outputLabel value="(Uses Yeo-Johnson technique for negative value data)"/>
+
                         </h:panelGrid>
                         <h:panelGrid style="width:100%; border-bottom: darkgray dashed thin; border-top: darkgray dashed thin" rendered="#{sessionBean1.analType eq 'roc' and sessionBean1.dataType eq 'conc'}">
                             <h:panelGroup>
@@ -79,35 +82,44 @@
                                 Log normalization will be performed during the process. You can only perform Data scaling in the next step.
                             </p>
                         </h:panelGrid>
-                        <b>Data transformation</b>
-                        <h:panelGrid columns="3" style="padding:2px 12px 10px 10px">
+                        <b>Data Transformation</b>
+                        <h:panelGrid columns="3" style="padding:2px 12px 10px 10px; font-size: 14px">
                             <p:radioButton for="transRadio" itemIndex="0"/>
-                            <p:outputLabel style="font-size:12px; font-weight: bold" value="None"/>
+                            <p:outputLabel style="font-size:13px; font-weight: bold" value="None"/>
                             <p:spacer/>
+                            
                             <p:radioButton for="transRadio" itemIndex="1"/>
-                            <p:outputLabel style="font-size:12px; font-weight: bold" value="Log transformation"/>
-                            <h:outputLabel value="(only for positive value data)"/>
+                            <p:outputLabel style="font-size:13px; font-weight: bold" value="Log transformation"/>
+                            <p:spacer/>
+                            
                             <p:radioButton for="transRadio" itemIndex="2"/>
-                            <p:outputLabel style="font-size:12px; font-weight: bold" value="Cube root transformation"/>
-<!--                            <h:outputLabel value="(takes the cube root of data values)"/>-->
+                            <p:outputLabel style="font-size:13px; font-weight: bold" value="Square root transformation"/>
+                            <h:outputLabel value="(only for positive value data)"/>
+                            
+                            <p:radioButton for="transRadio" itemIndex="2"/>
+                            <p:outputLabel style="font-size:13px; font-weight: bold" value="Cube root transformation"/>
                         </h:panelGrid>
-                        <b>Data scaling</b>
-                        <h:panelGrid columns="3" style="padding:2px 12px 10px 10px">
+                        <b>Data Scaling</b>
+                        <h:panelGrid columns="3" style="padding:2px 12px 10px 10px; font-size: 14px">
                             <p:radioButton for="scaleRadio" itemIndex="0"/>
-                            <p:outputLabel style="font-size:12px; font-weight: bold" value="None"/>
+                            <p:outputLabel style="font-size:13px; font-weight: bold" value="None"/>
                             <p:spacer/>
                             <p:radioButton for="scaleRadio" itemIndex="1"/>
-                            <p:outputLabel style="font-size:12px; font-weight: bold" value="Mean centering"/>
-<!--                            <h:outputLabel value="(mean-centered only)"/>-->
-                            <p:radioButton for="scaleRadio" itemIndex="2"/>
-                            <p:outputLabel style="font-size:12px; font-weight: bold" value="Auto scaling"/>
-                            <h:outputLabel value="(mean-centered and divided by the standard deviation of each variable)"/>
-                            <p:radioButton for="scaleRadio" itemIndex="3"/>
-                            <p:outputLabel style="font-size:12px; font-weight: bold" value="Pareto scaling"/>
-                            <h:outputLabel value="(mean-centered and divided by the square root of the standard deviation of each variable)"/>
+                            <p:outputLabel style="font-size:13px; font-weight: bold" value="Mean centering"/>
+                            <h:outputLabel value="(subtract the mean of the variable from each value)"/>
+                            
                             <p:radioButton for="scaleRadio" itemIndex="4"/>
-                            <p:outputLabel style="font-size:12px; font-weight: bold" value="Range scaling"/>
-                            <h:outputLabel value="(mean-centered and divided by the range of each variable)"/>
+                            <p:outputLabel style="font-size:13px; font-weight: bold" value="Max-Min scaling"/>
+                            <h:outputLabel value="(mean-center and divide each value by the range of the variable)"/> 
+                            
+                            <p:radioButton for="scaleRadio" itemIndex="2"/>
+                            <p:outputLabel style="font-size:13px; font-weight: bold" value="Z-score scaling"/>
+                            <h:outputLabel value="(mean-center and divide each value by the standard deviation of the variable)"/>
+                            
+                            <p:radioButton for="scaleRadio" itemIndex="3"/>
+                            <p:outputLabel style="font-size:13px; font-weight: bold" value="Pareto scaling"/>
+                            <h:outputLabel value="(mean-center and divide each value by the square root of the standard deviation of the variable)"/>
+
                         </h:panelGrid>
                     </h:panelGrid>
                     <h:panelGrid style="position: absolute; right: 35px; top: 30px">

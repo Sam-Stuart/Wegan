@@ -11,7 +11,7 @@
     </ui:define>
     <ui:define name="content">
         <h:form>
-            <h:panelGrid style="padding:20px 40px 20px 40px; font-size: 13px; line-height: 25px; width:100%; position: relative">
+            <h:panelGrid style="padding:20px 40px 20px 40px; font-size: 16px; line-height: 25px; width:100%; position: relative">
                 <h1>Data Filtering:</h1>
                 <h:panelGrid style="width:100%; background-color: #75bafb;"></h:panelGrid>
                 <h:panelGrid style="width:100%; background-color: white; "></h:panelGrid>
@@ -19,11 +19,11 @@
                 <h:panelGrid style="width:100%; background-color: white; "></h:panelGrid>  
                 <p>
                     The purpose of the data filtering is to identify and remove variables that are unlikely to be of use 
-                    when modeling the data. This step is recommended for data sets with large number of variables (>250). Filtering can often improve the results.
+                    when modeling the data. Filtering can often improve the results. This step is recommended for data sets with large number of variables (>250). 
                 </p>
                 <p>
                     Non-informative variables can be characterized in two groups: 1) variables of <b>very small values</b> - these 
-                    variables can be detected using mean or median; 2) variables that are <b>near-constant values</b> throughout the data set - these variables can be detected using standard deviation (SD) or the 
+                    variables can be detected using mean or median; 2) variables that are <b>near-constant values</b> - these variables can be detected using standard deviation (SD) or the 
                     interquantile range (IQR). The following empirical rules are applied during data filtering: 
                     <ul>
                         <li>
@@ -41,15 +41,17 @@
                     </ul>
                 </p>
                 <h:panelGrid style=" border: none; width: 100%; padding: 5px 10px 10px 5px; background-color: #8cbd4830; font-size: 14px">
+                    <p:outputLabel value="Filter data using:" style="font-size: 14px; font-weight: bold"/>
                     <p:selectOneRadio layout="pageDirection" value="#{procBean.filterOpt}" style="font:Arial,sans-serif; font-size: 13px">
-                        <f:selectItem itemLabel="None (less than 5000 features required)" itemValue="none" /> 
-                        <f:selectItem itemLabel="Interquantile range (IQR)" itemValue="iqr" /> 
-                        <f:selectItem itemLabel="Standard deviation (SD)" itemValue="sd" /> 
-                        <f:selectItem itemLabel="Median absolute deviation (MAD)" itemValue="mad" /> 
-                        <f:selectItem itemLabel="Relative standard deviation (RSD = SD/mean)" itemValue="rsd" /> 
-                        <f:selectItem itemLabel="Non-parametric relative standard deviation (MAD/median)" itemValue="nrsd" /> 
+                        <f:selectItem itemLabel="No filtering (less than 5000 features required)" itemValue="none" /> 
                         <f:selectItem itemLabel="Mean" itemValue="mean" /> 
                         <f:selectItem itemLabel="Median" itemValue="median" /> 
+                        <f:selectItem itemLabel="Interquantile range (IQR)" itemValue="iqr" /> 
+                        <f:selectItem itemLabel="Standard deviation (SD)" itemValue="sd" /> 
+                        <f:selectItem itemLabel="Relative standard deviation (RSD = SD/mean)" itemValue="rsd" /> 
+                        <f:selectItem itemLabel="Median absolute deviation (MAD)" itemValue="mad" /> 
+                        <f:selectItem itemLabel="Non-parametric relative standard deviation (MAD/median)" itemValue="nrsd" /> 
+
                     </p:selectOneRadio>
                 </h:panelGrid> 
                 <h:panelGrid style="position:absolute; right: 5px; width: 320px">

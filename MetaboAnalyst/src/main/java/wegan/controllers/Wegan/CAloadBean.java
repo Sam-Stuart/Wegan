@@ -85,16 +85,18 @@ public class CAloadBean implements Serializable {
             try {
                 RConnection RC = sb.getRConnection();
                 String fileName = DataUtils.uploadFile(dataFile, sb, null, ab.isOnPublicServer());
+                
                 if (fileName == null) {
                     return null;
                 }
-                //RDataUtils.readTextData(RC, fileName, dataFormat, "disc")
+
                 if (RDataUtils.readTextData(RC, fileName, dataFormat, "disc", dataNames)) {
                     sb.setDataUploaded(true);
-                    return "Data Check";
+                    sb.updateMsg("Error", "Data Uploaded successfully");
+                    return "Data check";
                 } else {
                     String err = RDataUtils.getErrMsg(RC);
-                    sb.updateMsg("Error", "Failed to read in the CSV file." + err);
+                    sb.updateMsg("Error", "Failed to read in the data file." + err);
                     return null;
                 }
             } catch (Exception e) {

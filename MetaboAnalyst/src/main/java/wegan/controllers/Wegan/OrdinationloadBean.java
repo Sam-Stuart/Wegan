@@ -147,7 +147,7 @@ public class OrdinationloadBean implements Serializable {
                 String fileName = DataUtils.uploadFile(dataFile, sb, null, ab.isOnPublicServer());
                 String fileNameMeta = DataUtils.uploadFile(dataFileMeta, sb, null, ab.isOnPublicServer());
                 String fileNameEnv = DataUtils.uploadFile(dataFileEnv, sb, null, ab.isOnPublicServer());
-                
+
                 if (fileName == null) {
                     return null;
                 }
@@ -155,9 +155,8 @@ public class OrdinationloadBean implements Serializable {
                     RDataUtils.readTextDataMeta(RC, fileNameMeta, metaFormat, "disc", metaNames);
                 }
                 if (fileNameEnv != null){
-                    RDataUtils.readTextDataEnv(RC, fileNameEnv, envFormat, "disc", envNames);
-                }                 
-
+                    RDataUtils.readTextDataMeta(RC, fileNameEnv, envFormat, "disc", envNames);
+                }
                 if (RDataUtils.readTextData(RC, fileName, dataFormat, "disc", dataNames)) {
                     sb.setDataUploaded(true);
                     sb.updateMsg("Error", "Data Uploaded successfully");

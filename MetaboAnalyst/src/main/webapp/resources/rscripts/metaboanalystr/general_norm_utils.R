@@ -509,42 +509,45 @@ PlotNormSummary <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA)
     data<-mSetObj$dataSet$prenorm
   } 
 
-  pre.inx<-GetRandomSubsetIndex(ncol(data), sub.num=50);
-  namesVec <- colnames(data[,pre.inx]);
+  numData <- select_if(data, is.numeric)
+  normNumData <- select_if(mSetObj$dataSet$norm, is.numeric)
+
+  pre.inx<-GetRandomSubsetIndex(ncol(numData), sub.num=50);
+  namesVec <- colnames(numData[,pre.inx]);
  
   # only get common ones
-  nm.inx <- namesVec %in% colnames(mSetObj$dataSet$norm)
+  nm.inx <- namesVec %in% colnames(normNumData)
   namesVec <- namesVec[nm.inx];
   pre.inx <- pre.inx[nm.inx];
  
-  norm.inx<-match(namesVec, colnames(mSetObj$dataSet$norm));
+  norm.inx<-match(namesVec, colnames(normNumData));
   namesVec <- substr(namesVec, 1, 12); # use abbreviated name
  
-  rangex.pre <- range(data[, pre.inx], na.rm=T);
-  rangex.norm <- range(mSetObj$dataSet$norm[, norm.inx], na.rm=T);
+  rangex.pre <- range(numData[, pre.inx], na.rm=T);
+  rangex.norm <- range(normNumData[, norm.inx], na.rm=T);
  
   x.label<-GetAbundanceLabel(mSetObj$dataSet$type);
   y.label<-GetVariableLabel(mSetObj$dataSet$type);
  
   # fig 1
   op<-par(mar=c(4,7,4,0), xaxt="s");
-  plot(density(apply(data, 2, mean, na.rm=TRUE)), col='darkblue', las =2, lwd=2, main="", xlab="", ylab="");
+  plot(density(apply(numData, 2, mean, na.rm=TRUE)), col='darkblue', las =2, lwd=2, main="", xlab="", ylab="");
   mtext("Density", 2, 5);
   mtext("Before Normalization",3, 1)
  
   # fig 2
   op<-par(mar=c(7,7,0,0), xaxt="s");
-  boxplot(data[,pre.inx], names= namesVec, ylim=rangex.pre, las = 2, col="lightgreen", horizontal=T);
+  boxplot(numData[,pre.inx], names= namesVec, ylim=rangex.pre, las = 2, col="lightgreen", horizontal=T);
   #mtext("Counts", 1, 5); #I REMOVED THIS
  
   # fig 3
   op<-par(mar=c(4,7,4,2), xaxt="s");
-  plot(density(apply(mSetObj$dataSet$norm, 2, mean, na.rm=TRUE)), col='darkblue', las=2, lwd =2, main="", xlab="", ylab="");
+  plot(density(apply(normNumData, 2, mean, na.rm=TRUE)), col='darkblue', las=2, lwd =2, main="", xlab="", ylab="");
   mtext("After Normalization",3, 1);
  
   # fig 4
   op<-par(mar=c(7,7,0,2), xaxt="s");
-  boxplot(mSetObj$dataSet$norm[,norm.inx], names=namesVec, ylim=rangex.norm, las = 2, col="lightgreen", horizontal=T);
+  boxplot(normNumData[,norm.inx], names=namesVec, ylim=rangex.norm, las = 2, col="lightgreen", horizontal=T);
   #mtext("Normalized Counts",1, 5); #I REMOVED THIS
  
   dev.off();
@@ -597,41 +600,44 @@ PlotSampleNormSummary <- function(mSetObj=NA, imgName, format="png", dpi=72, wid
     data<-mSetObj$dataSet$prenorm
   } 
 
-  pre.inx<-GetRandomSubsetIndex(nrow(data), sub.num=50);
-  namesVec <- rownames(data[pre.inx,]);
+  numData <- select_if(data, is.numeric)
+  normNumData <- select_if(mSetObj$dataSet$norm, is.numeric)
+
+  pre.inx<-GetRandomSubsetIndex(nrow(numData), sub.num=50);
+  namesVec <- rownames(numData[pre.inx,]);
  
   # only get common ones
-  nm.inx <- namesVec %in% rownames(mSetObj$dataSet$norm)
+  nm.inx <- namesVec %in% rownames(normNumData)
   namesVec <- namesVec[nm.inx];
   pre.inx <- pre.inx[nm.inx];
  
-  norm.inx<-match(namesVec, rownames(mSetObj$dataSet$norm));
+  norm.inx<-match(namesVec, rownames(normNumData));
   namesVec <- substr(namesVec, 1, 12); # use abbreviated name
  
-  rangex.pre <- range(data[pre.inx,], na.rm=T);
-  rangex.norm <- range(mSetObj$dataSet$norm[norm.inx,], na.rm=T);
+  rangex.pre <- range(numData[pre.inx,], na.rm=T);
+  rangex.norm <- range(normNumData[norm.inx,], na.rm=T);
  
   x.label<-GetAbundanceLabel(mSetObj$dataSet$type);
   y.label<-"Samples";
  
   # fig 1
   op<-par(mar=c(4,7,4,0), xaxt="s");
-  plot(density(apply(data, 1, mean, na.rm=TRUE)), col='darkblue', las =2, lwd=2, main="", xlab="", ylab="");
+  plot(density(apply(numData, 1, mean, na.rm=TRUE)), col='darkblue', las =2, lwd=2, main="", xlab="", ylab="");
   mtext("Density", 2, 5);
   mtext("Before Normalization",3, 1)
 
   # fig 2
   op<-par(mar=c(7,7,0,0), xaxt="s");
-  boxplot(t(data[pre.inx, ]), names= namesVec, ylim=rangex.pre, las = 2, col="lightgreen", horizontal=T);
+  boxplot(t(numData[pre.inx, ]), names= namesVec, ylim=rangex.pre, las = 2, col="lightgreen", horizontal=T);
  
   # fig 3
   op<-par(mar=c(4,7,4,2), xaxt="s");
-  plot(density(apply(mSetObj$dataSet$norm, 1, mean, na.rm=TRUE)), col='darkblue', las=2, lwd =2, main="", xlab="", ylab="");
+  plot(density(apply(normNumData, 1, mean, na.rm=TRUE)), col='darkblue', las=2, lwd =2, main="", xlab="", ylab="");
   mtext("After Normalization",3, 1);
 
   # fig 4
   op<-par(mar=c(7,7,0,2), xaxt="s");
-  boxplot(t(mSetObj$dataSet$norm[norm.inx,]), names=namesVec, ylim=rangex.norm, las = 2, col="lightgreen", ylab="", horizontal=T);
+  boxplot(t(normNumData[norm.inx,]), names=namesVec, ylim=rangex.norm, las = 2, col="lightgreen", ylab="", horizontal=T);
  
   dev.off();
   return(.set.mSet(mSetObj));
