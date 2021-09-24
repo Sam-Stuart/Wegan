@@ -339,7 +339,7 @@ public class ApplicationBean1 implements Serializable {
         designOpts[1] = new SelectItem("time", "Time-series + one experimental factor");
         designOpts[2] = new SelectItem("g2", "Two-factor independent samples");
 
-        dataNormOpts = new SelectItem[11];
+        dataNormOpts = new SelectItem[9];
         dataNormOpts[0] = new SelectItem("NULL", "None");
         dataNormOpts[1] = new SelectItem("SpecNorm", "Sample-specific normalization");
         dataNormOpts[2] = new SelectItem("SumNorm", "Normalization by sum");
@@ -349,18 +349,16 @@ public class ApplicationBean1 implements Serializable {
         dataNormOpts[6] = new SelectItem("CompNorm", "Normalization by reference feature");
         dataNormOpts[7] = new SelectItem("QuantileNorm", "Quantile normalization");
         dataNormOpts[8] = new SelectItem("BoxNorm", "Box-Cox normalization");
-        dataNormOpts[9] = new SelectItem("ZNorm", "Z-score normalization");
-        dataNormOpts[10] = new SelectItem("MaxMinNorm", "Max-Min (linear) normalization");
-
 
         probNormOpts = new SelectItem[2];
         probNormOpts[0] = new SelectItem("F", "Specify a reference sample");
         probNormOpts[1] = new SelectItem("T", "Create a pooled average sample from group");
 
-        transNormOpts = new SelectItem[3];
+        transNormOpts = new SelectItem[4];
         transNormOpts[0] = new SelectItem("NULL", "None");
         transNormOpts[1] = new SelectItem("LogNorm", "Log transformation");
         transNormOpts[2] = new SelectItem("CrNorm", "Cube root transformation");
+        transNormOpts[3] = new SelectItem("SqNorm", "Square root transformation");
 
         scaleNormOpts = new SelectItem[5];
         scaleNormOpts[0] = new SelectItem("NULL", "None");

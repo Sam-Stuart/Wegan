@@ -22,7 +22,8 @@ CleanDataMatrix <- function(ndata){
 BestNormalize <- function(mSetObj=NA){
  
   mSetObj <- .get.mSet(mSetObj);
-
+  library(dplyr)
+ 
   if(is.null(mSetObj$dataSet[["procr"]])){
     data<-mSetObj$dataSet$preproc
   }else if(is.null(mSetObj$dataSet[["prenorm"]])){
@@ -33,28 +34,12 @@ BestNormalize <- function(mSetObj=NA){
    
   numData <- select_if(data, is.numeric)
   colNamesNum <- colnames(numData)
-  rowNamesNum <- rownames(numData)
-
-  charData <- select_if(data, is.character)
-  colNamesChar <- colnames(charData)
+  rowNamesNum <- rownames(data)
 
   #QuantileNorm
   numDataQuantileNorm <- QuantileNormalize(numData);
   colnames(numDataQuantileNorm) <- colNamesNum;
   rownames(numDataQuantileNorm) <- rowNamesNum;
-
-  #ProbNormGroup
-  grp.inx <- cls == ref;
-  grp.ref.smpl <- numData[,grp.inx]; #I CHANGED THIS TO COLS
-  numDataGroupPQN <- apply(numData, 2, ProbNorm, grp.ref.smpl);
-  colnames(numDataGroupPQN) <- colNamesNum;
-  rownames(numDataGroupPQN) <- rowNamesNum;
-
-  #ProbNormSample
-  samp.ref.smpl <- numData[ref,];
-  numDataSamplePQN <- apply(numData, 1, ProbNorm, samp.ref.smpl); #I CHANGED THIS TO ROWS
-  colnames(numDataSamplePQN) <- colNamesNum;
-  rownames(numDataSamplePQN) <- rowNamesNum;
 
   #SumNorm
   numDataSumNorm<-apply(numData, 2, SumNorm);
@@ -66,7 +51,7 @@ BestNormalize <- function(mSetObj=NA){
   colnames(numDataMedianNorm) <- colNamesNum;
   rownames(numDataMedianNorm) <- rowNamesNum;
 
-  #BoxNorm 
+  #BoxNorm
   if(sum(as.numeric(numData<=0)) > 0){
     numDataBoxNorm<-apply(numData, 2, YeoNorm);
   } else {
@@ -75,26 +60,20 @@ BestNormalize <- function(mSetObj=NA){
   colnames(numDataBoxNorm) <- colNamesNum;
   rownames(numDataBoxNorm) <- rowNamesNum;
 
-  numDataNormList <- list(numDataQuantileNorm, numDataGroupPQN, numDataSamplePQN, numDataSumNorm, numDataMedianNorm, numDataBoxNorm)
-  normNames <- c("QuantileNorm", "CompNorm", "SamplePQN", "SumNorm", "MedianNorm", "BoxNorm")
+  numDataNormList <- list(numDataQuantileNorm, numDataSumNorm, numDataMedianNorm, numDataBoxNorm)
+  normNames <- c("QuantileNorm", "SumNorm", "MedianNorm", "BoxNorm")
 
   SWList <- list()
+  pSum <- list()
   for (i in 1:length(numDataNormList)) {
     SWList[[normNames[i]]] <- apply(numDataNormList[[i]], 2, shapiroWilk)
-  }    
-    #Next: count the number of p-values above 0.05. The highest count wins.
-    #If there is a tie, sum the p-values and the highest number wins.
-    #Whoever wins, record i.
-  normBest <- numDataNormList[[i]]
-  numDataNorm <- normNames[i]
+    pSum[[normNames[i]]] <- sum(SWList[[normNames[i]]])
+  }  
 
-  data_1 <- cbind(numDataNorm, charData)
-  colNames <- c(colNamesNum, colNamesChar)
-  colnames(data_1) <- colNames
-  rownames(data_1) <- rownames(data)
+  pSum_unlist <- unlist(pSum)
+  #return(names(which.min(pSum_unlist))) #I COMMENTED THIS OUT FOR NOW
 
-  mSetObj$dataSet$norm <- data_1;
-  mSetObj$dataSet$best.method <- normBest;
+  mSetObj$dataSet$bestNorm <- names(which.min(pSum_unlist))
   return(.set.mSet(mSetObj));
 }
 
@@ -275,13 +254,18 @@ Normalization <- function(mSetObj=NA, rowNorm, transNorm, scaleNorm, ref=NULL, r
     mSetObj$dataSet$use.ratio <- FALSE;
     # transformation
     if(transNorm=='LogNorm'){
-      min.val <- min(abs(numData[numData!=0]))/10;
-      numData<-apply(numData, 2, LogNorm, min.val);
+      #min.val <- min(abs(numData[numData!=0]))/10; #I REMOVED THIS TO REPLACE WITH LOG10
+      #numData<-apply(numData, 2, LogNorm, min.val);
+      numData <- apply(numData, 2, log10)
       transnm<-"Log Normalization";
+    }else if(transNorm=='SqNorm'){
+      numData <- numData^(1/2);
+      transnm<-"Square Root Transformation";
     }else if(transNorm=='CrNorm'){
-      norm.data <- abs(numData)^(1/3);
-      norm.data[numData<0] <- - norm.data[numData<0];
-      numData <- norm.data;
+      numData <- numData^(1/3);
+      #norm.data <- abs(numData)^(1/3); #I REMOVED THIS
+      #norm.data[numData<0] <- - norm.data[numData<0];
+      #numData <- norm.data;
       transnm<-"Cubic Root Transformation";
     }else{
       transnm<-"N/A";
@@ -310,8 +294,8 @@ Normalization <- function(mSetObj=NA, rowNorm, transNorm, scaleNorm, ref=NULL, r
   colnames(numData)<-colNamesNum;
  
   # need to do some sanity check, for log there may be Inf values introduced
-  numData <- CleanData(numData, T, F, F);
-  charData <- charData[rownames(numData),] #Adjust character data rows if needed
+  #numData <- CleanData(numData, T, F, F); #I COMMENTED THIS OUT FOR NOW
+  #charData <- charData[rownames(numData),] #Adjust character data rows if needed
 
   if(ratio){
     mSetObj$dataSet$ratio <- CleanData(ratio.mat, T, F)
@@ -591,7 +575,7 @@ PlotSampleNormSummary <- function(mSetObj=NA, imgName, format="png", dpi=72, wid
 
   # since there may be too many samples, only plot a subsets (50) in box plot
   # but density plot will use all the data
- 
+   print("1")
   if(is.null(mSetObj$dataSet[["procr"]])){
     data<-mSetObj$dataSet$preproc
   }else if(is.null(mSetObj$dataSet[["prenorm"]])){
@@ -599,33 +583,33 @@ PlotSampleNormSummary <- function(mSetObj=NA, imgName, format="png", dpi=72, wid
   }else{
     data<-mSetObj$dataSet$prenorm
   } 
-
+   print("2")
   numData <- select_if(data, is.numeric)
   normNumData <- select_if(mSetObj$dataSet$norm, is.numeric)
-
+   print("3")
   pre.inx<-GetRandomSubsetIndex(nrow(numData), sub.num=50);
   namesVec <- rownames(numData[pre.inx,]);
- 
+    print("4")
   # only get common ones
   nm.inx <- namesVec %in% rownames(normNumData)
   namesVec <- namesVec[nm.inx];
   pre.inx <- pre.inx[nm.inx];
- 
+    print("5")
   norm.inx<-match(namesVec, rownames(normNumData));
   namesVec <- substr(namesVec, 1, 12); # use abbreviated name
- 
+    print("6")
   rangex.pre <- range(numData[pre.inx,], na.rm=T);
   rangex.norm <- range(normNumData[norm.inx,], na.rm=T);
- 
+    print("7")
   x.label<-GetAbundanceLabel(mSetObj$dataSet$type);
   y.label<-"Samples";
- 
+    print("8")
   # fig 1
   op<-par(mar=c(4,7,4,0), xaxt="s");
   plot(density(apply(numData, 1, mean, na.rm=TRUE)), col='darkblue', las =2, lwd=2, main="", xlab="", ylab="");
   mtext("Density", 2, 5);
   mtext("Before Normalization",3, 1)
-
+   print("9")
   # fig 2
   op<-par(mar=c(7,7,0,0), xaxt="s");
   boxplot(t(numData[pre.inx, ]), names= namesVec, ylim=rangex.pre, las = 2, col="lightgreen", horizontal=T);
