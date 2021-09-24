@@ -17,13 +17,13 @@
                     <h:form id="form1">
                         
 <!--                        <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> -->
-                            <h:panelGrid id="panelGrid" columns="4" cellpadding="2" >
+                            <h:panelGrid id="panelGrid" columns="6" cellpadding="2" >
                                 <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
                                 <p:selectBooleanCheckbox value ="#{accummodelBean.doOriginal}"/> 
-                                <h:outputLabel style="font-weight: bold" value="permutations:"/>
-                                <p:inputText value = "#{accummodelBean.permutations}"/>  
                                 <h:outputLabel style="font-weight: bold" value="Conditioned:"/>
                                 <p:selectBooleanCheckbox value ="#{accummodelBean.doConditioned}"/> 
+                                <h:outputLabel style="font-weight: bold" value="permutations:"/>
+                                <p:inputText value = "#{accummodelBean.permutations}"/>  
                                 <h:outputLabel style="font-weight: bold" value="gamma:"/>
                                 <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{accummodelBean.gammachosen}">
                                     <f:selectItems value="#{accummodelBean.gamma}"/>
