@@ -5,10 +5,11 @@
 #'
 CleanDataMatrix <- function(ndata){
   # make sure no costant columns crop up
-  varCol <- apply(data.frame(ndata), 2, var, na.rm=T); # getting an error of dim(X) must have a positive length, fixed by data.frame 
+  varCol <- apply(data.frame(ndata), 2, var, na.rm=T); # getting an error of dim(X) must have a positive length, fixed by data.frame
   constCol <- (varCol == 0 | is.na(varCol));
   return(ndata[,!constCol, drop=FALSE]); # got an error of incorrect number of dimensions, added drop=FALSE to avoid vector conversion
 }
+
 
 #'BestNormalize
 #'@description This function performs column-wise normalization using all methods and selects the "best" (ie highest SW p-value).
@@ -42,6 +43,19 @@ BestNormalize <- function(mSetObj=NA){
   colnames(numDataQuantileNorm) <- colNamesNum;
   rownames(numDataQuantileNorm) <- rowNamesNum;
 
+  #ProbNormGroup
+  grp.inx <- cls == ref;
+  grp.ref.smpl <- numData[,grp.inx]; #I CHANGED THIS TO COLS
+  numDataGroupPQN <- apply(numData, 2, ProbNorm, grp.ref.smpl);
+  colnames(numDataGroupPQN) <- colNamesNum;
+  rownames(numDataGroupPQN) <- rowNamesNum;
+
+  #ProbNormSample
+  samp.ref.smpl <- numData[ref,];
+  numDataSamplePQN <- apply(numData, 1, ProbNorm, samp.ref.smpl); #I CHANGED THIS TO ROWS
+  colnames(numDataSamplePQN) <- colNamesNum;
+  rownames(numDataSamplePQN) <- rowNamesNum;
+
   #SumNorm
   numDataSumNorm<-apply(numData, 2, SumNorm);
   colnames(numDataSumNorm) <- colNamesNum;
@@ -53,16 +67,16 @@ BestNormalize <- function(mSetObj=NA){
   rownames(numDataMedianNorm) <- rowNamesNum;
 
   #BoxNorm 
-  if(sum(as.numeric(numData<0)) >= 0){
-    numDataBoxNorm<-as.data.frame(apply(numData, 2, YeoNorm));
+  if(sum(as.numeric(numData<=0)) > 0){
+    numDataBoxNorm<-apply(numData, 2, YeoNorm);
   } else {
-    numDataBoxNorm<-as.data.frame(apply(numData, 2, BoxNorm, data=numData));
+    numDataBoxNorm<-apply(numData, 2, BoxNorm);
   }
   colnames(numDataBoxNorm) <- colNamesNum;
   rownames(numDataBoxNorm) <- rowNamesNum;
 
-  numDataNormList <- list(numDataQuantileNorm, numDataSumNorm, numDataMedianNorm, numDataBoxNorm)
-  normNames <- c("QuantileNorm", "SumNorm", "MedianNorm", "BoxNorm")
+  numDataNormList <- list(numDataQuantileNorm, numDataGroupPQN, numDataSamplePQN, numDataSumNorm, numDataMedianNorm, numDataBoxNorm)
+  normNames <- c("QuantileNorm", "CompNorm", "SamplePQN", "SumNorm", "MedianNorm", "BoxNorm")
 
   SWList <- list()
   for (i in 1:length(numDataNormList)) {
@@ -84,20 +98,22 @@ BestNormalize <- function(mSetObj=NA){
   return(.set.mSet(mSetObj));
 }
 
+
+
 #'Normalization
-#'@description This function performs row-wise normalization, transformation, and 
-#'scaling of your metabolomic data. 
+#'@description This function performs row-wise normalization, transformation, and
+#'scaling of your metabolomic data.
 #'@usage Normalization(mSetObj, rowNorm, transNorm, scaleNorm, ref=NULL, ratio=FALSE, ratioNum=20)
 #'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
-#'@param rowNorm Select the option for row-wise normalization, "QuantileNorm" for Quantile Normalization, 
+#'@param rowNorm Select the option for row-wise normalization, "QuantileNorm" for Quantile Normalization,
 #'"ProbNormT" for Probabilistic Quotient Normalization without using a reference sample,
-#'"ProbNormF" for Probabilistic Quotient Normalization based on a reference sample, 
+#'"ProbNormF" for Probabilistic Quotient Normalization based on a reference sample,
 #'"CompNorm" for Normalization by a reference feature,
-#'"SumNorm" for Normalization to constant sum, 
-#'"MedianNorm" for Normalization to sample median, and 
+#'"SumNorm" for Normalization to constant sum,
+#'"MedianNorm" for Normalization to sample median, and
 #'"SpecNorm" for Normalization by a sample-specific factor.
 #'@param transNorm Select option to transform the data, "LogNorm" for Log Normalization,
-#'and "CrNorm" for Cubic Root Transformation. 
+#'and "CrNorm" for Cubic Root Transformation.
 #'@param scaleNorm Select option for scaling the data, "MeanCenter" for Mean Centering,
 #'"AutoNorm" for Autoscaling, "ParetoNorm" for Pareto Scaling, amd "RangeNorm" for Range Scaling.
 #'@param ref Input the name of the reference sample or the reference feature, use " " around the name.  
@@ -185,7 +201,7 @@ Normalization <- function(mSetObj=NA, rowNorm, transNorm, scaleNorm, ref=NULL, r
     rownm<-"Probabilistic Quotient Normalization by a reference sample";
   }else if(rowNorm=="CompNorm"){
     numData<-apply(numData, 2, CompNorm, ref);
-    rownm<-"Normalization by a reference feature";
+    rownm<-"Normalization by a reference variable";
   }else if(rowNorm=="SumNorm"){
     numData<-apply(numData, 2, SumNorm);
     rownm<-"Normalization to constant sum";
@@ -194,10 +210,10 @@ Normalization <- function(mSetObj=NA, rowNorm, transNorm, scaleNorm, ref=NULL, r
     rownm<-"Normalization to sample median";
   } else if(rowNorm=="BoxNorm"){ #I ADDED THIS
     if(sum(as.numeric(numData<=0)) > 0){
-      numDataYeo<-as.data.frame(apply(numData, 2, YeoNorm));
-      numData <- numDataYeo[1:nrow(numData),]
+      numData<-as.data.frame(apply(numData, 2, YeoNorm));
+      numData <- numData[1:nrow(data),]
     } else {
-      numData<-as.data.frame(apply(numData, 2, BoxNorm, data=numData));
+      numData<-as.data.frame(apply(numData, 2, BoxNorm));
     }
     rownm<-"Box-Cox Normalization";
   }else if(rowNorm=="SpecNorm"){
@@ -251,7 +267,7 @@ Normalization <- function(mSetObj=NA, rowNorm, transNorm, scaleNorm, ref=NULL, r
    
     colNames <- colnames(numData);
     rowNames <- rownames(numData);
-    mSetObj$dataSet$procr <- numData;
+    #mSetObj$dataSet$procr <- numData;
     mSetObj$dataSet$use.ratio <- TRUE;
     mSetObj$dataSet$proc.ratio <- numData;
 
@@ -294,7 +310,8 @@ Normalization <- function(mSetObj=NA, rowNorm, transNorm, scaleNorm, ref=NULL, r
   colnames(numData)<-colNamesNum;
  
   # need to do some sanity check, for log there may be Inf values introduced
-  #ADD CHECK FOR INF/-INF AND REMOVE COLUMNS?????????
+  numData <- CleanData(numData, T, F, F);
+  charData <- charData[rownames(numData),] #Adjust character data rows if needed
 
   if(ratio){
     mSetObj$dataSet$ratio <- CleanData(ratio.mat, T, F)
@@ -321,7 +338,7 @@ Normalization <- function(mSetObj=NA, rowNorm, transNorm, scaleNorm, ref=NULL, r
 #'Normalize by a sum of each sample, assume constant sum (1000).
 # Return: normalized data.
 #'Options for normalize by sum median, reference sample,
-#'reference reference (compound), or quantile normalization
+#'reference variable (compound), or quantile normalization
 #'@param x Input data to normalize
 #'@author Jeff Xia \email{jeff.xia@mcgill.ca}
 #'McGill University, Canada
@@ -354,16 +371,66 @@ QuantileNormalize <- function(data){
   #return(t(preprocessCore::normalize.quantiles(t(data), copy=FALSE))); #I REMOVED THIS BC PREPROCESSCORE WAS NOT WORKING WITH R4.0.5
   data_rank <- apply(data,2,rank,ties.method="min")
   data_sorted <- data.frame(apply(data, 2, sort))
-  data_mean <- apply(data_sorted, 1, mean)   
+  data_mean <- apply(data_sorted, 1, mean)
+   
+  index_to_mean <- function(my_index, my_mean){
+    return(my_mean[my_index])
+  }
+   
   data_final <- apply(data_rank, 2, index_to_mean, my_mean=data_mean)
   rownames(data_final) <- rownames(data)
   return(data_final)
 }
 
+
+#'Box-Cox normalization
+#'@description performs Box-Cox (data must be 0 or positive values)
+#'@usage BoxNorm(vec), where vec is a numeric vector (eg column in data frame)
+#'@param x is the column being normalized
+#'@author Louisa Normington \email{normingt@ualberta.ca}
+#'University of Alberta, Canada
+#'@export
+BoxNorm <- function(vec) {
+  library(MASS)
+  box <- boxcox(vec~1, lambda = seq(-6,6,0.1), plotit = FALSE) 
+  cox <- data.frame(box$x, box$y) # Create a data frame with the results
+  cox2 <- cox[with(cox, order(-cox$box.y)),] # Order the new data frame by decreasing y
+  lambda <- cox2[1, "box.x"] # Extract that lambda
+  vec.trans <- (vec ^ lambda - 1)/lambda
+  return(vec.trans)
+}
+
+
+#'Yeo-Johnson normalization
+#'@description performs Yeo-Johnson normalization (data can have negative values)
+#'@usage YeoNorm(x), where x is a numeric vector (eg column in data frame)
+#'@param x is the column being normalized
+#'@author Louisa Normington \email{normingt@ualberta.ca}
+#'University of Alberta, Canada
+#'@export
+YeoNorm <- function(x) {
+  library(VGAM)
+  yeo.johnson(x, lambda=seq(-6,6,0.1))
+}
+
+
+#'Shapiro Wilk test for normality
+#'@usage shapiroWilk(x)
+#'@param x is the column being normalized
+#'@author Louisa Normington \email{normingt@ualberta.ca}
+#'University of Alberta, Canada
+#'@export
+shapiroWilk <- function(x) {
+  shapiro <- shapiro.test(x) #Perform the test
+  p <- shapiro[["p.value"]]
+  return(p)
+}
+
+
 #'Column-wise Normalization
 #'@description Column-wise norm methods, when x is a column
 #'Options for log, zero mean and unit variance, and
-#'several zero mean and variance/SE 
+#'several zero mean and variance/SE
 #'@param x Input data
 #'@param min.val Input minimum value
 #'@author Jeff Xia \email{jeff.xia@mcgill.ca}
@@ -403,12 +470,12 @@ RangeNorm<-function(x){
 #'@usage PlotNormSummary(mSetObj, imgName, format, dpi, width)
 #'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
 #'@param imgName Input a name for the plot
-#'@param format Select the image format, "png", or "pdf". 
-#'@param dpi Input the dpi. If the image format is "pdf", users need not define the dpi. For "png" images, 
+#'@param format Select the image format, "png", or "pdf".
+#'@param dpi Input the dpi. If the image format is "pdf", users need not define the dpi. For "png" images,
 #'the default dpi is 72. It is suggested that for high-resolution images, select a dpi of 300.  
 #'@param width Input the width, there are 2 default widths, the first, width = NULL, is 10.5.
-#'The second default is width = 0, where the width is 7.2. Otherwise users can input their own width.   
-#'@author Jeff Xia \email{jeff.xia@mcgill.ca}, Jasmine Chong 
+#'The second default is width = 0, where the width is 7.2. Otherwise users can input their own width.  
+#'@author Jeff Xia \email{jeff.xia@mcgill.ca}, Jasmine Chong
 #'McGill University, Canada
 #'@export
 #'
@@ -425,55 +492,63 @@ PlotNormSummary <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA)
     h = width*1.25
     # w <- 7.2; h <- 9;
   }
-  
+ 
   mSetObj$imgSet$norm <- imgName
-  
+ 
   Cairo::Cairo(file = imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white");
   layout(matrix(c(1,2,2,2,3,4,4,4), 4, 2, byrow = FALSE))
-  
-  # since there may be too many compounds, only plot a subsets (50) in box plot
+ 
+  # since there may be too many variables, only plot a subsets (50) in box plot
   # but density plot will use all the data
-  
-  pre.inx<-GetRandomSubsetIndex(ncol(mSetObj$dataSet$procr), sub.num=50);
-  namesVec <- colnames(mSetObj$dataSet$procr[,pre.inx]);
-  
+ 
+  if(is.null(mSetObj$dataSet[["procr"]])){ #I ADDED THIS
+    data<-mSetObj$dataSet$preproc
+  }else if(is.null(mSetObj$dataSet[["prenorm"]])){
+    data<- mSetObj$dataSet$procr
+  }else{
+    data<-mSetObj$dataSet$prenorm
+  } 
+
+  pre.inx<-GetRandomSubsetIndex(ncol(data), sub.num=50);
+  namesVec <- colnames(data[,pre.inx]);
+ 
   # only get common ones
   nm.inx <- namesVec %in% colnames(mSetObj$dataSet$norm)
   namesVec <- namesVec[nm.inx];
   pre.inx <- pre.inx[nm.inx];
-  
+ 
   norm.inx<-match(namesVec, colnames(mSetObj$dataSet$norm));
   namesVec <- substr(namesVec, 1, 12); # use abbreviated name
-  
-  rangex.pre <- range(mSetObj$dataSet$procr[, pre.inx], na.rm=T);
+ 
+  rangex.pre <- range(data[, pre.inx], na.rm=T);
   rangex.norm <- range(mSetObj$dataSet$norm[, norm.inx], na.rm=T);
-  
+ 
   x.label<-GetAbundanceLabel(mSetObj$dataSet$type);
   y.label<-GetVariableLabel(mSetObj$dataSet$type);
-  
+ 
   # fig 1
   op<-par(mar=c(4,7,4,0), xaxt="s");
-  plot(density(apply(mSetObj$dataSet$procr, 2, mean, na.rm=TRUE)), col='darkblue', las =2, lwd=2, main="", xlab="", ylab="");
+  plot(density(apply(data, 2, mean, na.rm=TRUE)), col='darkblue', las =2, lwd=2, main="", xlab="", ylab="");
   mtext("Density", 2, 5);
   mtext("Before Normalization",3, 1)
-  
+ 
   # fig 2
   op<-par(mar=c(7,7,0,0), xaxt="s");
-  boxplot(mSetObj$dataSet$procr[,pre.inx], names= namesVec, ylim=rangex.pre, las = 2, col="lightgreen", horizontal=T);
-  #mtext(x.label, 1, 5);
-  
+  boxplot(data[,pre.inx], names= namesVec, ylim=rangex.pre, las = 2, col="lightgreen", horizontal=T);
+  #mtext("Counts", 1, 5); #I REMOVED THIS
+ 
   # fig 3
   op<-par(mar=c(4,7,4,2), xaxt="s");
   plot(density(apply(mSetObj$dataSet$norm, 2, mean, na.rm=TRUE)), col='darkblue', las=2, lwd =2, main="", xlab="", ylab="");
   mtext("After Normalization",3, 1);
-  
+ 
   # fig 4
   op<-par(mar=c(7,7,0,2), xaxt="s");
   boxplot(mSetObj$dataSet$norm[,norm.inx], names=namesVec, ylim=rangex.norm, las = 2, col="lightgreen", horizontal=T);
-  #mtext(paste("Normalized",x.label),1, 5);
-  
+  #mtext("Normalized Counts",1, 5); #I REMOVED THIS
+ 
   dev.off();
-  
+ 
   return(.set.mSet(mSetObj));
 }
 
@@ -482,17 +557,17 @@ PlotNormSummary <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA)
 #'@usage PlotSampleNormSummary(mSetObj=NA, imgName, format="png", dpi=72, width=NA)
 #'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
 #'@param imgName Input a name for the plot
-#'@param format Select the image format, "png", of "pdf". 
-#'@param dpi Input the dpi. If the image format is "pdf", users need not define the dpi. For "png" images, 
+#'@param format Select the image format, "png", of "pdf".
+#'@param dpi Input the dpi. If the image format is "pdf", users need not define the dpi. For "png" images,
 #'the default dpi is 72. It is suggested that for high-resolution images, select a dpi of 300.  
 #'@param width Input the width, there are 2 default widths, the first, width = NULL, is 10.5.
-#'The second default is width = 0, where the width is 7.2. Otherwise users can input their own width.   
-#'@author Jeff Xia \email{jeff.xia@mcgill.ca}, Jasmine Chong 
+#'The second default is width = 0, where the width is 7.2. Otherwise users can input their own width.  
+#'@author Jeff Xia \email{jeff.xia@mcgill.ca}, Jasmine Chong
 #'McGill University, Canada
 #'@export
 
 PlotSampleNormSummary <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA){
-  
+ 
   mSetObj <- .get.mSet(mSetObj);
   imgName = paste(imgName, "dpi", dpi, ".", format, sep="");
   if(is.na(width)){
@@ -504,101 +579,66 @@ PlotSampleNormSummary <- function(mSetObj=NA, imgName, format="png", dpi=72, wid
     h = width*1.25
     # w <- 7.2; h <- 9;
   }
-  
+ 
   mSetObj$imgSet$summary_norm <-imgName;
-  
+ 
   Cairo::Cairo(file = imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white");
-  layout(matrix(c(1,1,1,2,3,3,3,4), 4, 2, byrow = FALSE))
-  
+  #layout(matrix(c(1,1,1,2,3,3,3,4), 4, 2, byrow = FALSE))
+  layout(matrix(c(1,2,2,2,3,4,4,4), 4, 2, byrow = FALSE))
+
   # since there may be too many samples, only plot a subsets (50) in box plot
   # but density plot will use all the data
-  
-  pre.inx<-GetRandomSubsetIndex(nrow(mSetObj$dataSet$procr), sub.num=50);
-  namesVec <- rownames(mSetObj$dataSet$procr[pre.inx,]);
-  
+ 
+  if(is.null(mSetObj$dataSet[["procr"]])){
+    data<-mSetObj$dataSet$preproc
+  }else if(is.null(mSetObj$dataSet[["prenorm"]])){
+    data<- mSetObj$dataSet$procr
+  }else{
+    data<-mSetObj$dataSet$prenorm
+  } 
+
+  pre.inx<-GetRandomSubsetIndex(nrow(data), sub.num=50);
+  namesVec <- rownames(data[pre.inx,]);
+ 
   # only get common ones
   nm.inx <- namesVec %in% rownames(mSetObj$dataSet$norm)
   namesVec <- namesVec[nm.inx];
   pre.inx <- pre.inx[nm.inx];
-  
+ 
   norm.inx<-match(namesVec, rownames(mSetObj$dataSet$norm));
   namesVec <- substr(namesVec, 1, 12); # use abbreviated name
-  
-  rangex.pre <- range(mSetObj$dataSet$procr[pre.inx,], na.rm=T);
+ 
+  rangex.pre <- range(data[pre.inx,], na.rm=T);
   rangex.norm <- range(mSetObj$dataSet$norm[norm.inx,], na.rm=T);
-  
+ 
   x.label<-GetAbundanceLabel(mSetObj$dataSet$type);
   y.label<-"Samples";
-  
+ 
   # fig 1
-  op<-par(mar=c(5.75,8,4,0), xaxt="s");
-  boxplot(t(mSetObj$dataSet$procr[pre.inx, ]), names= namesVec, ylim=rangex.pre, las = 2, col="lightgreen", horizontal=T);
-  mtext("Before Normalization", 3,1)
-  
-  # fig 2
-  op<-par(mar=c(6.5,7,0,0), xaxt="s");
-  plot(density(apply(mSetObj$dataSet$procr, 1, mean, na.rm=TRUE)), col='darkblue', las =2, lwd=2, main="", xlab="", ylab="");
-  #mtext(x.label, 1, 4);
+  op<-par(mar=c(4,7,4,0), xaxt="s");
+  plot(density(apply(data, 1, mean, na.rm=TRUE)), col='darkblue', las =2, lwd=2, main="", xlab="", ylab="");
   mtext("Density", 2, 5);
-  
+  mtext("Before Normalization",3, 1)
+
+  # fig 2
+  op<-par(mar=c(7,7,0,0), xaxt="s");
+  boxplot(t(data[pre.inx, ]), names= namesVec, ylim=rangex.pre, las = 2, col="lightgreen", horizontal=T);
+ 
   # fig 3
-  
-  op<-par(mar=c(5.75,8,4,2), xaxt="s");
-  boxplot(t(mSetObj$dataSet$norm[norm.inx,]), names=namesVec, ylim=rangex.norm, las = 2, col="lightgreen", ylab="", horizontal=T);
-  mtext("After Normalization", 3, 1);
-  
-  # fig 4
-  op<-par(mar=c(6.5,7,0,2), xaxt="s");
+  op<-par(mar=c(4,7,4,2), xaxt="s");
   plot(density(apply(mSetObj$dataSet$norm, 1, mean, na.rm=TRUE)), col='darkblue', las=2, lwd =2, main="", xlab="", ylab="");
-  #mtext(paste("Normalized",x.label),1, 4)
-  
+  mtext("After Normalization",3, 1);
+
+  # fig 4
+  op<-par(mar=c(7,7,0,2), xaxt="s");
+  boxplot(t(mSetObj$dataSet$norm[norm.inx,]), names=namesVec, ylim=rangex.norm, las = 2, col="lightgreen", ylab="", horizontal=T);
+ 
   dev.off();
   return(.set.mSet(mSetObj));
 }
 
-#'Box-Cox normalization
-#'@description performs Box-Cox (data must be 0 or positive values)
-#'@usage BoxNorm(x)
-#'@param x is the column being normalized
-#'@author Louisa Normington \email{normingt@ualberta.ca}
-#'University of Alberta, Canada
-#'@export
-BoxNorm <- function(data, x) {
-  library(MASS)
-  print("inside boxcox")
-  box <- boxcox(x ~ 1, data=data, lambda = seq(-6,6,0.1), plotit = FALSE) 
-  cox <- data.frame(box$x, box$y) # Create a data frame with the results
-  cox2 <- cox[with(cox, order(-cox$box.y)),] # Order the new data frame by decreasing y
-  lambda <- cox2[1, "box.x"] # Extract that lambda
-  x.trans <- (x ^ lambda - 1)/lambda
-  return(x.trans)
-}
 
 
-#'Yeo-Johnson normalization
-#'@description performs Yeo-Johnson normalization (data can have negative values)
-#'@usage YeoNorm(x)
-#'@param x is the column being normalized
-#'@author Louisa Normington \email{normingt@ualberta.ca}
-#'University of Alberta, Canada
-#'@export
-YeoNorm <- function(x) {
-  library(VGAM)
-  yeo.johnson(x, lambda=seq(-6,6,0.1))
-}
-
-
-#'Shapiro Wilk test for normality
-#'@usage shapiroWilk(x)
-#'@param x is the column being normalized
-#'@author Louisa Normington \email{normingt@ualberta.ca}
-#'University of Alberta, Canada
-#'@export
-shapiroWilk <- function(x) {
-  shapiro <- shapiro.test(x) #Perform the test
-  p <- shapiro[["p.value"]]
-  return(p)
-}
 ##############################################
 ##############################################
 ########## Utilities for web-server ##########
@@ -606,20 +646,20 @@ shapiroWilk <- function(x) {
 ##############################################
 
 
-#'Remove a group from the data 
+#'Remove a group from the data
 #'@description This function removes a user-specified group from the data set.
 #'This must be performed following data processing and filtering. If the data was normalized prior to removal,
-#'you must re-normalize the data. 
+#'you must re-normalize the data.
 #'@usage UpdateGroupItems(mSetObj=NA, grp.nm.vec)  
 #'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
-#'@param grp.nm.vec Input the name of the group you would like to remove from the data set in quotation marks 
-#'(ex: "Disease B") The name must be identical to a class label. 
-#'@author Jeff Xia \email{jeff.xia@mcgill.ca}, Jasmine Chong 
+#'@param grp.nm.vec Input the name of the group you would like to remove from the data set in quotation marks
+#'(ex: "Disease B") The name must be identical to a class label.
+#'@author Jeff Xia \email{jeff.xia@mcgill.ca}, Jasmine Chong
 #'McGill University, Canada
 #'@export
 #'
 UpdateGroupItems <- function(mSetObj=NA, grp.nm.vec){
-  
+ 
   mSetObj <- .get.mSet(mSetObj);
   if(is.null(mSetObj$dataSet$filt)){
     data <- mSetObj$dataSet$procr;
@@ -636,16 +676,16 @@ UpdateGroupItems <- function(mSetObj=NA, grp.nm.vec){
       facB <- mSetObj$dataSet$filt.facB;
     }
   }
-  
+ 
   hit.inx <- cls %in% grp.nm.vec;
   mSetObj$dataSet$prenorm <- CleanDataMatrix(data[!hit.inx,,drop=FALSE]);
-  mSetObj$dataSet$prenorm.cls <- droplevels(factor(cls[!hit.inx])); 
-  
+  mSetObj$dataSet$prenorm.cls <- droplevels(factor(cls[!hit.inx]));
+ 
   if(substring(mSetObj$dataSet$format,4,5)=="ts"){
     mSetObj$dataSet$prenorm.facA <- droplevels(factor(facA[!hit.inx]));
     mSetObj$dataSet$prenorm.facB <- droplevels(factor(facB[!hit.inx]));
   }
-  
+ 
   AddMsg("Successfully updated the group items!");
   if(.on.public.web){
     .set.mSet(mSetObj);
@@ -660,9 +700,9 @@ UpdateGroupItems <- function(mSetObj=NA, grp.nm.vec){
 #'If the data was normalized prior to removal, you must re-normalize the data.  
 #'@usage UpdateSampleItems(mSetObj=NA, smpl.nm.vec)
 #'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
-#'@param smpl.nm.vec Input the name of the sample to remove from the data in quotation marks. The name must be identical to the 
+#'@param smpl.nm.vec Input the name of the sample to remove from the data in quotation marks. The name must be identical to the
 #'sample names found in the data set.  
-#'@author Jeff Xia \email{jeff.xia@mcgill.ca}, Jasmine Chong 
+#'@author Jeff Xia \email{jeff.xia@mcgill.ca}, Jasmine Chong
 #'McGill University, Canada
 #'@export
 #'
@@ -683,7 +723,7 @@ UpdateSampleItems <- function(mSetObj=NA, smpl.nm.vec){
       facB <- mSetObj$dataSet$filt.facB;
     }
   }
-  
+ 
   hit.inx <- rownames(data) %in% smpl.nm.vec;
   mSetObj$dataSet$prenorm <- CleanDataMatrix(data[!hit.inx,,drop=FALSE]);
   mSetObj$dataSet$prenorm.cls <- as.factor(as.character(cls[!hit.inx]));
@@ -691,31 +731,31 @@ UpdateSampleItems <- function(mSetObj=NA, smpl.nm.vec){
     mSetObj$dataSet$prenorm.facA <- as.factor(as.character(facA[!hit.inx]));
     mSetObj$dataSet$prenorm.facB <- as.factor(as.character(facB[!hit.inx]));
   }
-  
+ 
   AddMsg("Successfully updated the sample items!");
-  
+ 
   if(.on.public.web){
     .set.mSet(mSetObj);
     return(length(levels(mSetObj$dataSet$prenorm.cls)));
   }else{
-    return(.set.mSet(mSetObj)); 
+    return(.set.mSet(mSetObj));
   }
 }
 
 #' Remove feature items
-#' @description This function removes user-selected features from the data set. 
+#' @description This function removes user-selected features from the data set.
 #' This must be performed following data processing and filtering.
 #' If the data was normalized prior to removal, you must re-normalize the data.  
 #' @usage UpdateFeatureItems(mSetObj=NA, feature.nm.vec)
 #'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
-#' @param feature.nm.vec Input the name of the feature to remove from the data in quotation marks. 
+#' @param feature.nm.vec Input the name of the feature to remove from the data in quotation marks.
 #' The name must be identical to the feature names found in the data set.  
-#'@author Jeff Xia \email{jeff.xia@mcgill.ca}, Jasmine Chong 
+#'@author Jeff Xia \email{jeff.xia@mcgill.ca}, Jasmine Chong
 #'McGill University, Canada
 #'@export
 #'
 UpdateFeatureItems <- function(mSetObj=NA, feature.nm.vec){
-  
+ 
   mSetObj <- .get.mSet(mSetObj);
   if(is.null(mSetObj$dataSet$filt)){
     data <- mSetObj$dataSet$procr;
@@ -732,11 +772,11 @@ UpdateFeatureItems <- function(mSetObj=NA, feature.nm.vec){
       facB <- mSetObj$dataSet$filt.facB;
     }
   }
-  
+ 
   hit.inx <- colnames(data) %in% feature.nm.vec;
   mSetObj$dataSet$prenorm <- CleanDataMatrix(data[,!hit.inx,drop=FALSE]);
   mSetObj$dataSet$prenorm.cls <- cls; # this is the same
-  
+ 
   AddMsg("Successfully updated the feature items!");
   return(.set.mSet(mSetObj));
 }
@@ -767,12 +807,26 @@ InitPrenormData <- function(mSetObj=NA){
 # get the dropdown list for sample normalization view
 GetPrenormSmplNms <-function(mSetObj=NA){
   mSetObj <- .get.mSet(mSetObj);
-  return(rownames(mSetObj$dataSet$prenorm));
+  if(is.null(mSetObj$dataSet[["procr"]])){ #I ADDED THIS
+    samples<-rownames(mSetObj$dataSet$preproc)
+  }else if(is.null(mSetObj$dataSet[["prenorm"]])){
+    samples<- rownames(mSetObj$dataSet$procr)
+  }else{
+    samples<-rownames(mSetObj$dataSet$prenorm)
+  } 
+  return(samples);
 }
 
 GetPrenormFeatureNms <- function(mSetObj=NA){
   mSetObj <- .get.mSet(mSetObj);
-  return(colnames(mSetObj$dataSet$prenorm));
+  if(is.null(mSetObj$dataSet[["procr"]])){ #I ADDED THIS
+    variables<-colnames(mSetObj$dataSet$preproc)
+  }else if(is.null(mSetObj$dataSet[["prenorm"]])){
+    variables<- colnames(mSetObj$dataSet$procr)
+  }else{
+    variables<-colnames(mSetObj$dataSet$prenorm)
+  } 
+  return(variables);
 }
 
 GetPrenormClsNms <- function(mSetObj=NA){

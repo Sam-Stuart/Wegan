@@ -21,11 +21,11 @@
 
 
                 <h:panelGrid style=" margin-bottom: 10px;font-size: 16px; width:100%">
-                    The normalization procedures are grouped into three categories. 
-                    The sample normalization allows general-purpose adjustment for differences among your sample.  
-                    Click Auto-Normalize to select the best normalization technique based on the Shapiro-Wilk and Z-Score tests.
-                    Data transformation and scaling are two different approaches to make individual variables more comparable. 
-                    You can use one or combine them to achieve better results.  
+                    The normalization procedures are grouped into three categories, all of which make variables more comparable. 
+                    The data normalization allows general-purpose adjustment in an attempt to acheive the class bell-shapped distribution.  
+                    Click Auto-Normalize to select the best option based on the Shapiro-Wilk normality test.
+                    Data transformation and scaling are two different approaches that can compliment data normalization. 
+                    You can use one procedure or combine them to achieve better results.  
                 </h:panelGrid>
                 
                 <p:selectOneRadio id="rowRadio" value="#{normBean.rowNormOpt}" layout="custom">  
@@ -40,35 +40,25 @@
                 
                 <h:panelGrid columns="2" style=" border: none; width: 100%; padding: 5px 10px 10px 5px; background-color: #8cbd4830; font-size: 14px; position:relative">
                     <h:panelGrid>
-                        <b>Sample normalization</b>
-                        <h:panelGrid columns="3" style="padding:2px 12px 10px 10px">
+                        <b>Data normalization</b>
+                        <h:panelGrid columns="2" style="padding:2px 12px 10px 10px">
                             <p:radioButton for="rowRadio" itemIndex="0"/>
                             <p:outputLabel style="font-size:12px; font-weight: bold" value="None"/>
-                            <p:spacer/>   
-
-                            <p:radioButton for="rowRadio" itemIndex="4"/>
-                            <p:outputLabel style="font-size:12px; font-weight: bold" value="Normalization by reference sample"/>  
-                            <p:commandLink value="Specify" onclick="PF('refSmplDialog').show()"/>
-
-                            <p:radioButton for="rowRadio" itemIndex="6"/>
-                            <p:outputLabel style="font-size:12px; font-weight: bold" value="Normalization by reference variable"/>  
-                            <p:commandLink value="Specify" onclick="PF('refVarDialog').show()"/>
 
                             <p:radioButton for="rowRadio" itemIndex="2"/>
                             <p:outputLabel style="font-size:12px; font-weight: bold" value="Normalization by sum"/>
-                            <p:spacer/>   
 
                             <p:radioButton for="rowRadio" itemIndex="3"/>
                             <p:outputLabel style="font-size:12px; font-weight: bold" value="Normalization by median"/>
-                            <p:spacer/>   
 
                             <p:radioButton for="rowRadio" itemIndex="7"/>
                             <p:outputLabel style="font-size:12px; font-weight: bold" value="Quantile normalization"/>
-                            <p:spacer/>   
 
                             <p:radioButton for="rowRadio" itemIndex="8"/>
                             <p:outputLabel style="font-size:12px; font-weight: bold" value="Box-Cox normalization"/>         
-                            <p:spacer/>   
+                        
+                            <p:radioButton for="rowRadio" itemIndex="9"/>
+                            <p:outputLabel style="font-size:12px; font-weight: bold" value="Z-Score normalization"/>  
                         </h:panelGrid>
                         <h:panelGrid style="width:100%; border-bottom: darkgray dashed thin; border-top: darkgray dashed thin" rendered="#{sessionBean1.analType eq 'roc' and sessionBean1.dataType eq 'conc'}">
                             <h:panelGroup>
@@ -96,7 +86,7 @@
                             <p:spacer/>
                             <p:radioButton for="transRadio" itemIndex="1"/>
                             <p:outputLabel style="font-size:12px; font-weight: bold" value="Log transformation"/>
-                            <h:outputLabel value="(only for positive, non-zero data)"/>
+                            <h:outputLabel value="(only for positive value data)"/>
                             <p:radioButton for="transRadio" itemIndex="2"/>
                             <p:outputLabel style="font-size:12px; font-weight: bold" value="Cube root transformation"/>
 <!--                            <h:outputLabel value="(takes the cube root of data values)"/>-->
@@ -190,7 +180,7 @@
                     Please note: the boxplots show at most 50 variables/samples due to space limitation; the density plots are based on all data 
                 </p>
                 <p:tabView id="ac" style="width:100%; border: none; background: none;">
-                    <p:tab title ="Feature View">
+                    <p:tab title ="Variable View">
                         <h:panelGrid style="text-align: center; width: 100%;">
                             <h:panelGrid style="text-align: right; padding-left: 700px; width: 760px;">
                                 <p:commandLink actionListener="#{sessionBean1.graphicsLnk_action('norm')}" 

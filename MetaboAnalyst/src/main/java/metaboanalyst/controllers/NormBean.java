@@ -132,11 +132,11 @@ public class NormBean implements Serializable {
             case "CompNorm":
                 ref = refVar;
                 break;
-            case "GroupPQN":
-                ref = refGrp;
+            case "SamplePQN":
+                ref = refSmpl;
                 break;
             default:
-                ref = refSmpl;
+                ref = refGrp;
                 break;
         }
         int res = RDataUtils.normalizeData(RC, rowNormOpt, transNormOpt, scaleNormOpt, ref, includeRatio, ratioNumOpt);
