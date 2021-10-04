@@ -118,10 +118,12 @@ public class OABean implements Serializable {
     }
     
     private void doDefaultCCA(){
-        if (!OAUtils.CreateCCA(sb, false, false, "NULL")){
-            RConnection RC = sb.getRConnection();
-            sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
-        }
+//        if (!OAUtils.CreateCCA(sb, false, false, "NULL")){
+//    }
+        OAUtils.CreateCCA(sb, false, false, "NULL");
+//            RConnection RC = sb.getRConnection();
+//            sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
+//        }
         OAUtils.PlotCCA(sb, "NULL", false, false, false, false, false, "NULL", "NULL", "NULL", sb.getCurrentImage("ord_cca_2D"), "png", 72);
         OAUtils.PlotCcaScree(sb, sb.getCurrentImage("ord_cca_scree"), "png", 72);
     }
@@ -131,8 +133,11 @@ public class OABean implements Serializable {
 //            RConnection RC = sb.getRConnection();
 //            sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
 //        }
-//        OAUtils.PlotCA2D(sb, "NULL", false, false, sb.getCurrentImage("ord_ca_2D"), "png", 72);
-//        OAUtils.PlotCAScree(sb, sb.getCurrentImage("ord_cca_scree"), "png", 72);
+        OAUtils.CreateCA(sb);
+//            RConnection RC = sb.getRConnection();
+//            sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
+        OAUtils.PlotCA2D(sb, "NULL", false, false, sb.getCurrentImage("ord_ca_2D"), "png", 72);
+        OAUtils.PlotCAScree(sb, sb.getCurrentImage("ord_cca_scree"), "png", 72);
     }
     
     private void doDefaultPCA() {
@@ -147,10 +152,11 @@ public class OABean implements Serializable {
     }
     
     private void doDefaultDCA(){
-        if (!OAUtils.CreateDCA(sb)){
-            RConnection RC = sb.getRConnection();
-            sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
-        }
+//        if (!OAUtils.CreateDCA(sb)){
+//            RConnection RC = sb.getRConnection();
+//            sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
+//        }
+        OAUtils.CreateDCA(sb);
         OAUtils.PlotDCA2D(sb, "NULL", false, false, false, false, false, "NULL", "NULL", "NULL", sb.getCurrentImage("ord_dca_2D"), "png", 72);
         OAUtils.PlotDCAScree(sb, sb.getCurrentImage("ord_dca_scree"), "png", 72);
     }

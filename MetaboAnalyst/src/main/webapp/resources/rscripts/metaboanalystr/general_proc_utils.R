@@ -13,159 +13,163 @@
 #'
 SanityCheckData <- function(mSetObj=NA){
   
+  load_dplyr()
   mSetObj <- .get.mSet(mSetObj);
   
   msg <- NULL;
   cls <- mSetObj$dataSet$orig.cls;
   mSetObj$dataSet$small.smpl.size <- 0;
+
   # check class info
   if(mSetObj$dataSet$cls.type == "disc"){
-    if(substring(mSetObj$dataSet$format,4,5)=="ts"){
-      if(mSetObj$dataSet$design.type =="time"){
-        msg<-c(msg, "The data is time-series data.");
-      }else if(mSetObj$dataSet$design.type =="time0"){
-        msg<-c(msg, "The data is time-series only data.");
-      }else{
-        msg<-c(msg, "The data is not time-series data.");
-      }
-      clsA.num <- length(levels(mSetObj$dataSet$facA));
-      clsB.num <- length(levels(mSetObj$dataSet$facB));
-      msg<-c(msg, paste(clsA.num, "groups were detected in samples for factor", mSetObj$dataSet$facA.lbl));
-      msg<-c(msg, paste(clsB.num, "groups were detected in samples for factor", mSetObj$dataSet$facB.lbl));
-    }else{
-      if(mSetObj$dataSet$paired){
-        msg<-c(msg,"Samples are paired.");
-        # need to first set up pair information if not csv file
-        if(!(mSetObj$dataSet$type=="conc" | mSetObj$dataSet$type=="specbin" | mSetObj$dataSet$type=="pktable" )){
-          pairs <- ReadPairFile();
-          # check if they are of the right length
-          if(length(pairs)!=nrow(mSetObj$dataSet$orig)){
-            AddErrMsg("Error: the total paired names are not equal to sample names.");
-            return(0);
-          }else{
-            # matching the names of the files
-            inx<-match(rownames(mSetObj$dataSet$orig), names(pairs));
-            #check if all matched exactly
-            if(sum(is.na(inx))>0){
-              AddErrMsg("Error: some paired names not match the sample names.");
-              return(0);
-            }else{
-              mSetObj$dataSet$pairs <- pairs[inx];
-            }
-          }
-        }
-        
-        pairs <- mSetObj$dataSet$pairs;
-        
-        # check if QC samples are present
-        qc.hits <- tolower(as.character(cls)) %in% "qc";
-        mSetObj$dataSet$orig <- mSetObj$dataSet$orig;
-        if(sum(qc.hits) > 0){
-          AddErrMsg("<font color='red'>Error: QC samples not supported in paired analysis mode.</font>");
-          AddErrMsg("You can perform QC filtering using regular two-group labels.");
-          AddErrMsg("Then re-upload your data (without QC samples) for paired analysis.");
-          return(0);
-        }else{
-          pairs <- as.numeric(pairs);
-        }
-        
-        label <- as.numeric(pairs);
-        cls <- as.factor(ifelse(label>0,1,0));
-        mSetObj$dataSet$pairs <- label;
-        
-        lev <- unique(pairs);
-        uni.cl <- length(lev);
-        uni.cl.abs <- uni.cl/2;             
-        sorted.pairs <- sort(pairs,index=TRUE);
-        
-        if(!all(sorted.pairs$x==c(-uni.cl.abs:-1,1:uni.cl.abs))){
-          AddErrMsg("There are some problems in paired sample labels! ");
-          if(uni.cl.abs != round(uni.cl.abs)){
-            AddErrMsg("The total samples must be of even number!");
-          }else{
-            AddErrMsg(paste("And class labels between ",-uni.cl.abs,
-                            " and 1, and between 1 and ",uni.cl.abs,".",sep=""));
-          }
-          return(0);
-        }else{  
-          msg <- c(msg,"The labels of paired samples passed sanity check.");
-          msg <- c(msg, paste("A total of", uni.cl.abs, "pairs were detected."));
-          # make sure paired samples are sorted 1:n/2 and -1:-n/2
-          
-          x<-sorted.pairs$ix[(uni.cl.abs+1):uni.cl]
-          y<-sorted.pairs$ix[uni.cl.abs:1]
-          index<-as.vector(cbind(x,y));
-          cls<-cls[index];
-          pairs <- pairs[index];
-          mSetObj$dataSet$pairs <- pairs;
-          mSetObj$dataSet$orig.cls <- cls;
-          mSetObj$dataSet$orig <- mSetObj$dataSet$orig[index,];
-        }
-      }else{
-        msg <- c(msg,"Samples are not paired.");
-      }
-      
+    if(substring(mSetObj$dataSet$format,4,5)=="ts"){ #I COMMENTED THIS SECTION OUT BC IT IS UNUSED BY WEGAN
+    #  if(mSetObj$dataSet$design.type =="time"){
+    #    msg<-c(msg, "The data is time-series data.");
+    #  }else if(mSetObj$dataSet$design.type =="time0"){
+    #    msg<-c(msg, "The data is time-series only data.");
+    #  }else{
+    #    msg<-c(msg, "The data is not time-series data.");
+    #  }
+    #  clsA.num <- length(levels(mSetObj$dataSet$facA));
+    #  clsB.num <- length(levels(mSetObj$dataSet$facB));
+    #  msg<-c(msg, paste(clsA.num, "groups were detected in samples for factor", mSetObj$dataSet$facA.lbl));
+    #  msg<-c(msg, paste(clsB.num, "groups were detected in samples for factor", mSetObj$dataSet$facB.lbl));
+    } else {
+    #  if(mSetObj$dataSet$paired){
+    #    msg<-c(msg,"Samples are paired.");
+    #    # need to first set up pair information if not csv file
+    #    if(!(mSetObj$dataSet$type=="conc" | mSetObj$dataSet$type=="specbin" | mSetObj$dataSet$type=="pktable" )){
+    #      pairs <- ReadPairFile();
+    #      # check if they are of the right length
+    #      if(length(pairs)!=nrow(mSetObj$dataSet$orig)){
+    #        AddErrMsg("Error: the total paired names are not equal to sample names.");
+    #        return(0);
+    #      }else{
+    #        # matching the names of the files
+    #        inx<-match(rownames(mSetObj$dataSet$orig), names(pairs));
+    #        #check if all matched exactly
+    #        if(sum(is.na(inx))>0){
+    #          AddErrMsg("Error: some paired names not match the sample names.");
+    #          return(0);
+    #        }else{
+    #          mSetObj$dataSet$pairs <- pairs[inx];
+    #        }
+    #      }
+    #    }
+    #    
+    #    pairs <- mSetObj$dataSet$pairs;
+    #    
+    #    # check if QC samples are present
+    #    qc.hits <- tolower(as.character(cls)) %in% "qc";
+    #    mSetObj$dataSet$orig <- mSetObj$dataSet$orig;
+    #    if(sum(qc.hits) > 0){
+    #      AddErrMsg("<font color='red'>Error: QC samples not supported in paired analysis mode.</font>");
+    #      AddErrMsg("You can perform QC filtering using regular two-group labels.");
+    #      AddErrMsg("Then re-upload your data (without QC samples) for paired analysis.");
+    #      return(0);
+    #    }else{
+    #      pairs <- as.numeric(pairs);
+    #    }
+    #    
+    #    label <- as.numeric(pairs);
+    #    cls <- as.factor(ifelse(label>0,1,0));
+    #    mSetObj$dataSet$pairs <- label;
+    #    
+    #    lev <- unique(pairs);
+    #    uni.cl <- length(lev);
+    #    uni.cl.abs <- uni.cl/2;             
+    #    sorted.pairs <- sort(pairs,index=TRUE);
+    #    
+    #    if(!all(sorted.pairs$x==c(-uni.cl.abs:-1,1:uni.cl.abs))){
+    #      AddErrMsg("There are some problems in paired sample labels! ");
+    #      if(uni.cl.abs != round(uni.cl.abs)){
+    #        AddErrMsg("The total samples must be of even number!");
+    #      }else{
+    #        AddErrMsg(paste("And class labels between ",-uni.cl.abs,
+    #                        " and 1, and between 1 and ",uni.cl.abs,".",sep=""));
+    #      }
+    #      return(0);
+    #    }else{  
+    #      msg <- c(msg,"The labels of paired samples passed sanity check.");
+    #      msg <- c(msg, paste("A total of", uni.cl.abs, "pairs were detected."));
+    #      # make sure paired samples are sorted 1:n/2 and -1:-n/2
+    #      
+    #      x<-sorted.pairs$ix[(uni.cl.abs+1):uni.cl]
+    #      y<-sorted.pairs$ix[uni.cl.abs:1]
+    #      index<-as.vector(cbind(x,y));
+    #      cls<-cls[index];
+    #      pairs <- pairs[index];
+    #      mSetObj$dataSet$pairs <- pairs;
+    #      mSetObj$dataSet$orig.cls <- cls;
+    #      mSetObj$dataSet$orig <- mSetObj$dataSet$orig[index,];
+    #    }
+    #  }else{
+    #    msg <- c(msg,"Samples are not paired."); #I COMMENTED THIS OUT
+    #  }
+            
       # checking if too many groups but a few samples in each group
       cls.lbl <- mSetObj$dataSet$orig.cls;
-      min.grp.size <- min(table(cls.lbl));
-      
       cls.num <- length(levels(cls.lbl));
-      if(cls.num/min.grp.size > 3){
-        mSetObj$dataSet$small.smpl.size <- 1;
-        msg <- c(msg, "<font color='red'>Too many groups with very small number of replicates!</font>");
-        msg <- c(msg, "<font color='red'>Only a subset of methods will be available for analysis!</font>");
-      }
-      
-      msg <- c(msg, paste(cls.num, "groups were detected in samples."));
       mSetObj$dataSet$cls.num <- cls.num;
+      min.grp.size <- min(table(cls.lbl));
       mSetObj$dataSet$min.grp.size <- min.grp.size;
+      
+
+      #I COMMENTED THIS OUT SINCE DATASETS MAY NOT HAVE GROUPS
+      #if(cls.num/min.grp.size > 3){
+      #  mSetObj$dataSet$small.smpl.size <- 1;
+      #  msg <- c(msg, "<font color='red'>Too many groups with very small number of replicates! Only a subset of methods will be available for analysis!</font>");
+      #}
+      #msg <- c(msg, paste(cls.num, "groups were detected in samples.")); 
     }
     
+    #I REMOVED THIS BC WE DO NOT WANT AUTO SORTING
     #samples may not be sorted properly, need to do some sorting at the beginning 
-    if(substring(mSetObj$dataSet$format,4,5)=="ts"){
-      nfacA <- mSetObj$dataSet$facA;
-      nfacB <- mSetObj$dataSet$facB;
-      if(mSetObj$dataSet$design.type =="time" | mSetObj$dataSet$design.type =="time0"){
-        # determine time factor and should order first by subject then by each time points
-        if(tolower(mSetObj$dataSet$facA.lbl) == "time"){ 
-          time.fac <- nfacA;
-          exp.fac <- nfacB;
-        }else{
-          time.fac <- nfacB;
-          exp.fac <- nfacA;
-        }
-        # update with new index
-        ord.inx <- order(exp.fac);
-      }else{
-        ord.inx <- order(nfacA);
-      }
-      mSetObj$dataSet$orig.cls <- mSetObj$dataSet$orig.cls[ord.inx];
-      mSetObj$dataSet$orig <- mSetObj$dataSet$orig[ord.inx, ];
-      mSetObj$dataSet$facA <- mSetObj$dataSet$orig.facA <- mSetObj$dataSet$facA[ord.inx];
-      mSetObj$dataSet$facB <- mSetObj$dataSet$orig.facB <- mSetObj$dataSet$facB[ord.inx];
-    }else{
-      ord.inx <- order(mSetObj$dataSet$orig.cls);
-      mSetObj$dataSet$orig.cls <- cls[ord.inx];
-      mSetObj$dataSet$orig <- mSetObj$dataSet$orig[ord.inx, ];
-      if(mSetObj$dataSet$paired){
-        mSetObj$dataSet$pairs <- mSetObj$dataSet$pairs[ord.inx];
-      }
-    }
+    #if(substring(mSetObj$dataSet$format,4,5)=="ts"){
+    #  nfacA <- mSetObj$dataSet$facA;
+    #  nfacB <- mSetObj$dataSet$facB;
+    #  if(mSetObj$dataSet$design.type =="time" | mSetObj$dataSet$design.type =="time0"){
+    #    # determine time factor and should order first by subject then by each time points
+    #    if(tolower(mSetObj$dataSet$facA.lbl) == "time"){ 
+    #      time.fac <- nfacA;
+    #      exp.fac <- nfacB;
+    #   }else{
+    #     time.fac <- nfacB;
+    #     exp.fac <- nfacA;
+    #   }
+    #   # update with new index
+    #   ord.inx <- order(exp.fac);
+    # }else{
+    #    ord.inx <- order(nfacA);
+    #  }
+    #  mSetObj$dataSet$orig.cls <- mSetObj$dataSet$orig.cls[ord.inx];
+    #  mSetObj$dataSet$orig <- mSetObj$dataSet$orig[ord.inx, ];
+    #  mSetObj$dataSet$facA <- mSetObj$dataSet$orig.facA <- mSetObj$dataSet$facA[ord.inx];
+    #  mSetObj$dataSet$facB <- mSetObj$dataSet$orig.facB <- mSetObj$dataSet$facB[ord.inx];
+    #}else{
+    #  ord.inx <- order(mSetObj$dataSet$orig.cls);
+    #  mSetObj$dataSet$orig.cls <- cls[ord.inx];
+    #  mSetObj$dataSet$orig <- mSetObj$dataSet$orig[ord.inx, ];
+    #  if(mSetObj$dataSet$paired){
+    #    mSetObj$dataSet$pairs <- mSetObj$dataSet$pairs[ord.inx];
+    #  }
+    #}
   }
-  msg<-c(msg,"Only English letters, numbers, underscore, hyphen and forward slash (/) are allowed.");
-  msg<-c(msg,"<font color=\"orange\">Other special characters or punctuations (if any) will be stripped off.</font>");
+
+  #I REMOVED THIS AND MOVED TO UPPER PANEL IN VIEW
+  #msg<-c(msg,"Only English letters, numbers, underscore, hyphen and forward slash (/) are allowed.");
+  #msg<-c(msg,"Other special characters or punctuations (if any) will be stripped off.");
   
   int.mat <- mSetObj$dataSet$orig;
-  mSetObj$dataSet$test_cat <- mSetObj$dataSet$orig;
-  
-  # check numerical matrix
-  rowNms <- rownames(int.mat);
-  colNms <- colnames(int.mat);
-  naNms <- sum(is.na(int.mat));
-  
-  num.mat <- apply(int.mat, 2, as.numeric)
-  
-  # TODO: REMOVED THIS TO SEE IF WE CAN KEEP CATEGORICAL DATA
+
+  #I COMMENTED THIS OUT BC ITS UNUSED
+  # check matrix
+  #rowNms <- rownames(int.mat);
+  #colNms <- colnames(int.mat);
+  #naNms <- sum(is.na(int.mat));
+    
+  # DANA REMOVED THIS TO KEEP CATEGORICAL DATA
+  #num.mat <- apply(int.mat, 2, as.numeric)
   #if(sum(is.na(num.mat)) > naNms){
     # try to remove "," in thousand seperator if it is the cause
   #  num.mat <- apply(int.mat,2,function(x) as.numeric(gsub(",", "", x)));
@@ -177,38 +181,50 @@ SanityCheckData <- function(mSetObj=NA){
   #}else{
   #  msg<-c(msg,"All data values are numeric.");
   #}
+  #
+  #int.mat <- num.mat;
+  #rownames(int.mat) <- rowNms;
+  #colnames(int.mat)<- colNms;
+  #
+  ## check for columns with all constant (var =0)
+  #varCol <- apply(int.mat, 2, var, na.rm=T);
+  #
+  #constCol <- (varCol == 0 | is.na(varCol));
+  #constNum <- sum(constCol, na.rm=T);
+  #if(constNum > 0){
+  #  msg<-c(msg, paste("<font color=\"red\">", constNum, "variable(s) with a constant or single value across samples were found and deleted.</font>"));
+  #  int.mat <- int.mat[,!constCol];
+  #}
   
-  int.mat <- num.mat;
-  rownames(int.mat) <- rowNms;
-  colnames(int.mat)<- colNms;
-  
-  # check for columns with all constant (var =0)
-  varCol <- apply(int.mat, 2, var, na.rm=T);
-  
-  constCol <- (varCol == 0 | is.na(varCol));
-  constNum <- sum(constCol, na.rm=T);
-  if(constNum > 0){
-    msg<-c(msg, paste("<font color=\"red\">", constNum, "features with a constant or single value across samples were found and deleted.</font>"));
-    int.mat <- int.mat[,!constCol];
-  }
-  
-  # check zero, NA values
+  #I ADDED THIS
+  # check numeric and categorical variables
+  numCount <- length(select_if(int.mat, is.numeric))
+  catCount <- length(select_if(int.mat, is.character))
+  msg<-c(msg, paste0("A total of ", numCount, " numeric and ", catCount, " categorical variables were detected."));
+
+  #Check for 0s and neg numbers
+  zeroCount <- sum(int.mat==0);
+  negCount <- sum(int.mat<0);
+  msg<-c(msg, paste0("A total of ", zeroCount, " zero values and ", negCount, " negative values were detected. Zero and negative values will impact which transformations are available."));
+
+
+  # check NA values
   totalCount <- nrow(int.mat)*ncol(int.mat);
   naCount <- sum(is.na(int.mat));
   naPercent <- round(100*naCount/totalCount,1)
   
-  msg<-c(msg, paste("A total of ", naCount, " (", naPercent, "%) missing values were detected.", sep=""));
-  msg<-c(msg, "<u>By default, these values will be replaced by a small value.</u>",
+  msg<-c(msg, paste0("<font color=\"red\">", "A total of ", naCount, " (", naPercent, "%) missing values were detected.</font>"));
+
+  msg<-c(msg, "<u>By default, missing values will be left as is, though certain functionalities may be unavailable.</u>",
          "Click <b>Skip</b> button if you accept the default practice",
-         "Or click <b>Missing value imputation</b> to use other methods");
+         "Or click <b>Missing value estimation</b> to estimate values and filter data");
   
-  # obtain original half of minimal positive value (threshold)
-  minConc<-min(int.mat[int.mat>0], na.rm=T)/2;
-
-
+  # obtain original half of minimal positive value (threshold) for numeric columns
+  numVars <- select_if(int.mat, is.numeric) #I ADDED THIS FOR WEGAN WHICH ALLOWS CATEGORICAL VARS
+  minConc<-min(numVars[numVars>0], na.rm=T)/2;
   mSetObj$dataSet$minConc <- minConc;
-  mSetObj$dataSet$preproc <- as.data.frame(int.mat);
 
+  mSetObj$dataSet$preproc <- as.data.frame(int.mat);
   mSetObj$dataSet$proc.cls <- mSetObj$dataSet$cls <- mSetObj$dataSet$orig.cls;
   
   if(substring(mSetObj$dataSet$format,4,5)=="ts"){
@@ -227,6 +243,7 @@ SanityCheckData <- function(mSetObj=NA){
   return(.set.mSet(mSetObj));
 }
 
+
 #'Replace missing or zero values
 #'@description This function will replace zero/missing values by half of the smallest
 #'positive value in the original dataset.  
@@ -241,42 +258,44 @@ SanityCheckData <- function(mSetObj=NA){
 #'@export
 #'
 ReplaceMin <- function(mSetObj=NA){
-  
+#THIS ACTION WAS DESIGNED TO OCCUR AUTOMATICALLY. IT WAS REMOVED FOR WEGAN.
   mSetObj <- .get.mSet(mSetObj);
-  
-  if(!is.null(mSetObj$dataSet$norm)){
-    int.mat <- mSetObj$dataSet$norm
-    minConc <- min(int.mat[int.mat>0], na.rm=T)/2;
-    
-    # replace zero and missing values
-    # we leave nagative values unchanged! ? not sure if this is the best way
-    #int.mat[int.mat==0 | is.na(int.mat)] <- minConc; # I COMMENTED OUT THIS LINE
-    
-    # note, this is last step of processing, replace norm and save to procr
-    mSetObj$dataSet$procr <- as.data.frame(int.mat);
-    mSetObj$dataSet$norm <- as.data.frame(int.mat);
-    mSetObj$msgSet$replace.msg <- paste("Zero or missing variables were replaced with a small value:", minConc);
-    rm(int.mat);
-    invisible(gc()); # suppress gc output
-    return(.set.mSet(mSetObj));
-  }else{
-    int.mat <- as.matrix(mSetObj$dataSet$preproc)
-    minConc <- mSetObj$dataSet$minConc;
-    
-    # replace zero and missing values
-    # we leave nagative values unchanged! ? not sure if this is the best way
-    #int.mat[int.mat==0 | is.na(int.mat)] <- minConc; # I COMMENTED OUT THIS LINE
-    
-    # note, this is last step of processing, also save to proc
-    mSetObj$dataSet$procr <- as.data.frame(int.mat);
-    mSetObj$msgSet$replace.msg <- paste("Zero or missing variables were replaced with a small value:", minConc);
-    rm(int.mat);
-    invisible(gc()); # suppress gc output
+
+  #if(!is.null(mSetObj$dataSet$norm)){
+  #  int.mat <- mSetObj$dataSet$norm
+  #  minConc <- min(int.mat[int.mat>0], na.rm=T)/2;
+  #  
+  #  # replace zero and missing values
+  #  # we leave nagative values unchanged! ? not sure if this is the best way
+  #  #int.mat[int.mat==0 | is.na(int.mat)] <- minConc; # I COMMENTED OUT THIS LINE
+  #  
+  #  # note, this is last step of processing, replace norm and save to procr
+  #  mSetObj$dataSet$procr <- as.data.frame(int.mat);
+  #  mSetObj$dataSet$norm <- as.data.frame(int.mat);
+  #  mSetObj$msgSet$replace.msg <- paste("Zero or missing variables were replaced with a small value:", minConc);
+  #  rm(int.mat);
+  #  invisible(gc()); # suppress gc output
+  #  return(.set.mSet(mSetObj));
+  #}else{
+  #  int.mat <- as.matrix(mSetObj$dataSet$preproc)
+  #  minConc <- mSetObj$dataSet$minConc;
+  #  
+  #  # replace zero and missing values
+  #  # we leave nagative values unchanged! ? not sure if this is the best way
+  #  #int.mat[int.mat==0 | is.na(int.mat)] <- minConc; # I COMMENTED OUT THIS LINE
+  #  
+  #  # note, this is last step of processing, also save to proc
+  #  mSetObj$dataSet$procr <- as.data.frame(int.mat);
+  #  mSetObj$msgSet$replace.msg <- paste("Variables of all zeros were replaced with a small value:", minConc);
+  #  rm(int.mat);
+  #  invisible(gc()); # suppress gc output
 
     return(.set.mSet(mSetObj));
-  }
+#  }
 }
 
+
+#TODO: UPDATE FROM HERE TO LINE 583!!!!!!!!!!!!!!
 #'Data processing: remove variables with missing values
 #'@description Remove variables containing a user-defined percentage cut-off of missing values.
 #'@usage RemoveMissingPercent(mSetObj, percent)
@@ -494,7 +513,7 @@ FilterVariable <- function(mSetObj=NA, filter, qcFilter, rsd){
       rsd.vals <- abs(sds/mns);  
       gd.inx <- rsd.vals < rsd;
       int.mat <- int.mat[,gd.inx];
-      msg <- paste("Removed ", sum(!gd.inx), " features based on QC RSD values. QC samples are still kept. You can remove them later.");
+      msg <- paste("Removed ", sum(!gd.inx), " variables based on QC RSD values. QC samples are still kept. You can remove them later.");
     }else if(sum(qc.hits) > 0){
       AddErrMsg("RSD requires at least 3 QC samples, and only non-QC based filtering can be applied.");
       return(0);
@@ -556,7 +575,7 @@ FilterVariable <- function(mSetObj=NA, filter, qcFilter, rsd){
       msg <- paste(msg, "Further feature filtering based on", nm);
       if(sum(remain) > 8000){
         remain <-rk < 8000;
-        msg <- paste(msg, "Reduced to 8000 features based on", nm);
+        msg <- paste(msg, "Reduced to 8000 variables based on", nm);
       }
     }
   }
