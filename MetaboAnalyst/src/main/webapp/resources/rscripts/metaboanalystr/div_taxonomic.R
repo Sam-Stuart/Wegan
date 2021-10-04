@@ -105,10 +105,11 @@ Taxonomic_div <- function(mSetObj = NA, data = "false", dis = "NULL", match.forc
   taxon <- taxondive(input.2, dis1, match.force = match.force1)
   summary.taxon <- summary(taxon)
   
-  tr <- hclust(taxdis, method = aggme1)
+  tr <- hclust(taxdis, method = "average")
   dtree <- treedist(input.2, tr)
   mod <- treedive(input.2, tr)
   plottree <- hclust(vegdist(input.2), method = aggme1)
+  print(plottree)
   taxontree <- hclust(taxdis)
   print("plottree")  
 
