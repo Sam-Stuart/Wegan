@@ -255,8 +255,8 @@ functionalDiv <- function(mSetObj = NA, data = "false", w_text = "", corr = "NUL
 #'@export
 FD_cluster_plot <- function(mSetObj=NA, color="NULL", imgName, format="png", dpi=72, width=NA) {
   
-  library(vegan)
-  library(FD)  
+  #library(vegan)
+  #library(FD)  
   #library(ggplot2)
   #library(ggdendro) not availble for this version of R
   #library(Cairo)

@@ -179,7 +179,7 @@ taxa_tree <- function(mSetObj = NA, color = "NULL", imgName, format = "png", dpi
   
   options(errors = traceback)
 
-  library(vegan)
+  #library(vegan)
   #library(ggplot2)
   #library(ggdendro) not availble for this version of R
   #library(Cairo)
@@ -245,7 +245,7 @@ taxa_tree <- function(mSetObj = NA, color = "NULL", imgName, format = "png", dpi
 #'@export
 
 taxon_scatter <- function(mSetObj=NA, colorc="NULL", imgName, format="png", dpi=72, width=NA) {
-  library(vegan)
+  #library(vegan)
   #library(ggplot2)
   #library(ggdendro) not availble for this version of R
   #library(Cairo)
@@ -316,7 +316,7 @@ taxon_scatter <- function(mSetObj=NA, colorc="NULL", imgName, format="png", dpi=
 #'@export
 
 taxon_heatmap <- function(mSetObj=NA, colord="NULL", imgName, format="png", dpi=72, width=NA) {
-  library(vegan)
+  #library(vegan)
   #library(ggplot2)
   #library(ggdendro) not availble for this version of R
   #library(Cairo)

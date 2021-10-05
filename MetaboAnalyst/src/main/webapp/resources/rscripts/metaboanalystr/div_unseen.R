@@ -171,9 +171,9 @@ sp_pool <- function(mSetObj = NA, data = "false", pool = "", smallsample = "fals
 
 pool_boxplot <- function(mSetObj=NA, plot_data = "NULL", box.color = "NULL", xlab = "", ylab = "",
                       border.col = "NULL", imgName, format="png", dpi=72, width=NA) {
-  library(plyr)
-  library(vegan)
-  library(dplyr)
+  #library(plyr)
+  #library(vegan)
+  #library(dplyr)
   
   mSetObj <- .get.mSet(mSetObj)
   
@@ -289,10 +289,10 @@ pool_boxplot <- function(mSetObj=NA, plot_data = "NULL", box.color = "NULL", xla
 
 rich_est_curve <- function(mSetObj=NA, color="NULL", imgName, format="png", dpi=72, width=NA) {
 
-  library(plyr)
-  library(vegan)
-  library(dplyr)
-  library(lattice)
+  #library(plyr)
+  #library(vegan)
+  #library(dplyr)
+  #library(lattice)
   #install.packages("tidyverse")
   #library(tidyverse)
   library(ggplot2)

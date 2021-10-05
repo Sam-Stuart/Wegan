@@ -113,6 +113,13 @@
                                 </i>
                             </h:panelGrid> 
                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <p:commandButton value="Export"
+                                    styleClass="exportButton"
+                                    style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                    actionListener="#{sessionBean1.graphicsLnk_action('Alpha_Plot')}"
+                                    oncomplete="PF('graphDialog').show()"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
                                 <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('Alpha_Plot')}" alt="TestPlot"/>
                             </h:panelGrid>                            
                         </h:panelGrid> 
@@ -217,7 +224,14 @@
                                 <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
                                     <h:outputText escape="false" value="#{indicesBean.filegammaresultpath}"/>
                                 </i>
-                            </h:panelGrid>  
+                            </h:panelGrid>
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <p:commandButton value="Export"
+                                    styleClass="exportButton"
+                                    style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                    actionListener="#{sessionBean1.graphicsLnk_action('Beta_Plot')}"
+                                    oncomplete="PF('graphDialog').show()"/>
+                            </h:panelGrid>
                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
                                 <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('Beta_Plot')}" alt="TestPlot"/>
                             </h:panelGrid>                            

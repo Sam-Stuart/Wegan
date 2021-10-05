@@ -16,7 +16,7 @@ AbundanceModel <- function(mSetObj = NA, data = "false", community = "", tiespli
   #library("ade4")
   #library("adegraphics")
   #library("plyr")
-  library("dplyr")
+  #library("dplyr")
   library("vegan")
 
 
@@ -30,7 +30,7 @@ AbundanceModel <- function(mSetObj = NA, data = "false", community = "", tiespli
   }
 
   input.2 <- select_if(input, is.numeric)
-  #print(input.2)  
+  print(input.2)  
 
   if (tiesplit == "false") {
     tiesplit1 = FALSE
@@ -308,7 +308,7 @@ AbundanceModel <- function(mSetObj = NA, data = "false", community = "", tiespli
 AbundanceFisherPlot <- function(mSetObj = NA, bar.color = "NULL", line.color.addFit = "NULL", 
                            imgName, format="png", dpi=72, width=NA) {
   
-  library(vegan)
+  #library(vegan)
   
   mSetObj <- .get.mSet(mSetObj)
   
@@ -392,9 +392,9 @@ AbundanceFisherPlot <- function(mSetObj = NA, bar.color = "NULL", line.color.add
 #'@export
 AbundancePrestPlot <- function(mSetObj=NA, bar.color="NULL", line.color.addPoi = "NULL", line.color.addMax = "NULL", imgName, format="png", dpi=72, width=NA) {
 
-  library(plyr)
-  library(dplyr)
-  library(vegan)
+  #library(plyr)
+  #library(dplyr)
+  #library(vegan)
   
   mSetObj <- .get.mSet(mSetObj)
   
@@ -466,6 +466,7 @@ AbundancePrestPlot <- function(mSetObj=NA, bar.color="NULL", line.color.addPoi =
   print(line.color.addMax1)
 
   a <- as.data.frame(mSetObj$analset$result$log_likelihood$frequencies)
+  print(a)
   m <- round(max(a$Fitted) + 10, digits = -1)
   n <- length(a$Observed)
   b <- a%>%
@@ -512,9 +513,9 @@ AbundancePrestPlot <- function(mSetObj=NA, bar.color="NULL", line.color.addPoi =
 #'@export
 AbundanceRankPlot <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA) {
   
-  library(plyr)
-  library(vegan)
-  library(dplyr)
+  #library(plyr)
+  #library(vegan)
+  #library(dplyr)
   library(ggplot2)
   print("ggplot2")
   

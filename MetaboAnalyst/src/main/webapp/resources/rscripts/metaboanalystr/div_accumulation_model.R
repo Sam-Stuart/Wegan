@@ -220,9 +220,9 @@ AccumulationModel <- function(mSetObj = NA, data = "false", permutations = "", c
 AccumCurve <- function(mSetObj=NA, type = "NULL", color = "NULL", ci.color="NULL", ci.type="NULL", box.color = "NULL", 
                            line.color = "NULL", pred.color = "NULL", pch = "", imgName, format="png", dpi=72, width=NA) {
   
-  library(vegan)
-  library(plyr)  
-  library(dplyr)
+  #library(vegan)
+  #library(plyr)  
+  #library(dplyr)
   
   mSetObj <- .get.mSet(mSetObj)
   

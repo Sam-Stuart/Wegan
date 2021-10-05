@@ -106,7 +106,14 @@
                                 <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 4.5px">                             
                                     <h:outputText escape="false" value="#{unseendivBean.fileunquaresultpath}"/>
                                 </i>
-                            </h:panelGrid>                                                
+                            </h:panelGrid> 
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <p:commandButton value="Export"
+                                    styleClass="exportButton"
+                                    style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                    actionListener="#{sessionBean1.graphicsLnk_action('boxplot_richness')}"
+                                    oncomplete="PF('graphDialog').show()"/>
+                            </h:panelGrid> 
                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
                                 <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('boxplot_richness')}" alt="TestPlot"/>
                             </h:panelGrid>                            
@@ -207,6 +214,13 @@
                                 <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 4.5px">                             
                                     <h:outputText escape="false" value="#{unseendivBean.fileunquaresultpath}"/>
                                 </i>
+                            </h:panelGrid> 
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <p:commandButton value="Export"
+                                    styleClass="exportButton"
+                                    style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                    actionListener="#{sessionBean1.graphicsLnk_action('plot_matrices')}"
+                                    oncomplete="PF('graphDialog').show()"/>
                             </h:panelGrid> 
                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
                                 <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('plot_matrices')}" alt="TestPlot"/>

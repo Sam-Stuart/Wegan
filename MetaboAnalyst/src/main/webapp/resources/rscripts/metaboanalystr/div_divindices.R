@@ -223,9 +223,9 @@ div_index <- function(mSetObj = NA, data = "false", group = "", margin = "NULL")
 AlphaPlot <- function(mSetObj=NA, color="NULL", imgName, format="png", dpi=72, width=NA) { 
   
   #library("ggplot2") 
-  library(plyr)
-  library("dplyr")
-  library(vegan)
+  #library(plyr)
+  #library("dplyr")
+  #library(vegan)
     
   print("start alpha plot")
   mSetObj <- .get.mSet(mSetObj)
@@ -309,9 +309,9 @@ AlphaPlot <- function(mSetObj=NA, color="NULL", imgName, format="png", dpi=72, w
 
 BetaPlot <- function(mSetObj=NA, colorb="NULL", imgName, format="png", dpi=72, width=NA) { 
   
-  library(plyr)
-  library("dplyr")
-  library(vegan)
+  #library(plyr)
+  #library("dplyr")
+  #library(vegan)
   
   mSetObj <- .get.mSet(mSetObj)
   

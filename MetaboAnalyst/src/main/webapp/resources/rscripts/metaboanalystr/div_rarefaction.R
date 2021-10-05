@@ -160,7 +160,7 @@ Rarefaction_div <- function(mSetObj = NA, data = "false", type = "NULL", sample 
 
 RarefactionCurve <- function(mSetObj=NA, step = "", color="NULL", imgName, format="png", dpi=72, width=NA) {
   
-  library(vegan)
+  #library(vegan)
   
   mSetObj <- .get.mSet(mSetObj)
   
@@ -250,7 +250,7 @@ RarefactionCurve <- function(mSetObj=NA, step = "", color="NULL", imgName, forma
 
 RarefactionPlot <- function(mSetObj = NA, colorb = "NULL", imgName, format = "png", dpi = 72, width = NA) {
   
-  library(vegan)
+  #library(vegan)
   
   cat("Linear plot only works for univariate analysis")
   mSetObj <- .get.mSet(mSetObj)

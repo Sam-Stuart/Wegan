@@ -64,10 +64,16 @@
                                     <h:outputText escape="false" value="#{abunddistBean.filefisheroutputresultpath}"/>
                                 </i>
                             </h:panelGrid>
-                                                                               
-                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <p:commandButton value="Export"
+                                    styleClass="exportButton"
+                                    style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                    actionListener="#{sessionBean1.graphicsLnk_action('Abundance_Fisher_Dist_Plot')}"
+                                    oncomplete="PF('graphDialog').show()"/>
+                            </h:panelGrid>                                                   
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
                                 <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('Abundance_Fisher_Dist_Plot')}" alt="TestPlot"/>
-                             </h:panelGrid>                            
+                            </h:panelGrid>                            
                         </h:panelGrid> 
                     </h:form>
                 </p:tab>              
@@ -141,10 +147,16 @@
                                     <h:outputText escape="false" value="#{abunddistBean.filemaxextraresultpath}"/>
                                 </i>
                             </h:panelGrid>
-                                                    
-                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <p:commandButton value="Export"
+                                    styleClass="exportButton"
+                                    style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                    actionListener="#{sessionBean1.graphicsLnk_action('Abundance_Prest_Dist_Plot')}"
+                                    oncomplete="PF('graphDialog').show()"/>
+                            </h:panelGrid>                           
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
                                 <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('Abundance_Prest_Dist_Plot')}" alt="TestPlot"/>
-                             </h:panelGrid>                            
+                            </h:panelGrid>                            
                         </h:panelGrid> 
                     </h:form>
                 </p:tab>
@@ -215,10 +227,16 @@
                                     <h:outputText escape="false" value="#{abunddistBean.filemanresultpath}"/>
                                 </i>
                             </h:panelGrid>
-                                                                                
-                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <p:commandButton value="Export"
+                                    styleClass="exportButton"
+                                    style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                    actionListener="#{sessionBean1.graphicsLnk_action('Abundance_Rank_Dist_Plot')}"
+                                    oncomplete="PF('graphDialog').show()"/>
+                            </h:panelGrid>                                                     
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
                                 <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('Abundance_Rank_Dist_Plot')}" alt="TestPlot"/>
-                             </h:panelGrid>                            
+                            </h:panelGrid>                            
                         </h:panelGrid> 
                     </h:form>
                 </p:tab>
