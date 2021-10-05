@@ -31,11 +31,11 @@ Rarefaction_div <- function(mSetObj = NA, data = "false", type = "NULL", sample 
   #Extract input from mSetObj
   mSetObj <- .get.mSet(mSetObj)
 
-  #metaData <- mSetObj$dataSet$origMeta
+  metaData <- mSetObj$dataSet$origMeta
   #envData <- mSetObj$dataSet$origEnv
  
   print("BEFORE DATA TESTS")
-  #print(metaData)
+  print(metaData)
   #print(envData)
 
   if (data == "false") { #normalized data as input

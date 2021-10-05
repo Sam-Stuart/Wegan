@@ -87,8 +87,8 @@
                             <p:commandButton value="Customize Graph"
                                              styleClass="graphicsButton"
                                              style="box-shadow: none !important; text-shadow: none !important;"
-                                             actionListener="#{sessionBean1.graphicsLnk_action('pca_pair')}" 
-                                            oncomplete="PF('graphApperanceNMDS').show()"/>  
+                                             actionListener="#{sessionBean1.graphicsLnk_action('ord_nmds_2D')}" 
+                                            oncomplete="PF('graphApperanceNMDS1').show()"/>  
                 
                            
                             <p:commandButton value="Update" 
@@ -97,7 +97,7 @@
                                             onclick="PF('statusDialog').show()"
                                             oncomplete="PF('statusDialog').hide()"  
                                             update=":NMDS:form1:nmdsPane1  :cmdPane" 
-                                            actionListener="#{ordNMDSBean.nmdsUpdate_action()}"/>                          
+                                            actionListener="#{ordNMDSBean.nmdsUpdate_action1()}"/>                          
                         </h:panelGrid>
                         
                         <h:panelGrid class="resultsBar" columns="2">
@@ -175,7 +175,7 @@
                                             onclick="PF('statusDialog').show()"
                                             oncomplete="PF('statusDialog').hide()"  
                                             update=":NMDS:form2:nmdsPane2  :cmdPane" 
-                                            actionListener="#{ordNMDSBean.nmdsUpdate_action()}"/>                           
+                                            actionListener="#{ordNMDSBean.nmdsUpdate_action2()}"/>                           
                         </h:panelGrid>
                         <h:panelGrid class="resultsBar" columns="2">
                             <h:panelGroup>
@@ -248,7 +248,7 @@
                                             onclick="PF('statusDialog').show()"
                                             oncomplete="PF('statusDialog').hide()"                                            
                                             update=":NMDS:form3:nmdsPane3  :cmdPane" 
-                                            actionListener="#{ordNMDSBean.nmdsUpdate_action()}"/>                          
+                                            actionListener="#{ordNMDSBean.nmdsUpdate_action3()}"/>                          
                         </h:panelGrid>
                         <h:panelGrid class="resultsBar" columns="2">
                             <h:panelGroup>
@@ -318,7 +318,7 @@
                                             onclick="PF('statusDialog').show()"
                                             oncomplete="PF('statusDialog').hide()"  
                                             update=":NMDS:form4:nmdsPane4  :cmdPane" 
-                                            actionListener="#{ordNMDSBean.nmdsUpdate_action()}"/>                          
+                                            actionListener="#{ordNMDSBean.nmdsUpdate_action4()}"/>                          
                         </h:panelGrid>
                         <h:panelGrid class="resultsBar" columns="2">
                             <h:panelGroup>
@@ -352,11 +352,11 @@
                 
             </p:tabView>
         </h:panelGrid>
-        <p:dialog modal="true" widgetVar="graphApperanceNMDS" 
+        <p:dialog modal="true" widgetVar="graphApperanceNMDS1" 
             style="width: 400px; height:400px;" 
             appendTo="@(body)" header="Graphics Center"
             draggable="false" closable="true" resizable="false"> 
-            <ui:include src="_color_palette_nmds.xhtml" />
+            <ui:include src="_color_palette_nmds1.xhtml" />
         </p:dialog>
         <script type="text/javascript">
             showNMDS3DScore();

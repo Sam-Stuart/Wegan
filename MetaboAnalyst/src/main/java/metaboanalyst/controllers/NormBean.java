@@ -114,7 +114,7 @@ public class NormBean implements Serializable {
             return;
         }
         if (rowNormOpt.equals("CompNorm") && refVar == null) {
-            sb.updateMsg("Error", "You need to manually specify a reference feature for normalization");
+            sb.updateMsg("Error", "You need to manually specify a reference variable for normalization");
             return;
         }
         if (rowNormOpt.equals("GroupPQN") && refGrp == null) {
@@ -132,11 +132,11 @@ public class NormBean implements Serializable {
             case "CompNorm":
                 ref = refVar;
                 break;
-            case "GroupPQN":
-                ref = refGrp;
+            case "SamplePQN":
+                ref = refSmpl;
                 break;
             default:
-                ref = refSmpl;
+                ref = refGrp;
                 break;
         }
         int res = RDataUtils.normalizeData(RC, rowNormOpt, transNormOpt, scaleNormOpt, ref, includeRatio, ratioNumOpt);
@@ -241,4 +241,17 @@ public class NormBean implements Serializable {
         }
     }
 
+    
+    public void performAutoNormalization() {
+        RConnection RC = sb.getRConnection();
+        int res = RDataUtils.autoNormalize(RC);
+        String msg = RDataUtils.getCurrentMsg(RC);
+        if (res == 0) {
+            sb.updateMsg("Error", "Unknown error happened during data normalization process!");
+        } else {
+            sb.updateMsg("OK", "You can click <b>View Result</b> button to view the effect, or <b>Proceed</b> button to analysis page!");
+            normPerformed = true;
+        }            
+    }
+    
 }

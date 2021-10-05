@@ -192,6 +192,17 @@ public class EnrichUploadBean implements Serializable {
         this.qeaTestDataOpt = qeaTestDataOpt;
     }
 
+        
+    private String dataNames = "colOnly";
+
+    public String getDataNames() {
+        return dataNames;
+    }
+
+    public void setDataNames(String dataNames) {
+        this.dataNames = dataNames;
+    }
+    
     public String handleQeaDataUpload() {
         try {
             if (!sb.doLogin("conc", "msetqea", qeaClsOpt.equals("cont"), false)) {
@@ -226,12 +237,12 @@ public class EnrichUploadBean implements Serializable {
         }
         sb.setDataUploaded(true);
         RDataUtils.setCachexiaTestSet(sb.getRConnection(), "TRUE");
-        return processMsetQeaData(fileName, clsType, "rowu", lblType);        
+        return processMsetQeaData(fileName, clsType, "colu", lblType);        
     }
 
     private String processMsetQeaData(String fileName, String clsType, String dataFormat, String lblType) {
           RConnection RC = sb.getRConnection();
-        if (RDataUtils.readTextData(RC, fileName, dataFormat, clsType)) {
+        if (RDataUtils.readTextData(RC, fileName, dataFormat, clsType, dataNames)) {
             //double check for multiple class, this will be issue for large sample
             if (RDataUtils.getGroupNumber(RC) > 2) {
                     sb.updateMsg("Error", "Enrichment analysis for multiple-group data is not well-defined. Please subset your data to two groups to proceed!");

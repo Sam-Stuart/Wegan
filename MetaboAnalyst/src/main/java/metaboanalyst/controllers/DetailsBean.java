@@ -15,12 +15,13 @@ import javax.faces.model.ListDataModel;
 import metaboanalyst.models.ColumnBean;
 import metaboanalyst.models.FeatureBean;
 import metaboanalyst.rwrappers.ChemoMetrics;
-import metaboanalyst.rwrappers.Dispersal;
+import metaboanalyst.rwrappers.DispersalUtils;
 import metaboanalyst.rwrappers.Classifying;
 import metaboanalyst.rwrappers.RDataUtils;
 import metaboanalyst.rwrappers.SigVarSelect;
 import metaboanalyst.rwrappers.TimeSeries;
 import metaboanalyst.rwrappers.UniVarTests;
+import metaboanalyst.controllers.dispersal.BGDBean;
 import metaboanalyst.utils.DataUtils;
 import org.rosuda.REngine.Rserve.RConnection;
 
@@ -89,9 +90,9 @@ public class DetailsBean implements Serializable {
             sigmat = UniVarTests.GetTTSigMat(sb);
             fileName = UniVarTests.GetTtestSigFileName(sb);
         } else if (from.equals("bgd")||from.equals("bgd1")||from.equals("bgd2")||from.equals("bgd3")||from.equals("bgd4")) {
-            rownames = Dispersal.GetBGDSigRowNames(sb, from);
-            colnames = Dispersal.GetBGDSigColNames(sb, from);
-            sigmat = Dispersal.GetBGDSigMat(sb, from);
+            rownames = BGDBean.GetBGDSigRowNames(sb, from);
+            colnames = BGDBean.GetBGDSigColNames(sb, from);
+            sigmat = BGDBean.GetBGDSigMat(sb, from);
 //            fileName = Dispersal.GetBGDSigFileName(sb);
             fileName= "test_fileName.csv";
         } else if (from.equals("volcano")) {

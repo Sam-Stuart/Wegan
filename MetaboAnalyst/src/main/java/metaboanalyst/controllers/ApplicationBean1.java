@@ -53,27 +53,6 @@ public class ApplicationBean1 implements Serializable {
     private static final String test_currency_data = "/data/currency.txt";
     private static final String test_pos_adduct_data = "/data/pos_add_list.txt";
     private static final String test_neg_adduct_data = "/data/neg_add_list.txt";
-    //WEGAN TEST DATA PATHS ----------------------------------------------------
-    
-    private static final String test_amf = "/data/WeganTestAMF.csv";
-    private static final String test_dune = "/data/dune.txt";
-    private static final String test_BCI = "/data/BCI.txt";
-    private static final String test_varespec = "/data/varespec.txt";
-    private static final String test_linear = "/data/linear_test_data4.txt"; // linear plot test data 
-   
-    
-    private static final String test_iris = "/data/iris.txt";
-//    private static final String test_linear = "/data/linear.txt";
-    private static final String test_dune_weights = "/data/dune_weights.txt";
-//    private static final String test_iris = "/data/iris.txt";
-    
-    
-    //**************************************************************************
-    
-    
-    
-    
-    
     private static final String qc_cmp_data = "/data/qc_compare.csv";
     private static final String path_lib = "/libs/smp_path.csv";
     private static final String mset_dir = "/libs/msets";
@@ -82,20 +61,38 @@ public class ApplicationBean1 implements Serializable {
     private static final String test_powerdata = "/data/human_cachexia.csv";
     private static final String test_rocdata = "/data/plasma_nmr.csv";
     private static final String test_rocnewdata = "/data/plasma_nmr_new.csv";
-    
-    
-    //private static final String test_Dune = "/data/plasma_nmr_new.csv";
-    
-    
-    
-
     private static final String bg_image = "/images/background.png";
+        //WEGAN TEST DATA PATHS ----------------------------------------------------
+    
+    private static final String test_amf = "/data/WeganTestAMF.csv";
+    private static final String test_dune = "/data/dune.csv";
+    private static final String test_duneMeta = "/data/dune_meta.csv";
+    private static final String test_duneEnv = "/data/dune_env.csv";
+    private static final String test_duneTaxon = "/data/dune_taxon.csv";
+    private static final String test_BCI = "/data/BCI.txt";
+    private static final String test_varespec = "/data/varespec.csv";
+    private static final String test_linear = "/data/linear_test_data.csv"; // linear plot test data 
+    private static final String test_iris = "/data/iris.csv";
+    private static final String test_dune_weights = "/data/dune_weights.txt";
+    private static final String test_pitlatrine = "/data/SPE_pitlatrine.csv";
+    private static final String test_pitlatrineEnv = "/data/ENV_pitlatrine.csv";
+    private static final String test_WolvesElk = "/data/Wolves_Elk.csv";
+    private static final String test_pitlatrineMeta = "/data/META_pitlatrine.csv";
+    private static final String test_missing = "/data/missing_data_test.csv";
+
+  
+    //**************************************************************************
 
     private final SelectItem[] csvOpts;
     private final SelectItem[] cmpdIDOpts;
     private final SelectItem[] cmpdIDOpts1;
     private final SelectItem[] zipOpts;
     private final SelectItem[] csvFormatOpts;
+    private final SelectItem[] metaFormatOpts;
+    private final SelectItem[] envFormatOpts;
+    private final SelectItem[] dataNamesOpts;
+    private final SelectItem[] metaNamesOpts;
+    private final SelectItem[] envNamesOpts;
     private final SelectItem[] rocFormatOpts;
     private final SelectItem[] tsFormatOpts;
     private final SelectItem[] testDataOpts;
@@ -134,7 +131,7 @@ public class ApplicationBean1 implements Serializable {
     private final SelectItem[] ciaDataSetOpts;
     private final SelectItem[] ciaTypeOpts;
     private final SelectItem[] plottingDataOpts;
-    
+    private final SelectItem[] betadisperDataOpts;
     
     //Wegan variables begin here (currently ot used, regulat TestDataOpt is used
     
@@ -166,9 +163,9 @@ public class ApplicationBean1 implements Serializable {
         this.realPath = context.getRealPath(resourcePath);
 
         csvOpts = new SelectItem[3];
-        csvOpts[0] = new SelectItem("conc", "Concentrations");
-        csvOpts[1] = new SelectItem("specbin", "Spectral bins");
-        csvOpts[2] = new SelectItem("pktable", "Peak intensity table");
+        csvOpts[0] = new SelectItem("main", "Main");
+        csvOpts[1] = new SelectItem("meta", "Grouping");
+        csvOpts[2] = new SelectItem("env", "Constraining");
 
         zipOpts = new SelectItem[3];
         zipOpts[0] = new SelectItem("nmrpeak", "NMR peak list");
@@ -184,12 +181,42 @@ public class ApplicationBean1 implements Serializable {
         cmpdIDOpts[5] = new SelectItem("metlin", "METLIN");
         cmpdIDOpts[6] = new SelectItem("hmdb_kegg", "HMDB and KEGG ID");
 
-        csvFormatOpts = new SelectItem[4];
-        csvFormatOpts[0] = new SelectItem("rowu", "Samples in rows (unpaired)");
-        csvFormatOpts[1] = new SelectItem("colu", "Samples in columns (unpaired)");
-        csvFormatOpts[2] = new SelectItem("rowp", "Samples in rows (paired)");
-        csvFormatOpts[3] = new SelectItem("colp", "Samples in columns (paired)");
+        csvFormatOpts = new SelectItem[2];
+        csvFormatOpts[0] = new SelectItem("rowu", "Samples in rows");
+        csvFormatOpts[1] = new SelectItem("colu", "Samples in columns");
+//        csvFormatOpts[2] = new SelectItem("rowp", "Samples in rows (paired)");
+//        csvFormatOpts[3] = new SelectItem("colp", "Samples in columns (paired)");
 
+        metaFormatOpts = new SelectItem[2];
+        metaFormatOpts[0] = new SelectItem("rowu", "Samples in rows");
+        metaFormatOpts[1] = new SelectItem("colu", "Samples in columns");
+//        metaFormatOpts[2] = new SelectItem("rowp", "Samples in rows (paired)");
+//        metaFormatOpts[3] = new SelectItem("colp", "Samples in columns (paired)");
+        
+        envFormatOpts = new SelectItem[2];
+        envFormatOpts[0] = new SelectItem("rowu", "Samples in rows");
+        envFormatOpts[1] = new SelectItem("colu", "Samples in columns");
+//        envFormatOpts[2] = new SelectItem("rowp", "Samples in rows (paired)");
+//        envFormatOpts[3] = new SelectItem("colp", "Samples in columns (paired)");
+        
+        dataNamesOpts = new SelectItem[4];
+        dataNamesOpts[0] = new SelectItem("colOnly", "Column labels only");
+        dataNamesOpts[1] = new SelectItem("rowOnly", "Row labels only");
+        dataNamesOpts[2] = new SelectItem("bothNames", "Both");
+        dataNamesOpts[3] = new SelectItem("noNames", "Neither");
+        
+        metaNamesOpts = new SelectItem[4];
+        metaNamesOpts[0] = new SelectItem("colOnly", "Column labels only");
+        metaNamesOpts[1] = new SelectItem("rowOnly", "Row labels only");
+        metaNamesOpts[2] = new SelectItem("bothNames", "Both");
+        metaNamesOpts[3] = new SelectItem("noNames", "Neither");
+        
+        envNamesOpts = new SelectItem[4];
+        envNamesOpts[0] = new SelectItem("colOnly", "Column labels only");
+        envNamesOpts[1] = new SelectItem("rowOnly", "Row labels only");
+        envNamesOpts[2] = new SelectItem("bothNames", "Both");
+        envNamesOpts[3] = new SelectItem("noNames", "Neither");
+        
         tsFormatOpts = new SelectItem[2];
         tsFormatOpts[0] = new SelectItem("rowts", "Samples in rows");
         tsFormatOpts[1] = new SelectItem("colts", "Samples in columns");
@@ -198,39 +225,37 @@ public class ApplicationBean1 implements Serializable {
         rocFormatOpts[0] = new SelectItem("rowu", "Samples in rows");
         rocFormatOpts[1] = new SelectItem("colu", "Samples in columns");
 
-        testDataOpts = new SelectItem[12];
-        //Changed for WEGAN testing
-        testDataOpts[0] = new SelectItem("Dune", "CA");
-        testDataOpts[1] = new SelectItem("BCI", "NMDS");
-        testDataOpts[2] = new SelectItem("nmrspecbin", "NMR spectral bins");
-        testDataOpts[3] = new SelectItem("nmrpeaklist", "NMR peak lists");
-        testDataOpts[4] = new SelectItem("concpair", "Concentrations (paired)");
-        testDataOpts[5] = new SelectItem("mspkint", "MS peak intensities");
-        testDataOpts[6] = new SelectItem("mspklist", "MS peak list");
-        testDataOpts[7] = new SelectItem("lcmsspec", "LC-MS spectra");
-        testDataOpts[8] = new SelectItem("gcmsspec", "GC-MS spectra");
-        testDataOpts[9] = new SelectItem("Varespec", "Dispersal");
-        testDataOpts[10] = new SelectItem("Linear", "Plotting");
-        testDataOpts[11] = new SelectItem("Iris", "Iris");
+        //Changed for WEGAN
+        testDataOpts = new SelectItem[8];
+        testDataOpts[0] = new SelectItem("Dune", "Dune");
+        testDataOpts[1] = new SelectItem("Iris", "Iris");
+        testDataOpts[2] = new SelectItem("BCI", "BCI");
+        testDataOpts[3] = new SelectItem("Varespec", "Varespec");
+        testDataOpts[4] = new SelectItem("Linear", "Linear");  
+        testDataOpts[5] = new SelectItem("Pitlatrine", "Pitlatrine");
+        testDataOpts[6] = new SelectItem("WolvesElk", "WolvesElk");
+        testDataOpts[7] = new SelectItem("Missing", "Missing");
+//        testDataOpts[4] = new SelectItem("nmrspecbin", "NMR spectral bins");
+//        testDataOpts[5] = new SelectItem("nmrpeaklist", "NMR peak lists");
+//        testDataOpts[6] = new SelectItem("concpair", "Concentrations (paired)");
+//        testDataOpts[7] = new SelectItem("mspkint", "MS peak intensities");
+//        testDataOpts[8] = new SelectItem("mspklist", "MS peak list");
+//        testDataOpts[9] = new SelectItem("lcmsspec", "LC-MS spectra");
+//        testDataOpts[10] = new SelectItem("gcmsspec", "GC-MS spectra");
+
+
         
         caDataOpts = new SelectItem[2];
-        caDataOpts[0] = new SelectItem("Dune", "CA");
-        caDataOpts[1] = new SelectItem("BCI", "NMDS");
-        //WEGAN TEST FUNCTIONS START HERE
+        caDataOpts[0] = new SelectItem("Dune", "Dune");
+        caDataOpts[1] = new SelectItem("BCI", "BCI");
         
+        //WEGAN TEST FUNCTION
         NMDSTestDataOpts = new SelectItem[1];
         NMDSTestDataOpts[0] = new SelectItem("Dune");
 
-        // Plotting Test Functions 
-        
-        
-        
-        
-        
-        
-        
-        
-        
+        betadisperDataOpts = new SelectItem[2];
+        betadisperDataOpts[0] = new SelectItem("org","Original Data set");
+        betadisperDataOpts[1] = new SelectItem("norm","Normalized Data set");
                 
         vegdistMeasureOpts = new SelectItem[14];
         vegdistMeasureOpts[0] = new SelectItem("NULL", "Bray-Curtis");
@@ -273,7 +298,6 @@ public class ApplicationBean1 implements Serializable {
         plottingDataOpts[0] = new SelectItem("Dune");
         plottingDataOpts[1] = new SelectItem("Linear");
 
-        
         cmpdIDOpts1 = new SelectItem[4];
         cmpdIDOpts1[0] = new SelectItem("na", "-- Please specify");
         cmpdIDOpts1[1] = new SelectItem("name", "Compound names");
@@ -287,7 +311,7 @@ public class ApplicationBean1 implements Serializable {
         pathIDOpts[3] = new SelectItem("kegg", "KEGG ID");
 
         clsOpts = new SelectItem[2];
-        clsOpts[0] = new SelectItem("disc", "Discrete  (Classification)");
+        clsOpts[0] = new SelectItem("disc", "Discrete (Classification)");
         clsOpts[1] = new SelectItem("cont", "Continuous (Regression)");
 
         qeaTestDataOpts = new SelectItem[2];
@@ -315,7 +339,7 @@ public class ApplicationBean1 implements Serializable {
         designOpts[1] = new SelectItem("time", "Time-series + one experimental factor");
         designOpts[2] = new SelectItem("g2", "Two-factor independent samples");
 
-        dataNormOpts = new SelectItem[8];
+        dataNormOpts = new SelectItem[9];
         dataNormOpts[0] = new SelectItem("NULL", "None");
         dataNormOpts[1] = new SelectItem("SpecNorm", "Sample-specific normalization");
         dataNormOpts[2] = new SelectItem("SumNorm", "Normalization by sum");
@@ -324,15 +348,17 @@ public class ApplicationBean1 implements Serializable {
         dataNormOpts[5] = new SelectItem("GroupPQN", "Create a pooled average sample from group");
         dataNormOpts[6] = new SelectItem("CompNorm", "Normalization by reference feature");
         dataNormOpts[7] = new SelectItem("QuantileNorm", "Quantile normalization");
+        dataNormOpts[8] = new SelectItem("BoxNorm", "Box-Cox normalization");
 
         probNormOpts = new SelectItem[2];
         probNormOpts[0] = new SelectItem("F", "Specify a reference sample");
         probNormOpts[1] = new SelectItem("T", "Create a pooled average sample from group");
 
-        transNormOpts = new SelectItem[3];
+        transNormOpts = new SelectItem[4];
         transNormOpts[0] = new SelectItem("NULL", "None");
         transNormOpts[1] = new SelectItem("LogNorm", "Log transformation");
         transNormOpts[2] = new SelectItem("CrNorm", "Cube root transformation");
+        transNormOpts[3] = new SelectItem("SqNorm", "Square root transformation");
 
         scaleNormOpts = new SelectItem[5];
         scaleNormOpts[0] = new SelectItem("NULL", "None");
@@ -354,7 +380,7 @@ public class ApplicationBean1 implements Serializable {
         posthocOpts[1] = new SelectItem("tukey", "Tukey\'s HSD");
 
         distMeasureOpts = new SelectItem[3];
-        distMeasureOpts[0] = new SelectItem("pearson", "Pearson r");
+        distMeasureOpts[0] = new SelectItem("pearson", "Pearson R");
         distMeasureOpts[1] = new SelectItem("spearman", "Spearman rank correlation");
         distMeasureOpts[2] = new SelectItem("kendall", "Kendall rank correlation");
 
@@ -534,16 +560,6 @@ public class ApplicationBean1 implements Serializable {
         return domain_url.contains("metaboanalyst.ca");
     }
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     public String getRootContext() {
         return rootContext;
     }
@@ -565,17 +581,42 @@ public class ApplicationBean1 implements Serializable {
         return realPath + test_amf;
     }
     
-    public String getTestFileMeta() {
-        return realPath + "/data/dune_meta.txt";
+    public String getTestDuneMeta() {
+        return realPath + test_duneMeta;
     }
-    public String getTestFileEnv() {
-        return realPath + "/data/dune_env.txt";
+    
+    public String getTestDuneEnv() {
+        return realPath + test_duneEnv;
     }
     
     public String getTestDune() {
         return realPath + test_dune;
     }
+    
+    public String getTestDuneTaxon() {
+        return realPath + test_duneTaxon;
+    }
+            
+    public String getTestPitlatrine() {
+        return realPath + test_pitlatrine;
+    }
+    
+    public String getTestPitlatrineEnv() {
+        return realPath + test_pitlatrineEnv;
+    }
+    
+    public String getTestPitlatrineMeta() {
+        return realPath + test_pitlatrineMeta;
+    }
+    
+    public String getTestMissing() {
+        return realPath + test_missing;
+    }
 
+    public String getTestWolvesElk() {
+        return realPath + test_WolvesElk;
+    }
+            
     public String getTestIris() {
         return realPath + test_iris;
     }
@@ -587,16 +628,16 @@ public class ApplicationBean1 implements Serializable {
     public String getTestBCI(){
         return realPath + test_BCI;
     }
+    
     public String getTestVarespec(){
         return realPath + test_varespec;
     }
+    
     public String getTestLinear(){
         return realPath + test_linear;
     }
     
     //--------------------------------------------------------------------------
-    
-    
     
     
     public String getTestAllPeakPath() {
@@ -754,7 +795,27 @@ public class ApplicationBean1 implements Serializable {
     public SelectItem[] getCsvFormatOpts() {
         return csvFormatOpts;
     }
-
+    
+    public SelectItem[] getMetaFormatOpts() {
+        return csvFormatOpts;
+    }
+        
+    public SelectItem[] getEnvFormatOpts() {
+        return csvFormatOpts;
+    }
+    
+    public SelectItem[] getDataNamesOpts() {
+        return dataNamesOpts;
+    }
+    
+    public SelectItem[] getMetaNamesOpts() {
+        return dataNamesOpts;
+    }    
+    
+    public SelectItem[] getEnvNamesOpts() {
+        return dataNamesOpts;
+    }
+    
     public SelectItem[] getRocFormatOpts() {
         return rocFormatOpts;
     }
@@ -778,6 +839,7 @@ public class ApplicationBean1 implements Serializable {
     public SelectItem[] getTestDataOpts() {
         return testDataOpts;
     }
+    
     public SelectItem[] getPlottingDataOpts() {
         return plottingDataOpts;
     }
@@ -787,23 +849,6 @@ public class ApplicationBean1 implements Serializable {
         public SelectItem[] getNMDSTestDataOpts() {
         return testDataOpts;
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     
     //********----------------------------------------------------
@@ -877,6 +922,10 @@ public class ApplicationBean1 implements Serializable {
     
     public SelectItem[] getVegdistMeasureOpts() {
         return vegdistMeasureOpts;
+    }
+    
+    public SelectItem[] getBetadisperDataOpts() {
+        return betadisperDataOpts;
     }
       
     public SelectItem[] getCiaTypeOpts() {

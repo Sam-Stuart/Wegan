@@ -31,7 +31,7 @@ public class DispersalloadBean implements Serializable {
     /*
      * Handle file upoad (.csv or .txt)
      */
-    private String dataType = "conc";
+    private String dataType = "main";
 
     public String getDataType() {
         return dataType;
@@ -41,7 +41,7 @@ public class DispersalloadBean implements Serializable {
         this.dataType = dataType;
     }
 
-    private String dataFormat = "colu";
+    private String dataFormat = "rowu";
 
     public String getDataFormat() {
         return dataFormat;
@@ -61,6 +61,16 @@ public class DispersalloadBean implements Serializable {
         this.dataFile = dataFile;
     }
 
+    private String dataNames = "colOnly";
+
+    public String getDataNames() {
+        return dataNames;
+    }
+
+    public void setDataNames(String dataNames) {
+        this.dataNames = dataNames;
+    }
+    
     /*
     Data upload for statistics module
      */
@@ -79,7 +89,7 @@ public class DispersalloadBean implements Serializable {
                     return null;
                 }
 
-                if (RDataUtils.readTextData(RC, fileName, dataFormat, "disc")) {
+                if (RDataUtils.readTextData(RC, fileName, dataFormat, "disc", dataNames)) {
                     sb.setDataUploaded(true);
                     sb.updateMsg("Error", "Data Uploaded successfully");
                     return "Data check";
@@ -184,26 +194,6 @@ public class DispersalloadBean implements Serializable {
      */
     private String testDataOpt;
     
-    
-    
-    
-    //WEGAN FUCNTIONS 
-    
-    //*********------------------------------------------------------
-    
-    private String NMDSTestDataOpt;
-    
-    public String getNMDSTestDataOpt() {
-        return NMDSTestDataOpt;
-    }
-
-    public void setNMDSTestDataOpt(String NMDSTestDataOpt) {
-        this.NMDSTestDataOpt = NMDSTestDataOpt;
-    }
-    
-
-    
-    //*********------------------------------------------------------
     public String getTestDataOpt() {
         return testDataOpt;
     }
@@ -212,104 +202,33 @@ public class DispersalloadBean implements Serializable {
         this.testDataOpt = testDataOpt;
     }
 
-    public String handleStatTestFileUpload() {
-        String format = "";
-        boolean paired = false;
-        boolean isZip = false;
-        String testFile = null;
-
-        
-        
-        if (testDataOpt == null) {
-            sb.updateMsg("Error", "No data set is selected!");
-            return null;
-        }
-
-        if (testDataOpt.equals("conccancer")) {
-            dataType = "conc";
-            testFile = ab.getTestConcHsaPath();
-            format = "rowu";
-        }
-        
-        //DUNE DATA SELECTED*********************************************************
-        else if (testDataOpt.equals("Dune")) {
-            dataType = "Dune";
-            sb.updateMsg("Error", "Dune data selected");
-
-            testFile = ab.getTestamf();
-            format = "rowu";
-            
-           
-        } else if (testDataOpt.equals("BCI")) {
-            testFile = ab.getTestBCI();
-            format = "rowu";
-        }
-
-        if (!sb.doLogin(dataType, "dispersal", false, paired)) {
-            //sb.updateMsg("Error", "No login return null?");
-            return null;
-        }
-
-        RConnection RC = sb.getRConnection();
-        if (isZip) {
-            if (!RDataUtils.readZipData(RC, testFile, dataType, "F")) {
-                sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
-                return null;
-            }
-        } else {
-            
-            //Tested cahnging Disc to cont
-            if (!RDataUtils.readTextData(RC, testFile, format, "disc")) {
-                sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
-                return null;
-            }
-        }
-        sb.setDataUploaded(true);
-        if (dataType.equals("conc") || dataType.equals("pktable") || dataType.equals("specbin")) {
-            return "Data check";
-        }
-        return dataType;
-    }
     
-    //----------------------------------------------------------------- Test loader 
-    public String handleDispersalTestFileUpload() {
-        String format = "";
+    //--------------Test data loader------------------- 
+     public String handleDispersalTestFileUpload() {
         boolean paired = false;
         boolean isZip = false;
         String testFile = null;
-//        System.out.println(" HELLO THERE !! ");
 
-
-        System.out.print(testDataOpt);  
-        
         if (testDataOpt == null) {
-                    
-
             sb.updateMsg("Error", "No data set is selected!");
             return null;
-        }
-
-        
-        //DUNE DATA SELECTED*********************************************************
-        else if (testDataOpt.equals("Dune")) {
+        } else if (testDataOpt.equals("Dune")) {
             dataType = "Dune";
-            sb.updateMsg("Error", "Dune data selected");
-
+            //sb.updateMsg("Error", "Dune data selected");
             testFile = ab.getTestDune();
-            format = "rowu";
-            
+            dataFormat = "rowu";
+            dataNames = "colOnly";
         } else if (testDataOpt.equals("BCI")) {
             testFile = ab.getTestBCI();
-            format = "rowu";
+            dataFormat = "rowu";
+            dataNames = "colOnly";
         } else if (testDataOpt.equals("Varespec")) {
-            dataType = "Varespec";
-            sb.updateMsg("Error", "Varespec data selected");
             testFile = ab.getTestVarespec();
-            format = "rowu";
+            dataFormat = "rowu";
+            dataNames = "colOnly";
         } else {
-            System.out.print(" Unknown data has been selected");
-            System.out.print( dataType                       );
-            sb.updateMsg("Error", "Unknown data selected");
+            sb.updateMsg("Error", "Unknown data selected?");
+
             return null;
         }
         if (!sb.doLogin(dataType, "dispersal", false, paired)) {
@@ -324,193 +243,15 @@ public class DispersalloadBean implements Serializable {
                 return null;
             }
         } else {
-            
             //Tested cahnging Disc to cont
-            if (!RDataUtils.readTextData(RC, testFile, format, "disc")) {
+            if (!RDataUtils.readTextData(RC, testFile, dataFormat, "disc", dataNames)) {
                 sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
                 return null;
             }
         }
         sb.setDataUploaded(true);
-        //RC.Eval;
-        /*try {
-            //String rCommand = "InitDataObjects(\"" + dataType + "\", \"" + analType + "\", " + (isPaired ? "TRUE" : "FALSE") + ")";
-            //String rCommand = "NMDSWegan(\"" + dataType + "\")";
-            
-            //String rCommand = "DCAWegan(\"" + dataType + "\", \"" + sb.getPath2()+ "\"  )";
-            
-            
-            //RC.voidEval(rCommand);
-            //RCenter.recordRCommand(RC, rCommand);
-            
-        } catch (RserveException rse) {
-            System.out.println(rse);
-            return "";
-        }*/
-        //;
-        return "Dispersal";    /*  CHANGE BACK TO 'Data check'  FOR THE SANITY CHECK _ NORMALIZATOION WORKFLOW   */ 
-    }
-    
-    
-    
-    public boolean runDispersalR(String inputData,String ext){
-        RConnection RC = sb.getRConnection();
-        try {
-            //String rCommand = "InitDataObjects(\"" + dataType + "\", \"" + analType + "\", " + (isPaired ? "TRUE" : "FALSE") + ")";
-
-            //String rCommand = "CAWegan(\"" + inputData + "\", \"" + sb.getPath2()+ "\"  )";
-
-            String rCommand = "DispersalWegan(\"" + inputData + "\", \"" + sb.getPath2()+ "\", \"" + ext + "\"   )";
-            RC.voidEval(rCommand);
-            RCenter.recordRCommand(RC, rCommand);
-
-        } catch (RserveException rse) {
-            System.out.println(rse);
-            return false;
-        }
-        //;
-        return true ;
-            
-    }    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    //END IMPORTANT FUNCS***********************************************************************
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    /*
-    Handle data for power analysis
-     */
-    private boolean useExample = false;
-
-    public boolean isUseExample() {
-        return useExample;
-    }
-
-    public void setUseExample(boolean useExample) {
-        this.useExample = useExample;
-    }
-
-    public String uploadPilotData() {
-        //check if data is uploaded
-        if (useExample) {
-            return handlePowerTestFileUpload();
-        }
-
-        if (dataFile.getSize() == 0) {
-            sb.updateMsg("Error", "File is empty");
-            return null;
-        }
-
-        boolean paired = false;
-        if (dataFormat.endsWith("p")) {
-            paired = true;
-        }
-        if (sb.doLogin(dataType, "power", false, paired)) {
-            RConnection RC = sb.getRConnection();
-            String fileName = DataUtils.uploadFile(dataFile, sb, null, ab.isOnPublicServer());
-            if (RDataUtils.readTextData(RC, fileName, dataFormat, "disc")) {
-                sb.setDataUploaded(true);
-                return "Data check";
-            } else {
-                sb.updateMsg("Error:", RDataUtils.getErrMsg(RC));
-                return null;
-            }
-        }
-        return null;
-    }
-
-    public String handlePowerTestFileUpload() {
-        if (!sb.doLogin("conc", "power", false, false)) {
-            return null;
-        }
-        RConnection RC = sb.getRConnection();
-        RDataUtils.readTextData(RC, ab.getTestPowerPath(), "rowu", "disc");
-        sb.setDataUploaded(true);
         return "Data check";
     }
-
-    /*
-    ROC data upload
-     */
-    private String dataOpt = "data1";
-
-    public String getDataOpt() {
-        return dataOpt;
-    }
-
-    public void setDataOpt(String dataOpt) {
-        this.dataOpt = dataOpt;
-    }
-
-    public String uploadRocData() {
-        //check if data is uploaded
-        if (useExample) {
-            return handleRocTestFileUpload();
-        }
-
-        if (dataFile.getSize() == 0) {
-            sb.updateMsg("Error", "File is empty");
-            return null;
-        }
-
-        if (sb.doLogin(dataType, "roc", false, false)) {
-            RConnection RC = sb.getRConnection();
-            String fileName = DataUtils.uploadFile(dataFile, sb, null, ab.isOnPublicServer());
-            if (RDataUtils.readTextData(RC, fileName, dataFormat, "disc")) {
-                sb.setDataUploaded(true);
-                return "Data check";
-            } else {
-                sb.updateMsg("Error:", RDataUtils.getErrMsg(RC));
-                return null;
-            }
-        }
-        return null;
-    }
-
-    public String handleRocTestFileUpload() {
-        if (!sb.doLogin("conc", "roc", false, false)) {
-            return null;
-        }
-        RConnection RC = sb.getRConnection();
-        if (dataOpt.equals("data1")) {
-            RDataUtils.readTextData(RC, ab.getTestRocPath(), "rowu", "disc");
-        } else {
-            RDataUtils.readTextData(RC, ab.getTestRocNewPath(), "rowu", "disc");
-        }
-        sb.setDataUploaded(true);
-        return "Data check";
-    }
+    
+    
 }

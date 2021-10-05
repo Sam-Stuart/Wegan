@@ -15,53 +15,179 @@
         <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/jscripts/graphics.js"></script>
     </ui:define>
     <ui:define name="content">
-       
-        <h:panelGrid style="padding:20px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%; align: center">
-            
-    <!--        <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('bgd1')}" alt="bgdispersal"/>
-                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('bgd2')}" alt="bgdispersal"/> 
-                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('bgd3')}" alt="bgdispersal"/> -->
+      
+        <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
+            <p:tabView id="linCA" style="border-bottom-color: #8cbd48 !important">
+                <p:tab title ="Overview" titleStyleClass="p-tab-nav">
+                    <h:form id="form1">  
+                        <p>
+                            The signs of the DD coefficients indicate the direction of dispersal, provided that the asymmetry is significant. A positive sign indicates dispersal from the first (row in DD tables) to the second region (column); a negative sign indicates the opposite. A McNemar test of asymmetry is computed from the presence-absence data to test the hypothesis of a significant asymmetry between the two areas under comparison. 
+                        </p>
+                        <p>
+                            In the input data table, the rows are sites or areas, the columns are taxa. Most often, the taxa are species, but the coefficients can be computed from genera or families as well. DD1 and DD2 only are computed for presence-absence data. The four types of coefficients are computed for quantitative data, which are converted to presence-absence for the computation of DD1 and DD2. 
+                        </p>
+                        
+                        <h:panelGrid class="resultsBar" columns="2">
+                            <h:panelGroup>
+                                <h:panelGrid columns="1" style="text-align : left;">
+                                    Results
+                                </h:panelGrid>
+                            </h:panelGroup> 
+                            <h:panelGroup>
+                                <h:panelGrid columns="3" class="resultsImages">
+                                    
+<!--                               <i class="fa fa-table"></i>
+                                   <i class="fas fa-palette"></i>-->
+                                   <i class="fa fa-question-circle"></i>
 
-                <h2> Coefficients of Biogeographcal Dispersal Direction: </h2>
-<!--                <div class ="tooltip">
-                    <span class="tooltiptext"> This is text</span>
-                </div>-->
-                <p:commandLink  value="DD1  " action="#{sessionBean1.detailsLnk_action('bgd1')}" title="DD1[j,k] = (a * (b - c))/((a + b + c)^2)">
-    <!--                <img src="#{facesContext.externalContext.requestContextPath}/resources/images/table.png"/>-->
-                </p:commandLink>
-                <p:commandLink  value="DD2 " action="#{sessionBean1.detailsLnk_action('bgd2')}" title="DD2[j,k] = (2*a * (b - c))/((2*a + b + c) * (a + b + c)) where a, b, and c have the same meaning as in the computation of binary similarity coefficients. ">
-    <!--                <img src="#{facesContext.externalContext.requestContextPath}/resources/images/table.png"/>-->
-                </p:commandLink>
-                <p:commandLink  value="DD3" action="#{sessionBean1.detailsLnk_action('bgd3')}" title="DD3[j,k] = W*(A-B) / (A+B-W)^2">
-    <!--                <img src="#{facesContext.externalContext.requestContextPath}/resources/images/table.png"/>-->
-                </p:commandLink>
-                <p:commandLink  value="DD4" action="#{sessionBean1.detailsLnk_action('bgd4')}" title="DD4[j,k] = 2*W*(A-B) / ((A+B)*(A+B-W)) where W = sum(pmin(vector1, vector2)), 
-                                A = sum(vector1), B = sum(vector2)">
-    <!--                <img src="#{facesContext.externalContext.requestContextPath}/resources/images/table.png"/>-->
-                </p:commandLink>
-                <p:commandLink  value="McNemar" action="#{sessionBean1.detailsLnk_action('bgd5')}" title="McNemar chi-square statistic of asymmetry (Sokal and Rohlf 1995):
-                                2*(b*log(b) + c*log(c) - (b+c)*log((b+c)/2)) / q, where q = 1 + 1/(2*(b+c)) (Williams correction for continuity) ">
-    <!--                <img src="#{facesContext.externalContext.requestContextPath}/resources/images/table.png"/>-->
-                </p:commandLink>
-                <p:commandLink  value="prob.McNemar" action="#{sessionBean1.detailsLnk_action('bgd6')}" title="probabilities associated with McNemar statistics, chi-square test. H0: no asymmetry in (b-c). ">
-    <!--                <img src="#{facesContext.externalContext.requestContextPath}/resources/images/table.png"/>-->
-                </p:commandLink>
-                <p:commandButton value="Download" action="Download" title="Download the R code and included tables"/>   
-            
+                                </h:panelGrid>
+                            
+                            </h:panelGroup>                            
+                        </h:panelGrid> 
+                        <h:panelGroup>
+                                <p>
+                                    To see a quick view of the coefficient matrices, click on their respective blue buttons with the eye icon. To view and download a csv file of the matrix, click the respective csv link.
+                                </p>
+                        </h:panelGroup>
+                        <p></p>
+                        
+                        <h:panelGrid columns="3" style="width: 100%; line-height: 25px; text-align: left; border-bottom: 2px solid #8cbd48">
+                            <h:panelGrid >
+                                <p:commandButton icon ="fa fa-eye"
+                                                 value="DD1 Matrix"
+                                                 styleClass="bgdButton"
+                                                 style="box-shadow: none !important; text-shadow: none !important;background: #75bafb !important; "
+                                                 actionListener="#{sessionBean1.graphicsLnk_action('bgd_DD1')}" 
+                                                 oncomplete="PF('DD1Matrix').show()"/>  
+                            </h:panelGrid>
+                            <h:panelGrid >
+                                <p:commandButton icon ="fa fa-eye"
+                                                 value="DD2 Matrix"
+                                                 styleClass="bgdButton"
+                                                 style="box-shadow: none !important; text-shadow: none !important; background: #75bafb !important; "
+                                                 actionListener="#{sessionBean1.graphicsLnk_action('bgd_DD2')}" 
+                                                 oncomplete="PF('DD2Matrix').show()"/>  
+                            </h:panelGrid>
+                            <h:panelGrid >
+                                <p:commandButton icon ="fa fa-eye"
+                                                 value="DD3 Matrix"
+                                                 styleClass="bgdButton"
+                                                 style="box-shadow: none !important; text-shadow: none !important;background: #75bafb !important;"
+                                                 actionListener="#{sessionBean1.graphicsLnk_action('bgd_DD3')}" 
+                                                 oncomplete="PF('DD3Matrix').show()"/>  
+                            </h:panelGrid>
+                            
+                        </h:panelGrid>  
+                        <h:panelGrid columns="3" style="width: 100%; line-height: 25px; text-align: left; border-bottom: 2px solid #8cbd48">
+                            <h:panelGrid columns="2" style="width: 100%; padding-left: 0px; position:relative; left: 0px; top: 8px" >
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">
+                                    <h:outputText style="padding-left: 0px" escape="false" value="#{BGDBean.fileDD1Path}"/>
+                                </i>
+                            </h:panelGrid>
+                            
+                            <h:panelGrid columns="2" style="width: 100%; padding-left: 0px;  position:relative; left: 0px; top: 8px" >
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">
+                                    <h:outputText style="padding-left: 0px" escape="false" value="#{BGDBean.fileDD2Path}"/>
+                                </i>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" style="width: 100%; padding-left: 0px; position:relative; left: 0px; top: 8px" >
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">
+                                    <h:outputText style="padding-left: 0px" escape="false" value="#{BGDBean.fileDD3Path}"/>
+                                </i>
+                            </h:panelGrid>
+                            
+                        </h:panelGrid>                        
+                        <h:panelGrid columns="3" style="width: 100%; line-height: 25px; text-align: left; border-bottom: 2px solid #8cbd48">
+                            
+                            <h:panelGrid >
+                                <p:commandButton icon ="fa fa-eye"
+                                                 value="DD4 Matrix"
+                                                 styleClass="bgdButton"
+                                                 style="box-shadow: none !important; text-shadow: none !important;background: #75bafb !important;"
+                                                 actionListener="#{sessionBean1.graphicsLnk_action('bgd_DD4')}" 
+                                                 oncomplete="PF('DD4Matrix').show()"/>  
+                            </h:panelGrid>
+                            <h:panelGrid >
+                                <p:commandButton icon ="fa fa-eye"
+                                                 value="McNemar"
+                                                 styleClass="bgdButton"
+                                                 style="box-shadow: none !important; text-shadow: none !important;background: #75bafb !important;"
+                                                 actionListener="#{sessionBean1.graphicsLnk_action('bgd_McNemar')}" 
+                                                 oncomplete="PF('McNemarMatrix').show()"/>  
+                            </h:panelGrid>
+                            <h:panelGrid >
+                                <p:commandButton icon ="fa fa-eye"
+                                                 value="Probability McNemar"
+                                                 styleClass="bgdButton"
+                                                 style="box-shadow: none !important; text-shadow: none !important;position: relative;  background-color: #75bafb !important;"
+                                                 actionListener="#{sessionBean1.graphicsLnk_action('bgd_ProbMcNemar')}" 
+                                                 oncomplete="PF('ProbMcNemarMatrix').show()"/>  
+                            </h:panelGrid>
+                            
+                        </h:panelGrid>  
+                        
+                         
+                        
+                        
+                        <h:panelGrid columns="3" style="width:100%; 25px; text-align: left; border-bottom: 2px solid #8cbd48">
+                            <h:panelGrid columns="2" style="width: 100%; padding-left: 0px; position:relative; left: 0px; top: 8px" >
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 10px">
+                                    <h:outputText style="padding-right: 20px" escape="false" value="#{BGDBean.fileDD4Path}"/>
+                                </i>
+                            </h:panelGrid>
+                            
+                            <h:panelGrid columns="2" style="width: 100%; padding-left: 0px; position:relative; left: 19%; top: 8px" >
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 10px">
+                                    <h:outputText style="padding-left: 10px; width: 1100px" escape="false" value="#{BGDBean.fileMcNemarPath}"/>
+                                </i>
+                            </h:panelGrid>
+                            
+                            <h:panelGrid columns="2" style="width: 100%; padding-left: 10px; position:relative; left: 15%; top: 8px" >
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 10px">
+                                    <h:outputText style="padding-left: 0px" escape="false" value="#{BGDBean.fileProbMcNemarPath}"/>
+                                </i>
+                            </h:panelGrid>
+                        </h:panelGrid> 
+                        
+                   </h:form>
+                </p:tab>
+            </p:tabView> 
+            <p:dialog modal="true" widgetVar="DD1Matrix" 
+                style="width: 400px; height:400px;text-align: center" 
+                appendTo="@(body)" header="DD1 Coefficient Matrix"
+                draggable="false" closable="true" resizable="true"> 
+                <ui:include src="_BGD_DD1_graph.xhtml" />
+            </p:dialog>
+            <p:dialog modal="true" widgetVar="DD2Matrix" 
+                style="width: 400px; height:400px;text-align: center; " 
+                appendTo="@(body)" header="DD2 Coefficient Matrix" 
+                draggable="false" closable="true" resizable="true"> 
+                <ui:include src="_BGD_DD2_graph.xhtml" />
+            </p:dialog>
+            <p:dialog modal="true" widgetVar="DD3Matrix" 
+                style="width: 400px; height:400px;text-align: center" 
+                appendTo="@(body)" header="DD3 Coefficient Matrix"
+                draggable="false" closable="true" resizable="true"> 
+                <ui:include src="_BGD_DD3_graph.xhtml" />
+            </p:dialog>
+            <p:dialog modal="true" widgetVar="DD4Matrix" 
+                style="width: 400px; height:400px;text-align: center; " 
+                appendTo="@(body)" header="DD4 Coefficient Matrix" 
+                draggable="false" closable="true" resizable="true"> 
+                <ui:include src="_BGD_DD4_graph.xhtml" />
+            </p:dialog>
+            <p:dialog modal="true" widgetVar="McNemarMatrix" 
+                style="width: 400px; height:400px;text-align: center; " 
+                appendTo="@(body)" header="McNemar Coefficient Matrix" 
+                draggable="false" closable="true" resizable="true"> 
+                <ui:include src="_BGD_McNemar_graph.xhtml" />
+            </p:dialog>
+            <p:dialog modal="true" widgetVar="ProbMcNemarMatrix" 
+                style="width: 400px; height:400px;text-align: center; " 
+                appendTo="@(body)" header="Probabilities sssociated with McNemar Coefficient Matrix" 
+                draggable="false" closable="true" resizable="true"> 
+                <ui:include src="_BGD_ProbMcNemar_graph.xhtml" />
+            </p:dialog>
         </h:panelGrid> 
-<!--        
-          <h:panelGroup>
-                                <h:outputLabel style="font-weight: bold" value="Display Matrices of BGD"/>
-                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:50px" value="{dispersalBean.dispersalBgdNum}">
-                                    <f:selectItems value="hello world" />
-                                </p:selectOneMenu>
-                                <h:outputLabel style="font-weight: bold" value="bgd"/>
-                            </h:panelGroup>
-                            <p:commandButton value="Update" update=":ac:form2:screePane  :cmdPane" actionListener="{pcaBean.pcaScreeBtn_action()}"/>   -->
-<!--        <h:panelGrid style="padding: 20px 50px 20px 40px; font-size: 13px; line-height: 23px; width: 100%">
-            <h1> Coefficients of Biogeographical Dispersal Direction </h1>
-            <h:panelGrid style="text-align: center; width: 80%">-->
-                
-            
-    </ui:define>
+     </ui:define>
 </ui:composition>

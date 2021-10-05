@@ -12,95 +12,82 @@
     </ui:define>
     <ui:define name="content">
         <h:form id="form" enctype="multipart/form-data"> 
-            
-            <h:panelGrid style="padding: 20px 20px 20px 40px; font-size:12px;">
-                <h2 style="margin-top: 10px; margin-bottom: 4px">1) Upload your data</h2>
-                <h:panelGrid columns="2" style="border: gray solid thin; background-color: #F9F9FB; padding: 20px; width:760px">
-                    <p:outputLabel style="font-size:13px; font-weight: bold" value="Tab-delimited text (.txt) or comma-separated values (.csv) file:"/>
-                    <p:spacer/>
-                    <h:panelGrid columns="2" style="width:560px; height:120px; padding: 10px">
 
-                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Data File:"/>
-                        <p:fileUpload value="#{Diversityload.dataFile}" mode="simple"/>
-                    </h:panelGrid>
-                    <p:spacer/>
-                    
-                    <p:outputLabel style="font-size:12px; font-weight: bold" value="Data Format:"/>
-                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:170px" value="#{Diversityload.dataFormat}">
-                        <f:selectItems value="#{applicationBean1.csvFormatOpts}" />
-                    </p:selectOneMenu>
-                    
-                    <h:panelGrid style="padding: 10px">
+            <h:panelGrid style="padding:20px 40px 20px 40px; font-size: 13px; line-height: 25px; width:100%">
+                <h1 style="margin-top: 10px; margin-bottom: 4px">Upload your data</h1>
+                <h:panelGrid style="width:100%; background-color: #75bafb;"></h:panelGrid>
+                <h:panelGrid style="width:100%; background-color: white; "></h:panelGrid>
+                <h:panelGrid style="width:100%; background-color: #75bafb;"></h:panelGrid>
+                <h:panelGrid style="width:100%; background-color: white; "></h:panelGrid>
+
+                <h:panelGrid style="border: none; width: 100%; padding: 15px 20px 10px 25px; background-color: #8cbd4830; font-size: 14px;">
+                    <h2 style="margin-top: 10px; margin-bottom: 4px">Data table: Plain text file (.csv or .txt)</h2>
+                    <h:panelGrid columns="2" style="padding: 10px">
+                        <p:outputLabel style="font-size:14px; font-weight: bold" value="Data File:"/>
+                        <p:fileUpload value="#{Dispersalload.dataFile}" mode="simple"/>
+                    </h:panelGrid>                   
+                    <h:panelGrid columns="3" style="padding: 10px; margin-left: 40px">
+                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Format:"/>
+                        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:170px" value="#{Dispersalload.dataFormat}">
+                            <f:selectItems value="#{applicationBean1.csvFormatOpts}" />
+                        </p:selectOneMenu> 
+                    </h:panelGrid>                     
+                    <h:panelGrid columns="3" style="padding: 10px; margin-left: 40px">
+                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Labels:"/>
+                        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:170px" value="#{Dispersalload.dataNames}">
+                            <f:selectItems value="#{applicationBean1.dataNamesOpts}" />
+                        </p:selectOneMenu> 
+                    </h:panelGrid>                  
+
+                    <h:panelGrid style="padding: 10px; float:right">
                         <p:commandButton value="Submit" 
                                          styleClass="updateButton"
-                                         style="box-shadow: none !important; text-shadow: none !important"
+                                        style="box-shadow: none !important; text-shadow: none !important"
                                          ajax="false"
                                          onclick="PF('statusDialog').show()" 
                                          oncomplete="PF('statusDialog').hide()"
-                                         action="#{Dispersalload.handleFileUpload()}"/>                         
+                                         action="#{Dispersalload.handleFileUpload()}"/>   
                     </h:panelGrid>
-
                 </h:panelGrid>
-            </h:panelGrid>
-            
-            
-            
-            
-            
-            <h:panelGrid style="padding: 20px; font-size: 12px;  height:100%; width: 100%; line-height: 180%;">
                 
-                <h2 style="margin-top: 20px; margin-bottom: 4px"> 2) Try our test data :</h2>
+                <p:spacer style="width: 30px"/>
+                
+                <h:panelGrid style="border: none; width: 100%; padding: 15px 20px 10px 25px; background-color: #8cbd4830; font-size: 14px;">
+
+                    <h2 style="margin-top: 20px; margin-bottom: 4px">Try our test data :</h2>
+
                 <p:selectOneRadio id="customRadio" value="#{Dispersalload.testDataOpt}" layout="custom">  
                     <f:selectItems value="#{applicationBean1.testDataOpts}"/> 
-                </p:selectOneRadio>  
-                <h:panelGrid columns="3" style="border: gray solid thin; padding: 10px 30px 20px 10px; background-color: #F9F9FB; line-height: 21px; width:760px">
-                    <p:spacer style="width: 30px"/>
-                    <h:panelGrid style="width:150px; padding-left: 4px; padding-right: 4px">
-                        <p:outputLabel style="font-size:13px; font-weight: bold" value="Data Type"/>   
-                    </h:panelGrid>
-                    <p:outputLabel style="font-size:13px; font-weight: bold" value="Description"/>
-
+                </p:selectOneRadio> 
+                <h:panelGrid columns="3" style="padding: 10px 30px 20px 10px;line-height: 21px; width:760px">
                     <p:radioButton for="customRadio" itemIndex="0"/>
                         <p:outputLabel style="font-size:12px; font-weight: bold" value="Dune"/>
                     <h:panelGrid>
-                        Dune data set from within the R Vegan package (insert citation here)                                       
-                    </h:panelGrid>
-                    <p:radioButton for="customRadio" itemIndex="1"/>
-                    <p:outputLabel style="font-size:12px; font-weight: bold" value="BCI"/>
-                    <h:panelGrid>
-                        Barro Colorado Island Tree Counts in 1-hectare plots (insert citation here)                                       
+                        Grass species counts in Dutch dune meadows. Data consists of 30 species (variables/columns) and 20 plots of land (samples/rows), where species are labeled, but land plots are not. (<a href="https://rdrr.io/cran/vegan/man/dune.html">ref.</a>)                                       
                     </h:panelGrid>
                     <p:radioButton for="customRadio" itemIndex="2"/>
-                    <p:outputLabel style="font-size:12px; font-weight: bold" value="AMF"/>
+                    <p:outputLabel style="font-size:12px; font-weight: bold" value="BCI"/>
                     <h:panelGrid>
-                        Arbuscular Mycorrhizal Fungal data(insert citation here)                                       
+                        Barro Colorado Island tropical tree species counts. Data consists of 225 species (variables/columns) and 50 1-hectare plots of land (samples/rows). Species are labeled, but land plots are not. (<a href="https://rdrr.io/cran/vegan/man/BCI.html">ref.</a>)                                       
                     </h:panelGrid>
                     <p:radioButton for="customRadio" itemIndex="3"/>
-                    <p:outputLabel style="font-size:12px; font-weight: bold" value="EMF"/>
+                    <p:outputLabel style="font-size:12px; font-weight: bold" value="Vare Species"/>
                     <h:panelGrid>
-                        Ectomycorrhizal fungal data (insert citation here)                                       
+                        Lichen species counts from pine forest in eastern Fennoscandia. Species counts show which species were most impacted by reindeer grazing. Data consists of 44 species (variables/columns) and 24 sampling sites (samples/rows). Species are labeled, but sampling sites are not. (<a href="https://www.rdocumentation.org/packages/vegan/versions/2.4-2/topics/varespec">ref.</a>)                                                                 
                     </h:panelGrid>
-                    <p:radioButton for="customRadio" itemIndex="9"/>
-                    <p:outputLabel style="font-size:12px; font-weight: bold" value="Varespec"/>
-                    <h:panelGrid>
-                        Vegetation and environment in lichen pastures                                     
-                    </h:panelGrid>
-
-                                                
-
-                    
                 </h:panelGrid>
-                <h:panelGrid style="width:100%; text-align: center">
+                <h:panelGrid style="width:100%; text-align: right">
                     <p:commandButton value="Submit" 
                                      styleClass="updateButton"
                                     style="box-shadow: none !important; text-shadow: none !important"
                                      ajax="false" 
                                      onclick="PF('statusDialog').show()"
                                      action="#{Dispersalload.handleDispersalTestFileUpload}"/>  
+
+                </h:panelGrid>
+
                 </h:panelGrid>
             </h:panelGrid>
         </h:form>
     </ui:define>
 </ui:composition>
-
-

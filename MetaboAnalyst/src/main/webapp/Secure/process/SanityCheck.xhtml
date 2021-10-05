@@ -22,21 +22,27 @@
                 <h:panelGrid columns="2" style=" border: none; width: 100%; padding: 15px 10px 10px 5px; background-color: #8cbd4830; font-size: 14px">
                     <ol>
                         <li>
-                            Checking the class labels - at least three replicates are required in each class.
+                            Checking for the presence of missing values (i.e. blanks or NAs) or variables with constant values (i.e. all zeros):                
+                            <ul>
+                                - Missing values must either be empty or filled with NA without quotations. 
+                            </ul>
                         </li>
                         <li>
-                            If the samples are paired, the pair labels must conform to the specified format.
+                            Checking the sample and variable labels:
+                            <ul>
+                                - Duplicate labels are not allowed. 
+                            </ul>
+                            <ul>
+                                - All text must be UTF-8 encoded.
+                            </ul>
+                            <ul>
+                                - Only English letters, numbers, underscore, hyphen and forward slash (/) are allowed. Other special characters or punctuations (if any) will be stripped off.
+                            </ul>
                         </li>
-                        <li>
-                            The data (except class labels) must not contain non-numeric values.
-                        </li>
-                        <li>
-                            The presence of missing values or features with constant values (i.e. all zeros)                
-                        </li>
+
                     </ol>
                 </h:panelGrid>
                 <p/>
-                <h2>Data Processing Information:</h2>
                 <h:panelGrid style=" border: none; width: 100%; padding: 5px 10px 10px 5px; background-color: #8cbd4830; font-size: 14px">
                     
                     <h:outputLabel value="#{procBean.msgText}" escape="false"/>

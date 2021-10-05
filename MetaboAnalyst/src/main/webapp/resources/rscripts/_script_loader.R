@@ -7,7 +7,9 @@ correlation_files <- c("correlation_linear", "correlation_penalized", "correlati
 dispersal_files <- c("dispersal");
 plotting_files <- c("plotting", "plotting_pie", "plot_bar", "plot_box", "plot_scatter");
 ordination_files <- c("ord_nmds", "ord_pcoa", "ord_cia", "ord_dca", "ord_anosim", "ord_rda", "ord_bray", "ord_cca", "ord_ca", "ord_dca");
-diversity_files <- c("div_rarefaction", "div_abundance_dist", "div_accumulation_model", "div_taxonomic");
+
+diversity_files <- c("div_divindices","div_rarefaction", "div_abundance_dist", "div_accumulation_model", "div_taxonomic", "div_fd", "div_unseen");
+
 taxonomy_files <- c();
 cluster_files <- c();
 general_anot_files <- "general_anot_utils";
