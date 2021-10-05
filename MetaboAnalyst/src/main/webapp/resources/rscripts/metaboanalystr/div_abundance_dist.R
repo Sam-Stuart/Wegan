@@ -15,7 +15,7 @@ AbundanceModel <- function(mSetObj = NA, data = "false", community = "", tiespli
   options(errors = traceback)                          
   #library("ade4")
   #library("adegraphics")
-  library("plyr")
+  #library("plyr")
   library("dplyr")
   library("vegan")
 
