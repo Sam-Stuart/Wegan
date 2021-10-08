@@ -23,9 +23,10 @@
                 <h:panelGrid style=" margin-bottom: 10px;font-size: 16px; width:100%">
                     The normalization procedures are grouped into three categories, all of which manipulate data so that variables are more comparable.
                     The data normalization allows general-purpose adjustment in an attempt to achieve the class bell-shaped distribution.  
-                    Click <b>Auto-Normalize</b> to select the best normalization option based on the Shapiro-Wilk test.
+                    Click <b>Select Best Normalization</b> to obtain the optimal normalization option based on the Shapiro-Wilk test.
                     Data transformation and data scaling are two different approaches that can compliment data normalization. 
-                    You can use one procedure or combine them to achieve better results. <b>Normalization impacts numeric data only.</b>
+                    You can use one procedure or combine them to achieve better results. Once normalization has been performed, click <b>View Result</b> to view the effect, 
+                    along with important descriptive statistical results.
                 </h:panelGrid>
                 
                 <p:selectOneRadio id="rowRadio" value="#{normBean.rowNormOpt}" layout="custom">  
@@ -46,21 +47,21 @@
                             <p:outputLabel style="font-size:13px; font-weight: bold" value="None"/>
                             <p:spacer/>
 
-                            <p:radioButton for="rowRadio" itemIndex="2"/>
+                            <p:radioButton for="rowRadio" itemIndex="1"/>
                             <p:outputLabel style="font-size:13px; font-weight: bold" value="Normalization by sum"/>
                             <h:outputLabel value="(Divide each value by the sum of the variable)"/>
 
-                            <p:radioButton for="rowRadio" itemIndex="3"/>
+                            <p:radioButton for="rowRadio" itemIndex="2"/>
                             <p:outputLabel style="font-size:13px; font-weight: bold" value="Normalization by median"/>
                             <h:outputLabel value="(Divide each value by the median of the variable)"/>
 
-                            <p:radioButton for="rowRadio" itemIndex="7"/>
+                            <p:radioButton for="rowRadio" itemIndex="3"/>
                             <p:outputLabel style="font-size:13px; font-weight: bold" value="Quantile normalization"/>
-                            <h:outputLabel value="(Create identical distributions between variables using ranking and means)"/>
+                            <h:outputLabel value="(Create identical distributions using ranking and means)"/>
 
-                            <p:radioButton for="rowRadio" itemIndex="8"/>
+                            <p:radioButton for="rowRadio" itemIndex="4"/>
                             <p:outputLabel style="font-size:13px; font-weight: bold" value="Box-Cox normalization"/>         
-                            <h:outputLabel value="(Uses Yeo-Johnson technique for negative value data)"/>
+                            <h:outputLabel value="(Uses Yeo-Johnson technique for zero and negative value data)"/>
 
                         </h:panelGrid>
                         <h:panelGrid style="width:100%; border-bottom: darkgray dashed thin; border-top: darkgray dashed thin" rendered="#{sessionBean1.analType eq 'roc' and sessionBean1.dataType eq 'conc'}">
@@ -123,14 +124,14 @@
                         </h:panelGrid>
                     </h:panelGrid>
                     <h:panelGrid style="position: absolute; right: 35px; top: 30px">
-                        <p:commandButton value="Auto-Normalize" onclick="PF('statusDialog').show()" 
+                        <p:commandButton value="Select Best Data Normalization" onclick="PF('statusDialog').show()" 
                                          style="padding: 4px 7px 4px 7px; width: 150px; background: #8cbd48; border-color: #8cbd48; color: black; box-shadow: none !important; text-shadow: none !important;"
                                          oncomplete="PF('statusDialog').hide()" 
                                          update=":ac form1:viewBn form1:nextBn  :cmdPane"
                                          actionListener="#{normBean.performAutoNormalization()}"/>  
                     </h:panelGrid>
                     
-                    <h:panelGrid style="position: absolute; right: 35px; top: 70px">
+                    <h:panelGrid style="position: absolute; right: 35px; top: 80px">
                         <p:commandButton value="Submit" 
                                          styleClass="normButton"
                                          style="box-shadow: none !important; text-shadow: none !important;"

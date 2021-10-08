@@ -7,6 +7,8 @@ package metaboanalyst.rwrappers;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.faces.model.SelectItem;
 import metaboanalyst.models.ComponentBean;
 import metaboanalyst.utils.DataUtils;
@@ -412,16 +414,30 @@ public class RDataUtils {
         }
     }
 
-    //plot a boxplot and density for each compound
-    public static int autoNormalize(RConnection RC) {
+    //retrieve best noramlization method
+    public static String autoNormalize(RConnection RC) {
         try {
             String rCommand = "BestNormalize(NA)";
             RCenter.recordRCommand(RC, rCommand);
-            return RC.eval(rCommand).asInteger();
+            return RC.eval(rCommand).asString();
         } catch (Exception e) {
             e.printStackTrace();
-            return 0;
+            return null;
         }
+    }
+    
+        //retrieve best noramlization method
+    public static String[] AutoNormOptions(RConnection RC){
+        try {
+            String rCommand = "AutoNormOptions()";
+            RCenter.recordRCommand(RC, rCommand);
+            return RC.eval(rCommand).asStrings();
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        } catch (REXPMismatchException ex) {
+            Logger.getLogger(RDataUtils.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
     
     //plot a boxplot and density for each compound

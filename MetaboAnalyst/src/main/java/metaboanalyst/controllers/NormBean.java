@@ -152,7 +152,7 @@ public class NormBean implements Serializable {
                 RocAnalBean rocAnalBean = (RocAnalBean) DataUtils.findBean("rocAnalBean");
                 rocAnalBean.resetData();
             }
-            sb.updateMsg("OK", "You can click <b>View Result</b> button to view the effect, or <b>Proceed</b> button to analysis page!");
+            sb.updateMsg("OK", "You can click <b>View Result</b> button to view the effect, or the <b>Proceed</b> button to move to the analysis page!");
             normPerformed = true;
         } else {
             sb.updateMsg("Error", "Unknown error happened during data normalization process!");
@@ -242,15 +242,17 @@ public class NormBean implements Serializable {
     }
 
     
+    
     public void performAutoNormalization() {
         RConnection RC = sb.getRConnection();
-        int res = RDataUtils.autoNormalize(RC);
+//        String[] buttons = RDataUtils.AutoNormOptions(RC);
+        String res = RDataUtils.autoNormalize(RC);
         String msg = RDataUtils.getCurrentMsg(RC);
-        if (res == 0) {
+        if (res == null) {
             sb.updateMsg("Error", "Unknown error happened during data normalization process!");
         } else {
-            sb.updateMsg("OK", "You can click <b>View Result</b> button to view the effect, or <b>Proceed</b> button to analysis page!");
-            normPerformed = true;
+            rowNormOpt = res;
+            sb.updateMsg("OK", "Click the <b>Submit</b> button to implement the suggested normalization method!");
         }            
     }
     

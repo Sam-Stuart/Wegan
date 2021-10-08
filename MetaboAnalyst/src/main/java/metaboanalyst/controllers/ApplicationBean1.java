@@ -339,16 +339,16 @@ public class ApplicationBean1 implements Serializable {
         designOpts[1] = new SelectItem("time", "Time-series + one experimental factor");
         designOpts[2] = new SelectItem("g2", "Two-factor independent samples");
 
-        dataNormOpts = new SelectItem[9];
+        dataNormOpts = new SelectItem[5];
         dataNormOpts[0] = new SelectItem("NULL", "None");
-        dataNormOpts[1] = new SelectItem("SpecNorm", "Sample-specific normalization");
-        dataNormOpts[2] = new SelectItem("SumNorm", "Normalization by sum");
-        dataNormOpts[3] = new SelectItem("MedianNorm", "Normalization by median");
-        dataNormOpts[4] = new SelectItem("SamplePQN", "Specify a reference sample");
-        dataNormOpts[5] = new SelectItem("GroupPQN", "Create a pooled average sample from group");
-        dataNormOpts[6] = new SelectItem("CompNorm", "Normalization by reference feature");
-        dataNormOpts[7] = new SelectItem("QuantileNorm", "Quantile normalization");
-        dataNormOpts[8] = new SelectItem("BoxNorm", "Box-Cox normalization");
+//        dataNormOpts[1] = new SelectItem("SpecNorm", "Sample-specific normalization");
+        dataNormOpts[1] = new SelectItem("SumNorm", "Normalization by sum");
+        dataNormOpts[2] = new SelectItem("MedianNorm", "Normalization by median");
+//        dataNormOpts[4] = new SelectItem("SamplePQN", "Specify a reference sample");
+//        dataNormOpts[5] = new SelectItem("GroupPQN", "Create a pooled average sample from group");
+//        dataNormOpts[6] = new SelectItem("CompNorm", "Normalization by reference feature");
+        dataNormOpts[3] = new SelectItem("QuantileNorm", "Quantile normalization");
+        dataNormOpts[4] = new SelectItem("BoxNorm", "Box-Cox normalization");
 
         probNormOpts = new SelectItem[2];
         probNormOpts[0] = new SelectItem("F", "Specify a reference sample");
