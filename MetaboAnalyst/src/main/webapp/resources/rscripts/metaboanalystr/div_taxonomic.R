@@ -26,11 +26,11 @@ Taxonomic_div <- function(mSetObj = NA, data = "false", dis = "NULL", match.forc
 
   mSetObj <- .get.mSet(mSetObj)
 
-  data(dune)
-  data(dune.taxon)
+  #data(dune)
+  #data(dune.taxon)
   
-  mSetObj$dataSet$norm <- dune
-  mSetObj$dataSet$origMeta <- dune.taxon
+  #mSetObj$dataSet$norm <- dune
+  #mSetObj$dataSet$origMeta <- dune.taxon
 
   #Extract input from mSetObj
   if (data == "false") { #normalized data as input

@@ -26,12 +26,12 @@ sp_pool <- function(mSetObj = NA, data = "false", pool = "", smallsample = "fals
   mSetObj <- .get.mSet(mSetObj)
   #Extract input from mSetObj
   
-  data(dune)
-  data(dune.env)
+  #data(dune)
+  #data(dune.env)
 
-  mSetObj$dataSet$norm <- dune
-  mSetObj$dataSet$origMeta <- dune.env
-  metaData <- mSetObj$dataSet$origMeta
+  #mSetObj$dataSet$norm <- dune
+  #mSetObj$dataSet$origMeta <- dune.env
+  #metaData <- mSetObj$dataSet$origMeta
   print(metaData)
 
   if (data == "false") { #normalized data as input

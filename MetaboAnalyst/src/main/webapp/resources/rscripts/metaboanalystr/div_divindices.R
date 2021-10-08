@@ -22,12 +22,12 @@ div_index <- function(mSetObj = NA, data = "false", group = "", margin = "NULL")
   
   mSetObj <- .get.mSet(mSetObj)
   
-  data(dune)
-  data(dune.env)
+  #data(dune)
+  #data(dune.env)
   
-  mSetObj$dataSet$norm <- dune
+  #mSetObj$dataSet$norm <- dune
   print(mSetObj$dataSet$norm)
-  mSetObj$dataSet$origMeta <- dune.env
+  #mSetObj$dataSet$origMeta <- dune.env
   metaData <- mSetObj$dataSet$origMeta
   print(metaData)
     
