@@ -372,7 +372,7 @@ mSetObj <- .get.mSet(mSetObj);
   msg <- NULL;
 
   if(substring(dataFormat,1,3)=="row"){ # sample in row
-    msg<-c(msg, "Samples in rows and variables in columns");
+    msg<-c(msg, paste0("&emsp;&emsp;&emsp;&emsp;", "- Samples in rows and variables in columns."));
     smpl.nms <- rownames(dat);
     all.nms <- colnames(dat);
     cls.lbl <- smpl.nms;
@@ -383,7 +383,7 @@ mSetObj <- .get.mSet(mSetObj);
     var.nms <- all.nms;
     dat1 <- dat;
   }else{ # sample in col
-    msg<-c(msg, "Samples in columns and variables in rows.");
+    msg<-c(msg, paste0("<ul>", "- Samples in columns and variables in rows.", "</ul>"));
     all.nms <- rownames(dat);
     smpl.nms <- colnames(dat);
     cls.lbl <- smpl.nms;
@@ -478,8 +478,8 @@ mSetObj <- .get.mSet(mSetObj);
   mSetObj$dataSet$cmpd <- "NA";
   mSetObj$dataSet$type <- "main"
   mSetObj$dataSet$orig <- dat1; # copy to be processed in the downstream
-  mSetObj$msgSet$read.msg <- c(msg, paste("The uploaded data file contains a ", nrow(dat1),
-                                          " (samples) by ", ncol(dat1), " (variables) data matrix.", sep=""));
+  mSetObj$msgSet$read.msg <- c(msg, paste0("&emsp;&emsp;&emsp;&emsp;", "- The uploaded data file contains a ", nrow(dat1),
+                                          " (samples) by ", ncol(dat1), " (variables) data matrix."));
   return(.set.mSet(mSetObj));
 }
 
@@ -684,7 +684,7 @@ Read.PeakList<-function(mSetObj=NA, foldername){
   all.peaks <- all.peaks[gd.inx,]
   
   if(sum(!gd.inx) > 0){
-    msg<-c(msg, paste("<font color='red'>A total of", sum(!gd.inx), "peaks were excluded due to non-numeric values. </font>" ));
+    msg<-c(msg, paste("<font color='red'> A total of", sum(!gd.inx), "peaks were excluded due to non-numeric values. </font> " ));
   }
   msg<-c(msg, paste("These samples contain a total of ", dim(all.peaks)[1], "peaks," ));
   msg<-c(msg, paste("with an average of ", round(dim(all.peaks)[1]/length(files), 1), "peaks per sample" ));

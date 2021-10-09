@@ -39,6 +39,13 @@
                     </h:panelGrid>
                     <h:panelGrid></h:panelGrid>
                     <h2 style="margin-top: 10px; margin-bottom: 4px">Supplemental data tables (optional): Plain text files (.csv or .txt)</h2>    
+                    <h:panelGrid>
+                        Including supplemental data tables will enable more interesting and informative plots for certain analyses.
+                        <b>Grouping data</b> assigns categories to each sample to group one or more samples together. 
+                        Grouping data can be included in the main data set or it can be uploaded as a separate data table.              
+                        <b>Constraining data</b> assigns external conditions to each sample which may impact the main data set. One common example is environmental data.
+                        Note that constraining data is required for Co-Inertia Analysis. 
+                    </h:panelGrid>
                     <h:panelGrid columns="2" style="padding: 10px">
                         <p:outputLabel style="font-size:14px; font-weight: bold" value="Grouping Data File:"/>
                         <p:fileUpload value="#{Ordinationload.dataFileMeta}" mode="simple"/>

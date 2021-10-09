@@ -38,7 +38,10 @@
                         </p:selectOneMenu> 
                     </h:panelGrid>                  
                     <h:panelGrid></h:panelGrid>
-                    <h2 style="margin-top: 10px; margin-bottom: 4px">Supplemental data table: Plain text files (.csv or .txt)</h2>    
+                    <h2 style="margin-top: 10px; margin-bottom: 4px">Supplemental data table (optional): Plain text files (.csv or .txt)</h2>    
+                    <h:panelGrid>
+                        Text describing table and why use it.......
+                    </h:panelGrid>
                     <h:panelGrid columns="2" style="padding: 10px">
                         <p:outputLabel style="font-size:14px; font-weight: bold" value="Taxonomic??? Data File (required for functional diversity???):"/>
                         <p:fileUpload value="#{Diversityload.dataFileMeta}" mode="simple"/>

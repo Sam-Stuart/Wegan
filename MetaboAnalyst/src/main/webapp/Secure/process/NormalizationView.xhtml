@@ -21,12 +21,11 @@
 
 
                 <h:panelGrid style=" margin-bottom: 10px;font-size: 16px; width:100%">
-                    The normalization procedures are grouped into three categories, all of which manipulate data so that variables are more comparable.
-                    The data normalization allows general-purpose adjustment in an attempt to achieve the class bell-shaped distribution.  
-                    Click <b>Select Best Normalization</b> to obtain the optimal normalization option based on the Shapiro-Wilk test.
-                    Data transformation and data scaling are two different approaches that can compliment data normalization. 
-                    You can use one procedure or combine them to achieve better results. Once normalization has been performed, click <b>View Result</b> to view the effect, 
-                    along with important descriptive statistical results.
+                    The normalization procedures are grouped into two categories, both of which manipulate data so that samples and variables are more comparable.
+                    Data normalization allows general-purpose adjustment of variables in an attempt to achieve the classic bell-shaped distribution.
+                    Data scaling of variables can compliment data normalization. You can use one procedure or both to achieve better results. Click 
+                    <b>Select Best Normalization</b> to obtain the optimal normalization based on Pearson Mode Skewness. Click <b>Submit</b> 
+                    followed by <b>View Result</b> to view the effect of your selections.
                 </h:panelGrid>
                 
                 <p:selectOneRadio id="rowRadio" value="#{normBean.rowNormOpt}" layout="custom">  
@@ -63,6 +62,19 @@
                             <p:outputLabel style="font-size:13px; font-weight: bold" value="Box-Cox normalization"/>         
                             <h:outputLabel value="(Uses Yeo-Johnson technique for zero and negative value data)"/>
 
+                            <p:radioButton for="rowRadio" itemIndex="5"/>
+                            <p:outputLabel style="font-size:13px; font-weight: bold" value="Log base 10 transformation"/>
+                            <h:outputLabel value="(Only for positive and non-zero value data)"/>
+                            
+                            <p:radioButton for="rowRadio" itemIndex="6"/>
+                            <p:outputLabel style="font-size:13px; font-weight: bold" value="Square root transformation"/>
+                            <h:outputLabel value="(Only for positive and zero value data)"/>
+                            
+                            <p:radioButton for="rowRadio" itemIndex="7"/>
+                            <p:outputLabel style="font-size:13px; font-weight: bold" value="Cube root transformation"/>
+                            <h:outputLabel value="(Works for positive, zero and negative value data)"/>
+
+                            
                         </h:panelGrid>
                         <h:panelGrid style="width:100%; border-bottom: darkgray dashed thin; border-top: darkgray dashed thin" rendered="#{sessionBean1.analType eq 'roc' and sessionBean1.dataType eq 'conc'}">
                             <h:panelGroup>
@@ -83,23 +95,6 @@
                                 Log normalization will be performed during the process. You can only perform Data scaling in the next step.
                             </p>
                         </h:panelGrid>
-                        <b>Data Transformation</b>
-                        <h:panelGrid columns="3" style="padding:2px 12px 10px 10px; font-size: 14px">
-                            <p:radioButton for="transRadio" itemIndex="0"/>
-                            <p:outputLabel style="font-size:13px; font-weight: bold" value="None"/>
-                            <p:spacer/>
-                            
-                            <p:radioButton for="transRadio" itemIndex="1"/>
-                            <p:outputLabel style="font-size:13px; font-weight: bold" value="Log base 10 transformation"/>
-                            <h:outputLabel value="(only for positive value data)"/>
-                            
-                            <p:radioButton for="transRadio" itemIndex="3"/>
-                            <p:outputLabel style="font-size:13px; font-weight: bold" value="Square root transformation"/>
-                            <h:outputLabel value="(only for positive value data)"/>
-                            
-                            <p:radioButton for="transRadio" itemIndex="2"/>
-                            <p:outputLabel style="font-size:13px; font-weight: bold" value="Cube root transformation"/>
-                        </h:panelGrid>
                         <b>Data Scaling</b>
                         <h:panelGrid columns="3" style="padding:2px 12px 10px 10px; font-size: 14px">
                             <p:radioButton for="scaleRadio" itemIndex="0"/>
@@ -107,19 +102,19 @@
                             <p:spacer/>
                             <p:radioButton for="scaleRadio" itemIndex="1"/>
                             <p:outputLabel style="font-size:13px; font-weight: bold" value="Mean centering"/>
-                            <h:outputLabel value="(subtract the mean of the variable from each value)"/>
+                            <h:outputLabel value="(Subtract the mean of the variable from each value)"/>
                             
                             <p:radioButton for="scaleRadio" itemIndex="4"/>
                             <p:outputLabel style="font-size:13px; font-weight: bold" value="Max-Min scaling"/>
-                            <h:outputLabel value="(mean-center and divide each value by the range of the variable)"/> 
+                            <h:outputLabel value="(Mean-center and divide each value by the range of the variable)"/> 
                             
                             <p:radioButton for="scaleRadio" itemIndex="2"/>
                             <p:outputLabel style="font-size:13px; font-weight: bold" value="Z-score scaling"/>
-                            <h:outputLabel value="(mean-center and divide each value by the standard deviation of the variable)"/>
+                            <h:outputLabel value="(Mean-center and divide each value by the standard deviation of the variable)"/>
                             
                             <p:radioButton for="scaleRadio" itemIndex="3"/>
                             <p:outputLabel style="font-size:13px; font-weight: bold" value="Pareto scaling"/>
-                            <h:outputLabel value="(mean-center and divide each value by the square root of the standard deviation of the variable)"/>
+                            <h:outputLabel value="(Mean-center and divide each value by the square root of the standard deviation of the variable)"/>
 
                         </h:panelGrid>
                     </h:panelGrid>
@@ -193,7 +188,7 @@
                     Please note: the boxplots show at most 50 variables/samples due to space limitation; the density plots are based on all data 
                 </p>
                 <p:tabView id="ac" style="width:100%; border: none; background: none;">
-                    <p:tab title ="Variable View">
+                    <p:tab title ="Variable Overview">
                         <h:panelGrid style="text-align: center; width: 100%;">
                             <h:panelGrid style="text-align: right; padding-left: 700px; width: 760px;">
                                 <p:commandLink actionListener="#{sessionBean1.graphicsLnk_action('norm')}" 
@@ -205,7 +200,7 @@
                             <img src="#{sessionBean1.getCurrentImageURL('norm')}" alt="Normalization"/>
                         </h:panelGrid>
                     </p:tab>
-                    <p:tab title ="Sample View">
+                    <p:tab title ="Sample Overview">
                         <h:panelGrid style="text-align: center; width: 100%;">
                             <h:panelGrid style="text-align: right; padding-left: 700px; width: 760px;">
                                 <p:commandLink actionListener="#{sessionBean1.graphicsLnk_action('snorm')}" 

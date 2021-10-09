@@ -200,12 +200,12 @@ SanityCheckData <- function(mSetObj=NA){
   # check numeric and categorical variables
   numCount <- length(select_if(int.mat, is.numeric))
   catCount <- length(select_if(int.mat, is.character))
-  msg<-c(msg, paste0("A total of ", numCount, " numeric and ", catCount, " categorical variables were detected."));
+  msg<-c(msg, paste0("&emsp;&emsp;&emsp;&emsp;", "- A total of ", numCount, " numeric and ", catCount, " categorical variables were detected."));
 
   #Check for 0s and neg numbers
   zeroCount <- sum(int.mat==0);
   negCount <- sum(int.mat<0);
-  msg<-c(msg, paste0("A total of ", zeroCount, " zero values and ", negCount, " negative values were detected. Zero and negative values will impact which transformations are available."));
+  msg<-c(msg, paste0("&emsp;&emsp;&emsp;&emsp;", "- A total of ", zeroCount, " zero values and ", negCount, " negative values were detected. Zero and negative values will impact which normalization methods are available."));
 
 
   # check NA values
@@ -213,11 +213,9 @@ SanityCheckData <- function(mSetObj=NA){
   naCount <- sum(is.na(int.mat));
   naPercent <- round(100*naCount/totalCount,1)
   
-  msg<-c(msg, paste0("<font color=\"red\">", "A total of ", naCount, " (", naPercent, "%) missing values were detected.</font>"));
+  msg<-c(msg, paste0("&emsp;&emsp;&emsp;&emsp;", "- A total of ", naCount, " (", naPercent, "%) missing values were detected. By default, missing values will be left as is, though certain functionalities may be unavailable."));
 
-  msg<-c(msg, "<u>By default, missing values will be left as is, though certain functionalities may be unavailable.</u>",
-         "Click <b>Skip</b> button if you accept the default practice",
-         "Or click <b>Missing value estimation</b> to estimate values and filter data");
+  msg<-c(msg, "Click <b>Skip</b> button if you accept the default practice. Click <b>Missing value estimation</b> to estimate missing values and filter data.");
   
   # obtain original half of minimal positive value (threshold) for numeric columns
   numVars <- select_if(int.mat, is.numeric) #I ADDED THIS FOR WEGAN WHICH ALLOWS CATEGORICAL VARS
@@ -881,7 +879,7 @@ IsSpectraProcessingOK <- function(mSetObj=NA){
     .set.mSet(mSetObj)
     return(res);
   }
-  print(res);
+  #print(res);
   return(.set.mSet(mSetObj));
 }
 
@@ -906,7 +904,7 @@ GetGroupNumber<-function(mSetObj=NA){
 #'
 IsSmallSmplSize<-function(mSetObj=NA){
   mSetObj <- .get.mSet(mSetObj);
-  print(mSetObj$dataSet$small.smpl.size);
+  #print(mSetObj$dataSet$small.smpl.size);
   return(.set.mSet(mSetObj));
 }
 

@@ -182,28 +182,28 @@ public class ApplicationBean1 implements Serializable {
         cmpdIDOpts[6] = new SelectItem("hmdb_kegg", "HMDB and KEGG ID");
 
         csvFormatOpts = new SelectItem[2];
-        csvFormatOpts[0] = new SelectItem("rowu", "Samples in rows");
-        csvFormatOpts[1] = new SelectItem("colu", "Samples in columns");
+        csvFormatOpts[0] = new SelectItem("rowu", "Samples in rows, variables in columns");
+        csvFormatOpts[1] = new SelectItem("colu", "Samples in columns, variables in rows");
 //        csvFormatOpts[2] = new SelectItem("rowp", "Samples in rows (paired)");
 //        csvFormatOpts[3] = new SelectItem("colp", "Samples in columns (paired)");
 
         metaFormatOpts = new SelectItem[2];
-        metaFormatOpts[0] = new SelectItem("rowu", "Samples in rows");
-        metaFormatOpts[1] = new SelectItem("colu", "Samples in columns");
+        metaFormatOpts[0] = new SelectItem("rowu", "Samples in rows, variables in columns");
+        metaFormatOpts[1] = new SelectItem("colu", "Samples in columns, variables in rows");
 //        metaFormatOpts[2] = new SelectItem("rowp", "Samples in rows (paired)");
 //        metaFormatOpts[3] = new SelectItem("colp", "Samples in columns (paired)");
         
         envFormatOpts = new SelectItem[2];
-        envFormatOpts[0] = new SelectItem("rowu", "Samples in rows");
-        envFormatOpts[1] = new SelectItem("colu", "Samples in columns");
+        envFormatOpts[0] = new SelectItem("rowu", "Samples in rows, variables in columns");
+        envFormatOpts[1] = new SelectItem("colu", "Samples in columns, variables in rows");
 //        envFormatOpts[2] = new SelectItem("rowp", "Samples in rows (paired)");
 //        envFormatOpts[3] = new SelectItem("colp", "Samples in columns (paired)");
         
         dataNamesOpts = new SelectItem[4];
         dataNamesOpts[0] = new SelectItem("colOnly", "Column labels only");
         dataNamesOpts[1] = new SelectItem("rowOnly", "Row labels only");
-        dataNamesOpts[2] = new SelectItem("bothNames", "Both");
-        dataNamesOpts[3] = new SelectItem("noNames", "Neither");
+        dataNamesOpts[2] = new SelectItem("bothNames", "Column and row labels");
+        dataNamesOpts[3] = new SelectItem("noNames", "No labels");
         
         metaNamesOpts = new SelectItem[4];
         metaNamesOpts[0] = new SelectItem("colOnly", "Column labels only");
@@ -339,7 +339,7 @@ public class ApplicationBean1 implements Serializable {
         designOpts[1] = new SelectItem("time", "Time-series + one experimental factor");
         designOpts[2] = new SelectItem("g2", "Two-factor independent samples");
 
-        dataNormOpts = new SelectItem[5];
+        dataNormOpts = new SelectItem[8];
         dataNormOpts[0] = new SelectItem("NULL", "None");
 //        dataNormOpts[1] = new SelectItem("SpecNorm", "Sample-specific normalization");
         dataNormOpts[1] = new SelectItem("SumNorm", "Normalization by sum");
@@ -349,6 +349,9 @@ public class ApplicationBean1 implements Serializable {
 //        dataNormOpts[6] = new SelectItem("CompNorm", "Normalization by reference feature");
         dataNormOpts[3] = new SelectItem("QuantileNorm", "Quantile normalization");
         dataNormOpts[4] = new SelectItem("BoxNorm", "Box-Cox normalization");
+        dataNormOpts[5] = new SelectItem("LogNorm", "Log transformation");
+        dataNormOpts[6] = new SelectItem("CrNorm", "Cube root transformation");
+        dataNormOpts[7] = new SelectItem("SqNorm", "Square root transformation");
 
         probNormOpts = new SelectItem[2];
         probNormOpts[0] = new SelectItem("F", "Specify a reference sample");
