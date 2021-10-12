@@ -398,8 +398,8 @@ AbundancePrestPlot <- function(mSetObj=NA, bar.color="NULL", line.color.addPoi =
   
   mSetObj <- .get.mSet(mSetObj)
   
-  #plot_data.fit <- mSetObj$analset$result$lognormal_fit$output
-  #plot_data.distr <- mSetObj$analset$result$log_likelihood$output
+  plot_data.fit <- mSetObj$analset$result$lognormal_fit$output
+  plot_data.distr <- mSetObj$analset$result$log_likelihood$output
   
   #Set plot dimensions
   if(is.na(width)){

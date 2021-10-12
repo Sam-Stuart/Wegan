@@ -57,65 +57,65 @@ div_index <- function(mSetObj = NA, data = "false", group = "", margin = "NULL")
   print(Site)
   
 
-    H.shannon <- diversity(input.2, index = "shannon", MARGIN = MARGIN1, base = exp(1))
-    H.shannon1 <- as.data.frame(cbind(Site, "shannon", H.shannon))
-    colnames(H.shannon1) <- c("Site", "Index", "ShannonIndices")
-    print(H.shannon1)
+  H.shannon <- diversity(input.2, index = "shannon", MARGIN = MARGIN1, base = exp(1))
+  H.shannon1 <- as.data.frame(cbind(Site, "shannon", H.shannon))
+  colnames(H.shannon1) <- c("Site", "Index", "ShannonIndices")
+  print(H.shannon1)
+   
+  H.simpson <- diversity(input.2, index = "simpson", MARGIN = MARGIN1)
+  H.simpson1 <- as.data.frame(cbind(Site, "simpson", H.simpson))
+  colnames(H.simpson1) <- c("Site", "Index", "SimpsonIndices")
+  print(H.simpson1)  
     
-    H.simpson <- diversity(input.2, index = "simpson", MARGIN = MARGIN1)
-    H.simpson1 <- as.data.frame(cbind(Site, "simpson", H.simpson))
-    colnames(H.simpson1) <- c("Site", "Index", "SimpsonIndices")
-    print(H.simpson1)  
+  H.invsimpson <- diversity(input.2, index = "invsimpson", MARGIN = MARGIN1)
+  H.invsimpson1 <- as.data.frame(cbind(Site, "invsimpson", H.invsimpson))
+  colnames(H.invsimpson1) <- c("Site", "Index", "InvsimpsonIndices")
+  print(H.invsimpson1) 
     
-    H.invsimpson <- diversity(input.2, index = "invsimpson", MARGIN = MARGIN1)
-    H.invsimpson1 <- as.data.frame(cbind(Site, "invsimpson", H.invsimpson))
-    colnames(H.invsimpson1) <- c("Site", "Index", "InvsimpsonIndices")
-    print(H.invsimpson1) 
-    
-    Fisher.alpha <- fisher.alpha(input.2, MARGIN = MARGIN1)
-    fisher.alpha1 <- as.data.frame(cbind(Site, "fisher.alpha", Fisher.alpha))
-    colnames(fisher.alpha1) <- c("Site", "Index", "fisherAlphaIndices")
-    print(fisher.alpha1)
+  Fisher.alpha <- fisher.alpha(input.2, MARGIN = MARGIN1)
+  fisher.alpha1 <- as.data.frame(cbind(Site, "fisher.alpha", Fisher.alpha))
+  colnames(fisher.alpha1) <- c("Site", "Index", "fisherAlphaIndices")
+  print(fisher.alpha1)
   
-    richness <- specnumber(input.2, MARGIN = MARGIN1)
-    richness1 <- as.data.frame(cbind(Site, richness, metaData))
-    #colnames(richness1[1:2,]) <- c("Site", "Richness")
-    print(richness1)
+  richness <- specnumber(input.2, MARGIN = MARGIN1)
+  richness1 <- as.data.frame(cbind(Site, richness, metaData))
+  #colnames(richness1[1:2,]) <- c("Site", "Richness")
+  print(richness1)
   
-    if (group == "") {
-        group1 = 2
-        richness_g <- specnumber(input.2, groups = metaData[,2], MARGIN = MARGIN1)
-        richness_g1 <- as.data.frame(richness_g)
-        richness_g1 <- cbind(rownames(richness_g1), richness_g)
-        colnames(richness_g1) <- c("Group", "Richness")
-    } else {
-        group1 <- as.numeric(group)
-        richness_g <- specnumber(input.2, groups = metaData[,group1], MARGIN = MARGIN1)
-        richness_g1 <- as.data.frame(richness_g)
-        richness_g1 <- cbind(rownames(richness_g1), richness_g)
-        colnames(richness_g1) <- c(colnames(metaData[group1]), "Richness")
-    }
-    print(group1)
-    print(richness_g1)
+  if (group == "") {
+     group1 = 2
+     richness_g <- specnumber(input.2, groups = metaData[,2], MARGIN = MARGIN1)
+     richness_g1 <- as.data.frame(richness_g)
+     richness_g1 <- cbind(rownames(richness_g1), richness_g)
+     colnames(richness_g1) <- c("Group", "Richness")
+  } else {
+     group1 <- as.numeric(group)
+     richness_g <- specnumber(input.2, groups = metaData[,group1], MARGIN = MARGIN1)
+     richness_g1 <- as.data.frame(richness_g)
+     richness_g1 <- cbind(rownames(richness_g1), richness_g)
+     colnames(richness_g1) <- c(colnames(metaData[group1]), "Richness")
+  }
+  print(group1)
+  print(richness_g1)
 
-    Evenness.shannon <- H.shannon/log(richness)
-    Evenness.shannon1 <- as.data.frame(cbind(Site, Evenness.shannon))
-    colnames(Evenness.shannon1) <- c("Site", "Evenness(Shannon)")
-    print(Evenness.shannon1)
+  Evenness.shannon <- H.shannon/log(richness)
+  Evenness.shannon1 <- as.data.frame(cbind(Site, Evenness.shannon))
+  colnames(Evenness.shannon1) <- c("Site", "Evenness(Shannon)")
+  print(Evenness.shannon1)
   
-    Evenness.simpson <- H.simpson/log(richness) 
-    Evenness.simpson1 <- as.data.frame(cbind(Site, Evenness.simpson))
-    colnames(Evenness.simpson1) <- c("Site", "Evenness(Simpson)")
-    print(Evenness.simpson1)
+  Evenness.simpson <- H.simpson/log(richness) 
+  Evenness.simpson1 <- as.data.frame(cbind(Site, Evenness.simpson))
+  colnames(Evenness.simpson1) <- c("Site", "Evenness(Simpson)")
+  print(Evenness.simpson1)
   
-    Evenness.invsimpson <- H.invsimpson/log(richness)
-    Evenness.invsimpson1 <- as.data.frame(cbind(Site, Evenness.invsimpson))
-    colnames(Evenness.invsimpson1) <- c("Site", "Evenness(Invsimpson)")
-    print(Evenness.invsimpson1)
+  Evenness.invsimpson <- H.invsimpson/log(richness)
+  Evenness.invsimpson1 <- as.data.frame(cbind(Site, Evenness.invsimpson))
+  colnames(Evenness.invsimpson1) <- c("Site", "Evenness(Invsimpson)")
+  print(Evenness.invsimpson1)
     
-    ShannonIndices <- as.data.frame(cbind(Site, richness, Evenness.shannon, Evenness.simpson, Evenness.invsimpson, 
-                          H.shannon, H.simpson, H.invsimpson, Fisher.alpha))
-    print(ShannonIndices)
+  ShannonIndices <- as.data.frame(cbind(Site, richness, Evenness.shannon, Evenness.simpson, Evenness.invsimpson, 
+                       H.shannon, H.simpson, H.invsimpson, Fisher.alpha))
+  print(ShannonIndices)
   
   print("ready for alpha")
   alpha <- with(metaData, tapply(specnumber(input.2), metaData[,group1], mean))
