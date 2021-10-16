@@ -27,13 +27,13 @@
                     </h:panelGrid>                   
                     <h:panelGrid columns="3" style="padding: 10px; margin-left: 40px">
                         <p:outputLabel style="font-size:12px; font-weight: bold" value="Format:"/>
-                        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:170px" value="#{Ordinationload.dataFormat}">
+                        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:210px" value="#{Ordinationload.dataFormat}">
                             <f:selectItems value="#{applicationBean1.csvFormatOpts}" />
                         </p:selectOneMenu> 
                     </h:panelGrid>                     
                     <h:panelGrid columns="3" style="padding: 10px; margin-left: 40px">
                         <p:outputLabel style="font-size:12px; font-weight: bold" value="Labels:"/>
-                        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:170px" value="#{Ordinationload.dataNames}">
+                        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:210px" value="#{Ordinationload.dataNames}">
                             <f:selectItems value="#{applicationBean1.dataNamesOpts}" />
                         </p:selectOneMenu> 
                     </h:panelGrid>
@@ -43,7 +43,7 @@
                         Including supplemental data tables will enable more interesting and informative plots for certain analyses.
                         <b>Grouping data</b> assigns categories to each sample to group one or more samples together. 
                         Grouping data can be included in the main data set or it can be uploaded as a separate data table.              
-                        <b>Constraining data</b> assigns external conditions to each sample which may impact the main data set. One common example is environmental data.
+                        <b>Constraining data</b> assigns external conditions to each sample. One common example is environmental data.
                         Note that constraining data is required for Co-Inertia Analysis. 
                     </h:panelGrid>
                     <h:panelGrid columns="2" style="padding: 10px">
@@ -52,13 +52,13 @@
                     </h:panelGrid>   
                     <h:panelGrid columns="2" style="padding: 10px; margin-left: 40px">
                         <p:outputLabel style="font-size:12px; font-weight: bold" value="Format:"/>
-                        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:170px" value="#{Ordinationload.metaFormat}">
+                        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:210px" value="#{Ordinationload.metaFormat}">
                             <f:selectItems value="#{applicationBean1.metaFormatOpts}" />
                         </p:selectOneMenu> 
                     </h:panelGrid> 
                     <h:panelGrid columns="2" style="padding: 10px; margin-left: 40px">
                         <p:outputLabel style="font-size:12px; font-weight: bold" value="Labels:"/>
-                        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:170px" value="#{Ordinationload.metaNames}">
+                        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:210px" value="#{Ordinationload.metaNames}">
                             <f:selectItems value="#{applicationBean1.metaNamesOpts}" />
                         </p:selectOneMenu> 
                     </h:panelGrid>
@@ -68,13 +68,13 @@
                     </h:panelGrid>
                     <h:panelGrid columns="2" style="padding: 10px; margin-left: 40px">
                         <p:outputLabel style="font-size:12px; font-weight: bold" value="Format:"/>
-                        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:170px" value="#{Ordinationload.envFormat}">
+                        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:210px" value="#{Ordinationload.envFormat}">
                             <f:selectItems value="#{applicationBean1.envFormatOpts}" />
                         </p:selectOneMenu> 
                     </h:panelGrid> 
                     <h:panelGrid columns="2" style="padding: 10px; margin-left: 40px">
                         <p:outputLabel style="font-size:12px; font-weight: bold" value="Labels"/>
-                        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:170px" value="#{Ordinationload.envNames}">
+                        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:210px" value="#{Ordinationload.envNames}">
                             <f:selectItems value="#{applicationBean1.envNamesOpts}" />
                         </p:selectOneMenu> 
                     </h:panelGrid>

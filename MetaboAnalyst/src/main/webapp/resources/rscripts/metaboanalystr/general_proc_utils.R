@@ -205,7 +205,7 @@ SanityCheckData <- function(mSetObj=NA){
   #Check for 0s and neg numbers
   zeroCount <- sum(int.mat==0);
   negCount <- sum(int.mat<0);
-  msg<-c(msg, paste0("&emsp;&emsp;&emsp;&emsp;", "- A total of ", zeroCount, " zero values and ", negCount, " negative values were detected. Zero and negative values will impact which normalization methods are available."));
+  msg<-c(msg, paste0("&emsp;&emsp;&emsp;&emsp;", "- A total of ", zeroCount, " zero values and ", negCount, " negative values were detected."));
 
 
   # check NA values
@@ -213,8 +213,8 @@ SanityCheckData <- function(mSetObj=NA){
   naCount <- sum(is.na(int.mat));
   naPercent <- round(100*naCount/totalCount,1)
   
-  msg<-c(msg, paste0("&emsp;&emsp;&emsp;&emsp;", "- A total of ", naCount, " (", naPercent, "%) missing values were detected. By default, missing values will be left as is, though certain functionalities may be unavailable."));
-
+  msg<-c(msg, paste0("&emsp;&emsp;&emsp;&emsp;", "- A total of ", naCount, " (", naPercent, "%) missing values were detected."));
+  msg<-c(msg, "By default, missing and constant values are left as is, though certain functionalities may be unavailable.")
   msg<-c(msg, "Click <b>Skip</b> button if you accept the default practice. Click <b>Missing value estimation</b> to estimate missing values and filter data.");
   
   # obtain original half of minimal positive value (threshold) for numeric columns
