@@ -528,11 +528,11 @@ Read.TextDataMeta <- function(mSetObj=NA, filePath, metaFormat="rowu", lbl.type=
 Read.TextDataEnv <- function(mSetObj=NA, filePath, envFormat="rowu", lbl.type="disc", envNames="colOnly"){
   mSetObj <- .get.mSet(mSetObj);
 
-  if (dataNames=="colOnly") { #yes column names, no row names
+  if (envNames=="colOnly") { #yes column names, no row names
     dat <- .readEnvDataTable(filePath, envNames="colOnly");
-  } else if (dataNames=="rowOnly") { #no col names, yes row names
+  } else if (envNames=="rowOnly") { #no col names, yes row names
     dat <- .readEnvDataTable(filePath, envNames="rowOnly"); 
-  } else if (dataNames=="bothNames") { #yes col names, yes row names
+  } else if (envNames=="bothNames") { #yes col names, yes row names
     dat <- .readEnvDataTable(filePath, envNames="bothNames");
   } else { #no col names, no row names
     dat <- .readEnvDataTable(filePath, envNames="noNames");

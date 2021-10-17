@@ -24,16 +24,7 @@ ord.anosim <- function(mSetObj=NA, data="NULL", distance="NULL", binary="false",
   }
   
   input <- input[order(as.numeric(row.names(input))),] #Order rows
-  #envData <- mSetObj$dataSet$origEnv #Compulsory
-
-
-####TESTING####
-  input <- input[-1,] #Remove duplicate rows
-  envData <- .readDataTable("/home/louisa/Wegan/MetaboAnalyst/src/main/webapp/resources/rscripts/metaboanalystr/test_data/dune_env.csv")
-  print(envData)
-############
-
-
+  envData <- mSetObj$dataSet$origEnv #Compulsory
   
   #Obtain numeric data for anosim
   num_data <- select_if(input, is.numeric) 

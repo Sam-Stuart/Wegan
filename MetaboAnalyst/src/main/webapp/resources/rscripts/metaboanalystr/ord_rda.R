@@ -32,17 +32,6 @@ ord.rda <- function(mSetObj=NA, abundance="false", env_text=" ", data="false") {
   metaData <- mSetObj$dataSet$origMeta
   envData <- mSetObj$dataSet$origEnv
 
-  cat("metaData")
-  print(metaData)
-
-
-####TESTING####
-  input <- input[-1,] #Remove duplicate row
-  metaData <- .readDataTable("/home/louisa/Wegan/MetaboAnalyst/src/main/webapp/resources/rscripts/metaboanalystr/test_data/dune_meta.csv") 
-  envData <- .readDataTable("/home/louisa/Wegan/MetaboAnalyst/src/main/webapp/resources/rscripts/metaboanalystr/test_data/dune_env.csv")
-############
-
-
   #Obtain numeric data for ordination and categorical data for grouping data
   num_data <- select_if(input, is.numeric)
   fac_data <- select_if(input, is.character)

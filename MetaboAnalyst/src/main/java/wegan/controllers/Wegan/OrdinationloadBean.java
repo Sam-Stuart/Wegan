@@ -289,9 +289,7 @@ public class OrdinationloadBean implements Serializable {
             testFile = ab.getTestDune();
             dataFormat = "rowu";
             dataNames = "colOnly";
-            metaTestFile = ab.getTestDuneMeta();
-            metaFormat = "rowu";
-            metaNames = "colOnly";
+            metaTestFile = null;
             envTestFile = ab.getTestDuneEnv();
             envFormat = "rowu";
             envNames = "colOnly";
@@ -303,11 +301,7 @@ public class OrdinationloadBean implements Serializable {
             dataFormat = "rowu";       
             dataNames = "colOnly";
             metaTestFile = null;
-            metaFormat = null;
-            metaNames = null;
             envTestFile = null;
-            envFormat = null;
-            envNames = null;
         } 
         
         else if (testDataOpt.equals("Pitlatrine")) {
@@ -339,7 +333,7 @@ public class OrdinationloadBean implements Serializable {
         if (metaTestFile != null) {
             RDataUtils.readTextDataMeta(RC, metaTestFile, metaFormat, "disc", metaNames);
         }
-        if (metaTestFile != null) {
+        if (envTestFile != null) {
             RDataUtils.readTextDataEnv(RC, envTestFile, envFormat, "disc", envNames);
         }
         return "Data check";

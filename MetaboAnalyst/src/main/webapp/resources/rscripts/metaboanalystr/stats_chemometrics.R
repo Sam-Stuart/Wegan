@@ -186,11 +186,7 @@ PlotPCA2DScore <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, 
   xlabel = paste("PC",pcx, "(", round(100*mSetObj$analSet$pca$variance[pcx],1), "%)");
   ylabel = paste("PC",pcy, "(", round(100*mSetObj$analSet$pca$variance[pcy],1), "%)");
   pc1 = mSetObj$analSet$pca$x[, pcx];
-  print("pc1")
-  print(pc1)
   pc2 = mSetObj$analSet$pca$x[, pcy];
-  print("pc2")
-  print(pc2)
   text.lbls<-substr(names(pc1),1,14) # some names may be too long
   print("1")
   imgName = paste(imgName, "dpi", dpi, ".", format, sep="");
@@ -223,15 +219,8 @@ PlotPCA2DScore <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, 
       print("20")
       mSetObj$dataSet$cls <- lvs[i];
       inx <- mSetObj$dataSet$cls;
-      print("inx")
-      print(inx)
       groupVar <- var(cbind(pc1[inx],pc2[inx]), na.rm=T);
-      print("groupVar")
-      print(groupVar)
       groupMean <- cbind(mean(pc1[inx], na.rm=T),mean(pc2[inx], na.rm=T));
-      print("groupMean")
-      print(groupMean)
-      print(reg)
       pts.array[,,i] <- ellipse::ellipse(groupVar, scale = c(1, 1), centre = groupMean, level = reg, npoints=100);
       print("15")
     }

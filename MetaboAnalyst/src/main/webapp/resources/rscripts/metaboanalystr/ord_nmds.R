@@ -26,17 +26,8 @@ ord.NMDS <- function(mSetObj=NA, data="false", distance="NULL", abundance="false
   }
 
   input <- input[order(as.numeric(row.names(input))),] #Order rows
-  #metaData <- mSetObj$dataSet$origMeta
-  #envData <- mSetObj$dataSet$origEnv
-
-
-####TESTING####
-  input <- input[-1,] #Remove duplicate row
-  metaData <- .readDataTable("/home/louisa/Wegan/MetaboAnalyst/src/main/webapp/resources/rscripts/metaboanalystr/test_data/dune_meta.csv") 
-  envData <- .readDataTable("/home/louisa/Wegan/MetaboAnalyst/src/main/webapp/resources/rscripts/metaboanalystr/test_data/dune_env.csv")
-############
-
-
+  metaData <- mSetObj$dataSet$origMeta
+  envData <- mSetObj$dataSet$origEnv
 
   #Obtain numeric data for ordination and categorical data for grouping data
   num_data <- select_if(input, is.numeric) #Numeric data only for NMDS
@@ -77,7 +68,7 @@ ord.NMDS <- function(mSetObj=NA, data="false", distance="NULL", abundance="false
   } else {  #User uplaoded meta data
     metaData1 <- metaData #Data integrated like weights in correlation module
     if (nrow(metaData1)!=nrow(input)) {
-      #AddErrMsg("Your meta data does not have the same number of rows as your numerical data! Please check that you meta data is correct.")
+      #AddErrMsg("Your grouping data does not have the same number of rows as your numerical data! Please check that you meta data is correct.")
       stop("Your grouping data does not have the same number of rows as your main data set! Please check that you meta data is correct.")
     }
     colnames(metaData1) <- colnames(metaData)
@@ -90,8 +81,8 @@ ord.NMDS <- function(mSetObj=NA, data="false", distance="NULL", abundance="false
       envData1 <- envData
   }
 
-  if (nrow(envData1)!=nrow(input)) {
-    #AddErrMsg("Your meta data does not have the same number of rows as your numerical data! Please check that you meta data is correct.")
+  if (length(nrow(envData1)!=nrow(input))==0) {
+    #AddErrMsg("Your environmental data does not have the same number of rows as your numerical data! Please check that you meta data is correct.")
     stop("Your environmental data does not have the same number of rows as your numerical data! Please check that you environmental data is correct.")
   }
   

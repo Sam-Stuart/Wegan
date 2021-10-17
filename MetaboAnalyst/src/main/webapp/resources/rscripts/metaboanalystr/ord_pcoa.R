@@ -31,18 +31,8 @@ ord.pcoa <- function(mSetObj=NA, data="false", distance="NULL", binary="false", 
   }
   
   input <- input[order(as.numeric(row.names(input))),] #Order rows
-  #metaData <- mSetObj$dataSet$origMeta
-  #envData <- mSetObj$dataSet$origEnv
-
-
-####TESTING####
-  input <- input[-1,] #Remove duplicate rows
-  metaData <- .readDataTable("/home/louisa/Wegan/MetaboAnalyst/src/main/webapp/resources/rscripts/metaboanalystr/test_data/dune_meta.csv") 
-  envData <- .readDataTable("/home/louisa/Wegan/MetaboAnalyst/src/main/webapp/resources/rscripts/metaboanalystr/test_data/dune_env.csv")
-############
-
-
-
+  metaData <- mSetObj$dataSet$origMeta
+  envData <- mSetObj$dataSet$origEnv
 
   #Obtain numeric data for ordination and catgroical data for grouping data
   num_data <- select_if(input, is.numeric) #Numeric data only for PCOA
