@@ -84,7 +84,7 @@ public class OABean implements Serializable {
 
     private void doDefaultPCOA() {
         OAUtils.CreatePCOAOrdination(sb, false, "NULL", false, false, " ");
-        OAUtils.PlotPCOA2DOrdination(sb, false, false, false, false, false, "NULL", "NULL", sb.getCurrentImage("ord_nmds_2D"), "png", 72);
+        OAUtils.PlotPCOA2DOrdination(sb, false, false, false, false, false, "NULL", "NULL", sb.getCurrentImage("ord_pcoa_2D"), "png", 72);
         OAUtils.PlotPCOA3DOrdination(sb, "NULL", false, "NULL", sb.getCurrentImage("ord_pcoa_3D"));
         OAUtils.PlotPCOAstressOrdination(sb, sb.getCurrentImage("ord_pcoa_stress"), "png", 72);
         OAUtils.PlotPCOAscreeOrdination(sb, sb.getCurrentImage("ord_pcoa_scree"), "png", 72);

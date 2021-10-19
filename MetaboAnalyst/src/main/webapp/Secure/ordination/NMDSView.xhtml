@@ -130,13 +130,12 @@
                             </h:panelGrid>  
                             
                         <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
-                            <p:commandButton value="Export"
-                                styleClass="exportButton"
-                                style="box-shadow: none !important; float:right; text-shadow: none !important;"
-                                actionListener="#{sessionBean1.graphicsLnk_action('ord_nmds_2D')}"
-                                oncomplete="PF('graphDialog').show()"/>
+                                <p:commandButton value="Export"
+                                    styleClass="exportButton"
+                                    style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                    actionListener="#{sessionBean1.graphicsLnk_action('ord_nmds_2D')}"
+                                    oncomplete="PF('graphDialog').show()"/>
                         </h:panelGrid>      
-                            
                         <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
                             <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('ord_nmds_2D')}" alt="nmds2D"/>
                         </h:panelGrid>
