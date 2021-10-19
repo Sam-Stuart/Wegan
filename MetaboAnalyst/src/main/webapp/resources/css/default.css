@@ -134,6 +134,14 @@
     width: 40%;
 }
 
+.colNMDSLong {
+    width: 25%;
+}
+
+.colNMDSShort {
+    width: 10%;
+}
+
 .colBrayShort {
     width: 15%;
 }

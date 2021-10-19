@@ -3,20 +3,16 @@
 #'@param mSetObj Input name of the created mSet Object
 #'@param distance Input distance as one of "bray" (default), "manhattan", "canberra", "euclidean", "kulczynski", "jaccard", "gower", "altGower", "morisita", "horn", "mountford", "raup" , "binomial", "chao", "cao", "mahalanobis"
 #'@param abundance Set abundance transformation, default is absolute (no change), else relative
-#'@param env_text Input environmental data column names (java uses text box to obtain string)
 #'@param data Which data set to use, normalized (default) or original
 #'@author Louisa Normington\email{normingt@ualberta.ca}
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2)
 #'@export
-ord.NMDS <- function(mSetObj=NA, data="false", distance="NULL", abundance="false", env_text=" ") { #2 drop downs, one text box, one checkbox
+ord.NMDS <- function(mSetObj=NA, data="false", distance="NULL", abundance="false") { 
   
   library("vegan")
   library("dplyr")
 
-  print("The use of data groupings will create more interesting plots. Load grouping data separately, where each row aligns with the rows in your data set, or include groupings as columns in your data set.")
-  print("The use of environmental data, if available, will also create more interesting plots. Load environmental data separately, where each row aligns with the rows in your data set.")
-  
   #Obtain mSet dataset
   mSetObj <- .get.mSet(mSetObj)
   if (data=="false") {
@@ -93,20 +89,7 @@ ord.NMDS <- function(mSetObj=NA, data="false", distance="NULL", abundance="false
   
   #Set up environmental data using user selected columns
   if (is.data.frame(envData1)==TRUE) { #User uplaoded environmental data
-    if (env_text==" ") { #Nothing typed in text box
-      env_text1 <- colnames(envData1) #Default is the all env columns
-      cat(paste0("You have selected these constraining variables: ", paste(env_text1, collapse=", "), "."))
-      cat("If the selection is not what you intended, reenter environmental variable(s) in the text box, using the column names with commas in between.")
-    } else {
-      env_text1 <- env_text #taken from text box by java, fed as string into R code
-      env_text1 <- gsub("\n", "", env_text1, fixed=TRUE) #fixed=TRUE means we are dealing with one string, versus a vector of strings (fixed=FALSE)
-      env_text1 <- gsub(",", "+", env_text1, fixed=TRUE) 
-      env_text1 <- gsub(";", "+", env_text1, fixed=TRUE)
-      env_text1 <- gsub(":", "+", env_text1, fixed=TRUE)
-      env_text1 <- gsub("*", "+", env_text1, fixed=TRUE)
-      cat(paste0("You have selected these constraining variables: ", gsub("+", ", ", env_text1, fixed=TRUE), "."))
-      cat("If the selection is not what you intended, reenter environmental variable(s) in the text box, using the column names with commas in between.")
-    }
+    env_text1 <- colnames(envData1)
     env_cols <- unlist(strsplit(env_text1, "+", fixed=TRUE))
     env_data <- as.data.frame(envData1[,which(colnames(envData1) %in% env_cols)])
     colnames(env_data) <- env_cols
@@ -209,18 +192,19 @@ ord.NMDS <- function(mSetObj=NA, data="false", distance="NULL", abundance="false
     write.csv(env.scores2D, file="nmds_2D_constraining_variable_scores.csv", row.names=TRUE)
   }
   
-  stress_data <- c(nmds1D[["stress"]], nmds2D[["stress"]], nmds3D[["stress"]], nmds4D[["stress"]], nmds5D[["stress"]])
-  scree_data <- data.frame(paste("NMDS ", 1:5), stress_data)
-  colnames(scree_data) <- c("Dimension", "Stress")
+  pcvars <- c(nmds1D[["stress"]], nmds2D[["stress"]], nmds3D[["stress"]], nmds4D[["stress"]], nmds5D[["stress"]])
+  cumvars <- c(pcvars[1], pcvars[1]+pcvars[2], pcvars[1]+pcvars[2]+pcvars[3], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4]+pcvars[5])
+  scree_data <- data.frame(paste("NMDS ", 1:5), pcvars, cumvars)
+  colnames(scree_data) <- c("NMDS Dimension", "Stress", "Cumulative Stress")
   write.csv(scree_data, file="nmds_scree_data.csv", row.names=FALSE)
   
-  sink("column_impact_on_nmds_2D.txt") 
-  cat("Data columns may significantly impact NMDS\n")
+  sink("variable_impact_on_nmds_2D.txt") 
+  cat("Variables may significantly impact NMDS\n")
   cat("\nNMDS dimension=2\n\n")
   print(var.fit2D)
   sink()  
   
-  sink("constraining_variables__impact_on_nmds_2D.txt") 
+  sink("constraining_variables_impact_on_nmds_2D.txt") 
   cat("Constraining data may significantly impact NMDS\n")
   cat("\nNMDS dimension=2\n\n")
   print(env.fit2D)
@@ -245,7 +229,7 @@ ord.NMDS <- function(mSetObj=NA, data="false", distance="NULL", abundance="false
   cat("NMDS 5D")
   print(nmds5D)
   cat("\nLengend:\n")
-  cat("Site=Rows and Species=Columns\n")
+  cat("Site=Samples and Species=Variables\n")
   sink() 
   
   return(.set.mSet(mSetObj))
@@ -654,10 +638,22 @@ Plot.NMDS.scree <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA)
   nmds4D <- mSetObj$analSet$nmds$nmds4D
   nmds5D <- mSetObj$analSet$nmds$nmds5D
   input <- mSetObj$analSet$nmds$input
-  stressMax <- nmds1D[["stress"]]
-  stress_data <- c(nmds1D[["stress"]], nmds2D[["stress"]], nmds3D[["stress"]], nmds4D[["stress"]], nmds5D[["stress"]])
-  scree_data <- data.frame(1:5, stress_data)
-  colnames(scree_data) <- c("Dimension", "Stress")
+  distance <- mSetObj$analSet$nmds$distance
+  print(distance)
+
+  pcvars <- c(nmds1D[["stress"]], nmds2D[["stress"]], nmds3D[["stress"]], nmds4D[["stress"]], nmds5D[["stress"]])
+  cumvars <- c(pcvars[1], pcvars[1]+pcvars[2], pcvars[1]+pcvars[2]+pcvars[3], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4]+pcvars[5])
+
+  ylims <- range(c(pcvars,cumvars));
+  extd<-(ylims[2]-ylims[1])/10
+  miny<- ifelse(ylims[1]-extd>0, ylims[1]-extd, 0);
+  maxy<- ifelse(ylims[2]+extd>1, 1.0, ylims[2]+extd);
+
+  if (distance=="euclidean") {
+    main <- "Multidimensional Scaling Scree Plot"
+  } else {
+    main <- "Non-metric Multidimensional Scaling Scree Plot"
+  }
 
   #Set plot dimensions
   if(is.na(width)){
@@ -667,7 +663,7 @@ Plot.NMDS.scree <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA)
   } else{
     w <- width
   }
-  h <- w
+  h <- w*2/3
   
   #Name plot for download
   imgName <- paste(imgName, "dpi", dpi, ".", format, sep="")
@@ -675,10 +671,25 @@ Plot.NMDS.scree <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA)
   
   #Scree plot
   Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
-  par(xpd=FALSE, mar=c(5.1, 4.1, 4.1, 2.1)) 
-  plot(x=scree_data$Dimension, y=scree_data$Stress, type="l", xlim=c(1, 5), ylim=c(0, stressMax+0.1), xlab="Number of Dimensions", ylab="Stress", main="Non-metric Multidimensional Scaling Scree Plot", yaxt="n", col="blue", lwd=2)
-  points(x=scree_data$Dimension, y=scree_data$Stress, cex=1.1, pch=19, col="blue")
-  axis(2, las=2)
+
+  #par(xpd=FALSE, mar=c(5.1, 4.1, 4.1, 2.1)) 
+  par(mar=c(5,5,6,3));
+  plot(pcvars, type='l', col='blue', main=main, xlab='Number of Dimensions', ylab='Stress', ylim=c(miny, maxy), axes=F)
+  text(pcvars, labels =paste(100*round(pcvars,3),'%'), adj=c(-0.3, -0.5), srt=45, xpd=T)
+  points(pcvars, col='red');
+  
+  lines(cumvars, type='l', col='green')
+  text(cumvars, labels =paste(100*round(cumvars,3),'%'), adj=c(-0.3, -0.5), srt=45, xpd=T)
+  points(cumvars, col='red');
+  
+  abline(v=1:5, lty=3);
+  axis(2);
+  axis(1, 1:length(pcvars), 1:length(pcvars));
+
+  #plot(x=scree_data$Dimension, y=scree_data$Stress, type="l", xlim=c(1, 5), ylim=c(0, stressMax+0.1), xlab="Number of Dimensions", ylab="Stress", main="Non-metric Multidimensional Scaling Scree Plot", yaxt="n", col="blue", lwd=2)
+  #points(x=scree_data$Dimension, y=scree_data$Stress, cex=1.1, pch=19, col="blue")
+  #axis(2, las=2)
+
   dev.off()
 
   return(.set.mSet(mSetObj))

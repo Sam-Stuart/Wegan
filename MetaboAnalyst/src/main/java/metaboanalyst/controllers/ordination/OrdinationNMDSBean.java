@@ -274,21 +274,24 @@ public class OrdinationNMDSBean implements Serializable {
     
 
 //// ACTION BUTTONS //
-    public void nmdsUpdate_action1() {
-        OAUtils.CreateNMDSOrdination(sb, doOriginal, vegdistOpts, doAbundance, envDataCol);
+    public void nmdsUpdate_action2D() {
+        OAUtils.CreateNMDSOrdination(sb, doOriginal, vegdistOpts, doAbundance);
         OAUtils.PlotNMDS2DOrdination(sb, ellipseOpts, var_arrowsOpts, env_arrowsOpts, env_centOpts, sampleNamesOpts, ordColorOpts, nmdsMetaColumnName, sb.getNewImage("ord_nmds_2D"), "png", 72);
     }
-    public void nmdsUpdate_action2() {
-        OAUtils.CreateNMDSOrdination(sb, doOriginal, vegdistOpts, doAbundance, envDataCol);
+    public void nmdsUpdate_action3D() {
+        OAUtils.CreateNMDSOrdination(sb, doOriginal, vegdistOpts, doAbundance);
         OAUtils.PlotNMDS3DOrdination(sb, ordColorOpts, var_arrowsOpts, nmdsMetaColumnName, sb.getNewImage("ord_nmds_3D"));
     }
-    public void nmdsUpdate_action3() {
-        OAUtils.CreateNMDSOrdination(sb, doOriginal, vegdistOpts, doAbundance, envDataCol);
+    public void nmdsUpdate_actionStress() {
+        OAUtils.CreateNMDSOrdination(sb, doOriginal, vegdistOpts, doAbundance);
         OAUtils.PlotNMDSstressOrdination(sb, ordStressDimOpts, sb.getNewImage("ord_nmds_stress"), "png", 72);
     }
-    public void nmdsUpdate_action4() {
-        OAUtils.CreateNMDSOrdination(sb, doOriginal, vegdistOpts, doAbundance, envDataCol);
+    public void nmdsUpdate_actionScree() {
+        OAUtils.CreateNMDSOrdination(sb, doOriginal, vegdistOpts, doAbundance);
         OAUtils.PlotNMDSscreeOrdination(sb, sb.getNewImage("ord_nmds_scree"), "png", 72);    
+    }
+    public void nmdsUpdate_action2Dgraph() {
+        OAUtils.PlotNMDS2DOrdination(sb, ellipseOpts, var_arrowsOpts, env_arrowsOpts, env_centOpts, sampleNamesOpts, ordColorOpts, nmdsMetaColumnName, sb.getNewImage("ord_nmds_2D"), "png", 72);
     }
 }
 
