@@ -16,9 +16,8 @@ AbundanceModel <- function(mSetObj = NA, data = "false", community = "", tiespli
   #library("ade4")
   #library("adegraphics")
   #library("plyr")
-  library("dplyr")
+  #library("dplyr")
   library("vegan")
-
 
   mSetObj <- .get.mSet(mSetObj)
   
@@ -467,8 +466,11 @@ AbundancePrestPlot <- function(mSetObj=NA, bar.color="NULL", line.color.addPoi =
 
   a <- as.data.frame(mSetObj$analset$result$log_likelihood$frequencies)
   print(a)
+  
   m <- round(max(a$Fitted) + 10, digits = -1)
+  print(m)
   n <- length(a$Observed)
+  print(n)
   b <- a%>%
     select(Fitted)%>%
     mutate(row = seq(0.5, n, by = 1))

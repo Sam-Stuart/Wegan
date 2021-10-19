@@ -254,4 +254,11 @@ public class NormBean implements Serializable {
         }            
     }
     
+//    public void performAssumptionCheck() {
+//        RConnection RC = sb.getRConnection();
+//        RDataUtils.AssumpShapiroT(sb);
+//        RDataUtils.AssumpLevene(sb, "NULL");
+//        RDataUtils.AssumpResidPlot(sb, "NULL", "NULL", );
+//    }
+    //SessionBean1 sb, String numA, String pred_text, String imgName, String format, int dpi
 }
