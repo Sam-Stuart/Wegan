@@ -1,4 +1,4 @@
-'Shapiro test for each numeric variable
+#'Shapiro test for each numeric variable
 #'@description For each dataset, p value from Shapiro test will be displayes as a table
 #'@usage shapiroT(mSetObj = NA, data = "false")
 #'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
@@ -79,7 +79,7 @@ shapiroT <- function(mSetObj = NA) {
 }
 
 
-'Levene's test for each numeric variable
+#'Levene's test for each numeric variable
 #'@description For each dataset, p value from Levene's test will be displayes as a table
 #'@usage levene(mSetObj = NA, pred.text = "NULL")
 #'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
@@ -191,7 +191,7 @@ levene <- function(mSetObj = NA, pred.text = "NULL"){
 }
 
 
-'Regression model and its residuals for each numeric variable
+#'Regression model and its residuals for each numeric variable
 #'@description calculating residuals of regression models
 #'@usage RasidPlot(mSetObj = NA, numA, pred.text, imgName, format, dpi, width)
 #'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
@@ -278,7 +278,7 @@ ResidPlot <- function(mSetObj = NA, numA = "NULL", pred.text = "NULL", imgName, 
 
 
 
-'Residual vs. fitted plot
+#'Residual vs. fitted plot
 #'@description building a residual vs. fitted plot based on selected regression model 
 #'@usage Resid_fitPlot(mSetObj, imgName, format, dpi, width)
 #'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
@@ -317,7 +317,7 @@ Resid_fitPlot <- function(mSetObj = NA, imgName, format="png", dpi=72, width=NA)
 }
 
 
-'Q-Q plot
+#'Q-Q plot
 #'@description building a Q-Q plot based on selected regression model 
 #'@usage PlotNormSummary(mSetObj, imgName, format, dpi, width)
 #'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
@@ -351,7 +351,7 @@ QQplot <- function(mSetObj = NA, imgName, format="png", dpi=72, width=NA) {
 
 }
 
-'Density plot of residuals
+#'Density plot of residuals
 #'@description building a density plot of residuals of based on selected regression model 
 #'@usage PlotNormSummary(mSetObj, imgName, format, dpi, width)
 #'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)

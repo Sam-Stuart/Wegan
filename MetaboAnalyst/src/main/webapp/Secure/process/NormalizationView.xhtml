@@ -216,6 +216,18 @@
                             <img src="#{sessionBean1.getCurrentImageURL('snorm')}" alt="Sample Normalization"/>
                         </h:panelGrid>
                     </p:tab>
+                    <p:tab title ="Residual Plot View">
+                        <h:panelGrid style="text-align: center; width: 100%;">
+                            <h:panelGrid style="text-align: right; padding-left: 700px; width: 760px;">
+                                <p:commandLink actionListener="#{sessionBean1.graphicsLnk_action('rasid')}" 
+                                               oncomplete="PF('graphDialog').show()"
+                                               title="Customize the graphics output">
+                                    <img src="#{facesContext.externalContext.requestContextPath}/resources/images/imgcenter.png"/>
+                                </p:commandLink>
+                            </h:panelGrid>
+                            <img src="#{sessionBean1.getCurrentImageURL('RasidPlot')}" alt="Assumption"/>
+                        </h:panelGrid>
+                    </p:tab>
                 </p:tabView>
             </h:panelGrid> 
         </p:dialog>

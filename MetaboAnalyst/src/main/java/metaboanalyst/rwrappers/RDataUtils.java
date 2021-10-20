@@ -438,7 +438,7 @@ public class RDataUtils {
     }
 
     //plot a boxplot and density for each compound
-    public static void plotSampleNormSummaryGraph(SessionBean1 sb, String imgName, String format, int dpi) {
+public static void plotSampleNormSummaryGraph(SessionBean1 sb, String imgName, String format, int dpi) {
         try {
             RConnection RC = sb.getRConnection();
             String rCommand = "PlotSampleNormSummary(NA" + ", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
@@ -451,9 +451,9 @@ public class RDataUtils {
     }
     
     //---------------Assumption check----------------------
-    public static void AssumpShapiroT(SessionBean1 sb) {
+    public static void AssumpShapiroT(RConnection RC) {
         try {
-            RConnection RC = sb.getRConnection();
+            //RConnection RC = sb.getRConnection();
             String rCommand = "shapiroT(NA)";
             RCenter.recordRCommand(RC, rCommand);
             RC.voidEval(rCommand);
@@ -462,9 +462,9 @@ public class RDataUtils {
         }
     }
     
-    public static void AssumpLevene(SessionBean1 sb, String pred_text) {
+    public static void AssumpLevene(RConnection RC, String pred_text) {
         try {
-            RConnection RC = sb.getRConnection();
+            //RConnection RC = sb.getRConnection();
             String rCommand = "levene(NA" + ", \"" + pred_text + "\")";
             RCenter.recordRCommand(RC, rCommand);
             RC.voidEval(rCommand);

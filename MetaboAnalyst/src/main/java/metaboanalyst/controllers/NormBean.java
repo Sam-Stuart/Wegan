@@ -254,11 +254,14 @@ public class NormBean implements Serializable {
         }            
     }
     
-//    public void performAssumptionCheck() {
-//        RConnection RC = sb.getRConnection();
-//        RDataUtils.AssumpShapiroT(sb);
-//        RDataUtils.AssumpLevene(sb, "NULL");
-//        RDataUtils.AssumpResidPlot(sb, "NULL", "NULL", );
-//    }
+    public void performAssumptionCheck() {
+        RConnection RC = sb.getRConnection();
+        RDataUtils.AssumpShapiroT(RC);
+        RDataUtils.AssumpLevene(RC, "NULL");
+        RDataUtils.AssumpResidPlot(sb, "NULL", "NULL", sb.getNewImage("ResidPlot"), "png", 72);
+        RDataUtils.AssumpResidFitPlot(sb, sb.getNewImage("ResidFitPlot"), "png", 72);
+        RDataUtils.AssumpQQPlot(sb, sb.getNewImage("QQPlot"), "png", 72);
+        RDataUtils.AssumpDenPlot(sb, sb.getNewImage("DenPlot"), "png", 72);
+    }
     //SessionBean1 sb, String numA, String pred_text, String imgName, String format, int dpi
 }
