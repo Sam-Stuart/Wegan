@@ -426,20 +426,6 @@ public class RDataUtils {
         }
     }
     
-        //retrieve best noramlization method
-    public static String[] AutoNormOptions(RConnection RC){
-        try {
-            String rCommand = "AutoNormOptions()";
-            RCenter.recordRCommand(RC, rCommand);
-            return RC.eval(rCommand).asStrings();
-        } catch (RserveException rse) {
-            System.out.println(rse);
-        } catch (REXPMismatchException ex) {
-            Logger.getLogger(RDataUtils.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
-    }
-    
     //plot a boxplot and density for each compound
     public static void plotNormSummaryGraph(SessionBean1 sb, String imgName, String format, int dpi) {
         try {
@@ -465,6 +451,100 @@ public class RDataUtils {
             e.printStackTrace();
         }
     }
+    
+       //LOUISA ADDED THIS START!!!!!!!!!!!!
+        //perform Shapiro-Wilk test
+    public static String shapiroTest(RConnection RC) {
+        try {
+            String rCommand = "shapiroT(NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            return RC.eval(rCommand).asString();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    
+            //perform Levene's test
+    public static String leveneTest(RConnection RC, String predText) {
+        try {
+            String rCommand = "levene(NA" + ", \"" + predText + ")";
+            RCenter.recordRCommand(RC, rCommand);
+            return RC.eval(rCommand).asString();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    
+    //Plot regression plus residuals
+    public static void ResidualPlot(SessionBean1 sb, String numA, String predText, String imgName, String format, int dpi) {
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "ResidPlot(NA" + ", \"" + numA + "\", \"" + predText + "\", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            sb.addGraphicsCMD("resid", rCommand);
+            RC.voidEval(rCommand);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+        //Plot residuals vs fitted values
+    public static void Residual_fitPlot(SessionBean1 sb, String imgName, String format, int dpi) {
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "Resid_fitPlot(NA" + ", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            sb.addGraphicsCMD("residFit", rCommand);
+            RC.voidEval(rCommand);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+   
+            //QQ Plot
+    public static void QQ_plot(SessionBean1 sb, String imgName, String format, int dpi) {
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "QQplot(NA" + ", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            sb.addGraphicsCMD("qq", rCommand);
+            RC.voidEval(rCommand);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+       
+            //Plot density of residuals
+    public static void Density_plot(SessionBean1 sb, String imgName, String format, int dpi) {
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "Densityplot(NA" + ", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            sb.addGraphicsCMD("residDen", rCommand);
+            RC.voidEval(rCommand);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    //Extract numeric column names for residual plot
+    public static String[] AssupColumn(SessionBean1 sb){
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "AssupCol(NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            return RC.eval(rCommand).asStrings();
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        } catch (REXPMismatchException ex) {
+            Logger.getLogger(OAUtils.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    } 
+   //LOUISA ADDED THIS END!!!!!!!!!!!!
+    
     //---------------Methods for access Data information-------------
     //get data information
 
