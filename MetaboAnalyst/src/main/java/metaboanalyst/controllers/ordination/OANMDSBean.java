@@ -31,7 +31,7 @@ import org.rosuda.REngine.Rserve.RConnection;
  * @author Louisa Normington
  */
 @ManagedBean(name = "ordNMDSBean")
-public class OrdinationNMDSBean implements Serializable {
+public class OANMDSBean implements Serializable {
 
     private final SessionBean1 sb = (SessionBean1) DataUtils.findBean("sessionBean1");
     

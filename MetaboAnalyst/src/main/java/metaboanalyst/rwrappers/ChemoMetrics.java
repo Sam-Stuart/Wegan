@@ -14,9 +14,9 @@ import org.rosuda.REngine.Rserve.RserveException;
  */
 public class ChemoMetrics {
 
-    public static void InitPCA(SessionBean1 sb) {
+    public static void InitPCA(SessionBean1 sb, boolean data) {
         try {
-            String rCommand = "PCA.Anal(NA)";
+            String rCommand = "PCA.Anal(NA" + ", \"" + data + "\")";
             RConnection RC = sb.getRConnection();
             RCenter.recordRCommand(RC, rCommand);
             RC.voidEval(rCommand);

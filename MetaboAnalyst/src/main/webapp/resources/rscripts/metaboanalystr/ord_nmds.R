@@ -650,7 +650,7 @@ Plot.NMDS.scree <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA)
   maxy<- ifelse(ylims[2]+extd>1, 1.0, ylims[2]+extd);
 
   if (distance=="euclidean") {
-    main <- "Multidimensional Scaling Scree Plot"
+    main <- "Metric Multidimensional Scaling Scree Plot"
   } else {
     main <- "Non-metric Multidimensional Scaling Scree Plot"
   }

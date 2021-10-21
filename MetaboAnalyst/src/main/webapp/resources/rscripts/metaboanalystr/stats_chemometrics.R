@@ -6,12 +6,23 @@
 #'License: GNU GPL (>= 2)
 #'@export
 #'
-PCA.Anal <- function(mSetObj=NA){
-  
+PCA.Anal <- function(mSetObj=NA, data="false"){
   options(error=traceback)
   mSetObj <- .get.mSet(mSetObj);
+  if (data=="false") {
+    data <- mSetObj$dataSet$norm
+  } else {
+    data <- mSetObj$dataSet$orig
+  }
+
+  numData <- select_if(data, is.numeric)
+  colNamesNum <- colnames(numData)
+  rowNamesNum <- rownames(numData)
+
+  charData <- select_if(data, is.character)
+  colNamesChar <- colnames(charData)
   
-  pca <- prcomp(mSetObj$dataSet$norm, center=TRUE, scale=F);
+  pca <- prcomp(numData, center=TRUE, scale=F);
   
   # obtain variance explained
   sum.pca <- summary(pca);
@@ -75,9 +86,10 @@ PCA.Flip <- function(mSetObj=NA, axisOpt){
 #'@export
 #'
 PlotPCAPairSummary <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, pc.num){
-  options(error=traceback)
+  library(viridis)
+
   mSetObj <- .get.mSet(mSetObj);
-  pclabels <- paste("PC", 1:pc.num, "\n", round(100*mSetObj$analSet$pca$variance[1:pc.num],1), "%");
+  pclabels <- paste("PC", 1:4, "\n", round(100*mSetObj$analSet$pca$variance[1:4],1), "%");
   imgName = paste(imgName, "dpi", dpi, ".", format, sep="");
   if(is.na(width)){
     w <- 10;
@@ -90,11 +102,16 @@ PlotPCAPairSummary <- function(mSetObj=NA, imgName, format="png", dpi=72, width=
   mSetObj$imgSet$pca.pair <- imgName;
   
   h <- w;
+
   Cairo::Cairo(file = imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white");
   if(mSetObj$dataSet$cls.type == "disc"){
-    pairs(mSetObj$analSet$pca$x[,1:pc.num], col=GetColorSchema(mSetObj), pch=as.numeric(mSetObj$dataSet$cls)+1, labels=pclabels);
+    n <- nlevels(as.factor(mSetObj$dataSet$cls))
+    print(paste0(n, "groups"))
+    colors <- viridis(n)
+    print(colors)
+    pairs(mSetObj$analSet$pca$x[,1:4], col=colors, pch=19, labels=pclabels);
   }else{
-    pairs(mSetObj$analSet$pca$x[,1:pc.num], labels=pclabels);
+    pairs(mSetObj$analSet$pca$x[,1:4], col="blue", labels=pclabels);
   }
   dev.off();
   return(.set.mSet(mSetObj));
@@ -210,7 +227,7 @@ PlotPCA2DScore <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, 
     if(mSetObj$dataSet$type.cls.lbl=="integer"){
       cls <- as.factor(as.numeric(levels(mSetObj$dataSet$cls))[mSetObj$dataSet$cls]);
     }else{
-      cls <- mSetObj$dataSet$cls;
+      cls <- as.factor(mSetObj$dataSet$cls);
     }
     print("10")
     lvs <- levels(cls);
@@ -232,16 +249,16 @@ PlotPCA2DScore <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, 
     xlims<-c(xrg[1]-x.ext, xrg[2]+x.ext);
     ylims<-c(yrg[1]-y.ext, yrg[2]+y.ext);
     print("8")
-    cols <- GetColorSchema(mSetObj, grey.scale==1);
+    cols <- viridis(length(cls))
     uniq.cols <- unique(cols);
-    
-    plot(pc1, pc2, xlab=xlabel, xlim=xlims, ylim=ylims, ylab=ylabel, type='n', main="Scores Plot",
-         col=cols, pch=as.numeric(mSetObj$dataSet$cls)+1); ## added
+
+    plot(pc1, pc2, xlab=xlabel, ylab=ylabel, type='n', main="PCA Scores Plot",
+         col=cols, pch=19); ## I UPDATED THIS since axis limits weren't working
     grid(col = "lightgray", lty = "dotted", lwd = 1);
     print("9")
     # make sure name and number of the same order DO NOT USE levels, which may be different
     legend.nm <- unique(as.character(sort(cls)));
-    ## uniq.cols <- unique(cols);
+    uniq.cols <- unique(cols);
     
     ## BHAN: when same color is choosen; it makes an error
     print("7")
@@ -261,9 +278,9 @@ PlotPCA2DScore <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, 
       }
     }
     print("6")
-    pchs <- GetShapeSchema(mSetObj, show, grey.scale);
+    pchs <- 19
     if(grey.scale) {
-      cols <- rep("black", length(cols));
+      cols <- grey.colors();
     }
     if(show == 1){
       text(pc1, pc2, label=text.lbls, pos=4, xpd=T, cex=0.75);
@@ -345,14 +362,14 @@ PlotPCA3DScore <- function(mSetObj=NA, imgName, format="json", inx1, inx2, inx3)
   print(pca3d$score$colors)
   imgName = paste(imgName, ".", format, sep="");
   print("BEFORE JSON")
-  print(pca3d)
+#  print(pca3d)
   json.obj <- RJSONIO::toJSON(pca3d, .na='null');
   sink(imgName);
-  #print(json.obj);
-  print("AFTER JSON OBJECT")
   cat(json.obj);
   sink();
 
+  print("AFTER JSON OBJECT")
+  
   if(!.on.public.web){
     return(.set.mSet(mSetObj));
   }

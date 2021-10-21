@@ -107,40 +107,40 @@ public class NormBean implements Serializable {
         return normPerformed;
     }
 
-    ///LOUISA ADDED THIS START!!!!!!!!!!!!!!
-    private String predictText = "NULL";
-        
-    public String getPredictText() {
-        return predictText;
-    }
-
-    public void setPredictText(String predictText) {
-        this.predictText = predictText;
-    } 
-    
-    private SelectItem[] assumptionCol = null;
-    
-    public SelectItem[] getAssupCol(){
-        String[] columns = RDataUtils.AssupColumn(sb);
-        int columnsLen = columns.length;
-        assumptionCol = new SelectItem[columnsLen];
-        List<String> columnNames = Arrays.asList(columns);
-        for (int i = 0; i < columnsLen; i++) {
-            assumptionCol[i] = new SelectItem(columnNames.get(i), columnNames.get(i));
-        }
-        return assumptionCol;
-    }
-    
-    private String assumptionColName = getAssupCol()[0].getLabel();
-    
-    public String getAssumptionColName() {
-        return assumptionColName;
-    }
-
-    public void setAssumptionColName(String assumptionColName) {
-        this.assumptionColName = assumptionColName;
-    }
-    ///LOUISA ADDED THIS END!!!!!!!!!!!!!!
+//    ///LOUISA ADDED THIS START!!!!!!!!!!!!!!
+//    private String predictText = "NULL";
+//        
+//    public String getPredictText() {
+//        return predictText;
+//    }
+//
+//    public void setPredictText(String predictText) {
+//        this.predictText = predictText;
+//    } 
+//    
+//    private SelectItem[] assumptionCol = null;
+//    
+//    public SelectItem[] getAssupCol(){
+//        String[] columns = RDataUtils.AssupColumn(sb);
+//        int columnsLen = columns.length;
+//        assumptionCol = new SelectItem[columnsLen];
+//        List<String> columnNames = Arrays.asList(columns);
+//        for (int i = 0; i < columnsLen; i++) {
+//            assumptionCol[i] = new SelectItem(columnNames.get(i), columnNames.get(i));
+//        }
+//        return assumptionCol;
+//    }
+//    
+//    private String assumptionColName = getAssupCol()[0].getLabel();
+//    
+//    public String getAssumptionColName() {
+//        return assumptionColName;
+//    }
+//
+//    public void setAssumptionColName(String assumptionColName) {
+//        this.assumptionColName = assumptionColName;
+//    }
+//    ///LOUISA ADDED THIS END!!!!!!!!!!!!!!
 
     
     public void performDataNormalization() {
@@ -182,15 +182,15 @@ public class NormBean implements Serializable {
             //plot the new image
             RDataUtils.plotNormSummaryGraph(sb, sb.getNewImage("norm"), "png", 72);
             RDataUtils.plotSampleNormSummaryGraph(sb, sb.getNewImage("snorm"), "png", 72);
-            ///LOUISA ADDED THIS START!!!!!!!!!!!!!!
-            RDataUtils.shapiroTest(RC);
-            RDataUtils.leveneTest(RC, "NULL");
-            RDataUtils.ResidualPlot(sb, "NULL", "NULL", sb.getNewImage("resid"), "png", 72);
-            RDataUtils.Density_plot(sb, sb.getNewImage("residDen"), "png", 72);
-            RDataUtils.Residual_fitPlot(sb, sb.getNewImage("residFit"), "png", 72);
-            RDataUtils.QQ_plot(sb, sb.getNewImage("qq"), "png", 72);
-            RDataUtils.AssupColumn(sb);
-            ///LOUISA ADDED THIS END!!!!!!!!!!!!!!
+//            ///LOUISA ADDED THIS START!!!!!!!!!!!!!!
+//            RDataUtils.shapiroTest(RC);
+//            RDataUtils.leveneTest(RC, "NULL");
+//            RDataUtils.ResidualPlot(sb, "NULL", "NULL", sb.getNewImage("resid"), "png", 72);
+//            RDataUtils.Density_plot(sb, sb.getNewImage("residDen"), "png", 72);
+//            RDataUtils.Residual_fitPlot(sb, sb.getNewImage("residFit"), "png", 72);
+//            RDataUtils.QQ_plot(sb, sb.getNewImage("qq"), "png", 72);
+//            RDataUtils.AssupColumn(sb);
+//            ///LOUISA ADDED THIS END!!!!!!!!!!!!!!
             //now reset all data analysis to default
             sb.setDataNormed(true);
             sb.resetAnalysis();
@@ -303,12 +303,12 @@ public class NormBean implements Serializable {
     }
  
     
-    ///LOUISA ADDED THIS!!!!!!!!!!!!!!
-    public void leveneUpdate_action() {
-        RConnection RC = sb.getRConnection();
-        RDataUtils.leveneTest(RC, predictText);
-    }
-    public void ResidPlotUpdate_action() {
-        RDataUtils.ResidualPlot(sb, assumptionColName, predictText, sb.getNewImage("resid"), "png", 72);    
-    }
+//    ///LOUISA ADDED THIS!!!!!!!!!!!!!!
+//    public void leveneUpdate_action() {
+//        RConnection RC = sb.getRConnection();
+//        RDataUtils.leveneTest(RC, predictText);
+//    }
+//    public void ResidPlotUpdate_action() {
+//        RDataUtils.ResidualPlot(sb, assumptionColName, predictText, sb.getNewImage("resid"), "png", 72);    
+//    }
 }

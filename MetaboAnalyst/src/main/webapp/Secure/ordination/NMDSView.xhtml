@@ -60,15 +60,15 @@
                         <p style="font-size: 13px">
                             The 2D scores plot orients samples in two dimensions so that the more similar their variable values, the closer the samples are to one another. The position of variable arrows and constraining variables indicate which factors have the greatest impact on the relative position of the samples.
                         </p>
-                        <h:panelGrid id="panelGrid1" columns="7" cellpadding="3">
+                        <h:panelGrid id="panelGrid1" columns="6" cellpadding="3" columnClasses="colBrayLong, colBrayShort, colBrayLong, colBrayShort, colBrayLong, colBrayShort">
 
-                            <h:outputLabel style="font-weight: bold" value="&emsp;&emsp;Use Non-Normalized (Original) Data:"/>
+                            <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
                             <p:selectBooleanCheckbox value ="#{ordNMDSBean.doOriginal}"/> 
 
-                            <h:outputLabel style="font-weight: bold" value="&emsp;&emsp;&emsp;&emsp;Use Relative Abundance:"/>
+                            <h:outputLabel style="font-weight: bold" value="Use Relative Abundance:"/>
                             <p:selectBooleanCheckbox value ="#{ordNMDSBean.doAbundance}"/> 
                             
-                            <h:outputLabel style="font-weight: bold" value="&emsp;&emsp;&emsp;&emsp;Distance Measure:"/>
+                            <h:outputLabel style="font-weight: bold" value="Distance Measure:"/>
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordNMDSBean.vegdistOpts}">
                                 <f:selectItems value="#{applicationBean1.vegdistMeasureOpts}" />
                             </p:selectOneMenu> 
@@ -140,15 +140,15 @@
                         <p style="font-size: 13px">
                             NMDS 3D........
                         </p>
-                        <h:panelGrid id="panelGrid2" columns="7" cellpadding="3">
+                        <h:panelGrid id="panelGrid2" columns="6" cellpadding="3" columnClasses="colBrayLong, colBrayShort, colBrayLong, colBrayShort, colBrayLong, colBrayShort">
 
-                            <h:outputLabel style="font-weight: bold" value="&emsp;&emsp;Use Non-Normalized (Original) Data:"/>
+                            <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
                             <p:selectBooleanCheckbox value ="#{ordNMDSBean.doOriginal}"/> 
 
-                            <h:outputLabel style="font-weight: bold" value="&emsp;&emsp;&emsp;&emsp;Use Relative Abundance:"/>
+                            <h:outputLabel style="font-weight: bold" value="Use Relative Abundance:"/>
                             <p:selectBooleanCheckbox value ="#{ordNMDSBean.doAbundance}"/> 
                             
-                            <h:outputLabel style="font-weight: bold" value="&emsp;&emsp;&emsp;&emsp;Distance Measure:"/>
+                            <h:outputLabel style="font-weight: bold" value="Distance Measure:"/>
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordNMDSBean.vegdistOpts}">
                                 <f:selectItems value="#{applicationBean1.vegdistMeasureOpts}" />
                             </p:selectOneMenu> 
@@ -209,15 +209,15 @@
                         <p style="font-size: 13px">
                             NMDS scree.........
                         </p>
-                        <h:panelGrid id="panelGrid3" columns="7" cellpadding="3">
+                        <h:panelGrid id="panelGrid3" columns="6" cellpadding="3" columnClasses="colBrayLong, colBrayShort, colBrayLong, colBrayShort, colBrayLong, colBrayShort">
 
-                            <h:outputLabel style="font-weight: bold" value="&emsp;&emsp;Use Non-Normalized (Original) Data:"/>
+                            <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
                             <p:selectBooleanCheckbox value ="#{ordNMDSBean.doOriginal}"/> 
 
-                            <h:outputLabel style="font-weight: bold" value="&emsp;&emsp;&emsp;&emsp;Use Relative Abundance:"/>
+                            <h:outputLabel style="font-weight: bold" value="Use Relative Abundance:"/>
                             <p:selectBooleanCheckbox value ="#{ordNMDSBean.doAbundance}"/> 
                             
-                            <h:outputLabel style="font-weight: bold" value="&emsp;&emsp;&emsp;&emsp;Distance Measure:"/>
+                            <h:outputLabel style="font-weight: bold" value="Distance Measure:"/>
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordNMDSBean.vegdistOpts}">
                                 <f:selectItems value="#{applicationBean1.vegdistMeasureOpts}" />
                             </p:selectOneMenu> 
@@ -271,20 +271,20 @@
                         <p style="font-size: 13px">
                             NMDS stress.........
                         </p>
-                        <h:panelGrid id="panelGrid1" columns="9" cellpadding="3">
+                        <h:panelGrid id="panelGrid1" columns="4" cellpadding="3" columnClasses="colBrayLong, colBrayShort, colBrayLong, colBrayShort">
 
-                            <h:outputLabel style="font-weight: bold" value="&emsp;&emsp;Use Non-Normalized (Original) Data:"/>
+                            <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
                             <p:selectBooleanCheckbox value ="#{ordNMDSBean.doOriginal}"/> 
 
-                            <h:outputLabel style="font-weight: bold" value="&emsp;&emsp;&emsp;&emsp;Use Relative Abundance:"/>
+                            <h:outputLabel style="font-weight: bold" value="Use Relative Abundance:"/>
                             <p:selectBooleanCheckbox value ="#{ordNMDSBean.doAbundance}"/> 
                             
-                            <h:outputLabel style="font-weight: bold" value="&emsp;&emsp;&emsp;&emsp;Distance Measure:"/>
+                            <h:outputLabel style="font-weight: bold" value="Distance Measure:"/>
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordNMDSBean.vegdistOpts}">
                                 <f:selectItems value="#{applicationBean1.vegdistMeasureOpts}" />
                             </p:selectOneMenu> 
                             
-                            <h:outputLabel style="font-weight: bold" value="&emsp;&emsp;&emsp;&emsp;Dimension:"/>
+                            <h:outputLabel style="font-weight: bold" value="Dimension:"/>
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordNMDSBean.ordStressDimOpts}">
                                 <f:selectItems value="#{applicationBean1.ordStressDimensionOpts}" />
                             </p:selectOneMenu> 
