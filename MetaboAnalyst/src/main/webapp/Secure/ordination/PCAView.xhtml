@@ -55,13 +55,18 @@
         </script>-->
         <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
             <p:tabView id="ac" style="width:100%; border: none; background: none; font-size: 13px;">
-                <p:tab title ="Overview" titleStyleClass="p-tab-nav">
+                <p:tab title ="Pairs Plot" titleStyleClass="p-tab-nav">
                     <h:form id="form1">
-                        <h:panelGrid id="panelGrid1" columns="4" cellpadding="3" columnClasses="colBrayLong,colBrayShort,colBrayLong,colBrayShort">
+                        <p style="font-size: 13px">
+                            PCA pairs plot.........
+                        </p>
+                        <h:panelGrid id="panelGrid1" columns="4" cellpadding="3" columnClasses="colNMDSLong,colNMDSShort,colNMDSLong,colNMDSShort">
         
                             <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
                             <p:selectBooleanCheckbox value ="#{pcaBean.doOriginal}"/> 
-
+                             
+                            <spacer></spacer>
+<!--                            <h:panelGrid></h:panelGrid> -->
 <!--                            <h:outputLabel style="font-weight: bold" value="Display pairwise score plot for top "/>
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:50px" value="#{pcaBean.pcaPairNum}">
                                 <f:selectItems value="#{pcaBean.pcaPCs}" />
@@ -104,28 +109,30 @@
                 </p:tab>
                 <p:tab title ="Scree Plot" titleStyleClass="p-tab-nav">
                     <h:form id="form2">
-                        <p>
-                            The green line on top shows the accumulated variance explained; the blue line underneath shows the variance explained by individual PC
+                        <p style="font-size: 13px">
+                            The green line on top shows the accumulated variance explained; the blue line underneath shows the variance explained by individual PC......
                         </p>
-                        <h:panelGrid id="panelGrid2" columns="4" cellpadding="3" columnClasses="colBrayLong,colBrayShort,colBrayLong,colBrayShort">
-                            <h:panelGroup>
-                                        
-                                <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
-                                <p:selectBooleanCheckbox value ="#{pcaBean.doOriginal}"/> 
+                        <h:panelGrid></h:panelGrid>
+                        <h:panelGrid id="panelGrid2" columns="4" cellpadding="3" columnClasses="colNMDSLong,colNMDSShort,colNMDSLong,colNMDSShort">
+        
+                            <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
+                            <p:selectBooleanCheckbox value ="#{pcaBean.doOriginal}"/> 
+                             
+                            <spacer></spacer>
 
-                                <h:outputLabel style="font-weight: bold" value="Display the scree plot for top "/>
+<!--                                <h:outputLabel style="font-weight: bold" value="Display the scree plot for top "/>
                                 <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:50px" value="#{pcaBean.pcaScreeNum}">
                                     <f:selectItems value="#{pcaBean.pcaPCs}" />
                                 </p:selectOneMenu>
-                                <h:outputLabel style="font-weight: bold" value=" PCs"/>
-                            </h:panelGroup>  
+                                <h:outputLabel style="font-weight: bold" value=" PCs"/>-->
+<!--                            </h:panelGroup>  -->
                         </h:panelGrid>
                         <h:panelGrid columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
                             <p:commandButton value="Update" 
                                              styleClass="updateButton"
                                              style="box-shadow: none !important; text-shadow: none !important"
                                              onclick="PF('statusDialog').show()"
-                                            oncomplete="PF('statusDialog').hide()" 
+                                             oncomplete="PF('statusDialog').hide()" 
                                              update=":ac:form2:screePane  :cmdPane" 
                                              actionListener="#{pcaBean.pcaScreeBtn_action()}"/> 
                         </h:panelGrid>
@@ -155,23 +162,29 @@
                 </p:tab>
                 <p:tab title ="2D Scores Plot" titleStyleClass="p-tab-nav">
                     <h:form id="form3">
-                        <h:panelGrid columns="5" cellpadding="3" columnClasses="colBrayLong, colBrayShort, colBrayLong, colBrayShort, colLast" >
+                        <p style="font-size: 13px">
+                            PCA 2D scores plot.........
+                        </p>
+                        <h:panelGrid id="panelGrid3" columns="4" cellpadding="3" columnClasses="colNMDSLong, colNMDSShort, colNMDSLong, colNMDSShort" >
                                     
                                 <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
                                 <p:selectBooleanCheckbox value ="#{pcaBean.doOriginal}"/> 
-    
+                                
+                                <h:panelGrid style="line-height: 21px">
                                 <h:outputLabel style="font-weight: bold" value="Display sample names:"/>
-                                <p:selectBooleanCheckbox value ="#{pcaBean.displayNames}"/>  
+                                </h:panelGrid>                                
+                                <p:selectBooleanCheckbox value ="#{pcaBean.displayNames}"/> 
                                 
                                 <h:outputLabel style="font-weight: bold" value="Specify PC on X-axis:"/>
-                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:50px" value="#{pcaBean.pcaScoreX}">
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:25px" value="#{pcaBean.pcaScoreX}">
                                     <f:selectItems value="#{pcaBean.pcaAllPCs}" />
                                 </p:selectOneMenu>
+                                
 <!--                                <h:outputLabel style="font-weight: bold" value="Display 95% confidence regions:"/>
                                 <p:selectBooleanCheckbox value ="#{pcaBean.displayConfs}"/> -->
                                 
                                 <h:outputLabel style="font-weight: bold" value="Specify PC on Y-axis:"/>
-                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:50px" value="#{pcaBean.pcaScoreY}">
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:25px" value="#{pcaBean.pcaScoreY}">
                                     <f:selectItems value="#{pcaBean.pcaAllPCs}" />
                                 </p:selectOneMenu>    
   
@@ -227,14 +240,18 @@
                 </p:tab>
                 <p:tab title ="3D Scores Plot" titleStyleClass="p-tab-nav">
                     <h:form id="form4">
-                        <h:panelGrid id="panelGrid1" columns="4" cellpadding="3" columnClasses="colBrayLong,colBrayShort,colBrayLong,colBrayShort">
-                                
+                        <p style="font-size: 13px">
+                            PCA 3D scores plot.........
+                        </p>
+                        <h:panelGrid id="panelGrid4" columns="4" cellpadding="3" columnClasses="colNMDSLong,colNMDSShort,colNMDSLong,colNMDSShort">
+        
                             <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
                             <p:selectBooleanCheckbox value ="#{pcaBean.doOriginal}"/> 
-
+                             
+                            <spacer></spacer>
                         </h:panelGrid>  
 
-                        <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;">  
+                        <h:panelGrid columns="2" cellpadding="3" style="float: right; text-shadow: none !important;">  
                             <p:commandButton value="Update" 
                                              styleClass="updateButton"
                                              style="box-shadow: none !important; text-shadow: none !important"
@@ -261,27 +278,31 @@
                                 actionListener="#{sessionBean1.graphicsLnk_action('pca_biplot')}"
                                 oncomplete="PF('graphDialog').show()"/>
                         </h:panelGrid>  
-                        <h:panelGrid id="pairPane" style="text-align: center; width: 100%;">
+                        <h:panelGrid id="score3dPane" style="text-align: center; width: 100%;">
                             <canvas id='canvas1' width='670px' height='630px'/>
                         </h:panelGrid>
                     </h:form>
                 </p:tab>
                 <p:tab title ="Loadings Plot" titleStyleClass="p-tab-nav">
                     <h:form id="form5">
-                        <h:panelGrid columns="4" cellpadding="3" columnClasses="colBrayLong, colBrayShort, colBrayLong, colBrayShort" >
+                        <p style="font-size: 13px">
+                            PCA loading plot.........
+                        </p>
+                        <h:panelGrid id="panelGrid5" columns="4" cellpadding="3" columnClasses="colNMDSLong, colNMDSShort, colNMDSLong, colNMDSShort" >
                                 
                             <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
                             <p:selectBooleanCheckbox value ="#{pcaBean.doOriginal}"/> 
 
+                            <h:panelGrid style="line-height: 21px">
+                            <h:outputLabel style="font-weight: bold" value="Display variable names:"/>
+                            </h:panelGrid>
+                            <p:selectBooleanCheckbox value ="#{pcaBean.displayFeatNames}"/>
+                                                                                          
                             <h:outputLabel style="font-weight: bold" value="Select PC for X-axis:"/>
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:50px" value="#{pcaBean.pcaLoadX}">
                                 <f:selectItems value="#{pcaBean.pcaAllPCs}" />
                             </p:selectOneMenu>
-                            <h:panelGrid style="line-height: 21px">
-                                    <h:outputLabel style="font-weight: bold" value="Display feature names:"/>
-                                </h:panelGrid>
-                                <p:selectBooleanCheckbox value ="#{pcaBean.displayFeatNames}"/>
-                                
+
                             <h:outputLabel style="font-weight: bold" value="Select PC for Y-axis:"/>
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:50px" value="#{pcaBean.pcaLoadY}">
                                 <f:selectItems value="#{pcaBean.pcaAllPCs}" />
@@ -333,8 +354,11 @@
                     </h:form>
                 </p:tab>
                 <p:tab title ="Biplot" titleStyleClass="p-tab-nav">
+                        <p style="font-size: 13px">
+                            PCA biplot.........
+                        </p>
                     <h:form id="form6">
-                        <h:panelGrid columns="4" cellpadding="3" columnClasses="colBrayLong, colBrayShort, colBrayLong, colBrayShort" >
+                        <h:panelGrid id="panelGrid6" columns="4" cellpadding="3" columnClasses="colNMDSLong, colNMDSShort, colNMDSLong, colNMDSShort" >
                                     
                             <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
                             <p:selectBooleanCheckbox value ="#{pcaBean.doOriginal}"/> 
@@ -343,10 +367,13 @@
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:50px" value="#{pcaBean.pcaBiplotX}">
                                 <f:selectItems value="#{pcaBean.pcaAllPCs}" />
                             </p:selectOneMenu>
+                            
                             <h:outputLabel style="font-weight: bold" value="Select PC for Y-axis:"/>
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:50px" value="#{pcaBean.pcaBiplotY}">
                                 <f:selectItems value="#{pcaBean.pcaAllPCs}" />
-                            </p:selectOneMenu>                            
+                            </p:selectOneMenu> 
+                            
+                            <spacer></spacer>
                         </h:panelGrid>
                         <h:panelGrid columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
                             <p:commandButton value="Update" 

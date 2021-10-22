@@ -22,6 +22,8 @@ ord.NMDS <- function(mSetObj=NA, data="false", distance="NULL", abundance="false
   }
 
   input <- input[order(as.numeric(row.names(input))),] #Order rows
+print("meta")
+print(mSetObj$dataSet$origMeta)
   metaData <- mSetObj$dataSet$origMeta
   envData <- mSetObj$dataSet$origEnv
 
