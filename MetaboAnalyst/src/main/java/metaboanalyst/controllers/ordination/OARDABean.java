@@ -41,7 +41,7 @@ public class OARDABean implements Serializable {
     }
     
     
-    private String fileRowScore = "rda_row_scores.csv";
+    private String fileRowScore = "rda_sample_scores.csv";
     private String fileRowScorePath  = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileRowScore + "\">" + fileRowScore + "</a>";
     
     public String getFileRowScorePath() {
@@ -53,7 +53,7 @@ public class OARDABean implements Serializable {
     }
     
     
-    private String fileEnvScore = "rda_environment_scores.csv";
+    private String fileEnvScore = "rda_constraining_data_scores.csv";
     private String fileEnvScorePath  = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileEnvScore + "\">" + fileEnvScore + "</a>";
         
     public String getFileEnvScorePath() {
@@ -65,7 +65,7 @@ public class OARDABean implements Serializable {
     }
     
     
-    private String fileColScore = "rda_column_scores.csv";
+    private String fileColScore = "rda_variable_scores.csv";
     private String fileColScorePath  = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileColScore + "\">" + fileColScore + "</a>";
         
     public String getfileColScorePath() {
@@ -180,6 +180,30 @@ public class OARDABean implements Serializable {
     }
     
     
+    private SelectItem[] nmdsMetaColumnOpts = null;
+    
+    public SelectItem[] getNmdsMetaColumnOpts(){
+        String[] columns = OAUtils.GetNMDSMetaColumns(sb);
+        int columnsLen = columns.length;
+        nmdsMetaColumnOpts = new SelectItem[columnsLen];
+        List<String> columnNames = Arrays.asList(columns);
+        for (int i = 0; i < columnsLen; i++) {
+            nmdsMetaColumnOpts[i] = new SelectItem(columnNames.get(i), columnNames.get(i));
+        }
+        return nmdsMetaColumnOpts;
+    }
+    
+    private String nmdsMetaColumnName = getNmdsMetaColumnOpts()[0].getLabel();
+    
+    public String getNmdsMetaColumnName() {
+        return nmdsMetaColumnName;
+    }
+
+    public void setNmdsMetaColumnName(String nmdsMetaColumnName) {
+        this.nmdsMetaColumnName = nmdsMetaColumnName;
+    }
+    
+    
     //STATIC DROPDOWN
     private String color = "NULL";
         
@@ -206,12 +230,15 @@ public class OARDABean implements Serializable {
     
 
     // ACTION BUTTONS //
-    public void rdaUpdate_action() {
+    public void rdaUpdate_action2D() {
         OAUtils.CreateRDA(sb, doAbundance, envDataCol, doOriginal);
         OAUtils.PlotRDA2D(sb, color, varArrows, envArrows, envCentroid, sampleNames, rdaMetaColumnName, addEllipse, sb.getNewImage("ord_rda_2D"), "png", 72);   
-        OAUtils.PlotRDAScree(sb, sb.getNewImage("ord_rda_scree"), "png", 72);
     }
 
+    public void rdaUpdate_actionScree() {
+        OAUtils.CreateRDA(sb, doAbundance, envDataCol, doOriginal);
+        OAUtils.PlotRDAScree(sb, sb.getNewImage("ord_rda_scree"), "png", 72);
+    }
     
 }
 

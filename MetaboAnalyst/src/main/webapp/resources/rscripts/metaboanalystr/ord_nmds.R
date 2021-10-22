@@ -641,7 +641,6 @@ Plot.NMDS.scree <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA)
   nmds5D <- mSetObj$analSet$nmds$nmds5D
   input <- mSetObj$analSet$nmds$input
   distance <- mSetObj$analSet$nmds$distance
-  print(distance)
 
   pcvars <- c(nmds1D[["stress"]], nmds2D[["stress"]], nmds3D[["stress"]], nmds4D[["stress"]], nmds5D[["stress"]])
   cumvars <- c(pcvars[1], pcvars[1]+pcvars[2], pcvars[1]+pcvars[2]+pcvars[3], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4]+pcvars[5])
@@ -687,10 +686,6 @@ Plot.NMDS.scree <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA)
   abline(v=1:5, lty=3);
   axis(2);
   axis(1, 1:length(pcvars), 1:length(pcvars));
-
-  #plot(x=scree_data$Dimension, y=scree_data$Stress, type="l", xlim=c(1, 5), ylim=c(0, stressMax+0.1), xlab="Number of Dimensions", ylab="Stress", main="Non-metric Multidimensional Scaling Scree Plot", yaxt="n", col="blue", lwd=2)
-  #points(x=scree_data$Dimension, y=scree_data$Stress, cex=1.1, pch=19, col="blue")
-  #axis(2, las=2)
 
   dev.off()
 

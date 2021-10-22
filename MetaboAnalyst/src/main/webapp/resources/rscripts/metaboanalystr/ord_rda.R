@@ -190,10 +190,10 @@ ord.rda <- function(mSetObj=NA, abundance="false", env_text=" ", data="false") {
   mSetObj$analSet$rda$eigenvalues <- eigenvalues
 
   #Download relevant data
-  write.csv(samp.scores, file="rda_row_scores.csv", row.names=row.names(input))
-  write.csv(var_scores, file="rda_column_scores.csv", row.names=TRUE)
+  write.csv(samp.scores, file="rda_sample_scores.csv", row.names=row.names(input))
+  write.csv(var_scores, file="rda_variable_scores.csv", row.names=TRUE)
   if (is.data.frame(envData1)==TRUE) { #If environmental data uploaded
-    write.csv(env_scores, file="rda_environment_scores.csv", row.names=TRUE)
+    write.csv(env_scores, file="rda_constraining_data_scores.csv", row.names=TRUE)
   } 
 
   eigenValues_data <- cbind(eigenvalues, eigenvalues/sum(eigenvalues))
@@ -312,9 +312,9 @@ Plot.RDA.2D <- function(mSetObj=NA, color="NULL", var_arrows="false", env_arrows
     #variable arrow options
     if (var_arrows!="false") { #If variable arrows selected
         if (color=="plasma") {
-            plot(var.fit2D, col="black")
+            plot(var_fit, col="black")
         } else {
-            plot(var.fit2D, col="darkred") 
+            plot(var_fit, col="darkred") 
         }
     }
     
@@ -331,7 +331,7 @@ Plot.RDA.2D <- function(mSetObj=NA, color="NULL", var_arrows="false", env_arrows
   } else { #If grouping data available
     
     #Set up grouping data column to use for colors
-    if (meta_col_color=="NULL") { #No column selected for grouping by color
+    if (is.data.frame(meta_col_color)==FALSE) { #No column selected for grouping by color
       meta_col_color_data <- as.factor(metaData[,1]) #Default grouping data column for grouping with color is the first
       meta_col_color_name <- colnames(metaData)[1] #Extract name
     } else { #column selected for grouping by color
@@ -417,13 +417,20 @@ Plot.RDA.scree <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA) 
   mSetObj <- .get.mSet(mSetObj)
   eigenvalues <- mSetObj$analSet$rda$eigenvalues
 
-  #Produce data set for plotting
-  eigenValues_data <- as.data.frame(cbind(eigenvalues, eigenvalues/sum(eigenvalues))) #Eigen values and variance explained
-  maxVar <- max(eigenvalues/sum(eigenvalues))
+#  #Produce data set for plotting
+#  eigenValues_data <- as.data.frame(cbind(eigenvalues, eigenvalues/sum(eigenvalues))) #Eigen values and variance explained
+#  maxVar <- max(eigenvalues/sum(eigenvalues))
+#  n <- nrow(eigenValues_data) #also used in plot code below
+#  eigenValues_data <- as.data.frame(cbind(1:n, eigenValues_data)) #Add dimension column
+#  colnames(eigenValues_data) <- c("Dimension", "Eigen_Value", "Variance_Explained")
 
-  n <- nrow(eigenValues_data) #also used in plot code below
-  eigenValues_data <- as.data.frame(cbind(1:n, eigenValues_data)) #Add dimension column
-  colnames(eigenValues_data) <- c("Dimension", "Eigen_Value", "Variance_Explained")
+  pcvars <- eigenvalues[1:8]/sum(eigenvalues)
+  cumvars <- c(pcvars[1], pcvars[1]+pcvars[2], pcvars[1]+pcvars[2]+pcvars[3], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4]+pcvars[5], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4]+pcvars[5]+pcvars[6], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4]+pcvars[5]+pcvars[6]+pcvars[7], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4]+pcvars[5]+pcvars[6]+pcvars[7]+pcvars[8])
+  ylims <- range(c(pcvars,cumvars));
+  extd<-(ylims[2]-ylims[1])/10
+  miny<- ifelse(ylims[1]-extd>0, ylims[1]-extd, 0);
+  maxy<- ifelse(ylims[2]+extd>1, 1.0, ylims[2]+extd);
+  main <- "Redundancy Analysis Scree Plot"
 
   #Set plot dimensions
   if(is.na(width)){
@@ -441,11 +448,19 @@ Plot.RDA.scree <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA) 
   
   #Scree plot
   Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
-  par(xpd=FALSE, mar=c(5.1, 4.1, 4.1, 2.1)) 
-  plot(x=eigenValues_data$Dimension, y=eigenValues_data$Variance_Explained, type="l", xlim=c(1, n), ylim=c(0, maxVar + 0.1), xlab="Dimension", ylab="Proportion of Variance Explained", main="Redundancy Analysis Scree Plot", yaxt="n", xaxt="n", col="blue", lwd=2)
-  points(x=eigenValues_data$Dimension, y=eigenValues_data$Variance_Explained, cex=1.1, pch=19, col="blue")
-  axis(2, las=2)
-  axis(1, at=1:n)
+  par(mar=c(5,5,6,3));
+  plot(pcvars, type='l', col='blue', main=main, xlab='Number of Dimensions', ylab='Stress', ylim=c(miny, maxy), axes=F)
+  text(pcvars, labels =paste(100*round(pcvars,3),'%'), adj=c(-0.3, -0.5), srt=45, xpd=T)
+  points(pcvars, col='red');
+  
+  lines(cumvars, type='l', col='green')
+  text(cumvars, labels =paste(100*round(cumvars,3),'%'), adj=c(-0.3, -0.5), srt=45, xpd=T)
+  points(cumvars, col='red');
+  
+  abline(v=1:8, lty=3);
+  axis(2);
+  axis(1, 1:length(pcvars), 1:length(pcvars));
+
   dev.off()
 }
 
@@ -467,12 +482,15 @@ Plot.RDA.scree <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA) 
 rda.meta.columns <- function(mSetObj=NA) {
   
   mSetObj <- .get.mSet(mSetObj)
-  
-  metaData <- mSetObj$analSet$rda$metaData
-  name.all.meta.cols <- colnames(metaData)
 
-  return(name.all.meta.cols)
-  
+  metaData <- mSetObj$analSet$rda$metaData
+  if (is.data.frame(metaData)==FALSE) {
+    meta.col.names <- "No grouping data"
+  } else {
+    meta.col.names <- colnames(metaData)
+  }
+
+  return(meta.col.names)
 }
 
 

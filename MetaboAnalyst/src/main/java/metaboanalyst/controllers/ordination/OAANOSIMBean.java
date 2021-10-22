@@ -30,7 +30,7 @@ import org.rosuda.REngine.Rserve.RConnection;
  *
  * @author Louisa Normington
  */
-@ManagedBean(name = "ordANOSIMBean")
+@ManagedBean(name = "anosimBean")
 public class OAANOSIMBean implements Serializable {
 
     private final SessionBean1 sb = (SessionBean1) DataUtils.findBean("sessionBean1");

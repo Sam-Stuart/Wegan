@@ -194,9 +194,9 @@ ord.cca <- function(mSetObj=NA, envData=NA, abundance="false", data="false", env
   mSetObj$analSet$cca$eigenValues <- cca$CCA$eig
   
   #Download relevent data
-  write.csv(samp.scores, file="cca_row_scores.csv", row.names=TRUE)
-  write.csv(var_scores, file="cca_column_scores.csv", row.names=TRUE)
-  write.csv(env_scores, file="cca_environment_scores.csv", row.names=TRUE)
+  write.csv(samp.scores, file="cca_sample_scores.csv", row.names=TRUE)
+  write.csv(var_scores, file="cca_variable_scores.csv", row.names=TRUE)
+  write.csv(env_scores, file="cca_constraining_data_scores.csv", row.names=TRUE)
   eigenValues_data <- cbind(cca$CCA$eig, cca$CCA$eig/sum(cca$CCA$eig))
   n <- nrow(eigenValues_data)
   eigenValues_data <- as.data.frame(cbind(paste0("CCA ", 1:nrow(eigenValues_data)), eigenValues_data))

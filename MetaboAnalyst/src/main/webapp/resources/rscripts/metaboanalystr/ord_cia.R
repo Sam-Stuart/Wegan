@@ -188,8 +188,8 @@ ord.cia <- function(mSetObj=NA, data="false", type="NULL", env_text=" ") {
   colnames(norm.row.1) <- c("Axis 1", "Axis 2")
   norm.row.2 <- cia$mY
   colnames(norm.row.2) <- c("Axis 1", "Axis 2")
-  write.csv(norm.row.1, file="coinertia_analysis_row_scores_main_data_set.csv", row.names=row.names(input))
-  write.csv(norm.row.2, file="coinertia_analysis_row_scores_env_data_set.csv", row.names=row.names(envData1))
+  write.csv(norm.row.1, file="cia_sample_scores_main_data_set.csv", row.names=row.names(input))
+  write.csv(norm.row.2, file="cia_sample_scores_constraining_data_set.csv", row.names=row.names(envData1))
   write.csv(eigenValues_data, file="cia_scree_data.csv", row.names=FALSE)
   
 return(.set.mSet(mSetObj))

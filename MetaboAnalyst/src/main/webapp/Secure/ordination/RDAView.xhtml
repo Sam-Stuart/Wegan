@@ -13,16 +13,12 @@
     <ui:define name="content">
         <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
             <p:tabView id="RDA">
-                <p:tab title =" Biplot" titleStyleClass="p-tab-nav">
+                <p:tab title =" 2D Scores Plot" titleStyleClass="p-tab-nav">
                     <h:form id="form1">
-                        <p>
-                            The use of data groupings will create more interesting plots. Load grouping data separately, where each row aligns with the rows in your data set, or include groupings as columns in your data set.
-                        </p> 
-                        <p>
-                            The use of environmental data, if available, will also create more interesting plots. Load environmental data separately, where each row aligns with the rows in your data set.
+                        <p style="font-size:13px">
+                            The use of data groupings will create more interesting plots. Load grouping data separately, where each row aligns with the rows in your data set, or include groupings as columns in your data set.The use of environmental data, if available, will also create more interesting plots. Load environmental data separately, where each row aligns with the rows in your data set.
                         </p> 
                         
-                        <h3>Dataset Options:</h3>
                         <h:panelGrid id="panelGrid1" columns="4" cellpadding="3" columnClasses="colBrayLong,colBrayShort,colBrayLong,colBrayShort" >
                             
                             <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
@@ -32,11 +28,11 @@
                             <p:selectBooleanCheckbox value ="#{rdaBean.doAbundance}"/> 
 
                         </h:panelGrid>
-                        <h:panelGrid columns="2" cellpadding="3">
+<!--                        <h:panelGrid columns="2" cellpadding="3">
                             <h:outputLabel style="font-weight: bold" value="Constraining Data Variable Selection:"/>
                             <p:inputText style="width:400px; height:100px; line-height:5px;" value="#{rdaBean.envDataCol}"/>
 
-                        </h:panelGrid>
+                        </h:panelGrid>-->
                         <h:panelGrid id="panelGrid1_2" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
                             
                             <p:commandButton value="Customize Graph"
@@ -50,7 +46,7 @@
                                             onclick="PF('statusDialog').show()"
                                             oncomplete="PF('statusDialog').hide()"  
                                             update=":RDA:form1:rdaPane1  :cmdPane" 
-                                            actionListener="#{rdaBean.rdaUpdate_action()}"/>
+                                            actionListener="#{rdaBean.rdaUpdate_action2D()}"/>
                         </h:panelGrid>
                         <h:panelGrid class="resultsBar" columns="2">
                             <h:panelGroup>
@@ -98,11 +94,8 @@
                 </p:tab>
                 <p:tab title ="Scree Plot" titleStyleClass="p-tab-nav">
                     <h:form id="form2">
-                        <p>
-                            The use of data groupings will create more interesting plots. Load grouping data separately, where each row aligns with the rows in your data set, or include groupings as columns in your data set.
-                        </p> 
-                        <p>
-                            The use of environmental data, if available, will also create more interesting plots. Load environmental data separately, where each row aligns with the rows in your data set.
+                        <p style="font-size:13px">
+                            The use of data groupings will create more interesting plots. Load grouping data separately, where each row aligns with the rows in your data set, or include groupings as columns in your data set.The use of environmental data, if available, will also create more interesting plots. Load environmental data separately, where each row aligns with the rows in your data set.
                         </p> 
                         <h:panelGrid id="panelGrid2" columns="4" cellpadding="3" columnClasses="colBrayLong,colBrayShort,colBrayLong,colBrayShort"> 
                             <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
@@ -118,7 +111,7 @@
                                             onclick="PF('statusDialog').show()"
                                             oncomplete="PF('statusDialog').hide()"  
                                             update=":RDA:form2:rdaPane2  :cmdPane" 
-                                            actionListener="#{rdaBean.rdaUpdate_action()}"/>
+                                            actionListener="#{rdaBean.rdaUpdate_actionScree()}"/>
                         </h:panelGrid>
                         <h:panelGrid class="resultsBar" columns="2">
                             <h:panelGroup>

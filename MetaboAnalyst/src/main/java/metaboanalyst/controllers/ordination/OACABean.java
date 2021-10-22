@@ -28,10 +28,10 @@ public class OACABean implements Serializable {
     private String usrName = usr.getName();
     
 
-    private String fileRowScores = "ca_row_scores.csv";
+    private String fileRowScores = "ca_sample_scores.csv";
     private String fileRowScorePath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileRowScores + "\">" + fileRowScores + "</a>";
     
-    private String fileColScores = "ca_column_scores.csv";
+    private String fileColScores = "ca_variable_scores.csv";
     private String fileColScorePath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileColScores + "\">" + fileColScores + "</a>";
    
     private String fileScree = "ca_scree_data.csv";

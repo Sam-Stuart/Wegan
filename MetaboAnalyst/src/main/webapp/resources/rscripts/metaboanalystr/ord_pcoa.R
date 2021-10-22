@@ -199,11 +199,11 @@ ord.pcoa <- function(mSetObj=NA, data="false", distance="NULL", binary="false", 
   colnames(eigenValues_data) <- c("Dimension", "Eigen_Value", "Variance_Explained")
   
   write.csv(eigenValues_data, file="pcoa_eigen_values.csv", row.names=FALSE)
-  write.csv(pcoa$points, file="pcoa_row_scores.csv", row.names=row.names(input))
-  write.csv(var.fit$vectors$arrows, file="pcoa_column_scores.csv", row.names=TRUE)
-  write.csv(pcoa$x, file=paste0("pcoa_", distance1, "_dissimilarity_matrix.csv"), row.names=TRUE)
+  write.csv(pcoa$points, file="pcoa_sample_scores.csv", row.names=row.names(input))
+  write.csv(var.fit$vectors$arrows, file="pcoa_variable_scores.csv", row.names=TRUE)
+  write.csv(pcoa$x, file("pcoa_dissimilarity_matrix.csv", row.names=TRUE)
   if (is.data.frame(env_data)==TRUE) {
-    write.csv(env.scores, file="pcoa_environment_scores.csv", row.names=TRUE)
+    write.csv(env.scores, file="pcoa_constraining_data_scores.csv", row.names=TRUE)
   }
 
   sink("column_impact_on_pcoa.txt") 

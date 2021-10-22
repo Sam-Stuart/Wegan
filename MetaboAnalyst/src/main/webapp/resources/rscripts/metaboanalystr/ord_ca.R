@@ -85,8 +85,8 @@ ord.ca <- function(mSetObj=NA, data="NULL", fac_text="NULL") {
   mSetObj$analSet$ca$eigenValues <- coa$eig
   
   #Download relevent data
-  write.csv(samp.scores, file="ca_row_scores.csv", row.names=row.names(input))
-  write.csv(var_scores, file="ca_column_scores.csv", row.names=TRUE)
+  write.csv(samp.scores, file="ca_sample_scores.csv", row.names=row.names(input))
+  write.csv(var_scores, file="ca_variable_scores.csv", row.names=TRUE)
 
   eigenValues <- coa$eig
   n <- length(eigenValues)
