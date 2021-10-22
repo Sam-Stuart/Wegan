@@ -13,6 +13,7 @@ PCA.Anal <- function(mSetObj=NA, data="false"){
     data <- mSetObj$dataSet$norm
   } else {
     data <- mSetObj$dataSet$orig
+    mSetObj$dataSet$cls <- rownames(data)
   }
 
   numData <- select_if(data, is.numeric)
@@ -89,7 +90,7 @@ PlotPCAPairSummary <- function(mSetObj=NA, imgName, format="png", dpi=72, width=
   library(viridis)
 
   mSetObj <- .get.mSet(mSetObj);
-  pclabels <- paste("PC", 1:4, "\n", round(100*mSetObj$analSet$pca$variance[1:4],1), "%");
+  pclabels <- paste("PC", 1:5, "\n", round(100*mSetObj$analSet$pca$variance[1:5],1), "%");
   imgName = paste(imgName, "dpi", dpi, ".", format, sep="");
   if(is.na(width)){
     w <- 10;
@@ -109,9 +110,9 @@ PlotPCAPairSummary <- function(mSetObj=NA, imgName, format="png", dpi=72, width=
     print(paste0(n, "groups"))
     colors <- viridis(n)
     print(colors)
-    pairs(mSetObj$analSet$pca$x[,1:4], col=colors, pch=19, labels=pclabels);
+    pairs(mSetObj$analSet$pca$x[,1:5], col=colors, pch=19, labels=pclabels);
   }else{
-    pairs(mSetObj$analSet$pca$x[,1:4], col="blue", labels=pclabels);
+    pairs(mSetObj$analSet$pca$x[,1:5], col="blue", labels=pclabels);
   }
   dev.off();
   return(.set.mSet(mSetObj));

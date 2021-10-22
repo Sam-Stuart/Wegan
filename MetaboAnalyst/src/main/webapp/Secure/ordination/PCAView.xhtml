@@ -155,24 +155,26 @@
                 </p:tab>
                 <p:tab title ="2D Scores Plot" titleStyleClass="p-tab-nav">
                     <h:form id="form3">
-                        <h:panelGrid columns="4" cellpadding="3" columnClasses="colBrayLong, colBrayShort, colBrayLong, colBrayShort" >
+                        <h:panelGrid columns="5" cellpadding="3" columnClasses="colBrayLong, colBrayShort, colBrayLong, colBrayShort, colLast" >
                                     
                                 <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
                                 <p:selectBooleanCheckbox value ="#{pcaBean.doOriginal}"/> 
     
+                                <h:outputLabel style="font-weight: bold" value="Display sample names:"/>
+                                <p:selectBooleanCheckbox value ="#{pcaBean.displayNames}"/>  
+                                
                                 <h:outputLabel style="font-weight: bold" value="Specify PC on X-axis:"/>
                                 <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:50px" value="#{pcaBean.pcaScoreX}">
                                     <f:selectItems value="#{pcaBean.pcaAllPCs}" />
                                 </p:selectOneMenu>
-                                <h:outputLabel style="font-weight: bold" value="Display 95% confidence regions:"/>
-                                <p:selectBooleanCheckbox value ="#{pcaBean.displayConfs}"/> 
+<!--                                <h:outputLabel style="font-weight: bold" value="Display 95% confidence regions:"/>
+                                <p:selectBooleanCheckbox value ="#{pcaBean.displayConfs}"/> -->
                                 
                                 <h:outputLabel style="font-weight: bold" value="Specify PC on Y-axis:"/>
                                 <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:50px" value="#{pcaBean.pcaScoreY}">
                                     <f:selectItems value="#{pcaBean.pcaAllPCs}" />
                                 </p:selectOneMenu>    
-                                <h:outputLabel style="font-weight: bold" value="Display sample names:"/>
-                                <p:selectBooleanCheckbox value ="#{pcaBean.displayNames}"/>    
+  
 <!--                                
                                 <h:outputLabel style="font-weight: bold" value="Use grey-scale colors:"/>
                                 <p:selectBooleanCheckbox value ="#{pcaBean.greyScale}"/>-->
