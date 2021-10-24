@@ -383,7 +383,7 @@ public class ApplicationBean1 implements Serializable {
         posthocOpts[1] = new SelectItem("tukey", "Tukey\'s HSD");
 
         distMeasureOpts = new SelectItem[3];
-        distMeasureOpts[0] = new SelectItem("pearson", "Pearson R");
+        distMeasureOpts[0] = new SelectItem("pearson", "Pearson R correlation");
         distMeasureOpts[1] = new SelectItem("spearman", "Spearman rank correlation");
         distMeasureOpts[2] = new SelectItem("kendall", "Kendall rank correlation");
 

@@ -54,6 +54,7 @@
             }
         </script>-->
         <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
+            <h1>Non-metric Multidimensional Scaling Analysis:</h1>            
             <p:tabView id="NMDS">
                 <p:tab title ="2D Scores Plot" titleStyleClass="p-tab-nav">
                     <h:form id="form1">
@@ -61,7 +62,6 @@
                             The 2D scores plot orients samples in two dimensions so that the more similar their variable values, the closer the samples are to one another. The position of variable arrows and constraining variables indicate which factors have the greatest impact on the relative position of the samples.
                         </p>
                         <h:panelGrid id="panelGrid1" columns="4" cellpadding="3" columnClasses="colNMDSLong, colNMDSShort, colNMDSLong, colNMDSShort">
-
                             <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
                             <p:selectBooleanCheckbox value ="#{ordNMDSBean.doOriginal}"/> 
 
@@ -109,17 +109,17 @@
                         <h:panelGrid id="nmdsPane1" style="width: 100%;">
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
                                 <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
-                                    <h:outputText escape="false" value="#{ordNMDSBean.file2DSampleScoresPath}"/>
+                                    <h:outputText style="padding-left: 0px" escape="false" value="#{ordNMDSBean.file2DSampleScoresPath}"/>
                                 </i>
                             </h:panelGrid>
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
                                 <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
-                                    <h:outputText escape="false" value="#{ordNMDSBean.file2DColScoresPath}"/>
+                                    <h:outputText style="padding-left: 0px" escape="false" value="#{ordNMDSBean.file2DColScoresPath}"/>
                                 </i>    
                             </h:panelGrid>
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
-                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
-                                    <h:outputText escape="false" value="#{ordNMDSBean.file2DEnvScoresPath}"/>
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 3px; padding-right: 1px">
+                                    <h:outputText style="padding-left: 0px" escape="false" value="#{ordNMDSBean.file2DEnvScoresPath}"/>
                                 </i>
                             </h:panelGrid>  
                             

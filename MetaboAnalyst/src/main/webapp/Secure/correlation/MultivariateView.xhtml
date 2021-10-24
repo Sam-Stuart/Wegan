@@ -11,14 +11,13 @@
     </ui:define>
     <ui:define name="content">
         <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
-            <p:tabView id="multiCA">
-                <p:tab title ="Overview" titleStyleClass="p-tab-nav">
+            <h1>Multivariate Regression:</h1>
+            <p:tabView id="multiCA">    
+                <p:tab title ="Line of Best Fit" titleStyleClass="p-tab-nav">
                     <h:form id="form1">
-                        <p>
-                            "One dependent variable and multiple independent variables will be tested for correlation. All must have numeric values." 
-                              "You have created this formula for model building: ", facA, " ~ ", pred.text (facA and pred.text are store in  mSetObj$analSet$linRegMulti$res as response and predictors, respectively)
-                              "The L hand side is the dependent variable. The R hand side is the independent variable(s). If there is >1 independent variable, plus signs indicate the variables are evaluated on their own; colons indicate an interaction between the variables is evaluated."
-                              "If the formula is not what you intended, retype independent variable(s) in the text box and/or choose another dependent variable."
+                        <p style='font-size: 13px'>
+                            One dependent variable and multiple independent variables are tested for correlation. Only numeric variables are used for the dependent variable. Numeric and categorical variables can be independent variables. 
+                            Use the text box to select the the independent variables. Use commas between variables, however if you are interested in the interaction between two or more variables, separate them by a colon.
                         </p>
                         <h:panelGrid id="panelGrid" columns="2" cellpadding="3" columnClasses="width: 10%, width: 40%">
                             <h:outputLabel style="font-weight: bold" value="Dependant Variable:"/>
@@ -28,9 +27,10 @@
                             </p:selectOneMenu>
 
                             <h:outputLabel style="font-weight: bold" value="Indicate independent variables using the column names with commas in between:"/>
-                            <p:inputText style="width:400px; height:100px" value="#{rfCABean.indInput}"/> 
+                            <p:inputText style="width:400px; height:40px" value="#{rfCABean.indInput}"/> 
 
                             <p:panelGrid></p:panelGrid>
+                            <h:panelGrid columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
                             <p:commandButton value="Update" 
                                              styleClass="updateButton"
                                              style="box-shadow: none !important; text-shadow: none !important"
@@ -38,6 +38,7 @@
                                             oncomplete="PF('statusDialog').hide()"  
                                             update=":multiCA:form1:rfPane1  :cmdPane" 
                                             actionListener="#{rfCABean.corrRFBtn_action()}"/> 
+                            </h:panelGrid>
 
                         </h:panelGrid>
                         <h:panelGrid class="resultsBar" columns="2">
@@ -49,7 +50,6 @@
                             <h:panelGroup>
                                 <h:panelGrid columns="3" class="resultsImages">
                                     <i class="fas fa-palette"></i>
-                                    <i class="fa fa-table"></i>
                                     <i class="fa fa-question-circle"></i>
                                 </h:panelGrid>
 
@@ -62,14 +62,9 @@
                 </p:tab>
                 <p:tab title ="Predicted vs Actual Plot" titleStyleClass="p-tab-nav">
                     <h:form id="form2">
-                        <p>
-                           "One dependent variable and two or more independent variables will be tested for correlation. The dependent variable must be numeric. The independent variables can be numeric or categorical."
-                            "For categorical independent variables, make sure to use characters for the levels and not numbers. For example, if you have levels 1, 2 and 3, change the level labels to I, II and III prior to upload."
-                          "You have created this formula for model building: ", facA, " ~ ", pred.text (stored in mSetObj$analSet$rfReg$res as response and pred.text, respectively)
-                            "The L hand side is the dependent variable. The R hand side is the independent variable(s).
-                            "If the formula is not what you intended, retype independent variable(s) in the text box and/or choose another dependent variable."
-                          "The train data for model building is 70% of the dataset, while the test data for model testing is 30% of the dataset."
-
+                        <p style='font-size: 13px'>
+                            One dependent variable and multiple independent variables are tested for correlation. Only numeric variables are used for building the model. 
+                            Use the text box to select the the independent variables. Use commas between variables, however if you are interested in the interaction between two or more variables, separate them by a colon.
                         </p>
                         <h:panelGrid id="panelGrid" columns="2" cellpadding="3" columnClasses="width: 10%, width: 40%">
                             <h:outputLabel style="font-weight: bold" value="Dependant Variable:"/>
@@ -79,9 +74,10 @@
                             </p:selectOneMenu>
 
                             <h:outputLabel style="font-weight: bold" value="Indicate independent variables using the column names with commas in between:"/>
-                            <p:inputText style="width:400px; height:100px" value="#{rfCABean.indInput}"/> 
+                            <p:inputText style="width:400px; height:40px" value="#{rfCABean.indInput}"/> 
 
                             <p:panelGrid></p:panelGrid>
+                            <h:panelGrid columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
                             <p:commandButton value="Update" 
                                              styleClass="updateButton"
                                              style="box-shadow: none !important; text-shadow: none !important"
@@ -89,6 +85,7 @@
                                             oncomplete="PF('statusDialog').hide()"  
                                             update=":multiCA:form2:rfPane2  :cmdPane" 
                                             actionListener="#{rfCABean.corrRFBtn_action()}"/> 
+                            </h:panelGrid>
 
                         </h:panelGrid>
                         <h:panelGrid class="resultsBar" columns="2">
@@ -100,7 +97,6 @@
                             <h:panelGroup>
                                 <h:panelGrid columns="3" class="resultsImages">
                                     <i class="fas fa-palette"></i>
-                                    <i class="fa fa-table"></i>
                                     <i class="fa fa-question-circle"></i>
                                 </h:panelGrid>
 
@@ -113,14 +109,9 @@
                 </p:tab>
                 <p:tab title ="Coefficient Plot" titleStyleClass="p-tab-nav">
                     <h:form id="form3">
-                        <p>
-                           "One dependent variable and two or more independent variables will be tested for correlation. The dependent variable must be numeric. The independent variables can be numeric or categorical."
-                            "For categorical independent variables, make sure to use characters for the levels and not numbers. For example, if you have levels 1, 2 and 3, change the level labels to I, II and III prior to upload."
-                          "You have created this formula for model building: ", facA, " ~ ", pred.text (stored in mSetObj$analSet$rfReg$res as response and pred.text, respectively)
-                            "The L hand side is the dependent variable. The R hand side is the independent variable(s).
-                            "If the formula is not what you intended, retype independent variable(s) in the text box and/or choose another dependent variable."
-                          "The train data for model building is 70% of the dataset, while the test data for model testing is 30% of the dataset."
-
+                        <p style='font-size: 13px'>
+                            One dependent variable and multiple independent variables are tested for correlation. Only numeric variables are used for building the model. 
+                            Use the text box to select the the independent variables. Use commas between variables, however if you are interested in the interaction between two or more variables, separate them by a colon.
                         </p>
                         <h:panelGrid id="panelGrid" columns="2" cellpadding="3" columnClasses="width: 10%, width: 40%">
                             <h:outputLabel style="font-weight: bold" value="Dependant Variable:"/>
@@ -130,9 +121,10 @@
                             </p:selectOneMenu>
 
                             <h:outputLabel style="font-weight: bold" value="Indicate independent variables using the column names with commas in between:"/>
-                            <p:inputText style="width:400px; height:100px" value="#{rfCABean.indInput}"/> 
+                            <p:inputText style="width:400px; height:40px" value="#{rfCABean.indInput}"/> 
 
                             <p:panelGrid></p:panelGrid>
+                            <h:panelGrid columns="2" cellpadding="3" style="float: right; text-shadow: none !important;">                             
                             <p:commandButton value="Update" 
                                              styleClass="updateButton"
                                              style="box-shadow: none !important; text-shadow: none !important"
@@ -140,6 +132,7 @@
                                             oncomplete="PF('statusDialog').hide()"  
                                             update=":multiCA:form3:rfPane3  :cmdPane" 
                                             actionListener="#{rfCABean.corrRFBtn_action()}"/> 
+                            </h:panelGrid>
 
                         </h:panelGrid>
                         <h:panelGrid class="resultsBar" columns="2">
@@ -151,7 +144,6 @@
                             <h:panelGroup>
                                 <h:panelGrid columns="3" class="resultsImages">
                                     <i class="fas fa-palette"></i>
-                                    <i class="fa fa-table"></i>
                                     <i class="fa fa-question-circle"></i>
                                 </h:panelGrid>
 
@@ -164,14 +156,9 @@
                 </p:tab>
                 <p:tab title ="Relative Importance" titleStyleClass="p-tab-nav">
                     <h:form id="form4">
-                        <p>
-                           "One dependent variable and two or more independent variables will be tested for correlation. The dependent variable must be numeric. The independent variables can be numeric or categorical."
-                            "For categorical independent variables, make sure to use characters for the levels and not numbers. For example, if you have levels 1, 2 and 3, change the level labels to I, II and III prior to upload."
-                          "You have created this formula for model building: ", facA, " ~ ", pred.text (stored in mSetObj$analSet$rfReg$res as response and pred.text, respectively)
-                            "The L hand side is the dependent variable. The R hand side is the independent variable(s).
-                            "If the formula is not what you intended, retype independent variable(s) in the text box and/or choose another dependent variable."
-                          "The train data for model building is 70% of the dataset, while the test data for model testing is 30% of the dataset."
-
+                        <p style='font-size: 13px'>
+                            One dependent variable and multiple independent variables are tested for correlation. Only numeric variables are used for building the model. 
+                            Use the text box to select the the independent variables. Use commas between variables, however if you are interested in the interaction between two or more variables, separate them by a colon.
                         </p>
                         <h:panelGrid id="panelGrid" columns="2" cellpadding="3" columnClasses="width: 10%, width: 40%">
                             <h:outputLabel style="font-weight: bold" value="Dependant Variable:"/>
@@ -181,9 +168,10 @@
                             </p:selectOneMenu>
 
                             <h:outputLabel style="font-weight: bold" value="Indicate independent variables using the column names with commas in between:"/>
-                            <p:inputText style="width:400px; height:100px" value="#{rfCABean.indInput}"/> 
+                            <p:inputText style="width:400px; height:40px" value="#{rfCABean.indInput}"/> 
 
                             <p:panelGrid></p:panelGrid>
+                            <h:panelGrid columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
                             <p:commandButton value="Update" 
                                              styleClass="updateButton"
                                              style="box-shadow: none !important; text-shadow: none !important"
@@ -191,6 +179,7 @@
                                             oncomplete="PF('statusDialog').hide()"  
                                             update=":multiCA:form4:rfPane3  :cmdPane" 
                                             actionListener="#{rfCABean.corrRFBtn_action()}"/> 
+                            </h:panelGrid>
 
                         </h:panelGrid>
                         <h:panelGrid class="resultsBar" columns="2">
@@ -202,7 +191,6 @@
                             <h:panelGroup>
                                 <h:panelGrid columns="3" class="resultsImages">
                                     <i class="fas fa-palette"></i>
-                                    <i class="fa fa-table"></i>
                                     <i class="fa fa-question-circle"></i>
                                 </h:panelGrid>
 

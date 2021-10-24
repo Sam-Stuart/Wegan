@@ -19,7 +19,7 @@
                             The use of data groupings will create more interesting plots. Load grouping data separately, where each row aligns with the rows in your data set, or include groupings as columns in your data set.The use of environmental data, if available, will also create more interesting plots. Load environmental data separately, where each row aligns with the rows in your data set.
                         </p> 
                         
-                        <h:panelGrid id="panelGrid1" columns="4" cellpadding="3" columnClasses="colBrayLong,colBrayShort,colBrayLong,colBrayShort" >
+                        <h:panelGrid id="panelGrid1" columns="4" cellpadding="3" columnClasses="colNMDSLong,colNMDSShort,colNMDSLong,colNMDSShort" >
                             
                             <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
                             <p:selectBooleanCheckbox value ="#{rdaBean.doOriginal}"/> 
@@ -65,8 +65,8 @@
                                 <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
                                     <h:outputText style="padding-left: 0px" escape="false" value="#{rdaBean.fileRowScorePath}"/>
                                 </i>
-                                
                             </h:panelGrid>
+                            
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
                                 <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
                                     <h:outputText style="padding-left: 0px" escape="false" value="#{rdaBean.fileColScorePath}"/>
@@ -97,7 +97,7 @@
                         <p style="font-size:13px">
                             The use of data groupings will create more interesting plots. Load grouping data separately, where each row aligns with the rows in your data set, or include groupings as columns in your data set.The use of environmental data, if available, will also create more interesting plots. Load environmental data separately, where each row aligns with the rows in your data set.
                         </p> 
-                        <h:panelGrid id="panelGrid2" columns="4" cellpadding="3" columnClasses="colBrayLong,colBrayShort,colBrayLong,colBrayShort"> 
+                        <h:panelGrid id="panelGrid2" columns="4" cellpadding="3" columnClasses="colNMDSLong,colNMDSShort,colNMDSLong,colNMDSShort"> 
                             <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
                             <p:selectBooleanCheckbox value ="#{rdaBean.doOriginal}"/> 
                             <h:outputLabel style="font-weight: bold" value="Perform Relative Abundance Transformation:"/>

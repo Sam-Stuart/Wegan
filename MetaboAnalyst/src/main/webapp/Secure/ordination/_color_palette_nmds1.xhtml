@@ -10,7 +10,7 @@
         <h:panelGrid columns="1" style="width:380px;">
             <h:panelGrid id="panelGrid1" columns="2" cellpadding="5" columnClasses="colBrayLong,colBrayShort">
                 
-                <h:outputLabel style="font-weight: bold" value="Show Sample Names:"/>
+                <h:outputLabel style="font-weight: bold" value="Use Sample Names for Points:"/>
                 <p:selectBooleanCheckbox value ="#{ordNMDSBean.sampleNamesOpts}"/> 
                 
                 <h:outputLabel style="font-weight: bold" value="Add Variable Arrows:"/>
@@ -23,7 +23,7 @@
                     <f:selectItems value="#{ordNMDSBean.nmdsMetaColumnOpts}" />
                 </p:selectOneMenu> 
                 
-                <h:outputLabel style="font-weight: bold" value="Color Pallet:"/>
+                <h:outputLabel style="font-weight: bold" value="Color Palette:"/>
                 <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordNMDSBean.ordColorOpts}">
                     <f:selectItems value="#{applicationBean1.ordColorPaletteOpts}" />
                 </p:selectOneMenu> 

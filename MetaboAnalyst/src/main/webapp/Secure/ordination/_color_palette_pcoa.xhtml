@@ -24,7 +24,7 @@
                     <f:selectItems value="#{ordPCOABean.pcoaMetaColumnOpts}" />
                 </p:selectOneMenu>  
                                 
-                <h:outputLabel style="font-weight: bold" value="Color Pallet:"/>
+                <h:outputLabel style="font-weight: bold" value="Color Palette:"/>
                 <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordPCOABean.ordColorOpts}">
                     <f:selectItems value="#{applicationBean1.ordColorPaletteOpts}" />
                 </p:selectOneMenu> 
@@ -34,10 +34,10 @@
                 
                 <h3>Constraining Data Options</h3>
                 <p:panelGrid></p:panelGrid>
-                <h:outputLabel style="font-weight: bold" value="Add Arrows for Continuous Constraining Variables:"/>
+                <h:outputLabel style="font-weight: bold" value="Add Arrows for Constraining Variables:"/>
                 <p:selectBooleanCheckbox value ="#{ordPCOABean.env_arrowsOpts}"/> 
 
-                <h:outputLabel style="font-weight: bold" value="Add Centroids for Categorical Constraining Variables:"/>
+                <h:outputLabel style="font-weight: bold" value="Add Centroids for Constraining Variables:"/>
                 <p:selectBooleanCheckbox value ="#{ordPCOABean.env_centOpts}"/> 
                 <p:panelGrid></p:panelGrid>  
 

@@ -68,10 +68,10 @@ lin.reg.anal.one <- function(mSetObj=NA, facA="NULL", facB="NULL", weights=NULL)
   equation <- paste(facA, " = ", paste(paste(beta, facB, sep="*"), alpha, sep=" + ")) #Create equation with intercept, coefficient and predictor variable name
   r.squared <- summary[["adj.r.squared"]] #Extract R^2 value
   r_sq <- round(r.squared, 2)
-  r.squared.eq <- paste("R-squared = ", r_sq) #Generate R^2 equation
+  r.squared.eq <- paste("R-squared: ", r_sq) #Generate R^2 equation
   r.squared.adj <- summary[["adj.r.squared"]] #Extract adjusted R^2 value
   r_sq_adj <- round(r.squared.adj, 2)
-  r.squared.adj.eq <- paste("R-squared adjusted = ", r_sq_adj) #Generate adjusted R^2 equation
+  r.squared.adj.eq <- paste("R-squared adjusted: ", r_sq_adj) #Generate adjusted R^2 equation
   
   # #Test residuals for normality. Error will be visable to user.
   # norm_resid <- shapiro.test(residuals) 

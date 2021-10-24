@@ -54,6 +54,7 @@
             }
         </script>-->
         <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
+            <h1>Principal Component Analysis:</h1>            
             <p:tabView id="ac" style="width:100%; border: none; background: none; font-size: 13px;">
                 <p:tab title ="Pairs Plot" titleStyleClass="p-tab-nav">
                     <h:form id="form1">
@@ -170,24 +171,23 @@
                                 <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
                                 <p:selectBooleanCheckbox value ="#{pcaBean.doOriginal}"/> 
                                 
-                                <h:panelGrid style="line-height: 21px">
+                                <h:panelGrid style="line-height: 25px">
                                 <h:outputLabel style="font-weight: bold" value="Display sample names:"/>
                                 </h:panelGrid>                                
                                 <p:selectBooleanCheckbox value ="#{pcaBean.displayNames}"/> 
                                 
-                                <h:outputLabel style="font-weight: bold" value="Specify PC on X-axis:"/>
-                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:25px" value="#{pcaBean.pcaScoreX}">
+                                <h:outputLabel style="font-weight: bold" value="Select PC for X-axis:"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:50px" value="#{pcaBean.pcaLoadX}">
                                     <f:selectItems value="#{pcaBean.pcaAllPCs}" />
                                 </p:selectOneMenu>
-                                
+
+                                <h:outputLabel style="font-weight: bold" value="Select PC for Y-axis:"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:50px" value="#{pcaBean.pcaLoadY}">
+                                    <f:selectItems value="#{pcaBean.pcaAllPCs}" />
+                                </p:selectOneMenu>      
+                                  
 <!--                                <h:outputLabel style="font-weight: bold" value="Display 95% confidence regions:"/>
                                 <p:selectBooleanCheckbox value ="#{pcaBean.displayConfs}"/> -->
-                                
-                                <h:outputLabel style="font-weight: bold" value="Specify PC on Y-axis:"/>
-                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:25px" value="#{pcaBean.pcaScoreY}">
-                                    <f:selectItems value="#{pcaBean.pcaAllPCs}" />
-                                </p:selectOneMenu>    
-  
 <!--                                
                                 <h:outputLabel style="font-weight: bold" value="Use grey-scale colors:"/>
                                 <p:selectBooleanCheckbox value ="#{pcaBean.greyScale}"/>-->
@@ -293,7 +293,7 @@
                             <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
                             <p:selectBooleanCheckbox value ="#{pcaBean.doOriginal}"/> 
 
-                            <h:panelGrid style="line-height: 21px">
+                            <h:panelGrid style="line-height: 25px">
                             <h:outputLabel style="font-weight: bold" value="Display variable names:"/>
                             </h:panelGrid>
                             <p:selectBooleanCheckbox value ="#{pcaBean.displayFeatNames}"/>
@@ -339,11 +339,16 @@
                                 oncomplete="PF('graphDialog').show()"/>
                         </h:panelGrid>   
                         <h:panelGrid id="loadPane" style="width: 100%;">
-                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+<!--                        <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
                                 <i class="fa fa-table fa-2x" style="align: middle; width: 1px; padding-right: 3px">
                                     <p:commandLink action="#{sessionBean1.detailsLnk_action('pca')}" value="View the detailed data table"></p:commandLink>
                                 </i>
-                            </h:panelGrid> 
+                            </h:panelGrid> -->
+<!--                        <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 3px">
+                                    <h:outputText escape="false" value="#{ordNMDSBean.file2DSampleScoresPath}"/>
+                                </i>
+                            </h:panelGrid>-->
                             <h:panelGrid style="width: 100%; text-align: center">
                                 <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('pca_loading')}" alt="PCALoadingImage"/>
                             </h:panelGrid>

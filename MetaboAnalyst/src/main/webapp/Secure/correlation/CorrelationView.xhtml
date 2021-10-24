@@ -11,10 +11,11 @@
     </ui:define>
     <ui:define name="content">
         <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
+            <h1>Correlation Heatmap:</h1>
             <h:form id="form1">
                 <p>
                     Correlation metrics can be applied to detect similarities between variables or samples. The heatmap function will only show correlations for a maximum of 1000 variables. For larger datasets, 
-                    only the top 1000 variables will be selected based on their interquantile range (IQR). For the sample view, greater than 4 variables are required to perform the analysis. 
+                    only the top 1000 variables will be selected based on their interquantile range (IQR). <b>For the sample view, greater than 4 variables are required to perform the analysis.</b> 
                     When the color distribution is fixed, you can potentially compare the correlation patterns among different data sets. 
 <!--                    In this case, you can choose "do not perform clustering" for the entire data set,  or only to perform clustering on a 
                     single reference data set, then manually re-arrange other data sets according to the clustering pattern of the 

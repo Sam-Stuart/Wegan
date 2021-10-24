@@ -201,7 +201,7 @@ ord.pcoa <- function(mSetObj=NA, data="false", distance="NULL", binary="false", 
   write.csv(eigenValues_data, file="pcoa_eigen_values.csv", row.names=FALSE)
   write.csv(pcoa$points, file="pcoa_sample_scores.csv", row.names=row.names(input))
   write.csv(var.fit$vectors$arrows, file="pcoa_variable_scores.csv", row.names=TRUE)
-  write.csv(pcoa$x, file("pcoa_dissimilarity_matrix.csv", row.names=TRUE)
+  write.csv(pcoa$x, file("pcoa_dissimilarity_matrix.csv", row.names=TRUE))
   if (is.data.frame(env_data)==TRUE) {
     write.csv(env.scores, file="pcoa_constraining_data_scores.csv", row.names=TRUE)
   }

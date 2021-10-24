@@ -15,7 +15,7 @@
     </ui:define>
     <ui:define name="content">
         <h:inputHidden id="mydir" value="#{sessionBean1.getJsonDir('bray_score3d')}" />
-        <script type="text/javascript">
+<!--        <script type="text/javascript">
             // for scatter plot
             function addBind() {
                 mychart = $("[id='ac:chart']");
@@ -52,10 +52,11 @@
                     }
                 };
             }
-        </script>
+        </script>-->
         <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
+            <h1>Bray-Curtis (Polar) Ordination:</h1>
             <p:tabView id="overviewbray">
-                <p:tab title ="Overview" titleStyleClass="p-tab-nav">
+                <p:tab title ="2D Scores Plot" titleStyleClass="p-tab-nav">
                     <h:form id="form1">
                         <p>
                             The use of data groupings will create more interesting plots. Load grouping data separately, where each row aligns with the rows in your data set, or include groupings as columns in your data set.
@@ -258,13 +259,13 @@
             draggable="false" closable="true" resizable="false"> 
             <ui:include src="_color_palette_bray.xhtml" />
         </p:dialog>
-        <script type="text/javascript">
+<!--        <script type="text/javascript">
             showBray3DScore();
             $("[id='ac:chart']").bind('jqplotDataClick',
                     function (ev, seriesIndex, pointIndex, data) {
                         //note, we use the internal index, not point index 
                         remoteCall([{name: 'cmpdIndex', value: data[0]}]);
                     });
-        </script>
+        </script>-->
     </ui:define>
 </ui:composition>

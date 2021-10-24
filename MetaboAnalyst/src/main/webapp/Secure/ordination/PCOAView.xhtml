@@ -15,7 +15,7 @@
     </ui:define>
     <ui:define name="content">
         <h:inputHidden id="mydir" value="#{sessionBean1.getJsonDir('pcoa_score3d')}" />
-        <script type="text/javascript">
+<!--        <script type="text/javascript">
             // for scatter plot
             function addBind() {
                 mychart = $("[id='ac:chart']");
@@ -52,8 +52,9 @@
                     }
                 };
             }
-        </script>
+        </script>-->
         <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
+            <h1>Principal Coordinate Analysis:</h1>            
             <p:tabView id="PCOA">
                 <p:tab title ="Biplot" titleStyleClass="p-tab-nav">
                     <h:form id="form1">

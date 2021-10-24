@@ -12,6 +12,7 @@
     </ui:define>
     <ui:define name="content">
         <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
+            <h1>Correspondence Analysis:</h1>
             <p:tabView id="overviewCA">
                 <p:tab title ="Biplot" titleStyleClass="p-tab-nav">
                     <h:form id="form1">
@@ -20,7 +21,7 @@
                             <p:selectBooleanCheckbox value ="#{oaCaBean.doOriginal}"/>
                             <h:outputLabel style="font-weight: bold" value="Variable Arrows:"/>
                             <p:selectBooleanCheckbox value ="#{oaCaBean.varArrows}"/> 
-                            <h:outputLabel style="font-weight: bold" value="Color Pallet:"/>
+                            <h:outputLabel style="font-weight: bold" value="Color Palette:"/>
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{oaCaBean.color}">
 
                                 <f:selectItems value="#{applicationBean1.ordColorPaletteOpts}" />
