@@ -13,26 +13,25 @@
         <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
             <h1>Support Vector Machine Regression:</h1>
             <h:form id="form1">
-                <p>
-                    One dependent variable and one or more independent variables will be tested for correlation. The dependent variable must be numeric. The independent variables can be numeric or categorical.
-                    For categorical independent variables, make sure to use characters for the levels and not numbers. For example, if you have levels 1, 2 and 3, change the level labels to I, II and III prior to upload.
-                    You have created this formula for model building: ", facA, " ~ ", pred.text (stored in mSetObj$analSet$rfReg$res as response and pred.text, respectively)
-                    The Left hand side is the dependent variable. The R hand side is the independent variable(s).
-                    If the formula is not what you intended, retype independent variable(s) in the text box and/or choose another dependent variable.
-                    The train data for model building is 70% of the dataset, while the test data for model testing is 30% of the dataset.
-                </p>
+                        <p style="font-size: 13px">
+                            One dependent variable and one or more independent variables are tested for correlation. The dependent variable must be numeric. The independent variables can be numeric or categorical.
+                            For categorical variables, make sure to use characters and not numbers. For example, if you have levels 1, 2 and 3, change the level labels to I, II and III prior to upload.
+                            The train data for model building is 70% of the dataset, while the test data for model testing is 30% of the dataset.
+                        </p>
                 
-                <h:panelGrid id="panelGrid" columns="2" cellpadding="3" columnClasses="width: 10%, width: 40%">
+                <h:panelGrid id="corrSVMPane1" columns="3" cellpadding="3" columnClasses="colLeft,colRight,colLast">
                     <h:outputLabel style="font-weight: bold" value="Dependant Variable:"/>
                             
                     <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{svmCABean.columnNameA}">
                         <f:selectItems value="#{svmCABean.columnOpts}" />
                     </p:selectOneMenu>
-                    
+                    <spacer></spacer>
                     <h:outputLabel style="font-weight: bold" value="Indicate independent variables using the column names with commas in between:"/>
                     <p:inputText style="width:400px; height:100px" value="#{svmCABean.indInput}"/> 
+                </h:panelGrid>
                     
-                    <p:panelGrid></p:panelGrid>
+                <p:panelGrid></p:panelGrid>
+                <h:panelGrid id="panelGrid1_2" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
                     <p:commandButton value="Update" 
                                     styleClass="updateButton"
                                     style="box-shadow: none !important; text-shadow: none !important"
@@ -40,8 +39,7 @@
                                     oncomplete="PF('statusDialog').hide()"  
                                     update=":form1:corrSVMPane1  :cmdPane" 
                                     actionListener="#{svmCABean.corrSVMBtn_action()}"/> 
-                    
-                </h:panelGrid>
+                </h:panelGrid>   
                 <h:panelGrid class="resultsBar" columns="2">
                     <h:panelGroup>
                         <h:panelGrid columns="1" style="text-align : left;">
@@ -51,7 +49,6 @@
                     <h:panelGroup>
                         <h:panelGrid columns="3" class="resultsImages">
                             <i class="fas fa-palette"></i>
-                            <i class="fa fa-table"></i>
                             <i class="fa fa-question-circle"></i>
 <!--                                                                       <i class="fas fa-table"></i>
                            <i class="fas fa-palette"></i>
@@ -60,7 +57,7 @@
 
                     </h:panelGroup>                            
                 </h:panelGrid> 
-                        <h:panelGrid id="corrSVMPane1" style="width: 100%;">
+                        <h:panelGrid id="corrSVMPane1_3" style="width: 100%;">
                              <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
                                 <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_svm')}" alt="SVM image"/>
                             </h:panelGrid>                           

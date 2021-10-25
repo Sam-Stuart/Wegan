@@ -12,7 +12,7 @@
 #'License: GNU GPL (>= 2)
 #'@export
 
-log.reg.anal <- function(mSetObj=NA, data="NULL", facA="NULL", pred.text="NULL", type="multinomial", reference="NULL", order.text="NULL", weights=weights) {
+log.reg.anal <- function(mSetObj=NA, facA="NULL", pred.text="NULL", type="multinomial", reference="NULL", order.text="NULL", weights=weights) {
   
   library("nnet") #For multinomial regression
   library("MASS") #For ordinal regression
@@ -20,7 +20,7 @@ log.reg.anal <- function(mSetObj=NA, data="NULL", facA="NULL", pred.text="NULL",
 
   mSetObj <- .get.mSet(mSetObj)
 
-  #if (data=="NULL") {
+  #if (data=="false") {
     data <- mSetObj$dataSet$norm
   #} else {
   #  data <- mSetObj$dataSet$orig
@@ -73,49 +73,47 @@ log.reg.anal <- function(mSetObj=NA, data="NULL", facA="NULL", pred.text="NULL",
   
   #Subset data using predictor column names
   predictors <- unlist(strsplit(pred.text, "+", fixed=TRUE))
-  print("pred_data")
-  print(pred_data)
   pred_data <- data[,which(colnames(data) %in% predictors)]
-  print("pred_data")
-  print(pred_data)
   model_data <- data.frame(data[,facA], pred_data)
-  print("pred_data")
-  print(pred_data)
   colnames(model_data) <- c(paste0(facA), predictors)
-  
+
   if (type=="ordinal") {
       
     #Check number of levels
-    levels.num <- length(levels(model_data[,facA]))
+    levels.num <- length(levels(model_data[,1]))
     if (levels.num<3) {
       #AddErrMsg("The dependent variable has less than 3 levels! Try binomial regression instead.")
       stop("The dependent variable has less than 3 levels! Try binomial regression instead.")
     }
     
     #Obtain reference level for response variable
-    if (is.null(reference)==TRUE) {
-      ref.col <- model_data[,facA] 
-      reference <- paste0(ref.col[1]) #Reference category is default the first level of the response column
-    } 
+    if (reference=="NULL") {
+      ref.col <- as.data.frame(model_data[,1])
+      print("ref.col") 
+      print(ref.col) 
+      ref.col.levels <- levels(ref.col)
+      reference <- ref.col.levels[1] #Reference category is default the first level of the response column
+      print("reference")
+      print(reference)
+    } else {
+      reference <- reference
+    }
     
     #Set reference
-    model_data[,facA] <- relevel(as.factor(model_data[,facA]), ref=reference) 
+    model_data[,1] <- relevel(as.factor(model_data[,1]), ref=reference) 
   
     #Order the response variable levels. 
     #Text box instructions for selecting dependent variable levels. Text box should be interactive, meaning any change in text alters the result in real time. Default order.text is no reorder.
     cat("If performing ordinal regression, indicate the order of the dependent variable levels using the level names with commas in between. Levels should be listed in ascending order. For example, if your dependent variable is placement in a sports match, type bronze, silver, gold in the text box.")
-    if (is.null(order.text)==TRUE) {
-      model_data[,facA] <- ordered(model_data[,facA]) #Default is use order as inputted
-      order.text <- levels(model_data[,facA])
+    if (order.text=="NULL") {
+      model_data[,1] <- ordered(model_data[,1]) #Default is use order as inputted
+      order.text <- levels(model_data[,1])
     } else { 
       order.text <- order.text #Order is user inputted in ascending order, taken from text box by java, entered into R code as one character value (string)
       order.text <- gsub(" ", "", order.text, fixed=TRUE)
       order.text <- unlist(strsplit(order.text, ",", fixed=TRUE))
-      model_data[,facA] <- ordered(model_data[,facA], levels=paste(order.text, sep=","))
+      model_data[,1] <- ordered(model_data[,1], levels=paste(order.text, sep=","))
     }
-
-    print("data[,facA]")
-    print(data[,facA])
     
     #Build model
     model <- polr(formula, data=model_data, method="logistic", weights=weights, Hess=TRUE)
@@ -173,22 +171,27 @@ log.reg.anal <- function(mSetObj=NA, data="NULL", facA="NULL", pred.text="NULL",
 
     
     #Check number of levels
-    model_data_as_factor <- as.factor(model_data[,facA]) 
+    model_data_as_factor <- as.factor(model_data[,1]) 
     levels.num <- length(levels(model_data_as_factor))
-    print(levels.num);
     if (levels.num<3) {
       #AddErrMsg("The dependent variable has less than 3 levels! Try binomial regression instead.")
       stop("The dependent variable has less than 3 levels! Try binomial regression instead.")
     }
 
     
-    #Obtain reference level for response variable
-    if (is.null(reference)==TRUE) {
-      ref.col <- model_data[,facA] 
-      reference <- paste0(ref.col[1]) #Reference category is default the first level of the response column
+    if (reference=="NULL") {
+      ref.col <- as.data.frame(model_data[,1])
+      ref.col.levels <- levels(as.factor(ref.col))
+      reference <- ref.col.levels[1] #Reference category is default the first level of the response column
+      print("reference")
+      print(reference)
+    } else {
+      reference <- reference
     }
-    #Set reference
-    model_data[,facA] <- relevel(as.factor(model_data[,facA]), ref=reference) 
+    
+    #Set reference--ISNT WORKING!!!!!!!!!!!
+    #model_data[,1] <- relevel(as.factor(model_data[,1]), ref=reference) 
+
     #Build model for multinomial regression
     model <- multinom(formula, data=model_data, Hess=TRUE, maxit=1000, weights=NULL)
     model_name <- "Multinomial Logistic Regression"
@@ -241,21 +244,23 @@ log.reg.anal <- function(mSetObj=NA, data="NULL", facA="NULL", pred.text="NULL",
   } else { #Default type is binomial
     
     #Check number of levels
-    levels.num <- length(levels(model_data[,facA]))
+    levels.num <- length(levels(model_data[,1]))
     if (levels.num<2) {
       #AddErrMsg("The dependent variable has more than 2 levels! Try multinomial regression instead.")
       stop("The dependent variable has more than 2 levels! Try multinomial regression instead.")
     }
     
     #Obtain reference level for response variable
-    if (is.null(reference)==TRUE) {
-      ref.col <- model_data[,facA] 
-      reference <- paste0(ref.col[1]) #Reference category is default the first level of the response column
+    if (reference=="NULL") {
+      ref.col <- as.data.frame(model_data[,1]) 
+      reference <- levels(ref.col)[1] #Reference category is default the first level of the response column
+    } else {
+      reference <- reference
     }
     
     #Set reference
-    model_data[,facA] <- relevel(as.factor(model_data[,facA]), ref=reference) 
-    
+    model_data[,1] <- relevel(as.factor(model_data[,1]), ref=reference) 
+  
     #Build model
     model <- glm(formula, data=model_data, family=binomial("logit"), maxit=1000, weights=weights)
     model_name <- "Binomial Logistic Regression"
