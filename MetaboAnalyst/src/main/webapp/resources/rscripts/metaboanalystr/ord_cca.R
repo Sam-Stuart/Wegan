@@ -283,7 +283,8 @@ Plot.CCA.biplot <- function(mSetObj=NA, color="NULL", ellipse="NULL", var_arrows
   #Produce constrained ordination plot
   Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
   par(xpd=FALSE, mar=c(5.1, 4.1, 4.1, 2.1)) 
-  plot(cca, type="n", xlab=paste0("CCA 1 (", signif(CCA1, 4)*100, " %)"), ylab=paste0("CCA 2 (", signif(CCA2, 4)*100, " %)"), main="Constrained Correspondence Analysis", yaxt="n") #Empty ordination plot
+  #plot(cca, type="n", xlab=paste0("CCA 1 (", signif(CCA1, 4)*100, " %)"), ylab=paste0("CCA 2 (", signif(CCA2, 4)*100, " %)"), main="Constrained Correspondence Analysis", yaxt="n") #Empty ordination plot
+  plot(cca, type="n", main="Constrained Correspondence Analysis", yaxt="n") #Empty ordination plot
   axis(2, las=2)
 
   #Plot with and without ellipses/sample labels/metadata options/variable arrows/env data arrows

@@ -69,21 +69,20 @@
                             
                             <h:outputLabel style="font-weight: bold" value="Data Is Presence/Absence:"/>
                             <p:selectBooleanCheckbox value ="#{ordPCOABean.doBinary}"/> 
-
+                            <spacer></spacer>
                             <h:outputLabel style="font-weight: bold" value="Perform Relative Abundance Transformation:"/>
                             <p:selectBooleanCheckbox value ="#{ordPCOABean.doAbundance}"/> 
                             
-                            <p:panelGrid></p:panelGrid>
-
                             <h:outputLabel style="font-weight: bold" value="Distance Measure:"/>
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordPCOABean.vegdistOpts}">
                                 <f:selectItems value="#{applicationBean1.vegdistMeasureOpts}" />
                             </p:selectOneMenu> 
+                            <spacer></spacer>
 
-                            <h:panelGrid columns="2" cellpadding="3">
+<!--                            <h:panelGrid columns="2" cellpadding="3">
                             <h:outputLabel style="font-weight: bold" value="Constraining Data Variable Selection:"/>
-                                <p:inputText style="width:400px; height:100px; line-height:5px;" value="#{ordPCOABean.envDataCol}"/>
-                            </h:panelGrid>
+                                <p:inputText style="width:400px; height:40px; line-height:5px;" value="#{ordPCOABean.envDataCol}"/>
+                            </h:panelGrid>-->
                             <p:panelGrid></p:panelGrid>
                         </h:panelGrid>
                         <h:panelGrid id="panelGrid1_2" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
@@ -158,18 +157,17 @@
                             
                             <h:outputLabel style="font-weight: bold" value="Data Is Presence/Absence:"/>
                             <p:selectBooleanCheckbox value ="#{ordPCOABean.doBinary}"/> 
+                            <spacer></spacer>
 
                             <h:outputLabel style="font-weight: bold" value="Perform Relative Abundance Transformation:"/>
                             <p:selectBooleanCheckbox value ="#{ordPCOABean.doAbundance}"/> 
                             
-                            <p:panelGrid></p:panelGrid>
-
                             <h:outputLabel style="font-weight: bold" value="Distance Measure:"/>
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordPCOABean.vegdistOpts}">
                                 <f:selectItems value="#{applicationBean1.vegdistMeasureOpts}" />
                             </p:selectOneMenu> 
 
-                            <p:panelGrid></p:panelGrid>
+                            <spacer></spacer>
                                 
                         </h:panelGrid>
                         <h:panelGrid columns="1" cellpadding="3" style="float: right">    
@@ -231,18 +229,17 @@
                                                         
                             <h:outputLabel style="font-weight: bold" value="Data Is Presence/Absence:"/>
                             <p:selectBooleanCheckbox value ="#{ordPCOABean.doBinary}"/> 
+                            <spacer></spacer>
 
                             <h:outputLabel style="font-weight: bold" value="Perform Relative Abundance Transformation:"/>
                             <p:selectBooleanCheckbox value ="#{ordPCOABean.doAbundance}"/> 
                             
-                            <p:panelGrid></p:panelGrid>
-
                             <h:outputLabel style="font-weight: bold" value="Distance Measure:"/>
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordPCOABean.vegdistOpts}">
                                 <f:selectItems value="#{applicationBean1.vegdistMeasureOpts}" />
                             </p:selectOneMenu> 
 
-                            <p:panelGrid></p:panelGrid>
+                            <spacer></spacer>
                                 
                         </h:panelGrid>
                         <h:panelGrid columns="1" cellpadding="3" style="float: right">    
@@ -300,17 +297,16 @@
                                                         
                             <h:outputLabel style="font-weight: bold" value="Data Is Presence/Absence:"/>
                             <p:selectBooleanCheckbox value ="#{ordPCOABean.doBinary}"/> 
+                            <spacer></spacer>
 
                             <h:outputLabel style="font-weight: bold" value="Perform Relative Abundance Transformation:"/>
                             <p:selectBooleanCheckbox value ="#{ordPCOABean.doAbundance}"/> 
                             
-                            <p:panelGrid></p:panelGrid>
-
                             <h:outputLabel style="font-weight: bold" value="Distance Measure:"/>
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordPCOABean.vegdistOpts}">
                                 <f:selectItems value="#{applicationBean1.vegdistMeasureOpts}" />
                             </p:selectOneMenu> 
-                            <p:panelGrid></p:panelGrid>
+                            <spacer></spacer>
                                 
                         </h:panelGrid>
                         <h:panelGrid columns="1" cellpadding="3" style="float: right">    

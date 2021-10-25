@@ -36,7 +36,7 @@ ord.pcoa <- function(mSetObj=NA, data="false", distance="NULL", binary="false", 
 
   #Obtain numeric data for ordination and catgroical data for grouping data
   num_data <- select_if(input, is.numeric) #Numeric data only for PCOA
-  fac_data <- select_if(input, is.factor) #Any categorical data will be used for grouping
+  fac_data <- select_if(input, is.character) #Any categorical data will be used for grouping
   count.fac.cols <- ncol(fac_data) #number of categorical data columns
   
   #Transform abundance data
@@ -62,7 +62,7 @@ ord.pcoa <- function(mSetObj=NA, data="false", distance="NULL", binary="false", 
   } else {
     dist <- vegdist(num_data1, method=distance1, binary=TRUE) #Generate dissimilarity matrix for presence/absence data
   }
-  
+
   #Run PCOA with and without weights
   pcoa <- wcmdscale(dist, add="lingoes", eig=TRUE, x.ret=TRUE)
 
@@ -201,7 +201,7 @@ ord.pcoa <- function(mSetObj=NA, data="false", distance="NULL", binary="false", 
   write.csv(eigenValues_data, file="pcoa_eigen_values.csv", row.names=FALSE)
   write.csv(pcoa$points, file="pcoa_sample_scores.csv", row.names=row.names(input))
   write.csv(var.fit$vectors$arrows, file="pcoa_variable_scores.csv", row.names=TRUE)
-  write.csv(pcoa$x, file("pcoa_dissimilarity_matrix.csv", row.names=TRUE))
+  #write.csv(pcoa$x, file("pcoa_dissimilarity_matrix.csv", row.names=TRUE))
   if (is.data.frame(env_data)==TRUE) {
     write.csv(env.scores, file="pcoa_constraining_data_scores.csv", row.names=TRUE)
   }
@@ -288,11 +288,8 @@ Plot.PCOA.2D <- function(mSetObj=NA, ellipse="false", var_arrows="false", env_ar
   input <- mSetObj$analSet$pcoa$input
   var.fit <- mSetObj$analSet$pcoa$var.fit
   env.fit.char <- mSetObj$analSet$pcoa$env.fit.char
-  print(env.fit.char)
   env.fit.num <- mSetObj$analSet$pcoa$env.fit.num
-  print(env.fit.num)
   env_data <- mSetObj$analSet$pcoa$env_data
-  print(env_data)
 
   #Set plot dimensions
   if(is.na(width)){
@@ -648,6 +645,7 @@ pcoa.meta.columns <- function(mSetObj=NA) {
   mSetObj <- .get.mSet(mSetObj)
   
   metaData <- mSetObj$analSet$pcoa$metaData
+  print(metaData)
   name.all.meta.cols <- colnames(metaData)
 
   return(name.all.meta.cols)
