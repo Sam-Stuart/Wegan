@@ -1,7 +1,7 @@
 # This script should be called by server to load actual scripts
 # based on the modules user selected
 general_files <- c("general_data_utils","general_misc_utils","general_load_libs");
-general_stat_files <- c("general_norm_utils","general_proc_utils");
+general_stat_files <- c("general_norm_utils","general_proc_utils", "general_data_assumption");
 stats_files <- c("stats_chemometrics","stats_classification","stats_clustering", "stats_correlations", "stats_sigfeatures","stats_univariates");
 correlation_files <- c("correlation_linear", "correlation_penalized", "correlation_polynomial", "correlation_ml", "correlation_multivariate", "correlation_SVM", "correlation_RF", "correlation_logistic");
 dispersal_files <- c("dispersal");

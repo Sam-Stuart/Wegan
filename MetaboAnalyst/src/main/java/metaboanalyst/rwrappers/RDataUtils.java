@@ -7,6 +7,8 @@ package metaboanalyst.rwrappers;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.faces.model.SelectItem;
 import metaboanalyst.models.ComponentBean;
 import metaboanalyst.utils.DataUtils;
@@ -412,15 +414,15 @@ public class RDataUtils {
         }
     }
 
-    //plot a boxplot and density for each compound
-    public static int autoNormalize(RConnection RC) {
+    //retrieve best noramlization method
+    public static String autoNormalize(RConnection RC) {
         try {
             String rCommand = "BestNormalize(NA)";
             RCenter.recordRCommand(RC, rCommand);
-            return RC.eval(rCommand).asInteger();
+            return RC.eval(rCommand).asString();
         } catch (Exception e) {
             e.printStackTrace();
-            return 0;
+            return null;
         }
     }
     
@@ -438,7 +440,7 @@ public class RDataUtils {
     }
 
     //plot a boxplot and density for each compound
-public static void plotSampleNormSummaryGraph(SessionBean1 sb, String imgName, String format, int dpi) {
+    public static void plotSampleNormSummaryGraph(SessionBean1 sb, String imgName, String format, int dpi) {
         try {
             RConnection RC = sb.getRConnection();
             String rCommand = "PlotSampleNormSummary(NA" + ", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
@@ -450,91 +452,88 @@ public static void plotSampleNormSummaryGraph(SessionBean1 sb, String imgName, S
         }
     }
     
-    //---------------Assumption check----------------------
-    public static void AssumpShapiroT(RConnection RC) {
-        try {
-            //RConnection RC = sb.getRConnection();
-            String rCommand = "shapiroT(NA)";
+       //LOUISA ADDED THIS START!!!!!!!!!!!!
+        //perform Shapiro-Wilk test
+    public static String shapiroTest(SessionBean1 sb, String imgName, String format, int dpi, String width) {
+         try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "shapiroT(NA" + ", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
             RCenter.recordRCommand(RC, rCommand);
-            RC.voidEval(rCommand);
+            return RC.eval(rCommand).asString();
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
     }
     
-    public static void AssumpLevene(RConnection RC, String pred_text) {
-        try {
-            //RConnection RC = sb.getRConnection();
-            String rCommand = "levene(NA" + ", \"" + pred_text + "\")";
-            RCenter.recordRCommand(RC, rCommand);
-            RC.voidEval(rCommand);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    
-    public static void AssumpResidPlot(SessionBean1 sb, String numA, String pred_text, String imgName, String format, int dpi) {
+    //perform Levene's test
+    public static String leveneTest(SessionBean1 sb, String predText, String imgName, String format, int dpi, String width) {
         try {
             RConnection RC = sb.getRConnection();
-            String rCommand = "ResidPlot(NA" 
-                                                + ", \"" + numA 
-                                                + ", \"" + pred_text
-                                                + "\", \"" + imgName 
-                                                + "\", \"" + format
-                                                + "\", " + dpi
-                                                + "\")";
+            String rCommand = "levene(NA" + ", \"" + predText + "\", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
             RCenter.recordRCommand(RC, rCommand);
-            RC.voidEval(rCommand);
+            return RC.eval(rCommand).asString();
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
     }
     
-    public static void AssumpResidFitPlot(SessionBean1 sb, String imgName, String format, int dpi) {
+    //Plot regression plus residuals
+//    public static void residualCal(SessionBean1 sb, String assumptionColName, String predText) {
+//        try {
+//            RConnection RC = sb.getRConnection();
+//            String rCommand = "Residuals(NA" + ", \"" + assumptionColName + "\", \"" + predText + "\")";
+//            RCenter.recordRCommand(RC, rCommand);
+//            sb.addGraphicsCMD("resid", rCommand);
+//            RC.voidEval(rCommand);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
+    
+    public static void ResidualCal(SessionBean1 sb, String numA, String predText) {
         try {
             RConnection RC = sb.getRConnection();
-            String rCommand = "Resid_fitPlot(NA" 
-                                                + "\", \"" + imgName 
-                                                + "\", \"" + format
-                                                + "\", " + dpi
-                                                + "\")";
+            String rCommand = "Residuals(NA" + ", \"" + numA + "\", \"" + predText + "\")";
             RCenter.recordRCommand(RC, rCommand);
+            sb.addGraphicsCMD("resid", rCommand);
             RC.voidEval(rCommand);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
     
-    public static void AssumpQQPlot(SessionBean1 sb, String imgName, String format, int dpi) {
+    
+        //Plot residuals vs fitted values
+    public static void ResidualPlot(SessionBean1 sb, String imgName, String format, int dpi, String width) {
         try {
             RConnection RC = sb.getRConnection();
-            String rCommand = "QQplot(NA" 
-                                                + "\", \"" + imgName 
-                                                + "\", \"" + format
-                                                + "\", " + dpi
-                                                + "\")";
+            String rCommand = "ResidPlot(NA" + ", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
             RCenter.recordRCommand(RC, rCommand);
+            sb.addGraphicsCMD("residFit", rCommand);
             RC.voidEval(rCommand);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+  
     
-    public static void AssumpDenPlot(SessionBean1 sb, String imgName, String format, int dpi) {
-        try {
-            RConnection RC = sb.getRConnection();
-            String rCommand = "Densityplot(NA" 
-                                                + "\", \"" + imgName 
-                                                + "\", \"" + format
-                                                + "\", " + dpi
-                                                + "\")";
-            RCenter.recordRCommand(RC, rCommand);
-            RC.voidEval(rCommand);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    
+    //Extract numeric variable names for residual plot
+//    public static String[] AssupColumn(SessionBean1 sb){
+//        try {
+//            RConnection RC = sb.getRConnection();
+//            String rCommand = "AssupCol(NA)";
+//            RCenter.recordRCommand(RC, rCommand);
+//            return RC.eval(rCommand).asStrings();
+//        } catch (RserveException rse) {
+//            System.out.println(rse);
+//        } catch (REXPMismatchException ex) {
+//            Logger.getLogger(RDataUtils.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        return null;
+//    } 
+   //LOUISA ADDED THIS END!!!!!!!!!!!!
     
     //---------------Methods for access Data information-------------
     //get data information

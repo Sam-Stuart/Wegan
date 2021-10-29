@@ -6,6 +6,7 @@ package metaboanalyst.controllers;
 
 import metaboanalyst.utils.DataUtils;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -106,6 +107,53 @@ public class NormBean implements Serializable {
         return normPerformed;
     }
 
+    ///LOUISA ADDED THIS START!!!!!!!!!!!!!!
+    private String predText = "NULL";
+        
+    public String getPredText() {
+        return predText;
+    }
+
+    public void setPredText(String predText) {
+        this.predText = predText;
+    }
+    
+        
+//    private SelectItem[] assumpColOpts = null;
+//    
+//    public SelectItem[] getAssumpColOpts(){
+//        String[] columns = RDataUtils.AssupColumn(sb);
+//        int columnsLen = columns.length;
+//        assumpColOpts = new SelectItem[columnsLen];
+//        List<String> columnNames = Arrays.asList(columns);
+//        for (int i = 0; i < columnsLen; i++) {
+//            assumpColOpts[i] = new SelectItem(columnNames.get(i), columnNames.get(i));
+//        }
+//        return assumpColOpts;
+//    }
+////    
+//    private String assumptionColName = getAssumpColOpts()[0].getLabel();
+////    
+//    public String getAssumptionColName() {
+//        return assumptionColName;
+//    }
+//
+//    public void setAssumptionColName(String assumptionColName) {
+//        this.assumptionColName = assumptionColName;
+//    }
+    
+//    private String numA = getAssumpColOpts()[0].getLabel();
+    
+    private String numA = "NULL";   
+    public String getNumA() {
+        return numA;
+    }
+
+    public void setNumA(String numA) {
+        this.numA = numA;
+    }
+    
+    
     public void performDataNormalization() {
 
         //String specNorm = smplSpecNorm ? "T" : "NULL";
@@ -145,6 +193,16 @@ public class NormBean implements Serializable {
             //plot the new image
             RDataUtils.plotNormSummaryGraph(sb, sb.getNewImage("norm"), "png", 72);
             RDataUtils.plotSampleNormSummaryGraph(sb, sb.getNewImage("snorm"), "png", 72);
+//            /LOUISA ADDED THIS START!!!!!!!!!!!!!!
+//            RDataUtils.AssupColumn(sb);
+            RDataUtils.shapiroTest(sb, sb.getNewImage("Shapiro"), "png", 72, "false");
+            //RDataUtils.shapiroTestT(sb, sb.getNewImage("ShapiroT"), "png", 72, "false");
+            RDataUtils.leveneTest(sb, "NULL", sb.getNewImage("Levene"), "png", 72, "false");
+            RDataUtils.ResidualCal(sb, "NULL", "NULL");
+            RDataUtils.ResidualPlot(sb, sb.getNewImage("residFit"), "png", 72, "false");
+          
+            
+            ///LOUISA ADDED THIS END!!!!!!!!!!!!!!
             //now reset all data analysis to default
             sb.setDataNormed(true);
             sb.resetAnalysis();
@@ -152,13 +210,15 @@ public class NormBean implements Serializable {
                 RocAnalBean rocAnalBean = (RocAnalBean) DataUtils.findBean("rocAnalBean");
                 rocAnalBean.resetData();
             }
-            sb.updateMsg("OK", "You can click <b>View Result</b> button to view the effect, or <b>Proceed</b> button to analysis page!");
+            sb.updateMsg("OK", "You can click <b>View Result</b> button to view the effect, or the <b>Proceed</b> button to move to the analysis page!");
             normPerformed = true;
         } else {
             sb.updateMsg("Error", "Unknown error happened during data normalization process!");
         }
     }
 
+// -------------------------------------------------------------------------------------    
+    
     private boolean includeRatio = false;
 
     public boolean isIncludeRatio() {
@@ -242,26 +302,31 @@ public class NormBean implements Serializable {
     }
 
     
+    
     public void performAutoNormalization() {
         RConnection RC = sb.getRConnection();
-        int res = RDataUtils.autoNormalize(RC);
+//        String[] buttons = RDataUtils.AutoNormOptions(RC);
+        String res = RDataUtils.autoNormalize(RC);
         String msg = RDataUtils.getCurrentMsg(RC);
-        if (res == 0) {
+        if (res == null) {
             sb.updateMsg("Error", "Unknown error happened during data normalization process!");
         } else {
-            sb.updateMsg("OK", "You can click <b>View Result</b> button to view the effect, or <b>Proceed</b> button to analysis page!");
-            normPerformed = true;
+            rowNormOpt = res;
+            sb.updateMsg("OK", "Click the <b>Submit</b> button to implement the suggested normalization method!");
         }            
     }
+ 
     
-    public void performAssumptionCheck() {
-        RConnection RC = sb.getRConnection();
-        RDataUtils.AssumpShapiroT(RC);
-        RDataUtils.AssumpLevene(RC, "NULL");
-        RDataUtils.AssumpResidPlot(sb, "NULL", "NULL", sb.getNewImage("ResidPlot"), "png", 72);
-        RDataUtils.AssumpResidFitPlot(sb, sb.getNewImage("ResidFitPlot"), "png", 72);
-        RDataUtils.AssumpQQPlot(sb, sb.getNewImage("QQPlot"), "png", 72);
-        RDataUtils.AssumpDenPlot(sb, sb.getNewImage("DenPlot"), "png", 72);
+//    /LOUISA ADDED THIS!!!!!!!!!!!!!!
+//    public void leveneUpdate_action() {
+//        RConnection RC = sb.getRConnection();
+//        RDataUtils.leveneTest(RC, predText);
+//    }
+    
+    public void ResidCalUpdate_action() {
+        RDataUtils.ResidualCal(sb, numA, predText); 
+        RDataUtils.ResidualPlot(sb, sb.getNewImage("residFit"), "png", 72, "false");
     }
-    //SessionBean1 sb, String numA, String pred_text, String imgName, String format, int dpi
+    
+    
 }
