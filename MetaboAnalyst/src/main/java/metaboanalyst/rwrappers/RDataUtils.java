@@ -453,6 +453,35 @@ public class RDataUtils {
     }
     
        //LOUISA ADDED THIS START!!!!!!!!!!!!
+    
+        //Extract numeric variable names for residual plot
+    
+//    public static String[] AssupColumn(SessionBean1 sb) {
+//        try {
+//            RConnection RC = sb.getRConnection();
+//            String rCommand = "AssupCol(NA)";
+//            RCenter.recordRCommand(RC, rCommand);
+//            return RC.eval(rCommand).asString();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return null;
+//        }
+//    }
+    
+    public static String[] AssupColumn(SessionBean1 sb){
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "AssupCol(NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            return RC.eval(rCommand).asStrings();
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        } catch (REXPMismatchException ex) {
+            Logger.getLogger(CAUtils.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
         //perform Shapiro-Wilk test
     public static String shapiroTest(SessionBean1 sb, String imgName, String format, int dpi, String width) {
          try {
@@ -492,10 +521,10 @@ public class RDataUtils {
 //        }
 //    }
     
-    public static void ResidualCal(SessionBean1 sb, String numA, String predText) {
+    public static void ResidualCal(SessionBean1 sb, String predText, String assumptionColName) {
         try {
             RConnection RC = sb.getRConnection();
-            String rCommand = "Residuals(NA" + ", \"" + numA + "\", \"" + predText + "\")";
+            String rCommand = "Residuals(NA" + ", \"" + predText + "\", \"" + assumptionColName + "\")";
             RCenter.recordRCommand(RC, rCommand);
             sb.addGraphicsCMD("resid", rCommand);
             RC.voidEval(rCommand);
@@ -519,20 +548,6 @@ public class RDataUtils {
     }
   
     
-    //Extract numeric variable names for residual plot
-//    public static String[] AssupColumn(SessionBean1 sb){
-//        try {
-//            RConnection RC = sb.getRConnection();
-//            String rCommand = "AssupCol(NA)";
-//            RCenter.recordRCommand(RC, rCommand);
-//            return RC.eval(rCommand).asStrings();
-//        } catch (RserveException rse) {
-//            System.out.println(rse);
-//        } catch (REXPMismatchException ex) {
-//            Logger.getLogger(RDataUtils.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        return null;
-//    } 
    //LOUISA ADDED THIS END!!!!!!!!!!!!
     
     //---------------Methods for access Data information-------------

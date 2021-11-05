@@ -2,21 +2,26 @@
 #'@usage AssupCol(mSetObj = NA)
 #'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
 #'@export
-#AssupCol <- function(mSetObj = NA) {
+AssupCol <- function(mSetObj = NA) {
   #load_plyr()
   #load_dplyr()
-  #library(plyr)
-#  mSetObj <- .get.mSet(mSetObj)
-  #library(dplyr)
-#  data<-mSetObj$dataSet$norm
-#  print(data)
-#  numData <- select_if(data, is.numeric)
-#  print(numData)
-#  columns <- colnames(numData)
-#  print(columns)
-#  return(columns)
-#}
-
+  
+  mSetObj <- .get.mSet(mSetObj)
+  
+  if(is.null(mSetObj$dataSet[["procr"]])){
+    data<-mSetObj$dataSet$preproc
+  }else if(is.null(mSetObj$dataSet[["prenorm"]])){
+    data<- mSetObj$dataSet$procr;
+  }else{
+    data<-mSetObj$dataSet$prenorm
+  }
+  numData <- select_if(data, is.numeric)
+  columnsNum <- colnames(numData)
+  #print(columnsNum)
+   
+  return(columnsNum)
+  
+}
 
 #'Shapiro test for each numeric variable
 #'@description For each dataset, p value from Shapiro test will be displayes as a table
@@ -27,6 +32,9 @@
 #'@export
 
 shapiroT <- function(mSetObj = NA, imgName, format="png", dpi=72, width=NA) {
+  
+  print("ShapiroT")
+
   #library(plyr)
   #library(dplyr)
   library(gt)
@@ -41,21 +49,27 @@ shapiroT <- function(mSetObj = NA, imgName, format="png", dpi=72, width=NA) {
     data<-mSetObj$dataSet$prenorm
   }
   #print(data)
+  print("data ready")
 
   normData <- mSetObj$dataSet$norm
   #print(normData)
+  print("Norm_transfered data ready")
 
   a <- select_if(normData, is.numeric)
   b <- select_if(normData, is.character)
   b[sapply(b, is.character)] <- lapply(b[sapply(b, is.character)], as.factor)
   #print(a)
   #print(b)  
+  print("numerical norm_trans_data")
+  print("charac norm_trans_data")
   
   a.norm <- select_if(data, is.numeric)
   b.norm <- select_if(data, is.character)
   b.norm[sapply(b.norm, is.character)] <- lapply(b.norm[sapply(b.norm, is.character)], as.factor)
   #print(a.norm)
   #print(b.norm)
+  print("numerical data")
+  print("chatac data")
 
   ab.data <- data.frame()
   ab.list <- list()
@@ -77,66 +91,75 @@ shapiroT <- function(mSetObj = NA, imgName, format="png", dpi=72, width=NA) {
 
   #c <- nlevels(b$Var)
   d <- as.numeric(ncol(a))
-  #print(d)
+  print(d)
   e <- as.numeric(ncol(b))
-  #print(e)
+  print(e)
 
-  d.norm <- as.numeric(ncol(a))
-  #print(d.norm)
-  e.norm <- as.numeric(ncol(b))
-  #print(e.norm)  
+  d.norm <- as.numeric(ncol(a.norm))
+  print(d.norm)
+  e.norm <- as.numeric(ncol(b.norm))
+  print(e.norm)  
 
-    for(i in 1:d) {
-      for (l in 1:e) {
-        ab.list[[l]] <- split(data, b[,l])
-        ab.data <- ab.list[[l]]
-        c <- as.numeric(nlevels(b[,l]))
-        for (j in 1:c) {
-          test.list[[j]] <- as.data.frame(ab.data[j])
-          test.data <- test.list[[j]]
-          result <- shapiro.test(test.data[,i])
-          name <- as.character(colnames(test.data[i]))
-          p <- result$p.value
-          p.list[[i]] <- data.frame(p)
-          p.data <- rbind(p.data, p.list[[i]])
-          name.list[[i]] <- data.frame(name)
-          name.data <- rbind(name.data, name.list[[i]])
-          shapiroT <- cbind(name.data, p.data)
-          #shapiroT.data <- cbind(shapiroT.data, shapiroT.list[[i]])
-          #shapiroT.listA[[j]] <- data.frame(shapiroT)
-          #shapiroT.dataA <- rbind(shapiroT.dataA, shapiroT.listA[[j]]) 
-        }
-      #shapiroT.listB[[l]] <- data.frame(shapiroT.dataA)
-      #shapiroT.dataB <- rbind(shapiroT.dataB, shapiroT.listB[[l]]) 
+  for(i in 1:d) {
+    for (l in 1:e) {
+      ab.list[[l]] <- split(data, b[,l])
+      ab.data <- ab.list[[l]]
+      c <- as.numeric(nlevels(b[,l]))
+      for (j in 1:c) {
+        test.list[[j]] <- as.data.frame(ab.data[j])
+        test.data <- test.list[[j]]
+        result <- shapiro.test(test.data[,i])
+        name <- as.character(colnames(test.data[i]))
+        p <- result$p.value
+        p.list[[i]] <- data.frame(p)
+        p.data <- rbind(p.data, p.list[[i]])
+        name.list[[i]] <- data.frame(name)
+        name.data <- rbind(name.data, name.list[[i]])
+        shapiroT <- cbind(name.data, p.data)
+        print("shapiroT")
+        #shapiroT.data <- cbind(shapiroT.data, shapiroT.list[[i]])
+        #shapiroT.listA[[j]] <- data.frame(shapiroT)
+        #shapiroT.dataA <- rbind(shapiroT.dataA, shapiroT.listA[[j]]) 
       }
-    #shapiroT.listC[[l]] <- data.frame(shapiroT.dataC)
-    #shapiroT.dataC <- rbind(shapiroT.dataC, shapiroT.listC[[l]]) 
+    #shapiroT.listB[[l]] <- data.frame(shapiroT.dataA)
+    #shapiroT.dataB <- rbind(shapiroT.dataB, shapiroT.listB[[l]]) 
     }
+  #shapiroT.listC[[l]] <- data.frame(shapiroT.dataC)
+  #shapiroT.dataC <- rbind(shapiroT.dataC, shapiroT.listC[[l]]) 
+  }
   
   ShapiroT.result <- as.data.frame(shapiroT)
   #print(ShapiroT.result)
   
-  mSetObj$analset$shapiro <- ShapiroT.result  
+  mSetObj$analset$shapiro <- shapiroT
+  print("mSetObj storage shapiroT") 
 
   for(g in 1:d.norm) {
       for (h in 1:e.norm) {
-        ab.normlist[[l]] <- split(normData, b.norm[,])
+        ab.normlist[[h]] <- split(normData, b.norm[,h])
         ab.normdata <- ab.normlist[[h]]
         c.norm <- as.numeric(nlevels(b.norm[,h]))
+        print(c.norm)
+        print
         for (f in 1:c.norm) {
-          test.normlist[[j]] <- as.data.frame(ab.normdata[j])
-          test.normdata <- test.normlist[[j]]
-          result.norm <- shapiro.test(test.normdata[,i])
-          name.norm <- as.character(colnames(test.normdata[i]))
+          test.normlist[[f]] <- as.data.frame(ab.normdata[f])
+          test.normdata <- test.normlist[[f]]
+          print(test.normdata)
+          result.norm <- shapiro.test(test.normdata[,g])
+          name.norm <- as.character(colnames(test.normdata[g]))
+          print(name.norm)
           p.norm <- result$p.value
-          p.normlist[[i]] <- data.frame(p.norm)
-          p.normdata <- rbind(p.normdata, p.normlist[[i]])
-          name.normlist[[i]] <- data.frame(name)
-          name.normdata <- rbind(name.normdata, name.normlist[[i]])
+          p.normlist[[g]] <- data.frame(p.norm)
+          p.normdata <- rbind(p.normdata, p.normlist[[g]])
+          print(p.normdata)
+          name.normlist[[g]] <- data.frame(name)
+          name.normdata <- rbind(name.normdata, name.normlist[[g]])
+          print(name.normdata)
           shapiroT.norm <- cbind(name.normdata, p.normdata)
-          #shapiroT.data <- cbind(shapiroT.data, shapiroT.list[[i]])
-          #shapiroT.listA[[j]] <- data.frame(shapiroT)
-          #shapiroT.dataA <- rbind(shapiroT.dataA, shapiroT.listA[[j]]) 
+          print("shapiroT.norm")
+          #shapiroT.data <- cbind(shapiroT.data, shapiroT.list[[g]])
+          #shapiroT.listA[[h]] <- data.frame(shapiroT)
+          #shapiroT.dataA <- rbind(shapiroT.dataA, shapiroT.listA[[h]]) 
         }
       #shapiroT.listB[[l]] <- data.frame(shapiroT.dataA)
       #shapiroT.dataB <- rbind(shapiroT.dataB, shapiroT.listB[[l]]) 
@@ -150,11 +173,13 @@ shapiroT <- function(mSetObj = NA, imgName, format="png", dpi=72, width=NA) {
 
   ShapiroT.norm.result <- as.data.frame(shapiroT.norm)
   mSetObj$analset$shapiro.norm <- ShapiroT.norm.result
+  print("mSetObj storage ShapiroT.norm")
 
   #print(ShapiroT.norm.result[2])
   ShapiroT.all.result <- cbind(ShapiroT.result, ShapiroT.norm.result[,2])
-  #print(ShapiroT.all.result)
+  print(ShapiroT.all.result)
   colnames(ShapiroT.all.result) <- c("Treatments", "P Value(Before Normalization)", "P Value(After Normalization)")
+  print("ShapiroT.all.result, combined orig & norm")
 
   #ShapiroT.result.table <- data_check(ShapiroT.result)
   write.csv(ShapiroT.result, "ShapiroOrig.csv")
@@ -168,7 +193,8 @@ shapiroT <- function(mSetObj = NA, imgName, format="png", dpi=72, width=NA) {
   #gt_ShapiroT.result.table <- gt(ShapiroT.result) %>% tab_options(table.font.size = 6);
   #gt_ShapiroT.norm.result.table <- gt(ShapiroT.norm.result) %>% tab_options(table.font.size = 6); 
   gt_ShapiroT.all.result.table <- gt(ShapiroT.all.result) %>% tab_options(table.font.size = 6);   
- 
+  print("get ready for plot - gt()") 
+
   # Fix the Formatting says Dana
   if(is.na(width)){
       w <- 10;
@@ -215,6 +241,8 @@ levene <- function(mSetObj = NA, pred.text = "NULL", imgName, format="png", dpi=
   
   mSetObj <- .get.mSet(mSetObj)
   
+  print("Start Levene test")
+
   if(is.null(mSetObj$dataSet[["procr"]])){
     data<-mSetObj$dataSet$preproc
   }else if(is.null(mSetObj$dataSet[["prenorm"]])){
@@ -223,10 +251,10 @@ levene <- function(mSetObj = NA, pred.text = "NULL", imgName, format="png", dpi=
     data<-mSetObj$dataSet$prenorm
   }
   
-  print(data)
+  #print("orig data for Levene")
 
   normData <- mSetObj$dataSet$norm
-  print(normData)  
+  #print("normData for Levene")  
 
   a <- select_if(data, is.numeric)  
   data[sapply(data, is.character)] <- lapply(data[sapply(data, is.character)], as.factor)
@@ -264,7 +292,7 @@ levene <- function(mSetObj = NA, pred.text = "NULL", imgName, format="png", dpi=
         name_v.list[[i]] <- data.frame(name_v)
         name_v.data <- rbind(name_v.data, name_v.list[[i]])
         table <- cbind(name.data, name_v.data, leve.data) 
-        print(table)
+        #print("Levene table orig")
       }
     }
     
@@ -291,32 +319,43 @@ levene <- function(mSetObj = NA, pred.text = "NULL", imgName, format="png", dpi=
         name_v.norm.list[[m]] <- data.frame(name_v.norm)
         name_v.norm.data <- rbind(name_v.norm.data, name_v.norm.list[[m]])
         table.norm <- cbind(name.norm.data, name_v.norm.data, leve.norm.data)
-        print(table.norm)
+        #print("levene table.norm")
       }
     }
     Levene.result <- as.data.frame(cbind(table, "Before normalization"))
     Levene.norm.result <- as.data.frame(cbind(table.norm, "After normalization"))
     mSetObj$analset$levene.single.var <- Levene.result
     mSetObj$analset$levene.norm.single.var <- Levene.norm.result
-    
+    #print("mSetObj storage Levene norm & orig_single")
+
+    Levene.all.result <- cbind(Levene.result[1:3], Levene.norm.result[3])
+    print(Levene.all.result)
+    colnames(Levene.all.result) <- c("Independant Variable", "Dependant Variable", "P Value(Before Normalization)", "P Value(After Normalization)")
+
   } else {
     pred.text <- pred.text #taken from text box by java, fed as string into R code
-    
+    print(pred.text)    
+
     #Currate right side of formula, and extract character vector of predictors
     pred.text <- gsub("\n", "*", pred.text, fixed=TRUE) #fixed=TRUE means we are dealing with one string, versus a vector of strings (fixed=FALSE)
     pred.text <- gsub(",", "*", pred.text, fixed=TRUE) 
     pred.text <- gsub(";", "*", pred.text, fixed=TRUE)
     pred.text <- gsub(" ", "*", pred.text, fixed=TRUE)
     pred.text <- gsub(":", "*", pred.text, fixed=TRUE)
-    pred.text <- gsub("*", "*", pred.text, fixed=TRUE)
+    pred.text <- gsub("*", "", pred.text, fixed=TRUE)
+    print(pred.text)
   
     #Subset data using predictor column names
     predictors1 <- unlist(strsplit(pred.text, "*", fixed=TRUE))
     predictors2 <- unlist(strsplit(predictors1, ":", fixed=TRUE))
+    #print(predictors1)
+    #print(predictors2)
   
     pred_data.norm <- as.data.frame(normData[,which(colnames(normData) %in% predictors2)])
     pred_data <- as.data.frame(data[,which(colnames(data) %in% predictors2)])
-  
+    #print(pred_data)  
+    #print(pred_data.norm)
+
     leve_2.list <- list()
     leve_2.data <- data.frame()
     name_in.list <- list()
@@ -339,30 +378,48 @@ levene <- function(mSetObj = NA, pred.text = "NULL", imgName, format="png", dpi=
         #name_v.data <- rbind(name_v.data, name_v.list[[i]])
         table_in <- cbind(pred.text, name_in.data, leve_2.data)
         #print(table_in)
+        #print("levene table interaction orig")
     }
   
     leve_2.norm.list <- list()
+    print(leve_2.norm.list)
     leve_2.norm.data <- data.frame()
     name_in.norm.list <- list()
     name_in.norm.data <- data.frame()
   
     for (q in 1:g.norm) {
         value.norm = as.numeric(a.norm[,q])
+        #print(value.norm)
         result.norm <- leveneTest(value.norm ~ interaction(pred_data.norm))
-        p.norm = result$`Pr(>F)`[1]
+        #print(result.norm)
+        p.norm = result.norm$`Pr(>F)`[1]
+        #print(p.norm)
         leve_2.norm.list[[q]] <- data.frame(p.norm)
+        leve_2.norm.list[[q]]
         leve_2.norm.data <- rbind(leve_2.norm.data, leve_2.norm.list[[q]])
+        leve_2.norm.data
         name_in.norm <- colnames(a.norm[q])
         name_in.norm.list[[q]] <- data.frame(name_in.norm)
         name_in.norm.data <- rbind(name_in.norm.data, name_in.norm.list[[q]])
         table_in.norm <- cbind(pred.text, name_in.norm.data, leve_2.norm.data)
         #print(table_in.norm)
+        #print("levene table interaction norm")
     }
+    #print(a.norm)
+    #print(g.norm)
+    
+    #print(table_in.norm)
     Levene.result <- as.data.frame(cbind(table_in, "Before normalization"))
     Levene.norm.result <- as.data.frame(cbind(table_in.norm, "After normalization"))
+    #print(Levene.norm.result)    
 
     mSetObj$analset$levene.interaction <- Levene.result
     mSetObj$analset$levene.norm.interaction <- Levene.norm.result
+
+    Levene.all.result <- cbind(Levene.result[1:3], Levene.norm.result[3])
+    #print(Levene.all.result)
+    colnames(Levene.all.result) <- c("Independant Variable", "Dependant Variable", "P Value(Before Normalization)", "P Value(After Normalization)")
+
   }
   
   #Levene.norm.result[,3:4]
@@ -370,9 +427,9 @@ levene <- function(mSetObj = NA, pred.text = "NULL", imgName, format="png", dpi=
 
   #Levene.resultT <- t(Levene.result)
   #Levene.norm.resultT <- t(Levene.norm.result)
-  Levene.all.result <- cbind(Levene.result[1:3], Levene.norm.result[3])
-  print(Levene.all.result)
-  colnames(Levene.all.result) <- c("Indepandant Variable", "Depandant Variable", "P Value(Before Normalization)", "P Value(After Normalization)")
+  #Levene.all.result <- cbind(Levene.result[1:3], Levene.norm.result[3])
+  #print(Levene.all.result)
+  #colnames(Levene.all.result) <- c("Independant Variable", "Dependant Variable", "P Value(Before Normalization)", "P Value(After Normalization)")
 
   #Levene.inter.var.all.result <- cbind(Levene.inter.result, Levene.norm.inter.var.result[,2])
   #print(Levene.inter.var.all.result)
@@ -411,6 +468,7 @@ levene <- function(mSetObj = NA, pred.text = "NULL", imgName, format="png", dpi=
   #print(p)
 
   #dev.off();
+  print("finish Levene test")
   return(.set.mSet(mSetObj)) 
   
 }
@@ -433,7 +491,7 @@ levene <- function(mSetObj = NA, pred.text = "NULL", imgName, format="png", dpi=
 #'University of Alberta, Canada
 #'@export
 
-Residuals <- function(mSetObj = NA, numA = "NULL", predText = "NULL"){
+Residuals <- function(mSetObj = NA, predText = "NULL", numA = "NULL"){
   
   #library(plyr)
   #library(dplyr)
@@ -441,7 +499,8 @@ Residuals <- function(mSetObj = NA, numA = "NULL", predText = "NULL"){
   mSetObj <- .get.mSet(mSetObj)
 
   #print(mSetObj$dataSet)
-  
+  print("start residual calculations")
+
   if(is.null(mSetObj$dataSet[["procr"]])){
     data<-mSetObj$dataSet$preproc
   }else if(is.null(mSetObj$dataSet[["prenorm"]])){
@@ -463,21 +522,12 @@ Residuals <- function(mSetObj = NA, numA = "NULL", predText = "NULL"){
   data[sapply(data, is.character)] <- lapply(data[sapply(data, is.character)], as.factor)
   fac.data <- select_if(data, is.factor)
   
-  if (numA == "NULL") {
-    numA = (num.data[1])
-  } else {
-    numA <- numA  #static drow down menu - only numerical data 
-  }
+  #if (numA == "NULL") {
+  #  numA = (num.data[1])
+  #} else {
+  #  numA1 <- numA  #static drow down menu - only numerical data
+  #}
   #print(numA)
-
-  nameNumA <- colnames(numA)
-  #print(nameNumA)
-  nm.inx <- nameNumA %in% colnames(numnormData)
-  #print(nm.inx)  
-
-  numB.frame <- numnormData%>%
-    select(all_of(nameNumA))
-  #print(numB.frame)
 
   #pre.inx<-GetRandomSubsetIndex(ncol(num.data), sub.num=50);
   #print(pre.inx)
@@ -498,38 +548,83 @@ Residuals <- function(mSetObj = NA, numA = "NULL", predText = "NULL"){
   #print(namesVec)  
 
   if (predText=="NULL") {
-    modelB <- lm(num.data[,1] ~ fac.data[,1])
-    resB <- resid(modelB)
-    fitB <- fitted(modelB)
-    #print(resB)
-    mSetObj$analSet$resB <- resB  
-    mSetObj$analSet$fitB <- fitB
-    #mSetObj$analSet$formulaB <- formula
-    #mSetObj$analSet$pred_dataB <- pred_data
-    #mSetObj$analSet$model_dataB <- model_data
-    mSetObj$analSet$inputB <- data
-    
-    var <- fac.data[1]
-    #print(var)
-    #print(as.numeric(numB.frame[1]))
-    #print(numB.frame)
-    modelA <- lm(numB.frame[,1] ~ fac.data[,1])
-    
-    #print(modelA)
+       
+    if (numA == "NULL") {
+      #nameNumA <- colnames(numA)
+      #print(nameNumA)
+      #nm.inx <- nameNumA %in% colnames(numnormData)
+      #print("nm.inx")  
+      #numB.frame <- numnormData%>%
+      #  select(all_of(nameNumA))
+      #print("numB.frame")
+      
+      modelB <- lm(num.data[,1] ~ fac.data[,1])
+      resB <- resid(modelB)
+      fitB <- fitted(modelB)
+      print("resB")
+      print(summary(modelB))
+      mSetObj$analSet$resB <- resB  
+      mSetObj$analSet$fitB <- fitB
+      mSetObj$analSet$inputB <- data  
 
-    resA <- resid(modelA)
-    fitA <- fitted(modelA)
-    #print(resA)
-    mSetObj$analSet$resA <- resA  
-    mSetObj$analSet$fitA <- fitA
+      modelA <- lm(numnormData[,1] ~ fac.data[,1])
+      resA <- resid(modelA)
+      fitA <- fitted(modelA)
+      print("resA")
+      print(summary(modelA))
+      mSetObj$analSet$resA <- resA  
+      mSetObj$analSet$fitA <- fitA
+      mSetObj$analSet$inputA <- normData
+    } else {
+      numB.frame <- numnormData%>%
+        select(all_of(numA))
+      #print(numB.frame)
+      numA.frame <- data%>%
+        select(all_of(numA))
+      #print(numA.frame)
+
+      modelB <- lm(numB.frame[,1] ~ fac.data[,1])
+      resB <- resid(modelB)
+      fitB <- fitted(modelB)
+      print("resB")
+      print(summary(modelB))
+      mSetObj$analSet$resB <- resB  
+      mSetObj$analSet$fitB <- fitB
+      mSetObj$analSet$inputB <- data  
+
+      modelA <- lm(numA.frame[,1] ~ fac.data[,1])
+      print("modelA")
+      print(modelA)
+      print(summary(modelA))
+      resA <- resid(modelA)
+      fitA <- fitted(modelA)
+      print("resA")
+      mSetObj$analSet$resA <- resA  
+      mSetObj$analSet$fitA <- fitA
+      mSetObj$analSet$inputA <- normData
+    }
+
+    #modelB <- lm(num.data[,1] ~ fac.data[,1])
+    #resB <- resid(modelB)
+    #fitB <- fitted(modelB)
+    #print("resB")
+    
     #mSetObj$analSet$formulaB <- formula
     #mSetObj$analSet$pred_dataB <- pred_data
     #mSetObj$analSet$model_dataB <- model_data
-    mSetObj$analSet$inputA <- normData
+      
+
+    #modelA <- lm(numB.frame[,1] ~ fac.data[,1])
+    
+    
+    #mSetObj$analSet$formulaB <- formula
+    #mSetObj$analSet$pred_dataB <- pred_data
+    #mSetObj$analSet$model_dataB <- model_data
+    
    
   } else {
     predText <- predText #taken from text box by java, fed as string into R code
-    
+    #print(predText)
     #Currate right side of formula, and extract character vector of predictors
     predText <- gsub("\n", "", predText, fixed=TRUE) #fixed=TRUE means we are dealing with one string, versus a vector of strings (fixed=FALSE)
     predText <- gsub(",", "+", predText, fixed=TRUE) 
@@ -538,11 +633,18 @@ Residuals <- function(mSetObj = NA, numA = "NULL", predText = "NULL"){
     predText <- gsub(":", "+", predText, fixed=TRUE)
     predText <- gsub("*", "*", predText, fixed=TRUE)
   
-    #print(predText)
-    #print(numA)  
+    print(predText)
+
+    if (numA == "NULL") {
+      numA <- colnames(num.data[1])
+    } else {
+      numA <- numA
+    }
+    print(numA)  
 
     #Generate formula
     formula <- as.formula(paste(numA, "~", predText))
+    print(formula)
     #Text should be visible to user
     #cat(paste0("You have created this formula for model building: ", facA, " ~ ", predText))
     #cat("The L hand side is the dependent variable. The R hand side is the independent variable(s). If there is >1 independent variable, plus signs indicate the variables are evaluated on their own; colons indicate an interaction between the variables is evaluated.")
@@ -556,12 +658,17 @@ Residuals <- function(mSetObj = NA, numA = "NULL", predText = "NULL"){
     #colnames(model_data) <- c(paste0(facA), predictors2)
   
     data.1 <- data
-    
+    print(data.1)    
+
     modelB <- lm(formula, data = data.1)
+    print(modelB)
+    print(summary(modelB))
     resB <- resid(modelB)
     fitB <- fitted(modelB)
 
     modelA <- lm(formula, data = normData)
+    print(modelA)
+    print(summary(modelA))
     resA <- resid(modelA)
     fitA <- fitted(modelA) 
 
@@ -583,6 +690,7 @@ Residuals <- function(mSetObj = NA, numA = "NULL", predText = "NULL"){
     #print(resA)
   }
 
+  #print(summary(lm(normData$Sepal.Length ~ normData$Species * normData$Category * normData$Cate1)))
   #print(resB)
   #print(fitB)
   #print(resA)

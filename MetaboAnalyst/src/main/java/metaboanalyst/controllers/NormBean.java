@@ -119,39 +119,55 @@ public class NormBean implements Serializable {
     }
     
         
-//    private SelectItem[] assumpColOpts = null;
+    private SelectItem[] assumpColOpts = null;
+    
+    public SelectItem[] getAssumpColOpts(){
+        String[] columns = RDataUtils.AssupColumn(sb);
+        int columnsLen = columns.length;
+        assumpColOpts = new SelectItem[columnsLen];
+        List<String> columnNames = Arrays.asList(columns);
+        for (int i = 0; i < columnsLen; i++) {
+            assumpColOpts[i] = new SelectItem(columnNames.get(i), columnNames.get(i));
+        }
+        return assumpColOpts;
+    }
+    
+    
+//     
+//    private SelectItem[] corrColumnOpts = null;
 //    
-//    public SelectItem[] getAssumpColOpts(){
-//        String[] columns = RDataUtils.AssupColumn(sb);
+//    public SelectItem[] getCorrColumnOpts(){
+//        String[] columns = CAUtils.GetDataColumns(sb);
 //        int columnsLen = columns.length;
-//        assumpColOpts = new SelectItem[columnsLen];
+//        corrColumnOpts = new SelectItem[columnsLen];
 //        List<String> columnNames = Arrays.asList(columns);
 //        for (int i = 0; i < columnsLen; i++) {
-//            assumpColOpts[i] = new SelectItem(columnNames.get(i), columnNames.get(i));
+//            corrColumnOpts[i] = new SelectItem(columnNames.get(i), columnNames.get(i));
 //        }
-//        return assumpColOpts;
-//    }
-////    
-//    private String assumptionColName = getAssumpColOpts()[0].getLabel();
-////    
-//    public String getAssumptionColName() {
-//        return assumptionColName;
-//    }
-//
-//    public void setAssumptionColName(String assumptionColName) {
-//        this.assumptionColName = assumptionColName;
+//        //List<String> columnNames = Arrays.asList(columns);
+//        return corrColumnOpts;
 //    }
     
-//    private String numA = getAssumpColOpts()[0].getLabel();
+    private String assumptionColName = getAssumpColOpts()[0].getLabel();
     
-    private String numA = "NULL";   
-    public String getNumA() {
-        return numA;
+    public String getAssumptionColName() {
+        return assumptionColName;
     }
 
-    public void setNumA(String numA) {
-        this.numA = numA;
+    public void setAssumptionColName(String assumptionColName) {
+        this.assumptionColName = assumptionColName;
     }
+    
+//    private String assumptionNumName = getAssumpColOpts()[0].getLabel();
+//    
+////    private String numA = "NULL";   
+//    public String getAssumptionNumName() {
+//        return assumptionNumName;
+//    }
+//
+//    public void setAssumptionNumName(String assumptionNumName) {
+//        this.assumptionNumName = assumptionNumName;
+//    }
     
     
     public void performDataNormalization() {
@@ -194,7 +210,7 @@ public class NormBean implements Serializable {
             RDataUtils.plotNormSummaryGraph(sb, sb.getNewImage("norm"), "png", 72);
             RDataUtils.plotSampleNormSummaryGraph(sb, sb.getNewImage("snorm"), "png", 72);
 //            /LOUISA ADDED THIS START!!!!!!!!!!!!!!
-//            RDataUtils.AssupColumn(sb);
+            RDataUtils.AssupColumn(sb);
             RDataUtils.shapiroTest(sb, sb.getNewImage("Shapiro"), "png", 72, "false");
             //RDataUtils.shapiroTestT(sb, sb.getNewImage("ShapiroT"), "png", 72, "false");
             RDataUtils.leveneTest(sb, "NULL", sb.getNewImage("Levene"), "png", 72, "false");
@@ -318,13 +334,13 @@ public class NormBean implements Serializable {
  
     
 //    /LOUISA ADDED THIS!!!!!!!!!!!!!!
-//    public void leveneUpdate_action() {
-//        RConnection RC = sb.getRConnection();
-//        RDataUtils.leveneTest(RC, predText);
-//    }
+    public void leveneUpdate_action() {
+        //RConnection RC = sb.getRConnection();
+        RDataUtils.leveneTest(sb, predText, sb.getNewImage("Levene"), "png", 72, "false");
+    }
     
     public void ResidCalUpdate_action() {
-        RDataUtils.ResidualCal(sb, numA, predText); 
+        RDataUtils.ResidualCal(sb, predText, assumptionColName); 
         RDataUtils.ResidualPlot(sb, sb.getNewImage("residFit"), "png", 72, "false");
     }
     
