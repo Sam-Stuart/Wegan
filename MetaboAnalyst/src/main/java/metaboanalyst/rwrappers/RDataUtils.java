@@ -477,7 +477,7 @@ public class RDataUtils {
         } catch (RserveException rse) {
             System.out.println(rse);
         } catch (REXPMismatchException ex) {
-            Logger.getLogger(CAUtils.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(RDataUtils.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }

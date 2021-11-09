@@ -141,13 +141,13 @@ public class DiversityUtils {
     }
     
     
-    public static boolean CreateIndicesDiv(SessionBean1 sb, boolean data, String group, String margin) {
+    public static boolean CreateIndicesDiv(SessionBean1 sb, boolean data, String groupColName, String margin) {
         try {
             System.out.print("R RAREFACTION");
             RConnection RC = sb.getRConnection(); //Start R connection
             String rCommand = "div_index(NA"
                                                  + ", \"" + data
-                                                 + "\", \"" + group
+                                                 + "\", \"" + groupColName
                                                  + "\", \""  + margin                                                 
                                                  + "\")";
             RCenter.recordRCommand(RC, rCommand); // records r command
@@ -570,6 +570,19 @@ public class DiversityUtils {
     }
     
  
+    public static String[] IndiceColumn(SessionBean1 sb){
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "IndiceCol(NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            return RC.eval(rCommand).asStrings();
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        } catch (REXPMismatchException ex) {
+            Logger.getLogger(DiversityUtils.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
 
     
     /////// ------------ Diversity helper functions --------------- //////////////

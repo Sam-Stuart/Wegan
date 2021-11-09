@@ -169,6 +169,7 @@ RarefactionCurve <- function(mSetObj=NA, step = "", color="NULL", imgName, forma
   sample1 <- mSetObj$analset$result$sample_size
   input.p <- mSetObj$analset$input
   type <- mSetObj$analset$result$type
+  n <- nrow(input.p)
   
   #print("get richness value")
   #S <- specnumber(input.2)
@@ -198,12 +199,12 @@ RarefactionCurve <- function(mSetObj=NA, step = "", color="NULL", imgName, forma
                 "mediumpurple", "maroon", "lightyellow", "turquoise3", "tan3", 
                 "springgreen", "thistle1", "sienna3", "orange", "dimgray",
                 "burlywood", "darksalmon", "deeppink", "goldenrod", "forestgreen")
-  } else if (color == "red") {
-     color1 = "red"
-  } else if (color == "plasma") {
-     color1 <- c("yellow", "pink")
-  } else if (color == "rainbow") { 
-     color1 <- c("orange", "brown")
+  } else if (color == "rainbow") {
+     color1 = rainbow(n)
+  } else if (color == "heat") {
+     color1 = heat.colors(n)
+  } else if (color == "viridis") { 
+     color1 = cm.colors(n)
   }
   print(color1)  
 
@@ -221,9 +222,9 @@ RarefactionCurve <- function(mSetObj=NA, step = "", color="NULL", imgName, forma
   print("actually plotting")
   print(input.p)
   #windows(width = w, height = h)
-  rarecurve(input.p, step = step1, sample = sample1, col = color1, label = T, yaxt = "n")
-  axis(2, las = 2, labels = T)
-  title = "Rarefaction Curve Plot" 
+  rarecurve(input.p, step = step1, sample = sample1, col = color1, label = T, yaxt = "n", cex.lab = 1.2, cex.axis = 1)
+  axis(2, las = 2, labels = T, cex.lab = 1.2, cex.axis = 1)
+  title(main = "Rarefaction Curve Plot", cex.lab = 1.5) 
   
   dev.off()
  
@@ -331,12 +332,16 @@ RarefactionPlot <- function(mSetObj = NA, colorb = "NULL", imgName, format = "pn
   print(minmy1)
   maxmy = round(as.numeric(max(plot_data)+10), digits = -1)
   #windows(width = w, height = h)
-  plot(plot_data ~ S, ann = F, axes = F, xlim = c(minnx1, maxnx), ylim = c(minmy1, maxmy),
-       col = colorb1, xlab = "Observed No. of Species", ylab = "Rarefied No. of Species")
-  axis(1, labels = T, at = seq(minnx1, maxnx, by = 5))
-  axis(2, las = 2, at = seq(minmy1, maxmy, by = 5) )
+  plot(plot_data ~ S, xaxt = "n", yaxt = "n", xlim = c(minnx1, maxnx), ylim = c(minmy1, maxmy),
+       col = colorb1, xlab = "Observed No. of Species", ylab = "Rarefied No. of Species", cex.lab = 1.2)
+  axis(1, labels = T, at = seq(minnx1, maxnx, by = 5), cex.axis = 1)
+  axis(2, las = 2, at = seq(minmy1, maxmy, by = 5), cex.axis = 1)
   #abline(0,1)
-  title = "Rarefaction Linear Plot"
+  #mtext("Rarefied Number of Species", 2, 5)
+  #mtext("Observed Number of Species", 2, 5)
+  #mtext("Rarefaction Linear Plot",5, 1)
+  title(main = "Rarefaction Linear Plot", cex.lab = 1.5) 
+  
 
   dev.off()
   

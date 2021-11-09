@@ -133,21 +133,6 @@ public class NormBean implements Serializable {
     }
     
     
-//     
-//    private SelectItem[] corrColumnOpts = null;
-//    
-//    public SelectItem[] getCorrColumnOpts(){
-//        String[] columns = CAUtils.GetDataColumns(sb);
-//        int columnsLen = columns.length;
-//        corrColumnOpts = new SelectItem[columnsLen];
-//        List<String> columnNames = Arrays.asList(columns);
-//        for (int i = 0; i < columnsLen; i++) {
-//            corrColumnOpts[i] = new SelectItem(columnNames.get(i), columnNames.get(i));
-//        }
-//        //List<String> columnNames = Arrays.asList(columns);
-//        return corrColumnOpts;
-//    }
-    
     private String assumptionColName = getAssumpColOpts()[0].getLabel();
     
     public String getAssumptionColName() {

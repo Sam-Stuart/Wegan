@@ -364,16 +364,17 @@ AccumCurve <- function(mSetObj=NA, type = "NULL", color = "NULL", ci.color="NULL
   
   #windows(height = h, width = w)
   
-  plot(plot_data, ann = T, axes = F, ci.type = ci.type1, col = color1, lwd = 3, ci.lty = 0, 
-       ci.col = ci.color1, lty = 1, xant = "n", yant = "n", ylab = "Number of species")
+  plot(plot_data, axes = F, ci.type = ci.type1, col = color1, lwd = 3, ci.lty = 0, 
+       ci.col = ci.color1, lty = 1, xaxt = "n", yaxt = "n", ylab = "Number of species", xlab = "Sites", cex.axis = 1, cex.lab = 1.2)
+  legend("bottomright", legend = c(type1, "nonlinear selfstarting", "prediction"), col = c(color1, line.color1, pred.color1),
+         lty = 1:3, cex = 1, box.lty = 0) 
   axis(1, labels = T, at = 0:n)
   axis(2, las = 2)
   boxplot(box_data, col = box.color1, add = TRUE, pch = pch1)
   lines(line_data, col = line.color1, lwd = 3, lty = 2)
   lines(pred_data, col = pred.color1, lwd = 3, lty = 3)
-  legend("bottomright", legend = c(type1, "nonlinear selfstarting", "prediction"), col = c(color1, line.color1, pred.color1),
-         lty = 1:3, cex = 0.8, box.lty = 0)
-  title("Species Accumulation Model")
+   
+  title(main = "Species Accumulation Model")
 
   dev.off() 
   

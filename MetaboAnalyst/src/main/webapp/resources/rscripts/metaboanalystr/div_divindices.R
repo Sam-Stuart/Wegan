@@ -1,3 +1,33 @@
+#'Extract column names from numeric variables-- used by ResidPlot()
+#'@usage AssupCol(mSetObj = NA)
+#'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
+#'@export
+IndiceCol <- function(mSetObj = NA) {
+  #load_plyr()
+  #load_dplyr()
+  
+  mSetObj <- .get.mSet(mSetObj)
+  
+  #if(is.null(mSetObj$dataSet[["procr"]])){
+  #  data<-mSetObj$dataSet$preproc
+  #}else if(is.null(mSetObj$dataSet[["prenorm"]])){
+  #  data<- mSetObj$dataSet$procr;
+  #}else{
+  #  data<-mSetObj$dataSet$prenorm
+  #}
+
+  metaData <- mSetObj$dataSet$origMeta
+
+  columnsMeta <- colnames(metaData)
+  #print(columnsNum)
+   
+  return(columnsMeta)
+  
+}
+
+
+
+
 #'Perform species richness, evenness, diverisy index, alpha, beta & gamma density
 #'@description Perform species richness, evenness, diverisy index, alpha, beta & gamma density
 #'@param mSetObj Input name of the created mSet Object
@@ -10,14 +40,14 @@
 #'@export
 
 
-div_index <- function(mSetObj = NA, data = "false", group = "", margin = "NULL") {
+div_index <- function(mSetObj = NA, data = "false", group = "NULL", margin = "NULL") {
   
   print("start model")
   options(errors = traceback)   
   #library("ade4")
   #library("adegraphics")
-  library(plyr)
-  library("dplyr")
+  #library(plyr)
+  #library("dplyr")
   library("vegan")
   
   mSetObj <- .get.mSet(mSetObj)
@@ -26,10 +56,10 @@ div_index <- function(mSetObj = NA, data = "false", group = "", margin = "NULL")
   #data(dune.env)
   
   #mSetObj$dataSet$norm <- dune
-  print(mSetObj$dataSet$norm)
+  #print(mSetObj$dataSet$norm)
   #mSetObj$dataSet$origMeta <- dune.env
   metaData <- mSetObj$dataSet$origMeta
-  print(metaData)
+  print("set up metaData")
     
   #Extract input from mSetObj
   print("setup mSetObj")
@@ -38,7 +68,7 @@ div_index <- function(mSetObj = NA, data = "false", group = "", margin = "NULL")
   } else { #original data as input
     input <- mSetObj$dataSet$orig
   }
-  print(input)
+  print("input")
 
   # MARGIN = 1, data in rows; MARGIN = 2, data in columns
   if (margin == "NULL") { 
@@ -47,6 +77,20 @@ div_index <- function(mSetObj = NA, data = "false", group = "", margin = "NULL")
     margin1 <- 2
   }
   print(margin1)
+  print(colnames(metaData))
+
+  if (group == "NULL") {
+     print(group)
+     group1 <- metaData[,2]
+     print("1")
+  } else {
+     B.frame <- metaData%>%
+        select(all_of(group))
+     group1 <- B.frame[,1]
+  }
+  #group1 <- colnames(metaData[,2])
+  print(group1)   
+  print(metaData[,2]) 
   
   cat("Alpha, beta and gamma diversity analysis works on numeric data only")
   input.2 <- input
@@ -82,19 +126,23 @@ div_index <- function(mSetObj = NA, data = "false", group = "", margin = "NULL")
   #colnames(richness1[1:2,]) <- c("Site", "Richness")
   print(richness1)
   
-  if (group == "") {
-     group1 = 2
-     richness_g <- specnumber(input.2, groups = metaData[,2], MARGIN = MARGIN1)
+  
+  
+  #print(metaData[2,]) 
+
+#  if (group == "") {
+#group1 = 2
+     richness_g <- specnumber(input.2, groups = group1, MARGIN = MARGIN1)
      richness_g1 <- as.data.frame(richness_g)
      richness_g1 <- cbind(rownames(richness_g1), richness_g)
      colnames(richness_g1) <- c("Group", "Richness")
-  } else {
-     group1 <- as.numeric(group)
-     richness_g <- specnumber(input.2, groups = metaData[,group1], MARGIN = MARGIN1)
-     richness_g1 <- as.data.frame(richness_g)
-     richness_g1 <- cbind(rownames(richness_g1), richness_g)
-     colnames(richness_g1) <- c(colnames(metaData[group1]), "Richness")
-  }
+#  } else {
+#     group1 <- as.numeric(group)
+#     richness_g <- specnumber(input.2, groups = metaData[,group1], MARGIN = MARGIN1)
+#     richness_g1 <- as.data.frame(richness_g)
+#     richness_g1 <- cbind(rownames(richness_g1), richness_g)
+#     colnames(richness_g1) <- c(colnames(metaData[group1]), "Richness")
+#  }
   print(group1)
   print(richness_g1)
 
@@ -118,13 +166,15 @@ div_index <- function(mSetObj = NA, data = "false", group = "", margin = "NULL")
   print(ShannonIndices)
   
   print("ready for alpha")
-  alpha <- with(metaData, tapply(specnumber(input.2), metaData[,group1], mean))
+  alpha <- with(metaData, tapply(specnumber(input.2), group1, mean))
+  #alpha <- with(metaData, tapply(specnumber(input.2), metaData[,group1], mean))
   alpha1 <- as.data.frame(alpha)
   alpha1 <- cbind(rownames(alpha), alpha)
   colnames(alpha1) <- c("Group", "Alpha") 
   print(alpha1)
   
-  gamma <- with(metaData, specnumber(input.2, metaData[,group1]))
+  gamma <- with(metaData, specnumber(input.2, group1))
+  #gamma <- with(metaData, specnumber(input.2, metaData[,group1]))
   gamma1 <- as.data.frame(gamma)
   gamma1 <- cbind(rownames(gamma1), gamma)
   colnames(gamma1) <- c("Group", "Gamma") 
@@ -136,10 +186,11 @@ div_index <- function(mSetObj = NA, data = "false", group = "", margin = "NULL")
   #colnames(beta1) <- c("Group", "Beta") 
   
   beta_dis <- betadiver(input.2, "z")
-  beta <- with(metaData, betadisper(beta_dis, metaData[, group1]))
+  beta <- with(metaData, betadisper(beta_dis, group1))
+  #beta <- with(metaData, betadisper(beta_dis, metaData[, group1]))
   distance <- as.numeric(beta$distances)
-  group <- as.character(beta$group)
-  beta.frame <- as.data.frame(cbind(group, distance))
+  #group <- as.character(beta$group)
+  beta.frame <- as.data.frame(cbind(group1, distance))
   print(beta)
   print(beta.frame)  
 
@@ -169,7 +220,8 @@ div_index <- function(mSetObj = NA, data = "false", group = "", margin = "NULL")
   print("12")  
   mSetObj$analSet$result$gamma <- gamma1
   print("13")   
-  mSetObj$analSet$result$group <- metaData[,group1]
+  #mSetObj$analSet$result$group <- metaData[,group1]
+  mSetObj$analSet$result$group <- group1
   print("14")  
   mSetObj$analSet$input <- input.2
   print("15")    
