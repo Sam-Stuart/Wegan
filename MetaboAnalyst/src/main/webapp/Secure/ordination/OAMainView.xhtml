@@ -39,16 +39,16 @@
                         <h:commandLink id="dca" style="margin-left: 25px" action="DCA" onclick="PF('statusDialog').show()" value="Detrended Correspondence Analysis (DCA)"/>
                         <p:tooltip for="dca" style="font-size: 11px;" value="TODO: Rewrite dca hoverover" />
                         
-                        <h:commandLink id="ca" style="margin-left: 25px" action="CA" onclick="PF('statusDialog').show()" value="Correspondence Analysis (CA)"/>
+                        <h:commandLink id="ca" style="margin-left: 25px" action="CA"  onclick="PF('statusDialog').show()" value="Correspondence Analysis (CA)"/>
                         <p:tooltip for="ca" style="font-size: 11px;" value="TODO: Rewrite ca hoverover" />   
                         
                         <h:commandLink id="bray" style="margin-left: 25px" action="Bray" onclick="PF('statusDialog').show()" value="Bray-Curtis (Polar) Ordination"/>
-                        <p:tooltip for="bray" style="font-size: 11px;" value="TODO: Rewrite bray hoverover" />                   
+                        <p:tooltip for="bray" style="font-size: 11px;" value="TODO: Rewrite bray hoverover" />      
                         
-                        <h:commandLink id="cia" style="margin-left: 25px" action="CIA" onclick="PF('statusDialog').show()" value="Co-Inertia Analysis (CIA)"/>
+                        <h:commandLink id="cia" style="margin-left: 25px" action="CIA" rendered="#{sessionBean1.envDataUploaded eq 'TRUE'}" onclick="PF('statusDialog').show()" value="Co-Inertia Analysis (CIA)"/>
                         <p:tooltip for="cia" style="font-size: 11px;" value="TODO: Rewrite cia hoverover" />
                                                                                                
-                        <h:commandLink id="anosim" style="margin-left: 25px" action="ANOSIM" onclick="PF('statusDialog').show()" value="Analysis of Similarities (ANOSIM)"/>
+                        <h:commandLink id="anosim" style="margin-left: 25px" action="ANOSIM" rendered="#{sessionBean1.envDataUploaded eq 'TRUE'}" onclick="PF('statusDialog').show()" value="Analysis of Similarities (ANOSIM)"/>
                         <p:tooltip for="anosim" style="font-size: 11px;" value="TODO: Rewrite anosim hoverover" />  
 
                     </h:panelGrid>

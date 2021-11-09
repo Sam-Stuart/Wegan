@@ -844,20 +844,22 @@ SaveTransformedData <- function(mSetObj=NA){
         # for ms peaks with rt and ms, insert two columns, without labels
         # note in memory, variables in columns
         
-      #  if(!is.null(mSetObj$dataSet$three.col)){ 
+      #  if(!is.null(mSetObj$dataSet$three.col)){  #I REMOVED THIS
       #   ids <- matrix(unlist(strsplit(colnames(mSetObj$dataSet$norm), "/")),ncol=2, byrow=T);
       #   colnames(ids) <- c("mz", "rt");
       #   write.csv(new.data, file="peak_normalized_rt_mz.csv");
       #}
         
         norm.data<-cbind(lbls, mSetObj$dataSet$norm);
+
         #if(dim(norm.data)[2]>200){
         #  norm.data<-t(norm.data);
         #}
+
        write.csv(norm.data, file="data_normalized.csv", row.names=FALSE);
      }
     }
-  return(.set.mSet(mSetObj));
+  #return(.set.mSet(mSetObj));
   }
 }
 

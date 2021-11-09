@@ -31,6 +31,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import metaboanalyst.models.RcmdBean;
+import metaboanalyst.rwrappers.OAUtils;
 import metaboanalyst.rwrappers.RGraphUtils;
 import metaboanalyst.rwrappers.TimeSeries;
 import metaboanalyst.rwrappers.UniVarTests;
@@ -250,6 +251,10 @@ public class SessionBean1 implements Serializable {
         "Batch Effect", "ROC Analysis", "Integrative Analysis", "Power Analysis", "Multivariate", "Univariate", "Tester"});
     private final List<String> twoGrpsMethods = Arrays.asList(new String[]{"T-test", "Volcano plot", "Fold change", "EBAM", "SVM", "OrthoPLSDA"});
 
+    private final List<String> catGrpMethods = Arrays.asList(new String[]{});
+    private final List<String> numGrpMethods = Arrays.asList(new String[]{});
+    private final List<String> envDataUploadedMethods = Arrays.asList(new String[]{"CIA"});
+
     public void onNodeSelect(NodeSelectEvent event) {
         TreeNode node = event.getTreeNode();
         String parentNm = node.getParent().getData().toString();
@@ -385,6 +390,22 @@ public class SessionBean1 implements Serializable {
                     RequestContext.getCurrentInstance().execute("PF('statusDialog').hide()");
                     return;
                 }
+
+                if (catGroup) {
+                    if (catGrpMethods.contains(naviKey)) {
+                        updateMsg("Error", "The method is only applicable for categorical data analysis!");
+                        RequestContext.getCurrentInstance().execute("PF('statusDialog').hide()");
+                        return;
+                    }
+                }
+                if (numGroup) {
+                    if (numGrpMethods.contains(naviKey)) {
+                        updateMsg("Error", "The method is only applicable for numeric data analysis!");
+                        RequestContext.getCurrentInstance().execute("PF('statusDialog').hide()");
+                        return;
+                    }
+                }
+                
                 if (multiGroup) {
                     if (twoGrpsMethods.contains(naviKey)) {
                         updateMsg("Error", "The method is only applicable for two-group data analysis!");
@@ -634,7 +655,28 @@ public class SessionBean1 implements Serializable {
     public void setMultipleGroup(boolean multiGroup) {
         this.multiGroup = multiGroup;
     }
+    
+    
+    private boolean catGroup = false;
 
+    public boolean isCatGroup() {
+        return catGroup;
+    }
+
+    public void setCategoricalGroup(boolean catGroup) {
+        this.catGroup = catGroup;
+    }
+
+    private boolean numGroup = false;
+
+    public boolean isNumGroup() {
+        return numGroup;
+    }
+
+    public void setNumericGroup(boolean numGroup) {
+        this.numGroup = numGroup;
+    }    
+    
     public boolean isKeepClsOrder() {
         return keepClsOrder;
     }
@@ -1012,4 +1054,22 @@ public class SessionBean1 implements Serializable {
             return "/MetaboAnalyst";
         }
     }
+       
+    public String envDataUploaded(){
+        if(OAUtils.getEnvDataAvailable(sb)=="TRUE"){
+            return "TRUE";
+        }else{
+            return "FALSE";
+        }
+    }
+    
+//    private String envDataAvailable = "FALSE";
+//
+//    public String getEnvDataAvailable() {
+//        return envDataAvailable;
+//    }
+//
+//    public void setEnvDataAvailable(String envDataAvailable) {
+//        this.envDataAvailable = envDataAvailable;
+//    }
 }

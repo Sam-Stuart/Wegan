@@ -10,6 +10,7 @@ import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
 import metaboanalyst.controllers.ApplicationBean1;
 import metaboanalyst.controllers.SessionBean1;
+import metaboanalyst.rwrappers.OAUtils;
 import metaboanalyst.rwrappers.RCenter;
 import metaboanalyst.rwrappers.RDataUtils;
 import metaboanalyst.utils.DataUtils;
@@ -155,7 +156,7 @@ public class OrdinationloadBean implements Serializable {
                     RDataUtils.readTextDataMeta(RC, fileNameMeta, metaFormat, "disc", metaNames);
                 }
                 if (fileNameEnv != null){
-                    RDataUtils.readTextDataMeta(RC, fileNameEnv, envFormat, "disc", envNames);
+                    RDataUtils.readTextDataEnv(RC, fileNameEnv, envFormat, "disc", envNames);
                 }
                 if (RDataUtils.readTextData(RC, fileName, dataFormat, "disc", dataNames)) {
                     sb.setDataUploaded(true);

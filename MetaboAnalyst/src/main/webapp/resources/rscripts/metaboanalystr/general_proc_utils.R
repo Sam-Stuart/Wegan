@@ -894,6 +894,29 @@ GetGroupNumber<-function(mSetObj=NA){
   return(length(levels(mSetObj$dataSet$cls)));
 }
 
+GetCatNumber<-function(mSetObj=NA){
+  load_dplyr()
+  mSetObj <- .get.mSet(mSetObj);
+  catData <- select_if(mSetObj$dataSet$norm, is.character)
+  return(ncol(catData));
+}
+
+GetNumNumber<-function(mSetObj=NA){
+  load_dplyr()
+  mSetObj <- .get.mSet(mSetObj);
+  numData <- select_if(mSetObj$dataSet$norm, is.numeric)
+  return(ncol(numData));
+}
+
+GetEnvDataAvailable <-function(mSetObj=NA){
+  mSetObj <- .get.mSet(mSetObj);
+  if (is.data.frame(mSetObj$dataSet$origEnv)==FALSE) { #No constraining data uploaded
+    return("FALSE")
+  } else {
+    return("TRUE")
+  }
+}
+
 #'Check if the sample size is small
 #'@description Returns whether or not the sanity check found that there were too many
 #'groups in the dataset containing too few samples. It will return a 0 if the data passes the check,

@@ -160,4 +160,5 @@ public class OABean implements Serializable {
         OAUtils.PlotDCA2D(sb, "NULL", false, false, false, false, false, "NULL", "NULL", "NULL", sb.getCurrentImage("ord_dca_2D"), "png", 72);
         OAUtils.PlotDCAScree(sb, sb.getCurrentImage("ord_dca_scree"), "png", 72);
     }
+    
 }

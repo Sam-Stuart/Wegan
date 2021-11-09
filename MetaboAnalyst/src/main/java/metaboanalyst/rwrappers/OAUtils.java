@@ -650,5 +650,41 @@ public class OAUtils {
         }
         return null;
     }
+    
+    public static int getCatNumber(RConnection RC) {
+        try {
+            return RC.eval("GetCatNumber(NA)").asInteger();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+    
+        
+    public static int getNumNumber(RConnection RC) {
+        try {
+            return RC.eval("GetNumNumber(NA)").asInteger();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+        
+        
+    
+    public static String getEnvDataAvailable(SessionBean1 sb){
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "GetEnvDataAvailable(NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            return RC.eval(rCommand).asString();
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        } catch (REXPMismatchException ex) {
+            Logger.getLogger(OAUtils.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
 }
 

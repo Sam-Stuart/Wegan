@@ -22,7 +22,7 @@ ord.anosim <- function(mSetObj=NA, data="NULL", distance="NULL", binary="false",
   } else {
     input <- mSetObj$dataSet$orig
   }
-  
+
   input <- input[order(as.numeric(row.names(input))),] #Order rows
   envData <- mSetObj$dataSet$origEnv #Compulsory
   

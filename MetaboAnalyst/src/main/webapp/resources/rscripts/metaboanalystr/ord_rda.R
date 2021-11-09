@@ -27,6 +27,9 @@ ord.rda <- function(mSetObj=NA, abundance="false", env_text=" ", data="false") {
   } else {
     input <- mSetObj$dataSet$orig
   }
+   print("norm")
+   print(mSetObj$dataSet$norm)
+
   cat("beforeMeta")
   input <- input[order(as.numeric(row.names(input))),] #Order rows
   metaData <- mSetObj$dataSet$origMeta

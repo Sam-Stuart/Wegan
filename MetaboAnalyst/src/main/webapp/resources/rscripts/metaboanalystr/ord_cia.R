@@ -27,17 +27,8 @@ ord.cia <- function(mSetObj=NA, data="false", type="NULL", env_text=" ") {
   }
  
   #input <- input[order(as.numeric(row.names(input))),] #Order rows
-  #metaData <- mSetObj$dataSet$origMeta
-  #envData <- mSetObj$dataSet$origEnv
-
-
-####TESTING####
-  input <- .readDataTable("/home/louisa/Wegan/MetaboAnalyst/src/main/webapp/resources/rscripts/metaboanalystr/test_data/iris_v2.csv")
-  input <- input[order(as.numeric(row.names(input))),] #Order rows
-  metaData <- .readDataTable("/home/louisa/Wegan/MetaboAnalyst/src/main/webapp/resources/rscripts/metaboanalystr/test_data/iris_meta.csv") 
-  envData <- .readDataTable("/home/louisa/Wegan/MetaboAnalyst/src/main/webapp/resources/rscripts/metaboanalystr/test_data/iris_env.csv")
-############
-
+  metaData <- mSetObj$dataSet$origMeta
+  envData <- mSetObj$dataSet$origEnv
 
   #constraining data, used to correlate with rows in main data set
   if (is.data.frame(envData)==FALSE) { #No user uplaoded constraining data
