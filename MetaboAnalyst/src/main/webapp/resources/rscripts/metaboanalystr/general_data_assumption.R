@@ -48,7 +48,7 @@ shapiroT <- function(mSetObj = NA, imgName, format="png", dpi=72, width=NA) {
   }else{
     data<-mSetObj$dataSet$prenorm
   }
-  #print(data)
+  print(data)
   print("data ready")
 
   normData <- mSetObj$dataSet$norm
