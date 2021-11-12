@@ -324,9 +324,9 @@ Plot.PCOA.2D <- function(mSetObj=NA, ellipse="false", var_arrows="false", env_ar
     #variable arrow options
     if (var_arrows!="false") { #If variable arrows selected
         if (color=="plasma") {
-            plot(var.fit2D, col="black")
+            plot(var.fit, col="black")
         } else {
-            plot(var.fit2D, col="darkred") 
+            plot(var.fit, col="darkred") 
         }
     }
     
@@ -548,11 +548,14 @@ Plot.PCOA.scree <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA)
   #Extract necessary objects from mSetObj
   mSetObj <- .get.mSet(mSetObj)
   eigenvalues <- mSetObj$analSet$pcoa$eigenvalues
-  
-  #Produce data set for plotting
-  eigenValues_data <- eigenvalues[1:6]
-  eigenvalues_data <- as.data.frame(cbind(1:6, eigenValues_data/sum(eigenvalues)))
-  maxVar <- eigenvalues_data[1,2]
+
+  pcvars <- eigenvalues[1:6]/sum(eigenvalues)
+  cumvars <- c(pcvars[1], pcvars[1]+pcvars[2], pcvars[1]+pcvars[2]+pcvars[3], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4]+pcvars[5], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4]+pcvars[5]+pcvars[6])
+
+  ylims <- range(c(pcvars,cumvars));
+  extd<-(ylims[2]-ylims[1])/10
+  miny<- ifelse(ylims[1]-extd>0, ylims[1]-extd, 0);
+  maxy<- ifelse(ylims[2]+extd>1, 1.0, ylims[2]+extd);
   
   #Set plot dimensions
   if(is.na(width)){
@@ -570,11 +573,18 @@ Plot.PCOA.scree <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA)
   
   #Scree plot
   Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
-  par(xpd=FALSE, mar=c(5.1, 4.1, 4.1, 2.1)) 
-  plot(x=eigenvalues_data$V1, y=eigenvalues_data$V2, type="l", xlim=c(1, 6), ylim=c(0, maxVar+0.1), xlab="Dimension", ylab="Proportion of Variance Explained", main="Principal Coordinate Analysis Scree Plot", yaxt="n", xaxt="n", col="blue", lwd=2)
-  points(x=eigenvalues_data$V1, y=eigenvalues_data$V2, cex=1.1, pch=19, col="blue")
-  axis(2, las=2)
-  axis(1, at=1:6)
+  par(mar=c(5,5,6,3));
+  plot(pcvars, type='l', col='blue', main="Principal Coordinate Analysis \nScree Plot", xlab='Number of Dimensions', ylab='Variance Explained', ylim=c(miny, maxy), axes=F)
+  text(pcvars, labels =paste(100*round(pcvars,3),'%'), adj=c(-0.3, -0.5), srt=45, xpd=T)
+  points(pcvars, col='red');
+  
+  lines(cumvars, type='l', col='green')
+  text(cumvars, labels =paste(100*round(cumvars,3),'%'), adj=c(-0.3, -0.5), srt=45, xpd=T)
+  points(cumvars, col='red');
+  
+  abline(v=1:5, lty=3);
+  axis(2);
+  axis(1, 1:length(pcvars), 1:length(pcvars));
   dev.off()
 }
 
@@ -645,9 +655,11 @@ pcoa.meta.columns <- function(mSetObj=NA) {
   mSetObj <- .get.mSet(mSetObj)
   
   metaData <- mSetObj$analSet$pcoa$metaData
-  print(metaData)
-  name.all.meta.cols <- colnames(metaData)
-
+  if (metaData=="NA") {
+    name.all.meta.cols <- "No groupings"
+  } else {
+    name.all.meta.cols <- colnames(metaData)
+  }
   return(name.all.meta.cols)
   
 }

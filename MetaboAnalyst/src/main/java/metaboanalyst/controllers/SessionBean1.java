@@ -53,6 +53,7 @@ import org.rosuda.REngine.Rserve.RserveException;
 public class SessionBean1 implements Serializable {
 
     private final ApplicationBean1 ab = (ApplicationBean1) DataUtils.findBean("applicationBean1");
+    private SessionBean1 sb;
 
     public SessionBean1() {
 
@@ -1054,22 +1055,30 @@ public class SessionBean1 implements Serializable {
             return "/MetaboAnalyst";
         }
     }
-       
+    
+    
+    private String envDataAvailable = "FALSE";
+
+    public String getEnvDataAvailable() {
+        return envDataAvailable;
+    }
+
+    public void setEnvDataAvailable(String envDataAvailable) {
+        this.envDataAvailable = envDataAvailable;
+    }  
+    
+    
     public String envDataUploaded(){
-        if(OAUtils.getEnvDataAvailable(sb)=="TRUE"){
-            return "TRUE";
+        if(OAUtils.getEnvDataAvailable(RC)=="TRUE"){
+            envDataAvailable = "TRUE";
         }else{
-            return "FALSE";
+            envDataAvailable = "FALSE";
         }
+        return envDataAvailable;
     }
     
-//    private String envDataAvailable = "FALSE";
-//
-//    public String getEnvDataAvailable() {
-//        return envDataAvailable;
-//    }
-//
-//    public void setEnvDataAvailable(String envDataAvailable) {
-//        this.envDataAvailable = envDataAvailable;
-//    }
+    
+    
+    
+
 }

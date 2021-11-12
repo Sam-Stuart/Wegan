@@ -56,13 +56,13 @@
         <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
             <h1>Principal Coordinate Analysis:</h1>            
             <p:tabView id="PCOA">
-                <p:tab title ="Biplot" titleStyleClass="p-tab-nav">
+                <p:tab title ="2D Ordination Plot" titleStyleClass="p-tab-nav">
                     <h:form id="form1">
                         <p>
-                            PCOA is performed on numeric data only. The use of data groupings will create more interesting plots. Load grouping data separately, where each row aligns with the rows in your data set, or include groupings as columns in your data set.
+                            Represent the pairwise dissimilarity between data points using a specified distance metric. The use of data groupings and constraining data will create more interesting plots. Load grouping data separately, where each row aligns with the rows in your data set, or include groupings as columns in your data set. Load constraining data separately where each row aligns with the rows in your data set.
                         </p>
                         
-                        <h:panelGrid id="panelGrid1" columns="5" cellpadding="3" columnClasses="colBrayLong,colBrayShort,colBrayLong,colBrayShort, colLast">
+                        <h:panelGrid id="panelGrid1" columns="5" cellpadding="3" columnClasses="colNMDSLong,colNMDSShort,colNMDSLong,colNMDSShort, colLast">
                                 
                             <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
                             <p:selectBooleanCheckbox value ="#{ordPCOABean.doOriginal}"/> 
@@ -79,12 +79,8 @@
                             </p:selectOneMenu> 
                             <spacer></spacer>
 
-<!--                            <h:panelGrid columns="2" cellpadding="3">
-                            <h:outputLabel style="font-weight: bold" value="Constraining Data Variable Selection:"/>
-                                <p:inputText style="width:400px; height:40px; line-height:5px;" value="#{ordPCOABean.envDataCol}"/>
-                            </h:panelGrid>-->
-                            <p:panelGrid></p:panelGrid>
                         </h:panelGrid>
+                        <h:panelGrid></h:panelGrid>
                         <h:panelGrid id="panelGrid1_2" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
                             
                             <p:commandButton value="Customize Graph"
@@ -128,7 +124,7 @@
                             </h:panelGrid>
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
                                 <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
-                                    <h:outputText escape="false" value="#{ordPCOABean.file2DEnvScoresPath}"/>
+                                    <h:outputText style="padding-left: 6px" escape="false" value="#{ordPCOABean.file2DEnvScoresPath}"/>
                                 </i>
                             </h:panelGrid> 
                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
@@ -148,9 +144,9 @@
                 <p:tab title ="3D Ordination Plot" titleStyleClass="p-tab-nav">
                     <h:form id="form2">
                         <p>
-                            The use of data groupings will create more interesting plots. Load grouping data separately, where each row aligns with the rows in your data set, or include groupings as columns in your data set.
+                            Represent the pairwise dissimilarity between data points using a specified distance metric. 
                         </p>
-                        <h:panelGrid id="panelGrid2" columns="5" cellpadding="3" columnClasses="colBrayLong,colBrayShort,colBrayLong,colBrayShort, colLast">
+                        <h:panelGrid id="panelGrid2" columns="5" cellpadding="3" columnClasses="colNMDSLong,colNMDSShort,colNMDSLong,colNMDSShort, colLast">
                                 
                             <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
                             <p:selectBooleanCheckbox value ="#{ordPCOABean.doOriginal}"/> 
@@ -220,9 +216,9 @@
                 <p:tab title ="Scree Plot" titleStyleClass="p-tab-nav">
                     <h:form id="form3">
                         <p>
-                            The use of data groupings will create more interesting plots. Load grouping data separately, where each row aligns with the rows in your data set, or include groupings as columns in your data set.
+                            Calculate the proportion of variance explained by each dimension using eigenvalues. The green line on top shows the accumulated variance explained; the blue line underneath shows the variance explained by individual dimensions.
                         </p>
-                        <h:panelGrid id="panelGrid3" columns="5" cellpadding="3" columnClasses="colBrayLong,colBrayShort,colBrayLong,colBrayShort, colLast">
+                        <h:panelGrid id="panelGrid3" columns="5" cellpadding="3" columnClasses="colNMDSLong,colNMDSShort,colNMDSLong,colNMDSShort, colLast">
                                 
                             <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
                             <p:selectBooleanCheckbox value ="#{ordPCOABean.doOriginal}"/> 
@@ -285,12 +281,12 @@
                     </h:form>
                 </p:tab>    
                 
-                <p:tab title ="Stress Plot" titleStyleClass="p-tab-nav">
+                <p:tab title ="Shepard Plot" titleStyleClass="p-tab-nav">
                     <h:form id="form4">
                         <p>
-                            The use of data groupings will create more interesting plots. Load grouping data separately, where each row aligns with the rows in your data set, or include groupings as columns in your data set.
+                            Plot the pairwise dissimilarity between data points against the ordination distance calculated by the PCoA. When data points swarm around the red line, the PCoA was successful in representing the data in lower dimensions.
                         </p>
-                        <h:panelGrid id="panelGrid4" columns="5" cellpadding="3" columnClasses="colBrayLong,colBrayShort,colBrayLong,colBrayShort, colLast">
+                        <h:panelGrid id="panelGrid4" columns="5" cellpadding="3" columnClasses="colNMDSLong,colNMDSShort,colNMDSLong,colNMDSShort, colLast">
                                 
                             <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
                             <p:selectBooleanCheckbox value ="#{ordPCOABean.doOriginal}"/> 

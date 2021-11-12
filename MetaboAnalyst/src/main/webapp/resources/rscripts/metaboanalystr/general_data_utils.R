@@ -791,6 +791,7 @@ ReadPairFile <- function(filePath="pairs.txt"){
 #'
 SaveTransformedData <- function(mSetObj=NA){
   mSetObj <- .get.mSet(mSetObj);
+
   if(!is.null(mSetObj$dataSet[["orig"]])){
     lbls <- NULL;
     tsFormat <- substring(mSetObj$dataSet$format,4,5)=="ts";
@@ -805,20 +806,21 @@ SaveTransformedData <- function(mSetObj=NA){
     #  orig.data<-t(orig.data);
     #}
     write.csv(orig.data, file="data_original.csv", row.names=FALSE);
+  }
 
     if(!is.null(mSetObj$dataSet[["origMeta"]])){
         lbls.meta <- as.data.frame(c(1:nrow(mSetObj$dataSet$origMeta)))
         colnames(lbls.meta) <- c("Sample")
         orig.meta<-cbind(lbls.meta, mSetObj$dataSet$origMeta);
         write.csv(orig.meta, file="data_grouping.csv", row.names=FALSE); 
-     }
+    }
 
     if(!is.null(mSetObj$dataSet[["origEnv"]])){
         lbls.env <- as.data.frame(c(1:nrow(mSetObj$dataSet$origEnv)))
         colnames(lbls.env) <- c("Sample")
         orig.env<-cbind(lbls.env, mSetObj$dataSet$origEnv);
         write.csv(orig.env, file="data_constraining.csv", row.names=FALSE); 
-     }
+    }
 
     if(!is.null(mSetObj$dataSet[["procr"]])){
       if(tsFormat){
@@ -832,7 +834,8 @@ SaveTransformedData <- function(mSetObj=NA){
      #  proc.data<-t(proc.data);
      #}
       write.csv(proc.data, file="data_processed.csv", row.names=FALSE);
-      
+    }
+  
     if(!is.null(mSetObj$dataSet[["norm"]])){
         if(tsFormat){
           lbls <- cbind(as.character(mSetObj$dataSet$facA),as.character(mSetObj$dataSet$facB));
@@ -843,7 +846,6 @@ SaveTransformedData <- function(mSetObj=NA){
         
         # for ms peaks with rt and ms, insert two columns, without labels
         # note in memory, variables in columns
-        
       #  if(!is.null(mSetObj$dataSet$three.col)){  #I REMOVED THIS
       #   ids <- matrix(unlist(strsplit(colnames(mSetObj$dataSet$norm), "/")),ncol=2, byrow=T);
       #   colnames(ids) <- c("mz", "rt");
@@ -858,9 +860,7 @@ SaveTransformedData <- function(mSetObj=NA){
 
        write.csv(norm.data, file="data_normalized.csv", row.names=FALSE);
      }
-    }
-  #return(.set.mSet(mSetObj));
-  }
+  return(.set.mSet(mSetObj));
 }
 
 

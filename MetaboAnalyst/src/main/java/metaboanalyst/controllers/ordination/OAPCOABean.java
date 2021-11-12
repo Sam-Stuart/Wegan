@@ -292,7 +292,23 @@ public class OAPCOABean implements Serializable {
         OAUtils.PlotPCOAstressOrdination(sb, sb.getNewImage("ord_pcoa_stress"), "png", 72);
         OAUtils.PlotPCOAscreeOrdination(sb, sb.getNewImage("ord_pcoa_scree"), "png", 72);    
     }
-
+//    public void pcoaUpdate_action() {
+//        OAUtils.CreatePCOAOrdination(sb, doOriginal, vegdistOpts, doBinary, doAbundance, envDataCol);
+//        OAUtils.PlotPCOA2DOrdination(sb, ellipseOpts, var_arrowsOpts, env_arrowsOpts, env_centOpts, sampleNamesOpts, ordColorOpts, pcoaMetaColumnName, sb.getNewImage("ord_pcoa_2D"), "png", 72);
+//
+//    public void pcoaUpdate_action() {
+//        OAUtils.CreatePCOAOrdination(sb, doOriginal, vegdistOpts, doBinary, doAbundance, envDataCol);
+////        OAUtils.PlotPCOA3DOrdination(sb, ordColorOpts, var_arrowsOpts, pcoaMetaColumnName, sb.getNewImage("ord_pcoa_3D"));
+//  
+//    }
+//    public void pcoaUpdate_action() {
+//        OAUtils.CreatePCOAOrdination(sb, doOriginal, vegdistOpts, doBinary, doAbundance, envDataCol);
+//        OAUtils.PlotPCOAstressOrdination(sb, sb.getNewImage("ord_pcoa_stress"), "png", 72);
+//    }
+//    public void pcoaUpdate_action() {
+//        OAUtils.CreatePCOAOrdination(sb, doOriginal, vegdistOpts, doBinary, doAbundance, envDataCol);
+//        OAUtils.PlotPCOAscreeOrdination(sb, sb.getNewImage("ord_pcoa_scree"), "png", 72);    
+//    }
 }
 
 
