@@ -53,12 +53,14 @@ Taxonomic_div <- function(mSetObj = NA, data = "false", dis = "NULL", match.forc
   #print(input.2)
 
 
-  if (match.force == "false") { 
-    match.force1 = FALSE
-  } else {
-    match.force1 = TRUE
-  }
-  print(match.force1)  
+  #if (match.force == "false") { 
+  #  match.force1 = FALSE
+  #} else {
+  #  match.force1 = TRUE
+  #}
+  #print(match.force1)  
+  match.force1 = TRUE
+  print(match.force1)
 
   if (varstep == "false") {
     varstep1 = FALSE
@@ -299,15 +301,20 @@ taxon_scatter <- function(mSetObj=NA, colorc="NULL", imgName, format="png", dpi=
   pars <- expand.grid(col = colorc1, stringsAsFactors = FALSE)
   
   #windows(width = 20, height = 20)
-  n <- max(b) + 10
-  max(b)
-  print(max(b))
-  print(n)
-  m <- max(scatter_data$Species) 
-  plot(scatter_data, col = colorc1, axes = F, pch = 17, xaxt = "n", yaxt = "n")
-  axis(1, labels = T, at = 0:m)
-  axis(2, las = 2)
+  #b[ , apply(b, 2, function(x) !any(is.na(x)))]
 
+  c <- max(b, na.rm = TRUE)
+  #c <- select_if(b, !is.na)
+  n <- c + 10
+  #max(b)
+  #print(max(b))
+  print(n)
+  m <- max(scatter_data$Species)
+  print(m) 
+  plot(scatter_data, col = colorc1, pch = 17, xaxt = "n", yaxt = "n")
+  axis(1, labels  = T, at = 0:m)
+  axis(2, las = 2, at = seq(0, n, by = 10), labels = T, ylab = "Delta+")
+  #xlab = "Number of Species", 
   dev.off() 
   
   return(.set.mSet(mSetObj)) 

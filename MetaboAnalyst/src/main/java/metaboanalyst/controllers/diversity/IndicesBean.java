@@ -82,20 +82,20 @@ public class IndicesBean implements Serializable {
 
     
     // static dropdown
-    private final SelectItem[] margin; // in the view, need to present the options //application bean 
-    private String marginchosen = "NULL";
-            
-    public SelectItem[] getMargin() {
-        return margin;
-    }
-    
-    public String getMarginchosen() {
-        return marginchosen;
-    } 
-
-    public void setMarginchosen(String marginchosen) {
-        this.marginchosen = marginchosen;
-    }
+//    private final SelectItem[] margin; // in the view, need to present the options //application bean 
+//    private String marginchosen = "NULL";
+//            
+//    public SelectItem[] getMargin() {
+//        return margin;
+//    }
+//    
+//    public String getMarginchosen() {
+//        return marginchosen;
+//    } 
+//
+//    public void setMarginchosen(String marginchosen) {
+//        this.marginchosen = marginchosen;
+//    }
        
     
     private final SelectItem[] color;
@@ -263,11 +263,7 @@ public class IndicesBean implements Serializable {
     }  
     
    
-    public IndicesBean() {      
-        margin = new SelectItem[2];
-        margin[0] = new SelectItem("NULL", "1");
-        margin[1] = new SelectItem("2", "2");
-        
+    public IndicesBean() {    
         color = new SelectItem[6];
         color[0] = new SelectItem("NULL", "Skyblue");
         color[1] = new SelectItem("gray", "Gray");
@@ -288,12 +284,12 @@ public class IndicesBean implements Serializable {
     
     // ACTION BUTTON // 
     public void indicesAlphaUpdate_action() {
-        DiversityUtils.CreateIndicesDiv(sb, doOriginal, groupColName, marginchosen);       
+        DiversityUtils.CreateIndicesDiv(sb, doOriginal, groupColName);       
         DiversityUtils.PlotAlphaDiversity(sb, colorchosen, sb.getNewImage("Alpha_Plot"), "png", 72, "false");
     }
     
     public void indicesBetaUpdate_action() {
-        DiversityUtils.CreateIndicesDiv(sb, doOriginal, groupColName, marginchosen);               
+        DiversityUtils.CreateIndicesDiv(sb, doOriginal, groupColName);               
         DiversityUtils.PlotBetaDiversity(sb, colorbchosen, sb.getNewImage("Beta_Plot"), "png", 72, "false");
     }
     

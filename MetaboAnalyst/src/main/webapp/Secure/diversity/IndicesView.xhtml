@@ -18,14 +18,10 @@
                         <h:panelGrid id="panelGrid" columns="6" cellpadding="3" >
                             <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
                             <p:selectBooleanCheckbox value ="#{indicesBean.doOriginal}"/> 
-                            <h:outputLabel style="font-weight: bold" value="Select grouping variable:"/>
+                            <h:outputLabel style="font-weight: bold" value="Select grouping variable (x-axis):"/>
                                     <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{indicesBean.groupColName}">
                                         <f:selectItems value="#{indicesBean.groupColOpts}" />
                                     </p:selectOneMenu>
-                            <h:outputLabel style="font-weight: bold" value="Margin (select row or column):"/>
-                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{indicesBean.marginchosen}">
-                                <f:selectItems value="#{indicesBean.margin}"/>
-                            </p:selectOneMenu> 
                         </h:panelGrid>  
                         <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
                             <p:commandButton value="Update" 
@@ -133,14 +129,10 @@
                         <h:panelGrid id="panelGrid" columns="6" cellpadding="3" >
                             <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
                             <p:selectBooleanCheckbox value ="#{indicesBean.doOriginal}"/> 
-                            <h:outputLabel style="font-weight: bold" value="Select grouping variable:"/>
+                            <h:outputLabel style="font-weight: bold" value="Select grouping variable (x-axis):"/>
                                     <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{indicesBean.groupColName}">
                                         <f:selectItems value="#{indicesBean.groupColOpts}" />
                                     </p:selectOneMenu>
-                            <h:outputLabel style="font-weight: bold" value="Margin (select row or column):"/>
-                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{indicesBean.marginchosen}">
-                                <f:selectItems value="#{indicesBean.margin}"/>
-                            </p:selectOneMenu> 
                         </h:panelGrid>  
                         <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
                             <p:commandButton value="Update" 
