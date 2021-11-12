@@ -469,6 +469,14 @@ public class RDataUtils {
 //    public static String leveneTest(RConnection RC, String predText) {
 //        try {
 //            String rCommand = "levene(NA" + ", \"" + predText + ")";
+       //LOUISA ADDED THIS START!!!!!!!!!!!!
+    
+        //Extract numeric variable names for residual plot
+    
+//    public static String[] AssupColumn(SessionBean1 sb) {
+//        try {
+//            RConnection RC = sb.getRConnection();
+//            String rCommand = "AssupCol(NA)";
 //            RCenter.recordRCommand(RC, rCommand);
 //            return RC.eval(rCommand).asString();
 //        } catch (Exception e) {
@@ -482,6 +490,52 @@ public class RDataUtils {
 //        try {
 //            RConnection RC = sb.getRConnection();
 //            String rCommand = "ResidPlot(NA" + ", \"" + numA + "\", \"" + predText + "\", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
+    
+    public static String[] AssupColumn(SessionBean1 sb){
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "AssupCol(NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            return RC.eval(rCommand).asStrings();
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        } catch (REXPMismatchException ex) {
+            Logger.getLogger(RDataUtils.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+        //perform Shapiro-Wilk test
+    public static String shapiroTest(SessionBean1 sb, String imgName, String format, int dpi, String width) {
+         try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "shapiroT(NA" + ", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            return RC.eval(rCommand).asString();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    
+    //perform Levene's test
+    public static String leveneTest(SessionBean1 sb, String predText, String imgName, String format, int dpi, String width) {
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "levene(NA" + ", \"" + predText + "\", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            return RC.eval(rCommand).asString();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    
+    //Plot regression plus residuals
+//    public static void residualCal(SessionBean1 sb, String assumptionColName, String predText) {
+//        try {
+//            RConnection RC = sb.getRConnection();
+//            String rCommand = "Residuals(NA" + ", \"" + assumptionColName + "\", \"" + predText + "\")";
 //            RCenter.recordRCommand(RC, rCommand);
 //            sb.addGraphicsCMD("resid", rCommand);
 //            RC.voidEval(rCommand);
@@ -544,6 +598,35 @@ public class RDataUtils {
 //        return null;
 //    } 
 //   //LOUISA ADDED THIS END!!!!!!!!!!!!
+    
+    public static void ResidualCal(SessionBean1 sb, String predText, String assumptionColName) {
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "Residuals(NA" + ", \"" + predText + "\", \"" + assumptionColName + "\")";
+            RCenter.recordRCommand(RC, rCommand);
+            sb.addGraphicsCMD("resid", rCommand);
+            RC.voidEval(rCommand);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    
+        //Plot residuals vs fitted values
+    public static void ResidualPlot(SessionBean1 sb, String imgName, String format, int dpi, String width) {
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "ResidPlot(NA" + ", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            sb.addGraphicsCMD("residFit", rCommand);
+            RC.voidEval(rCommand);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+  
+    
+   //LOUISA ADDED THIS END!!!!!!!!!!!!
     
     //---------------Methods for access Data information-------------
     //get data information

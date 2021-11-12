@@ -18,8 +18,10 @@
                         <h:panelGrid id="panelGrid" columns="6" cellpadding="3" >
                             <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
                             <p:selectBooleanCheckbox value ="#{indicesBean.doOriginal}"/> 
-                            <h:outputLabel style="font-weight: bold" value="Select samples size:"/>
-                            <p:inputText value = "#{indicesBean.group}"/>
+                            <h:outputLabel style="font-weight: bold" value="Select grouping variable:"/>
+                                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{indicesBean.groupColName}">
+                                        <f:selectItems value="#{indicesBean.groupColOpts}" />
+                                    </p:selectOneMenu>
                             <h:outputLabel style="font-weight: bold" value="Margin (select row or column):"/>
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{indicesBean.marginchosen}">
                                 <f:selectItems value="#{indicesBean.margin}"/>
@@ -131,8 +133,10 @@
                         <h:panelGrid id="panelGrid" columns="6" cellpadding="3" >
                             <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
                             <p:selectBooleanCheckbox value ="#{indicesBean.doOriginal}"/> 
-                            <h:outputLabel style="font-weight: bold" value="Select samples size:"/>
-                            <p:inputText value = "#{indicesBean.group}"/>
+                            <h:outputLabel style="font-weight: bold" value="Select grouping variable:"/>
+                                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{indicesBean.groupColName}">
+                                        <f:selectItems value="#{indicesBean.groupColOpts}" />
+                                    </p:selectOneMenu>
                             <h:outputLabel style="font-weight: bold" value="Margin (select row or column):"/>
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{indicesBean.marginchosen}">
                                 <f:selectItems value="#{indicesBean.margin}"/>

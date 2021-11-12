@@ -120,7 +120,7 @@ public class DiversityBean implements Serializable {
 //            sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
 //        }
         System.out.print("INSIDE INDICES");
-        DiversityUtils.CreateIndicesDiv(sb, false, "", "NULL");
+        DiversityUtils.CreateIndicesDiv(sb, false, "NULL", "NULL");
         DiversityUtils.PlotAlphaDiversity(sb, "NULL", sb.getCurrentImage("Alpha_Plot"), "png", 72, "false");
         DiversityUtils.PlotBetaDiversity(sb, "NULL", sb.getCurrentImage("Beta_Plot"), "png", 72, "false");
         System.out.print("AFTER INDICES");

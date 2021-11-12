@@ -19,18 +19,18 @@ Taxonomic_div <- function(mSetObj = NA, data = "false", dis = "NULL", match.forc
   
   #library("ade4")
   #library("adegraphics")
-  library(plyr)
-  library(dplyr)
+  #library(plyr)
+  #library(dplyr)
   library(vegan)
   print("taxonomic")  
 
   mSetObj <- .get.mSet(mSetObj)
 
-  data(dune)
-  data(dune.taxon)
+  #data(dune)
+  #data(dune.taxon)
   
-  mSetObj$dataSet$norm <- dune
-  mSetObj$dataSet$origMeta <- dune.taxon
+  #mSetObj$dataSet$norm <- dune
+  #mSetObj$dataSet$origMeta <- dune.taxon
 
   #Extract input from mSetObj
   if (data == "false") { #normalized data as input
@@ -74,7 +74,7 @@ Taxonomic_div <- function(mSetObj = NA, data = "false", dis = "NULL", match.forc
   }
   print(check1)
 
-  taxdis <- taxa2dist(metaData, varstep = varstep1, check = check1)
+  taxdis <- taxa2dist(metaData, varstep = varstep1, check = TRUE)
   print(taxdis)
   print("taxdis ready")  
 
@@ -96,18 +96,27 @@ Taxonomic_div <- function(mSetObj = NA, data = "false", dis = "NULL", match.forc
   print(dis1)
   
   if (aggme == "NULL") {
-    aggme1 = "average"
+    aggme1 <- "average"
   } else {
-    aggme1 = aggme
+    aggme1 <- aggme
   }
   print(aggme1)
 
   taxon <- taxondive(input.2, dis1, match.force = match.force1)
+  print(taxon)
   summary.taxon <- summary(taxon)
-  
+  print(summary.taxon)
+  print("after summary taxon")
+
   tr <- hclust(taxdis, method = "average")
+  print(tr)
+  print("after tr")
   dtree <- treedist(input.2, tr)
+  print(dtree)
+  print("after dtree")
   mod <- treedive(input.2, tr)
+  print(mod)
+  print("after mod")
   plottree <- hclust(vegdist(input.2), method = aggme1)
   print(plottree)
   taxontree <- hclust(taxdis)
@@ -188,7 +197,8 @@ taxa_tree <- function(mSetObj = NA, color = "NULL", imgName, format = "png", dpi
   
   print("get plot_data")
   plot_data <- mSetObj$analset$taxa2dist$taxdis
-  
+  print(plot_data)  
+
   #Set plot dimensions
   if(is.na(width)){
     w <- 10.5
@@ -282,18 +292,21 @@ taxon_scatter <- function(mSetObj=NA, colorc="NULL", imgName, format="png", dpi=
     colorc1 <- c("red") 
   }
   print(colorc1)  
-  b <- scatter_data$Dplus
+  b <- as.numeric(scatter_data$Dplus)
   print(b)
   print("just to show the next argument is n")
 
   pars <- expand.grid(col = colorc1, stringsAsFactors = FALSE)
   
   #windows(width = 20, height = 20)
-  n <- (max(scatter_data$Dplus)) + 10
+  n <- max(b) + 10
+  max(b)
+  print(max(b))
+  print(n)
   m <- max(scatter_data$Species) 
-  plot(scatter_data, col = colorc1, axes = F, pch = 17, xant = "n", yant = "n")
+  plot(scatter_data, col = colorc1, axes = F, pch = 17, xaxt = "n", yaxt = "n")
   axis(1, labels = T, at = 0:m)
-  axis(2, at = seq(0, n, by = 5), las = 2)
+  axis(2, las = 2)
 
   dev.off() 
   

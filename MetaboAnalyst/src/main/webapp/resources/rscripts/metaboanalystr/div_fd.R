@@ -31,14 +31,14 @@ functionalDiv <- function(mSetObj = NA, data = "false", w_text = "", corr = "NUL
   
   mSetObj <- .get.mSet(mSetObj)
 
-  data(tussock)
-  print(tussock)
+  #data(tussock)
+  #print(tussock)
   #metaData = tussock$trait
   #mSetObj$dataSet$orig = tussock$abun 
   #print(metaData)
 
-  mSetObj$dataSet$norm <- tussock$abun
-  mSetObj$dataSet$origMeta <- tussock$trait
+  #mSetObj$dataSet$norm <- tussock$abun
+  #mSetObj$dataSet$origMeta <- tussock$trait
 
   #Extract input from mSetObj
   if (data == "false") { #normalized data as input

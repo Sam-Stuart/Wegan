@@ -161,9 +161,9 @@ public class RarefactionBean implements Serializable {
         
         color = new SelectItem[4];
         color[0] = new SelectItem("NULL", "Default");
-        color[1] = new SelectItem("red", "Red");
-        color[2] = new SelectItem("plasma", "Plasma");
-        color[3] = new SelectItem("rainbow", "Rainbow");
+        color[1] = new SelectItem("rainbow", "Rainbow");
+        color[2] = new SelectItem("heat", "Heat");
+        color[3] = new SelectItem("cm", "Cm");
         
         margin = new SelectItem[2];
         margin[0] = new SelectItem("NULL", "1");
