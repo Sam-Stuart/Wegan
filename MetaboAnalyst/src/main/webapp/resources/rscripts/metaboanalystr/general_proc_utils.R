@@ -246,8 +246,8 @@ SanityCheckData <- function(mSetObj=NA){
 #'@description This function will replace zero/missing values by half of the smallest
 #'positive value in the original dataset.  
 #'This method will be called after all missing value imputations are conducted.
-#'Also, it directly modifies the mSet$dataSet$procr if executed after normalization,
-#'or the mSet$dataSet$norm if before normalization.
+#'Also, it directly modifies the mSetObj$dataSet$procr if executed after normalization,
+#'or the mSetObj$dataSet$norm if before normalization.
 #'@usage ReplaceMin(mSetObj=NA) 
 #'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
 #'@author Jeff Xia \email{jeff.xia@mcgill.ca}

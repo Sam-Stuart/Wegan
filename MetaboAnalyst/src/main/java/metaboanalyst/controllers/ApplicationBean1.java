@@ -73,6 +73,8 @@ public class ApplicationBean1 implements Serializable {
     private static final String test_varespec = "/data/varespec.csv";
     private static final String test_linear = "/data/linear_test_data.csv"; // linear plot test data 
     private static final String test_iris = "/data/iris.csv";
+    private static final String test_irisOrd = "/data/iris_ord.csv";
+    private static final String test_irisMeta = "/data/iris_meta.csv";
     private static final String test_dune_weights = "/data/dune_weights.txt";
     private static final String test_pitlatrine = "/data/SPE_pitlatrine.csv";
     private static final String test_pitlatrineEnv = "/data/ENV_pitlatrine.csv";
@@ -259,19 +261,19 @@ public class ApplicationBean1 implements Serializable {
                 
         vegdistMeasureOpts = new SelectItem[14];
         vegdistMeasureOpts[0] = new SelectItem("NULL", "Bray-Curtis");
-        vegdistMeasureOpts[1] = new SelectItem("euclidean", "Euclidean");
-        vegdistMeasureOpts[2] = new SelectItem("manhattan", "Manhattan");
-        vegdistMeasureOpts[3] = new SelectItem("canberra", "Canberra");
-        vegdistMeasureOpts[4] = new SelectItem("kulczynski", "Kulczynski");
-        vegdistMeasureOpts[5] = new SelectItem("jaccard", "Jaccard");
+        vegdistMeasureOpts[1] = new SelectItem("binomial", "Binomial");
+        vegdistMeasureOpts[2] = new SelectItem("canberra", "Canberra");
+        vegdistMeasureOpts[3] = new SelectItem("cao", "Cao");
+        vegdistMeasureOpts[4] = new SelectItem("chao", "Chao");
+        vegdistMeasureOpts[5] = new SelectItem("euclidean", "Euclidean");
         vegdistMeasureOpts[6] = new SelectItem("gower", "Gower");
         vegdistMeasureOpts[7] = new SelectItem("horn", "Horn-Morisita");
-        vegdistMeasureOpts[8] = new SelectItem("mountford", "Mountford");
-        vegdistMeasureOpts[9] = new SelectItem("raup" , "Raup-Crick");
-        vegdistMeasureOpts[10] = new SelectItem("binomial", "Binomial");
-        vegdistMeasureOpts[11] = new SelectItem("chao", "Chao");
-        vegdistMeasureOpts[12] = new SelectItem("cao", "Cao");
-        vegdistMeasureOpts[13] = new SelectItem("mahalanobis", "Mahalanobis");
+        vegdistMeasureOpts[8] = new SelectItem("jaccard", "Jaccard");
+        vegdistMeasureOpts[9] = new SelectItem("kulczynski", "Kulczynski");
+        vegdistMeasureOpts[10] = new SelectItem("mahalanobis", "Mahalanobis");
+        vegdistMeasureOpts[11] = new SelectItem("manhattan", "Manhattan");
+        vegdistMeasureOpts[12] = new SelectItem("mountford", "Mountford");
+        vegdistMeasureOpts[13] = new SelectItem("raup" , "Raup-Crick");
         
         ciaTypeOpts = new SelectItem[2];
         ciaTypeOpts[0] = new SelectItem("NULL", "Numeric Data Types");
@@ -624,6 +626,14 @@ public class ApplicationBean1 implements Serializable {
         return realPath + test_iris;
     }
 
+    public String getTestIrisMeta() {
+        return realPath + test_irisMeta;
+    }
+    
+    public String getTestIrisOrd() {
+        return realPath + test_irisOrd;
+    }            
+            
     public String getTestWeightDune() {
         return realPath + test_dune_weights;
     }

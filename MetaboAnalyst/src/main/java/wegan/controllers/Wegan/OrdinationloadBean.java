@@ -298,10 +298,12 @@ public class OrdinationloadBean implements Serializable {
         
         else if (testDataOpt.equals("Iris")) {
             dataType = "main";
-            testFile = ab.getTestIris();
+            testFile = ab.getTestIrisOrd();
             dataFormat = "rowu";       
             dataNames = "colOnly";
-            metaTestFile = null;
+            metaTestFile = ab.getTestIrisMeta();
+            metaFormat = "rowu";
+            metaNames = "bothNames";
             envTestFile = null;
         } 
         
@@ -340,6 +342,15 @@ public class OrdinationloadBean implements Serializable {
         return "Data check";
     }
     
- 
+//    Checkbox for viewing supplemental data loader panel
+    public boolean checkboxValue;
+
+    public void setCheckboxValue(boolean checkboxValue) {
+        this.checkboxValue = checkboxValue;
+    }
+
+    public boolean getCheckboxValue() {
+        return this.checkboxValue;
+    }
 
 }

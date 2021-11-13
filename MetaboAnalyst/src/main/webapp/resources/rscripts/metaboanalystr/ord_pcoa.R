@@ -18,6 +18,7 @@ ord.pcoa <- function(mSetObj=NA, data="false", distance="NULL", binary="false", 
 
   library("vegan") #For generating distance matrix
   library("dplyr") #For easy data manipulation
+  library("fastDummies") 
 
   print("The use of data groupings will create more interesting plots. Load grouping data separately, where each row aligns with the rows in your data set, or include groupings as columns in your data set.")
   print("The use of environmental data, if available, will also create more interesting plots. Load environmental data separately, where each row aligns with the rows in your data set.")
@@ -30,15 +31,20 @@ ord.pcoa <- function(mSetObj=NA, data="false", distance="NULL", binary="false", 
     input <- mSetObj$dataSet$orig
   }
   
-  input <- input[order(as.numeric(row.names(input))),] #Order rows
   metaData <- mSetObj$dataSet$origMeta
+  print("metaData")
+  print(metaData)
   envData <- mSetObj$dataSet$origEnv
 
-  #Obtain numeric data for ordination and catgroical data for grouping data
-  num_data <- select_if(input, is.numeric) #Numeric data only for PCOA
-  fac_data <- select_if(input, is.character) #Any categorical data will be used for grouping
-  count.fac.cols <- ncol(fac_data) #number of categorical data columns
-  
+  #Obtain categorical data for making dummy variables
+  num_data <- select_if(input, is.numeric)
+  fac_data <- select_if(input, is.character) #Any categorical data will be used for dummy variables!
+  if (ncol(fac_data)>=1) {
+    fac_data1 <- dummy_cols(fac_data, select_columns = NULL, remove_selected_columns = TRUE)
+  } else {
+    fac_data1 <- fac_data
+  }
+
   #Transform abundance data
   print("Should you have community species data, you may want to investigate the relative abundance (divide all values by column totals) versus absolute abundance (no change to data).")
   if (abundance=="false") {
@@ -56,29 +62,27 @@ ord.pcoa <- function(mSetObj=NA, data="false", distance="NULL", binary="false", 
     distance1 <- distance #USer selected from list "bray", "manhattan", "canberra", "kulczynski", "jaccard", "gower", "altGower", "morisita", "horn", "mountford", "raup" , "binomial", "chao", "cao", "mahalanobis"
   } 
   
+  #Combine numeric data and dummy variables
+  data <- cbind(num_data1, fac_data1)
+
   #Generate dissimilarity matrix
   if (binary=="false") {
-    dist <- vegdist(num_data1, method=distance1, binary=FALSE) #Generate dissimilarity matrix
+    dist <- vegdist(data, method=distance1, binary=FALSE) #Generate dissimilarity matrix
   } else {
-    dist <- vegdist(num_data1, method=distance1, binary=TRUE) #Generate dissimilarity matrix for presence/absence data
+    dist <- vegdist(data, method=distance1, binary=TRUE) #Generate dissimilarity matrix for presence/absence data
   }
 
-  #Run PCOA with and without weights
+  #Run PCOA 
   pcoa <- wcmdscale(dist, add="lingoes", eig=TRUE, x.ret=TRUE)
 
   #meta data, used to group samples using colors or plotting symbols
-  if (is.data.frame(metaData)==FALSE) { #No user uplaoded meta data
-    if (count.fac.cols >= 1) { #If species data had at least one categorical column, call it meta data
-      metaData1 <- as.data.frame(fac_data)
-    } else {
-      metaData1 <- "NA" #If species data had no categorical columns, meta data is NULL
-      #AddErrMsg("No groupings columns were detected. If this is a mistake, make sure that groupings columns use characters and not numbers. For example, instead ofgrouping data using 1, 2, and 3, use I, II and III.")
-      print("No groupings columns were detected! If this is a mistake, make sure that groupings columns use characters and not numbers. For example, instead of grouping data using 1, 2, and 3, use I, II and III.")
-    }
+  if (is.data.frame(metaData)==FALSE) { #No user uploaded meta data
+    metaData1 <- "NA" #If species data had no categorical columns, meta data is NULL
+    print("No grouping variables were uploaded!")  
   } else {  #User uploaded meta data
     metaData1 <- metaData #User uploaded like weights in correlation module
     if (nrow(metaData1)!=nrow(input)) {
-      #AddErrMsg("Your meta data does not have the same number of rows as your numerical data! Please check that you meta data is correct.")
+      #AddErrMsg("Your grouping data does not have the same number of rows as your numerical data! Please check that you grouping data is correct.")
       stop("Your grouping data does not have the same number of rows as your numerical data! Please check that you grouping data is correct.")
     }
     for(i in 1:ncol(metaData1)) {
@@ -177,7 +181,7 @@ ord.pcoa <- function(mSetObj=NA, data="false", distance="NULL", binary="false", 
   }
   
   #Fit variables to ordination plots for plotting arrows
-  var.fit <- envfit(pcoa, num_data1, permutations=999, p.max=NULL)
+  var.fit <- envfit(pcoa, data, permutations=999, p.max=NULL)
   
   #Store results in mSetObj$analSet$pcoa
   mSetObj$analSet$pcoa$name <- "PCOA"
@@ -198,12 +202,15 @@ ord.pcoa <- function(mSetObj=NA, data="false", distance="NULL", binary="false", 
   eigenValues_data <- cbind(eig_rownames, eigenValues_data)
   colnames(eigenValues_data) <- c("Dimension", "Eigen_Value", "Variance_Explained")
   
-  write.csv(eigenValues_data, file="pcoa_eigen_values.csv", row.names=FALSE)
-  write.csv(pcoa$points, file="pcoa_sample_scores.csv", row.names=row.names(input))
-  write.csv(var.fit$vectors$arrows, file="pcoa_variable_scores.csv", row.names=TRUE)
+  write.csv(eigenValues_data, file="pcoa_scree_data.csv", row.names=FALSE)
+  write.csv(pcoa$points[,1:2], file="pcoa_2D_sample_scores.csv", row.names=row.names(input))
+  write.csv(pcoa$points[,1:3], file="pcoa_3D_sample_scores.csv", row.names=row.names(input))
+  write.csv(var.fit$vectors$arrows, file="pcoa_2D_variable_scores.csv", row.names=TRUE)
   #write.csv(pcoa$x, file("pcoa_dissimilarity_matrix.csv", row.names=TRUE))
   if (is.data.frame(env_data)==TRUE) {
-    write.csv(env.scores, file="pcoa_constraining_data_scores.csv", row.names=TRUE)
+    write.csv(env.scores, file="pcoa_2D_constraining_variable_scores.csv", row.names=TRUE)
+  } else {
+    write.csv(NULL, file="pcoa_2D_constraining_variable_scores.csv", row.names=FALSE)
   }
 
   sink("column_impact_on_pcoa.txt") 
@@ -549,8 +556,8 @@ Plot.PCOA.scree <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA)
   mSetObj <- .get.mSet(mSetObj)
   eigenvalues <- mSetObj$analSet$pcoa$eigenvalues
 
-  pcvars <- eigenvalues[1:6]/sum(eigenvalues)
-  cumvars <- c(pcvars[1], pcvars[1]+pcvars[2], pcvars[1]+pcvars[2]+pcvars[3], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4]+pcvars[5], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4]+pcvars[5]+pcvars[6])
+  pcvars <- eigenvalues[1:8]/sum(eigenvalues)
+  cumvars <- c(pcvars[1], pcvars[1]+pcvars[2], pcvars[1]+pcvars[2]+pcvars[3], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4]+pcvars[5], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4]+pcvars[5]+pcvars[6], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4]+pcvars[5]+pcvars[6]+pcvars[7], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4]+pcvars[5]+pcvars[6]+pcvars[7]+pcvars[8])
 
   ylims <- range(c(pcvars,cumvars));
   extd<-(ylims[2]-ylims[1])/10
@@ -582,9 +589,10 @@ Plot.PCOA.scree <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA)
   text(cumvars, labels =paste(100*round(cumvars,3),'%'), adj=c(-0.3, -0.5), srt=45, xpd=T)
   points(cumvars, col='red');
   
-  abline(v=1:5, lty=3);
-  axis(2);
+  abline(v=1:8, lty=3);
   axis(1, 1:length(pcvars), 1:length(pcvars));
+  axis(2, las=2) #yaxis numbers upright for readability
+
   dev.off()
 }
 
@@ -630,7 +638,7 @@ Plot.PCOA.stress <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA
   #Stress plot
   Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
   par(xpd=FALSE, mar=c(5.1, 4.1, 4.1, 2.1)) #No plotting outside of plot limits, set margins to default
-  vegan::stressplot(pcoa, main="Principal Coordinate Analysis\nShepard Plot for Goodness of Fit", yaxt="n")
+  vegan::stressplot(pcoa, main="Principal Coordinate Analysis\nShepard Plot", yaxt="n")
   axis(2, las=2) #yaxis numbers upright for readability
   dev.off()
 }
@@ -655,7 +663,7 @@ pcoa.meta.columns <- function(mSetObj=NA) {
   mSetObj <- .get.mSet(mSetObj)
   
   metaData <- mSetObj$analSet$pcoa$metaData
-  if (metaData=="NA") {
+  if (is.data.frame(metaData)==FALSE) {
     name.all.meta.cols <- "No groupings"
   } else {
     name.all.meta.cols <- colnames(metaData)

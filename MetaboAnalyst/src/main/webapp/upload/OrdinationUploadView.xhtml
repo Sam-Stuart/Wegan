@@ -38,46 +38,55 @@
                         </p:selectOneMenu> 
                     </h:panelGrid>
                     <h:panelGrid></h:panelGrid>
-                    <h2 style="margin-top: 10px; margin-bottom: 4px">Supplemental data tables (optional): Plain text files (.csv or .txt)</h2>    
-                    <h:panelGrid>
-                        Including supplemental data tables will enable more interesting and informative plots for certain analyses.
-                        <b>Grouping data</b> assigns categories to each sample to group one or more samples together. 
-                        Grouping data can be included in the main data set or it can be uploaded as a separate data table.              
-                        <b>Constraining data</b> assigns external conditions to each sample. One common example is environmental data.
-                        Note that constraining data is required for Co-Inertia Analysis. 
+                    <h:panelGrid columns="2">
+                        <p:selectBooleanCheckbox value="#{Ordinationload.checkboxValue}">
+                            <f:ajax event="change" render="suppPanel"/>
+                        </p:selectBooleanCheckbox>
+                        <h:outputLabel style="font-size:16px; font-weight: bold" value="Supplemental data tables (optional): Plain text files (.csv or .txt)"/>
                     </h:panelGrid>
-                    <h:panelGrid columns="2" style="padding: 10px">
-                        <p:outputLabel style="font-size:14px; font-weight: bold" value="Grouping Data File:"/>
-                        <p:fileUpload value="#{Ordinationload.dataFileMeta}" mode="simple"/>
-                    </h:panelGrid>   
-                    <h:panelGrid columns="2" style="padding: 10px; margin-left: 40px">
-                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Format:"/>
-                        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:210px" value="#{Ordinationload.metaFormat}">
-                            <f:selectItems value="#{applicationBean1.metaFormatOpts}" />
-                        </p:selectOneMenu> 
-                    </h:panelGrid> 
-                    <h:panelGrid columns="2" style="padding: 10px; margin-left: 40px">
-                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Labels:"/>
-                        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:210px" value="#{Ordinationload.metaNames}">
-                            <f:selectItems value="#{applicationBean1.metaNamesOpts}" />
-                        </p:selectOneMenu> 
-                    </h:panelGrid>
-                    <h:panelGrid columns="2" style="padding: 10px">
-                        <p:outputLabel style="font-size:14px; font-weight: bold" value="Constraining Data File:"/>
-                        <p:fileUpload value="#{Ordinationload.dataFileEnv}" mode="simple"/>
-                    </h:panelGrid>
-                    <h:panelGrid columns="2" style="padding: 10px; margin-left: 40px">
-                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Format:"/>
-                        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:210px" value="#{Ordinationload.envFormat}">
-                            <f:selectItems value="#{applicationBean1.envFormatOpts}" />
-                        </p:selectOneMenu> 
-                    </h:panelGrid> 
-                    <h:panelGrid columns="2" style="padding: 10px; margin-left: 40px">
-                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Labels"/>
-                        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:210px" value="#{Ordinationload.envNames}">
-                            <f:selectItems value="#{applicationBean1.envNamesOpts}" />
-                        </p:selectOneMenu> 
-                    </h:panelGrid>
+
+                    <h:panelGroup id="suppPanel">
+                        <h:panelGroup rendered="#{Ordinationload.checkboxValue}">
+                        <h:panelGrid>
+                            Including supplemental data tables will enable more interesting and informative plots for certain analyses.
+                            <b>Grouping data</b> assigns categories to each sample to group one or more samples together. 
+                            <b>Constraining data</b> assigns external conditions to each sample. One common example is environmental data.
+                            Note that constraining data is required for Co-Inertia Analysis and Analysis of Similarities. 
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" style="padding: 10px">
+                            <p:outputLabel style="font-size:14px; font-weight: bold" value="Grouping Data File:"/>
+                            <p:fileUpload value="#{Ordinationload.dataFileMeta}" mode="simple"/>
+                        </h:panelGrid>   
+                        <h:panelGrid columns="2" style="padding: 10px; margin-left: 40px">
+                            <p:outputLabel style="font-size:12px; font-weight: bold" value="Format:"/>
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:210px" value="#{Ordinationload.metaFormat}">
+                                <f:selectItems value="#{applicationBean1.metaFormatOpts}" />
+                            </p:selectOneMenu> 
+                        </h:panelGrid> 
+                        <h:panelGrid columns="2" style="padding: 10px; margin-left: 40px">
+                            <p:outputLabel style="font-size:12px; font-weight: bold" value="Labels:"/>
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:210px" value="#{Ordinationload.metaNames}">
+                                <f:selectItems value="#{applicationBean1.metaNamesOpts}" />
+                            </p:selectOneMenu> 
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" style="padding: 10px">
+                            <p:outputLabel style="font-size:14px; font-weight: bold" value="Constraining Data File:"/>
+                            <p:fileUpload value="#{Ordinationload.dataFileEnv}" mode="simple"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" style="padding: 10px; margin-left: 40px">
+                            <p:outputLabel style="font-size:12px; font-weight: bold" value="Format:"/>
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:210px" value="#{Ordinationload.envFormat}">
+                                <f:selectItems value="#{applicationBean1.envFormatOpts}" />
+                            </p:selectOneMenu> 
+                        </h:panelGrid> 
+                        <h:panelGrid columns="2" style="padding: 10px; margin-left: 40px">
+                            <p:outputLabel style="font-size:12px; font-weight: bold" value="Labels"/>
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:210px" value="#{Ordinationload.envNames}">
+                                <f:selectItems value="#{applicationBean1.envNamesOpts}" />
+                            </p:selectOneMenu> 
+                        </h:panelGrid>
+                        </h:panelGroup>
+                    </h:panelGroup>
                     
                     <h:panelGrid style="padding: 10px; float:right">
                         <p:commandButton value="Submit" 
@@ -102,23 +111,23 @@
                     </p:selectOneRadio> 
                     <h:panelGrid columns="3" style="padding: 10px 30px 20px 10px;line-height: 21px; width:760px">
                         <p:radioButton for="customRadio" itemIndex="0"/>
-                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Dune"/>
+                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Dune   "/>
                         <h:panelGrid>
-                            Grass species counts in Dutch dune meadows. Data consists of 30 species (variables/columns) and 20 plots of land (samples/rows), where species are labeled, but land plots are not. (<a href="https://rdrr.io/cran/vegan/man/dune.html">ref.</a>)                                       
+                            Grass species counts in Dutch dune meadows. Data consists of 30 species (variables/columns) and 20 plots of land (samples/rows), where species are labeled, but land plots are not. (<a href="">view main data set</a>) (<a href="">view constraining data set</a>) (<a href="https://rdrr.io/cran/vegan/man/dune.html" target="_blank">Jongman, R. <i>et al. Data Analysis in Community and Landscape Ecology</i>. Pudoc, Wageningen. 1987.</a>)                                       
                         </h:panelGrid>
                     </h:panelGrid>
                     <h:panelGrid columns="3" style="padding: 10px 30px 20px 10px;line-height: 21px; width:760px">
                         <p:radioButton for="customRadio" itemIndex="1"/>
-                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Iris"/>
+                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Iris   "/>
                         <h:panelGrid>
-                            Iris flower measurements with species data. Data consists of 4 measurements (petal width, petal length, sepal width, sepal length) and species groupings (variables/columns) for 150 iris flowers (samples/rows). There are 50 flowers from each of 3 species of iris: Iris setosa, Iris versicolor, and Iris virginica. Variables are labeled, but iris flowers are not. (<a href="https://www.rdocumentation.org/packages/datasets/versions/3.6.2/topics/iris">ref.</a>)                                       
+                            Iris flower measurements with species data. Data consists of 4 measurements (petal width, petal length, sepal width, sepal length) and species groupings (variables/columns) for 150 iris flowers (samples/rows). There are 50 flowers from each of 3 species of iris: <i>Iris setosa</i>, <i>Iris versicolor</i>, and <i>Iris virginica</i>. Variables are labeled, but flowers are not. (<a href="">view main data set</a>) (<a href="">view grouping data set</a>) (<a href="https://www.rdocumentation.org/packages/datasets/versions/3.6.2/topics/iris" target="_blank">Becker, R. <i>et al. The New S Language</i>. 1988.</a>)                                           
                         </h:panelGrid>
                     </h:panelGrid>
                     <h:panelGrid columns="3" style="padding: 10px 30px 20px 10px;line-height: 21px; width:760px">
                         <p:radioButton for="customRadio" itemIndex="5"/>
-                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Pit latrine"/>
+                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Pit latrine   "/>
                         <h:panelGrid>
-                            Microbial species counts in pit latrines from Tanzania and Vietnam. Data was generated by metagenomic 16SrRNA sequencing of samples taken at different depths. Data consists of 52 species (variables/rows) and 81 depths (samples/columns). Both species and sampling depths are labeled. (<a href="https://sfamjournals.onlinelibrary.wiley.com/doi/10.1111/1751-7915.12334">ref.</a>)          
+                            Microbial species counts in pit latrines from Tanzania and Vietnam. Data was generated by metagenomic 16SrRNA sequencing of samples taken at different depths. Data consists of 52 species (variables/rows) and 81 depths (samples/columns). Both species and sampling depths are labeled. (<a href="">view main data set</a>) (<a href="">view grouping data set</a>) (<a href="">view constraining data set</a>) (<a href="https://sfamjournals.onlinelibrary.wiley.com/doi/10.1111/1751-7915.12334" target="_blank">Torondel, B. <i>et al. Microbial Biotechnology</i>. 2016.</a>)          
                         </h:panelGrid>  
                     </h:panelGrid>
 

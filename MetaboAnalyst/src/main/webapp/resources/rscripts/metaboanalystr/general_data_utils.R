@@ -499,7 +499,7 @@ Read.TextDataMeta <- function(mSetObj=NA, filePath, metaFormat="rowu", lbl.type=
     dat <- .readMetaDataTable(filePath, metaNames="noNames");
   }
 
-  if(class(dat) == "try-error" || ncol(dat) == 1){
+  if(class(dat) == "try-error" || ncol(dat) == 0){
     AddErrMsg("Data format error. Failed to read in the data!
                 /nMake sure the data table is saved in tab separated values (.txt) or comma separated values (.csv) format.
                 /nPlease also check the following:
@@ -538,7 +538,7 @@ Read.TextDataEnv <- function(mSetObj=NA, filePath, envFormat="rowu", lbl.type="d
     dat <- .readEnvDataTable(filePath, envNames="noNames");
   }
 
-  if(class(dat) == "try-error" || ncol(dat) == 1){
+  if(class(dat) == "try-error" || ncol(dat) == 0){
     AddErrMsg("Data format error. Failed to read in the data!
                 /nMake sure the data table is saved in tab separated values (.txt) or comma separated values (.csv) format.
                 /nPlease also check the following:

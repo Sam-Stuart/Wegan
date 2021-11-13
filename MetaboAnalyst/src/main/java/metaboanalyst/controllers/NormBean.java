@@ -239,12 +239,12 @@ public class NormBean implements Serializable {
 //            RDataUtils.AssupColumn(sb);
 //            ///LOUISA ADDED THIS END!!!!!!!!!!!!!!
 //            /LOUISA ADDED THIS START!!!!!!!!!!!!!!
-            RDataUtils.AssupColumn(sb);
-            RDataUtils.shapiroTest(sb, sb.getNewImage("Shapiro"), "png", 72, "false");
-            //RDataUtils.shapiroTestT(sb, sb.getNewImage("ShapiroT"), "png", 72, "false");
-            RDataUtils.leveneTest(sb, "NULL", sb.getNewImage("Levene"), "png", 72, "false");
-            RDataUtils.ResidualCal(sb, "NULL", "NULL");
-            RDataUtils.ResidualPlot(sb, sb.getNewImage("residFit"), "png", 72, "false");
+//            RDataUtils.AssupColumn(sb);
+//            RDataUtils.shapiroTest(sb, sb.getNewImage("Shapiro"), "png", 72, "false");
+//            //RDataUtils.shapiroTestT(sb, sb.getNewImage("ShapiroT"), "png", 72, "false");
+//            RDataUtils.leveneTest(sb, "NULL", sb.getNewImage("Levene"), "png", 72, "false");
+//            RDataUtils.ResidualCal(sb, "NULL", "NULL");
+//            RDataUtils.ResidualPlot(sb, sb.getNewImage("residFit"), "png", 72, "false");
           
             
             ///LOUISA ADDED THIS END!!!!!!!!!!!!!!

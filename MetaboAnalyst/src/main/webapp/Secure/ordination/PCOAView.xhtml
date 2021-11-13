@@ -86,17 +86,16 @@
                             <p:commandButton value="Customize Graph"
                                              styleClass="graphicsButton"
                                              style="box-shadow: none !important; text-shadow: none !important;"
-                                             actionListener="#{sessionBean1.graphicsLnk_action('pca_pair')}" 
+                                             actionListener="#{sessionBean1.graphicsLnk_action('ord_pcoa_2D')}" 
                                             oncomplete="PF('graphApperancePCOA').show()"/>  
-                
-                           
+                                           
                             <p:commandButton value="Update" 
                                              styleClass="updateButton"
                                              style="box-shadow: none !important; text-shadow: none !important"
                                             onclick="PF('statusDialog').show()"
                                             oncomplete="PF('statusDialog').hide()"  
                                             update=":PCOA:form1:pcoaPane1  :cmdPane" 
-                                            actionListener="#{ordPCOABean.pcoaUpdate_action()}"/>                          
+                                            actionListener="#{ordPCOABean.pcoa_2D_Update_action()}"/>                          
                         </h:panelGrid>
                         
                         <h:panelGrid class="resultsBar" columns="2">
@@ -173,7 +172,7 @@
                                             onclick="PF('statusDialog').show()"
                                             oncomplete="PF('statusDialog').hide()"  
                                             update=":PCOA:form2:pcoaPane2  :cmdPane" 
-                                            actionListener="#{ordPCOABean.pcoaUpdate_action()}"/>                           
+                                            actionListener="#{ordPCOABean.pcoa_3D_Update_action()}"/>                           
                         </h:panelGrid>
                         <h:panelGrid class="resultsBar" columns="2">
                             <h:panelGroup>
@@ -194,11 +193,11 @@
                                     <h:outputText escape="false" value="#{ordPCOABean.file3DSampleScoresPath}"/>
                                 </i>
                             </h:panelGrid>
-                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+<!--                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
                                 <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
                                     <h:outputText escape="false" value="#{ordPCOABean.file3DColScoresPath}"/>
                                 </i>    
-                            </h:panelGrid>
+                            </h:panelGrid>-->
                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
                                 <p:commandButton value="Export"
                                     styleClass="exportButton"
@@ -245,7 +244,7 @@
                                             onclick="PF('statusDialog').show()"
                                             oncomplete="PF('statusDialog').hide()"                                            
                                             update=":PCOA:form3:pcoaPane3  :cmdPane" 
-                                            actionListener="#{ordPCOABean.pcoaUpdate_action()}"/>                          
+                                            actionListener="#{ordPCOABean.pcoa_scree_Update_action()}"/>                          
                         </h:panelGrid>
                         <h:panelGrid class="resultsBar" columns="2">
                             <h:panelGroup>
@@ -312,7 +311,7 @@
                                             onclick="PF('statusDialog').show()"
                                             oncomplete="PF('statusDialog').hide()"  
                                             update=":PCOA:form4:pcoaPane4  :cmdPane" 
-                                            actionListener="#{ordPCOABean.pcoaUpdate_action()}"/>                          
+                                            actionListener="#{ordPCOABean.pcoa_stress_Update_action()}"/>                          
                         </h:panelGrid>
                         <h:panelGrid class="resultsBar" columns="2">
                             <h:panelGroup>
@@ -351,13 +350,13 @@
             draggable="false" closable="true" resizable="false"> 
             <ui:include src="_color_palette_pcoa.xhtml" />
         </p:dialog>
-        <script type="text/javascript">
+<!--        <script type="text/javascript">
             showPCOA3DScore();
             $("[id='ac:chart']").bind('jqplotDataClick',
                     function (ev, seriesIndex, pointIndex, data) {
                         //note, we use the internal index, not point index 
                         remoteCall([{name: 'cmpdIndex', value: data[0]}]);
                     });
-        </script>
+        </script>-->
     </ui:define>
 </ui:composition>
