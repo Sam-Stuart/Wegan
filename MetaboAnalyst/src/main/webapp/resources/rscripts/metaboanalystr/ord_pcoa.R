@@ -287,7 +287,8 @@ Plot.PCOA.2D <- function(mSetObj=NA, ellipse="false", var_arrows="false", env_ar
 
   library("vegan")
   library("viridis") 
-  
+  library("dplyr") 
+
   #Extract necessary objects from mSetObj
   mSetObj <- .get.mSet(mSetObj)
   pcoa <- mSetObj$analSet$pcoa$pcoa
@@ -330,20 +331,23 @@ Plot.PCOA.2D <- function(mSetObj=NA, ellipse="false", var_arrows="false", env_ar
     
     #variable arrow options
     if (var_arrows!="false") { #If variable arrows selected
-        if (color=="plasma") {
-            plot(var.fit, col="black")
-        } else {
-            plot(var.fit, col="darkred") 
-        }
+        plot(var.fit, col="darkred") 
+        
     }
     
     if (is.data.frame(env_data)==TRUE) { #If environment data uploaded
       if (env_arrows!="false") { #If environment arrows selected
-        plot(env.fit.num, col="blue", lwd=2)
+        num_env_data <- select_if(env_data, is.numeric)
+        if (!is.null(num_env_data)){
+            plot(env.fit.num, col="blue", lwd=2)
+        }
       }
       
       if (env_cent!="false") { #If environment constraints selected
-        plot(env.fit.char, col="blue", lwd=2)
+        fac_env_data <- select_if(env_data, is.character)
+        if (!is.null(fac_env_data)){
+            plot(env.fit.char, col="blue", lwd=2)
+        }
       }
     }
     
@@ -388,16 +392,6 @@ Plot.PCOA.2D <- function(mSetObj=NA, ellipse="false", var_arrows="false", env_ar
       plot(var.fit, col="darkred", lwd=2)
     }
     
-    if (is.data.frame(env_data)==TRUE) { #If environment data uploaded
-      if (env_arrows!="false") { #If environment arrows selected
-        plot(env.fit.num, col="blue", lwd=2)
-      }
-      
-      if (env_cent!="false") { #If environment constraints selected
-        plot(env.fit.char, col="blue", lwd=2)
-      }
-    }
-    
     #Ellipse option
     if (ellipse!="false") { #if ellipses selected
       with(metaData, ordiellipse(pcoa, meta_col_color_data, kind="sd", draw="polygon", border=colors, lwd=2)) # Include standard deviation ellipses that are the same color as the text.
@@ -405,6 +399,23 @@ Plot.PCOA.2D <- function(mSetObj=NA, ellipse="false", var_arrows="false", env_ar
     
     #Legend
     with(metaData, legend("topright", legend=levels(meta_col_color_data), col=colors, pch=19, title=meta_col_color_name)) # Include legend for colors in figure   
+    
+    #Env arrows and centroids
+    if (is.data.frame(env_data)==TRUE) { #If environment data uploaded
+      if (env_arrows!="false") { #If environment arrows selected
+        num_env_data <- select_if(env_data, is.numeric)
+        if (ncol(num_env_data)!=0){
+            plot(env.fit.num, col="blue", lwd=2)
+        } 
+      }
+      
+      if (env_cent!="false") { #If environment constraints selected
+        fac_env_data <- select_if(env_data, is.character)
+        if (ncol(fac_env_data)!=0){
+            plot(env.fit.char, col="blue", lwd=2)
+        }
+      }
+    }
   }
   
   dev.off()
