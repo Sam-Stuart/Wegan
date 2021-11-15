@@ -161,4 +161,27 @@ public class OABean implements Serializable {
         OAUtils.PlotDCAScree(sb, sb.getCurrentImage("ord_dca_scree"), "png", 72);
     }
     
+        
+    private String envDataAvailable = envDataUploaded();
+
+    public String getEnvDataAvailable() {
+        System.out.println("START OF getEnvDataAvaiable");
+        return envDataAvailable;
+    }
+
+    public void setEnvDataAvailable(String envDataAvailable) {
+        this.envDataAvailable = envDataAvailable;
+    }  
+    
+    
+    
+    public String envDataUploaded(){
+        if(OAUtils.getEnvDataAvailable(sb)=="TRUE"){
+            envDataAvailable = "TRUE";
+        }else{
+            envDataAvailable = "FALSE";
+        }
+        return envDataAvailable;
+    }
+    
 }

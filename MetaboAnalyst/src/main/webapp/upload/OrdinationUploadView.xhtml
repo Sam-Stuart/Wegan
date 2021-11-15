@@ -113,7 +113,7 @@
                         <p:radioButton for="customRadio" itemIndex="0"/>
                         <p:outputLabel style="font-size:12px; font-weight: bold" value="Dune   "/>
                         <h:panelGrid>
-                            Grass species counts in Dutch dune meadows. Data consists of 30 species (variables/columns) and 20 plots of land (samples/rows), where species are labeled, but land plots are not. (<a href="">view main data set</a>) (<a href="">view constraining data set</a>) (<a href="https://rdrr.io/cran/vegan/man/dune.html" target="_blank">Jongman, R. <i>et al. Data Analysis in Community and Landscape Ecology</i>. Pudoc, Wageningen. 1987.</a>)                                       
+                            Grass species counts in Dutch dune meadows. Data consists of 30 species (variables/columns) and 20 plots of land (samples/rows), where species are labeled, but land plots are not. (<a class="image-link" href="https://cdn.shopify.com/s/files/1/2018/8867/files/matteo-paganelli-39971_530x.jpg">view main data set</a>) (<a href="">view constraining data set</a>) (<a href="https://rdrr.io/cran/vegan/man/dune.html" target="_blank">Jongman, R. <i>et al. Data Analysis in Community and Landscape Ecology</i>. Pudoc, Wageningen. 1987.</a>)                                       
                         </h:panelGrid>
                     </h:panelGrid>
                     <h:panelGrid columns="3" style="padding: 10px 30px 20px 10px;line-height: 21px; width:760px">
@@ -154,7 +154,13 @@
                 </h:panelGrid>
             </h:panelGrid>
         </h:form>
+        <script type="text/javascript">
+        $(document).ready(function() {
+        $('.image-link').magnificPopup({type:'image'});
+        });
+        </script>
     </ui:define>
 </ui:composition>
+
 
 

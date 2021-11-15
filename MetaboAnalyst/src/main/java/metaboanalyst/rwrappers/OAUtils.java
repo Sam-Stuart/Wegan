@@ -672,8 +672,11 @@ public class OAUtils {
         
         
     
-    public static String getEnvDataAvailable(RConnection RC){
+
+    public static String getEnvDataAvailable(SessionBean1 sb){
+        System.out.println("START OF getEnvDataAvaiable Utils");
         try {
+            RConnection RC = sb.getRConnection();
             String rCommand = "GetEnvDataAvailable(NA)";
             RCenter.recordRCommand(RC, rCommand);
             return RC.eval(rCommand).asString();
@@ -684,6 +687,5 @@ public class OAUtils {
         }
         return null;
     }
-
 }
 

@@ -1056,26 +1056,7 @@ public class SessionBean1 implements Serializable {
         }
     }
     
-    
-    private String envDataAvailable = "FALSE";
 
-    public String getEnvDataAvailable() {
-        return envDataAvailable;
-    }
-
-    public void setEnvDataAvailable(String envDataAvailable) {
-        this.envDataAvailable = envDataAvailable;
-    }  
-    
-    
-    public String envDataUploaded(){
-        if(OAUtils.getEnvDataAvailable(RC)=="TRUE"){
-            envDataAvailable = "TRUE";
-        }else{
-            envDataAvailable = "FALSE";
-        }
-        return envDataAvailable;
-    }
     
     
     

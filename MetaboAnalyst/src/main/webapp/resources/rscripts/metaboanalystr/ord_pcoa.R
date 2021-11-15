@@ -32,8 +32,6 @@ ord.pcoa <- function(mSetObj=NA, data="false", distance="NULL", binary="false", 
   }
   
   metaData <- mSetObj$dataSet$origMeta
-  print("metaData")
-  print(metaData)
   envData <- mSetObj$dataSet$origEnv
 
   #Obtain categorical data for making dummy variables
@@ -55,15 +53,15 @@ ord.pcoa <- function(mSetObj=NA, data="false", distance="NULL", binary="false", 
     num_data1 <- decostand(num_data, method="total") #Alternative option is relative abundance, each value is divided by the column sum
   }
   
+  #Combine numeric data and dummy variables
+  data <- cbind(num_data1, fac_data1) 
+ 
   #Set distance measure for creation of dissimilarity matrix
   if (distance=="NULL") {
     distance1 <- "bray" #Default distance
   } else {
     distance1 <- distance #USer selected from list "bray", "manhattan", "canberra", "kulczynski", "jaccard", "gower", "altGower", "morisita", "horn", "mountford", "raup" , "binomial", "chao", "cao", "mahalanobis"
   } 
-  
-  #Combine numeric data and dummy variables
-  data <- cbind(num_data1, fac_data1)
 
   #Generate dissimilarity matrix
   if (binary=="false") {
@@ -320,7 +318,7 @@ Plot.PCOA.2D <- function(mSetObj=NA, ellipse="false", var_arrows="false", env_ar
   axis(2, las=2)
   
   #Plot with and without ellipses/sample labels/metadata options/variable arrows/env data arrows
-  if (is.data.frame(metaData)==FALSE) { #If no meta data
+  if (is.data.frame(metaData)==FALSE || meta_col_color=="No groupings") { #If no meta data
 
     #point options
     if (sampleNames!="false") { #If display data as lables
@@ -331,10 +329,10 @@ Plot.PCOA.2D <- function(mSetObj=NA, ellipse="false", var_arrows="false", env_ar
     
     #variable arrow options
     if (var_arrows!="false") { #If variable arrows selected
-        plot(var.fit, col="darkred") 
-        
+        plot(var.fit, col="darkred")        
     }
     
+    #Env data options
     if (is.data.frame(env_data)==TRUE) { #If environment data uploaded
       if (env_arrows!="false") { #If environment arrows selected
         num_env_data <- select_if(env_data, is.numeric)
@@ -358,10 +356,10 @@ Plot.PCOA.2D <- function(mSetObj=NA, ellipse="false", var_arrows="false", env_ar
       meta_col_color_data <- as.factor(metaData[,1]) #Default meta data column for labeling with color is the first
       meta_col_color_name <- colnames(metaData)[1]
     } else {
-      meta_col_color_data <- as.factor(metaData[,meta_col_color]) #User imputted meta data column for labeling with colors, options given to java using function meta.columns() below
+      meta_col_color_data <- as.factor(metaData[,meta_col_color]) #User inputted meta data column for labeling with colors, options given to java using function meta.columns() below
       meta_col_color_name <- meta_col_color
     }
-    
+
     #Color options
     n <- length(levels(meta_col_color_data)) #Determine how many different colors are needed based on the levels of the meta data
     if (color=="NULL") {
@@ -370,17 +368,10 @@ Plot.PCOA.2D <- function(mSetObj=NA, ellipse="false", var_arrows="false", env_ar
       colors <- plasma(n+1)#Assign a color to each level using the plasma pallete (viridis package)
     } else if (color=="grey") {
       colors <- grey.colors(n, start=0.1, end=0.75) #Assign a grey color to each level (grDevices package- automatically installed)
-    } else { 
-      color <- "none"
-    }
+    } 
     
-    #Assign colors to points
-    if (color=="none") {
-      cols <- "black" #color none means black points
-    } else {
-      cols <- colors[meta_col_color_data] #Color pallete applied for groupings of user's choice
-    }
-    
+    #Points options
+    cols <- colors[meta_col_color_data] #Color palette applied for groupings of user's choice
     if (sampleNames!="false") { #If display data as lables
       with(metaData, text(pcoa$points, col=cols, bg=cols)) # Text for samples
     } else { #display data as points
@@ -569,11 +560,6 @@ Plot.PCOA.scree <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA)
 
   pcvars <- eigenvalues[1:8]/sum(eigenvalues)
   cumvars <- c(pcvars[1], pcvars[1]+pcvars[2], pcvars[1]+pcvars[2]+pcvars[3], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4]+pcvars[5], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4]+pcvars[5]+pcvars[6], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4]+pcvars[5]+pcvars[6]+pcvars[7], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4]+pcvars[5]+pcvars[6]+pcvars[7]+pcvars[8])
-
-  ylims <- range(c(pcvars,cumvars));
-  extd<-(ylims[2]-ylims[1])/10
-  miny<- ifelse(ylims[1]-extd>0, ylims[1]-extd, 0);
-  maxy<- ifelse(ylims[2]+extd>1, 1.0, ylims[2]+extd);
   
   #Set plot dimensions
   if(is.na(width)){
@@ -592,7 +578,7 @@ Plot.PCOA.scree <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA)
   #Scree plot
   Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
   par(mar=c(5,5,6,3));
-  plot(pcvars, type='l', col='blue', main="Principal Coordinate Analysis \nScree Plot", xlab='Number of Dimensions', ylab='Variance Explained', ylim=c(miny, maxy), axes=F)
+  plot(pcvars, type='l', col='blue', main="Principal Coordinate Analysis \nScree Plot", xlab='Number of Dimensions', ylab='Variance Explained', ylim=c(0,1), axes=F)
   text(pcvars, labels =paste(100*round(pcvars,3),'%'), adj=c(-0.3, -0.5), srt=45, xpd=T)
   points(pcvars, col='red');
   
@@ -677,7 +663,7 @@ pcoa.meta.columns <- function(mSetObj=NA) {
   if (is.data.frame(metaData)==FALSE) {
     name.all.meta.cols <- "No groupings"
   } else {
-    name.all.meta.cols <- colnames(metaData)
+    name.all.meta.cols <- c(colnames(metaData), "No groupings")
   }
   return(name.all.meta.cols)
   
