@@ -15,21 +15,19 @@
             <p:tabView id="rarefaction">
                 <p:tab title ="Rarefaction Curve Plot" titleStyleClass="p-tab-nav">
                     <h:form id="form1">
-                        <h:panelGrid id="panelGrid" columns="6" cellpadding="3" >
+                        <h:panelGrid id="panelGrid" columns="4" cellpadding="3" columnClasses="colFront, colLeft, colRight">
                             <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
-                            <p:selectBooleanCheckbox value ="#{rarefactionBean.doOriginal}"/> 
-                            <h:outputLabel style="font-weight: bold" value="Select samples size:"/>
+                            <p:selectBooleanCheckbox value ="#{rarefactionBean.doOriginal}"/>                     
+                            <h:outputLabel style="font-weight: bold" value="Fill in subsample size for rarefying community:"/>
                             <p:inputText value = "#{rarefactionBean.sample}"/>
-                            <h:outputLabel style="font-weight: bold" value="Rarefaction Type:"/>
+                            <h:outputLabel style="font-weight: bold" value="Return Standard Error:"/>
+                            
+                            
+                            <p:selectBooleanCheckbox value ="#{rarefactionBean.doSe}"/> 
+                            <h:outputLabel style="font-weight: bold" value="Select returned rarefied value:"/>
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{rarefactionBean.typechosen}">
                                 <f:selectItems value="#{rarefactionBean.type}"/>
                             </p:selectOneMenu> 
-                            <h:outputLabel style="font-weight: bold" value="Margin (select row or column):"/>
-                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{rarefactionBean.marginchosen}">
-                                <f:selectItems value="#{rarefactionBean.margin}"/>
-                            </p:selectOneMenu> 
-                            <h:outputLabel style="font-weight: bold" value="Return Standard Error:"/>
-                            <p:selectBooleanCheckbox value ="#{rarefactionBean.doSe}"/> 
                         </h:panelGrid>  
                         <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
                             <p:commandButton value="Update" 
@@ -80,21 +78,17 @@
                 
                 <p:tab title ="Rarefaction Scatter Plot" titleStyleClass="p-tab-nav">
                     <h:form id="form2">
-                        <h:panelGrid id="panelGrid" columns="6" cellpadding="3" >
+                        <h:panelGrid id="panelGrid" columns="4" cellpadding="3" columnClasses="colFront, colLeft, colRight">
                             <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
                             <p:selectBooleanCheckbox value ="#{rarefactionBean.doOriginal}"/> 
-                            <h:outputLabel style="font-weight: bold" value="Select samples size:"/>
+                            <h:outputLabel style="font-weight: bold" value="Fill in subsample value or vector for rarefying community:"/>
                             <p:inputText value = "#{rarefactionBean.sample}"/>
-                            <h:outputLabel style="font-weight: bold" value="Rarefaction Type:"/>
+                            <h:outputLabel style="font-weight: bold" value="Return Standard Error:"/>
+                            <p:selectBooleanCheckbox value ="#{rarefactionBean.doSe}"/>   
+                            <h:outputLabel style="font-weight: bold" value="Select returned rarefied value:"/>
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{rarefactionBean.typechosen}">
                                 <f:selectItems value="#{rarefactionBean.type}"/>
                             </p:selectOneMenu> 
-                            <h:outputLabel style="font-weight: bold" value="Margin (select row or column):"/>
-                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{rarefactionBean.marginchosen}">
-                                <f:selectItems value="#{rarefactionBean.margin}"/>
-                            </p:selectOneMenu> 
-                            <h:outputLabel style="font-weight: bold" value="Return Standard Error:"/>
-                            <p:selectBooleanCheckbox value ="#{rarefactionBean.doSe}"/>     
                         </h:panelGrid>  
                         <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
                             <p:commandButton value="Update" 

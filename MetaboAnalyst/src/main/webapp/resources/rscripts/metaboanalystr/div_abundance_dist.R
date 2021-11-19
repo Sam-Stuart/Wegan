@@ -1,16 +1,88 @@
-#'Perform species abundance distribution
+#'Perform Fisher species abundance distribution
 #'@description Perform rarefaction technique 
 #'@param mSetObj Input name of the created mSet Object
 #'@param data Boolean for which data set to use, normalized (default) or original
-#'@param community Input for abundance model, textbox with default as the whole dataset, or a row number (each row should represent a plot/site/sample unit)
+#'@param communityFisher Input for abundance model, textbox with default as the whole dataset, or a row number (each row should represent a plot/site/sample unit)
+#'@author Shiyang Zhao\email{shiyang1@ualberta.ca}
+#'University of Alberta, Canada
+#'License: GNU GPL (>= 2) ######
+#'@export
+
+AbundanceFisherModel <- function(mSetObj = NA, data = "false", communityFisher = ""){
+  print("start model")
+  options(errors = traceback)                          
+  #library("ade4")
+  #library("adegraphics")
+  #library("plyr")
+  #library("dplyr")
+  library("vegan")
+
+  mSetObj <- .get.mSet(mSetObj)
+  
+  print("setup normal")
+  if (data == "false") { #normalized data as input
+    input <- mSetObj$dataSet$norm
+  } else { #original data as input
+    input <- mSetObj$dataSet$orig
+  }
+
+  input.2 <- select_if(input, is.numeric)
+  print(input.2)  
+
+  if(communityFisher == "") {
+    input.c <- input.2
+  } else {
+    community1 <- as.numeric(communityFisher)
+    input.c <- input.2[community1, ]
+  }
+  #print(input.c)
+
+
+  #mod.radfit_all <- radfit(input.2)
+
+  #print(community1)  
+
+  output.fisher <- fisherfit(input.c)
+
+  mSetObj$analset$result$fisher$name <- "Species Abundance Model"
+  mSetObj$analset$result$fisher$type <- "Fisher's logseries"
+  mSetObj$analset$result$fisher$estimate <- output.fisher$estimate
+  mSetObj$analset$result$fisher$No.of.species <- sum(output.fisher$fisher)
+  mSetObj$analset$result$fisher$freq <- output.fisher$fisher
+  mSetObj$analset$result$fisher$freq <- as.list.data.frame(output.fisher$fisher)
+  mSetObj$analset$result$fisher$freq <- as.data.frame(mSetObj$analset$result$fisher$freq)
+  colnames(mSetObj$analset$result$fisher$freq) <- c("freq")
+  freq.row <- rownames(mSetObj$analset$result$fisher$freq)
+  mSetObj$analset$result$fisher$freq <- cbind(freq.row, mSetObj$analset$result$fisher$freq)
+  mSetObj$analset$result$fisher$freq.row <- as.numeric(mSetObj$analset$result$fisher$freq.row)
+  mSetObj$analset$result$fisher$n <- nrow(mSetObj$analset$result$fisher$freq)
+  mSetObj$analset$result$fisher$output <- output.fisher
+  mSetObj$analset$result$fisher$com.result <- rbind(mSetObj$analset$result$fisher$name, 
+                                                    mSetObj$analset$result$fisher$type,
+                                                    mSetObj$analset$result$fisher$estimate,
+                                                    mSetObj$analset$result$fisher$No.of.species)
+  rownames(mSetObj$analset$result$fisher$com.result) <- c("Analysis", "Model Type", "Fisher_alpha Estimate", "No. of Sp.")
+   
+  write.csv(mSetObj$analset$result$fisher$freq, "Fisher frequency table.csv")
+  write.csv(mSetObj$analset$result$fisher$com.result, "Fisher log series model output.csv")
+  
+  return(.set.mSet(mSetObj)) 
+}
+
+
+
+#'Perform Preston species abundance distribution
+#'@description Perform rarefaction technique 
+#'@param mSetObj Input name of the created mSet Object
+#'@param data Boolean for which data set to use, normalized (default) or original
+#'@param communityPres Input for abundance model, textbox with default as the whole dataset, or a row number (each row should represent a plot/site/sample unit)
 #'@param tiesplit Boolean for split frequencies, drop down options are "TRUE" or "FALSE" (default)
 #'@param truncate Boolean for truncation point for log-Normal model, in log2 units, default value is -1
 #'@author Shiyang Zhao\email{shiyang1@ualberta.ca}
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2) ######
 #'@export
-
-AbundanceModel <- function(mSetObj = NA, data = "false", community = "", tiesplit = "false", truncate = ""){
+AbundancePrestonModel <- function(mSetObj = NA, data = "false", communityPres = "", tiesplit = "false", truncate = ""){
   print("start model")
   options(errors = traceback)                          
   #library("ade4")
@@ -38,10 +110,10 @@ AbundanceModel <- function(mSetObj = NA, data = "false", community = "", tiespli
   }
   print(tiesplit1)  
 
-  if(community == "") {
+  if(communityPres == "") {
     input.c <- input.2
   } else {
-    community1 <- as.numeric(community)
+    community1 <- as.numeric(communityPres)
     input.c <- input.2[community1, ]
   }
   #print(input.c)
@@ -53,6 +125,98 @@ AbundanceModel <- function(mSetObj = NA, data = "false", community = "", tiespli
   }
   truncate1 <- as.numeric(truncate1)
   print(truncate1)  
+
+  #mod.radfit_all <- radfit(input.2)
+  
+  
+  output.fit <- prestonfit(input.c, tiesplit = tiesplit1)
+  output.distr <- prestondistr(input.c, truncate = truncate1)
+  output.ve.fit <- veiledspec(output.fit)
+  output.ve.distr <- veiledspec(output.distr)
+  #print(AIC(output.fisher))
+  #print(AIC(output.fit))
+  #print(AIC(output.distr))
+  #print(BIC(output.fisher))
+  #print(BIC(output.fit))
+  #print(BIC(output.distr))
+
+  #mSetObj$analset$result$mod.radfit <- mod.radfit
+  #mSetObj$analset$result$mod.radfit_all <- mod.radfit_all
+  
+
+  mSetObj$analset$result$lognormal_fit$name <- "Species Abundance Model"
+  mSetObj$analset$result$lognormal_fit$type <- "Poisson fit to octaves"
+  mSetObj$analset$result$lognormal_fit$fitted <- output.fit$fitted
+  mSetObj$analset$result$lognormal_fit$freq <- output.fit$freq
+  mSetObj$analset$result$lognormal_fit$coefficients <- output.fit$coefficients
+  mSetObj$analset$result$lognormal_fit$output <- output.fit
+  mSetObj$analset$result$lognormal_fit$output.r <- output.ve.fit
+  mSetObj$analset$result$lognormal_fit$frequencies <- cbind(mSetObj$analset$result$lognormal_fit$freq,
+                                                            mSetObj$analset$result$lognormal_fit$fitted)
+  colnames(mSetObj$analset$result$lognormal_fit$frequencies) <- c("Observed", "Fitted")
+  mSetObj$analset$result$lognormal_fit$coeffi <- as.data.frame(mSetObj$analset$result$lognormal_fit$coefficients)
+  colnames(mSetObj$analset$result$lognormal_fit$coeffi) <- c("Coefficients")
+  mSetObj$analset$result$lognormal_fit$output.r <- as.data.frame(mSetObj$analset$result$lognormal_fit$output.r)
+  colnames(mSetObj$analset$result$lognormal_fit$output.r) <- c("Richness")
+  
+  
+  mSetObj$analset$result$log_likelihood$name <- "Species Abundance Model"
+  mSetObj$analset$result$log_likelihood$type <- "Maximization of log-likelihood"
+  mSetObj$analset$result$log_likelihood$fitted <- output.distr$fitted
+  mSetObj$analset$result$log_likelihood$freq <- output.distr$freq
+  mSetObj$analset$result$log_likelihood$coefficients <- output.distr$coefficients
+  mSetObj$analset$result$log_likelihood$output <- output.distr
+  mSetObj$analset$result$log_likelihood$output.r <- output.ve.distr
+  mSetObj$analset$result$log_likelihood$frequencies <- cbind(mSetObj$analset$result$log_likelihood$freq,
+                                                            mSetObj$analset$result$log_likelihood$fitted)
+  colnames(mSetObj$analset$result$log_likelihood$frequencies) <- c("Observed", "Fitted")
+  mSetObj$analset$result$log_likelihood$coeffi <- as.data.frame(mSetObj$analset$result$log_likelihood$coefficients)
+  colnames(mSetObj$analset$result$log_likelihood$coeffi) <- c("Coefficients")
+  mSetObj$analset$result$log_likelihood$output.r <- as.data.frame(mSetObj$analset$result$log_likelihood$output.r)
+  colnames(mSetObj$analset$result$log_likelihood$output.r) <- c("Richness")
+  
+
+  write.csv(mSetObj$analset$result$lognormal_fit$coeffi, "Poisson coefficients.csv")
+  write.csv(mSetObj$analset$result$lognormal_fit$frequencies, "Poisson frequencies by Octave.csv")
+  write.csv(mSetObj$analset$result$lognormal_fit$output.r, "Poisson_Total extrapolated richness.csv")
+  write.csv(mSetObj$analset$result$log_likelihood$coeffi, "Max_likelihood coefficients.csv")
+  write.csv(mSetObj$analset$result$log_likelihood$frequencies, "Max_likelihood frequencies by Octave.csv")
+  write.csv(mSetObj$analset$result$log_likelihood$output.r, "Max_likelihood_Total extrapolated richness.csv")
+   
+  return(.set.mSet(mSetObj)) 
+}
+
+
+
+#'Perform rank species abundance distribution
+#'@description Perform rarefaction technique 
+#'@param mSetObj Input name of the created mSet Object
+#'@param data Boolean for which data set to use, normalized (default) or original
+#'@param communityRank Input for abundance model, textbox with default as the whole dataset, or a row number (each row should represent a plot/site/sample unit)
+#'@author Shiyang Zhao\email{shiyang1@ualberta.ca}
+#'University of Alberta, Canada
+#'License: GNU GPL (>= 2) ######
+#'@export
+AbundanceRankModel <- function(mSetObj = NA, data = "false", communityRank = ""){
+  print("start model")
+  options(errors = traceback)                          
+  #library("ade4")
+  #library("adegraphics")
+  #library("plyr")
+  #library("dplyr")
+  library("vegan")
+
+  mSetObj <- .get.mSet(mSetObj)
+  
+  print("setup normal")
+  if (data == "false") { #normalized data as input
+    input <- mSetObj$dataSet$norm
+  } else { #original data as input
+    input <- mSetObj$dataSet$orig
+  }
+
+  input.2 <- select_if(input, is.numeric)
+  print(input.2)  
 
   mod.radfit_all <- radfit(input.2)
   
@@ -175,7 +339,7 @@ AbundanceModel <- function(mSetObj = NA, data = "false", community = "", tiespli
   colnames(man.data.set) <- c("Deviance", "AIC", "Beta", "Gamma")
   print(man.data.set)  
 
-  if (community == "") {
+  if (communityRank == "") {
     mod.radfit <- radfit(input.2[1,])
     mod.null <- rad.null(input.2[1,])
     mod.pree <- rad.preempt(input.2[1,])
@@ -183,7 +347,7 @@ AbundanceModel <- function(mSetObj = NA, data = "false", community = "", tiespli
     mod.zipf <- rad.zipf(input.2[1,])
     mod.man <- rad.zipfbrot(input.2[1,])
   } else {
-    community1 <- as.numeric(community)
+    community1 <- as.numeric(communityRank)
     input.c <- input.2[community1, ]
     mod.radfit <- radfit(input.c)
     mod.null <- rad.null(input.c)
@@ -192,19 +356,7 @@ AbundanceModel <- function(mSetObj = NA, data = "false", community = "", tiespli
     mod.zipf <- rad.zipf(input.c)
     mod.man <- rad.zipfbrot(input.c)
   }
-  print(community)  
-
-  output.fisher <- fisherfit(input.c)
-  output.fit <- prestonfit(input.c, tiesplit = tiesplit1)
-  output.distr <- prestondistr(input.c, truncate = truncate1)
-  output.ve.fit <- veiledspec(output.fit)
-  output.ve.distr <- veiledspec(output.distr)
-  #print(AIC(output.fisher))
-  #print(AIC(output.fit))
-  #print(AIC(output.distr))
-  #print(BIC(output.fisher))
-  #print(BIC(output.fit))
-  #print(BIC(output.distr))
+  #print(community)  
 
   mSetObj$analset$result$mod.radfit <- mod.radfit
   mSetObj$analset$result$mod.radfit_all <- mod.radfit_all
@@ -218,67 +370,8 @@ AbundanceModel <- function(mSetObj = NA, data = "false", community = "", tiespli
   mSetObj$analset$result$log.data.set <- log.data.set
   mSetObj$analset$result$zipf.data.set <- zipf.data.set
   mSetObj$analset$result$man.data.set <- man.data.set
-
-  mSetObj$analset$result$fisher$name <- "Species Abundance Model"
-  mSetObj$analset$result$fisher$type <- "Fisher's logseries"
-  mSetObj$analset$result$fisher$estimate <- output.fisher$estimate
-  mSetObj$analset$result$fisher$No.of.species <- sum(output.fisher$fisher)
-  mSetObj$analset$result$fisher$freq <- output.fisher$fisher
-  mSetObj$analset$result$fisher$freq <- as.list.data.frame(output.fisher$fisher)
-  mSetObj$analset$result$fisher$freq <- as.data.frame(mSetObj$analset$result$fisher$freq)
-  colnames(mSetObj$analset$result$fisher$freq) <- c("freq")
-  freq.row <- rownames(mSetObj$analset$result$fisher$freq)
-  mSetObj$analset$result$fisher$freq <- cbind(freq.row, mSetObj$analset$result$fisher$freq)
-  mSetObj$analset$result$fisher$freq.row <- as.numeric(mSetObj$analset$result$fisher$freq.row)
-  mSetObj$analset$result$fisher$n <- nrow(mSetObj$analset$result$fisher$freq)
-  mSetObj$analset$result$fisher$output <- output.fisher
-  mSetObj$analset$result$fisher$com.result <- rbind(mSetObj$analset$result$fisher$name, 
-                                                    mSetObj$analset$result$fisher$type,
-                                                    mSetObj$analset$result$fisher$estimate,
-                                                    mSetObj$analset$result$fisher$No.of.species)
-  rownames(mSetObj$analset$result$fisher$com.result) <- c("Analysis", "Model Type", "Fisher_alpha Estimate", "No. of Sp.")
   
 
-  mSetObj$analset$result$lognormal_fit$name <- "Species Abundance Model"
-  mSetObj$analset$result$lognormal_fit$type <- "Poisson fit to octaves"
-  mSetObj$analset$result$lognormal_fit$fitted <- output.fit$fitted
-  mSetObj$analset$result$lognormal_fit$freq <- output.fit$freq
-  mSetObj$analset$result$lognormal_fit$coefficients <- output.fit$coefficients
-  mSetObj$analset$result$lognormal_fit$output <- output.fit
-  mSetObj$analset$result$lognormal_fit$output.r <- output.ve.fit
-  mSetObj$analset$result$lognormal_fit$frequencies <- cbind(mSetObj$analset$result$lognormal_fit$freq,
-                                                            mSetObj$analset$result$lognormal_fit$fitted)
-  colnames(mSetObj$analset$result$lognormal_fit$frequencies) <- c("Observed", "Fitted")
-  mSetObj$analset$result$lognormal_fit$coeffi <- as.data.frame(mSetObj$analset$result$lognormal_fit$coefficients)
-  colnames(mSetObj$analset$result$lognormal_fit$coeffi) <- c("Coefficients")
-  mSetObj$analset$result$lognormal_fit$output.r <- as.data.frame(mSetObj$analset$result$lognormal_fit$output.r)
-  colnames(mSetObj$analset$result$lognormal_fit$output.r) <- c("Richness")
-  
-  
-  mSetObj$analset$result$log_likelihood$name <- "Species Abundance Model"
-  mSetObj$analset$result$log_likelihood$type <- "Maximization of log-likelihood"
-  mSetObj$analset$result$log_likelihood$fitted <- output.distr$fitted
-  mSetObj$analset$result$log_likelihood$freq <- output.distr$freq
-  mSetObj$analset$result$log_likelihood$coefficients <- output.distr$coefficients
-  mSetObj$analset$result$log_likelihood$output <- output.distr
-  mSetObj$analset$result$log_likelihood$output.r <- output.ve.distr
-  mSetObj$analset$result$log_likelihood$frequencies <- cbind(mSetObj$analset$result$log_likelihood$freq,
-                                                            mSetObj$analset$result$log_likelihood$fitted)
-  colnames(mSetObj$analset$result$log_likelihood$frequencies) <- c("Observed", "Fitted")
-  mSetObj$analset$result$log_likelihood$coeffi <- as.data.frame(mSetObj$analset$result$log_likelihood$coefficients)
-  colnames(mSetObj$analset$result$log_likelihood$coeffi) <- c("Coefficients")
-  mSetObj$analset$result$log_likelihood$output.r <- as.data.frame(mSetObj$analset$result$log_likelihood$output.r)
-  colnames(mSetObj$analset$result$log_likelihood$output.r) <- c("Richness")
-  
-  
-  write.csv(mSetObj$analset$result$fisher$freq, "Fisher frequency table.csv")
-  write.csv(mSetObj$analset$result$fisher$com.result, "Fisher log series model output.csv")
-  write.csv(mSetObj$analset$result$lognormal_fit$coeffi, "Poisson coefficients.csv")
-  write.csv(mSetObj$analset$result$lognormal_fit$frequencies, "Poisson frequencies by Octave.csv")
-  write.csv(mSetObj$analset$result$lognormal_fit$output.r, "Poisson_Total extrapolated richness.csv")
-  write.csv(mSetObj$analset$result$log_likelihood$coeffi, "Max_likelihood coefficients.csv")
-  write.csv(mSetObj$analset$result$log_likelihood$frequencies, "Max_likelihood frequencies by Octave.csv")
-  write.csv(mSetObj$analset$result$log_likelihood$output.r, "Max_likelihood_Total extrapolated richness.csv")
   write.csv(mSetObj$analset$result$null.data.set, "Perimeters of brokenstick models of species abundance.csv")
   write.csv(mSetObj$analset$result$prep.data.set, "Perimeters of preemption models of species abundance.csv")
   write.csv(mSetObj$analset$result$log.data.set, "Perimeters of log-Normal models of species abundance.csv")
@@ -287,6 +380,7 @@ AbundanceModel <- function(mSetObj = NA, data = "false", community = "", tiespli
   
   return(.set.mSet(mSetObj)) 
 }
+
 
 
 #'Perform Fisher log series distribution histogram plot
@@ -361,11 +455,12 @@ AbundanceFisherPlot <- function(mSetObj = NA, bar.color = "NULL", line.color.add
   }
   
   m <- max(plot_data.fisher$fisher) + 10
-  plot(plot_data.fisher, ann = T, axes = F, lty = 1, lwd = 2, cex = 2, yant = "n", xant = "n",
-       line.col = line.color.addFit1, bar.col = bar.color1, xlab = "Abundance Octave", ylab = "No. of Species")
-  #axis(1, labels = T, at = 0:n)
-  axis(2, las = 2, at = seq(0, m, by = 5))
-  title("Fisher's Log-series Species Abundance Distribution ")
+  plot(plot_data.fisher, lty = 1, lwd = 2, cex = 2, yaxt = "n", xaxt = "n",
+       line.col = line.color.addFit1, bar.col = bar.color1, xlab = "Abundance Octave", ylab = "Number of Species",
+       cex.lab = 1.2, cex.axis = 1)
+  axis(1, labels = T, at = 0:n, cex.lab = 1.2, cex.axis = 1)
+  axis(2, las = 2, at = 0:m, cex.lab = 1.2, cex.axis = 1)
+  title(main = "Fisher's Log-series Species Abundance Distribution", cex.lab = 1.5)
   dev.off()
   
   return(.set.mSet(mSetObj))
@@ -481,19 +576,24 @@ AbundancePrestPlot <- function(mSetObj=NA, bar.color="NULL", line.color.addPoi =
     mutate(row <- seq(0.5, n, by = 1))
   colnames(d) <- c("Fitted", "row") 
   print(d)
+  eec <- 0.5 + d$row
+  eem <- max(d$row)
   #windows(height = h, width = w)
-  barplot(a$Observed, axes = F, space = 0, col = bar.color1, ylim = c(0,m), 
-          names.arg = c(""), xlab = "Abundance Octave", ylab = "No. of Species")
-  #axis(1, xlab = "Abundance Octave")
-  axis(2, at = seq(0, m, by = 10), las = 2, ylab = "No. of Species")
+  barplot(a$Observed, type = "b", space = 0, col = bar.color1, ylim = c(0,m), 
+          names.arg = eec, xlab = "Abundance Octave", ylab = "Number of Species", yaxt = "n", cex.lab = 1.2, cex.axis = 1)
+  axis(1, at = 0:eem, label = F)
+  axis(2, at = seq(0, m, by = 10), las = 2, ylab = "Number of Species", cex.lab = 1.2, cex.axis = 1)
+  box()
+  #axis(3, cex.axis = 1)
+  #axis(4, cex.axis = 1)
   points(x = b$row, y = b$Fitted, pch = 1, col = line.color.addPoi1)
   lines(x = b$row, y = b$Fitted, lwd = 2, col = line.color.addPoi1)
   points(x = d$row, y = d$Fitted, pch = 1, col = line.color.addMax1)
   lines(x = d$row, y = d$Fitted, lwd = 2, col = line.color.addMax1)
   legend("topright", legend=c("Traditional binning", "Without binning"),
-         col=c(line.color.addPoi1, line.color.addMax1), lty=2, cex=1,
-         box.lty=0)
-  title("Species Abundance Distribution Maximization of log-likelihood")
+         col=c(line.color.addPoi1, line.color.addMax1), lty=1, cex=1.2, lwd = 2,
+         box.lty=1)
+  title(main = "Species Abundance Distribution Maximization of log-likelihood", cex.lab = 1.5)
 
   dev.off()
   print("really?")

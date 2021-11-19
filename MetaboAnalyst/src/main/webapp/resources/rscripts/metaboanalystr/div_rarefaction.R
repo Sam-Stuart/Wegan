@@ -5,14 +5,13 @@
 #'@param type Set type for different types of rarefied community data, drop down options are "Species richness" (default), "Random rarefaction" or "Probability"
 #'@param sample Input subsample size for rarefying community, either a single value or a vector.default is not apply subsample
 #'@param se Input estimate standard errors, drop down options are "TRUE" or "FALSE" (default). 
-#'@param margin Input the index is computed, drop down options are "1" (default) or "2" 
 #'@author Shiyang Zhao\email{shiyang1@ualberta.ca}
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2) ######
 #'@export
 
 
-Rarefaction_div <- function(mSetObj = NA, data = "false", type = "NULL", sample = "", se = "false", margin = "NULL") {
+Rarefaction_div <- function(mSetObj = NA, data = "false", type = "NULL", sample = "", se = "false") {
   
   options(errors = traceback)
   #print("inside faction R file")
@@ -31,11 +30,11 @@ Rarefaction_div <- function(mSetObj = NA, data = "false", type = "NULL", sample 
   #Extract input from mSetObj
   mSetObj <- .get.mSet(mSetObj)
 
-  metaData <- mSetObj$dataSet$origMeta
+  #metaData <- mSetObj$dataSet$origMeta
   #envData <- mSetObj$dataSet$origEnv
  
   print("BEFORE DATA TESTS")
-  print(metaData)
+  #print(metaData)
   #print(envData)
 
   if (data == "false") { #normalized data as input
@@ -45,17 +44,17 @@ Rarefaction_div <- function(mSetObj = NA, data = "false", type = "NULL", sample 
   }
   #input <- as.data.frame(input)
   
-  print("margin setup")
+  print("no margin setup")
   # margin = 1, data in rows; margin = 2, data in columns
-  if (margin == "NULL") { 
-    margin1 <- "1"
-  } else if (margin == "2") {
-    margin1 <- "2"  
-  }
-  margin1 <- as.numeric(margin1)
-  print(margin1)  
+  #if (margin == "NULL") { 
+  #  margin1 <- "1"
+  #} else if (margin == "2") {
+  #  margin1 <- "2"  
+  #}
+  #margin1 <- as.numeric(margin1)
+  #print(margin1)  
 
-  cat("after if margin statement")
+  #cat("after if margin statement")
   #sample <- as.numeric(sample)
 
   print("before se")
@@ -77,12 +76,12 @@ Rarefaction_div <- function(mSetObj = NA, data = "false", type = "NULL", sample 
     } else {
       sample1 = as.numeric(sample)
     }
-    Srare <- rarefy(input.2, sample = sample1, se = se1, MARGIN = margin1)
+    Srare <- rarefy(input.2, sample = sample1, se = se1)
     cat ("Expected species richness in random subsamples of size 'samples' from the community")
     mSetObj$analset$result$name <- "Rarefaction"
     mSetObj$analset$result$type <- type1
     mSetObj$analset$result$sample_size <- sample1
-    mSetObj$analset$result$margin <- margin1
+    #mSetObj$analset$result$margin <- margin1
     mSetObj$analset$result$Output <- Srare
     mSetObj$analset$Srare <- mSetObj$analset$result$Output
   } else if (type == "Random rarefaction") {
@@ -97,7 +96,7 @@ Rarefaction_div <- function(mSetObj = NA, data = "false", type = "NULL", sample 
     mSetObj$analset$result$name <- "Rarefaction"
     mSetObj$analset$result$type <- type
     #mSetObj$analset$result$sample_size <- sample1
-    mSetObj$analset$result$margin <- margin1
+    #mSetObj$analset$result$margin <- margin1
     mSetObj$analset$result$Output <- Srare 
     Srare.frame <- as.data.frame(cbind(mSetObj$analset$result$name, mSetObj$analset$result$type, 
                                  mSetObj$analset$result$sample <- sample1, mSetObj$analset$result$Output <- Srare))
@@ -115,7 +114,7 @@ Rarefaction_div <- function(mSetObj = NA, data = "false", type = "NULL", sample 
     mSetObj$analset$result$name <- "Rarefaction"
     mSetObj$analset$result$type <- type
     mSetObj$analset$result$sample <- sample1
-    mSetObj$analset$result$margin <- margin1
+    #mSetObj$analset$result$margin <- margin1
     mSetObj$analset$result$Output <- Srare 
     Srare.frame <- as.data.frame(cbind(mSetObj$analset$result$name, mSetObj$analset$result$type, 
                                        mSetObj$analset$result$sample <- sample1, mSetObj$analset$result$Output <- Srare))
@@ -259,9 +258,9 @@ RarefactionPlot <- function(mSetObj = NA, colorb = "NULL", imgName, format = "pn
   type.p <- mSetObj$analset$result$type
   plot_data <- mSetObj$analset$result$Output
   input.p <- mSetObj$analset$input
-  margin.p <- as.numeric(mSetObj$analset$result$margin)
+  #margin.p <- as.numeric(mSetObj$analset$result$margin)
   print("gather plot data") 
-  print(margin.p) 
+  #print(margin.p) 
   
 
   #if (MARGIN2 == "2") {
@@ -271,9 +270,9 @@ RarefactionPlot <- function(mSetObj = NA, colorb = "NULL", imgName, format = "pn
   #}
   
   if (type.p == "Rarefaction") {
-    S <- specnumber(input.p, MARGIN = margin.p)
-  }  else {
     S <- specnumber(input.p)
+  }  else {
+    S <- NULL
   }
   print(type.p)
 
@@ -332,8 +331,8 @@ RarefactionPlot <- function(mSetObj = NA, colorb = "NULL", imgName, format = "pn
   print(minmy1)
   maxmy = round(as.numeric(max(plot_data)+10), digits = -1)
   #windows(width = w, height = h)
-  plot(plot_data ~ S, xaxt = "n", yaxt = "n", xlim = c(minnx1, maxnx), ylim = c(minmy1, maxmy),
-       col = colorb1, xlab = "Observed No. of Species", ylab = "Rarefied No. of Species", cex.lab = 1.2)
+  plot(plot_data ~ S, xaxt = "n", yaxt = "n", xlim = c(minnx1, maxnx), ylim = c(minmy1, maxmy), pch = 19,
+       col = colorb1, xlab = "Observed Number of Species", ylab = "Rarefied Number of Species", cex.lab = 1.2)
   axis(1, labels = T, at = seq(minnx1, maxnx, by = 5), cex.axis = 1)
   axis(2, las = 2, at = seq(minmy1, maxmy, by = 5), cex.axis = 1)
   #abline(0,1)

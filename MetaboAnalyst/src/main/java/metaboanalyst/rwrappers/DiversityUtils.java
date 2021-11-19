@@ -193,7 +193,7 @@ public class DiversityUtils {
     }
     
     
-    public static boolean CreateRarefactionDiv(SessionBean1 sb, boolean data, String type, String sample, boolean se, String margin) {
+    public static boolean CreateRarefactionDiv(SessionBean1 sb, boolean data, String type, String sample, boolean se) {
         try {
             System.out.print("R RAREFACTION");
             RConnection RC = sb.getRConnection(); //Start R connection
@@ -201,8 +201,7 @@ public class DiversityUtils {
                                                  + ", \"" + data
                                                  + "\", \"" + type
                                                  + "\", \"" + sample
-                                                 + "\", \""  + se
-                                                 + "\", \""  + margin                                                 
+                                                 + "\", \""  + se                                            
                                                  + "\")";
             RCenter.recordRCommand(RC, rCommand); // records r command
             RC.voidEval(rCommand); // tells you want your r script returns  
@@ -248,15 +247,49 @@ public class DiversityUtils {
         }
     }
 
-    public static boolean CreateAbundDistDiv(SessionBean1 sb, boolean data, String community, boolean tiesplit, String truncate) {
+    public static boolean CreateAbundFisherDistDiv(SessionBean1 sb, boolean data, String communityFisher) {
         try {
             System.out.print("R Abundancedist");
             RConnection RC = sb.getRConnection(); //Start R connection
-            String rCommand = "AbundanceModel(NA"
+            String rCommand = "AbundanceFisherModel(NA"
                                                  + ", \"" + data
-                                                 + "\", \"" + community
+                                                 + "\", \"" + communityFisher                                         
+                                                 + "\")";
+            RCenter.recordRCommand(RC, rCommand); // records r command
+            RC.voidEval(rCommand); // tells you want your r script returns  
+            return true;
+        } catch (RserveException rse) {
+            System.out.println(rse);
+            return false;
+        }
+    }
+    
+    public static boolean CreateAbundPresDistDiv(SessionBean1 sb, boolean data, String communityPres, boolean tiesplit, String truncate) {
+        try {
+            System.out.print("R Abundancedist");
+            RConnection RC = sb.getRConnection(); //Start R connection
+            String rCommand = "AbundancePrestonModel(NA"
+                                                 + ", \"" + data
+                                                 + "\", \"" + communityPres
                                                  + "\", \"" + tiesplit
                                                  + "\", \"" + truncate                                           
+                                                 + "\")";
+            RCenter.recordRCommand(RC, rCommand); // records r command
+            RC.voidEval(rCommand); // tells you want your r script returns  
+            return true;
+        } catch (RserveException rse) {
+            System.out.println(rse);
+            return false;
+        }
+    }
+    
+    public static boolean CreateAbundRankDistDiv(SessionBean1 sb, boolean data, String communityRank) {
+        try {
+            System.out.print("R Abundancedist");
+            RConnection RC = sb.getRConnection(); //Start R connection
+            String rCommand = "AbundanceRankModel(NA"
+                                                 + ", \"" + data
+                                                 + "\", \"" + communityRank                                        
                                                  + "\")";
             RCenter.recordRCommand(RC, rCommand); // records r command
             RC.voidEval(rCommand); // tells you want your r script returns  
@@ -498,13 +531,13 @@ public class DiversityUtils {
         }
     }
     
-    public static boolean CreateUnseenDiv(SessionBean1 sb, boolean data, String pool, boolean smallsample, String index, String permutations, String minsize,  String parallel) {
+    public static boolean CreateUnseenDiv(SessionBean1 sb, boolean data, String poolColName, boolean smallsample, String index, String permutations, String minsize,  String parallel) {
         try {
             System.out.print("FD");
             RConnection RC = sb.getRConnection(); //Start R connection
             String rCommand = "sp_pool(NA"
                                                  + ", \"" + data
-                                                 + "\", \"" + pool
+                                                 + "\", \"" + poolColName
                                                  + "\", \"" + smallsample
                                                  + "\", \"" + index
                                                  + "\", \"" + permutations
@@ -524,8 +557,7 @@ public class DiversityUtils {
     }
     
     
-    public static boolean PlotPoolBoxplot(SessionBean1 sb, String plot_data, String box_color, String xlab,
-                                          String ylab, String border_col, String imgName, String format, int dpi, String width) {
+    public static boolean PlotPoolBoxplot(SessionBean1 sb, String plot_data, String box_color, String border_col, String imgName, String format, int dpi, String width) {
         try {
             System.out.print("FD");
             RConnection RC = sb.getRConnection(); //Start R connection
@@ -533,8 +565,8 @@ public class DiversityUtils {
                                                  + ", \"" + plot_data
                                                  //+ "\", \"" + fac_data
                                                  + "\", \"" + box_color
-                                                 + "\", \"" + xlab
-                                                 + "\", \"" + ylab
+//                                                 + "\", \"" + xlab
+//                                                 + "\", \"" + ylab
                                                  + "\", \"" + border_col
                                                  + "\", \"" + imgName 
                                                  + "\", \"" + format 
@@ -573,6 +605,21 @@ public class DiversityUtils {
         try {
             RConnection RC = sb.getRConnection();
             String rCommand = "IndiceCol(NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            return RC.eval(rCommand).asStrings();
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        } catch (REXPMismatchException ex) {
+            Logger.getLogger(DiversityUtils.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+    
+    public static String[] poolColumn(SessionBean1 sb){
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "PoolCol(NA)";
             RCenter.recordRCommand(RC, rCommand);
             return RC.eval(rCommand).asStrings();
         } catch (RserveException rse) {

@@ -17,29 +17,30 @@
                     <h:form id="form1">
                         
 <!--                        <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> -->
-                            <h:panelGrid id="panelGrid" columns="6" cellpadding="2" >
+                            <h:panelGrid id="panelGrid" columns="4" cellpadding="3" columnClasses="colFront, colLeft, colRight">
                                 <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
                                 <p:selectBooleanCheckbox value ="#{accummodelBean.doOriginal}"/> 
-                                <h:outputLabel style="font-weight: bold" value="Conditioned:"/>
-                                <p:selectBooleanCheckbox value ="#{accummodelBean.doConditioned}"/> 
-                                <h:outputLabel style="font-weight: bold" value="permutations:"/>
-                                <p:inputText value = "#{accummodelBean.permutations}"/>  
-                                <h:outputLabel style="font-weight: bold" value="gamma:"/>
+                                <h:outputLabel style="font-weight: bold" value="Method for estimating the total extrapolated number of species:"/>
                                 <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{accummodelBean.gammachosen}">
                                     <f:selectItems value="#{accummodelBean.gamma}"/>
                                 </p:selectOneMenu> 
-                                <h:outputLabel style="font-weight: bold" value="models:"/>
+                                <h:outputLabel style="font-weight: bold" value="Conditional standard deviation:"/>
+                                <p:selectBooleanCheckbox value ="#{accummodelBean.doConditioned}"/>                                
+                                <h:outputLabel style="font-weight: bold" value="Species accumulation method:"/>
                                 <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{accummodelBean.modelschosen}">
                                     <f:selectItems value="#{accummodelBean.models}"/>
                                 </p:selectOneMenu> 
-                                <h:outputLabel style="font-weight: bold" value="object:"/>
-                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{accummodelBean.objectchosen}">
-                                    <f:selectItems value="#{accummodelBean.object}"/>
-                                </p:selectOneMenu>
-                                <h:outputLabel style="font-weight: bold" value="interval:"/>
+                                <h:outputLabel style="font-weight: bold" value="Type of interval calculation:"/>
                                 <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{accummodelBean.intervalchosen}">
                                     <f:selectItems value="#{accummodelBean.interval}"/>
                                 </p:selectOneMenu>
+                                <h:outputLabel style="font-weight: bold" value="Result of specaccum or the uploaded supplementary community data frame:"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{accummodelBean.objectchosen}">
+                                    <f:selectItems value="#{accummodelBean.object}"/>
+                                </p:selectOneMenu>
+                                <h:outputLabel style="font-weight: bold" value="Number of permutations (when method = random):"/>
+                                <p:inputText value = "#{accummodelBean.permutations}"/>  
+                                
                             </h:panelGrid>  
                             <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
                             <p:commandButton value="Update" 

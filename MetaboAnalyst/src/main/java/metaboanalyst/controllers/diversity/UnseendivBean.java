@@ -138,18 +138,43 @@ public class UnseendivBean implements Serializable {
  
     
     // textbox
-    private String pool = "";
+//    private String pool = "";
+//    
+//    public String getPool() {
+//        return pool;
+//    }
+//
+//    public void setPool(String pool) {
+//        this.pool = pool;
+//    }
     
-    public String getPool() {
-        return pool;
+    
+    private SelectItem[] poolColOpts = null;
+    
+    public SelectItem[] getPoolColOpts(){
+        String[] columns = DiversityUtils.poolColumn(sb);
+        int columnsLen = columns.length;
+        poolColOpts = new SelectItem[columnsLen];
+        List<String> columnNames = Arrays.asList(columns);
+        for (int i = 0; i < columnsLen; i++) {
+            poolColOpts[i] = new SelectItem(columnNames.get(i), columnNames.get(i));
+        }
+        return poolColOpts;
+    }
+    
+    private String poolColName = getPoolColOpts()[0].getLabel();
+    
+    public String getPoolColName() {
+        return poolColName;
     }
 
-    public void setPool(String pool) {
-        this.pool = pool;
+    public void setPoolColName(String poolColName) {
+        this.poolColName = poolColName;
     }
+
     
     
-    private String permutations = "";
+    private String permutations = "100";
     
     public String getPermutations() {
         return permutations;
@@ -160,7 +185,7 @@ public class UnseendivBean implements Serializable {
     }
     
   
-    private String minsize = "";
+    private String minsize = "3";
     
     public String getMinsize() {
         return minsize;
@@ -171,7 +196,7 @@ public class UnseendivBean implements Serializable {
     }
     
     
-    private String parallel = "";
+    private String parallel = "1";
     
     public String getParallel() {
         return parallel;
@@ -363,12 +388,12 @@ public class UnseendivBean implements Serializable {
         
     // ACTION BUTTON // 
     public void unseendivUpdateBox_action() {
-        DiversityUtils.CreateUnseenDiv(sb, doOriginal, pool, doSmallsample, indexchosen, permutations, minsize, parallel); 
-        DiversityUtils.PlotPoolBoxplot(sb, plot_datachosen, box_colorchosen, xlab, ylab, border_colchosen, sb.getNewImage("boxplot_richness"), "png", 72, "false");        DiversityUtils.PlotUnseenCurve(sb, colorchosen, sb.getNewImage("plot_matrices"), "png", 72, "false");
+        DiversityUtils.CreateUnseenDiv(sb, doOriginal, poolColName, doSmallsample, indexchosen, permutations, minsize, parallel); 
+        DiversityUtils.PlotPoolBoxplot(sb, plot_datachosen, box_colorchosen, border_colchosen, sb.getNewImage("boxplot_richness"), "png", 72, "false");        DiversityUtils.PlotUnseenCurve(sb, colorchosen, sb.getNewImage("plot_matrices"), "png", 72, "false");
     }
     
     public void unseendivUpdateLine_action() {
-        DiversityUtils.CreateUnseenDiv(sb, doOriginal, pool, doSmallsample, indexchosen, permutations, minsize, parallel); 
+        DiversityUtils.CreateUnseenDiv(sb, doOriginal, poolColName, doSmallsample, indexchosen, permutations, minsize, parallel); 
         DiversityUtils.PlotUnseenCurve(sb, colorchosen, sb.getNewImage("plot_matrices"), "png", 72, "false");
     }
     

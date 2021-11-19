@@ -15,16 +15,12 @@
             <p:tabView id="abundancedist">
                 <p:tab title ="Abundance Log series Distribution" titleStyleClass="p-tab-nav">
                     <h:form id="form1">
-                        <h:panelGrid id="panelGrid" columns="4" cellpadding="3" >
-                            <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
-                            <p:selectBooleanCheckbox value ="#{abunddistBean.doOriginal}"/> 
-                            <h:outputLabel style="font-weight: bold" value="Tiesplit:"/>
-                            <p:selectBooleanCheckbox value = "#{abunddistBean.doTiesplit}"/>
-                            <h:outputLabel style="font-weight: bold" value="Truncate"/>
-                            <p:inputText value = "#{abunddistBean.truncate}"/>  
-                            <h:outputLabel style="font-weight: bold" value="Select particular sampling plot:"/>
-                            <p:inputText value = "#{abunddistBean.community}"/>  
-                        </h:panelGrid>  
+                        <h:panelGrid id="panelGrid" columns="4" cellpadding="3" columnClasses="colFront, colLeft, colRight">
+                                <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
+                                <p:selectBooleanCheckbox value ="#{abunddistBean.doOriginal}"/> 
+                                <h:outputLabel style="font-weight: bold" value="Select a sampling unit to perform analysis:"/>
+                                <p:inputText value = "#{abunddistBean.communityFisher}"/>  
+                        </h:panelGrid> 
                         <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
                             <p:commandButton value="Update" 
                                              styleClass="updateButton"
@@ -79,16 +75,16 @@
                 </p:tab>              
                 <p:tab title ="Abundance Lognormal Distribution" titleStyleClass="p-tab-nav">
                     <h:form id="form2">
-                        <h:panelGrid id="panelGrid" columns="4" cellpadding="3" >
-                            <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
-                            <p:selectBooleanCheckbox value ="#{abunddistBean.doOriginal}"/> 
-                            <h:outputLabel style="font-weight: bold" value="Tiesplit:"/>
-                            <p:selectBooleanCheckbox value = "#{abunddistBean.doTiesplit}"/>
-                            <h:outputLabel style="font-weight: bold" value="Truncate"/>
-                            <p:inputText value = "#{abunddistBean.truncate}"/>  
-                            <h:outputLabel style="font-weight: bold" value="Select particular sampling plot:"/>
-                            <p:inputText value = "#{abunddistBean.community}"/>   
-                        </h:panelGrid>  
+                        <h:panelGrid id="panelGrid" columns="4" cellpadding="3" columnClasses="colFront, colLeft, colRight">
+                                <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
+                                <p:selectBooleanCheckbox value ="#{abunddistBean.doOriginal}"/> 
+                                <h:outputLabel style="font-weight: bold" value="Select a sampling unit to perform analysis:"/>
+                                <p:inputText value = "#{abunddistBean.communityPres}"/>  
+                                <h:outputLabel style="font-weight: bold" value=" More lognormal trend by splitting the frequencies in lognormal model (Tiesplit):"/>
+                                <p:selectBooleanCheckbox value = "#{abunddistBean.doTiesplit}"/>
+                                <h:outputLabel style="font-weight: bold" value="Truncation point for lognormal model, in log2 units(Truncate):"/>
+                                <p:inputText value = "#{abunddistBean.truncate}"/>                                  
+                        </h:panelGrid> 
                         <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;">     
                             <p:commandButton value="Update" 
                                              styleClass="updateButton"
@@ -164,15 +160,11 @@
                     <h:form id="form3">
                         
 <!--                        <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> -->
-                            <h:panelGrid id="panelGrid" columns="4" cellpadding="3" >
+                            <h:panelGrid id="panelGrid" columns="4" cellpadding="3" columnClasses="colFront, colLeft, colRight">
                                 <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
                                 <p:selectBooleanCheckbox value ="#{abunddistBean.doOriginal}"/> 
-                                <h:outputLabel style="font-weight: bold" value="Tiesplit:"/>
-                                <p:selectBooleanCheckbox value = "#{abunddistBean.doTiesplit}"/>
-                                <h:outputLabel style="font-weight: bold" value="Truncate"/>
-                                <p:inputText value = "#{abunddistBean.truncate}"/>  
-                                <h:outputLabel style="font-weight: bold" value="Select particular sampling plot:"/>
-                                <p:inputText value = "#{abunddistBean.community}"/>  
+                                <h:outputLabel style="font-weight: bold" value="Select a sampling unit to perform analysis:"/>
+                                <p:inputText value = "#{abunddistBean.communityRank}"/>  
                             </h:panelGrid>  
                             <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
                                 <p:commandButton value="Update" 

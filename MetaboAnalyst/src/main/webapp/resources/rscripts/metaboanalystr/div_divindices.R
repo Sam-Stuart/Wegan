@@ -1,5 +1,5 @@
 #'Extract column names from numeric variables-- used by ResidPlot()
-#'@usage AssupCol(mSetObj = NA)
+#'@usage IndiceCol(mSetObj = NA)
 #'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
 #'@export
 IndiceCol <- function(mSetObj = NA) {

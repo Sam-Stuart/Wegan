@@ -133,7 +133,7 @@ public class DiversityBean implements Serializable {
 //            sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
 //        }
         System.out.print("INSIDE RAREFACTION");
-        DiversityUtils.CreateRarefactionDiv(sb, false, "NULL", "", false, "NULL");
+        DiversityUtils.CreateRarefactionDiv(sb, false, "NULL", "", false);
         DiversityUtils.PlotRarefactionCurveDiversity(sb, "", "NULL", sb.getCurrentImage("Rarefaction_Curve_Plot"), "png", 72, "false");
         DiversityUtils.PlotRarefactionPlotDiversity(sb, "NULL", sb.getCurrentImage("Rarefaction_Linear_Plot"), "png", 72, "false");
         System.out.print("AFTER RAREFACTION");
@@ -145,7 +145,9 @@ public class DiversityBean implements Serializable {
 //            sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
 //        }
         System.out.print("INSIDE ABUNDDIST"); 
-        DiversityUtils.CreateAbundDistDiv(sb, false, "", false, "");
+        DiversityUtils.CreateAbundFisherDistDiv(sb, false, "");
+        DiversityUtils.CreateAbundPresDistDiv(sb, false, "", false, "-1");
+        DiversityUtils.CreateAbundRankDistDiv(sb, false, "");
         DiversityUtils.PlotAbundFisherPlotDiv(sb, "NULL", "NULL", sb.getCurrentImage("Abundance_Fisher_Dist_Plot"), "png", 72, "false");
         DiversityUtils.PlotAbundPrestPlotDiv(sb, "NULL", "NULL", "NULL", sb.getCurrentImage("Abundance_Prest_Dist_Plot"), "png", 72, "false");
         DiversityUtils.PlotAbundRankPlotDiv(sb, sb.getCurrentImage("Abundance_Rank_Dist_Plot"), "png", 72, "false");
@@ -158,7 +160,7 @@ public class DiversityBean implements Serializable {
 //            sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
 //        }
         System.out.print("INSIDE ACCUMMODEL"); 
-        DiversityUtils.CreateAccumModelDiv(sb, false, "", false, "NULL", "NULL", "NULL", "NULL");
+        DiversityUtils.CreateAccumModelDiv(sb, false, "100", false, "NULL", "NULL", "NULL", "NULL");
         DiversityUtils.PlotAccumCurveDiv(sb, "NULL", "NULL", "NULL", "NULL", "NULL","NULL", "NULL", "", sb.getCurrentImage("Species_Accumulation_Model"), "png", 72, "false");
         System.out.print("AFTER ACCUMMODEL");
     }
@@ -195,8 +197,8 @@ public class DiversityBean implements Serializable {
 //            sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
 //        }
         System.out.print("INSIDE UD"); 
-        DiversityUtils.CreateUnseenDiv(sb, false, "", false, "NULL", "", "", "");
-        DiversityUtils.PlotPoolBoxplot(sb, "NULL", "NULL", "", "", "NULL", sb.getCurrentImage("boxplot_richness"), "png", 72, "false");
+        DiversityUtils.CreateUnseenDiv(sb, false, "NULL", false, "NULL", "100", "3", "1");
+        DiversityUtils.PlotPoolBoxplot(sb, "NULL", "NULL", "NULL", sb.getCurrentImage("boxplot_richness"), "png", 72, "false");
         DiversityUtils.PlotUnseenCurve(sb, "NULL",sb.getCurrentImage("plot_matrices"), "png", 72, "false");
         System.out.print("AFTER UD");
     }

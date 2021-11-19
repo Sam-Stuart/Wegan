@@ -15,7 +15,7 @@
             <p:tabView id="indices">
                 <p:tab title ="Alpha Diveristy Graph" titleStyleClass="p-tab-nav">
                     <h:form id="form1">
-                        <h:panelGrid id="panelGrid" columns="6" cellpadding="3" >
+                        <h:panelGrid id="panelGrid" columns="4" cellpadding="3" columnClasses="colFront, colLeft, colRight">
                             <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
                             <p:selectBooleanCheckbox value ="#{indicesBean.doOriginal}"/> 
                             <h:outputLabel style="font-weight: bold" value="Select grouping variable (x-axis):"/>
@@ -126,7 +126,7 @@
                 
                 <p:tab title ="Beta Diversity Graph" titleStyleClass="p-tab-nav">
                     <h:form id="form2">
-                        <h:panelGrid id="panelGrid" columns="6" cellpadding="3" >
+                        <h:panelGrid id="panelGrid" columns="4" cellpadding="3" columnClasses="colFront, colLeft, colRight">
                             <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
                             <p:selectBooleanCheckbox value ="#{indicesBean.doOriginal}"/> 
                             <h:outputLabel style="font-weight: bold" value="Select grouping variable (x-axis):"/>

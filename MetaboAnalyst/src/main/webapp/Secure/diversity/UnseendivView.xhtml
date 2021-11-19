@@ -18,13 +18,15 @@
                  <!--DiversityUtils.CreateFdDiv(sb, doOriginal, corrchosen, doW_abun, doStand_x, m, doCalc_FDiv, doCalc_FRic, doStand_FRic, doCalc_CWM, doPrint_pco, doMessages, asym_bin, ordchosen);-->       
                
 <!--                        <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> -->
-                            <h:panelGrid id="panelGrid" columns="4" cellpadding="2" >
+                            <h:panelGrid id="panelGrid" columns="4" cellpadding="3" columnClasses="colFront, colLeft, colRight">
                                 <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
                                 <p:selectBooleanCheckbox value ="#{unseendivBean.doOriginal}"/> 
                                 <h:outputLabel style="font-weight: bold" value="Use small sample correction (N − 1)/N?"/>
                                 <p:selectBooleanCheckbox value ="#{unseendivBean.doSmallsample}"/> 
-                                <h:outputLabel style="font-weight: bold" value="Fill in a number of rows in grouping data for pooling the sites(N):"/>
-                                <p:inputText value = "#{unseendivBean.pool}"/>  
+                                <h:outputLabel style="font-weight: bold" value="Select grouping variable (x-axis):"/>
+                                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{unseendivBean.poolColName}">
+                                        <f:selectItems value="#{unseendivBean.poolColOpts}" />
+                                    </p:selectOneMenu>
                                 <h:outputLabel style="font-weight: bold" value="Fill in an integer giving the number permutations:"/>
                                 <p:inputText value = "#{unseendivBean.permutations}"/>  
                                 <h:outputLabel style="font-weight: bold" value="Fill in a smallest number of sampling units reported:"/>
@@ -43,7 +45,7 @@
                                             onclick="PF('statusDialog').show()"
                                             oncomplete="PF('statusDialog').hide()"  
                                             update=":unseendiv:form1:unseendivPane1  :cmdPane" 
-                                            actionListener="#{unseendivBean.unseendivUpdate_action()}"/>                          
+                                            actionListener="#{unseendivBean.unseendivUpdateBox_action()}"/>                          
                             <p:commandButton value="Customize Graph"
                                              styleClass="graphicsButton"
                                              style="box-shadow: none !important; text-shadow: none !important;"
@@ -131,8 +133,10 @@
                                 <p:selectBooleanCheckbox value ="#{unseendivBean.doOriginal}"/> 
                                 <h:outputLabel style="font-weight: bold" value="Use small sample correction (N − 1)/N?"/>
                                 <p:selectBooleanCheckbox value ="#{unseendivBean.doSmallsample}"/> 
-                                <h:outputLabel style="font-weight: bold" value="Fill in a number of rows in grouping data for pooling the sites(N):"/>
-                                <p:inputText value = "#{unseendivBean.pool}"/>  
+                                <h:outputLabel style="font-weight: bold" value="Select grouping variable (x-axis):"/>
+                                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{unseendivBean.poolColName}">
+                                        <f:selectItems value="#{unseendivBean.poolColOpts}" />
+                                    </p:selectOneMenu> 
                                 <h:outputLabel style="font-weight: bold" value="Fill in an integer giving the number permutations:"/>
                                 <p:inputText value = "#{unseendivBean.permutations}"/>  
                                 <h:outputLabel style="font-weight: bold" value="Fill in a smallest number of sampling units reported:"/>
@@ -151,7 +155,7 @@
                                             onclick="PF('statusDialog').show()"
                                             oncomplete="PF('statusDialog').hide()"  
                                             update=":unseendiv:form2:unseendivPane2  :cmdPane" 
-                                            actionListener="#{unseendivBean.unseendivUpdate_action()}"/>                          
+                                            actionListener="#{unseendivBean.unseendivUpdateLine_action()}"/>                          
                             <p:commandButton value="Customize Graph"
                                              styleClass="graphicsButton"
                                              style="box-shadow: none !important; text-shadow: none !important;"
