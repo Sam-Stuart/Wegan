@@ -15,7 +15,9 @@
             <p:tabView id="accumulationcurve">
                 <p:tab title ="Species Accumulation Model" titleStyleClass="p-tab-nav">
                     <h:form id="form1">
-                        
+                        <p>
+                            Species accumulation models study the accumulation of species (species richness) when the number of sites increases 
+                        </p>
 <!--                        <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> -->
                             <h:panelGrid id="panelGrid" columns="4" cellpadding="3" columnClasses="colFront, colLeft, colRight">
                                 <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
@@ -131,6 +133,9 @@
                                     <h:outputText escape="false" value="#{accummodelBean.filenlmfitresultpath}"/>
                                 </i>
                             </h:panelGrid>
+                            <p> 
+                                species accumulation curve shows the cumulative number of species recorded in a particular environment as the sampling effort increasing.
+                            </p>
                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
                                 <p:commandButton value="Export"
                                     styleClass="exportButton"

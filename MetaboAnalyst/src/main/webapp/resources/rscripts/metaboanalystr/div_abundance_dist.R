@@ -453,14 +453,27 @@ AbundanceFisherPlot <- function(mSetObj = NA, bar.color = "NULL", line.color.add
   } else if (line.color.addFit == "sienna") { 
     line.color.addFit1 <- "sienna1"
   }
+
+  m <- max(plot_data.fisher$fisher)
+  if (m/10000 >= 5) {  
+     per <- 10000
+  } else if (m/1000 >= 5) {
+     per <- 1000 
+  } else if (m/100 >= 5) {
+     per <- 100 
+  } else if (m/100 < 5 & m/50 >=5) {
+     per <- 50 
+  } else {
+     per <- 10
+  } 
   
-  m <- max(plot_data.fisher$fisher) + 10
+  
   plot(plot_data.fisher, lty = 1, lwd = 2, cex = 2, yaxt = "n", xaxt = "n",
        line.col = line.color.addFit1, bar.col = bar.color1, xlab = "Abundance Octave", ylab = "Number of Species",
        cex.lab = 1.2, cex.axis = 1)
   axis(1, labels = T, at = 0:n, cex.lab = 1.2, cex.axis = 1)
-  axis(2, las = 2, at = 0:m, cex.lab = 1.2, cex.axis = 1)
-  title(main = "Fisher's Log-series Species Abundance Distribution", cex.lab = 1.5)
+  axis(2, las = 2, at = seq(0, m, per), cex.lab = 1.2, cex.axis = 1)
+  title(main = "Fisher's Logseries Species Abundance Distribution", cex.lab = 1.5)
   dev.off()
   
   return(.set.mSet(mSetObj))
@@ -525,7 +538,7 @@ AbundancePrestPlot <- function(mSetObj=NA, bar.color="NULL", line.color.addPoi =
   } else if (bar.color == "seagreen") {
     bar.color1 = "darkseagreen1"
   } else if (bar.color == "wheat") {
-    bar.color1 = wheat1
+    bar.color1 = "wheat1"
   } 
   print(bar.color1)
   
@@ -562,14 +575,17 @@ AbundancePrestPlot <- function(mSetObj=NA, bar.color="NULL", line.color.addPoi =
   a <- as.data.frame(mSetObj$analset$result$log_likelihood$frequencies)
   print(a)
   
-  m <- round(max(a$Fitted) + 10, digits = -1)
-  print(m)
+  
+  #m1 <- round(max(a$Observed) + 10, digits = -1)
+  
   n <- length(a$Observed)
   print(n)
   b <- a%>%
     select(Fitted)%>%
     mutate(row = seq(0.5, n, by = 1))
   print(b)
+  m <- round(max(a$Fitted) + 10, digits = -1)
+  
   c <- as.data.frame(mSetObj$analset$result$lognormal_fit$frequencies)
   d <- c%>%
     select(Fitted)%>%
@@ -578,11 +594,36 @@ AbundancePrestPlot <- function(mSetObj=NA, bar.color="NULL", line.color.addPoi =
   print(d)
   eec <- 0.5 + d$row
   eem <- max(d$row)
+
+  m1 <- max(d$Fitted)
+
+  if (m >= m1) {
+     y_m <- m
+  } else {
+     y_m <- m1
+  }
+  y_m <- as.numeric(y_m)
+  print(y_m)
+
+  if (y_m/10000 >= 5) {  
+     per <- 10000
+  } else if (y_m/1000 >= 5) {
+     per <- 1000 
+  } else if (y_m/100 >= 5) {
+     per <- 100 
+  } else if (y_m/100 < 5 & y_m/50 >=5) {
+     per <- 50 
+  } else {
+     per <- 10
+  } 
+
+  y_m1 <- y_m +per  
+
   #windows(height = h, width = w)
-  barplot(a$Observed, type = "b", space = 0, col = bar.color1, ylim = c(0,m), 
+  barplot(a$Observed, space = 0, col = bar.color1, ylim = c(0,y_m1), 
           names.arg = eec, xlab = "Abundance Octave", ylab = "Number of Species", yaxt = "n", cex.lab = 1.2, cex.axis = 1)
   axis(1, at = 0:eem, label = F)
-  axis(2, at = seq(0, m, by = 10), las = 2, ylab = "Number of Species", cex.lab = 1.2, cex.axis = 1)
+  axis(2, at = seq(0, y_m1, per), las = 2, ylab = "Number of Species", cex.lab = 1.2, cex.axis = 1)
   box()
   #axis(3, cex.axis = 1)
   #axis(4, cex.axis = 1)
@@ -592,8 +633,8 @@ AbundancePrestPlot <- function(mSetObj=NA, bar.color="NULL", line.color.addPoi =
   lines(x = d$row, y = d$Fitted, lwd = 2, col = line.color.addMax1)
   legend("topright", legend=c("Traditional binning", "Without binning"),
          col=c(line.color.addPoi1, line.color.addMax1), lty=1, cex=1.2, lwd = 2,
-         box.lty=1)
-  title(main = "Species Abundance Distribution Maximization of log-likelihood", cex.lab = 1.5)
+         bty = "n")
+  title(main = "Species Abundance Distribution Maximization of Log-likelihood", cex.lab = 1.5)
 
   dev.off()
   print("really?")
@@ -619,6 +660,7 @@ AbundanceRankPlot <- function(mSetObj=NA, imgName, format="png", dpi=72, width=N
   #library(vegan)
   #library(dplyr)
   library(ggplot2)
+  library(svglite)
   print("ggplot2")
   
   mSetObj <- .get.mSet(mSetObj)
@@ -685,7 +727,17 @@ AbundanceRankPlot <- function(mSetObj=NA, imgName, format="png", dpi=72, width=N
     facet_grid(Index ~ ., scales = "free_y") +
     geom_line(aes(x = Rank, y = log(Fitted), color = Index)) 
   #print(gg + labs(y="Abundance (log)", x = "Rank"))
-  png(imgName)
+  
+  if (format == "png") {
+     png(imgName)
+  } else if (format == "tiff") {
+     tiff(imgName)
+  } else if (format == "svg") {
+     ggsave(file = "imgName.svg", plot = gg + labs(y="Abundance (log)", x = "Rank"))
+  } else if (format == "pdf") {
+     ggsave(file = "imgName.pdf") 
+  } 
+
   print(gg + labs(y="Abundance (log)", x = "Rank"))
   #print(gg)
 

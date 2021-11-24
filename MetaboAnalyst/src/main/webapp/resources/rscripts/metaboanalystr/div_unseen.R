@@ -354,6 +354,7 @@ rich_est_curve <- function(mSetObj=NA, color="NULL", imgName, format="png", dpi=
   #install.packages("tidyverse")
   #library(tidyverse)
   library(ggplot2)
+  library(svglite)
   #library("viridis")
   #library("stringr")
   #library(lettice)
@@ -554,6 +555,17 @@ rich_est_curve <- function(mSetObj=NA, color="NULL", imgName, format="png", dpi=
   #pars <- expand.grid(col = color1, stringsAsFactors = FALSE)
    
   print("ready for ggplot") 
+
+  if (format == "png") {
+     png(imgName)
+  } else if (format == "tiff") {
+     tiff(imgName)
+  } else if (format == "svg") {
+     ggsave(file = "imgName.svg", plot = gg + labs(y="Abundance (log)", x = "Rank"))
+  } else if (format == "pdf") {
+     ggsave(file = "imgName.pdf") 
+  } 
+
   p <- ggplot(plot_dataA, aes(x = Size, y = Richness)) +
     geom_line(aes(color = Index)) +
     facet_grid(Index ~ ., scales = "free_y") +

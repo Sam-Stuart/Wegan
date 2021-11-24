@@ -276,6 +276,22 @@ RarefactionPlot <- function(mSetObj = NA, colorb = "NULL", imgName, format = "pn
   }
   print(type.p)
 
+  ab_rsq <- summary(lm(plot_data~S))
+  print(ab_rsq)
+  print(ab_rsq$r.squared) 
+  rsq <- ab_rsq$adj.r.squared
+  p <- ab_rsq$coefficients[2,4]
+  print(p)
+  if (p > 0.05) {
+     p1 = "> 0.05"
+  }else if (p < 0.05 & p >0.01) {
+     p1 = "< 0.05"
+  }else if (p <0.01 & p > 0.001) {
+     p1 = "< 0.01"
+  } else if (p < 0.001) {
+     p1 = "< 0.001"  
+  }
+
   #Set plot dimensions
   if(is.na(width)){
     w <- 10.5
@@ -339,9 +355,12 @@ RarefactionPlot <- function(mSetObj = NA, colorb = "NULL", imgName, format = "pn
   #mtext("Rarefied Number of Species", 2, 5)
   #mtext("Observed Number of Species", 2, 5)
   #mtext("Rarefaction Linear Plot",5, 1)
-  title(main = "Rarefaction Linear Plot", cex.lab = 1.5) 
+  title(main = "Rarefaction Scatter Plot", cex.lab = 1.5) 
+  abline(ab_rsq)
+  legend("bottomright", legend = paste("R^2 = ", format(rsq, digits = 3), " p ", format(p1)), bty = "n") 
+   
+  #abline(Model) legend("topleft",legend = paste("R2 is", format(summary(Model)$r.squared,digits=3)))
   
-
   dev.off()
   
   return(.set.mSet(mSetObj))
