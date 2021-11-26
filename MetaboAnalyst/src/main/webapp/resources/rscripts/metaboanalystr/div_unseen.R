@@ -7,6 +7,13 @@ PoolCol <- function(mSetObj = NA) {
   #load_dplyr()
   
   mSetObj <- .get.mSet(mSetObj)
+
+  data(dune)
+  data(dune.env)
+
+  mSetObj$dataSet$norm <- dune
+  mSetObj$dataSet$origMeta <- dune.env
+  metaData <- mSetObj$dataSet$origMeta
   
   #if(is.null(mSetObj$dataSet[["procr"]])){
   #  data<-mSetObj$dataSet$preproc
@@ -42,7 +49,7 @@ PoolCol <- function(mSetObj = NA) {
 #'@export
 
 sp_pool <- function(mSetObj = NA, data = "false", pool = "NULL", smallsample = "false", 
-                         index = "NULL", permutations = "", minsize = "", parallel = "") {
+                         index = "NULL", permutations = "100", minsize = "3", parallel = "1") {
   print("start model")
   options(errors = traceback)   
   
@@ -53,11 +60,11 @@ sp_pool <- function(mSetObj = NA, data = "false", pool = "NULL", smallsample = "
   mSetObj <- .get.mSet(mSetObj)
   #Extract input from mSetObj
   
-  #data(dune)
-  #data(dune.env)
+  data(dune)
+  data(dune.env)
 
-  #mSetObj$dataSet$norm <- dune
-  #mSetObj$dataSet$origMeta <- dune.env
+  mSetObj$dataSet$norm <- dune
+  mSetObj$dataSet$origMeta <- dune.env
   metaData <- mSetObj$dataSet$origMeta
   print(metaData)
 
@@ -206,8 +213,6 @@ sp_pool <- function(mSetObj = NA, data = "false", pool = "NULL", smallsample = "
 #'@param plot_data Input the y-axis values, drop down options are pooled values using index "jack1" (default),"jack2", "chao", "boot" or "Species"
 #'@param box.color Input box color of boxplot, options are "skyblue" (default), "green", "turquoise", "steelblue", "peach", "wheat"  
 #'@param border.col options include "blue" (default), "green", "turquoise" & "steelblue", "peach" & "wheat"
-#'@param xlab Input x axis title, default is "Treatment"
-#'@param ylab Input y axis title, default is "Estimate"
 #'@param imgName Input the image name
 #'@param format Select the image format, "png" or "pdf", default is "png" 
 #'@param dpi Input the dpi. If the image format is "pdf", users need not define the dpi. For "png" images, 
@@ -233,16 +238,16 @@ pool_boxplot <- function(mSetObj=NA, plot_data = "NULL", box.color = "NULL",
 
   #boxplot(specnumber(dune)/specpool2vect(pool) ~ Management, col="hotpink",border="cyan3", notch=TRUE)
   if (plot_data == "NULL") {
-    plot_data1 <- (mSetObj$analset$rare/specpool2vect(mSetObj$analset$sp1_in))
+    plot_data1 <- rowMeans(mSetObj$analset$est.ac$S)
     ylab1 = "Richness"
-  } else if (plot_data == "S") {
-    plot_data1 <- mSetObj$analset$est.ac$S
-    ylab1 = "Estimates (species)"
+  #} else if (plot_data == "S") {
+  #  plot_data1 <- (mSetObj$analset$rare/specpool2vect(mSetObj$analset$sp1_in))
+  #  ylab1 = "Estimates (species)"
   } else if (plot_data == "chao") {
-    plot_data1 <- mSetObj$analset$est.ac$chao
+    plot_data1 <- rowMeans(mSetObj$analset$est.ac$chao)
     ylab1 = "Estimates (chao)"
   } else if (plot_data == "ace") {
-    plot_data1 <- mSetObj$analset$est.ac$ace
+    plot_data1 <- rowMeans(mSetObj$analset$est.ac$ace)
     ylab1 = "Estimates (ace)"
   }
   print(plot_data1)
@@ -294,13 +299,13 @@ pool_boxplot <- function(mSetObj=NA, plot_data = "NULL", box.color = "NULL",
   } else if (border.col1 == "peach") {
     border.col1 = "tan2"  
   } else if (border.col1 == "wheat") {
-    border.col1 <- "wheat3" 
+    border.col1 <- "wheat" 
   }
   print(border.col1)
   
   #pars <- expand.grid(col = box.color1, stringsAsFactors = FALSE)
   
-  if (pool == "") {
+  if (pool == "NULL") {
     xlab1 = colnames(metaData[2])
   } else {
     xlab1 = pool
@@ -345,7 +350,7 @@ pool_boxplot <- function(mSetObj=NA, plot_data = "NULL", box.color = "NULL",
 #'License: GNU GPL (>= 2)
 #'@export
 
-rich_est_curve <- function(mSetObj=NA, color="NULL", imgName, format="png", dpi=72, width=NA) {
+rich_est_curve <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA) {
 
   #library(plyr)
   #library(vegan)
@@ -537,43 +542,45 @@ rich_est_curve <- function(mSetObj=NA, color="NULL", imgName, format="png", dpi=
   
   Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
   
-  if (color == "NULL") { 
-    color1 <- c("azure2") #default fill palette is grayscale
-  } else if (color == "green") { #manual user entry. Selection of this option causes text box to appear
-    color1 <- c("darkseagreen")
-  } else if (color == "red") { 
-    color1 <- c("bisque")
-  } else if (color == "gray") { 
-    color1 <- c("darkslategray2")
-  } else if (color == "wheat") { 
-    color1 <- c("cornsilk2")
-  } else if (color == "orange") { 
-    color1 <- c("coral")
-  } 
-  print(color1)
+  #if (color == "NULL") { 
+  #  color1 <- c("azure2") #default fill palette is grayscale
+  #} else if (color == "green") { #manual user entry. Selection of this option causes text box to appear
+  #  color1 <- c("darkseagreen")
+  #} else if (color == "red") { 
+  #  color1 <- c("bisque")
+  #} else if (color == "gray") { 
+  #  color1 <- c("darkslategray2")
+  #} else if (color == "wheat") { 
+  #  color1 <- c("cornsilk2")
+  #} else if (color == "orange") { 
+  #  color1 <- c("coral")
+  #} 
+  #print(color1)
  
   #pars <- expand.grid(col = color1, stringsAsFactors = FALSE)
    
   print("ready for ggplot") 
+
+  p <- ggplot(plot_dataA, aes(x = Size, y = Richness)) +
+    geom_line(aes(color = Index)) +
+    facet_grid(Index ~ ., scales = "free_y") +
+    geom_line(aes(x = Size, y = min), color = "darkgray", linetype = "dotdash") +
+    geom_line(aes(x = Size, y = max), color = "darkgray", linetype = "dotdash") + 
+    xlim(0,20) 
+    
+  #png(imgName)
+  
 
   if (format == "png") {
      png(imgName)
   } else if (format == "tiff") {
      tiff(imgName)
   } else if (format == "svg") {
-     ggsave(file = "imgName.svg", plot = gg + labs(y="Abundance (log)", x = "Rank"))
+     ggsave(file = "imgName.svg", plot = p + theme(legend.position = "none"))
   } else if (format == "pdf") {
      ggsave(file = "imgName.pdf") 
   } 
 
-  p <- ggplot(plot_dataA, aes(x = Size, y = Richness)) +
-    geom_line(aes(color = Index)) +
-    facet_grid(Index ~ ., scales = "free_y") +
-    geom_line(aes(x = Size, y = min), linetype = "dotdash") +
-    geom_line(aes(x = Size, y = max), linetype = "dotdash") + 
-    xlim(0,20) 
-    
-  png(imgName)
   print(p + theme(legend.position = "none")) 
 
   #scale_color_manual(labels = c("CI", "Bootstrap", "Chao", "jackknife1", "jackknife2", "S"), name = "Variants of extrapolated richness", vales = c(color1, "red", "green", "blue", "yellow", "black"))

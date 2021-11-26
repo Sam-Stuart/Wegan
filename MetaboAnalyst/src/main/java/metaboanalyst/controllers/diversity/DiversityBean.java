@@ -199,7 +199,7 @@ public class DiversityBean implements Serializable {
         System.out.print("INSIDE UD"); 
         DiversityUtils.CreateUnseenDiv(sb, false, "NULL", false, "NULL", "100", "3", "1");
         DiversityUtils.PlotPoolBoxplot(sb, "NULL", "NULL", "NULL", sb.getCurrentImage("boxplot_richness"), "png", 72, "false");
-        DiversityUtils.PlotUnseenCurve(sb, "NULL",sb.getCurrentImage("plot_matrices"), "png", 72, "false");
+        DiversityUtils.PlotUnseenCurve(sb, sb.getCurrentImage("plot_matrices"), "png", 72, "false");
         System.out.print("AFTER UD");
     }
 }

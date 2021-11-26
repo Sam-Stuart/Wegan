@@ -6,29 +6,29 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:p="http://primefaces.org/ui">
 
-    <h:form id="unseenGraph">
+    <h:form id="BoxGraph">
         <h:panelGrid columns="1" style="width:380px;">
-            <h:panelGrid id="panelGrid2" columns="2" cellpadding="3" columnClasses="colBrayLong,colBrayShort">
+            <h:panelGrid id="panelGrid2" columns="2" cellpadding="6" columnClasses="colBrayLong,colBrayShort">
                 <h:outputLabel style="font-weight: bold" value="Select the index of extrapolated species richness for boxplot (y-axis):"/>
-                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{unseendivBean.plotdatachosen}">
-                    <f:selectItems value="#{unseendivBean.plotdata}"/>
-                </p:selectOneMenu>
-                <h:outputLabel style="font-weight: bold" value="Select box colors:"/>
-                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{unseendivBean.box_colorchosen}">
-                    <f:selectItems value="#{unseendivBean.box_color}"/>
-                </p:selectOneMenu>
-                <h:outputLabel style="font-weight: bold" value="Select the outline colors of boxplot:"/>
-                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{unseendivBean.border_colchosen}">
-                    <f:selectItems value="#{unseendivBean.border_col}"/>
-                </p:selectOneMenu> 
-                
+                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{unseendivBean.plotdatachosen}">
+                        <f:selectItems value="#{unseendivBean.plotdata}"/>
+                    </p:selectOneMenu>
+                    <h:outputLabel style="font-weight: bold" value="Select box colors:"/>
+                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{unseendivBean.box_colorchosen}">
+                        <f:selectItems value="#{unseendivBean.box_color}"/>
+                    </p:selectOneMenu>
+                    <h:outputLabel style="font-weight: bold" value="Select the outline colors of boxplot:"/>
+                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{unseendivBean.border_colchosen}">
+                        <f:selectItems value="#{unseendivBean.border_col}"/>
+                    </p:selectOneMenu> 
+                <p:panelGrid></p:panelGrid>  
             </h:panelGrid>
             <h:panelGrid id="panelGrid4" columns="1" cellpadding="6" style="float: right">
                 <p:commandButton value="Update" 
                                  styleClass="updateButton"
                                  style="box-shadow: none !important; text-shadow: none !important"
                                 onclick="PF('statusDialog').show()"
-                                oncomplete="PF('graphApperanceFddiv').hide(); PF('statusDialog').hide()"  
+                                oncomplete="PF('graphApperanceIndices').hide(); PF('statusDialog').hide()"  
                                 update=":unseendiv:form1:unseendivPane1  :cmdPane" 
                                 actionListener="#{unseendivBean.unseendivUpdateBox_action()}"/>
             </h:panelGrid>

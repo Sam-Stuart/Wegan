@@ -260,6 +260,7 @@ FD_cluster_plot <- function(mSetObj=NA, color="NULL", imgName, format="png", dpi
   #library(ggplot2)
   #library(ggdendro) not availble for this version of R
   #library(Cairo)
+  library(magick)
   
   mSetObj <- .get.mSet(mSetObj)
   
@@ -278,7 +279,7 @@ FD_cluster_plot <- function(mSetObj=NA, color="NULL", imgName, format="png", dpi
   
   #Name plot for download
   imgName <- paste(imgName, "dpi", dpi, ".", format, sep="")
-  mSetObj$imgSet$Plot.Rarefaction <- imgName
+  mSetObj$imgSet$Plot.FD <- imgName
   
   Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
   par(xpd=FALSE, mar=c(5.1, 4.1, 4.1, 2.1))
@@ -306,6 +307,17 @@ FD_cluster_plot <- function(mSetObj=NA, color="NULL", imgName, format="png", dpi
   plot(hcd, hang = -1, nodePar = nodePar, ylab = "Height", edgePar = list(col = color1, lwd = 2:1))
   title("Cluster dendrogram based on Gower’s distancematrix")
   
+  #if (format == "png") {
+  #  imgName <- image_convert(imgName, format="png")
+  #if (format == "tiff") {
+  #  imgName <- image_convert(imgName, format="tiff")
+  #} else if (format == "svg") {
+  #  imgName <- image_convert(imgName, format="svg")
+  #} else if (format == "pdf") {
+  #  imgName <- image_convert(imgName, format="pdf") 
+  #}
+  
+
   dev.off()
   return(.set.mSet(mSetObj))
 }

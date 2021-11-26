@@ -533,7 +533,7 @@ public class DiversityUtils {
     
     public static boolean CreateUnseenDiv(SessionBean1 sb, boolean data, String poolColName, boolean smallsample, String index, String permutations, String minsize,  String parallel) {
         try {
-            System.out.print("FD");
+            System.out.print("UD");
             RConnection RC = sb.getRConnection(); //Start R connection
             String rCommand = "sp_pool(NA"
                                                  + ", \"" + data
@@ -542,10 +542,7 @@ public class DiversityUtils {
                                                  + "\", \"" + index
                                                  + "\", \"" + permutations
                                                  + "\", \"" + minsize
-//                                                 + "\", \"" + calc_FDiv
-//                                                 + "\", \"" + calc_FRic
                                                  + "\", \"" + parallel
-//                                                 + "\", \"" + calc_CWM
                                                  + "\")";
             RCenter.recordRCommand(RC, rCommand); // records r command
             RC.voidEval(rCommand); // tells you want your r script returns  
@@ -557,16 +554,13 @@ public class DiversityUtils {
     }
     
     
-    public static boolean PlotPoolBoxplot(SessionBean1 sb, String plot_data, String box_color, String border_col, String imgName, String format, int dpi, String width) {
+    public static boolean PlotPoolBoxplot(SessionBean1 sb, String plotdata, String box_color, String border_col, String imgName, String format, int dpi, String width) {
         try {
-            System.out.print("FD");
+            System.out.print("UD");
             RConnection RC = sb.getRConnection(); //Start R connection
             String rCommand = "pool_boxplot(NA"
-                                                 + ", \"" + plot_data
-                                                 //+ "\", \"" + fac_data
+                                                 + ", \"" + plotdata
                                                  + "\", \"" + box_color
-//                                                 + "\", \"" + xlab
-//                                                 + "\", \"" + ylab
                                                  + "\", \"" + border_col
                                                  + "\", \"" + imgName 
                                                  + "\", \"" + format 
@@ -581,13 +575,12 @@ public class DiversityUtils {
         }
     }
     
-    public static boolean PlotUnseenCurve(SessionBean1 sb, String color, String imgName, String format, int dpi, String width) {
+    public static boolean PlotUnseenCurve(SessionBean1 sb, String imgName, String format, int dpi, String width) {
         try {
-            System.out.print("FD");
+            System.out.print("UD");
             RConnection RC = sb.getRConnection(); //Start R connection
             String rCommand = "rich_est_curve(NA"
-                                                 + ", \"" + color
-                                                 + "\", \"" + imgName 
+                                                 + ", \"" + imgName 
                                                  + "\", \"" + format 
                                                  + "\", " + dpi 
                                                  + ", width=NA)";
