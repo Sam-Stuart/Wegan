@@ -60,11 +60,11 @@ sp_pool <- function(mSetObj = NA, data = "false", pool = "NULL", smallsample = "
   mSetObj <- .get.mSet(mSetObj)
   #Extract input from mSetObj
   
-  data(dune)
-  data(dune.env)
+  #data(dune)
+  #data(dune.env)
 
-  mSetObj$dataSet$norm <- dune
-  mSetObj$dataSet$origMeta <- dune.env
+  #mSetObj$dataSet$norm <- dune
+  #mSetObj$dataSet$origMeta <- dune.env
   metaData <- mSetObj$dataSet$origMeta
   print(metaData)
 
@@ -250,10 +250,12 @@ pool_boxplot <- function(mSetObj=NA, plot_data = "NULL", box.color = "NULL",
     plot_data1 <- rowMeans(mSetObj$analset$est.ac$ace)
     ylab1 = "Estimates (ace)"
   }
+  print(mSetObj$analset$est.ac)
   print(plot_data1)
   
   metaData <- mSetObj$analset$metaData
   pool <- mSetObj$analset$treatmentName
+  print(pool)
 
   #Set plot dimensions
   if(is.na(width)){
@@ -582,6 +584,7 @@ rich_est_curve <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA) 
   } 
 
   print(p + theme(legend.position = "none")) 
+  # + labs(title = "Extrapolated species richness in relation to the number of samples")
 
   #scale_color_manual(labels = c("CI", "Bootstrap", "Chao", "jackknife1", "jackknife2", "S"), name = "Variants of extrapolated richness", vales = c(color1, "red", "green", "blue", "yellow", "black"))
   #Suppress the legend since color isn't actually providing any information

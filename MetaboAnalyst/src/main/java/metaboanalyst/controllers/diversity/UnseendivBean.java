@@ -358,11 +358,11 @@ public class UnseendivBean implements Serializable {
         index[3] = new SelectItem("boot", "Boot");
         index[4] = new SelectItem("Species", "Species");
         
-        plotdata = new SelectItem[4];
-        plotdata[0] = new SelectItem("NULL", "Richness");
-        plotdata[1] = new SelectItem("S", "Species");
-        plotdata[2] = new SelectItem("chao", "Chao");
-        plotdata[3] = new SelectItem("ace", "ACE");
+        plotdata = new SelectItem[3];
+        //plotdata[0] = new SelectItem("NULL", "Richness");
+        plotdata[0] = new SelectItem("NULL", "Species");
+        plotdata[1] = new SelectItem("chao", "Chao");
+        plotdata[2] = new SelectItem("ace", "ACE");
                 
         box_color = new SelectItem[6];
         box_color[0] = new SelectItem("NULL", "Skyblue");

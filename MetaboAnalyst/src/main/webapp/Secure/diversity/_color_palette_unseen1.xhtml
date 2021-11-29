@@ -9,7 +9,7 @@
     <h:form id="BoxGraph">
         <h:panelGrid columns="1" style="width:380px;">
             <h:panelGrid id="panelGrid2" columns="2" cellpadding="6" columnClasses="colBrayLong,colBrayShort">
-                <h:outputLabel style="font-weight: bold" value="Select the index of extrapolated species richness for boxplot (y-axis):"/>
+                    <h:outputLabel style="font-weight: bold" value="Select the index of extrapolated species richness for boxplot (y-axis):"/>
                     <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{unseendivBean.plotdatachosen}">
                         <f:selectItems value="#{unseendivBean.plotdata}"/>
                     </p:selectOneMenu>
@@ -28,7 +28,7 @@
                                  styleClass="updateButton"
                                  style="box-shadow: none !important; text-shadow: none !important"
                                 onclick="PF('statusDialog').show()"
-                                oncomplete="PF('graphApperanceIndices').hide(); PF('statusDialog').hide()"  
+                                oncomplete="PF('graphApperanceUnseendiv').hide(); PF('statusDialog').hide()"  
                                 update=":unseendiv:form1:unseendivPane1  :cmdPane" 
                                 actionListener="#{unseendivBean.unseendivUpdateBox_action()}"/>
             </h:panelGrid>
