@@ -18,7 +18,7 @@
 pieChart_setup <- function(mSetObj = NA, byrow = "false", bysum = "false", columns = 1,rows = "NULL", 
                            labels = "NULL", colors = "NULL", mainTitle = "Main Title", lgnd = "false"){
   
-  print("BANANA PIE : This comment is in plotting_pieChart.R");
+  #print("BANANA PIE : This comment is in plotting_pieChart.R");
   mSetObj <- .get.mSet(mSetObj)
   input <- mSetObj$dataSet$norm
   

@@ -74,7 +74,7 @@ public class PlottingMainBean implements Serializable {
     }
     
     private void doDefaultBoxChart(){  
-        PlottingUtils.CreateBoxPlot(sb, "NULL", "NULL", "NULL","NULL", "NULL", "NULL", "NULL", "NULL", "NULL", "NULL");
+        PlottingUtils.CreateBoxPlot(sb, "NULL", "NULL", "NULL","NULL", "NULL", "NULL", "NULL", "NULL", "NULL", "Box Plot Title");
         PlottingUtils.PlotBoxPlot(sb, sb.getCurrentImage("plot_box_chart"), "png", 72);     
     } 
     

@@ -36,17 +36,20 @@ print("iris pure: ")
   print(head(iris))
 print("iris Normalized: ")
   print(head(data))
-  facA = "Species"
-data <- iris
-  facB = "Sepal.Length"
-  facC = "NULL"
-  type = "NULL"
-  fillColor = "v"
-  xlab = "NULL"
-  ylab = "Sepal Length"
-  boxlabs = "NULL"
-  legendTitle = "NULL"
-  mainTitle = "Iris Boxplot"
+print("iris OG :" )
+print(head(mSetObj$dataSet$orig))
+
+  data <- mSetObj$dataSet$orig
+ #  facA = 
+# facB = "Sepal.Length"
+  #facC = "NULL"
+  #type = "NULL"
+  #fillColor = "v"
+  #xlab = "NULL"
+  #ylab = "Sepal Length"
+  #boxlabs = "NULL"
+  #legendTitle = "NULL"
+  #mainTitle = "Iris Boxplot!!"
   # Set x axis label if null
   if (xlab == "NULL"){
     if(facA == "NULL" ){
@@ -61,13 +64,13 @@ data <- iris
   if (ylab == "NULL"){
     if(facB == "NULL"){
       ylab <- "Dependant Variable"
-    } else if (length(facB == 1)) {
+    } else if (length(facB == 5)) {
       ylab <- facB
     } else{
       ylab <- "......"
     }
   }
-    print(" between labels and facs set up") 
+    
   #Set x axis variable data
   if (is.character(facA)){
     if (facA == "NULL"){
@@ -89,8 +92,7 @@ data <- iris
   facB <- unlist(facB) # turn list into a vector
   facB <- unname(facB) # remove column names from vector
   # set fill data - if exists
-  print("facC:   ")
-  print(facC)
+  
   if (!facC == "NULL"){
     facC <- data[,facC]
     facC <- unlist(facC)
@@ -107,7 +109,7 @@ data <- iris
   }
   facA_dim <- length(unique(facA)) # number of groups in facA
   facC_dim <- length(unique(facC)) # number of groups in facC
-   print("before color")
+   
   # select Color if no fill variable :
   if (facC == "NULL"){
     if (fillColor == "NULL"){
@@ -154,8 +156,7 @@ data <- iris
   }
   # save properties to object
 print("saving everyting")
-print(mSetObj)
-print(typeof(mSetObj));
+
 
   mSetObj$analSet$boxPlot <- list(data = data, facA = facA, facB = facB, facC = facC,
                                       type=type, fillColor = fillColor,
@@ -187,9 +188,9 @@ print(typeof(mSetObj));
 #'@export
 
 plotBoxPlot <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA){
-  print("plot box plot function") 
+  print("plot box plotting function") 
   mSetObj <- .get.mSet(mSetObj)
-  print("Bobs your monkey's uncle!!") 
+  
   
   
   # call upon graph parameters
