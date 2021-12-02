@@ -132,7 +132,7 @@ public class AnalysisBean implements Serializable {
     
     //-----------------------------------------------------------------------------------------------
     private void doDefaultPCA() {
-        ChemoMetrics.InitPCA(sb);
+        ChemoMetrics.InitPCA(sb, false);
         ChemoMetrics.PlotPCAPairSummary(sb, sb.getCurrentImage("pca_pair"), "png", 72, 5);
         ChemoMetrics.PlotPCAScree(sb, sb.getCurrentImage("pca_scree"), "png", 72, 5);
         ChemoMetrics.PlotPCA2DScore(sb, sb.getCurrentImage("pca_score2d"), "png", 72, 1, 2, 0.95, 1, 0);

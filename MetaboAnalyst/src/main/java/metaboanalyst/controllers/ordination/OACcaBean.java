@@ -28,13 +28,13 @@ public class OACcaBean implements Serializable {
     private String usrName = usr.getName();
     
 
-    private String fileRowScores = "cca_row_scores.csv";
+    private String fileRowScores = "cca_sample_scores.csv";
     private String fileRowScorePath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileRowScores + "\">" + fileRowScores + "</a>";
     
-    private String fileColScores = "cca_column_scores.csv";
+    private String fileColScores = "cca_variable_scores.csv";
     private String fileColScorePath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileColScores + "\">" + fileColScores + "</a>";
     
-    private String fileEnv = "cca_environment_scores.csv";
+    private String fileEnv = "cca_constraing_data_scores.csv";
     private String fileEnvPath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileEnv + "\">" + fileEnv + "</a>";
     
     private String fileScree = "cca_scree_data.csv";
@@ -55,7 +55,7 @@ public class OACcaBean implements Serializable {
     private String groupCol = "null";
     private String groupPoint = "null";
     private String color = "null";
-    private String envDataCol = "null";
+    private String envDataCol = " ";
     
     public String getColor() {
         return color;
@@ -188,8 +188,9 @@ public class OACcaBean implements Serializable {
     
 // ACTION BUTTONS //
     public void ccaUpdate_action() {
+//        OAUtils.CreateBray(sb, "NULL", "NULL", "NULL", "NULL");
         OAUtils.CreateCCA(sb, doAbundance, doOriginal, envDataCol);
-        OAUtils.PlotCCA(sb, color, addEllipse, varArrows, envArrows, envCentroid, sampleNames, groupCol, "NULL", "NULL", sb.getNewImage("ord_cca_2D"), "png", 72, "NULL");
+        OAUtils.PlotCCA(sb, color, addEllipse, varArrows, envArrows, envCentroid, sampleNames, groupCol, "NULL", "NULL", sb.getNewImage("ord_cca_2D"), "png", 72);
     }
     
     

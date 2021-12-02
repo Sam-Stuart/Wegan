@@ -1,0 +1,137 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_anal_template.xhtml">
+    <ui:define name="metaInfo">
+        <f:event type="preRenderView" listener="#{diversityBean.performDefaultAnalysis('Fddiv')}"/> 
+        <f:event type="preRenderView" listener="#{downloader.setupDownloadTable()}"/>
+    </ui:define>
+    <ui:define name="content">
+        <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
+            <p:tabView id="fddiv">
+                <p:tab title ="Cluster Dendrogram of Gower’s Distancematrix" titleStyleClass="p-tab-nav">
+                    <h:form id="form1">
+                 <!--DiversityUtils.CreateFdDiv(sb, doOriginal, corrchosen, doW_abun, doStand_x, m, doCalc_FDiv, doCalc_FRic, doStand_FRic, doCalc_CWM, doPrint_pco, doMessages, asym_bin, ordchosen);-->       
+               
+<!--                        <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> -->
+                            <h:panelGrid id="panelGrid" columns="4" cellpadding="2" >
+                                <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
+                                <p:selectBooleanCheckbox value ="#{fddivBean.doOriginal}"/> 
+                                <h:outputLabel style="font-weight: bold" value="Should weight by the relative abundances of the species?:"/>
+                                <p:selectBooleanCheckbox value ="#{fddivBean.doW_abun}"/> 
+                                <h:outputLabel style="font-weight: bold" value="Are all traits numeric data?:"/>
+                                <p:selectBooleanCheckbox value = "#{fddivBean.doStand_x}"/>  
+                                <h:outputLabel style="font-weight: bold" value="Should standardize FRic by the ‘global’ FRic?"/>
+                                <p:selectBooleanCheckbox value = "#{fddivBean.doStand_FRic}"/>  
+                                <h:outputLabel style="font-weight: bold" value="Should compute community-level weighted means of trait values (CWM)?"/>
+                                <p:selectBooleanCheckbox value = "#{fddivBean.doPrint_pco}"/>  
+                                <h:outputLabel style="font-weight: bold" value="Weight:"/>
+                                <p:inputText value = "#{fddivBean.w_text}"/>
+                                <h:outputLabel style="font-weight: bold" value="Fill in the number of PCoA axes to keep as ‘traits’ for calculating FRic and FDiv:"/>
+                                <p:inputText value = "#{fddivBean.m}"/>
+                                <h:outputLabel style="font-weight: bold" value="Fill in vector listing the asymmetric binary variables in data:"/>
+                                <p:inputText value = "#{fddivBean.asym_bin}"/>                                
+                                <h:outputLabel style="font-weight: bold" value="Select correction method:"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{fddivBean.corrchosen}">
+                                    <f:selectItems value="#{fddivBean.corr}"/>
+                                </p:selectOneMenu> 
+                                <h:outputLabel style="font-weight: bold" value="Set the method for ordinal variables:"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{fddivBean.ordchosen}">
+                                    <f:selectItems value="#{fddivBean.ord}"/>
+                                </p:selectOneMenu> 
+                            </h:panelGrid>  
+                            <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
+                            <p:commandButton value="Update" 
+                                             styleClass="updateButton"
+                                             style="box-shadow: none !important; text-shadow: none !important"
+                                            onclick="PF('statusDialog').show()"
+                                            oncomplete="PF('statusDialog').hide()"  
+                                            update=":fddiv:form1:fddivPane1  :cmdPane" 
+                                            actionListener="#{fddivBean.fddivUpdate_action()}"/>                          
+                            <p:commandButton value="Customize Graph"
+                                             styleClass="graphicsButton"
+                                             style="box-shadow: none !important; text-shadow: none !important;"
+                                             actionListener="#{sessionBean1.graphicsLnk_action('pca_pair')}" 
+                                            oncomplete="PF('graphApperanceFddiv').show()"/>  
+                            </h:panelGrid>             
+                        <h:panelGrid class="resultsBar" columns="2">
+                            <h:panelGroup>
+                                <h:panelGrid columns="1" style="text-align : left;">
+                                    Results
+                                </h:panelGrid>
+                            </h:panelGroup> 
+                            <h:panelGroup>
+                                <h:panelGrid columns="3" class="resultsImages">
+                                    <i class="fa fa-question-circle"></i>
+                                </h:panelGrid>
+                            </h:panelGroup>                            
+                        </h:panelGrid>                         
+                        
+                        <h:panelGrid id="fddivPane1" style="width: 100%;">
+<!--                        // <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                            //    
+                            // </h:panelGrid>-->
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
+                                    <h:outputText escape="false" value="#{fddivBean.filefdrichresultpath}"/>
+                                </i>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
+                                    <h:outputText escape="false" value="#{fddivBean.filefdevenresultpath}"/>
+                                </i>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
+                                    <h:outputText escape="false" value="#{fddivBean.filefddigresultpath}"/>
+                                </i>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">                             
+                                    <h:outputText escape="false" value="#{fddivBean.filefddisresultpath}"/>
+                                </i>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1.3px">                             
+                                    <h:outputText escape="false" value="#{fddivBean.filefdraoresultpath}"/>
+                                </i>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">                             
+                                    <h:outputText escape="false" value="#{fddivBean.filefdcomresultpath}"/>
+                                </i>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">                             
+                                    <h:outputText escape="false" value="#{fddivBean.filefdgowresultpath}"/>
+                                </i>
+                            </h:panelGrid>
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <p:commandButton value="Export"
+                                    styleClass="exportButton"
+                                    style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                    actionListener="#{sessionBean1.graphicsLnk_action('Cluster_Plot')}"
+                                    oncomplete="PF('graphDialog').show()"/>
+                            </h:panelGrid>                                                 
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('Cluster_Plot')}" alt="TestPlot"/>
+                            </h:panelGrid>                            
+                        </h:panelGrid> 
+                    </h:form>
+                </p:tab>
+            </p:tabView>
+            <p:dialog modal="true" widgetVar="graphApperanceFddiv" 
+                style="width: 400px; height:400px;" 
+                appendTo="@(body)" header="Graphics Center"
+                draggable="false" closable="true" resizable="false"> 
+                <ui:include src="_color_palette_fd.xhtml" />
+            </p:dialog>
+ 
+        </h:panelGrid>
+        
+    </ui:define>
+</ui:composition>

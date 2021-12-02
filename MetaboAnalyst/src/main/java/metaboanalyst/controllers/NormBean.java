@@ -6,6 +6,7 @@ package metaboanalyst.controllers;
 
 import metaboanalyst.utils.DataUtils;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -106,6 +107,89 @@ public class NormBean implements Serializable {
         return normPerformed;
     }
 
+//    ///LOUISA ADDED THIS START!!!!!!!!!!!!!!
+//    private String predictText = "NULL";
+//        
+//    public String getPredictText() {
+//        return predictText;
+//    }
+//
+//    public void setPredictText(String predictText) {
+//        this.predictText = predictText;
+//    } 
+//    
+//    private SelectItem[] assumptionCol = null;
+//    
+//    public SelectItem[] getAssupCol(){
+//        String[] columns = RDataUtils.AssupColumn(sb);
+//        int columnsLen = columns.length;
+//        assumptionCol = new SelectItem[columnsLen];
+//        List<String> columnNames = Arrays.asList(columns);
+//        for (int i = 0; i < columnsLen; i++) {
+//            assumptionCol[i] = new SelectItem(columnNames.get(i), columnNames.get(i));
+//        }
+//        return assumptionCol;
+//    }
+//    
+//    private String assumptionColName = getAssupCol()[0].getLabel();
+//    
+//    public String getAssumptionColName() {
+//        return assumptionColName;
+//    }
+//
+//    public void setAssumptionColName(String assumptionColName) {
+//        this.assumptionColName = assumptionColName;
+//    }
+//    ///LOUISA ADDED THIS END!!!!!!!!!!!!!!
+
+    ///LOUISA ADDED THIS START!!!!!!!!!!!!!!
+    private String predText = "NULL";
+        
+    public String getPredText() {
+        return predText;
+    }
+
+    public void setPredText(String predText) {
+        this.predText = predText;
+    }
+    
+        
+    private SelectItem[] assumpColOpts = null;
+    
+    public SelectItem[] getAssumpColOpts(){
+        String[] columns = RDataUtils.AssupColumn(sb);
+        int columnsLen = columns.length;
+        assumpColOpts = new SelectItem[columnsLen];
+        List<String> columnNames = Arrays.asList(columns);
+        for (int i = 0; i < columnsLen; i++) {
+            assumpColOpts[i] = new SelectItem(columnNames.get(i), columnNames.get(i));
+        }
+        return assumpColOpts;
+    }
+    
+    
+    private String assumptionColName = getAssumpColOpts()[0].getLabel();
+    
+    public String getAssumptionColName() {
+        return assumptionColName;
+    }
+
+    public void setAssumptionColName(String assumptionColName) {
+        this.assumptionColName = assumptionColName;
+    }
+    
+//    private String assumptionNumName = getAssumpColOpts()[0].getLabel();
+//    
+////    private String numA = "NULL";   
+//    public String getAssumptionNumName() {
+//        return assumptionNumName;
+//    }
+//
+//    public void setAssumptionNumName(String assumptionNumName) {
+//        this.assumptionNumName = assumptionNumName;
+//    }
+    
+    
     public void performDataNormalization() {
 
         //String specNorm = smplSpecNorm ? "T" : "NULL";
@@ -114,7 +198,7 @@ public class NormBean implements Serializable {
             return;
         }
         if (rowNormOpt.equals("CompNorm") && refVar == null) {
-            sb.updateMsg("Error", "You need to manually specify a reference feature for normalization");
+            sb.updateMsg("Error", "You need to manually specify a reference variable for normalization");
             return;
         }
         if (rowNormOpt.equals("GroupPQN") && refGrp == null) {
@@ -132,11 +216,11 @@ public class NormBean implements Serializable {
             case "CompNorm":
                 ref = refVar;
                 break;
-            case "GroupPQN":
-                ref = refGrp;
+            case "SamplePQN":
+                ref = refSmpl;
                 break;
             default:
-                ref = refSmpl;
+                ref = refGrp;
                 break;
         }
         int res = RDataUtils.normalizeData(RC, rowNormOpt, transNormOpt, scaleNormOpt, ref, includeRatio, ratioNumOpt);
@@ -145,6 +229,25 @@ public class NormBean implements Serializable {
             //plot the new image
             RDataUtils.plotNormSummaryGraph(sb, sb.getNewImage("norm"), "png", 72);
             RDataUtils.plotSampleNormSummaryGraph(sb, sb.getNewImage("snorm"), "png", 72);
+//            ///LOUISA ADDED THIS START!!!!!!!!!!!!!!
+//            RDataUtils.shapiroTest(RC);
+//            RDataUtils.leveneTest(RC, "NULL");
+//            RDataUtils.ResidualPlot(sb, "NULL", "NULL", sb.getNewImage("resid"), "png", 72);
+//            RDataUtils.Density_plot(sb, sb.getNewImage("residDen"), "png", 72);
+//            RDataUtils.Residual_fitPlot(sb, sb.getNewImage("residFit"), "png", 72);
+//            RDataUtils.QQ_plot(sb, sb.getNewImage("qq"), "png", 72);
+//            RDataUtils.AssupColumn(sb);
+//            ///LOUISA ADDED THIS END!!!!!!!!!!!!!!
+//            /LOUISA ADDED THIS START!!!!!!!!!!!!!!
+//            RDataUtils.AssupColumn(sb);
+//            RDataUtils.shapiroTest(sb, sb.getNewImage("Shapiro"), "png", 72, "false");
+//            //RDataUtils.shapiroTestT(sb, sb.getNewImage("ShapiroT"), "png", 72, "false");
+//            RDataUtils.leveneTest(sb, "NULL", sb.getNewImage("Levene"), "png", 72, "false");
+//            RDataUtils.ResidualCal(sb, "NULL", "NULL");
+//            RDataUtils.ResidualPlot(sb, sb.getNewImage("residFit"), "png", 72, "false");
+          
+            
+            ///LOUISA ADDED THIS END!!!!!!!!!!!!!!
             //now reset all data analysis to default
             sb.setDataNormed(true);
             sb.resetAnalysis();
@@ -152,13 +255,15 @@ public class NormBean implements Serializable {
                 RocAnalBean rocAnalBean = (RocAnalBean) DataUtils.findBean("rocAnalBean");
                 rocAnalBean.resetData();
             }
-            sb.updateMsg("OK", "You can click <b>View Result</b> button to view the effect, or <b>Proceed</b> button to analysis page!");
+            sb.updateMsg("OK", "You can click <b>View Result</b> button to view the effect, or the <b>Proceed</b> button to move to the analysis page!");
             normPerformed = true;
         } else {
             sb.updateMsg("Error", "Unknown error happened during data normalization process!");
         }
     }
 
+// -------------------------------------------------------------------------------------    
+    
     private boolean includeRatio = false;
 
     public boolean isIncludeRatio() {
@@ -241,4 +346,40 @@ public class NormBean implements Serializable {
         }
     }
 
+    
+    
+    public void performAutoNormalization() {
+        RConnection RC = sb.getRConnection();
+//        String[] buttons = RDataUtils.AutoNormOptions(RC);
+        String res = RDataUtils.autoNormalize(RC);
+        String msg = RDataUtils.getCurrentMsg(RC);
+        if (res == null) {
+            sb.updateMsg("Error", "Unknown error happened during data normalization process!");
+        } else {
+            rowNormOpt = res;
+            sb.updateMsg("OK", "Click the <b>Submit</b> button to implement the suggested normalization method!");
+        }            
+    }
+ 
+    
+//    /LOUISA ADDED THIS!!!!!!!!!!!!!!
+    public void leveneUpdate_action() {
+        //RConnection RC = sb.getRConnection();
+        RDataUtils.leveneTest(sb, predText, sb.getNewImage("Levene"), "png", 72, "false");
+    }
+    
+    public void ResidCalUpdate_action() {
+        RDataUtils.ResidualCal(sb, predText, assumptionColName); 
+        RDataUtils.ResidualPlot(sb, sb.getNewImage("residFit"), "png", 72, "false");
+    }
+    
+    
+//    ///LOUISA ADDED THIS!!!!!!!!!!!!!!
+//    public void leveneUpdate_action() {
+//        RConnection RC = sb.getRConnection();
+//        RDataUtils.leveneTest(RC, predictText);
+//    }
+//    public void ResidPlotUpdate_action() {
+//        RDataUtils.ResidualPlot(sb, assumptionColName, predictText, sb.getNewImage("resid"), "png", 72);    
+//    }
 }

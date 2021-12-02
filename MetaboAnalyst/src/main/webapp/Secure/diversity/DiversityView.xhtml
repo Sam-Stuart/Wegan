@@ -10,12 +10,51 @@
         <f:event type="preRenderView" listener="#{sessionBean1.registerPage('Diversity')}"/> 
     </ui:define>
     <ui:define name="content">
-        <h:form>
+        <h:form> 
             <h:panelGrid style="padding:20px 40px 20px 40px; font-size: 13px; line-height: 25px; width:100%">
-                <h2>Select an analysis path to explore :</h2>
-                <h:panelGrid style="border: lightgray thin solid; width: 670px; margin-left: 36px; padding: 15px 20px 10px 25px; background-color: #F9F9FB; font-size: 13px;">
+                <h2>Select an analysis path to explore:</h2>
+                <h:panelGrid style="width:100%; background-color: #75bafb;"></h:panelGrid>
+                <h:panelGrid style="width:100%; background-color: white; "></h:panelGrid>
+                <h:panelGrid style="width:100%; background-color: #75bafb;"></h:panelGrid>
+                <h:panelGrid style="width:100%; background-color: white; "></h:panelGrid>
+
+                <h:panelGrid style="border: none; width: 100%; padding: 15px 20px 10px 25px; background-color: #8cbd4830; font-size: 14px;">
+
+<!--                    <h:commandLink id="alpha" style="margin-left: 25px" action="Alpha" onclick="PF('statusDialog').show()" value="Alpha"/>
+                    <p:tooltip for="alpha" style="font-size: 11px;" value="TODO: Write Hoverover" />
                     
-                   <h2>Welcome to Diversity!!!</h2> 
+                    <h:commandLink id="beta" style="margin-left: 25px" action="Beta" onclick="PF('statusDialog').show()" value="Beta"/>
+                    <p:tooltip for="beta" style="font-size: 11px;" value="TODO: Write Hoverover" />
+                    
+                    <h:commandLink id="gamma" style="margin-left: 25px" action="Gamma" onclick="PF('statusDialog').show()" value="Gamma"/>
+                    <p:tooltip for="gamma" style="font-size: 11px;" value="TODO: Write Hoverover" />
+                    
+                    <h:commandLink id="species" style="margin-left: 25px" action="Species" onclick="PF('statusDialog').show()" value="Species"/>
+                    <p:tooltip for="species" style="font-size: 11px;" value="TODO: Write Hoverover" />
+
+                    <h:commandLink id="test_tutorial" style="margin-left: 25px" action="Test_Tutorial" onclick="PF('statusDialog').show()" value="Test Tutorial"/>
+                    <p:tooltip for="test_tutorial" style="font-size: 11px;" value="TODO: Write Hoverover" />-->
+                    
+                    <h:commandLink id="indices" style="margin-left: 25px" action="Indices" onclick="PF('statusDialog').show()" value="Diversity Indices"/>
+                    <p:tooltip for="indices" style="font-size: 11px;" value="TODO: Diversity indices, species richness, evenness and alpha, beta and gamma diversity" />
+                    
+                    <h:commandLink id="rarefaction" style="margin-left: 25px" action="Rarefaction" onclick="PF('statusDialog').show()" value="Rarefaction"/>
+                    <p:tooltip for="rarefaction" style="font-size: 11px;" value="TODO: Write Hoverover" />
+
+                    <h:commandLink id="abunddist" style="margin-left: 25px" action="Abunddist" onclick="PF('statusDialog').show()" value="Species Abundance Distribution"/>
+                    <p:tooltip for="abunddist" style="font-size: 11px;" value="TODO: Write Hoverover" />
+
+                    <h:commandLink id="accummodel" style="margin-left: 25px" action="Accummodel" onclick="PF('statusDialog').show()" value="Species Accumulation Model"/>
+                    <p:tooltip for="accummodel" style="font-size: 11px;" value="Assess diversity across populations or evaluate sampling efforts" />
+
+                    <h:commandLink id="taxodiv" style="margin-left: 25px" action="Taxodiv" onclick="PF('statusDialog').show()" value="Taxonomic Diversity and Distinctness "/>
+                    <p:tooltip for="taxodiv" style="font-size: 11px;" value="Taxonomic and functional diversity" />
+                    
+                    <h:commandLink id="fddiv" style="margin-left: 25px" action="Fddiv" onclick="PF('statusDialog').show()" value="Functional Diversity"/>
+                    <p:tooltip for="fddiv" style="font-size: 11px;" value="Functional diversity" />
+                    
+                    <h:commandLink id="unseendiv" style="margin-left: 25px" action="Unseendiv" onclick="PF('statusDialog').show()" value="Number of Unseen Species"/>
+                    <p:tooltip for="unseendiv" style="font-size: 11px;" value="Analyze number of unseen species" />
                     
                 </h:panelGrid>
             </h:panelGrid> 

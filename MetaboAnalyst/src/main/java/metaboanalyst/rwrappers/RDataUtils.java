@@ -7,6 +7,8 @@ package metaboanalyst.rwrappers;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.faces.model.SelectItem;
 import metaboanalyst.models.ComponentBean;
 import metaboanalyst.utils.DataUtils;
@@ -29,8 +31,8 @@ public class RDataUtils {
 
 
     /*
-     * data type: list, conc, specbin, pktable, nmrpeak, mspeak, msspec
-     * anal type: stat, pathora, pathqea, msetora, msetssp, msetqea, map, peaksearch
+     * data type: main, meta, env
+     * anal type: stat, ord, plot, stat, div, disp, clust, tax, corr
      *
      * */
     public static boolean initDataObjects(RConnection RC, String dataType, String analType, boolean isPaired) {
@@ -46,10 +48,10 @@ public class RDataUtils {
     }
 
     //should be in the same directory format specify sample in row or column
-    public static boolean readTextData(RConnection RC, String filePath, String format, String lblType) {
+    public static boolean readTextData(RConnection RC, String filePath, String dataFormat, String lblType, String dataNames) {
         try {
-            String rCommand = "Read.TextData(NA, \"" + filePath + "\", \"" + format + "\", \"" + lblType + "\");";
-            String rCommand2 = "Read.TextData(NA, \"" + "Replacing_with_your_file_path" + "\", \"" + format + "\", \"" + lblType + "\");";
+            String rCommand = "Read.TextData(NA, \"" + filePath + "\", \"" + dataFormat + "\", \"" + lblType + "\", \"" + dataNames + "\");";
+            String rCommand2 = "Read.TextData(NA, \"" + "Replacing_with_your_file_path" + "\", \"" + dataFormat + "\", \"" + lblType + "\", \"" + dataNames + "\");";
             RCenter.recordRCommand(RC, rCommand2);
             return (RC.eval(rCommand).asInteger() == 1);
         } catch (Exception rse) {
@@ -59,10 +61,10 @@ public class RDataUtils {
     }
 
     //should be in the same directory format specify sample in row or column
-    public static boolean readTextDataMeta(RConnection RC, String filePath, String format, String lblType) {
+    public static boolean readTextDataMeta(RConnection RC, String filePath, String metaFormat, String lblType, String metaNames) {
         try {
-            String rCommand = "Read.TextDataMeta(NA, \"" + filePath + "\", \"" + format + "\", \"" + lblType + "\");";
-            String rCommand2 = "Read.TextDataMeta(NA, \"" + "Replacing_with_your_file_path" + "\", \"" + format + "\", \"" + lblType + "\");";
+            String rCommand = "Read.TextDataMeta(NA, \"" + filePath + "\", \"" + metaFormat + "\", \"" + lblType + "\", \"" + metaNames + "\");";
+            String rCommand2 = "Read.TextDataMeta(NA, \"" + "Replacing_with_your_file_path" + "\", \"" + metaFormat + "\", \"" + lblType + "\", \"" + metaNames + "\");";
             RCenter.recordRCommand(RC, rCommand2);
             return (RC.eval(rCommand).asInteger() == 1);
         } catch (Exception rse) {
@@ -71,10 +73,10 @@ public class RDataUtils {
         }
     }    
 
-    public static boolean readTextDataEnv(RConnection RC, String filePath, String format, String lblType) {
+    public static boolean readTextDataEnv(RConnection RC, String filePath, String envFormat, String lblType, String envNames) {
         try {
-            String rCommand = "Read.TextDataEnv(NA, \"" + filePath + "\", \"" + format + "\", \"" + lblType + "\");";
-            String rCommand2 = "Read.TextDataEnv(NA, \"" + "Replacing_with_your_file_path" + "\", \"" + format + "\", \"" + lblType + "\");";
+            String rCommand = "Read.TextDataEnv(NA, \"" + filePath + "\", \"" + envFormat + "\", \"" + lblType + "\", \"" + envNames + "\");";
+            String rCommand2 = "Read.TextDataEnv(NA, \"" + "Replacing_with_your_file_path" + "\", \"" + envFormat + "\", \"" + lblType + "\", \"" + envNames + "\");";            
             RCenter.recordRCommand(RC, rCommand2);
             return (RC.eval(rCommand).asInteger() == 1);
         } catch (Exception rse) {
@@ -412,6 +414,18 @@ public class RDataUtils {
         }
     }
 
+    //retrieve best noramlization method
+    public static String autoNormalize(RConnection RC) {
+        try {
+            String rCommand = "BestNormalize(NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            return RC.eval(rCommand).asString();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    
     //plot a boxplot and density for each compound
     public static void plotNormSummaryGraph(SessionBean1 sb, String imgName, String format, int dpi) {
         try {
@@ -437,6 +451,183 @@ public class RDataUtils {
             e.printStackTrace();
         }
     }
+    
+//       //LOUISA ADDED THIS START!!!!!!!!!!!!
+//        //perform Shapiro-Wilk test
+//    public static String shapiroTest(RConnection RC) {
+//        try {
+//            String rCommand = "shapiroT(NA)";
+//            RCenter.recordRCommand(RC, rCommand);
+//            return RC.eval(rCommand).asString();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return null;
+//        }
+//    }
+//    
+//            //perform Levene's test
+//    public static String leveneTest(RConnection RC, String predText) {
+//        try {
+//            String rCommand = "levene(NA" + ", \"" + predText + ")";
+       //LOUISA ADDED THIS START!!!!!!!!!!!!
+    
+        //Extract numeric variable names for residual plot
+    
+//    public static String[] AssupColumn(SessionBean1 sb) {
+//        try {
+//            RConnection RC = sb.getRConnection();
+//            String rCommand = "AssupCol(NA)";
+//            RCenter.recordRCommand(RC, rCommand);
+//            return RC.eval(rCommand).asString();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return null;
+//        }
+//    }
+//    
+//    //Plot regression plus residuals
+//    public static void ResidualPlot(SessionBean1 sb, String numA, String predText, String imgName, String format, int dpi) {
+//        try {
+//            RConnection RC = sb.getRConnection();
+//            String rCommand = "ResidPlot(NA" + ", \"" + numA + "\", \"" + predText + "\", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
+    
+    public static String[] AssupColumn(SessionBean1 sb){
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "AssupCol(NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            return RC.eval(rCommand).asStrings();
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        } catch (REXPMismatchException ex) {
+            Logger.getLogger(RDataUtils.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+        //perform Shapiro-Wilk test
+    public static String shapiroTest(SessionBean1 sb, String imgName, String format, int dpi, String width) {
+         try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "shapiroT(NA" + ", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            return RC.eval(rCommand).asString();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    
+    //perform Levene's test
+    public static String leveneTest(SessionBean1 sb, String predText, String imgName, String format, int dpi, String width) {
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "levene(NA" + ", \"" + predText + "\", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            return RC.eval(rCommand).asString();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    
+    //Plot regression plus residuals
+//    public static void residualCal(SessionBean1 sb, String assumptionColName, String predText) {
+//        try {
+//            RConnection RC = sb.getRConnection();
+//            String rCommand = "Residuals(NA" + ", \"" + assumptionColName + "\", \"" + predText + "\")";
+//            RCenter.recordRCommand(RC, rCommand);
+//            sb.addGraphicsCMD("resid", rCommand);
+//            RC.voidEval(rCommand);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
+//    
+//        //Plot residuals vs fitted values
+//    public static void Residual_fitPlot(SessionBean1 sb, String imgName, String format, int dpi) {
+//        try {
+//            RConnection RC = sb.getRConnection();
+//            String rCommand = "Resid_fitPlot(NA" + ", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
+//            RCenter.recordRCommand(RC, rCommand);
+//            sb.addGraphicsCMD("residFit", rCommand);
+//            RC.voidEval(rCommand);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
+//   
+//            //QQ Plot
+//    public static void QQ_plot(SessionBean1 sb, String imgName, String format, int dpi) {
+//        try {
+//            RConnection RC = sb.getRConnection();
+//            String rCommand = "QQplot(NA" + ", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
+//            RCenter.recordRCommand(RC, rCommand);
+//            sb.addGraphicsCMD("qq", rCommand);
+//            RC.voidEval(rCommand);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
+//       
+//            //Plot density of residuals
+//    public static void Density_plot(SessionBean1 sb, String imgName, String format, int dpi) {
+//        try {
+//            RConnection RC = sb.getRConnection();
+//            String rCommand = "Densityplot(NA" + ", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
+//            RCenter.recordRCommand(RC, rCommand);
+//            sb.addGraphicsCMD("residDen", rCommand);
+//            RC.voidEval(rCommand);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
+//    
+//    //Extract numeric column names for residual plot
+//    public static String[] AssupColumn(SessionBean1 sb){
+//        try {
+//            RConnection RC = sb.getRConnection();
+//            String rCommand = "AssupCol(NA)";
+//            RCenter.recordRCommand(RC, rCommand);
+//            return RC.eval(rCommand).asStrings();
+//        } catch (RserveException rse) {
+//            System.out.println(rse);
+//        } catch (REXPMismatchException ex) {
+//            Logger.getLogger(OAUtils.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        return null;
+//    } 
+//   //LOUISA ADDED THIS END!!!!!!!!!!!!
+    
+    public static void ResidualCal(SessionBean1 sb, String predText, String assumptionColName) {
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "Residuals(NA" + ", \"" + predText + "\", \"" + assumptionColName + "\")";
+            RCenter.recordRCommand(RC, rCommand);
+            sb.addGraphicsCMD("resid", rCommand);
+            RC.voidEval(rCommand);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    
+        //Plot residuals vs fitted values
+    public static void ResidualPlot(SessionBean1 sb, String imgName, String format, int dpi, String width) {
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "ResidPlot(NA" + ", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            sb.addGraphicsCMD("residFit", rCommand);
+            RC.voidEval(rCommand);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+  
+    
+   //LOUISA ADDED THIS END!!!!!!!!!!!!
+    
     //---------------Methods for access Data information-------------
     //get data information
 
@@ -609,7 +800,7 @@ public class RDataUtils {
 
     public static int getProcFeatureNumber(RConnection RC) {
         try {
-            return RC.eval("ncol(mSet$dataSet$procr)").asInteger();
+            return RC.eval("ncol(mSetObj$dataSet$procr)").asInteger();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -2256,5 +2447,9 @@ public class RDataUtils {
         }
         return null;
     }
+
+//    public static void readTextData(RConnection RC, String testRocPath, String rowu, String disc, String afalse, String afalse0) {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
 
 }

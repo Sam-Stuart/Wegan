@@ -1,21 +1,21 @@
-Thickness	Moisture	Management	Use	Manure
-2.8	1	SF	Haypastu	IV
-3.5	1	BF	Haypastu	II
-4.3	2	SF	Haypastu	IV
-4.2	2	SF	Haypastu	IV
-6.3	1	HF	Hayfield	II
-4.3	1	HF	Haypastu	II
-2.8	1	HF	Pasture	III
-4.2	5	HF	Pasture	III
-3.7	4	HF	Hayfield	I
-3.3	2	BF	Hayfield	I
-3.5	1	BF	Pasture	I
-5.8	4	SF	Haypastu	II
-6	5	SF	Haypastu	III
-9.3	5	NM	Pasture	NA
-11.5	5	NM	Haypastu	NA
-5.7	5	SF	Pasture	III
-4	2	NM	Hayfield	NA
-4.6	1	NM	Hayfield	NA
-3.7	5	NM	Hayfield	NA
-3.5	5	NM	Hayfield	NA
+"A1","Moisture","Management","Use","Manure"
+2.8,"One","SF","Haypastu","Four"
+3.5,"One","BF","Haypastu","Two"
+4.3,"Two","SF","Haypastu","Four"
+4.2,"Two","SF","Haypastu","Four"
+6.3,"One","HF","Hayfield","Two"
+4.3,"One","HF","Haypastu","Two"
+2.8,"One","HF","Pasture","Three"
+4.2,"Five","HF","Pasture","Three"
+3.7,"Four","HF","Hayfield","One"
+3.3,"Two","BF","Hayfield","One"
+3.5,"One","BF","Pasture","One"
+5.8,"Four","SF","Haypastu","Two"
+6,"Five","SF","Haypastu","Three"
+9.3,"Five","NM","Pasture","Zero"
+11.5,"Five","NM","Haypastu","Zero"
+5.7,"Five","SF","Pasture","Three"
+4,"Two","NM","Hayfield","Zero"
+4.6,"One","NM","Hayfield","Zero"
+3.7,"Five","NM","Hayfield","Zero"
+3.5,"Five","NM","Hayfield","Zero"

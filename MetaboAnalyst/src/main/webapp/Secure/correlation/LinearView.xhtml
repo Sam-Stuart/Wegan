@@ -11,11 +11,12 @@
     </ui:define>
     <ui:define name="content">
         <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
+            <h1>Linear Regression:</h1>
             <p:tabView id="linCA" style="border-bottom-color: #8cbd48 !important">
-                <p:tab title ="Overview" titleStyleClass="p-tab-nav">
+                <p:tab title ="Line of Best Fit" titleStyleClass="p-tab-nav">
                     <h:form id="form1">
-                        <p>
-                            Two variables will be tested for correlation, a dependent variable and an independent variable. Both must have numeric values.                
+                        <p style="font-size: 13px">
+                            A dependent variable (x-axis) and an independent variable (y-axis) are correlated using a linear model. Along with Pearson R statistics, the line of best fit indicates how closely correlated the two variables are. Only numeric variables are used to build the model.               
                         </p>
                         <h:panelGrid id="panelGrid" columns="5" cellpadding="3" columnClasses="colLeft,colRight,colLeft,colRight, colLast">
                             
@@ -45,24 +46,75 @@
                                             actionListener="#{linearCABean.corrLin1Btn_action()}"/>  
                         
                         </h:panelGrid>
-                        <ui:include src="_results_bar.xhtml" />
+                        <ui:include src="_results_bar_linear.xhtml" />
                                   
                         <h:panelGrid id="corrLinPane1" style="width: 100%;">
                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px;">
-                                <h:outputLabel style="font-weight: bold" value="Formula: #{linearCABean.corrLinearResults.get(0)}"/>
+                                <h:outputLabel style="font-size: 13px; font-weight: bold" value="Formula: #{linearCABean.corrLinearResults.get(0)}"/>
                             </h:panelGrid>
                             <!--<h:panelGrid class="subResultsBar"></h:panelGrid>--> 
                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px;">
-                                <h:outputLabel style="font-weight: bold" value="#{linearCABean.corrLinearResults.get(1)}"/>
+                                <h:outputLabel style="font-size: 13px; font-weight: bold" value="#{linearCABean.corrLinearResults.get(1)}"/>
                             </h:panelGrid>
                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px;">
-                                <h:outputLabel style="font-weight: bold" value="#{linearCABean.corrLinearResults.get(2)}"/>
+                                <h:outputLabel style="font-size: 13px; font-weight: bold" value="#{linearCABean.corrLinearResults.get(2)}"/>
                             </h:panelGrid>
                              <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
                                 <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_linear')}" alt="CorrerlationLinearimage"/>
                             </h:panelGrid>                           
                             
                         </h:panelGrid>         
+                    </h:form>
+                </p:tab>
+                <p:tab title ="Predicted vs Actual Plot" titleStyleClass="p-tab-nav">
+                    <h:form id="form2">
+                        <p>
+                            A dependent variable and an independent variable are correlated using a linear model. Predicted values are plotted against actual data, representing a measure of correlation....
+                        </p>
+                        <h:panelGrid id="panelGrid2" columns="5" cellpadding="3" columnClasses="colLeft,colRight,colLeft,colRight, colLast">
+                            
+                            <h:outputLabel style="font-weight: bold" value="Dependant Variable:"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{polyCABean.columnNameA}">
+                                    <f:selectItems value="#{polyCABean.columnOpts}" />
+                                </p:selectOneMenu>
+                            
+                            <h:outputLabel style="font-weight: bold" value="Include Weights:"/>
+                                <p:selectBooleanCheckbox value ="#{polyCABean.addWeights}"/> 
+                            <p:panelGrid></p:panelGrid>
+                            
+                            <h:outputLabel style="font-weight: bold" value="Independant Variable:"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{polyCABean.columnNameB}">
+                                    <f:selectItems value="#{polyCABean.columnOpts}" />
+                                </p:selectOneMenu>
+                        </h:panelGrid>
+                        <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
+                            <p:commandButton value="Update" 
+                                             styleClass="updateButton"
+                                             style="box-shadow: none !important; text-shadow: none !important"
+                                            onclick="PF('statusDialog').show()"
+                                            oncomplete="PF('statusDialog').hide()"  
+                                            update=":linCA:form2:panelGrid2  :cmdPane" 
+                                            actionListener="#{polyCABean.corrPolyPredBtn_action()}"/>                       
+                        </h:panelGrid>
+                        <h:panelGrid class="resultsBar" columns="2">
+                            <h:panelGroup>
+                                <h:panelGrid columns="1" style="text-align : left;">
+                                    Results
+                                </h:panelGrid>
+                            </h:panelGroup> 
+                            <h:panelGroup>
+                                <h:panelGrid columns="3" class="resultsImages">
+                                    <i class="fas fa-palette"></i>
+<!--                                                                       <i class="fas fa-table"></i>
+                                   <i class="fas fa-palette"></i>
+                                   <i class="far fa-question-circle"></i>-->
+                                </h:panelGrid>
+                            
+                            </h:panelGroup>                            
+                        </h:panelGrid>
+                        <h:panelGrid id="corrPolyPane2" style="text-align: center; width: 100%;">
+                            <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_poly_pred')}" alt="CorrelationPolyPredictimage"/>
+                        </h:panelGrid>        
                     </h:form>
                 </p:tab>
             </p:tabView> 

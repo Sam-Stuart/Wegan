@@ -12,7 +12,7 @@
     <ui:define name="content">
         <h:form>
             <h:panelGrid style="padding:20px 40px 20px 40px; font-size: 13px; line-height: 25px; width:100%">
-                <h2>Select an analysis path to explore:</h2>
+                <h1>Select an analysis path to explore:</h1>
                 <h:panelGrid style="width:100%; background-color: #75bafb;"></h:panelGrid>
                 <h:panelGrid style="width:100%; background-color: white; "></h:panelGrid>
                 <h:panelGrid style="width:100%; background-color: #75bafb;"></h:panelGrid>
@@ -23,27 +23,33 @@
                     <h:panelGrid>
                         <h2>Heatmap Analysis:</h2>
                         <h:commandLink id="correlation" style="margin-left: 25px" action="Correlations" onclick="PF('statusDialog').show()" value="Correlation Analysis"/>
-                        <p:tooltip for="correlation" style="font-size: 11px;" value="Two variables will be tested for correlation, an independent variable and a dependent variable. Both must have numeric values." />
+                        <p:tooltip for="correlation" style="font-size: 11px;" value="TO DO: Add hover." />
                     </h:panelGrid>
                     
                     <h:panelGrid>
                         <h2>Univariate Analysis:</h2>
-                        <h:commandLink id="linear" style="margin-left: 25px" action="Linear" onclick="PF('statusDialog').show()" value="Linear Regression Analysis"/>
-                        <p:tooltip for="linear" style="font-size: 11px;" value="Two variables will be tested for correlation, an independent variable and a dependent variable. Both must have numeric values." />
-                        <h:commandLink style="margin-left: 25px" action="Polynomial" onclick="PF('statusDialog').show()" value="Polynomial Regression Analysis"/>
+                        <h:commandLink id="linear" style="margin-left: 25px" action="Linear" onclick="PF('statusDialog').show()" value="Linear Regression"/>
+                        <p:tooltip for="linear" style="font-size: 11px;" value="TO DO: Add hover." />
+                        <h:commandLink id="poly" style="margin-left: 25px" action="Polynomial" onclick="PF('statusDialog').show()" value="Polynomial Regression"/>
+                        <p:tooltip for="poly" style="font-size: 11px;" value="TO DO: Add hover." />
                     </h:panelGrid>
                     
                     <h:panelGrid>
                         <h2>Multivariate Analysis:</h2>
-                        <h:commandLink style="margin-left: 25px; color: rgb(66, 133, 244) " action="Penalized" onclick="PF('statusDialog').show()" value="Penalized Linear Regression"/>
-                        <h:commandLink style="margin-left: 25px; color: rgb(66, 133, 244)" action="MultivariateLinear" onclick="PF('statusDialog').show()" value="Multivariate Linear Regression Analysis"/>
-                        <h:commandLink style="margin-left: 25px; color: rgb(66, 133, 244)" action="LogisticCorrelation" onclick="PF('statusDialog').show()" value="Logistic Regression Analysis"/>
+                        <h:commandLink id="multi" style="margin-left: 25px; color: rgb(66, 133, 244)" action="MultivariateLinear" onclick="PF('statusDialog').show()" value="Multivariate Linear Regression"/>
+                        <p:tooltip for="multi" style="font-size: 11px;" value="TO DO: Add hover." />
+                        <h:commandLink id="penal" style="margin-left: 25px; color: rgb(66, 133, 244) " action="Penalized" onclick="PF('statusDialog').show()" value="Penalized Linear Regression"/>
+                        <p:tooltip for="penal" style="font-size: 11px;" value="TO DO: Add hover." />
+                        <h:commandLink id="logist" style="margin-left: 25px; color: rgb(66, 133, 244)" action="LogisticCorrelation" onclick="PF('statusDialog').show()" value="Logistic Regression"/>
+                        <p:tooltip for="logist" style="font-size: 11px;" value="TO DO: Add hover." />
                     </h:panelGrid>
                     
                     <h:panelGrid>
                         <h2>Machine Learning Analysis: </h2>
-                        <h:commandLink style="margin-left: 25px" action="SVMCorrelation" onclick="PF('statusDialog').show()" value="Support Vector Machine (SVM) Regression"/>
-                        <h:commandLink style="margin-left: 25px" action="RFCorrelation" onclick="PF('statusDialog').show()" value="Random Forest Regression"/>
+                        <h:commandLink id="svm" style="margin-left: 25px" action="SVMCorrelation" onclick="PF('statusDialog').show()" value="Support Vector Machine (SVM) Regression"/>
+                        <p:tooltip for="svm" style="font-size: 11px;" value="TO DO: Add hover." />
+                        <h:commandLink id="rf" style="margin-left: 25px" action="RFCorrelation" onclick="PF('statusDialog').show()" value="Random Forest Regression"/>
+                        <p:tooltip for="rf" style="font-size: 11px;" value="TO DO: Add hover." />
                     </h:panelGrid>
                 </h:panelGrid>
             </h:panelGrid> 

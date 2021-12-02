@@ -10,7 +10,7 @@
 
 library(gt)
 
-# -------------Coefficients of Biogeographical Dispersal Direction-------------------------------------------------- 
+###### -------------Coefficients of Biogeographical Dispersal Direction-------------------------------------------------- #################
 
 
 bgdispersalWegan <- function(mSetObj=NA){
@@ -162,7 +162,7 @@ GetBGDSigFileName <- function(mSetObj=NA){
 
 
 
-###### Beals smoothing function 
+###### ------------- Beals smoothing function ---------------------------------------#### 
 bealsWegan <- function(mSetObj=NA, spcs = 'NA', ref = 'NA', type = 0, incld = TRUE){
     mSetObj <- .get.mSet(mSetObj);
     
@@ -228,7 +228,7 @@ PlotBeals <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, pcnum
 }
 
 
-####### BETA DISPERSAL ###### 
+####### -------------------------- BETA DISPERSAL --------------------------###### 
 
 betadisperWegan <- function(mSetObj=NA,groups = "NA", labels= "NA", dataOpts = "NA" ){
     mSetObj <- .get.mSet(mSetObj);
@@ -245,7 +245,7 @@ betadisperWegan <- function(mSetObj=NA,groups = "NA", labels= "NA", dataOpts = "
     data_type <- mSetObj$dataSet$type;
     ## data check
     data <- data_check(data)
-
+    ## Default groups and labels for Example Data sets : 
     if(tolower(data_type) == "varespec"){ # Default for Varespec
         if(groups=="NA"|| groups == ""){
             groups = "16,8"
@@ -287,7 +287,8 @@ betadisperWegan <- function(mSetObj=NA,groups = "NA", labels= "NA", dataOpts = "
         labels <-  strsplit(labels,";")[[1]]
       }
     }
-    numGroups <- length(groups)
+    numGroups <- length(groups) # variable for the length of groups 
+    # Check stops to catch any errors in selections 
     if (labels == ""){  # catch if 'Groups' was updated but labels was not.
         for (i in 1:numGroups){
             label <- paste("Group ",LETTERS[i])
@@ -300,7 +301,8 @@ betadisperWegan <- function(mSetObj=NA,groups = "NA", labels= "NA", dataOpts = "
         }
     }
     numLabels <- length(labels)
-    if (sum(groups) != nrow(data)){
+    ## Error Messages
+    if (sum(groups) != nrow(data)){  
       AddErrMsg("ERROR: Inputted group values does not sum up to number of rows in data")
       stop();
     }
@@ -331,7 +333,7 @@ betadisperWegan <- function(mSetObj=NA,groups = "NA", labels= "NA", dataOpts = "
     return(.set.mSet(mSetObj));
 }
 
-
+# Create plot for Beta dispersal function
 PlotBetaDisper <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, pcnum=0){
   mSetObj <- .get.mSet(mSetObj);
   
@@ -356,9 +358,9 @@ PlotBetaDisper <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, 
 }
 
 
-### Other Functions : 
+####------------- Other Functions------------- #### 
 
-# Get columns : 
+# Get column: Retrieve column names and/or column numbers from the data set original
 
 disp.reg.columns <- function(mSetObj=NA){
   
@@ -379,7 +381,7 @@ disp.reg.columns <- function(mSetObj=NA){
 # Check that the first data rows and columns are not repeating 
 
 data_check <- function(mat){
-    ## This function was created because for some reason the normalization code creates another row "1" and we have been unable to fix it yet.
+    ## This function was created because for some reason the normalization code creates another row "1" and column " 1" and we have been unable to fix it yet.
     ## This was my solution. 
    
     mat <- as.matrix(mat)

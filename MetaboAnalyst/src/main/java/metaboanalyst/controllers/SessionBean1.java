@@ -31,6 +31,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import metaboanalyst.models.RcmdBean;
+import metaboanalyst.rwrappers.OAUtils;
 import metaboanalyst.rwrappers.RGraphUtils;
 import metaboanalyst.rwrappers.TimeSeries;
 import metaboanalyst.rwrappers.UniVarTests;
@@ -52,6 +53,7 @@ import org.rosuda.REngine.Rserve.RserveException;
 public class SessionBean1 implements Serializable {
 
     private final ApplicationBean1 ab = (ApplicationBean1) DataUtils.findBean("applicationBean1");
+    private SessionBean1 sb;
 
     public SessionBean1() {
 
@@ -118,32 +120,10 @@ public class SessionBean1 implements Serializable {
     
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     /*
      * Log in and out
-     * dataType: list, conc, specbin, pktable, nmrpeak, mspeak, msspec
-     * analType: WEGAN,stat, pathora, pathqea, msetora, msetssp, msetqea, msetview, cmpdmap, peaksearch, smpmap
+     * dataType: main, meta, env
+     * analType: "ca", "plotting", "diversity", "dispersal", "ord", "cluster", "stat", "taxon"
      * */
     public boolean doLogin(String dataType, String analType, boolean isRegression, boolean paired) {
 
@@ -268,9 +248,13 @@ public class SessionBean1 implements Serializable {
     /*
      * navigation tree
      */
-    private final List<String> parentNodes = Arrays.asList(new String[]{"Processing", "Correlation", "Dispersal","Plotting", "Enrichment", "Pathway", "Time Series", "ID Conversion",
+    private final List<String> parentNodes = Arrays.asList(new String[]{"Processing", "Correlation", "Dispersal","Plotting", "Ordination", "Clustering", "Taxonomy", "Statistics", "Diversity","Enrichment", "Pathway", "Time Series", "ID Conversion",
         "Batch Effect", "ROC Analysis", "Integrative Analysis", "Power Analysis", "Multivariate", "Univariate", "Tester"});
     private final List<String> twoGrpsMethods = Arrays.asList(new String[]{"T-test", "Volcano plot", "Fold change", "EBAM", "SVM", "OrthoPLSDA"});
+
+    private final List<String> catGrpMethods = Arrays.asList(new String[]{});
+    private final List<String> numGrpMethods = Arrays.asList(new String[]{});
+    private final List<String> envDataUploadedMethods = Arrays.asList(new String[]{"CIA"});
 
     public void onNodeSelect(NodeSelectEvent event) {
         TreeNode node = event.getTreeNode();
@@ -296,23 +280,23 @@ public class SessionBean1 implements Serializable {
 
         switch (naviKey) {
             case "Pre-process":
-                if (dataType.equals("conc") || dataType.equals("specbin") || dataType.equals("pktable")) {
+                if (dataType.equals("meta") || dataType.equals("env")) {
                     updateMsg("Error", "Your data type does not need this procedure!");
                     RequestContext.getCurrentInstance().execute("PF('statusDialog').hide()");
                     return;
                 }
                 break;
             case "Data check":
-                if (dataType.equals("conc") || dataType.equals("specbin") || dataType.equals("pktable")) {
+                if (dataType.equals("main")) {
                     break;
                 } else if (!dataProcessed) {
-                    updateMsg("Error", "Your need to pre-process your data first!");
+                    updateMsg("Error", "You need to pre-process your data first!");
                     RequestContext.getCurrentInstance().execute("PF('statusDialog').hide()");
                     return;
                 }
             case "Name check":
-                if (!dataType.equals("conc")) {
-                    updateMsg("Error", "The procedure is only applicable to compound concentration data!");
+                if (!dataType.equals("main")) {
+                    updateMsg("Error", "The procedure is only applicable to the main dataset data!");
                     RequestContext.getCurrentInstance().execute("PF('statusDialog').hide()");
                     return;
                 }
@@ -336,7 +320,7 @@ public class SessionBean1 implements Serializable {
             case "Image options":
             case "Normalization":
                 if (!integChecked) {
-                    updateMsg("Error", "The data need to pass integrity check first!");
+                    updateMsg("Error", "The data needs to pass integrity check first!");
                     RequestContext.getCurrentInstance().execute("PF('statusDialog').hide()");
                     return;
                 }
@@ -407,6 +391,22 @@ public class SessionBean1 implements Serializable {
                     RequestContext.getCurrentInstance().execute("PF('statusDialog').hide()");
                     return;
                 }
+
+                if (catGroup) {
+                    if (catGrpMethods.contains(naviKey)) {
+                        updateMsg("Error", "The method is only applicable for categorical data analysis!");
+                        RequestContext.getCurrentInstance().execute("PF('statusDialog').hide()");
+                        return;
+                    }
+                }
+                if (numGroup) {
+                    if (numGrpMethods.contains(naviKey)) {
+                        updateMsg("Error", "The method is only applicable for numeric data analysis!");
+                        RequestContext.getCurrentInstance().execute("PF('statusDialog').hide()");
+                        return;
+                    }
+                }
+                
                 if (multiGroup) {
                     if (twoGrpsMethods.contains(naviKey)) {
                         updateMsg("Error", "The method is only applicable for two-group data analysis!");
@@ -467,6 +467,8 @@ public class SessionBean1 implements Serializable {
                 return "Ordination";                
             case "cluster":
                 return "Clustering"; 
+            case "taxon":
+                return "Taxonomy";
         }
         return null;
     }
@@ -540,6 +542,7 @@ public class SessionBean1 implements Serializable {
         return key + "_" + imgMap.get(key) + "_";
     }
 
+
     /**
      * Get images for display
      *
@@ -552,13 +555,6 @@ public class SessionBean1 implements Serializable {
     }
 
     
-    
-    
-    
-    
-    
-    
-    
     /**
      * get JSON files for interactive
      *
@@ -568,6 +564,7 @@ public class SessionBean1 implements Serializable {
     public String getJsonDir(String name) {
         return currentUser.getRelativeDir() + "/" + getCurrentImage(name) + ".json";
     }
+
 
     /**
      * To record all commands that produce the images
@@ -659,7 +656,28 @@ public class SessionBean1 implements Serializable {
     public void setMultipleGroup(boolean multiGroup) {
         this.multiGroup = multiGroup;
     }
+    
+    
+    private boolean catGroup = false;
 
+    public boolean isCatGroup() {
+        return catGroup;
+    }
+
+    public void setCategoricalGroup(boolean catGroup) {
+        this.catGroup = catGroup;
+    }
+
+    private boolean numGroup = false;
+
+    public boolean isNumGroup() {
+        return numGroup;
+    }
+
+    public void setNumericGroup(boolean numGroup) {
+        this.numGroup = numGroup;
+    }    
+    
     public boolean isKeepClsOrder() {
         return keepClsOrder;
     }
@@ -706,7 +724,6 @@ public class SessionBean1 implements Serializable {
         return "featuredetails";
     }
     
-   
 
     public String getSigSource() {
         return sigVec.get(sigVec.size() - 1);
@@ -1038,4 +1055,30 @@ public class SessionBean1 implements Serializable {
             return "/MetaboAnalyst";
         }
     }
+    
+    
+    private String envDataAvailable = "FALSE";
+
+    public String getEnvDataAvailable() {
+        return envDataAvailable;
+    }
+
+    public void setEnvDataAvailable(String envDataAvailable) {
+        this.envDataAvailable = envDataAvailable;
+    }  
+    
+    
+    public String envDataUploaded(){
+        if(OAUtils.getEnvDataAvailable(RC)=="TRUE"){
+            envDataAvailable = "TRUE";
+        }else{
+            envDataAvailable = "FALSE";
+        }
+        return envDataAvailable;
+    }
+    
+    
+    
+    
+
 }

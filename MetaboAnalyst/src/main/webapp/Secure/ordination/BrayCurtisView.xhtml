@@ -15,7 +15,7 @@
     </ui:define>
     <ui:define name="content">
         <h:inputHidden id="mydir" value="#{sessionBean1.getJsonDir('bray_score3d')}" />
-        <script type="text/javascript">
+<!--        <script type="text/javascript">
             // for scatter plot
             function addBind() {
                 mychart = $("[id='ac:chart']");
@@ -52,15 +52,15 @@
                     }
                 };
             }
-        </script>
+        </script>-->
         <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
+            <h1>Bray-Curtis (Polar) Ordination:</h1>
             <p:tabView id="overviewbray">
-                <p:tab title ="Overview" titleStyleClass="p-tab-nav">
+                <p:tab title ="2D Scores Plot" titleStyleClass="p-tab-nav">
                     <h:form id="form1">
                         <p>
                             The use of data groupings will create more interesting plots. Load grouping data separately, where each row aligns with the rows in your data set, or include groupings as columns in your data set.
                         </p>
-                        <h3>Dataset Options:</h3>
                         <h:panelGrid id="panelGrid" columns="5" cellpadding="3" columnClasses="colBrayLong,colBrayShort,colBrayLong,colBrayShort, colLast">
                                 
                                 <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
@@ -123,7 +123,14 @@
                                 <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
                                     <h:outputText escape="false" value="#{brayBean.fileMatPath}"/>
                                 </i>
-                            </h:panelGrid>                            
+                            </h:panelGrid> 
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <p:commandButton value="Export"
+                                    styleClass="exportButton"
+                                    style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                    actionListener="#{sessionBean1.graphicsLnk_action('ord_bray_2D')}"
+                                    oncomplete="PF('graphDialog').show()"/>
+                            </h:panelGrid> 
                              <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
                                 <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('ord_bray_2D')}" alt="rda2D"/>
                             </h:panelGrid>                            
@@ -135,7 +142,6 @@
                         <p>
                             The use of data groupings will create more interesting plots. Load grouping data separately, where each row aligns with the rows in your data set, or include groupings as columns in your data set.
                         </p>
-                        <h3>Dataset Options:</h3>
                         <h:panelGrid id="panelGrid" columns="5" cellpadding="3" columnClasses="colBrayLong,colBrayShort,colBrayLong,colBrayShort, colLast">
                                 
                                 <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
@@ -185,7 +191,6 @@
                         <p>
                             The use of data groupings will create more interesting plots. Load grouping data separately, where each row aligns with the rows in your data set, or include groupings as columns in your data set.
                         </p>
-                        <h3>Dataset Options:</h3>
                         <h:panelGrid id="panelGrid" columns="5" cellpadding="3" columnClasses="colBrayLong,colBrayShort,colBrayLong,colBrayShort, colLast">
                                 
                                 <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
@@ -223,13 +228,20 @@
                                 <h:panelGrid columns="3" class="resultsImages">
                                     <i class="fa fa-question-circle"></i>
                                 </h:panelGrid>
-                            </h:panelGroup>                            
+                            </h:panelGroup> 
                         </h:panelGrid>
                         <h:panelGrid id="brayPane3" style="width: 100%;">
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
                                 <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
                                     <h:outputText escape="false" value="#{brayBean.fileScreePath}"/>
                                 </i>
+                            </h:panelGrid>
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <p:commandButton value="Export"
+                                    styleClass="exportButton"
+                                    style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                    actionListener="#{sessionBean1.graphicsLnk_action('ord_bray_scree')}"
+                                    oncomplete="PF('graphDialog').show()"/>
                             </h:panelGrid>                            
                              <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
                                 <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('ord_bray_scree')}" alt="rdascree"/>
@@ -247,13 +259,13 @@
             draggable="false" closable="true" resizable="false"> 
             <ui:include src="_color_palette_bray.xhtml" />
         </p:dialog>
-        <script type="text/javascript">
+<!--        <script type="text/javascript">
             showBray3DScore();
             $("[id='ac:chart']").bind('jqplotDataClick',
                     function (ev, seriesIndex, pointIndex, data) {
                         //note, we use the internal index, not point index 
                         remoteCall([{name: 'cmpdIndex', value: data[0]}]);
                     });
-        </script>
+        </script>-->
     </ui:define>
 </ui:composition>

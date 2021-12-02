@@ -27,35 +27,11 @@ public class OARDABean implements Serializable {
     private User usr = sb.getCurrentUser();
     private String usrName = usr.getName();
     
+    //LINK TABLES
 //    private String fileNMA = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + "/rda_scree_data.csv>";
     private String fileScree = "rda_scree_data.csv";
     private String fileScreePath  = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileScree + "\">" + fileScree + "</a>";
-    
-    private String fileRowScore = "rda_row_scores.csv";
-    private String fileRowScorePath  = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileRowScore + "\">" + fileRowScore + "</a>";
-    
-    private String fileEnvScore = "rda_environment_scores.csv";
-    private String fileEnvScorePath  = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileEnvScore + "\">" + fileEnvScore + "</a>";
-    
-    private String fileColScore = "rda_column_scores.csv";
-    private String fileColScorePath  = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileColScore + "\">" + fileColScore + "</a>";
-    
-    private boolean doOriginal = false; 
-    private boolean doAbundance = false;
-    
-    private boolean varArrows = false; 
-    private boolean sampleNames = false;
-    private boolean pointStyle = false;
-    
-    private String groupCol = "null"; //Grpup color
-    private String groupPoint = "null";
-    private String color = "null";
-    private boolean addEllipse = false;
-    
-    private String envDataCol = "null";
-    private boolean envArrows = false;
-    private boolean envCentroid = false;
-    
+        
     public String getFileScreePath() {
         return fileScreePath;
     }
@@ -63,6 +39,10 @@ public class OARDABean implements Serializable {
     public void setFileScreePath(String fileScreePath) {
         this.fileScreePath = fileScreePath;
     }
+    
+    
+    private String fileRowScore = "rda_sample_scores.csv";
+    private String fileRowScorePath  = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileRowScore + "\">" + fileRowScore + "</a>";
     
     public String getFileRowScorePath() {
         return fileRowScorePath;
@@ -72,6 +52,10 @@ public class OARDABean implements Serializable {
         this.fileRowScorePath = fileRowScorePath;
     }
     
+    
+    private String fileEnvScore = "rda_constraining_data_scores.csv";
+    private String fileEnvScorePath  = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileEnvScore + "\">" + fileEnvScore + "</a>";
+        
     public String getFileEnvScorePath() {
         return fileEnvScorePath;
     }
@@ -80,22 +64,22 @@ public class OARDABean implements Serializable {
         this.fileEnvScorePath = fileEnvScorePath;
     }
     
+    
+    private String fileColScore = "rda_variable_scores.csv";
+    private String fileColScorePath  = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileColScore + "\">" + fileColScore + "</a>";
+        
     public String getfileColScorePath() {
         return fileColScorePath;
     }
 
     public void setFileColScorePath(String fileColScorePath) {
         this.fileColScorePath = fileColScorePath;
-    }  
+    } 
     
-    public boolean isdoAbundance() {
-        return doAbundance;
-    }
     
-    public void setdoAbundance(boolean doAbundance) {
-        this.doAbundance = doAbundance;
-    }
-    
+    //CHECKBOXES
+    private boolean doOriginal = false; 
+        
     public boolean isdoOriginal() {
         return doOriginal;
     }
@@ -104,22 +88,31 @@ public class OARDABean implements Serializable {
         this.doOriginal = doOriginal;
     }
     
-    public String getEnvDataCol() {
-        return envDataCol;
-    }
-
-    public void setEnvDataCol(String envDataCol) {
-        this.envDataCol = envDataCol;
-    } 
     
+    private boolean doAbundance = false;
+        
+    public boolean isdoAbundance() {
+        return doAbundance;
+    }
+    
+    public void setdoAbundance(boolean doAbundance) {
+        this.doAbundance = doAbundance;
+    }
+    
+    
+    private boolean varArrows = false; 
+        
     public boolean isVarArrows() {
         return varArrows;
     }
     
     public void setVarArrows(boolean varArrows) {
         this.varArrows = varArrows;
-    }   
+    }  
     
+    
+    private boolean sampleNames = false;
+        
     public boolean isSampleNames() {
         return sampleNames;
     }
@@ -127,14 +120,10 @@ public class OARDABean implements Serializable {
     public void setSampleNames(boolean sampleNames) {
         this.sampleNames = sampleNames;
     }
-    public boolean isPointStyle() {
-        return pointStyle;
-    }
+     
     
-    public void setPointStyle(boolean pointStyle) {
-        this.pointStyle = pointStyle;
-    }
-    
+    private boolean addEllipse = false;
+        
     public boolean isAddEllipse() {
         return addEllipse;
     }
@@ -142,15 +131,21 @@ public class OARDABean implements Serializable {
     public void setAddEllipse(boolean addEllipse) {
         this.addEllipse = addEllipse;
     }
+        
     
-    public String getColor() {
-        return color;
+    private boolean envArrows = false;
+        
+    public boolean isEnvArrows() {
+        return envArrows;
     }
-
-    public void setColor(String color) {
-        this.color = color;
-    }  
     
+    public void setEnvArrows(boolean envArrows) {
+        this.envArrows = envArrows;
+    }
+    
+    
+    private boolean envCentroid = false;
+        
     public boolean isEnvCentroid() {
         return envCentroid;
     }
@@ -159,36 +154,91 @@ public class OARDABean implements Serializable {
         this.envCentroid = envCentroid;
     }
     
-    public boolean isEnvArrows() {
-        return envArrows;
-    }
     
-    public void setEnvArrows(boolean envArrows) {
-        this.envArrows = envArrows;
-    }    
-    public String getGroupPoint() {
-        return groupPoint;
+    //DYNAMIC DROPDOWN
+    private SelectItem[] rdaMetaColumnOpts = null; //Grouping variable
+        
+    public SelectItem[] getRdaMetaColumnOpts(){
+        String[] columns = OAUtils.GetRDAMetaColumns(sb);
+        int columnsLen = columns.length;
+        rdaMetaColumnOpts = new SelectItem[columnsLen];
+        List<String> columnNames = Arrays.asList(columns);
+        for (int i = 0; i < columnsLen; i++) {
+            rdaMetaColumnOpts[i] = new SelectItem(columnNames.get(i), columnNames.get(i));
+        }
+        return rdaMetaColumnOpts;
+    }
+        
+    private String rdaMetaColumnName = getRdaMetaColumnOpts()[0].getLabel(); 
+
+    public String getRdaMetaColumnName() {
+        return rdaMetaColumnName;
     }
 
-    public void setGroupPoint(String groupPoint) {
-        this.groupPoint = groupPoint;
+    public void setRdaMetaColumnName(String rdaMetaColumnName) {
+        this.rdaMetaColumnName = rdaMetaColumnName;
+    }
+    
+    
+    private SelectItem[] nmdsMetaColumnOpts = null;
+    
+    public SelectItem[] getNmdsMetaColumnOpts(){
+        String[] columns = OAUtils.GetNMDSMetaColumns(sb);
+        int columnsLen = columns.length;
+        nmdsMetaColumnOpts = new SelectItem[columnsLen];
+        List<String> columnNames = Arrays.asList(columns);
+        for (int i = 0; i < columnsLen; i++) {
+            nmdsMetaColumnOpts[i] = new SelectItem(columnNames.get(i), columnNames.get(i));
+        }
+        return nmdsMetaColumnOpts;
+    }
+    
+    private String nmdsMetaColumnName = getNmdsMetaColumnOpts()[0].getLabel();
+    
+    public String getNmdsMetaColumnName() {
+        return nmdsMetaColumnName;
+    }
+
+    public void setNmdsMetaColumnName(String nmdsMetaColumnName) {
+        this.nmdsMetaColumnName = nmdsMetaColumnName;
+    }
+    
+    
+    //STATIC DROPDOWN
+    private String color = "NULL";
+        
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    } 
+
+    
+    //TEXT BOX
+    private String envDataCol = " ";
+        
+    public String getEnvDataCol() {
+        return envDataCol;
+    }
+
+    public void setEnvDataCol(String envDataCol) {
+        this.envDataCol = envDataCol;
     } 
     
-    public String getGroupCol() {
-        return groupCol;
-    }
-
-    public void setGroupCol(String groupCol) {
-        this.groupCol = groupCol;
-    }
+    
 
     // ACTION BUTTONS //
-    public void rdaUpdate_action() {
+    public void rdaUpdate_action2D() {
         OAUtils.CreateRDA(sb, doAbundance, envDataCol, doOriginal);
-        OAUtils.PlotRDA2D(sb, color, varArrows, envArrows, envCentroid, sampleNames, groupCol, pointStyle, groupPoint, addEllipse, sb.getNewImage("ord_rda_2D"), "png", 72, "NULL");   
-        OAUtils.PlotRDAScree(sb, sb.getNewImage("ord_rda_scree"), "png", 72, "NULL");
+        OAUtils.PlotRDA2D(sb, color, varArrows, envArrows, envCentroid, sampleNames, rdaMetaColumnName, addEllipse, sb.getNewImage("ord_rda_2D"), "png", 72);   
     }
 
+    public void rdaUpdate_actionScree() {
+        OAUtils.CreateRDA(sb, doAbundance, envDataCol, doOriginal);
+        OAUtils.PlotRDAScree(sb, sb.getNewImage("ord_rda_scree"), "png", 72);
+    }
     
 }
 

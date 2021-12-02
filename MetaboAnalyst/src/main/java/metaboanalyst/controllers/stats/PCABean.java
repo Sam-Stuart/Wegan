@@ -58,13 +58,22 @@ public class PCABean implements Serializable {
         }
         return items;
     }
-
-    public String pcaPairBtn_action() {
+        
+    public void pcaPairBtn_action() {
+        ChemoMetrics.InitPCA(sb, doOriginal);
         ChemoMetrics.PlotPCAPairSummary(sb, sb.getNewImage("pca_pair"), "png", 72, pcaPairNum);
-        RequestContext.getCurrentInstance().scrollTo("ac:form1:pairPane");
-        return null;
     }
 
+    private boolean doOriginal = false; 
+    
+    public boolean isDoOriginal() {
+        return doOriginal;
+    }
+    
+    public void setDoOriginal(boolean doOriginal) {
+        this.doOriginal = doOriginal;
+    }
+    
     private boolean greyScale = false;
 
     public boolean isGreyScale() {
@@ -96,12 +105,13 @@ public class PCABean implements Serializable {
     }
 
     public String pcaScreeBtn_action() {
+        ChemoMetrics.InitPCA(sb, doOriginal);
         ChemoMetrics.PlotPCAScree(sb, sb.getNewImage("pca_scree"), "png", 72, pcaScreeNum);
         RequestContext.getCurrentInstance().scrollTo("ac:form2:screePane");
         return null;
     }
 
-    private boolean displayNames = true;
+    private boolean displayNames = false;
 
     public boolean isDisplayNames() {
         return displayNames;
@@ -111,7 +121,7 @@ public class PCABean implements Serializable {
         this.displayNames = displayNames;
     }
 
-    private boolean displayFeatNames = true;
+    private boolean displayFeatNames = false;
 
     public boolean isDisplayFeatNames() {
         return displayFeatNames;
@@ -121,7 +131,7 @@ public class PCABean implements Serializable {
         this.displayFeatNames = displayFeatNames;
     }
 
-    private boolean displayConfs = true;
+    private boolean displayConfs = false;
 
     public boolean isDisplayConfs() {
         return displayConfs;
@@ -167,6 +177,7 @@ public class PCABean implements Serializable {
             if (greyScale) {
                 useGreyScale = 1;
             }
+            ChemoMetrics.InitPCA(sb, doOriginal);
             ChemoMetrics.PlotPCA2DScore(sb, sb.getNewImage("pca_score2d"), "png", 72, pcaScoreX, pcaScoreY, conf, showNames, useGreyScale);
             RequestContext.getCurrentInstance().scrollTo("ac:form3:score2dPane");
         }
@@ -215,6 +226,7 @@ public class PCABean implements Serializable {
             sb.updateMsg("Error", "Detected the same PC on two axes!");
         } else {
             //ChemoMetrics.PlotPCA3DScore(sb, sb.getNewImage("pca_score3d"), "png", 72, pcaScore3dX, pcaScore3dY, pcaScore3dZ, rotationAngle);
+            ChemoMetrics.InitPCA(sb, doOriginal);
             ChemoMetrics.PlotPCA3DScore(sb, sb.getNewImage("pca_score3d"), "json", 72, pcaScore3dX, pcaScore3dY, pcaScore3dZ);
             //  RequestContext.getCurrentInstance().scrollTo("ac:form4:score3dPane");
         }
@@ -254,6 +266,7 @@ public class PCABean implements Serializable {
         if (pcaLoadX == pcaLoadY) {
             sb.updateMsg("Error", "Detected the same PC on two axes!");
         } else {
+            ChemoMetrics.InitPCA(sb, doOriginal);
             ChemoMetrics.PlotPCALoading(sb, sb.getNewImage("pca_loading"), "png", 72, pcaLoadX, pcaLoadY, loadPlotOpt, displayFeatNames ? 1 : 0);
             updateLoadModel();
         }
@@ -282,6 +295,7 @@ public class PCABean implements Serializable {
         if (pcaBiplotX == pcaBiplotY) {
             sb.updateMsg("Error", "Detected the same PC on two axes!");
         } else {
+            ChemoMetrics.InitPCA(sb, doOriginal);
             ChemoMetrics.PlotPCABiplot(sb, sb.getNewImage("pca_biplot"), "png", 72, pcaBiplotX, pcaBiplotY);
             RequestContext.getCurrentInstance().scrollTo("ac:form6:biplotPane");
         }

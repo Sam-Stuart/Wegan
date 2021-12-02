@@ -93,3 +93,4 @@ public class LinearCABean implements Serializable {
 
     
 }
+

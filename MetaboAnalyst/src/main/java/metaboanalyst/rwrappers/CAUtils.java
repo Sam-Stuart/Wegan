@@ -406,7 +406,7 @@ public class CAUtils {
             RConnection RC = sb.getRConnection();
             String rCommand = "log.response.levels(NA" + ", \"" + facA + "\")";
             RCenter.recordRCommand(RC, rCommand);
-            return RC.eval(rCommand).asStrings();
+            return RC.eval(rCommand).asStrings(); 
         } catch (RserveException rse) {
             System.out.println(rse);
         } catch (REXPMismatchException ex) {

@@ -603,7 +603,9 @@ public class DataUtils {
                 } else if (type.equalsIgnoreCase("diversity")) {
                     addDiversityNodes(naviTree);                
                 } else if (type.equalsIgnoreCase("cluster")) {
-                    addClusterNodes(naviTree);   
+                    addClusterNodes(naviTree); 
+                } else if (type.equalsIgnoreCase("taxon")) {
+                    addClusterNodes(naviTree);  
                 } else {
                     System.out.println("You need to define the navigation tree for this analysis type: " + type);
                 }
@@ -634,8 +636,8 @@ public class DataUtils {
         TreeNode nodep4 = new DefaultTreeNode("Data check", processNode);
         TreeNode nodep5 = new DefaultTreeNode("Missing value", processNode);
         TreeNode nodep6 = new DefaultTreeNode("Data filter", processNode);
-        TreeNode nodep7 = new DefaultTreeNode("Data editor", processNode);
-        TreeNode nodep8 = new DefaultTreeNode("Image options", processNode);
+//        TreeNode nodep7 = new DefaultTreeNode("Data editor", processNode);
+//        TreeNode nodep8 = new DefaultTreeNode("Image options", processNode);
     }
     
     private static void addCANodes(TreeNode parent) {
@@ -775,7 +777,17 @@ public class DataUtils {
         TreeNode nodeoa07 = new DefaultTreeNode("Bray Curtis", oaNode);
     }
     private static void addDiversityNodes(TreeNode parent) {
-        TreeNode dispersalNode = new DefaultTreeNode("Diversity", parent);  
+        TreeNode diversityNode = new DefaultTreeNode("Diversity", parent); 
+        TreeNode nodeDiv01 = new DefaultTreeNode("Alpha", diversityNode);
+        TreeNode nodeDiv02 = new DefaultTreeNode("Beta", diversityNode);
+        TreeNode nodeDiv03 = new DefaultTreeNode("Gamma", diversityNode);
+        TreeNode nodeDiv04 = new DefaultTreeNode("Species", diversityNode);    
+    }    
+    private static void addTaxonomyNodes(TreeNode parent) {
+        TreeNode dispersalNode = new DefaultTreeNode("Taxonomy", parent);  
+    }
+    private static void addCorrelationNodes(TreeNode parent) {
+        TreeNode dispersalNode = new DefaultTreeNode("Correlation", parent);  
     }
     private static void addClusterNodes(TreeNode parent) {
         TreeNode dispersalNode = new DefaultTreeNode("Clustering", parent);  

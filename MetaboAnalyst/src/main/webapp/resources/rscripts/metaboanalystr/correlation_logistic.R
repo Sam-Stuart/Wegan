@@ -12,14 +12,19 @@
 #'License: GNU GPL (>= 2)
 #'@export
 
-log.reg.anal <- function(mSetObj=NA, facA="NULL", pred.text="NULL", type="multinomial", reference=NULL, order.text=NULL, weights=weights) {
+log.reg.anal <- function(mSetObj=NA, facA="NULL", pred.text="NULL", type="multinomial", reference="NULL", order.text="NULL", weights=weights) {
   
   library("nnet") #For multinomial regression
   library("MASS") #For ordinal regression
-  
+  library("dplyr") #For data manipulation
+
   mSetObj <- .get.mSet(mSetObj)
 
-  print(mSetObj$dataSet$test_cat)
+  #if (data=="false") {
+    data <- mSetObj$dataSet$norm
+  #} else {
+  #  data <- mSetObj$dataSet$orig
+  #}
 
   #Text should be visable to user 
   cat("One categorical dependent variable and one or more independent variables will be tested for correlation. Independent variables can be categorical or numeric." )
@@ -32,12 +37,11 @@ log.reg.anal <- function(mSetObj=NA, facA="NULL", pred.text="NULL", type="multin
   
   #Choose response (dependent) variable for modeling
   if (facA=="NULL") {
-    for (i in 1:ncol(mSetObj$dataSet$test_cat)) {
-      print(class(mSetObj$dataSet$test_cat[,i]))
-      if (class(mSetObj$dataSet$test_cat[,i])=="character") {
-        facA <- colnames(mSetObj$dataSet$test_cat)[i]# Default is to choose the first factor column as response column
-        break
-      }
+    facData <- select_if(data, is.character)
+    if (is.null(facData)) {
+        stop("No categorical variables for ananlysis!")
+    } else {
+        facA <- colnames(facData)[1]# Default is to choose the first factor column as response column
     }
   } else {
     facA <- facA #User selected, java uses function factor.columns() to provide options in drop down menu (only categorical columns are available)
@@ -45,63 +49,70 @@ log.reg.anal <- function(mSetObj=NA, facA="NULL", pred.text="NULL", type="multin
   
   #Set right side of formula with predictor variables
   if (pred.text=="NULL") {
-    resp.col.num <- which(colnames(mSetObj$dataSet$test_cat)==facA)
-    data <- mSetObj$dataSet$test_cat[,-resp.col.num]
-    pred.text <- colnames(data)[1] #Default is the first potential predictor column
+    resp.col.num <- which(colnames(data)==facA)
+    predData <- data[,-resp.col.num]
+    pred.text <- colnames(predData) #Default is all predictor columns
   } else {
     pred.text <- pred.text #taken from text box by java, fed as string into R code
   }
   
   #Currate right side of formula, and extract character vector of predictors
   pred.text <- gsub("\n", "", pred.text, fixed=TRUE) #fixed=TRUE means we are dealing with one string, versus a vector of strings (fixed=FALSE)
+  pred.text <- gsub(" ", "", pred.text, fixed=TRUE)
   pred.text <- gsub(",", "+", pred.text, fixed=TRUE) 
   pred.text <- gsub(";", "+", pred.text, fixed=TRUE)
-  pred.text <- gsub(" ", "", pred.text, fixed=TRUE)
   pred.text <- gsub(":", "+", pred.text, fixed=TRUE)
   pred.text <- gsub("*", "+", pred.text, fixed=TRUE)
   
   #Generate formula
-  formula <- as.formula(paste(facA, "~", pred.text))
+  formula <- as.formula(paste0(facA, "~", pred.text))
   #Text should be visible to user
-  cat(paste0("You have created this formula for model building: ", facA, " ~ ", pred.text))
-  cat("The L hand side is the dependent variable. The R hand side is the independent variable(s). If there is >1 independent variable, plus signs indicate the variables are evaluated on their own; colons indicate an interaction between the variables is evaluated.")
-  cat("If the formula is not what you intended, retype independent variable(s) in the text box and/or choose another dependent variable.")
+  #cat(paste0("You have created this formula for model building: ", facA, " ~ ", pred.text))
+  #cat("The L hand side is the dependent variable. The R hand side is the independent variable(s). If there is >1 independent variable, plus signs indicate the variables are evaluated on their own; colons indicate an interaction between the variables is evaluated.")
+  #cat("If the formula is not what you intended, retype independent variable(s) in the text box and/or choose another dependent variable.")
   
   #Subset data using predictor column names
   predictors <- unlist(strsplit(pred.text, "+", fixed=TRUE))
-  pred_data <- mSetObj$dataSet$test_cat[,which(colnames(mSetObj$dataSet$test_cat) %in% predictors)]
-  model_data <- data.frame(mSetObj$dataSet$test_cat[,facA], pred_data)
+  pred_data <- data[,which(colnames(data) %in% predictors)]
+  model_data <- data.frame(data[,facA], pred_data)
   colnames(model_data) <- c(paste0(facA), predictors)
-  
+
   if (type=="ordinal") {
       
     #Check number of levels
-    levels.num <- length(levels(model_data[,facA]))
+    levels.num <- length(levels(model_data[,1]))
     if (levels.num<3) {
       #AddErrMsg("The dependent variable has less than 3 levels! Try binomial regression instead.")
       stop("The dependent variable has less than 3 levels! Try binomial regression instead.")
     }
     
     #Obtain reference level for response variable
-    if (is.null(reference)==TRUE) {
-      ref.col <- model_data[,facA] 
-      reference <- paste0(ref.col[1]) #Reference category is default the first level of the response column
-    } 
+    if (reference=="NULL") {
+      ref.col <- as.data.frame(model_data[,1])
+      print("ref.col") 
+      print(ref.col) 
+      ref.col.levels <- levels(ref.col)
+      reference <- ref.col.levels[1] #Reference category is default the first level of the response column
+      print("reference")
+      print(reference)
+    } else {
+      reference <- reference
+    }
     
     #Set reference
-    model_data[,facA] <- relevel(as.factor(model_data[,facA]), ref=reference) 
+    model_data[,1] <- relevel(as.factor(model_data[,1]), ref=reference) 
   
     #Order the response variable levels. 
     #Text box instructions for selecting dependent variable levels. Text box should be interactive, meaning any change in text alters the result in real time. Default order.text is no reorder.
     cat("If performing ordinal regression, indicate the order of the dependent variable levels using the level names with commas in between. Levels should be listed in ascending order. For example, if your dependent variable is placement in a sports match, type bronze, silver, gold in the text box.")
-    if (is.null(order.text)==TRUE) {
-      model_data[,facA] <- ordered(model_data[,facA]) #Default is use order as inputted
-      order.text <- levels(model_data[,facA])
+    if (order.text=="NULL") {
+      model_data[,1] <- ordered(model_data[,1]) #Default is use order as inputted
+      order.text <- levels(model_data[,1])
     } else { 
       order.text <- order.text #Order is user inputted in ascending order, taken from text box by java, entered into R code as one character value (string)
       order.text <- gsub(" ", "", order.text, fixed=TRUE)
       order.text <- unlist(strsplit(order.text, ",", fixed=TRUE))
-      model_data[,facA] <- ordered(model_data[,facA], levels=paste(order.text, sep=","))
+      model_data[,1] <- ordered(model_data[,1], levels=paste(order.text, sep=","))
     }
     
     #Build model
@@ -160,22 +171,27 @@ log.reg.anal <- function(mSetObj=NA, facA="NULL", pred.text="NULL", type="multin
 
     
     #Check number of levels
-    model_data_as_factor <- as.factor(model_data[,facA]) 
+    model_data_as_factor <- as.factor(model_data[,1]) 
     levels.num <- length(levels(model_data_as_factor))
-    print(levels.num);
     if (levels.num<3) {
       #AddErrMsg("The dependent variable has less than 3 levels! Try binomial regression instead.")
       stop("The dependent variable has less than 3 levels! Try binomial regression instead.")
     }
 
     
-    #Obtain reference level for response variable
-    if (is.null(reference)==TRUE) {
-      ref.col <- model_data[,facA] 
-      reference <- paste0(ref.col[1]) #Reference category is default the first level of the response column
+    if (reference=="NULL") {
+      ref.col <- as.data.frame(model_data[,1])
+      ref.col.levels <- levels(as.factor(ref.col))
+      reference <- ref.col.levels[1] #Reference category is default the first level of the response column
+      print("reference")
+      print(reference)
+    } else {
+      reference <- reference
     }
-    #Set reference
-    model_data[,facA] <- relevel(as.factor(model_data[,facA]), ref=reference) 
+    
+    #Set reference--ISNT WORKING!!!!!!!!!!!
+    #model_data[,1] <- relevel(as.factor(model_data[,1]), ref=reference) 
+
     #Build model for multinomial regression
     model <- multinom(formula, data=model_data, Hess=TRUE, maxit=1000, weights=NULL)
     model_name <- "Multinomial Logistic Regression"
@@ -228,21 +244,23 @@ log.reg.anal <- function(mSetObj=NA, facA="NULL", pred.text="NULL", type="multin
   } else { #Default type is binomial
     
     #Check number of levels
-    levels.num <- length(levels(model_data[,facA]))
+    levels.num <- length(levels(model_data[,1]))
     if (levels.num<2) {
       #AddErrMsg("The dependent variable has more than 2 levels! Try multinomial regression instead.")
       stop("The dependent variable has more than 2 levels! Try multinomial regression instead.")
     }
     
     #Obtain reference level for response variable
-    if (is.null(reference)==TRUE) {
-      ref.col <- model_data[,facA] 
-      reference <- paste0(ref.col[1]) #Reference category is default the first level of the response column
+    if (reference=="NULL") {
+      ref.col <- as.data.frame(model_data[,1]) 
+      reference <- levels(ref.col)[1] #Reference category is default the first level of the response column
+    } else {
+      reference <- reference
     }
     
     #Set reference
-    model_data[,facA] <- relevel(as.factor(model_data[,facA]), ref=reference) 
-    
+    model_data[,1] <- relevel(as.factor(model_data[,1]), ref=reference) 
+  
     #Build model
     model <- glm(formula, data=model_data, family=binomial("logit"), maxit=1000, weights=weights)
     model_name <- "Binomial Logistic Regression"
@@ -473,24 +491,11 @@ plot.ROC.logReg <- function(mSetObj=NA, type="multinomial", imgName, format="png
 #'@export
 
 factor.columns <- function(mSetObj=NA){
-  
+  load_dplyr()
   mSetObj <- .get.mSet(mSetObj)
-  
-  fac.col.names <- c()
-  for (i in 1:ncol(mSetObj$dataSet$test_cat)) {
-    if (class(mSetObj$dataSet$test_cat[,i])=="character") {
-      fac.col <- colnames(mSetObj$dataSet$test_cat)[i]
-      fac.col.names <- append(fac.col.names, fac.col) #Names of categorical columns
-    }
-  }
-  fac.col.count <- length(fac.col.names) #Number of categorical columns
-  fac.col.results <- list(
-    count=fac.col.count,
-    names=fac.col.names
-  )
-  
-  return(fac.col.names)
-  
+  fac.cols <- select_if(mSetObj$dataSet$norm, is.character)
+  fac.names <- colnames(fac.cols)
+  return(fac.names)
 }
 
 
@@ -504,31 +509,17 @@ factor.columns <- function(mSetObj=NA){
 #'@export
 
 log.response.levels <- function(mSetObj=NA, facA="NULL"){
-  
+  load_dplyr()
   mSetObj <- .get.mSet(mSetObj)
-  
   if (facA=="NULL") {
-    for (i in 1:ncol(mSetObj$dataSet$test_cat)) {
-      if (class(mSetObj$dataSet$test_cat[,i])=="character") {
-        facA <- colnames(mSetObj$dataSet$test_cat)[i] # Choose the first factor column as response column
-        break
-      }
-    }
+        fac_cols <- select_if(mSetObj$dataSet$norm, is.character)
+        facA <- colnames(fac_cols)[1] # Choose the first factor column as response column
   } else {
     facA <- facA #User selected, java uses function factor.columns() to obtain options
   }
-  print("INSIDE LEVELS")
-  print(facA)
-  
-  resp.levels.names <- unique(mSetObj$dataSet$test_cat[,facA]) #List names of levels in the response column
-  model_data_as_factor <- as.factor(resp.levels.names)
-  print(model_data_as_factor)
+  resp.levels <- unique(mSetObj$dataSet$norm[,facA]) #List names of levels in the response column
+  model_data_as_factor <- as.factor(resp.levels)
   resp.levels.names <- levels(model_data_as_factor) #Extract names in character vector
-  resp.levels.count <- length(resp.levels.names) #Count the number of levels in the response column
-  resp.levels.results <- list(resp.levels.count=resp.levels.count, resp.levels.names=resp.levels.names)
-  print(resp.levels.names)
-  resp.levels.names <- c(resp.levels.names)
-  
   return(resp.levels.names)
   
 }
