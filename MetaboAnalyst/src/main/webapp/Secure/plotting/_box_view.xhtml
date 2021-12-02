@@ -1,4 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' ?>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
@@ -7,9 +8,49 @@
                 xmlns:p="http://primefaces.org/ui">
     
     <p>
-        THIS IS THE BOX VIEW
+        A boxplot is a standardized way of displaying the distribution of data. The median (middle quartile) marks the mid-point of the data and is shown by the line that divides the box 
+        into two parts. Half the scores are greater than or equal to this value and half are less. The middle "box" represents the middle 50% of scores for the group. 
     </p>
+        <h:panelGrid id="panelGrid" columns="4" cellpadding="5" >  
+                            
+        <h:outputLabel  style="font-weight: bold" value="X Axis Data:"/>
+        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{boxPlotBean.box_xAxis}">
+            <f:selectItems value="#{boxPlotBean.boxColumnOpts}" />
+
+        </p:selectOneMenu>
         
+        <h:outputLabel  style="font-weight: bold" value="Y Axis Data:"/>
+        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{boxPlotBean.box_yAxis}">
+            <f:selectItems value="#{boxPlotBean.boxColumnOpts}" />
+
+        </p:selectOneMenu>
+        
+        
+        
+        <h:outputLabel style="font-weight: bold; " value="X Axis Label: "/>
+        <p:inputText style="left: -220px;" value="#{boxPlotBean.xLabel}"></p:inputText>
+        <h:outputLabel style="font-weight: bold" value="Y Axis Label:: "/>
+        <p:inputText value="#{boxPlotBean.yLabel}" style="  align-content: left"></p:inputText>  
+        
+        <h:outputLabel style="font-weight: bold" value="Color Pallet:"/>
+        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{boxPlotBean.color}">
+            <f:selectItems value="#{applicationBean1.boxPltColorPaletteOpts}" />
+        </p:selectOneMenu>
+        
+        <h:outputLabel style="font-weight: bold; " value="Main Title: "/>
+        <p:inputText style="left: -220px;" value="#{boxPlotBean.mainTitle}"></p:inputText>
+        
+ 
+    </h:panelGrid> 
+    <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
+        <p:commandButton value="Update" 
+                         styleClass="updateButton"
+                         style="box-shadow: none !important; text-shadow: none !important"
+                        onclick="PF('statusDialog').show()"
+                        oncomplete="PF('statusDialog').hide()"  
+                        update=":ac:form2:boxPane  :cmdPane"
+                        actionListener="#{BoxPlotBean.boxplotBtn_action()}"/>
+    </h:panelGrid>
     <h:panelGrid class="resultsBar" columns="2">
         <h:panelGroup>
             <h:panelGrid columns="1" style="text-align : left;">
@@ -25,7 +66,7 @@
 
         </h:panelGroup>                            
     </h:panelGrid>  
-    <h:panelGrid id="plotBoxPane1" style="width: 100%;">
+    <h:panelGrid id="boxPane" style="width: 100%;">
          <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
             <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('plot_box_chart')}" alt="PieChartImage"/>
         </h:panelGrid>                           

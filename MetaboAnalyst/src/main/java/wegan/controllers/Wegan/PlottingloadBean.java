@@ -239,11 +239,15 @@ public class PlottingloadBean implements Serializable {
 
             testFile = ab.getTestamf();
             format = "rowu";
-            
-           
+          
         } else if (testDataOpt.equals("BCI")) {
             testFile = ab.getTestBCI();
             format = "rowu";
+            
+        } else if (testDataOpt.equals("Iris")) {
+            dataType = "Dune";
+            testFile = ab.getTestIris();
+            format = "rowu";            
         }
 
         if (!sb.doLogin(dataType, "DCA", false, paired)) {
@@ -302,6 +306,11 @@ public class PlottingloadBean implements Serializable {
         } else if (testDataOpt.equals("BCI")) {
             testFile = ab.getTestBCI();
             format = "rowu";
+        } else if (testDataOpt.equals("Iris")) {
+            dataType = "Dune";
+            testFile = ab.getTestIris();
+            format = "rowu";            
+        
         } else if (testDataOpt.equals("Linear")) {
             //System.out.print(" Linear Data selected");
             dataType = "Linear";
@@ -335,7 +344,7 @@ public class PlottingloadBean implements Serializable {
             }
         }
         sb.setDataUploaded(true);
-        return "Data check";  // Change back to 'Data check' 
+        return "Data check";  // Change back to 'Data check'    
     }
     
     

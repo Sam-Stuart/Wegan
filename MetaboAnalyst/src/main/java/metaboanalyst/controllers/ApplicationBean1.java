@@ -112,6 +112,7 @@ public class ApplicationBean1 implements Serializable {
     private final SelectItem[] scaleNormOpts;
     private final SelectItem[] ordStressDimensionOpts;
     private final SelectItem[] ordColorPaletteOpts;
+    private final SelectItem[] boxPltColorPaletteOpts;
     private final SelectItem[] pairAnalOpts;
     private final SelectItem[] equalVarOpts;
     private final SelectItem[] posthocOpts;
@@ -263,6 +264,12 @@ public class ApplicationBean1 implements Serializable {
         ordColorPaletteOpts[1] = new SelectItem("plasma", "Plasma");
         ordColorPaletteOpts[2] = new SelectItem("grey", "Grayscale");
         ordColorPaletteOpts[3] = new SelectItem("none", "No Color");
+        
+        boxPltColorPaletteOpts = new SelectItem[4];
+        boxPltColorPaletteOpts[0] = new SelectItem("viridis", "Viridis");
+        boxPltColorPaletteOpts[1] = new SelectItem("plasma", "Plasma");
+        boxPltColorPaletteOpts[2] = new SelectItem("grey", "Grayscale");
+        boxPltColorPaletteOpts[3] = new SelectItem("rainbow", "Rainbow");
         
         ordStressDimensionOpts = new SelectItem[5];
         ordStressDimensionOpts[0] = new SelectItem("1", "1");
@@ -860,6 +867,11 @@ public class ApplicationBean1 implements Serializable {
     public SelectItem[] getOrdColorPaletteOpts() {
         return ordColorPaletteOpts;
     }
+    
+    public SelectItem[] getBoxPltColorPaletteOpts() {
+        return boxPltColorPaletteOpts;
+    }
+    
             
     public SelectItem[] getProbNormOpts() {
         return probNormOpts;

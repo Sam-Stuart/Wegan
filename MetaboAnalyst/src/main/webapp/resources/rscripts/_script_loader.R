@@ -3,7 +3,7 @@
 general_files <- c("general_data_utils","general_misc_utils","general_load_libs");
 general_stat_files <- c("general_norm_utils","general_proc_utils");
 general_anot_files <- "general_anot_utils";
-stats_files <- c("stats_chemometrics","stats_classification","stats_clustering", "stats_correlations", "stats_sigfeatures","stats_univariates");
+stats_files <- c("stats_classification","stats_clustering", "stats_correlations", "stats_sigfeatures","stats_univariates");
 enrich_files <- c("enrich_graphics","enrich_mset","enrich_name_match","enrich_stats");
 pathway_files <- c("enrich_mset","enrich_stats","enrich_name_match","enrich_path_graphics","enrich_path_kegg","enrich_path_stats")
 integmex_files <- c("enrich_integ","enrich_path_kegg","enrich_stats","enrich_name_match")
@@ -17,7 +17,7 @@ correlation_files <- c("correlation_linear", "correlation_penalized", "correlati
 ordination_files <- c("ord_nmds", "ord_pcoa", "ord_cia", "ord_dca", "ord_anosim", "ord_rda", "ord_bray", "ord_cca");
 nmds_files <- c("test-Vegan", "dispersal", "plotting");
 dispersal_files <- c("dispersal");
-plotting_files <- c("plotting", "plotting_pie", "plot_bar", "plot_box", "plot_scatter");
+plotting_files <- c("plotting", "plotting_pie", "plotting_bargraph", "plotting_boxplot");
 correlation_files <- c("correlation_linear", "correlation_penalized", "correlation_polynomial", "correlation_ml", "correlation_multivariate", "correlation_SVM", "correlation_logistic");
 ordination_files <- c("ord_nmds", "ord_pcoa", "ord_cia", "ord_dca", "ord_anosim", "ord_rda", "ord_bray", "ord_cca", "ord_ca", "ord_dca");
 nmds_files <- c("test-Vegan","Dispersal");

@@ -141,8 +141,12 @@
 .collol {
     width: 50%;
 }
-
-
+.colBoxPlotLong {
+    width: 40%;
+}
+.colBoxPlotShort {
+    width: 30%;
+}
 
 .home-banner {
   position: relative;

@@ -1,5 +1,4 @@
 
-
 #'Pie Chart'
 #'@description Construct pie chart components based on default variables and user input
 #'@usage pieChart_setup(mSetObj = NA, byrow = TRUE, columns = NULL,rows = NULL,labels = NULL, colors = NULL, main = NULL, lgnd = FALSE)
@@ -19,7 +18,7 @@
 pieChart_setup <- function(mSetObj = NA, byrow = "false", bysum = "false", columns = 1,rows = "NULL", 
                            labels = "NULL", colors = "NULL", mainTitle = "Main Title", lgnd = "false"){
   
-  
+  print("BANANA PIE : This comment is in plotting_pieChart.R");
   mSetObj <- .get.mSet(mSetObj)
   input <- mSetObj$dataSet$norm
   

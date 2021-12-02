@@ -74,8 +74,8 @@ public class PlottingMainBean implements Serializable {
     }
     
     private void doDefaultBoxChart(){  
-        PlottingUtils.CreateBoxChart(sb);
-        PlottingUtils.PlotBoxChart(sb, sb.getCurrentImage("plot_box_chart"), "png", 72);     
+        PlottingUtils.CreateBoxPlot(sb, "NULL", "NULL", "NULL","NULL", "NULL", "NULL", "NULL", "NULL", "NULL", "NULL");
+        PlottingUtils.PlotBoxPlot(sb, sb.getCurrentImage("plot_box_chart"), "png", 72);     
     } 
     
     private void doDefaultScatterChart(){  

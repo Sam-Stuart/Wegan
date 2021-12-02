@@ -105,22 +105,38 @@ public class PlottingUtils {
         }
     }
     
-    public static void CreateBoxChart(SessionBean1 sb) {
+    
+    
+    public static boolean CreateBoxPlot(SessionBean1 sb, String facA, String facB, String facC, String type, String fillColor ,
+                          String xlab, String ylab, String boxlabs, String legendTitle, String mainTitle) {
         try {
             RConnection RC = sb.getRConnection();
-            String rCommand = "boxPlot_setup(NA)";
+            String rCommand = "boxPlot_setup(NA"
+                                                + ", \"" + facA
+                                                + "\", \"" + facB
+                                                + "\", \"" + facC
+                                                + "\", \"" + type
+                                                + "\", \"" + fillColor
+                                                + "\", \"" + xlab
+                                                + "\", \"" + ylab
+                                                + "\", \"" + boxlabs
+                                                + "\", \"" + legendTitle
+                                                + "\", \"" + mainTitle + "\")";
             RCenter.recordRCommand(RC, rCommand);
             RC.voidEval(rCommand);
+            return true;
         } catch (RserveException rse) {
             System.out.println(rse);
+            return false;
         }
     }   
     
-    public static void PlotBoxChart(SessionBean1 sb, String imgName, String format, int dpi) {
+    public static void PlotBoxPlot(SessionBean1 sb, String imgName, String format, int dpi) {
         try {
             RConnection RC = sb.getRConnection();
             String rCommand = "plotBoxPlot(NA" + ", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
             RCenter.recordRCommand(RC, rCommand);
+            sb.addGraphicsCMD("boxplot", rCommand);
             RC.voidEval(rCommand);
         } catch (RserveException rse) {
             System.out.println(rse);
@@ -161,7 +177,7 @@ public class PlottingUtils {
         } catch (RserveException rse) {
             System.out.println(rse);
         } catch (REXPMismatchException ex) {
-            Logger.getLogger(CAUtils.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CAUtils.class.getName()).log(Level.SEVERE, null, ex);   /* Currently using CAUtils ..... Need to channnnne to PlottingUtils    */ 
         }
         return null;
     }
