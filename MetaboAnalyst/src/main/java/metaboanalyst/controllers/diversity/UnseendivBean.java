@@ -370,7 +370,7 @@ public class UnseendivBean implements Serializable {
         box_color[2] = new SelectItem("turquoise", "Turquoise");
         box_color[3] = new SelectItem("steelblue", "Steelblue");
         box_color[4] = new SelectItem("peach", "Peach");
-        box_color[5] = new SelectItem("wheat", "Wheat");
+        box_color[5] = new SelectItem("thistle", "Thistle");
         
         border_col = new SelectItem[6];
         border_col[0] = new SelectItem("NULL", "Blue");
@@ -378,7 +378,7 @@ public class UnseendivBean implements Serializable {
         border_col[2] = new SelectItem("turquoise", "Turquoise");
         border_col[3] = new SelectItem("steelblue", "Steelblue");
         border_col[4] = new SelectItem("peach", "Peach");
-        border_col[5] = new SelectItem("wheat", "Wheat");      
+        border_col[5] = new SelectItem("thistle", "Thistle");      
         
     }
     

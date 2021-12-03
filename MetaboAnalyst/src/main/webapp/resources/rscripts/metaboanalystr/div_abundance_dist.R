@@ -439,6 +439,7 @@ AbundanceFisherPlot <- function(mSetObj = NA, bar.color = "NULL", line.color.add
   } else if (bar.color == "wheat") {
     bar.color1 = "wheat1"
   } 
+  print(bar.color1)
   
   if (line.color.addFit == "NULL") { 
     line.color.addFit1 = "red" 
@@ -453,6 +454,7 @@ AbundanceFisherPlot <- function(mSetObj = NA, bar.color = "NULL", line.color.add
   } else if (line.color.addFit == "sienna") { 
     line.color.addFit1 <- "sienna1"
   }
+  print(line.color.addFit1)
 
   m <- max(plot_data.fisher$fisher)
   if (m/10000 >= 5) {  

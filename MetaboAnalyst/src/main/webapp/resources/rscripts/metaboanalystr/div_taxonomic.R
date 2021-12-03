@@ -26,11 +26,11 @@ Taxonomic_div <- function(mSetObj = NA, data = "false", dis = "NULL", match.forc
 
   mSetObj <- .get.mSet(mSetObj)
 
-  #data(dune)
-  #data(dune.taxon)
+  data(dune)
+  data(dune.taxon)
   
-  #mSetObj$dataSet$norm <- dune
-  #mSetObj$dataSet$origMeta <- dune.taxon
+  mSetObj$dataSet$norm <- dune
+  mSetObj$dataSet$origMeta <- dune.taxon
 
   #Extract input from mSetObj
   if (data == "false") { #normalized data as input
@@ -42,8 +42,8 @@ Taxonomic_div <- function(mSetObj = NA, data = "false", dis = "NULL", match.forc
   metaData <- mSetObj$dataSet$origMeta
   #envData <- mSetObj$dataSet$origEnv
   
-  print(metaData)
-  print(input)  
+  #print(metaData)
+  #print(input)  
   #input.1 <- t(input)
   #print(input.1)
 
@@ -110,7 +110,7 @@ Taxonomic_div <- function(mSetObj = NA, data = "false", dis = "NULL", match.forc
   print(summary.taxon)
   print("after summary taxon")
 
-  tr <- hclust(taxdis, method = "average")
+  tr <- hclust(taxdis, method = aggme1)
   print(tr)
   print("after tr")
   dtree <- treedist(input.2, tr)

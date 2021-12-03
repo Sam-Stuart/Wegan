@@ -60,11 +60,11 @@ sp_pool <- function(mSetObj = NA, data = "false", pool = "NULL", smallsample = "
   mSetObj <- .get.mSet(mSetObj)
   #Extract input from mSetObj
   
-  #data(dune)
-  #data(dune.env)
+  data(dune)
+  data(dune.env)
 
-  #mSetObj$dataSet$norm <- dune
-  #mSetObj$dataSet$origMeta <- dune.env
+  mSetObj$dataSet$norm <- dune
+  mSetObj$dataSet$origMeta <- dune.env
   metaData <- mSetObj$dataSet$origMeta
   print(metaData)
 
@@ -285,8 +285,8 @@ pool_boxplot <- function(mSetObj=NA, plot_data = "NULL", box.color = "NULL",
     box.color1 = "lightsteelblue1"
   } else if (box.color == "peach") {
     box.color1 = "peachpuff"
-  } else if (box.color == "wheat") {
-    box.color1 = "wheat1"
+  } else if (box.color == "thistle") {
+    box.color1 = "thistle"
   } 
   print(box.color1)
   
@@ -298,10 +298,10 @@ pool_boxplot <- function(mSetObj=NA, plot_data = "NULL", box.color = "NULL",
     border.col1 = "turquoise4"
   } else if (border.col == "steelblue") {
     border.col1 = "lightsteelblue4"
-  } else if (border.col1 == "peach") {
-    border.col1 = "tan2"  
-  } else if (border.col1 == "wheat") {
-    border.col1 <- "wheat" 
+  } else if (border.col == "peach") {
+    border.col1 = "salmon3"  
+  } else if (border.col == "thistle") {
+    border.col1 <- "orchid4" 
   }
   print(border.col1)
   
