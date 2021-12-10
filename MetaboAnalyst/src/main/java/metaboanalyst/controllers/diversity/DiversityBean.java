@@ -33,18 +33,18 @@ public class DiversityBean implements Serializable {
         if (!sb.isAnalInit(pageID)) {
             if (!FacesContext.getCurrentInstance().isPostback()) {
                 switch (pageID) {
-                    case "Alpha":
-                        doDefaultAlpha();
-                        break;
-                    case "Beta":
-                        doDefaultBeta();
-                        break;
-                    case "Gamma":
-                        doDefaultGamma();
-                        break;
-                    case "TestTutorial":
-                        doDefaultTestTutorial();
-                        break;
+//                    case "Alpha":
+//                        doDefaultAlpha();
+//                        break;
+//                    case "Beta":
+//                        doDefaultBeta();
+//                        break;
+//                    case "Gamma":
+//                        doDefaultGamma();
+//                        break;
+//                    case "TestTutorial":
+//                        doDefaultTestTutorial();
+//                        break;
                     case "Indices":
                         doDefaultIndices();
                         break;
@@ -73,45 +73,45 @@ public class DiversityBean implements Serializable {
     }
 
     
-    private void doDefaultAlpha(){
-        if (!DiversityUtils.CreateAlpha(sb)){
-            RConnection RC = sb.getRConnection();
-            sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
-        }
-        DiversityUtils.PlotAlpha(sb);
-    }
-    
-    private void doDefaultBeta(){
-        if (!DiversityUtils.CreateBeta(sb)){
-            RConnection RC = sb.getRConnection();
-            sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
-        }
-        DiversityUtils.PlotBeta(sb);
-    }
-    
-    private void doDefaultGamma(){
-        if (!DiversityUtils.CreateGamma(sb)){
-            RConnection RC = sb.getRConnection();
-            sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
-        }
-        DiversityUtils.PlotGamma(sb);
-    }
-    private void doDefaultSpecies(){
-        if (!DiversityUtils.CreateSpecies(sb)){
-            RConnection RC = sb.getRConnection();
-            sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
-        }
-        DiversityUtils.PlotSpecies(sb);
-    }
-    
-    private void doDefaultTestTutorial(){
-        if (!DiversityUtils.CreateTestTutorial(sb)){
-            RConnection RC = sb.getRConnection();
-            sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
-        }
-        DiversityUtils.CreateTestTutorial(sb);
-        DiversityUtils.PlotTestTutorial(sb, sb.getCurrentImage("gamma_plot"), "png", 72);
-    }
+//    private void doDefaultAlpha(){
+//        if (!DiversityUtils.CreateAlpha(sb)){
+//            RConnection RC = sb.getRConnection();
+//            sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
+//        }
+//        DiversityUtils.PlotAlpha(sb);
+//    }
+//    
+//    private void doDefaultBeta(){
+//        if (!DiversityUtils.CreateBeta(sb)){
+//            RConnection RC = sb.getRConnection();
+//            sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
+//        }
+//        DiversityUtils.PlotBeta(sb);
+//    }
+//    
+//    private void doDefaultGamma(){
+//        if (!DiversityUtils.CreateGamma(sb)){
+//            RConnection RC = sb.getRConnection();
+//            sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
+//        }
+//        DiversityUtils.PlotGamma(sb);
+//    }
+//    private void doDefaultSpecies(){
+//        if (!DiversityUtils.CreateSpecies(sb)){
+//            RConnection RC = sb.getRConnection();
+//            sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
+//        }
+//        DiversityUtils.PlotSpecies(sb);
+//    }
+//    
+//    private void doDefaultTestTutorial(){
+//        if (!DiversityUtils.CreateTestTutorial(sb)){
+//            RConnection RC = sb.getRConnection();
+//            sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
+//        }
+//        DiversityUtils.CreateTestTutorial(sb);
+//        DiversityUtils.PlotTestTutorial(sb, sb.getCurrentImage("gamma_plot"), "png", 72);
+//    }
     
     
     private void doDefaultIndices(){
@@ -173,7 +173,7 @@ public class DiversityBean implements Serializable {
         System.out.print("INSIDE TAXO"); 
         DiversityUtils.CreateTaxoDiv(sb, false, "NULL", false, false, "NULL", false);
         DiversityUtils.PlotTaxaTree(sb, "NULL",sb.getCurrentImage("Taxa_Tree_Plot"), "png", 72, "false");
-        DiversityUtils.PlotTaxonScatter(sb, "NULL",sb.getCurrentImage("Taxa_Scatter_Plot"), "png", 72, "false");
+        DiversityUtils.PlotTaxonScatter(sb, "NULL", "NULL",sb.getCurrentImage("Taxa_Scatter_Plot"), "png", 72, "false");
         DiversityUtils.PlotTaxonHeatmap(sb, "NULL",sb.getCurrentImage("Taxa_Heatmap_Plot"), "png", 72, "false");
         System.out.print("AFTER TAXO");
     }

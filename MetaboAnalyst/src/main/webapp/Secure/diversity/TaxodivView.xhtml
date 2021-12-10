@@ -13,28 +13,37 @@
     <ui:define name="content">
         <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
             <p:tabView id="taxatree">
-                <p:tab title ="Taxa dendrogram graph" titleStyleClass="p-tab-nav">
+                <p:tab title ="Taxonomic diversity dendrogram" titleStyleClass="p-tab-nav">
                     <h:form id="form1">
-                        
+                        <p>
+                            Taxonomic diversity (Delta) and distinctness (Delta*) are another two diversity measures, which are averaged taxonomic distances between two randomly selected species or individuals in the community.                          
+                        </p>
+                        <p>
+                            Taxonomic diversity (Delta) indicates the average taxonomic distance between any two randomly selected species/organisms from a site (sampling unit). The distance can be seen as the length of the path connecting these two organisms through a dendrogram or a Linnaean classification. The index measures both taxonomic relatedness and evenness.  
+                        </p>
+                        <p>
+                            Taxonomic distinctness (Delta∗) is the average path length between two randomly chosen but taxonomically different species/organisms. This index measures pure taxonomic relatedness,
+                        </p>
 <!--                        <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> -->
-                            <h:panelGrid id="panelGrid" columns="6" cellpadding="2" >
+                            <h:panelGrid id="panelGrid" columns="4" cellpadding="3" columnClasses="colFront, colLeft, colRight">
                                 <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
                                 <p:selectBooleanCheckbox value ="#{taxodivBean.doOriginal}"/> 
-                                <h:outputLabel style="font-weight: bold" value="Match force:"/>
+                                <h:outputLabel style="font-weight: bold" value="Match.force:"/>
                                 <p:selectBooleanCheckbox value ="#{taxodivBean.doMatch_force}"/> 
                                 <h:outputLabel style="font-weight: bold" value="Varstep:"/>
-                                <p:selectBooleanCheckbox value = "#{taxodivBean.doVarstep}"/>  
+                                <p:selectBooleanCheckbox value = "#{taxodivBean.doVarstep}"/>
+                                <h:outputLabel style="font-weight: bold" value="Select agglomeration method:"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{taxodivBean.aggmechosen}">
+                                    <f:selectItems value="#{taxodivBean.aggme}"/>
+                                </p:selectOneMenu> 
                                 <h:outputLabel style="font-weight: bold" value="Check:"/>
                                 <p:selectBooleanCheckbox value = "#{taxodivBean.doCheck}"/>  
                                 <h:outputLabel style="font-weight: bold" value="Select taxonomic distances among taxa:"/>
                                 <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{taxodivBean.dischosen}">
                                     <f:selectItems value="#{taxodivBean.dis}"/>
                                 </p:selectOneMenu> 
-                                <h:outputLabel style="font-weight: bold" value="Select agglomeration method:"/>
-                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{taxodivBean.aggmechosen}">
-                                    <f:selectItems value="#{taxodivBean.aggme}"/>
-                                </p:selectOneMenu> 
-                            </h:panelGrid>  
+                                
+                        </h:panelGrid> 
                             <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
                             <p:commandButton value="Update" 
                                              styleClass="updateButton"
@@ -42,12 +51,12 @@
                                             onclick="PF('statusDialog').show()"
                                             oncomplete="PF('statusDialog').hide()"  
                                             update=":taxatree:form1:taxatreePane1  :cmdPane" 
-                                            actionListener="#{taxodivBean.taxodivUpdate_action()}"/>                          
+                                            actionListener="#{taxodivBean.taxodivTreeUpdate_action()}"/>                          
                             <p:commandButton value="Customize Graph"
                                              styleClass="graphicsButton"
                                              style="box-shadow: none !important; text-shadow: none !important;"
                                              actionListener="#{sessionBean1.graphicsLnk_action('pca_pair')}" 
-                                            oncomplete="PF('graphApperanceTaxodiv').show()"/>  
+                                            oncomplete="PF('graphApperanceTaxodiv1').show()"/>  
                             </h:panelGrid>             
                         <h:panelGrid class="resultsBar" columns="2">
                             <h:panelGroup>
@@ -86,6 +95,9 @@
                                     <h:outputText escape="false" value="#{taxodivBean.filecommatrixresultpath}"/>
                                 </i>
                             </h:panelGrid>
+                            <p>
+                                
+                            </p>
                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
                                 <p:commandButton value="Export"
                                     styleClass="exportButton"
@@ -99,28 +111,37 @@
                         </h:panelGrid> 
                     </h:form>
                 </p:tab>
-                <p:tab title ="Taxonomic diversity vs. species richness" titleStyleClass="p-tab-nav">
+                <p:tab title ="Average taxonomic distinctness against number of species" titleStyleClass="p-tab-nav">
                     <h:form id="form2">
-                        
+                        <p>
+                            Taxonomic diversity (Delta) and distinctness (Delta*) are another two diversity measures, which are averaged taxonomic distances between two randomly selected species or individuals in the community.                          
+                        </p>
+                        <p>
+                            Taxonomic diversity (Delta) indicates the average taxonomic distance between any two randomly selected species/organisms from a site (sampling unit). The distance can be seen as the length of the path connecting these two organisms through a dendrogram or a Linnaean classification. The index measures both taxonomic relatedness and evenness.  
+                        </p>
+                        <p>
+                            Taxonomic distinctness (Delta∗) is the average path length between two randomly chosen but taxonomically different species/organisms. This index measures pure taxonomic relatedness,
+                        </p>
 <!--                        <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> -->
-                            <h:panelGrid id="panelGrid" columns="6" cellpadding="2" >
+                            <h:panelGrid id="panelGrid" columns="4" cellpadding="3" columnClasses="colFront, colLeft, colRight">
                                 <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
                                 <p:selectBooleanCheckbox value ="#{taxodivBean.doOriginal}"/> 
                                 <h:outputLabel style="font-weight: bold" value="Match.force:"/>
                                 <p:selectBooleanCheckbox value ="#{taxodivBean.doMatch_force}"/> 
                                 <h:outputLabel style="font-weight: bold" value="Varstep:"/>
-                                <p:selectBooleanCheckbox value = "#{taxodivBean.doVarstep}"/>  
+                                <p:selectBooleanCheckbox value = "#{taxodivBean.doVarstep}"/>
+                                <h:outputLabel style="font-weight: bold" value="Select agglomeration method:"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{taxodivBean.aggmechosen}">
+                                    <f:selectItems value="#{taxodivBean.aggme}"/>
+                                </p:selectOneMenu> 
                                 <h:outputLabel style="font-weight: bold" value="Check:"/>
                                 <p:selectBooleanCheckbox value = "#{taxodivBean.doCheck}"/>  
                                 <h:outputLabel style="font-weight: bold" value="Select taxonomic distances among taxa:"/>
                                 <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{taxodivBean.dischosen}">
                                     <f:selectItems value="#{taxodivBean.dis}"/>
                                 </p:selectOneMenu> 
-                                <h:outputLabel style="font-weight: bold" value="Select agglomeration method:"/>
-                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{taxodivBean.aggmechosen}">
-                                    <f:selectItems value="#{taxodivBean.aggme}"/>
-                                </p:selectOneMenu> 
-                            </h:panelGrid>  
+                                
+                        </h:panelGrid>  
                             <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
                             <p:commandButton value="Update" 
                                              styleClass="updateButton"
@@ -128,12 +149,12 @@
                                             onclick="PF('statusDialog').show()"
                                             oncomplete="PF('statusDialog').hide()"  
                                             update=":taxatree:form2:taxatreePane2  :cmdPane" 
-                                            actionListener="#{taxodivBean.taxodivUpdate_action()}"/>                          
+                                            actionListener="#{taxodivBean.taxodivScatUpdate_action()}"/>                          
                             <p:commandButton value="Customize Graph"
                                              styleClass="graphicsButton"
                                              style="box-shadow: none !important; text-shadow: none !important;"
                                              actionListener="#{sessionBean1.graphicsLnk_action('pca_pair')}" 
-                                            oncomplete="PF('graphApperanceTaxodiv').show()"/>  
+                                            oncomplete="PF('graphApperanceTaxodiv2').show()"/>  
                             </h:panelGrid>             
                         <h:panelGrid class="resultsBar" columns="2">
                             <h:panelGroup>
@@ -172,6 +193,16 @@
                                     <h:outputText escape="false" value="#{taxodivBean.filecommatrixresultpath}"/>
                                 </i>
                             </h:panelGrid>
+                            <p>
+                                Average taxonomic distinctness against number of species, for species lists from sampling units. Each point represents one sampling unit.
+                            </p>
+                            <p>
+                                The middle line shows the "expected" value of taxonomic distinctness derived from the list of the species known to be found within all sampling area under 
+                                random sampling assumptions. 
+                            </p>
+                            <p>
+                                The upper and lower lines are the 95% probability limits (confidence interval) for the species list derived from random sampling assumptions. 
+                            </p>
                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
                                 <p:commandButton value="Export"
                                     styleClass="exportButton"
@@ -185,28 +216,27 @@
                         </h:panelGrid> 
                     </h:form>
                 </p:tab>
-                <p:tab title ="Taxonomic Heatmap" titleStyleClass="p-tab-nav">
+<!--                <p:tab title ="Taxonomic Heatmap" titleStyleClass="p-tab-nav">
                     <h:form id="form3">
-                        
-<!--                        <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> -->
-                            <h:panelGrid id="panelGrid" columns="4" cellpadding="2" >
+                        <h:panelGrid id="panelGrid" columns="4" cellpadding="3" columnClasses="colFront, colLeft, colRight">
                                 <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
                                 <p:selectBooleanCheckbox value ="#{taxodivBean.doOriginal}"/> 
                                 <h:outputLabel style="font-weight: bold" value="Match.force:"/>
                                 <p:selectBooleanCheckbox value ="#{taxodivBean.doMatch_force}"/> 
                                 <h:outputLabel style="font-weight: bold" value="Varstep:"/>
-                                <p:selectBooleanCheckbox value = "#{taxodivBean.doVarstep}"/>  
+                                <p:selectBooleanCheckbox value = "#{taxodivBean.doVarstep}"/>
+                                <h:outputLabel style="font-weight: bold" value="Select agglomeration method:"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{taxodivBean.aggmechosen}">
+                                    <f:selectItems value="#{taxodivBean.aggme}"/>
+                                </p:selectOneMenu> 
                                 <h:outputLabel style="font-weight: bold" value="Check:"/>
                                 <p:selectBooleanCheckbox value = "#{taxodivBean.doCheck}"/>  
                                 <h:outputLabel style="font-weight: bold" value="Select taxonomic distances among taxa:"/>
                                 <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{taxodivBean.dischosen}">
                                     <f:selectItems value="#{taxodivBean.dis}"/>
                                 </p:selectOneMenu> 
-                                <h:outputLabel style="font-weight: bold" value="Select agglomeration method:"/>
-                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{taxodivBean.aggmechosen}">
-                                    <f:selectItems value="#{taxodivBean.aggme}"/>
-                                </p:selectOneMenu> 
-                            </h:panelGrid>  
+                                
+                        </h:panelGrid>  
                             <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
                             <p:commandButton value="Update" 
                                              styleClass="updateButton"
@@ -214,12 +244,12 @@
                                             onclick="PF('statusDialog').show()"
                                             oncomplete="PF('statusDialog').hide()"  
                                             update=":taxatree:form3:taxatreePane3  :cmdPane" 
-                                            actionListener="#{taxodivBean.taxodivUpdate_action()}"/>                          
+                                            actionListener="#{taxodivBean.taxodivHeatUpdate_action()}"/>                          
                             <p:commandButton value="Customize Graph"
                                              styleClass="graphicsButton"
                                              style="box-shadow: none !important; text-shadow: none !important;"
                                              actionListener="#{sessionBean1.graphicsLnk_action('pca_pair')}" 
-                                            oncomplete="PF('graphApperanceTaxodiv').show()"/>  
+                                            oncomplete="PF('graphApperanceTaxodiv3').show()"/>  
                             </h:panelGrid>             
                         <h:panelGrid class="resultsBar" columns="2">
                             <h:panelGroup>
@@ -235,9 +265,9 @@
                         </h:panelGrid>                         
                         
                         <h:panelGrid id="taxatreePane3" style="width: 100%;">
-<!--                        // <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                        // <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
                             //    
-                            // </h:panelGrid>-->
+                            // </h:panelGrid>
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
                                 <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
                                     <h:outputText escape="false" value="#{taxodivBean.filetaxadistresultpath}"/>
@@ -270,13 +300,25 @@
                             </h:panelGrid>                            
                         </h:panelGrid> 
                     </h:form>
-                </p:tab>
+                </p:tab>-->
             </p:tabView>
-            <p:dialog modal="true" widgetVar="graphApperanceTaxodiv" 
+            <p:dialog modal="true" widgetVar="graphApperanceTaxodiv1" 
                 style="width: 400px; height:400px;" 
                 appendTo="@(body)" header="Graphics Center"
                 draggable="false" closable="true" resizable="false"> 
                 <ui:include src="_color_palette_taxo.xhtml" />
+            </p:dialog>
+            <p:dialog modal="true" widgetVar="graphApperanceTaxodiv2" 
+                style="width: 400px; height:400px;" 
+                appendTo="@(body)" header="Graphics Center"
+                draggable="false" closable="true" resizable="false"> 
+                <ui:include src="_color_palette_taxo_1.xhtml" />
+            </p:dialog>
+            <p:dialog modal="true" widgetVar="graphApperanceTaxodiv3" 
+                style="width: 400px; height:400px;" 
+                appendTo="@(body)" header="Graphics Center"
+                draggable="false" closable="true" resizable="false"> 
+                <ui:include src="_color_palette_taxo_2.xhtml" />
             </p:dialog>
  
         </h:panelGrid>

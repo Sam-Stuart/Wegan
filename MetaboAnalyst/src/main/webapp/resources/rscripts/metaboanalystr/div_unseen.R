@@ -352,7 +352,7 @@ pool_boxplot <- function(mSetObj=NA, plot_data = "NULL", box.color = "NULL",
 #'License: GNU GPL (>= 2)
 #'@export
 
-rich_est_curve <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA) {
+RichEstCurve <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA) {
 
   #library(plyr)
   #library(vegan)

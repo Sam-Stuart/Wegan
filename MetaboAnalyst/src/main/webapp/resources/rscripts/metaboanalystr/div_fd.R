@@ -31,14 +31,14 @@ functionalDiv <- function(mSetObj = NA, data = "false", w_text = "", corr = "NUL
   
   mSetObj <- .get.mSet(mSetObj)
 
-  data(tussock)
-  print(tussock)
-  metaData = tussock$trait
-  mSetObj$dataSet$orig = tussock$abun 
-  print(metaData)
+  #data(tussock)
+  #print(tussock)
+  #metaData = tussock$trait
+  #mSetObj$dataSet$orig = tussock$abun 
+  #print(metaData)
 
-  mSetObj$dataSet$norm <- tussock$abun
-  mSetObj$dataSet$origMeta <- tussock$trait
+  #mSetObj$dataSet$norm <- tussock$abun
+  #mSetObj$dataSet$origMeta <- tussock$trait
 
   #Extract input from mSetObj
   if (data == "false") { #normalized data as input
@@ -48,13 +48,43 @@ functionalDiv <- function(mSetObj = NA, data = "false", w_text = "", corr = "NUL
   }
   print(input)
 
+  #input1 <- input
+  #print(rownames(input1))
+  #rownames(input1) <- c(input[,1])
+  #print(rownames(input1))
+  #input.2 <- input1[-1]
+  #input.2[sapply(input.2, is.character)] <- lapply(input.2[sapply(input.2, is.character)], as.numeric)
+
+  input1 <- input
+  input.2 <- input1
+  #input.2[sapply(input.2, is.character)] <- lapply(input.2[sapply(input.2, is.character)], as.numeric)
+  print(input.2)
+  print(is.numeric(input.2[2]))
+
+  print("--------- input above ---------")
+  print("--------- metadata below ---------")
+
   metaData <- mSetObj$dataSet$origMeta
   print(metaData)
+
+  #metaData1 <- metaData
+  #print(rownames(metaData1))
+  #rownames(metaData1) <- metaData[,1]
+  #print(rownames(metaData1))
+  #metaData2 <- metaData1[-1]
+  #metaData3 <- metaData2
+  #metaData3[sapply(metaData3, is.character)] <- lapply(metaData3[sapply(metaData3, is.character)], as.factor)
+
+  metaData3 <- metaData
+  metaData3[sapply(metaData3, is.character)] <- lapply(metaData3[sapply(metaData3, is.character)], as.factor)
+
   #w
   #print(w)
+  print("--------- Finish metadata ------------")
+
 
   #cat("Species data has to be numeric")
-  #input.2 <- (input)
+  #input.2 <- as.numeric(input)
   
   if (corr == "NULL") { 
     corr1 = "cailliez"
@@ -129,9 +159,9 @@ functionalDiv <- function(mSetObj = NA, data = "false", w_text = "", corr = "NUL
   print(m1)
   
   if (w_text == "") { #Nothing typed in text box
-     ex10 <- dbFD(metaData, input, corr = corr1, w.abun = w.abun1, stand.x = stand.x1, 
-               m = m1, stand.FRic = stand.FRic1, 
-               print.pco = print.pco1, messages = messages1)     
+     ex10 <- dbFD(metaData3, input.2, corr = corr1, w.abun = w.abun1, stand.x = stand.x1, 
+                 m = m1, stand.FRic = stand.FRic1, 
+                 print.pco = print.pco1, messages = messages1)    
   } else {
      print(w_text)
      w_text1 <- w_text #taken from text box by java, fed as string into R code
@@ -145,7 +175,7 @@ functionalDiv <- function(mSetObj = NA, data = "false", w_text = "", corr = "NUL
      print(w_text1)
      w1 <- as.numeric(w_text1)
      print(w1)
-     ex10 <- dbFD(metaData, input, w1, corr = corr1, w.abun = w.abun1, stand.x = stand.x1, 
+     ex10 <- dbFD(metaData, input.2, w1, corr = corr1, w.abun = w.abun1, stand.x = stand.x1, 
                m = m1, stand.FRic = stand.FRic1, 
                print.pco = print.pco1, messages = messages1)
   }
@@ -260,11 +290,11 @@ FD_cluster_plot <- function(mSetObj=NA, color="NULL", imgName, format="png", dpi
   #library(ggplot2)
   #library(ggdendro) not availble for this version of R
   #library(Cairo)
-  library(magick)
+  #library(magick)
   
   mSetObj <- .get.mSet(mSetObj)
   
-  plot_data <- mSetObj$analse$exg
+  plot_data <- mSetObj$analset$exg
   #print(plot_data)  
 
   #Set plot dimensions
@@ -304,8 +334,10 @@ FD_cluster_plot <- function(mSetObj=NA, color="NULL", imgName, format="png", dpi
   #plot(hclust(plot_data), hang = -1)
   
   #windows(width = 20, height = 20)
-  plot(hcd, hang = -1, nodePar = nodePar, ylab = "Height", edgePar = list(col = color1, lwd = 2:1))
-  title("Cluster dendrogram based on Gower’s distancematrix")
+  #plot(hcd, hang = -1, nodePar = nodePar, ylab = "Height", edgePar = list(col = color1, lwd = 2:1))
+  plot(hcd, hang = -1, nodePar = nodePar, ylab = "Height", edgePar = list(col = color1, lwd = 2:1), yaxt = "n")
+  axis(2, las = 2)
+  title("Functional dendrogram of study species based on functional trait matrix")
   
   #if (format == "png") {
   #  imgName <- image_convert(imgName, format="png")

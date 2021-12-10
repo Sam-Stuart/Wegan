@@ -21,16 +21,16 @@ Taxonomic_div <- function(mSetObj = NA, data = "false", dis = "NULL", match.forc
   #library("adegraphics")
   #library(plyr)
   #library(dplyr)
-  library(vegan)
+  #library(vegan)
   print("taxonomic")  
 
   mSetObj <- .get.mSet(mSetObj)
 
-  data(dune)
-  data(dune.taxon)
+  #data(dune)
+  #data(dune.taxon)
   
-  mSetObj$dataSet$norm <- dune
-  mSetObj$dataSet$origMeta <- dune.taxon
+  #mSetObj$dataSet$norm <- dune
+  #mSetObj$dataSet$origMeta <- dune.taxon
 
   #Extract input from mSetObj
   if (data == "false") { #normalized data as input
@@ -77,7 +77,7 @@ Taxonomic_div <- function(mSetObj = NA, data = "false", dis = "NULL", match.forc
   print(check1)
 
   taxdis <- taxa2dist(metaData, varstep = varstep1, check = TRUE)
-  print(taxdis)
+  #print(taxdis)
   print("taxdis ready")  
 
   if (dis == "NULL") {
@@ -99,28 +99,44 @@ Taxonomic_div <- function(mSetObj = NA, data = "false", dis = "NULL", match.forc
   
   if (aggme == "NULL") {
     aggme1 <- "average"
-  } else {
-    aggme1 <- aggme
+  } else if (aggme == "ward.D") {
+    aggme1 <- "ward.D"
+  } else if (aggme == "ward.D2") {
+    aggme1 <- "ward.D2"
+  } else if (aggme == "single") {
+    aggme1 <- "single"
+  } else if (aggme == "complete") {
+    aggme1 <- "complete"
+  } else if (aggme == "mcquitty") {
+    aggme1 <- "median"
+  } else if (aggme == "centroid") {
+    aggme1 <- "centroid"
   }
   print(aggme1)
-
-  taxon <- taxondive(input.2, dis1, match.force = match.force1)
-  print(taxon)
-  summary.taxon <- summary(taxon)
-  print(summary.taxon)
-  print("after summary taxon")
 
   tr <- hclust(taxdis, method = aggme1)
   print(tr)
   print("after tr")
-  dtree <- treedist(input.2, tr)
-  print(dtree)
-  print("after dtree")
-  mod <- treedive(input.2, tr)
-  print(mod)
-  print("after mod")
-  plottree <- hclust(vegdist(input.2), method = aggme1)
-  print(plottree)
+  abbbb <- vegdist(input.2)
+  print(abbbb)
+  plottree <- hclust(vegdist(input.2)) #, method = aggme1
+  print("aggme1")
+  print(aggme1)
+  print("plottree")
+
+  taxon <- taxondive(input.2, dis1, match.force = match.force1)
+  print("taxon")
+  summary.taxon <- summary(taxon)
+  print("summary.taxon")
+  print("after summary taxon")
+
+  #dtree <- treedist(input.2, tr)
+  #print("dtree")
+  #print("after dtree")
+  #mod <- treedive(input.2, tr)
+  #print(mod)
+  #print("after mod")
+  
   taxontree <- hclust(taxdis)
   print("plottree")  
 
@@ -152,8 +168,8 @@ Taxonomic_div <- function(mSetObj = NA, data = "false", dis = "NULL", match.forc
   #  select(name, Distance, Delta, `Delta*`, `Delta+`, `sd(Delta+)`, `z(Delta+)`, `Pr(>|z|)`)
   print("summary.taxon")
 
-  mSetObj$analset$treedive <- mod
-  mSetObj$analset$dtree <- as.data.frame(as.matrix(dtree))
+  #mSetObj$analset$treedive <- mod
+  #mSetObj$analset$dtree <- as.data.frame(as.matrix(dtree))
   mSetObj$analset$c1 <- tr
   mSetObj$analset$input.2 <- input.2
   mSetObj$analset$plottree <- plottree
@@ -236,6 +252,7 @@ taxa_tree <- function(mSetObj = NA, color = "NULL", imgName, format = "png", dpi
   print("ready to plot")  
  
   plot(hcd, hang = -1, nodePar = nodePar, ylab = "Height", edgePar = list(col = color1, lwd = 2:1), las = 2)
+  title(main = "Dendrogram of study species based on taxonomic diversity matrix")
   #title("")
   dev.off()
   return(.set.mSet(mSetObj))
@@ -256,7 +273,7 @@ taxa_tree <- function(mSetObj = NA, color = "NULL", imgName, format = "png", dpi
 #'License: GNU GPL (>= 2)
 #'@export
 
-taxon_scatter <- function(mSetObj=NA, colorc="NULL", imgName, format="png", dpi=72, width=NA) {
+taxon_scatter <- function(mSetObj=NA, plot_data = "NULL", colorc="NULL", imgName, format="png", dpi=72, width=NA) {
   #library(vegan)
   #library(ggplot2)
   #library(ggdendro) not availble for this version of R
@@ -283,7 +300,7 @@ taxon_scatter <- function(mSetObj=NA, colorc="NULL", imgName, format="png", dpi=
   mSetObj$imgSet$Taxa_Scatter_Plot <- imgName
   
   Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
-  par(xpd=FALSE, mar=c(5, 4.1, 4.1, 2.1))
+  par(xpd=FALSE, mar=c(5, 6.1, 4.1, 2.1))
   #abline(0, 1)
   
   if(colorc == "NULL") { 
@@ -294,27 +311,94 @@ taxon_scatter <- function(mSetObj=NA, colorc="NULL", imgName, format="png", dpi=
     colorc1 <- c("red") 
   }
   print(colorc1)  
-  b <- as.numeric(scatter_data$Dplus)
-  print(b)
-  print("just to show the next argument is n")
+  #b <- as.numeric(scatter_data$Dplus)
+  #print(b)
+  #print("just to show the next argument is n")
 
-  pars <- expand.grid(col = colorc1, stringsAsFactors = FALSE)
-  
+  #pars <- expand.grid(col = colorc1, stringsAsFactors = FALSE)
+  #par(mar=c(5,6,4,1)+.1)
+
   #windows(width = 20, height = 20)
   #b[ , apply(b, 2, function(x) !any(is.na(x)))]
 
-  c <- max(b, na.rm = TRUE)
+  #c <- max(b, na.rm = TRUE)
   #c <- select_if(b, !is.na)
-  n <- c + 10
+  #n <- c + 10
   #max(b)
   #print(max(b))
-  print(n)
-  m <- max(scatter_data$Species)
-  print(m) 
-  plot(scatter_data, col = colorc1, pch = 17, xaxt = "n", yaxt = "n")
-  axis(1, labels  = T, at = 0:m)
-  axis(2, las = 2, at = seq(0, n, by = 10), labels = T, ylab = "Delta+")
+  #print(n)
+  #m <- max(scatter_data$Species)
+  #print(m) 
+  #plot(scatter_data) labels = T, xaxt = "n", yaxt = "n",
+  #plot(scatter_data, ann = F, axes = F, col = colorc1, pch = 1, cex.lab = 1.2)
+  #axis(1, labels  = T, at = 0:m, cex.axis = 1, xlab = "Number of Species")
+  #axis(2, las = 2, at = seq(0, n, by = 10), labels = T, ylab = "Delta Plus", cex.axis = 1)
+  #mtext("Delta+", at = (6, 70))
   #xlab = "Number of Species", 
+
+  m <- max(scatter_data$Species)
+  m1 <- min(scatter_data$Species)
+  if (m1 > 2) {
+    mR = m1 - 2
+  } else if (m1 <= 2) {
+    mR = 0
+  }
+  print(mR)
+
+  if (plot_data == "NULL") {
+    b <- as.numeric(scatter_data$Dplus)
+    mod <- scatter_data
+    ylab1 <- "Delta+"
+  } else if (plot_data == "Delta") {
+    b <- as.numeric(scatter_data$D)
+    mod <- scatter_data$D
+    ylab1 <- "Delta"
+  } else if (plot_data == "Delta*") {
+    b <- as.numeric(scatter_data$Dstar)
+    mod <- scatter_data$Dstar
+    ylab1 <- "Delta*"
+  } else if (plot_data == "Lambda+") {
+    b <- as.numeric(scatter_data$Lambda)
+    mod <- scatter_data$Lambda
+    ylab1 <- "Lambda+"
+  } 
+  #b <- as.numeric(scatter_data$Dplus)
+  c <- max(b, na.rm = TRUE)
+  maxc = round(c, digits = -1)
+  n <- maxc + 10
+  print(n)
+  b1 <- as.numeric(scatter_data$Dplus)
+  c1 <- min(b1, na.rm = T)
+  if (c1 > 10) {
+    cR = c1 - 10
+  } else if (c1 <= 10) {
+    cR = 0
+  }
+  cR1 <- round(cR, digits = -1)
+  print(cR1)
+
+  if (n >= 5000) {
+    by1 <- 1000 
+  } else if (n >= 1000 & n < 5000) {
+    by1 <- 500
+  } else if (n < 1000 & n >= 500) {
+    by1 <- 100
+  } else if (n < 500 & n > 150) {
+    by1 <- 50
+  } else if (n <150 & n >= 30) {
+    by1 <- 10
+  } else if (n < 30) {
+    by1 <- 1
+  } 
+
+  plot(mod, ann = F, xaxt = "n", yaxt = "n", col = colorc1, pch = 19, cex.lab = 1.2, ylim = c(cR1, n), xlim = c(mR, m))
+  axis(1, labels  = T, at = mR:m, cex.axis = 1)
+  axis(2, las = 2, at = seq(cR1, n, by = by1), labels = T, cex.axis = 1)
+  title(xlab = "Number of Species")
+  title(ylab = ylab1)
+  title(main = "Average taxonomic distinctness against number of species")
+  #text(mod, labels=rownames(scatter_data),data=mod, cex=0.9, font=2)
+
   dev.off() 
   
   return(.set.mSet(mSetObj)) 
