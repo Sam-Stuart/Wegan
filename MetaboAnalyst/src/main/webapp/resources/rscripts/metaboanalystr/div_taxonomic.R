@@ -217,7 +217,7 @@ taxa_tree <- function(mSetObj = NA, color = "NULL", imgName, format = "png", dpi
   plot_data <- mSetObj$analset$taxa2dist$taxdis
   print(plot_data)  
 
-  #Set plot dimensions
+  
   if(is.na(width)){
     w <- 10.5
   } else if(width==0){
