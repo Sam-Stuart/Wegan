@@ -74,7 +74,7 @@ Raster_data <- function(mSetObj = NA, data = "false", source = "NULL", maptype =
 
   mSetObj <- .get.mSet(mSetObj)
 
-  register_google(key = "AIzaSyAbga6kmxU8EO3vXSHtEmRMiNvTwMQfOlo")
+  register_google()
   
   # set default dataset as 'dune' for now
   #Extract input from mSetObj
@@ -134,7 +134,7 @@ Raster_data <- function(mSetObj = NA, data = "false", source = "NULL", maptype =
   print(range1)
    
   if (ele == "true") {
-    set_key("AIzaSyAbga6kmxU8EO3vXSHtEmRMiNvTwMQfOlo")
+    set_key()
     coord <- input%>%
       select(lon, lat)
     ele1 <- "NULL"
