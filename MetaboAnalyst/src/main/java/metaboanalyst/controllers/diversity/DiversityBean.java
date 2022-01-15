@@ -14,6 +14,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import metaboanalyst.controllers.SessionBean1;
+import metaboanalyst.rwrappers.Clustering;
 import metaboanalyst.rwrappers.DiversityUtils;
 import metaboanalyst.rwrappers.UniVarTests;
 import metaboanalyst.rwrappers.OAUtils;
@@ -66,6 +67,9 @@ public class DiversityBean implements Serializable {
                     case "Unseendiv":
                          doDefaultUnseendiv();
                         break;
+                    case "Spatialvis":
+                        doDefaultSpatialvis();
+                    break;
                 }
             }
 
@@ -202,4 +206,18 @@ public class DiversityBean implements Serializable {
         DiversityUtils.PlotUnseenCurve(sb, sb.getCurrentImage("plot_matrices"), "png", 72, "false");
         System.out.print("AFTER UD");
     }
+    
+    
+    private void doDefaultSpatialvis(){
+//        if (!DiversityUtils.CreateRarefactionDiv(sb, false, "test", "test", false, "test")){
+//            RConnection RC = sb.getRConnection();
+//            sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
+//        }
+        System.out.print("INSIDE FD"); 
+        DiversityUtils.CreateSpatialvis(sb, false, "NULL", "NULL", "", "NULL", "", "NULL", false, "NULL", false, false, sb.getCurrentImage("ggmap"), "png", 72, "false");
+        //DiversityUtils.PlotSpatialmap(sb, false, false, sb.getCurrentImage("ggmap"), "png", 72, "false");
+        
+        System.out.print("AFTER FD");
+    }
+    
 }

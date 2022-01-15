@@ -19,6 +19,7 @@ import metaboanalyst.rwrappers.SigVarSelect;
 import metaboanalyst.rwrappers.UniVarTests;
 import metaboanalyst.rwrappers.Ordiantion;
 import metaboanalyst.rwrappers.DispersalUtils;
+import metaboanalyst.rwrappers.DiversityUtils;
 import metaboanalyst.utils.DataUtils;
 
 /**
@@ -88,7 +89,10 @@ public class AnalysisBean implements Serializable {
                         break; 
                     case "Diversity":
                         doDefaultDiversity();
-                    break; 
+                        break; 
+//                    case "Ggmap":
+//                        doDefaultGgmap();
+//                        break;
                 }
             }
         }
@@ -247,5 +251,15 @@ public class AnalysisBean implements Serializable {
     }
     
     
+    
+//    private void doDefaultGgmap(){
+////        if (!DiversityUtils.CreateRarefactionDiv(sb, false, "test", "test", false, "test")){
+////            RConnection RC = sb.getRConnection();
+////            sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
+////        }
+//        System.out.print("INSIDE FD"); 
+//        Clustering.CreateGGMap(sb, false, "NULL", "NULL", "", "NULL", "", "NULL", false, sb.getCurrentImage("ggmap"), "png", 72, "false");
+//        System.out.print("AFTER FD");
+//    }
     
 }
