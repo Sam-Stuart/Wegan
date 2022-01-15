@@ -73,8 +73,6 @@ Raster_data <- function(mSetObj = NA, data = "false", source = "NULL", maptype =
   #library("googleway")
 
   mSetObj <- .get.mSet(mSetObj)
-
-  register_google()
   
   # set default dataset as 'dune' for now
   #Extract input from mSetObj
@@ -134,7 +132,6 @@ Raster_data <- function(mSetObj = NA, data = "false", source = "NULL", maptype =
   print(range1)
    
   if (ele == "true") {
-    set_key()
     coord <- input%>%
       select(lon, lat)
     ele1 <- "NULL"
@@ -149,8 +146,6 @@ Raster_data <- function(mSetObj = NA, data = "false", source = "NULL", maptype =
   
   map <- get_map(location = bbox1, maptype = maptype1, zoom = zoom1, source = source1)
   #g_map <- get_googlemap(markers = state.coor, path = state.coor, scale = 1)
-
-  print("google key")
 
   if(is.na(width)){
     w <- 10.5
