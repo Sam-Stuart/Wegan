@@ -56,23 +56,26 @@
         <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
             <h1>Non-metric Multidimensional Scaling Analysis:</h1>            
             <p:tabView id="NMDS">
-                <p:tab title ="2D Scores Plot" titleStyleClass="p-tab-nav">
+                <p:tab title ="2D Ordination Plot" titleStyleClass="p-tab-nav">
                     <h:form id="form1">
                         <p style="font-size: 13px">
-                            The 2D scores plot orients samples in two dimensions so that the more similar their variable values, the closer the samples are to one another. The position of variable arrows and constraining variables indicate which factors have the greatest impact on the relative position of the samples.
+                            The 2D ordination plot orients samples in two dimensions so that samples with more similar variable values are closer to one another. Results may differ slightly every time the analysis is performed.
+                            <a href=" " style="color:blue" title="Perform Relative Abundance Transformation: Click checkbox if 1. you have community data and 2. want to compare the relative abundance of each species (each count value is divded by the sum of the species variable)." >
+                                help?
+                            </a>                         
                         </p>
                         <h:panelGrid id="panelGrid1" columns="4" cellpadding="3" columnClasses="colNMDSLong, colNMDSShort, colNMDSLong, colNMDSShort">
                             <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
                             <p:selectBooleanCheckbox value ="#{ordNMDSBean.doOriginal}"/> 
-
-                            <h:outputLabel style="font-weight: bold" value="Use Relative Abundance:"/>
-                            <p:selectBooleanCheckbox value ="#{ordNMDSBean.doAbundance}"/> 
-                                                        
-                            <h:outputLabel style="font-weight: bold" value="Distance Measure:"/>
+                    
+                            <h:outputLabel style="font-weight: bold" value="Distance Metric for Measuring Dissimilarity:"/>
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordNMDSBean.vegdistOpts}">
                                 <f:selectItems value="#{applicationBean1.vegdistMeasureOpts}" />
                             </p:selectOneMenu> 
                             
+                            <h:outputLabel style="font-weight: bold" value="Perform Relative Abundance Transformation:"/>
+                            <p:selectBooleanCheckbox value ="#{ordNMDSBean.doAbundance}"/> 
+                                    
                             <spacer></spacer>
 
                             <p:panelGrid></p:panelGrid>
@@ -102,7 +105,7 @@
                             </h:panelGroup> 
                             <h:panelGroup>
                                 <h:panelGrid columns="3" class="resultsImages">
-                                    <i class="fa fa-question-circle"></i>
+                                    <i id="question" class="fa fa-question-circle" title="The use of data groupings and constraining data will create more interesting plots. Load grouping and constraining data separately, where each row aligns with the rows in your main data set. The position of variable arrows and constraining variables indicate which factors have the greatest impact on the relative position of the samples."></i>
                                 </h:panelGrid>
                             </h:panelGroup>                            
                         </h:panelGrid>
@@ -139,22 +142,25 @@
                 
                 <p:tab title ="3D Scores Plot" titleStyleClass="p-tab-nav">
                     <h:form id="form2">
-                        <p style="font-size: 13px">
-                            NMDS 3D........
+                        <p>
+                            Represent the pairwise dissimilarity between data points using a specified distance metric, and view results in a three dimensional plot. 
+                            <a href=" " style="color:blue"  title="Perform Relative Abundance Transformation: Click checkbox if you have community data and want to apply a relative abundance transformation where each value is divded by the sum of the variable." >
+                                help?
+                            </a> 
                         </p>
                         <h:panelGrid id="panelGrid1" columns="4" cellpadding="3" columnClasses="colNMDSLong, colNMDSShort, colNMDSLong, colNMDSShort">
 
                             <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
                             <p:selectBooleanCheckbox value ="#{ordNMDSBean.doOriginal}"/> 
 
-                            <h:outputLabel style="font-weight: bold" value="Use Relative Abundance:"/>
-                            <p:selectBooleanCheckbox value ="#{ordNMDSBean.doAbundance}"/> 
-                            
-                            <h:outputLabel style="font-weight: bold" value="Distance Measure:"/>
+                            <h:outputLabel style="font-weight: bold" value="Distance Metric for Measuring Dissimilarity:"/>
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordNMDSBean.vegdistOpts}">
                                 <f:selectItems value="#{applicationBean1.vegdistMeasureOpts}" />
                             </p:selectOneMenu> 
 
+                            <h:outputLabel style="font-weight: bold" value="Perform Relative Abundance Transformation:"/>
+                            <p:selectBooleanCheckbox value ="#{ordNMDSBean.doAbundance}"/> 
+                            
                             <p:spacer></p:spacer>
                             
                         </h:panelGrid>
@@ -175,7 +181,7 @@
                             </h:panelGroup> 
                             <h:panelGroup>
                                 <h:panelGrid columns="3" class="resultsImages">
-                                    <i class="fa fa-question-circle"></i>
+                                    <i class="fa fa-question-circle" title="TO DO: Help with plot"></i>
                                 </h:panelGrid>
                             </h:panelGroup>                            
                         </h:panelGrid>
@@ -210,22 +216,27 @@
                 <p:tab title ="Scree Plot" titleStyleClass="p-tab-nav">
                     <h:form id="form3">
                         <p style="font-size: 13px">
-                            NMDS scree.........
-                        </p>
+                            Calculate the proportion of variance explained by each dimension. The green line on top shows the accumulated variance explained; the blue line underneath shows the variance explained by individual dimensions.
+                            <a href=" " style="color:blue"  title="Perform Relative Abundance Transformation: Click checkbox if you have community data and want to apply a relative abundance transformation where each value is divded by the sum of the variable." >
+                                help?
+                            </a>                         </p>
                         <h:panelGrid id="panelGrid1" columns="4" cellpadding="3" columnClasses="colNMDSLong, colNMDSShort, colNMDSLong, colNMDSShort">
 
                             <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
                             <p:selectBooleanCheckbox value ="#{ordNMDSBean.doOriginal}"/> 
 
-                            <h:outputLabel style="font-weight: bold" value="Use Relative Abundance:"/>
-                            <p:selectBooleanCheckbox value ="#{ordNMDSBean.doAbundance}"/> 
-                            
-                            <h:outputLabel style="font-weight: bold" value="Distance Measure:"/>
+                            <h:outputLabel style="font-weight: bold" value="Distance Metric for Measuring Dissimilarity:"/>
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordNMDSBean.vegdistOpts}">
                                 <f:selectItems value="#{applicationBean1.vegdistMeasureOpts}" />
                             </p:selectOneMenu> 
 
-                            <p:spacer></p:spacer>
+                            <h:outputLabel style="font-weight: bold" value="Perform Relative Abundance Transformation:"/>
+                            <p:selectBooleanCheckbox value ="#{ordNMDSBean.doAbundance}"/> 
+                            
+                            <h:outputLabel style="font-weight: bold" value="Number of Dimensions:"/>
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordNMDSBean.nmdsScreeDimNum}">
+                                <f:selectItems value="#{ordNMDSBean.nmdsScreeDimOpts}" />
+                            </p:selectOneMenu> 
                         </h:panelGrid>
                         <h:panelGrid columns="1" cellpadding="3" style="float: right">    
                             <p:commandButton value="Update" 
@@ -242,11 +253,11 @@
                                     Results
                                 </h:panelGrid>
                             </h:panelGroup> 
-                            <h:panelGroup>
+<!--                            <h:panelGroup>
                                 <h:panelGrid columns="3" class="resultsImages">
                                     <i class="fa fa-question-circle"></i>
                                 </h:panelGrid>
-                            </h:panelGroup> 
+                            </h:panelGroup> -->
                         </h:panelGrid>
                         <h:panelGrid id="nmdsPane3" style="width: 100%;">
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
@@ -269,27 +280,30 @@
                     </h:form>
                 </p:tab>    
                 
-                <p:tab title ="Stress Plot" titleStyleClass="p-tab-nav">
+                <p:tab title ="Shepard Plot" titleStyleClass="p-tab-nav">
                     <h:form id="form4">
                         <p style="font-size: 13px">
-                            NMDS stress.........
+                            Plot the pairwise dissimilarity between data points against the ordination distance calculated by the NMDS analysis. When data points swarm around the red line and R squared approaches 1, the analysis was successful in representing the data in lower dimensions. 
+                            <a href=" " style="color:blue"  title="Perform Relative Abundance Transformation: Click checkbox if you have community data and want to apply a relative abundance transformation where each value is divded by the sum of the variable." >
+                                help?
+                            </a> 
                         </p>
                         <h:panelGrid id="panelGrid1" columns="4" cellpadding="3" columnClasses="colNMDSLong, colNMDSShort, colNMDSLong, colNMDSShort">
 
                             <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
                             <p:selectBooleanCheckbox value ="#{ordNMDSBean.doOriginal}"/> 
 
-                            <h:outputLabel style="font-weight: bold" value="Use Relative Abundance:"/>
-                            <p:selectBooleanCheckbox value ="#{ordNMDSBean.doAbundance}"/> 
-                            
-                            <h:outputLabel style="font-weight: bold" value="Distance Measure:"/>
+                            <h:outputLabel style="font-weight: bold" value="Distance Metric for Measuring Dissimilarity:"/>
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordNMDSBean.vegdistOpts}">
                                 <f:selectItems value="#{applicationBean1.vegdistMeasureOpts}" />
                             </p:selectOneMenu> 
-                            
-                            <h:outputLabel style="font-weight: bold" value="Dimension:"/>
-                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordNMDSBean.ordStressDimOpts}">
-                                <f:selectItems value="#{applicationBean1.ordStressDimensionOpts}" />
+
+                            <h:outputLabel style="font-weight: bold" value="Perform Relative Abundance Transformation:"/>
+                            <p:selectBooleanCheckbox value ="#{ordNMDSBean.doAbundance}"/> 
+                                                        
+                            <h:outputLabel style="font-weight: bold" value="Dimension Number:"/>
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordNMDSBean.nmdsStressDimNum}">
+                                <f:selectItems value="#{ordNMDSBean.nmdsStressDimOpts}" />
                             </p:selectOneMenu> 
                             
                             <p:panelGrid></p:panelGrid>
@@ -310,11 +324,11 @@
                                     Results
                                 </h:panelGrid>
                             </h:panelGroup> 
-                            <h:panelGroup>
+<!--                            <h:panelGroup>
                                 <h:panelGrid columns="3" class="resultsImages">
                                     <i class="fa fa-question-circle"></i>
                                 </h:panelGrid>
-                            </h:panelGroup> 
+                            </h:panelGroup> -->
                         </h:panelGrid>
                         <h:panelGrid id="nmdsPane4" style="width: 100%;">
                             

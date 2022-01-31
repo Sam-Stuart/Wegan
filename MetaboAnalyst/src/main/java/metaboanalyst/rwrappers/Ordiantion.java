@@ -14,11 +14,11 @@ import org.rosuda.REngine.Rserve.RserveException;
  */
 public class Ordiantion {
 
-    public static void InitPCA(SessionBean1 sb, boolean data) {
+    public static void InitPCA(SessionBean1 sb, boolean origData) {
         try {
             String inputData = null;
             String ext = null;
-            String rCommand = "PCA.Anal(NA" + ", \"" + data + "\")";
+            String rCommand = "PCA.Anal(NA" + ", \"" + origData + "\")";
             RConnection RC = sb.getRConnection();
             RCenter.recordRCommand(RC, rCommand);
             RC.voidEval(rCommand);

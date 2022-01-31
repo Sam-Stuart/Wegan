@@ -22,34 +22,34 @@
                     
                     <h:panelGrid>                  
                         <h:commandLink id="pca" style="margin-left: 25px" action="PCA" onclick="PF('statusDialog').show()" value="Principal Component Analysis (PCA)"/>
-                        <p:tooltip for="pca" style="font-size: 11px;" value="Reduce the dimensions of multivariate data to a finite number of principal components that maximize the variation in the data using Euclidean distance." />
+                        <p:tooltip for="pca" style="font-size: 13px;" value="Reduce the dimensions of multivariate data to a finite number of principal components that maximize the variation in the data using Euclidean distance." />
                         
                         <h:commandLink id="poca" style="margin-left: 25px" action="PCOA" onclick="PF('statusDialog').show()" value="Principal Coordinate Analysis (PCoA)"/>
-                        <p:tooltip for="poca" style="font-size: 11px;" value="Represent the pairwise dissimilarity between data points using a specified distance metric. The number of dimensions in based on the data." />
+                        <p:tooltip for="poca" style="font-size: 13px;" value="Represent the pairwise dissimilarity between data points using a specified distance metric." />
                         
                         <h:commandLink id="nmds" style="margin-left: 25px" action="NMDS" onclick="PF('statusDialog').show()" value="Non-metric Multidimensional Scaling (NMDS)"/>
-                        <p:tooltip for="nmds" style="font-size: 11px;" value="Represent the pairwise dissimilarity between data points using a specified distance metric. The number of dimensions is fixed and re-ananlysis can yeild different results." />
+                        <p:tooltip for="nmds" style="font-size: 13px;" value="Represent the pairwise dissimilarity between data points using a specified distance metric. Re-ananlysis can yeild different results." />
                           
                         <h:commandLink id="rda" style="margin-left: 25px" action="RDA" onclick="PF('statusDialog').show()" value="Redundancy Analysis (RDA)"/>
-                        <p:tooltip for="rda" style="font-size: 11px;" value="Constrained PCA searches for the best explanatory variables to represent the pairwise dissimilarity between data points using Euclidean distance." />
+                        <p:tooltip for="rda" style="font-size: 13px;" value="Constrained PCA searches for the best variables to represent the pairwise dissimilarity between samples using Euclidean distance." />
                         
                         <h:commandLink id="ca" style="margin-left: 25px" action="CA"  onclick="PF('statusDialog').show()" value="Correspondence Analysis (CA)"/>
-                        <p:tooltip for="ca" style="font-size: 11px;" value="Reduce the dimensions of multivariate data to maximize the correspondance between samples and variables using a specified distance metric." />    
+                        <p:tooltip for="ca" style="font-size: 13px;" value="Reduce the dimensions of multivariate data to maximize the correspondance between samples and variables using a specified distance metric." />    
                         
                         <h:commandLink id="cca" style="margin-left: 25px" action="CCA" onclick="PF('statusDialog').show()" value="Canonical Correspondence Analysis (CCA)"/>
-                        <p:tooltip for="cca" style="font-size: 11px;" value="Constrained CA searches for the best explanatory variables to represent the pairwise dissimilarity between data points using a specified distance." />                    
+                        <p:tooltip for="cca" style="font-size: 13px;" value="Constrained CA searches for the best variables to represent the pairwise dissimilarity between samples using a specified distance." />                    
                         
                         <h:commandLink id="dca" style="margin-left: 25px" action="DCA" onclick="PF('statusDialog').show()" value="Detrended Correspondence Analysis (DCA)"/>
-                        <p:tooltip for="dca" style="font-size: 11px;" value="TODO: Rewrite dca hoverover" />
+                        <p:tooltip for="dca" style="font-size: 13px;" value="TODO: Rewrite dca hoverover" />
                           
                         <h:commandLink id="bray" style="margin-left: 25px" action="Bray" onclick="PF('statusDialog').show()" value="Bray-Curtis (Polar) Ordination"/>
-                        <p:tooltip for="bray" style="font-size: 11px;" value="TODO: Rewrite bray hoverover" />      
+                        <p:tooltip for="bray" style="font-size: 13px;" value="TODO: Rewrite bray hoverover" />      
                         
-                        <h:commandLink id="cia" style="margin-left: 25px" action="CIA" rendered="#{sessionBean1.envDataUploaded() eq 'TRUE'}" onclick="PF('statusDialog').show()" value="Co-Inertia Analysis (CIA)"/>
-                        <p:tooltip for="cia" style="font-size: 11px;" value="TODO: Rewrite cia hoverover" />
+                        <h:commandLink id="cia" style="margin-left: 25px" action="CIA" rendered="#{oaBean.envDataAvailable eq 'TRUE'}" onclick="PF('statusDialog').show()" value="Co-Inertia Analysis (CIA)"/>
+                        <p:tooltip for="cia" style="font-size: 13px;" value="TODO: Rewrite cia hoverover" />
                                                                                                
-                        <h:commandLink id="anosim" style="margin-left: 25px" action="ANOSIM" rendered="#{sessionBean1.envDataUploaded() eq 'TRUE'}" onclick="PF('statusDialog').show()" value="Analysis of Similarities (ANOSIM)"/>
-                        <p:tooltip for="anosim" style="font-size: 11px;" value="TODO: Rewrite anosim hoverover" />  
+                        <h:commandLink id="anosim" style="margin-left: 25px" action="ANOSIM" rendered="#{oaBean.envDataAvailable eq 'TRUE'}" onclick="PF('statusDialog').show()" value="Analysis of Similarities (ANOSIM)"/>
+                        <p:tooltip for="anosim" style="font-size: 13px;" value="TODO: Rewrite anosim hoverover" />  
 
                     </h:panelGrid>
                     

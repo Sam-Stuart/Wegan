@@ -272,7 +272,53 @@ public class OANMDSBean implements Serializable {
     }
 
     
+    private SelectItem[] nmdsStressDimOpts = null;
+    
+    public SelectItem[] getNmdsStressDimOpts(){
+        String[] dims = OAUtils.GetNMDSStressDims(sb);
+        int dimsLen = dims.length;
+        nmdsStressDimOpts = new SelectItem[dimsLen];
+        List<String> dimension = Arrays.asList(dims);
+        for (int i = 0; i < dimsLen; i++) {
+            nmdsStressDimOpts[i] = new SelectItem(dimension.get(i), dimension.get(i));
+        }
+        return nmdsStressDimOpts;
+    }
+    
+    private String nmdsStressDimNum = getNmdsStressDimOpts()[0].getLabel();
+    
+    public String getNmdsStressDimNum() {
+        return nmdsStressDimNum;
+    }
 
+    public void setNmdsStressDimNum(String nmdsStressDimNum) {
+        this.nmdsStressDimNum = nmdsStressDimNum;
+    }
+    
+
+    private SelectItem[] nmdsScreeDimOpts = null;
+    
+    public SelectItem[] getNmdsScreeDimOpts(){
+        String[] dims = OAUtils.GetNMDSScreeDims(sb);
+        int dimsLen = dims.length;
+        nmdsScreeDimOpts = new SelectItem[dimsLen];
+        List<String> dimension = Arrays.asList(dims);
+        for (int i = 0; i < dimsLen; i++) {
+            nmdsScreeDimOpts[i] = new SelectItem(dimension.get(i), dimension.get(i));
+        }
+        return nmdsScreeDimOpts;
+    }
+    
+    private String nmdsScreeDimNum = getNmdsScreeDimOpts()[0].getLabel();
+    
+    public String getNmdsScreeDimNum() {
+        return nmdsScreeDimNum;
+    }
+
+    public void setNmdsScreeDimNum(String nmdsScreeDimNum) {
+        this.nmdsScreeDimNum = nmdsScreeDimNum;
+    }
+    
 //// ACTION BUTTONS //
     public void nmdsUpdate_action2D() {
         OAUtils.CreateNMDSOrdination(sb, doOriginal, vegdistOpts, doAbundance);
@@ -284,15 +330,16 @@ public class OANMDSBean implements Serializable {
     }
     public void nmdsUpdate_actionStress() {
         OAUtils.CreateNMDSOrdination(sb, doOriginal, vegdistOpts, doAbundance);
-        OAUtils.PlotNMDSstressOrdination(sb, ordStressDimOpts, sb.getNewImage("ord_nmds_stress"), "png", 72);
+        OAUtils.PlotNMDSstressOrdination(sb, nmdsStressDimNum, sb.getNewImage("ord_nmds_stress"), "png", 72);
     }
     public void nmdsUpdate_actionScree() {
         OAUtils.CreateNMDSOrdination(sb, doOriginal, vegdistOpts, doAbundance);
-        OAUtils.PlotNMDSscreeOrdination(sb, sb.getNewImage("ord_nmds_scree"), "png", 72);    
+        OAUtils.PlotNMDSscreeOrdination(sb, nmdsScreeDimNum, sb.getNewImage("ord_nmds_scree"), "png", 72);    
     }
-    public void nmdsUpdate_action2Dgraph() {
-        OAUtils.PlotNMDS2DOrdination(sb, ellipseOpts, var_arrowsOpts, env_arrowsOpts, env_centOpts, sampleNamesOpts, ordColorOpts, nmdsMetaColumnName, sb.getNewImage("ord_nmds_2D"), "png", 72);
-    }
+//    public void nmdsUpdate_action2Dgraph() {
+//        OAUtils.PlotNMDS2DOrdination(sb, ellipseOpts, var_arrowsOpts, env_arrowsOpts, env_centOpts, sampleNamesOpts, ordColorOpts, nmdsMetaColumnName, sb.getNewImage("ord_nmds_2D"), "png", 72);
+//    }
+    
 }
 
 

@@ -247,6 +247,13 @@ public class PlottingloadBean implements Serializable {
             dataFormat = "rowu";
             dataNames = "colOnly";
         }
+                
+        else if (testDataOpt.equals("Iris")) {
+            dataType = "main";
+            testFile = ab.getTestIris();
+            dataFormat = "rowu";       
+            dataNames = "colOnly";
+        } 
         
         else {
             sb.updateMsg("Error", "Unknown data selected?");

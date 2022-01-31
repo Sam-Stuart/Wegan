@@ -12,17 +12,13 @@
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2)
 #'@export
-ord.pcoa <- function(mSetObj=NA, data="false", distance="NULL", binary="false", abundance="false", env_text="") { #4 user inputs, plus option to upload 2 supplementary data sets
+ord.pcoa <- function(mSetObj=NA, data="false", distance="NULL", binary="false", abundance="false", env_text=" ") { #4 user inputs, plus option to upload 2 supplementary data sets
   
   options(error=traceback)
 
   library("vegan") #For generating distance matrix
   library("dplyr") #For easy data manipulation
-  library("fastDummies") 
 
-  print("The use of data groupings will create more interesting plots. Load grouping data separately, where each row aligns with the rows in your data set, or include groupings as columns in your data set.")
-  print("The use of environmental data, if available, will also create more interesting plots. Load environmental data separately, where each row aligns with the rows in your data set.")
-  
   #Obtain mSet dataset
   mSetObj <- .get.mSet(mSetObj)
   if (data=="false") {
@@ -32,21 +28,12 @@ ord.pcoa <- function(mSetObj=NA, data="false", distance="NULL", binary="false", 
   }
   
   metaData <- mSetObj$dataSet$origMeta
-  print("metaData")
-  print(metaData)
   envData <- mSetObj$dataSet$origEnv
 
   #Obtain categorical data for making dummy variables
   num_data <- select_if(input, is.numeric)
-  fac_data <- select_if(input, is.character) #Any categorical data will be used for dummy variables!
-  if (ncol(fac_data)>=1) {
-    fac_data1 <- dummy_cols(fac_data, select_columns = NULL, remove_selected_columns = TRUE)
-  } else {
-    fac_data1 <- fac_data
-  }
 
   #Transform abundance data
-  print("Should you have community species data, you may want to investigate the relative abundance (divide all values by column totals) versus absolute abundance (no change to data).")
   if (abundance=="false") {
     abundance1 <- "absolute"
     num_data1 <- num_data #Default abundance is absolute and no change is made to data
@@ -55,15 +42,18 @@ ord.pcoa <- function(mSetObj=NA, data="false", distance="NULL", binary="false", 
     num_data1 <- decostand(num_data, method="total") #Alternative option is relative abundance, each value is divided by the column sum
   }
   
+  #Combine numeric data and dummy variables #I REMOVED DUMMIES SINCE WE CANNOT USE SAME DIST MEASURES FOR BOTH NUMERIC AND CATEGORICAL VARS
+  data <- num_data1
+  if (ncol(data)<2) {
+    #AddErrMsg("Ordination requires at least 2 variables!")
+    stop("Ordination requires at least 2 variables!")
+  } 
   #Set distance measure for creation of dissimilarity matrix
   if (distance=="NULL") {
     distance1 <- "bray" #Default distance
   } else {
     distance1 <- distance #USer selected from list "bray", "manhattan", "canberra", "kulczynski", "jaccard", "gower", "altGower", "morisita", "horn", "mountford", "raup" , "binomial", "chao", "cao", "mahalanobis"
   } 
-  
-  #Combine numeric data and dummy variables
-  data <- cbind(num_data1, fac_data1)
 
   #Generate dissimilarity matrix
   if (binary=="false") {
@@ -75,7 +65,7 @@ ord.pcoa <- function(mSetObj=NA, data="false", distance="NULL", binary="false", 
   #Run PCOA 
   pcoa <- wcmdscale(dist, add="lingoes", eig=TRUE, x.ret=TRUE)
 
-  #meta data, used to group samples using colors or plotting symbols
+  #meta data, used to group samples using colors
   if (is.data.frame(metaData)==FALSE) { #No user uploaded meta data
     metaData1 <- "NA" #If species data had no categorical columns, meta data is NULL
     print("No grouping variables were uploaded!")  
@@ -184,10 +174,9 @@ ord.pcoa <- function(mSetObj=NA, data="false", distance="NULL", binary="false", 
   var.fit <- envfit(pcoa, data, permutations=999, p.max=NULL)
   
   #Store results in mSetObj$analSet$pcoa
-  mSetObj$analSet$pcoa$name <- "PCOA"
   mSetObj$analSet$pcoa$pcoa <- pcoa
   mSetObj$analSet$pcoa$distance <- distance1
-  mSetObj$analSet$pcoa$input <- num_data
+  mSetObj$analSet$pcoa$input <- data
   mSetObj$analSet$pcoa$eigenvalues <- pcoa$eig
   mSetObj$analSet$pcoa$var.fit <- var.fit
   mSetObj$analSet$pcoa$env.fit <- env.fit
@@ -203,17 +192,16 @@ ord.pcoa <- function(mSetObj=NA, data="false", distance="NULL", binary="false", 
   colnames(eigenValues_data) <- c("Dimension", "Eigen_Value", "Variance_Explained")
   
   write.csv(eigenValues_data, file="pcoa_scree_data.csv", row.names=FALSE)
-  write.csv(pcoa$points[,1:2], file="pcoa_2D_sample_scores.csv", row.names=row.names(input))
-  write.csv(pcoa$points[,1:3], file="pcoa_3D_sample_scores.csv", row.names=row.names(input))
+  #write.csv(pcoa$points, file="pcoa_sample_scores.csv", row.names=row.names(input))!!!!!!!!!!!
   write.csv(var.fit$vectors$arrows, file="pcoa_2D_variable_scores.csv", row.names=TRUE)
-  #write.csv(pcoa$x, file("pcoa_dissimilarity_matrix.csv", row.names=TRUE))
+  #write.csv(pcoa$x, file("pcoa_dissimilarity_matrix.csv", row.names=TRUE))!!!!!!!!!!!!
   if (is.data.frame(env_data)==TRUE) {
     write.csv(env.scores, file="pcoa_2D_constraining_variable_scores.csv", row.names=TRUE)
   } else {
     write.csv(NULL, file="pcoa_2D_constraining_variable_scores.csv", row.names=FALSE)
   }
 
-  sink("column_impact_on_pcoa.txt") 
+  sink("variable_impact_on_pcoa.txt") 
   cat("Data columns may significantly impact PCOA\n")
   print(var.fit)
   sink() 
@@ -240,17 +228,17 @@ ord.pcoa <- function(mSetObj=NA, data="false", distance="NULL", binary="false", 
     abundance1 <- "true"
   }
   cat(paste0("\nPerform relative abundance transformation: "), abundance1, "\n")
-  cat("\nSites Scores:\n")
+  cat("\nSample Scores:\n")
   print(as.data.frame(pcoa$points))
-  cat("\nSpecies Scores:\n")
+  cat("\nVariable Scores:\n")
   print(var.fit$vectors$arrow)
-  cat("\nEnvironment Scores:\n")
+  cat("\nConstraining Scores:\n")
   print(env.scores)
   cat("\nEigen values:")
   print(eigenValues_t)
   cat(paste0("\nAdditive constant calculated using Lingoes procedure for negative eigen value correction: ", pcoa$ac, "\n"))
   cat("\nLengend:\n")
-  cat("Site=Rows and Species=Columns\n")
+  cat("Site=Samples and Species=Variables\n")
   sink()  
   
   return(.set.mSet(mSetObj))
@@ -320,7 +308,7 @@ Plot.PCOA.2D <- function(mSetObj=NA, ellipse="false", var_arrows="false", env_ar
   axis(2, las=2)
   
   #Plot with and without ellipses/sample labels/metadata options/variable arrows/env data arrows
-  if (is.data.frame(metaData)==FALSE) { #If no meta data
+  if (is.data.frame(metaData)==FALSE || meta_col_color=="No groupings") { #If no meta data
 
     #point options
     if (sampleNames!="false") { #If display data as lables
@@ -331,10 +319,10 @@ Plot.PCOA.2D <- function(mSetObj=NA, ellipse="false", var_arrows="false", env_ar
     
     #variable arrow options
     if (var_arrows!="false") { #If variable arrows selected
-        plot(var.fit, col="darkred") 
-        
+        plot(var.fit, col="darkred")        
     }
     
+    #Env data options
     if (is.data.frame(env_data)==TRUE) { #If environment data uploaded
       if (env_arrows!="false") { #If environment arrows selected
         num_env_data <- select_if(env_data, is.numeric)
@@ -358,10 +346,10 @@ Plot.PCOA.2D <- function(mSetObj=NA, ellipse="false", var_arrows="false", env_ar
       meta_col_color_data <- as.factor(metaData[,1]) #Default meta data column for labeling with color is the first
       meta_col_color_name <- colnames(metaData)[1]
     } else {
-      meta_col_color_data <- as.factor(metaData[,meta_col_color]) #User imputted meta data column for labeling with colors, options given to java using function meta.columns() below
+      meta_col_color_data <- as.factor(metaData[,meta_col_color]) #User inputted meta data column for labeling with colors, options given to java using function meta.columns() below
       meta_col_color_name <- meta_col_color
     }
-    
+
     #Color options
     n <- length(levels(meta_col_color_data)) #Determine how many different colors are needed based on the levels of the meta data
     if (color=="NULL") {
@@ -370,17 +358,10 @@ Plot.PCOA.2D <- function(mSetObj=NA, ellipse="false", var_arrows="false", env_ar
       colors <- plasma(n+1)#Assign a color to each level using the plasma pallete (viridis package)
     } else if (color=="grey") {
       colors <- grey.colors(n, start=0.1, end=0.75) #Assign a grey color to each level (grDevices package- automatically installed)
-    } else { 
-      color <- "none"
-    }
+    } 
     
-    #Assign colors to points
-    if (color=="none") {
-      cols <- "black" #color none means black points
-    } else {
-      cols <- colors[meta_col_color_data] #Color pallete applied for groupings of user's choice
-    }
-    
+    #Points options
+    cols <- colors[meta_col_color_data] #Color palette applied for groupings of user's choice
     if (sampleNames!="false") { #If display data as lables
       with(metaData, text(pcoa$points, col=cols, bg=cols)) # Text for samples
     } else { #display data as points
@@ -569,11 +550,8 @@ Plot.PCOA.scree <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA)
 
   pcvars <- eigenvalues[1:8]/sum(eigenvalues)
   cumvars <- c(pcvars[1], pcvars[1]+pcvars[2], pcvars[1]+pcvars[2]+pcvars[3], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4]+pcvars[5], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4]+pcvars[5]+pcvars[6], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4]+pcvars[5]+pcvars[6]+pcvars[7], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4]+pcvars[5]+pcvars[6]+pcvars[7]+pcvars[8])
-
-  ylims <- range(c(pcvars,cumvars));
-  extd<-(ylims[2]-ylims[1])/10
-  miny<- ifelse(ylims[1]-extd>0, ylims[1]-extd, 0);
-  maxy<- ifelse(ylims[2]+extd>1, 1.0, ylims[2]+extd);
+  miny<- 0
+  maxy<- min(max(cumvars)+0.2, 1);
   
   #Set plot dimensions
   if(is.na(width)){
@@ -592,7 +570,7 @@ Plot.PCOA.scree <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA)
   #Scree plot
   Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
   par(mar=c(5,5,6,3));
-  plot(pcvars, type='l', col='blue', main="Principal Coordinate Analysis \nScree Plot", xlab='Number of Dimensions', ylab='Variance Explained', ylim=c(miny, maxy), axes=F)
+  plot(pcvars, type='l', col='blue', main="Principal Coordinate Analysis \nScree Plot", xlab='Number of Dimensions', ylab='Variance Explained', ylim=c(miny,maxy), axes=F)
   text(pcvars, labels =paste(100*round(pcvars,3),'%'), adj=c(-0.3, -0.5), srt=45, xpd=T)
   points(pcvars, col='red');
   
@@ -677,7 +655,7 @@ pcoa.meta.columns <- function(mSetObj=NA) {
   if (is.data.frame(metaData)==FALSE) {
     name.all.meta.cols <- "No groupings"
   } else {
-    name.all.meta.cols <- colnames(metaData)
+    name.all.meta.cols <- c(colnames(metaData), "No groupings")
   }
   return(name.all.meta.cols)
   

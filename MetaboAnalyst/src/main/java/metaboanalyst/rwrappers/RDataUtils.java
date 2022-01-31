@@ -800,7 +800,7 @@ public class RDataUtils {
 
     public static int getProcFeatureNumber(RConnection RC) {
         try {
-            return RC.eval("ncol(mSetObj$dataSet$procr)").asInteger();
+            return RC.eval("ncol(mSet$dataSet$procr)").asInteger();
         } catch (Exception e) {
             e.printStackTrace();
         }

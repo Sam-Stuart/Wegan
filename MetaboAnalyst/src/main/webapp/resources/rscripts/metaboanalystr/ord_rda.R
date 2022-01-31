@@ -98,7 +98,7 @@ ord.rda <- function(mSetObj=NA, abundance="false", env_text=" ", data="false") {
     rda <- rda(num_data1 ~ ., env_data)
   }
 
-  #meta (grouping) data, used to group samples using colors or plotting symbols
+  #meta (grouping) data, used to group samples using colors
   if (is.data.frame(metaData)==FALSE) { #No user uplaoded grouping data
     if (count.char.cols >= 1) { #If species data had at least one categorical column, call it grouping data
       metaData1 <- as.data.frame(fac_data)

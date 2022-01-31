@@ -9,7 +9,8 @@
 #'License: GNU GPL (>= 2)
 #'@export
 ord.NMDS <- function(mSetObj=NA, data="false", distance="NULL", abundance="false") { 
-  
+    options(error=traceback)
+
   library("vegan")
   library("dplyr")
 
@@ -21,18 +22,12 @@ ord.NMDS <- function(mSetObj=NA, data="false", distance="NULL", abundance="false
     input <- mSetObj$dataSet$orig
   }
 
-  input <- input[order(as.numeric(row.names(input))),] #Order rows
-print("meta")
-print(mSetObj$dataSet$origMeta)
   metaData <- mSetObj$dataSet$origMeta
   envData <- mSetObj$dataSet$origEnv
 
   #Obtain numeric data for ordination and categorical data for grouping data
   num_data <- select_if(input, is.numeric) #Numeric data only for NMDS
-  char_data <- select_if(input, is.character) #Any categorical data will be used for grouping
-  count.char.cols <- ncol(char_data)
   
-  print("Should you have community species data, you may want to investigate the relative abundance (divide all values by column totals) versus absolute abundance (no change to data).")
   if (abundance=="false") {
     abundance1 <- "absolute" #Default abundance is absolute and no change is made to data
     num_data1 <- num_data
@@ -40,7 +35,7 @@ print(mSetObj$dataSet$origMeta)
     abundance1 <- "relative"
     num_data1 <- decostand(num_data, method="total") #Alternative option is relative abundance, each value is divided by the column sum
   }
-
+  
   if (distance=="NULL") {
     distance1 <- "bray" #Default distance
   } else {
@@ -48,42 +43,57 @@ print(mSetObj$dataSet$origMeta)
   } 
 
   #Run NMDS for 1D through 5D
-  nmds1D <- metaMDS(num_data1, maxit=999, trymax=50, dist=distance1, k=1, trace=0)
-  nmds2D <- metaMDS(num_data1, maxit=999, trymax=50, dist=distance1, k=2, trace=0)
-  nmds3D <- metaMDS(num_data1, maxit=999, trymax=50, dist=distance1, k=3, trace=0)
-  nmds4D <- metaMDS(num_data1, maxit=999, trymax=50, dist=distance1, k=4, trace=0)
-  nmds5D <- metaMDS(num_data1, maxit=999, trymax=50, dist=distance1, k=5, trace=0)
+  if (ncol(num_data1)<2) {
+    #AddErrMsg("Ordination requires atleast 2 variables!")
+    stop("Ordination requires at least 2 variables!")
+  } 
+  if (ncol(num_data1)>=2) {
+    nmds1D <- metaMDS(num_data1, maxit=999, trymax=50, dist=distance1, k=1, trace=0)
+    nmds2D <- metaMDS(num_data1, maxit=999, trymax=50, dist=distance1, k=2, trace=0)
+  }   
+  if (ncol(num_data1)>=3) {
+    nmds3D <- metaMDS(num_data1, maxit=999, trymax=50, dist=distance1, k=3, trace=0)
+  } 
+  if (ncol(num_data1)>=4) {
+    nmds4D <- metaMDS(num_data1, maxit=999, trymax=50, dist=distance1, k=4, trace=0)
+  } 
+  if (ncol(num_data1)>=5) {
+    nmds5D <- metaMDS(num_data1, maxit=999, trymax=50, dist=distance1, k=5, trace=0)
+  } 
+  if (ncol(num_data1)>=6) {
+    nmds6D <- metaMDS(num_data1, maxit=999, trymax=50, dist=distance1, k=6, trace=0)
+  } 
+  if (ncol(num_data1)>=7) {
+    nmds7D <- metaMDS(num_data1, maxit=999, trymax=50, dist=distance1, k=7, trace=0)
+  } 
+  if (ncol(num_data1)>=8) {
+    nmds8D <- metaMDS(num_data1, maxit=999, trymax=50, dist=distance1, k=8, trace=0)
+  } 
 
-  #meta data, used to group samples using colors or plotting symbols
+  #meta data, used to group samples using colors
   if (is.data.frame(metaData)==FALSE) { #No user uploaded meta data
-    if (count.char.cols >= 1) { #If species data had at least one categorical column, call it meta data
-      metaData1 <- as.data.frame(char_data)
-    } else {
-      metaData1 <- "NA" #If species data had no categorical columns, meta data is NA
-      #AddErrMsg("No groupings columns were detected. If this is a mistake, make sure that groupings columns use characters and not numbers. For example, instead ofgrouping data using 1, 2, and 3, use I, II and III.")
-      print("No groupings columns were detected! If this is a mistake, make sure that groupings columns use characters and not numbers. For example, instead of grouping data using 1, 2, and 3, use I, II and III.")
-    }
+    metaData1 <- "NA" #If species data had no categorical columns, meta data is NA
+    #AddErrMsg("No groupings columns were detected. If this is a mistake, make sure that groupings columns use characters and not numbers. For example, instead ofgrouping data using 1, 2, and 3, use I, II and III.")
+    print("No groupings data were detected!")
   } else {  #User uplaoded meta data
     metaData1 <- metaData #Data integrated like weights in correlation module
     if (nrow(metaData1)!=nrow(input)) {
       #AddErrMsg("Your grouping data does not have the same number of rows as your numerical data! Please check that you meta data is correct.")
       stop("Your grouping data does not have the same number of rows as your main data set! Please check that you meta data is correct.")
     }
-    colnames(metaData1) <- colnames(metaData)
   }
   
   #environmental data, used to correlate with rows in main data set
   if (is.data.frame(envData)==FALSE) { #No user uplaoded environmental data
-      envData1 <- "NA"
+    envData1 <- "NA"
   } else {  #User uplaoded environmental data
-      envData1 <- envData
+    envData1 <- envData #User uploaded (like weights in correlation module)
+    if (nrow(envData1)!=nrow(input)) {
+      #AddErrMsg("Your environmental data does not have the same number of rows as your data set! Please check that you environmental data is correct.")
+      stop("Your environmental data does not have the same number of rows as your data set! Please check that you environmental data is correct.")
+    }
   }
 
-  if (length(nrow(envData1)!=nrow(input))==0) {
-    #AddErrMsg("Your environmental data does not have the same number of rows as your numerical data! Please check that you meta data is correct.")
-    stop("Your environmental data does not have the same number of rows as your numerical data! Please check that you environmental data is correct.")
-  }
-  
   #Text box instructions for selecting environmental variables. Text box should be interactive, meaning any change in text alters the result in real time. Default env_text is second column.
   if (is.data.frame(envData1)==TRUE) {
     cat("You uploaded environmental data. Identify environmental variables for NMDS using the column names with commas in between.")
@@ -91,10 +101,7 @@ print(mSetObj$dataSet$origMeta)
   
   #Set up environmental data using user selected columns
   if (is.data.frame(envData1)==TRUE) { #User uplaoded environmental data
-    env_text1 <- colnames(envData1)
-    env_cols <- unlist(strsplit(env_text1, "+", fixed=TRUE))
-    env_data <- as.data.frame(envData1[,which(colnames(envData1) %in% env_cols)])
-    colnames(env_data) <- env_cols
+    env_data <- envData1
   } else {
     env_data <- "NA"
   }
@@ -125,9 +132,19 @@ print(mSetObj$dataSet$origMeta)
 
   #Extract scores
   samp.scores2D <- signif(scores(nmds2D, display="sites"), 5)
-  samp.scores3D <- signif(scores(nmds3D, display="sites"), 5)
+  if (ncol(num_data) >= 3) {
+    samp.scores3D <- signif(scores(nmds3D, display="sites"), 5)
+  } else {
+    #AddErrMsg("3D scores plot requires atleast 3 numeric variables!")
+    warning("3D scores plot requires at least 3 numeric variables!")
+  }
   var.scores2D <- signif(scores(nmds2D, display="species"), 5)
-  var.scores3D <- signif(scores(nmds3D, display="species"), 5)
+  if (ncol(num_data) >= 3) {
+    var.scores3D <- signif(scores(nmds3D, display="species"), 5)
+  } else {
+    #AddErrMsg("3D scores plot requires atleast 3 numeric variables!")
+    warning("3D scores plot requires at least 3 numeric variables!")
+  }
   
   if (is.data.frame(envData1)==FALSE) { #If environmental data not uploaded
     env.scores2D <- "NA"
@@ -167,39 +184,51 @@ print(mSetObj$dataSet$origMeta)
   }
   
   #Store results in mSetObj$analSet$nmds
-  mSetObj$analSet$nmds$name <- "NMDS"
   mSetObj$analSet$nmds$nmds1D <- nmds1D
   mSetObj$analSet$nmds$nmds2D <- nmds2D
-  mSetObj$analSet$nmds$nmds3D <- nmds3D
-  mSetObj$analSet$nmds$nmds4D <- nmds4D
-  mSetObj$analSet$nmds$nmds5D <- nmds5D
+  if (ncol(num_data1)>=3) {
+    mSetObj$analSet$nmds$nmds3D <- nmds3D
+  }
+  if (ncol(num_data1)>=4) {
+    mSetObj$analSet$nmds$nmds4D <- nmds4D
+  }
+  if (ncol(num_data1)>=5) {
+    mSetObj$analSet$nmds$nmds5D <- nmds5D
+  }
+  if (ncol(num_data1)>=6) {
+    mSetObj$analSet$nmds$nmds6D <- nmds6D
+  }
+  if (ncol(num_data1)>=7) {
+    mSetObj$analSet$nmds$nmds7D <- nmds7D
+  }
+  if (ncol(num_data1)>=8) {
+    mSetObj$analSet$nmds$nmds8D <- nmds8D
+  }
   mSetObj$analSet$nmds$distance <- distance1 
   mSetObj$analSet$nmds$abundance <- abundance1
-  mSetObj$analSet$nmds$input <- num_data1
+  mSetObj$analSet$nmds$num_data <- num_data1
   mSetObj$analSet$nmds$metaData <- metaData1
   mSetObj$analSet$nmds$env_data <- env_data
   mSetObj$analSet$nmds$var.fit2D <- var.fit2D
   mSetObj$analSet$nmds$env.fit2D <- env.fit2D
   mSetObj$analSet$nmds$env.fit2D.char <- env.fit2D.char
   mSetObj$analSet$nmds$env.fit2D.num <- env.fit2D.num
-  mSetObj$analSet$nmds$sample.scores3D <- samp.scores3D
-  mSetObj$analSet$nmds$var.scores3D <- var.scores3D
+  if (ncol(num_data) >= 3) {
+    mSetObj$analSet$nmds$sample.scores3D <- samp.scores3D
+    mSetObj$analSet$nmds$var.scores3D <- var.scores3D
+  }
   
   #Export tables and text docs into working directory
   write.csv(samp.scores2D, file="nmds_2D_sample_scores.csv", row.names=TRUE)
-  write.csv(samp.scores3D, file="nmds_3D_sample_scores.csv", row.names=TRUE)
   write.csv(var.scores2D, file="nmds_2D_variable_scores.csv", row.names=TRUE)
-  write.csv(var.scores3D, file="nmds_3D_variable_scores.csv", row.names=TRUE)
+  if (ncol(num_data) >= 3) {
+    write.csv(samp.scores3D, file="nmds_3D_sample_scores.csv", row.names=TRUE)
+    write.csv(var.scores3D, file="nmds_3D_variable_scores.csv", row.names=TRUE)
+  }
   if (is.data.frame(envData1)==TRUE) {
     write.csv(env.scores2D, file="nmds_2D_constraining_variable_scores.csv", row.names=TRUE)
   }
-  
-  pcvars <- c(nmds1D[["stress"]], nmds2D[["stress"]], nmds3D[["stress"]], nmds4D[["stress"]], nmds5D[["stress"]])
-  cumvars <- c(pcvars[1], pcvars[1]+pcvars[2], pcvars[1]+pcvars[2]+pcvars[3], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4]+pcvars[5])
-  scree_data <- data.frame(paste("NMDS ", 1:5), pcvars, cumvars)
-  colnames(scree_data) <- c("NMDS Dimension", "Stress", "Cumulative Stress")
-  write.csv(scree_data, file="nmds_scree_data.csv", row.names=FALSE)
-  
+
   sink("variable_impact_on_nmds_2D.txt") 
   cat("Variables may significantly impact NMDS\n")
   cat("\nNMDS dimension=2\n\n")
@@ -224,12 +253,31 @@ print(mSetObj$dataSet$origMeta)
   print(nmds1D)
   cat("NMDS 2D")
   print(nmds2D)
-  cat("NMDS 3D")
-  print(nmds3D)
-  cat("NMDS 4D")
-  print(nmds4D)
-  cat("NMDS 5D")
-  print(nmds5D)
+  if (ncol(num_data)>=3){
+    cat("NMDS 3D")
+    print(nmds3D)
+  }
+  if (ncol(num_data)>=4){
+    cat("NMDS 4D")
+    print(nmds4D)
+  }  
+  if (ncol(num_data)>=5){
+    cat("NMDS 5D")
+    print(nmds5D)
+  }  
+  if (ncol(num_data)>=6){
+    cat("NMDS 6D")
+    print(nmds6D)
+  }  
+  if (ncol(num_data)>=7){
+    cat("NMDS 7D")
+    print(nmds7D)
+  }  
+  if (ncol(num_data)>=8){
+    cat("NMDS 8D")
+    print(nmds8D)
+  }
+
   cat("\nLengend:\n")
   cat("Site=Samples and Species=Variables\n")
   sink() 
@@ -270,7 +318,7 @@ Plot.NMDS.2D <- function(mSetObj=NA, ellipse="false", var_arrows="false", env_ar
   nmds2D <- mSetObj$analSet$nmds$nmds2D
   metaData <- mSetObj$analSet$nmds$metaData
   env_data <- mSetObj$analSet$nmds$env_data
-  input <- mSetObj$analSet$nmds$input
+  num_data <- mSetObj$analSet$nmds$num_data
   var.fit2D <- mSetObj$analSet$nmds$var.fit2D
   env.fit2D.char <- mSetObj$analSet$nmds$env.fit2D.char
   env.fit2D.num <- mSetObj$analSet$nmds$env.fit2D.num
@@ -301,7 +349,7 @@ Plot.NMDS.2D <- function(mSetObj=NA, ellipse="false", var_arrows="false", env_ar
   axis(2, las=2)
   
   #Plot with and without ellipses/sample labels/metadata options/variable arrows/env data arrows
-  if (is.data.frame(metaData)==FALSE) { #If no meta data
+  if (is.data.frame(metaData)==FALSE || meta_col_color=="No groupings") { #If no meta data
 
     #Sample display options
     if (sampleNames=="true") { #If display data as lables
@@ -447,8 +495,14 @@ Plot.NMDS.3D <- function(mSetObj=NA, color="NULL", var_arrows="false", meta_col_
   
   #Extract necessary objects from mSetObj
   mSetObj <- .get.mSet(mSetObj)
-  input <- mSetObj$analSet$nmds$input
-  nmds3D <- mSetObj$analSet$nmds$nmds3D
+  num_data <- mSetObj$analSet$nmds$num_data
+  
+  if (ncol(num_data) >= 3) {
+    nmds3D <- mSetObj$analSet$nmds$nmds3D
+  } else {
+    #AddErrMsg("3D scores plot requires atleast 3 numeric variables!")
+    stop("3D scores plot requires at least 3 numeric variables!")
+  }
   metaData <- mSetObj$analSet$nmds$metaData
   samp.scores3D <- mSetObj$analSet$nmds$sample.scores3D
   var.scores3D <- mSetObj$analSet$nmds$var.scores3D
@@ -467,7 +521,7 @@ Plot.NMDS.3D <- function(mSetObj=NA, color="NULL", var_arrows="false", meta_col_
   sampleCoords <- data.frame(t(as.matrix(samp.scores3D)))
   colnames(sampleCoords) <- NULL
   nmds3D_plot$score$xyz <- sampleCoords
-  nmds3D_plot$score$name <- rownames(input)
+  nmds3D_plot$score$name <- rownames(num_data)
   
   if (is.data.frame(metaData)==FALSE) { #If no meta data
     nmds3D_plot$score$color <- "NA"
@@ -519,7 +573,7 @@ Plot.NMDS.3D <- function(mSetObj=NA, color="NULL", var_arrows="false", meta_col_
       nmds3D_plot$scoreVar$axis <- paste("NMDS", c(1, 2, 3), sep="")
     }
     nmds3D_plot$scoreVar$xyzVar <- variableCoords
-    nmds3D_plot$scoreVar$nameVar <- colnames(input)
+    nmds3D_plot$scoreVar$nameVar <- colnames(num_data)
     if (color=="plasma") {
       nmds3D_plot$scoreVar$colorVar <- col2rgb("black")
     } else {
@@ -574,6 +628,9 @@ Plot.NMDS.stress <- function(mSetObj=NA, k="NULL", imgName, format="png", dpi=72
 
   #Extract necessary objects from mSetObj
   mSetObj <- .get.mSet(mSetObj)
+
+  distance <- mSetObj$analSet$nmds$distance
+
   if (k=="NULL") {
     k <- 1
     nmds <- mSetObj$analSet$nmds$nmds1D
@@ -585,10 +642,21 @@ Plot.NMDS.stress <- function(mSetObj=NA, k="NULL", imgName, format="png", dpi=72
     nmds <- mSetObj$analSet$nmds$nmds4D
   } else if (k=="5") {
     nmds <- mSetObj$analSet$nmds$nmds5D
-  } 
+  } else if (k=="6") {
+    nmds <- mSetObj$analSet$nmds$nmds6D
+  } else if (k=="7") {
+    nmds <- mSetObj$analSet$nmds$nmds7D
+  } else if (k=="8") {
+    nmds <- mSetObj$analSet$nmds$nmds8D
+  }
   
   stress <- nmds$stress
   stress_eq <- paste0("Stress Statistic=", signif(stress,2))
+  if (distance=="euclidean") {
+    main <- "Metric Multidimensional Scaling"
+  } else {
+    main <- "Non-metric Multidimensional Scaling"
+  }
 
   #Set plot dimensions
   if(is.na(width)){
@@ -607,7 +675,7 @@ Plot.NMDS.stress <- function(mSetObj=NA, k="NULL", imgName, format="png", dpi=72
   #Stress plot
   Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
   par(xpd=FALSE, mar=c(5.1, 4.1, 6.1, 2.1)) 
-  stressplot(nmds, main=paste0("Non-metric Multidimensional Scaling\nDimension ", k,"\nShepard Stress Plot\n\n"), yaxt="n")
+  stressplot(nmds, main=paste0(main, "\nDimension ", k,"\nShepard Plot\n\n"), yaxt="n")
   axis(2, las=2)
   mtext(stress_eq, side=3)
   dev.off()
@@ -630,25 +698,78 @@ Plot.NMDS.stress <- function(mSetObj=NA, k="NULL", imgName, format="png", dpi=72
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2)
 #'@export
-Plot.NMDS.scree <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA) {
+Plot.NMDS.scree <- function(mSetObj=NA, dim_num="NULL", imgName, format="png", dpi=72, width=NA) {
   
   #Extract necessary objects from mSetObj
   mSetObj <- .get.mSet(mSetObj)
   nmds1D <- mSetObj$analSet$nmds$nmds1D
   nmds2D <- mSetObj$analSet$nmds$nmds2D
-  nmds3D <- mSetObj$analSet$nmds$nmds3D
-  nmds4D <- mSetObj$analSet$nmds$nmds4D
-  nmds5D <- mSetObj$analSet$nmds$nmds5D
-  input <- mSetObj$analSet$nmds$input
+  num_data <- mSetObj$analSet$nmds$num_data
   distance <- mSetObj$analSet$nmds$distance
-
-  pcvars <- c(nmds1D[["stress"]], nmds2D[["stress"]], nmds3D[["stress"]], nmds4D[["stress"]], nmds5D[["stress"]])
-  cumvars <- c(pcvars[1], pcvars[1]+pcvars[2], pcvars[1]+pcvars[2]+pcvars[3], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4]+pcvars[5])
-
-  ylims <- range(c(pcvars,cumvars));
-  extd<-(ylims[2]-ylims[1])/10
-  miny<- ifelse(ylims[1]-extd>0, ylims[1]-extd, 0);
-  maxy<- ifelse(ylims[2]+extd>1, 1.0, ylims[2]+extd);
+  
+  if (dim_num=="NULL") {
+    dim_numb <- 2
+    pcvars <- c(nmds1D[["stress"]], nmds2D[["stress"]])
+    cumvars <- c(pcvars[1], pcvars[1]+pcvars[2]) 
+  }
+  if (dim_num=="3") {
+    dim_numb <- 3
+    nmds3D <- mSetObj$analSet$nmds$nmds3D
+    pcvars <- c(nmds1D[["stress"]], nmds2D[["stress"]], nmds3D[["stress"]])
+    cumvars <- c(pcvars[1], pcvars[1]+pcvars[2], pcvars[1]+pcvars[2]+pcvars[3]) 
+  }
+  if (dim_num=="4") {
+    dim_numb <- 4
+    nmds3D <- mSetObj$analSet$nmds$nmds3D
+    nmds4D <- mSetObj$analSet$nmds$nmds4D
+    pcvars <- c(nmds1D[["stress"]], nmds2D[["stress"]], nmds3D[["stress"]], nmds4D[["stress"]])
+    cumvars <- c(pcvars[1], pcvars[1]+pcvars[2], pcvars[1]+pcvars[2]+pcvars[3], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4]) 
+  }
+  if (dim_num=="5") {
+    dim_numb <- 5
+    nmds3D <- mSetObj$analSet$nmds$nmds3D
+    nmds4D <- mSetObj$analSet$nmds$nmds4D
+    nmds5D <- mSetObj$analSet$nmds$nmds5D
+    pcvars <- c(nmds1D[["stress"]], nmds2D[["stress"]], nmds3D[["stress"]], nmds4D[["stress"]], nmds5D[["stress"]])
+    cumvars <- c(pcvars[1], pcvars[1]+pcvars[2], pcvars[1]+pcvars[2]+pcvars[3], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4]+pcvars[5])
+  }
+  if (dim_num=="6") {
+    dim_numb <- 6
+    nmds3D <- mSetObj$analSet$nmds$nmds3D
+    nmds4D <- mSetObj$analSet$nmds$nmds4D
+    nmds5D <- mSetObj$analSet$nmds$nmds5D
+    nmds6D <- mSetObj$analSet$nmds$nmds6D
+    pcvars <- c(nmds1D[["stress"]], nmds2D[["stress"]], nmds3D[["stress"]], nmds4D[["stress"]], nmds5D[["stress"]], nmds6D[["stress"]])
+    cumvars <- c(pcvars[1], pcvars[1]+pcvars[2], pcvars[1]+pcvars[2]+pcvars[3], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4]+pcvars[5], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4]+pcvars[5]+pcvars[6])
+  }
+  if (dim_num=="7") {
+    dim_numb <- 7
+    nmds3D <- mSetObj$analSet$nmds$nmds3D
+    nmds4D <- mSetObj$analSet$nmds$nmds4D
+    nmds5D <- mSetObj$analSet$nmds$nmds5D
+    nmds6D <- mSetObj$analSet$nmds$nmds6D
+    nmds7D <- mSetObj$analSet$nmds$nmds7D
+    pcvars <- c(nmds1D[["stress"]], nmds2D[["stress"]], nmds3D[["stress"]], nmds4D[["stress"]], nmds5D[["stress"]], nmds6D[["stress"]], nmds7D[["stress"]])
+    cumvars <- c(pcvars[1], pcvars[1]+pcvars[2], pcvars[1]+pcvars[2]+pcvars[3], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4]+pcvars[5], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4]+pcvars[5]+pcvars[6], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4]+pcvars[5]+pcvars[6]+pcvars[7])
+  }
+  if (dim_num=="8") {
+    dim_numb <- 8
+    nmds3D <- mSetObj$analSet$nmds$nmds3D
+    nmds4D <- mSetObj$analSet$nmds$nmds4D
+    nmds5D <- mSetObj$analSet$nmds$nmds5D
+    nmds6D <- mSetObj$analSet$nmds$nmds6D
+    nmds7D <- mSetObj$analSet$nmds$nmds7D
+    nmds8D <- mSetObj$analSet$nmds$nmds8D
+    pcvars <- c(nmds1D[["stress"]], nmds2D[["stress"]], nmds3D[["stress"]], nmds4D[["stress"]], nmds5D[["stress"]], nmds6D[["stress"]], nmds7D[["stress"]], nmds8D[["stress"]])
+    cumvars <- c(pcvars[1], pcvars[1]+pcvars[2], pcvars[1]+pcvars[2]+pcvars[3], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4]+pcvars[5], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4]+pcvars[5]+pcvars[6], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4]+pcvars[5]+pcvars[6]+pcvars[7], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4]+pcvars[5]+pcvars[6]+pcvars[7]+pcvars[8])
+  }
+  
+  scree_data <- data.frame(paste("NMDS ", 1:dim_numb), pcvars, cumvars)
+  colnames(scree_data) <- c("Dimension", "Stress", "Cumulative Stress")
+  write.csv(scree_data, file="nmds_scree_data.csv", row.names=FALSE)
+  
+  miny<- 0
+  maxy<- min(max(cumvars)+0.2, 1);
 
   if (distance=="euclidean") {
     main <- "Metric Multidimensional Scaling Scree Plot"
@@ -711,17 +832,47 @@ Plot.NMDS.scree <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA)
 nmds.meta.columns <- function(mSetObj=NA) {
   
   mSetObj <- .get.mSet(mSetObj)
-
   metaData <- mSetObj$analSet$nmds$metaData
   if (is.data.frame(metaData)==FALSE) {
-    meta.col.names <- "No grouping data"
+    name.all.meta.cols <- "No groupings"
   } else {
-    meta.col.names <- colnames(metaData)
+    name.all.meta.cols <- c(colnames(metaData), "No groupings")
   }
-
-  return(meta.col.names)
+  return(name.all.meta.cols)
+  
 }
 
+#'Determine number of possible dimensions for Shepard plot
+#'@description Java will use the dimension numbers to enable user options for Shepard plot
+#'@param mSetObj Input name of the created mSetObject 
+#'@author Louisa Normington\email{normingt@ualberta.ca}
+#'University of Alberta, Canada
+#'License: GNU GPL (>= 2)
+#'@export
+nmds.stress.dim <- function(mSetObj=NA) {
+  mSetObj <- .get.mSet(mSetObj)
+  num_data <- mSetObj$analSet$nmds$num_data
+  dim <- ncol(num_data)
+  max <- min(dim, 8)
+  nmds.stress.dim.opts <- 1:max
+  return(nmds.stress.dim.opts)
+}
+
+#'Determine number of possible dimensions for scree plot
+#'@description Java will use the dimension numbers to enable user options for scree plot
+#'@param mSetObj Input name of the created mSetObject 
+#'@author Louisa Normington\email{normingt@ualberta.ca}
+#'University of Alberta, Canada
+#'License: GNU GPL (>= 2)
+#'@export
+nmds.scree.dim <- function(mSetObj=NA) {
+  mSetObj <- .get.mSet(mSetObj)
+  num_data <- mSetObj$analSet$nmds$num_data
+  dim <- ncol(num_data)
+  max <- min(dim, 8)
+  nmds.scree.dim.opts <- 2:max
+  return(nmds.scree.dim.opts)
+}
 
 #'Obtain results'
 #'@description Java will use the stored results as needed for the results page
