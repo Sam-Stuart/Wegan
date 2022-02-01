@@ -511,13 +511,13 @@ Plot.NMDS.3D <- function(mSetObj=NA, color="NULL", var_arrows="false", meta_col_
   #Create list to hold plot items
   nmds3D_plot <- list()
   
-  #Samples (rows)
   if (distance=="euclidean") {
-    nmds3D_plot$score$axis <- paste("MDS", c(1, 2, 3), sep="")
+    nmds3D_plot$axis <- paste("MDS", c(1, 2, 3), sep="")
   } else {
-    nmds3D_plot$score$axis <- paste("NMDS", c(1, 2, 3), sep="")
+    nmds3D_plot$axis <- paste("NMDS", c(1, 2, 3), sep="")
   }
-  
+
+  #Samples (rows)
   sampleCoords <- data.frame(t(as.matrix(samp.scores3D)))
   colnames(sampleCoords) <- NULL
   nmds3D_plot$score$xyz <- sampleCoords
@@ -550,8 +550,8 @@ Plot.NMDS.3D <- function(mSetObj=NA, color="NULL", var_arrows="false", meta_col_
       colors <- grey.colors(n, start=0.1, end=0.75) #Assing a grey color to each level (grDevices package- automatically installed)
       cols <- colors[meta_col_color_data[,1]]
     } else { 
-      colors <- c("black")
-      cols <- "black"
+      colors <- "black"
+      cols <- rep("black", times=n)
     }
 
     #Assign colors
@@ -560,21 +560,15 @@ Plot.NMDS.3D <- function(mSetObj=NA, color="NULL", var_arrows="false", meta_col_
   
   #Variables (columns)
   if (var_arrows=="false") {
-    nmds3D_plot$scoreVar$axis <- "NA"
     nmds3D_plot$scoreVar$xyzVar <- "NA"
     nmds3D_plot$scoreVar$nameVar <- "NA"
     nmds3D_plot$scoreVar$colorVar <- "NA"
   } else {
     variableCoords <- data.frame(t(as.matrix(var.scores3D)))
     colnames(variableCoords) <- NULL
-    if (distance=="euclidean") {
-      nmds3D_plot$scoreVar$axis <- paste("MDS", c(1, 2, 3), sep="")
-    } else {
-      nmds3D_plot$scoreVar$axis <- paste("NMDS", c(1, 2, 3), sep="")
-    }
     nmds3D_plot$scoreVar$xyzVar <- variableCoords
     nmds3D_plot$scoreVar$nameVar <- colnames(num_data)
-    if (color=="plasma") {
+    if (color=="none") {
       nmds3D_plot$scoreVar$colorVar <- col2rgb("black")
     } else {
       nmds3D_plot$scoreVar$colorVar <- col2rgb("darkred")

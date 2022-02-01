@@ -163,11 +163,12 @@ public class OAUtils {
         }
     }
     
-    public static void PlotPCOAscreeOrdination(SessionBean1 sb, String imgName, String format, int dpi) {
+    public static void PlotPCOAscreeOrdination(SessionBean1 sb, String dim_numb, String imgName, String format, int dpi) {
         try {
             RConnection RC = sb.getRConnection();
             String rCommand = "Plot.PCOA.scree(NA"
-                                        + ", \"" + imgName
+                                        + ", \"" + dim_numb 
+                                        + "\", \"" + imgName
                                         + "\", \"" + format  
                                         + "\", " + dpi 
                                         + ", width=NA)";
@@ -665,7 +666,22 @@ public class OAUtils {
         }
         return null;
     }
-     
+             
+    public static String[] GetPCOAScreeDims(SessionBean1 sb){
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "pcoa.scree.dim(NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            return RC.eval(rCommand).asStrings();
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        } catch (REXPMismatchException ex) {
+            Logger.getLogger(OAUtils.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+    
     public static String[] GetPCAMetaColumns(SessionBean1 sb){
         try {
             RConnection RC = sb.getRConnection();

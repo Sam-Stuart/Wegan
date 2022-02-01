@@ -540,7 +540,7 @@ Plot.PCOA.3D <- function(mSetObj=NA, color="NULL", var_arrows="false", meta_col_
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2)
 #'@export
-Plot.PCOA.scree <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA) {
+Plot.PCOA.scree <- function(mSetObj=NA, dim_numb="NULL", imgName, format="png", dpi=72, width=NA) {
     
   options(error=traceback)
 
@@ -548,8 +548,42 @@ Plot.PCOA.scree <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA)
   mSetObj <- .get.mSet(mSetObj)
   eigenvalues <- mSetObj$analSet$pcoa$eigenvalues
 
-  pcvars <- eigenvalues[1:8]/sum(eigenvalues)
-  cumvars <- c(pcvars[1], pcvars[1]+pcvars[2], pcvars[1]+pcvars[2]+pcvars[3], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4]+pcvars[5], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4]+pcvars[5]+pcvars[6], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4]+pcvars[5]+pcvars[6]+pcvars[7], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4]+pcvars[5]+pcvars[6]+pcvars[7]+pcvars[8])
+  if (dim_numb=="NULL") {
+   dim_numb <- 2
+   pcvars <- eigenvalues[1:dim_numb]/sum(eigenvalues)
+   cumvars <- c(pcvars[1], pcvars[1]+pcvars[2])
+  }
+  if (dim_numb=="3") {
+   dim_numb <- 3
+   pcvars <- eigenvalues[1:dim_numb]/sum(eigenvalues)
+   cumvars <- c(pcvars[1], pcvars[1]+pcvars[2], pcvars[1]+pcvars[2]+pcvars[3])
+  }
+  if (dim_numb=="4") {
+   dim_numb <- 4
+   pcvars <- eigenvalues[1:dim_numb]/sum(eigenvalues)
+   cumvars <- c(pcvars[1], pcvars[1]+pcvars[2], pcvars[1]+pcvars[2]+pcvars[3], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4])
+  }
+  if (dim_numb=="5") {
+   dim_numb <- 5
+   pcvars <- eigenvalues[1:dim_numb]/sum(eigenvalues)
+   cumvars <- c(pcvars[1], pcvars[1]+pcvars[2], pcvars[1]+pcvars[2]+pcvars[3], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4]+pcvars[5])
+  }
+  if (dim_numb=="6") {
+   dim_numb <- 6
+   pcvars <- eigenvalues[1:dim_numb]/sum(eigenvalues)
+   cumvars <- c(pcvars[1], pcvars[1]+pcvars[2], pcvars[1]+pcvars[2]+pcvars[3], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4]+pcvars[5], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4]+pcvars[5]+pcvars[6])
+  }
+  if (dim_numb=="7") {
+   dim_numb <- 7
+   pcvars <- eigenvalues[1:dim_numb]/sum(eigenvalues)
+   cumvars <- c(pcvars[1], pcvars[1]+pcvars[2], pcvars[1]+pcvars[2]+pcvars[3], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4]+pcvars[5], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4]+pcvars[5]+pcvars[6], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4]+pcvars[5]+pcvars[6]+pcvars[7])
+  }
+  if (dim_numb=="8") {
+   dim_numb <- 8
+   pcvars <- eigenvalues[1:dim_numb]/sum(eigenvalues)
+   cumvars <- c(pcvars[1], pcvars[1]+pcvars[2], pcvars[1]+pcvars[2]+pcvars[3], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4]+pcvars[5], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4]+pcvars[5]+pcvars[6], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4]+pcvars[5]+pcvars[6]+pcvars[7], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4]+pcvars[5]+pcvars[6]+pcvars[7]+pcvars[8])
+  }
+
   miny<- 0
   maxy<- min(max(cumvars)+0.2, 1);
   
@@ -578,7 +612,7 @@ Plot.PCOA.scree <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA)
   text(cumvars, labels =paste(100*round(cumvars,3),'%'), adj=c(-0.3, -0.5), srt=45, xpd=T)
   points(cumvars, col='red');
   
-  abline(v=1:8, lty=3);
+  abline(v=1:dim_numb, lty=3);
   axis(1, 1:length(pcvars), 1:length(pcvars));
   axis(2, las=2) #yaxis numbers upright for readability
 
@@ -661,6 +695,21 @@ pcoa.meta.columns <- function(mSetObj=NA) {
   
 }
 
+#'Determine number of possible dimensions for scree plot
+#'@description Java will use the dimension numbers to enable user options for scree plot
+#'@param mSetObj Input name of the created mSetObject 
+#'@author Louisa Normington\email{normingt@ualberta.ca}
+#'University of Alberta, Canada
+#'License: GNU GPL (>= 2)
+#'@export
+pcoa.scree.dim <- function(mSetObj=NA) {
+  mSetObj <- .get.mSet(mSetObj)
+  num_data <- mSetObj$analSet$pcoa$input
+  dim <- ncol(num_data)
+  max <- min(dim, 8)
+  pcoa.scree.dim.opts <- 2:max
+  return(pcoa.scree.dim.opts)
+}
 
 #'Obtain results'
 #'@description Java will use the stored results as needed for the results page

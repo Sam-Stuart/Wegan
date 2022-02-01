@@ -247,6 +247,10 @@
 
                             <spacer></spacer>
                                 
+                            <h:outputLabel style="font-weight: bold" value="Number of Dimensions:"/>
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordPCOABean.pcoaScreeDimNum}">
+                                <f:selectItems value="#{ordPCOABean.pcoaScreeDimOpts}" />
+                            </p:selectOneMenu> 
                         </h:panelGrid>
                         <h:panelGrid></h:panelGrid>
 

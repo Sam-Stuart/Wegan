@@ -283,6 +283,28 @@ public class OAPCOABean implements Serializable {
     }
 
     
+    private SelectItem[] pcoaScreeDimOpts = null;
+    
+    public SelectItem[] getPcoaScreeDimOpts(){
+        String[] dims = OAUtils.GetPCOAScreeDims(sb);
+        int dimsLen = dims.length;
+        pcoaScreeDimOpts = new SelectItem[dimsLen];
+        List<String> dimension = Arrays.asList(dims);
+        for (int i = 0; i < dimsLen; i++) {
+            pcoaScreeDimOpts[i] = new SelectItem(dimension.get(i), dimension.get(i));
+        }
+        return pcoaScreeDimOpts;
+    }
+    
+    private String pcoaScreeDimNum = getPcoaScreeDimOpts()[0].getLabel();
+    
+    public String getPcoaScreeDimNum() {
+        return pcoaScreeDimNum;
+    }
+
+    public void setPcoaScreeDimNum(String pcoaScreeDimNum) {
+        this.pcoaScreeDimNum = pcoaScreeDimNum;
+    }
 
 //// ACTION BUTTONS //
 //    public void pcoaUpdate_action() {
@@ -308,7 +330,7 @@ public class OAPCOABean implements Serializable {
     }
     public void pcoa_scree_Update_action() {
         OAUtils.CreatePCOAOrdination(sb, doOriginal, vegdistOpts, doBinary, doAbundance, envDataCol);
-        OAUtils.PlotPCOAscreeOrdination(sb, sb.getNewImage("ord_pcoa_scree"), "png", 72);    
+        OAUtils.PlotPCOAscreeOrdination(sb, pcoaScreeDimNum, sb.getNewImage("ord_pcoa_scree"), "png", 72);    
     }
 }
 
