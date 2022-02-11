@@ -246,7 +246,6 @@ public class SpatialvisBean implements Serializable {
     public void spatialvisUpdate_action() {
         DiversityUtils.CreateSpatialvis(sb, doOriginal, sourcechosen, maptypechosen, zoom, varColName, rangeA, colorColName, doEle, 
                 lineColName, doPolygon, doPath, sb.getNewImage("ggmap"), "png", 72, "false"); 
-        //DiversityUtils.PlotSpatialmap(sb, doPolygon, doPath, sb.getNewImage("ggmap"), "png", 72, "false");
     }
     
 }

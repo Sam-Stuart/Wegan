@@ -39,7 +39,7 @@ IndiceCol <- function(mSetObj = NA) {
 #'@export
 
 
-div_index <- function(mSetObj = NA, data = "false", group = "NULL") {
+div_index <- function(mSetObj = NA, data = "false", group = "NULL", method = "NULL") {
   
   print("start model")
   options(errors = traceback)   
@@ -87,7 +87,7 @@ div_index <- function(mSetObj = NA, data = "false", group = "NULL") {
   print(group.name) 
   
   cat("Alpha, beta and gamma diversity analysis works on numeric data only")
-  #input.2 <- input
+  input.2 <- input
   
   c <- nrow(input.2)
   print(c)
@@ -176,6 +176,30 @@ div_index <- function(mSetObj = NA, data = "false", group = "NULL") {
   print(beta)
   print(beta.frame)  
 
+  if (method == "NULL") {
+    method1 <- "total"
+  } else if (method == "max") { 
+    method1 <- "max"
+  } else if (method == "freq") { 
+    method1 <- "freq"
+  } else if (method == "normalize") { 
+    method1 <- "normalize"
+  } else if (method == "range") { 
+    method1 <- "range"
+  } else if (method == "standardize") { 
+    method1 <- "standardize"
+  } else if (method == "pa") { 
+    method1 <- "pa"
+  } else if (method == "chi.square") { 
+    method1 <- "chi.square"
+  } else if (method == "hellinger") { 
+    method1 <- "hellinger"
+  } else if (method == "log") { 
+    method1 <- "log"
+  } 
+
+  relativeAbun <- decostand(input.2, method = method1)
+
   mSetObj$analSet$result$H_shannon <- H.shannon1
   print("1")
   mSetObj$analSet$result$H_simpson <- H.simpson1
@@ -210,7 +234,9 @@ div_index <- function(mSetObj = NA, data = "false", group = "NULL") {
   print("15")    
   mSetObj$analSet$metaData <- metaData
   print("16")
-  
+  mSetObj$analSet$relaAbun <- relativeAbun
+  print("17")
+
   write.csv(mSetObj$analSet$result$H_shannon, "Shannon diversity indices.csv")
   print("17")
   write.csv(mSetObj$analSet$result$H_simpson, "Simpson diversity indices.csv")
@@ -235,6 +261,8 @@ div_index <- function(mSetObj = NA, data = "false", group = "NULL") {
   print("27")  
   write.csv(mSetObj$analSet$result$gamma, "Gamma diversity.csv")
   print("28")
+  write.csv(mSetObj$analSet$relaAbun, "Relative abundance.csv")
+  print("29")
 
   return(.set.mSet(mSetObj))
 }

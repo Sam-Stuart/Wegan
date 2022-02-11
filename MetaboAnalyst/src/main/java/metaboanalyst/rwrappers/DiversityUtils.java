@@ -141,13 +141,14 @@ public class DiversityUtils {
 //    }
     
     
-    public static boolean CreateIndicesDiv(SessionBean1 sb, boolean data, String groupColName) {
+    public static boolean CreateIndicesDiv(SessionBean1 sb, boolean data, String groupColName, String method) {
         try {
             System.out.print("R RAREFACTION");
             RConnection RC = sb.getRConnection(); //Start R connection
             String rCommand = "div_index(NA"
                                                  + ", \"" + data
-                                                 + "\", \"" + groupColName                                                
+                                                 + "\", \"" + groupColName
+                                                 + "\", \"" + method
                                                  + "\")";
             RCenter.recordRCommand(RC, rCommand); // records r command
             RC.voidEval(rCommand); // tells you want your r script returns  
