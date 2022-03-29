@@ -16,10 +16,21 @@
                 <p:tab title ="Spatial Visualization" titleStyleClass="p-tab-nav">
                     <h:form id="form1">
                         <p>
+                            Input has to be in coordinate system
                         </p>                        
                         <h:panelGrid id="panelGrid" columns="4" cellpadding="3" columnClasses="colFront, colLeft, colRight">
                             <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
                             <p:selectBooleanCheckbox value ="#{spatialvisBean.doOriginal}"/>
+                            <h:outputLabel style="font-weight: bold" value="Is your data recorded as longtitude and latitude?"/>
+                            <p:selectBooleanCheckbox value ="#{spatialvisBean.doProj}"/>
+                            <h:outputLabel style="font-weight: bold" value="Is your data recorded in WGS84?"/>
+                            <p:selectBooleanCheckbox value ="#{spatialvisBean.doDatum}"/>
+                            <h:outputLabel style="font-weight: bold" value="Is your data recorded in Alberta 10TM:"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{spatialvisBean.crs_optionchosen}">
+                                    <f:selectItems value="#{spatialvisBean.crs_option}"/>
+                                </p:selectOneMenu> 
+                            <h:outputLabel style="font-weight: bold" value="Fill in UTM espg code to convert data:"/>
+                            <p:inputText value = "#{spatialvisBean.crs_txt}"/>
                             <h:outputLabel style="font-weight: bold" value="Return elevation:"/>
                             <p:selectBooleanCheckbox value ="#{spatialvisBean.doEle}"/>
                             <h:outputLabel style="font-weight: bold" value="Draw polygon on map:"/>

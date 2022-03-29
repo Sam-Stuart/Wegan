@@ -78,6 +78,28 @@ public class SpatialvisBean implements Serializable {
     }
     
     
+    private boolean doDatum = false;
+    
+    public boolean isdoDatum() {
+        return doDatum;
+    }
+
+    public void setdoDatum(boolean doDatum) {
+        this.doDatum = doDatum;
+    }
+    
+    
+    private boolean doProj = false;
+    
+    public boolean isdoProj() {
+        return doProj;
+    }
+
+    public void setdoProj(boolean doProj) {
+        this.doProj = doProj;
+    }
+    
+    
     // textbox 
     private String zoom = "";
     
@@ -97,6 +119,16 @@ public class SpatialvisBean implements Serializable {
 
     public void setRangeA(String rangeA) {
         this.rangeA = rangeA;
+    }
+     
+    private String crs_txt = "";
+    
+    public String getCrs_txt() {
+        return crs_txt;
+    }
+
+    public void setCrs_txt(String crs_txt) {
+        this.crs_txt = crs_txt;
     }
     
         
@@ -203,6 +235,22 @@ public class SpatialvisBean implements Serializable {
     public void setMaptypechosen(String maptypechosen) {
         this.maptypechosen = maptypechosen;
     }
+    
+    
+    private final SelectItem[] crs_option;
+    private String crs_optionchosen = "NULL";
+    
+    public SelectItem[] getCrs_option() {
+        return crs_option;
+    }
+    
+    public String getCrs_optionchosen() {
+        return crs_optionchosen;
+    } 
+
+    public void setCrs_optionchosen(String crs_optionchosen) {
+        this.crs_optionchosen = crs_optionchosen;
+    }
 
     
     private String fileeleresult = "Elevation.csv";
@@ -220,6 +268,10 @@ public class SpatialvisBean implements Serializable {
         source = new SelectItem[2];
         source[0] = new SelectItem("NULL", "Stamen");
         source[1] = new SelectItem("google", "Google");
+        
+        crs_option = new SelectItem[2];
+        crs_option[0] = new SelectItem("NULL", "Not require conversion");
+        crs_option[1] = new SelectItem("10TM", "10TM");
         
         maptype = new SelectItem[16];
         maptype[0] = new SelectItem("NULL", "Terrain");
@@ -244,7 +296,7 @@ public class SpatialvisBean implements Serializable {
     
     // ACTION BUTTON // 
     public void spatialvisUpdate_action() {
-        DiversityUtils.CreateSpatialvis(sb, doOriginal, sourcechosen, maptypechosen, zoom, varColName, rangeA, colorColName, doEle, 
+        DiversityUtils.CreateSpatialvis(sb, doOriginal, doDatum, doProj, crs_txt, crs_optionchosen,  sourcechosen, maptypechosen, zoom, varColName, rangeA, colorColName, doEle, 
                 lineColName, doPolygon, doPath, sb.getNewImage("ggmap"), "png", 72, "false"); 
     }
     

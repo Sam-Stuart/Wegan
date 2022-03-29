@@ -13,134 +13,7 @@ import org.rosuda.REngine.Rserve.RserveException;
 
 
 public class DiversityUtils {
-        
-//    public static boolean CreateAlpha(SessionBean1 sb) {
-//        try {
-//            RConnection RC = sb.getRConnection();
-//            String rCommand = "ord.cca(NA)";
-//            RCenter.recordRCommand(RC, rCommand);
-//            RC.voidEval(rCommand);
-//            return true;
-//        } catch (RserveException rse) {
-//            System.out.println(rse);
-//            return false;
-//        }
-//    }
-//     
-//    public static void PlotAlpha(SessionBean1 sb) {
-//        try {
-//            RConnection RC = sb.getRConnection();
-//            String rCommand = "Plot.CCA.biplot(NA)";
-//            RCenter.recordRCommand(RC, rCommand);
-//            sb.addGraphicsCMD("div_alpha", rCommand);
-//            RC.voidEval(rCommand);
-//        } catch (RserveException rse) {
-//            System.out.println(rse);
-//        }
-//    }
-//
-//    public static boolean CreateBeta(SessionBean1 sb) {
-//        try {
-//            RConnection RC = sb.getRConnection();
-//            String rCommand = "ord.cca(NA)";
-//            RCenter.recordRCommand(RC, rCommand);
-//            RC.voidEval(rCommand);
-//            return true;
-//        } catch (RserveException rse) {
-//            System.out.println(rse);
-//            return false;
-//        }
-//    }
-//     
-//    public static void PlotBeta(SessionBean1 sb) {
-//        try {
-//            RConnection RC = sb.getRConnection();
-//            String rCommand = "Plot.CCA.biplot(NA)";
-//            RCenter.recordRCommand(RC, rCommand);
-//            sb.addGraphicsCMD("div_alpha", rCommand);
-//            RC.voidEval(rCommand);
-//        } catch (RserveException rse) {
-//            System.out.println(rse);
-//        }
-//    }
-//    public static boolean CreateGamma(SessionBean1 sb) {
-//        try {
-//            RConnection RC = sb.getRConnection();
-//            String rCommand = "ord.cca(NA)";
-//            RCenter.recordRCommand(RC, rCommand);
-//            RC.voidEval(rCommand);
-//            return true;
-//        } catch (RserveException rse) {
-//            System.out.println(rse);
-//            return false;
-//        }
-//    }
-//     
-//    public static void PlotGamma(SessionBean1 sb) {
-//        try {
-//            RConnection RC = sb.getRConnection();
-//            String rCommand = "Plot.CCA.biplot(NA)";
-//            RCenter.recordRCommand(RC, rCommand);
-//            sb.addGraphicsCMD("div_alpha", rCommand);
-//            RC.voidEval(rCommand);
-//        } catch (RserveException rse) {
-//            System.out.println(rse);
-//        }
-//    }
-//    public static boolean CreateSpecies(SessionBean1 sb) {
-//        try {
-//            RConnection RC = sb.getRConnection();
-//            String rCommand = "ord.cca(NA)";
-//            RCenter.recordRCommand(RC, rCommand);
-//            RC.voidEval(rCommand);
-//            return true;
-//        } catch (RserveException rse) {
-//            System.out.println(rse);
-//            return false;
-//        }
-//    }
-//     
-//    public static void PlotSpecies(SessionBean1 sb) {
-//        try {
-//            RConnection RC = sb.getRConnection();
-//            String rCommand = "Plot.CCA.biplot(NA)";
-//            RCenter.recordRCommand(RC, rCommand);
-//            sb.addGraphicsCMD("div_alpha", rCommand);
-//            RC.voidEval(rCommand);
-//        } catch (RserveException rse) {
-//            System.out.println(rse);
-//        }
-//    }
-//    
-//    
-//    
-//    public static boolean CreateTestTutorial(SessionBean1 sb) {
-//        try {
-//            RConnection RC = sb.getRConnection(); //Start R connection
-//            String rCommand = "lin.reg.anal.one(NA)"; // Creates R command
-//            RCenter.recordRCommand(RC, rCommand); // records r command
-//            RC.voidEval(rCommand); // tells you want your r script returns  
-//            return true;
-//        } catch (RserveException rse) {
-//            System.out.println(rse);
-//            return false;
-//        }
-//    }
-//    
-//    public static void PlotTestTutorial(SessionBean1 sb, String imgName, String format, int dpi) {
-//        try {
-//            RConnection RC = sb.getRConnection();
-////            String rCommand = "plot.linReg1(NA)";
-//            String rCommand = "plot.linReg1(NA" + ", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
-//            RCenter.recordRCommand(RC, rCommand);
-//            sb.addGraphicsCMD("div_alpha", rCommand);
-//            RC.voidEval(rCommand);
-//        } catch (RserveException rse) {
-//            System.out.println(rse);
-//        }
-//    }
-    
-    
+       
     public static boolean CreateIndicesDiv(SessionBean1 sb, boolean data, String groupColName, String method) {
         try {
             System.out.print("R RAREFACTION");
@@ -610,13 +483,17 @@ public class DiversityUtils {
     }
     
     
-    public static void CreateSpatialvis(SessionBean1 sb, boolean data, String source, String maptype, String zoom, String varColName, 
+    public static void CreateSpatialvis(SessionBean1 sb, boolean data, boolean datum, boolean proj, String crs_txt, String crs_option, String source, String maptype, String zoom, String varColName, 
             String rangeA, String colorColName, boolean ele, String lineB, boolean polygon, boolean path, String imgName, String format, int dpi, String width) {
         try {
             System.out.print("UD");
             RConnection RC = sb.getRConnection(); //Start R connection
             String rCommand = "Raster_data(NA"
                                                  + ", \"" + data
+                                                 + "\", \"" + datum
+                                                 + "\", \"" + proj
+                                                 + "\", \"" + crs_txt
+                                                 + "\", \"" + crs_option
                                                  + "\", \"" + source
                                                  + "\", \"" + maptype
                                                  + "\", \"" + zoom

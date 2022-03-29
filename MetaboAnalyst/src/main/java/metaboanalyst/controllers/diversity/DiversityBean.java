@@ -75,54 +75,9 @@ public class DiversityBean implements Serializable {
 
         }
     }
-
-    
-//    private void doDefaultAlpha(){
-//        if (!DiversityUtils.CreateAlpha(sb)){
-//            RConnection RC = sb.getRConnection();
-//            sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
-//        }
-//        DiversityUtils.PlotAlpha(sb);
-//    }
-//    
-//    private void doDefaultBeta(){
-//        if (!DiversityUtils.CreateBeta(sb)){
-//            RConnection RC = sb.getRConnection();
-//            sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
-//        }
-//        DiversityUtils.PlotBeta(sb);
-//    }
-//    
-//    private void doDefaultGamma(){
-//        if (!DiversityUtils.CreateGamma(sb)){
-//            RConnection RC = sb.getRConnection();
-//            sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
-//        }
-//        DiversityUtils.PlotGamma(sb);
-//    }
-//    private void doDefaultSpecies(){
-//        if (!DiversityUtils.CreateSpecies(sb)){
-//            RConnection RC = sb.getRConnection();
-//            sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
-//        }
-//        DiversityUtils.PlotSpecies(sb);
-//    }
-//    
-//    private void doDefaultTestTutorial(){
-//        if (!DiversityUtils.CreateTestTutorial(sb)){
-//            RConnection RC = sb.getRConnection();
-//            sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
-//        }
-//        DiversityUtils.CreateTestTutorial(sb);
-//        DiversityUtils.PlotTestTutorial(sb, sb.getCurrentImage("gamma_plot"), "png", 72);
-//    }
-    
+  
     
     private void doDefaultIndices(){
-//        if (!DiversityUtils.CreateRarefactionDiv(sb, false, "test", "test", false, "test")){
-//            RConnection RC = sb.getRConnection();
-//            sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
-//        }
         System.out.print("INSIDE INDICES");
         DiversityUtils.CreateIndicesDiv(sb, false, "NULL", "NULL");
         DiversityUtils.PlotAlphaDiversity(sb, "NULL", sb.getCurrentImage("Alpha_Plot"), "png", 72, "false");
@@ -132,10 +87,6 @@ public class DiversityBean implements Serializable {
     
     
     private void doDefaultRarefaction(){
-//        if (!DiversityUtils.CreateRarefactionDiv(sb, false, "test", "test", false, "test")){
-//            RConnection RC = sb.getRConnection();
-//            sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
-//        }
         System.out.print("INSIDE RAREFACTION");
         DiversityUtils.CreateRarefactionDiv(sb, false, "NULL", "", false);
         DiversityUtils.PlotRarefactionCurveDiversity(sb, "", "NULL", sb.getCurrentImage("Rarefaction_Curve_Plot"), "png", 72, "false");
@@ -144,10 +95,6 @@ public class DiversityBean implements Serializable {
     }
     
     private void doDefaultAbunddist(){
-//        if (!DiversityUtils.CreateRarefactionDiv(sb, false, "test", "test", false, "test")){
-//            RConnection RC = sb.getRConnection();
-//            sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
-//        }
         System.out.print("INSIDE ABUNDDIST"); 
         DiversityUtils.CreateAbundFisherDistDiv(sb, false, "");
         DiversityUtils.CreateAbundPresDistDiv(sb, false, "", false, "-1");
@@ -159,10 +106,6 @@ public class DiversityBean implements Serializable {
     }
     
     private void doDefaultAccummodel(){
-//        if (!DiversityUtils.CreateRarefactionDiv(sb, false, "test", "test", false, "test")){
-//            RConnection RC = sb.getRConnection();
-//            sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
-//        }
         System.out.print("INSIDE ACCUMMODEL"); 
         DiversityUtils.CreateAccumModelDiv(sb, false, "100", false, "NULL", "NULL", "NULL", "NULL");
         DiversityUtils.PlotAccumCurveDiv(sb, "NULL", "NULL", "NULL", "NULL", "NULL","NULL", "NULL", "", sb.getCurrentImage("Species_Accumulation_Model"), "png", 72, "false");
@@ -170,10 +113,6 @@ public class DiversityBean implements Serializable {
     }
     
     private void doDefaultTaxodiv(){
-//        if (!DiversityUtils.CreateRarefactionDiv(sb, false, "test", "test", false, "test")){
-//            RConnection RC = sb.getRConnection();
-//            sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
-//        }
         System.out.print("INSIDE TAXO"); 
         DiversityUtils.CreateTaxoDiv(sb, false, "NULL", false, false, "NULL", false);
         DiversityUtils.PlotTaxaTree(sb, "NULL",sb.getCurrentImage("Taxa_Tree_Plot"), "png", 72, "false");
@@ -184,10 +123,6 @@ public class DiversityBean implements Serializable {
     
 
     private void doDefaultFddiv(){
-//        if (!DiversityUtils.CreateRarefactionDiv(sb, false, "test", "test", false, "test")){
-//            RConnection RC = sb.getRConnection();
-//            sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
-//        }
         System.out.print("INSIDE FD"); 
         DiversityUtils.CreateFdDiv(sb, false, "", "NULL", false, false, "", false, false, false, "", "NULL");
         DiversityUtils.PlotFdTree(sb, "NULL",sb.getCurrentImage("Cluster_Plot"), "png", 72, "false");
@@ -196,10 +131,6 @@ public class DiversityBean implements Serializable {
     
  
     private void doDefaultUnseendiv(){
-//        if (!DiversityUtils.CreateRarefactionDiv(sb, false, "test", "test", false, "test")){
-//            RConnection RC = sb.getRConnection();
-//            sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
-//        }
         System.out.print("INSIDE UD"); 
         DiversityUtils.CreateUnseenDiv(sb, false, "NULL", false, "NULL", "100", "3", "1");
         DiversityUtils.PlotPoolBoxplot(sb, "NULL", "NULL", "NULL", sb.getCurrentImage("boxplot_richness"), "png", 72, "false");
@@ -209,14 +140,8 @@ public class DiversityBean implements Serializable {
     
     
     private void doDefaultSpatialvis(){
-//        if (!DiversityUtils.CreateRarefactionDiv(sb, false, "test", "test", false, "test")){
-//            RConnection RC = sb.getRConnection();
-//            sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
-//        }
-        System.out.print("INSIDE FD"); 
-        DiversityUtils.CreateSpatialvis(sb, false, "NULL", "NULL", "", "NULL", "", "NULL", false, "NULL", false, false, sb.getCurrentImage("ggmap"), "png", 72, "false");
-        //DiversityUtils.PlotSpatialmap(sb, false, false, sb.getCurrentImage("ggmap"), "png", 72, "false");
-        
+        System.out.print("INSIDE Spatialvis"); 
+        DiversityUtils.CreateSpatialvis(sb, false, false, false, "", "NULL", "NULL", "NULL", "", "NULL", "", "NULL", false, "NULL", false, false, sb.getCurrentImage("ggmap"), "png", 72, "false");
         System.out.print("AFTER FD");
     }
     

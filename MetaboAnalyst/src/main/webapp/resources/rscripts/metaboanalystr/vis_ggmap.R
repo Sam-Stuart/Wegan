@@ -62,7 +62,7 @@ LineCol <- function(mSetObj = NA) {
 }
 
 
-Raster_data <- function(mSetObj = NA, data = "false", source = "NULL", maptype = "NULL",
+Raster_data <- function(mSetObj = NA, data = "false", datum = "false", proj = "false", CRS_txt = "", CRS_option = "NULL", source = "NULL", maptype = "NULL",
                    zoom = "", var = "NULL", rangeA = "", point = "NULL", ele = "false", lineB = "NULL", polygon = "false", path = "false",
                    imgName, format = "png", dpi = 72, width = NA) {
   #library("ade4")
@@ -71,6 +71,8 @@ Raster_data <- function(mSetObj = NA, data = "false", source = "NULL", maptype =
   #library("dplyr")
   library("ggmap")
   library("googleway")
+  library("rgdal")
+  library("sp")
 
   mSetObj <- .get.mSet(mSetObj)
 
@@ -84,12 +86,52 @@ Raster_data <- function(mSetObj = NA, data = "false", source = "NULL", maptype =
   }
   print(head(input))  
 
-  #colnames(input)[1:2] <- c("long", "lat")
-  #print(head(input))
-  
+
+  if (proj == "false" ){
+    colnames(input)[1:2] <- c("Lat", "Long")
+  } else {
+    colnames(input)[1:3] <- c("Northing", "Easting", "Zone")
+  }  
+  print(proj)
+
+  # CRS: coordinate reference system
+  if (CRS_option == "NULL"){
+    data.tm <- input #input contains coordinates and is recorded in a datum that user wants
+    if (CRS_txt == ""){
+       data.tm <- input
+    } else {
+       CRS1 <- CRS(CRS_txt)
+       latlong.tm <- sp::spTransform(x = data.tm, CRS(projection1)) 
+       input1 <- cbind(latlong.tm@coords, input[-c(1,2)])
+    }
+  } else if (CRS_option == "10TM") {
+    #CRS1 <- CRS(CRS_option) #only take northing and easting in utm. e,g,: nothing and eating in Alberta 10tm -- +init = espg:3402
+    input_10tm <- input[input$Zone == "10TM", ]
+    data.10tm <- sp::SpatialPointsDataFrame(coords = cbind(input$Easting, input$Northing), data = input, proj4string = CRS("+init=espg:3402")) 
+  } #else if (CRS_option == "12") {
+    #input_12 <- input[input$Zone == "12", ]
+    #data.12 <- sp::SpatialPointsDataFrame(coords = cbind(input$Easting, input$Northing), data = input, proj4string = CRS("+init=espg:3402")) 
+    #input_11 <- input[input$Zone == "11", ]
+    #data.11 <- sp::SpatialPointsDataFrame(coords = cbind(input$Easting, input$Northing), data = input, proj4string = CRS("+init=espg:3402")) 
+  #}
+  print(CRS_option)
+  print(CRS_txt)
+
+  # geographic coordinate system has to be WGS84 (epsg:4326 in Canada) to fit Stamen and Google map/NAD83 -- espg:4269
+  if (datum == "false"){
+    input1 <- data.tm
+  } else {
+    latlong.tm <- sp::spTransform(x = data.tm, CRS("+init = espg:4326"))
+    input1 <- cbind(latlong.tm@coords, input[-c(1,2)])
+  }
+  print(datum)
+
+  #data.10tm <- sp::SpatialPointsDataFrame(coords = cbind(Easting, Northing), data = input.data, proj4string = CRS("+init=espg:3402"))
+  #latlong.10tm <- sp::spTransform(x = data.10tm, CRS("+init = espg:4269"))
+  #12U CRS("+init=epsg:2956")  
 
   if (point == "NULL") {
-    point.data <- input
+    point.data <- input1
     nameA <- colnames(point.data)[6]
     print(nameA)
     colnames(point.data)[6] <- c("Point")
@@ -97,7 +139,7 @@ Raster_data <- function(mSetObj = NA, data = "false", source = "NULL", maptype =
     point1.data <- point.data %>%
       filter(!is.na(Point))
   } else {
-    point.data <- input
+    point.data <- input1
     point1 <- point.data%>%
       select(all_of(point))
     nameA <- point
@@ -139,14 +181,14 @@ Raster_data <- function(mSetObj = NA, data = "false", source = "NULL", maptype =
   print(range1)
    
   if (ele == "true") {
-    coord <- input%>%
-      select(lon, lat)
-    ele1 <- google_elevation(df_locations = coord, simplify = TRUE)
+    coord.data <- input1[c(1:2)]
+    ele1 <- google_elevation(df_locations = coord.data, simplify = TRUE)
     write.csv(ele1, "Elevation.csv")
     #if (ele1 == "NULL") {
     #  AddErrMsg("The length of the API query has exceeded 8192 characters and your request may not work. Try reducing the number of coordinates")
     #}
   }
+
   
   bbox1 <- make_bbox(lon = input$Long, lat = input$Lat, f = range1)
   print(bbox1)
@@ -208,30 +250,31 @@ Raster_data <- function(mSetObj = NA, data = "false", source = "NULL", maptype =
       geom_point(mapping = aes(x = lon, y = lat, color = point), size = 2, data = input.data1) 
   }
 
-    if (path == "true") {
-      if (polygon == "true") {
-        if (lineB == "NULL") {
-          lineB.data <- input
-          colnames(lineB.data)[8] <- c("Line")
-          lineB1.data <- lineB.data %>%
-            filter(!is.na(Line))
-        } else {
-          lineB.data <- input
-          lineB1 <- lineB.data%>%
-          select(all_of(lineB))
-          colnames(lineB1) <- c("Line")
-          lineB.data <- cbind(lineB.data, lineB1)
-          lineB1.data <- lineB.data %>%
-            filter(!is.na(Line))
-        }
 
-        input.data2 <- as.data.frame(cbind(lineB1.data$long, lineB1.data$lat, lineB1.data$Var, lineB1.data$Point, lineB1.data$Line))
-        colnames(input.data2) <- c("lon", "lat", "var", "point", "line")
-        gg <- ggmap(map) +
-            geom_polygon(data = input.data1, mapping = aes(x = lon, y = lat, group = var1), fill = NA) +
-            geom_path(data = input.data1, aes(color = line), size =3, lineend = "round") + 
-            labs(x = "longitude", y = "latitude") +
-            geom_point(mapping = aes(x = lon, y = lat, color = point1), size = 2, data = input.data2) 
+  if (path == "true") {
+    if (polygon == "true") {
+      if (lineB == "NULL") {
+        lineB.data <- input
+        colnames(lineB.data)[8] <- c("Line")
+        lineB1.data <- lineB.data %>%
+          filter(!is.na(Line))
+      } else {
+        lineB.data <- input
+        lineB1 <- lineB.data%>%
+          select(all_of(lineB))
+        colnames(lineB1) <- c("Line")
+        lineB.data <- cbind(lineB.data, lineB1)
+        lineB1.data <- lineB.data %>%
+          filter(!is.na(Line))
+      }
+
+      input.data2 <- as.data.frame(cbind(lineB1.data$long, lineB1.data$lat, lineB1.data$Var, lineB1.data$Point, lineB1.data$Line))
+      colnames(input.data2) <- c("lon", "lat", "var", "point", "line")
+      gg <- ggmap(map) +
+          geom_polygon(data = input.data1, mapping = aes(x = lon, y = lat, group = var1), fill = NA) +
+          geom_path(data = input.data1, aes(color = line), size =3, lineend = "round") + 
+          labs(x = "longitude", y = "latitude") +
+          geom_point(mapping = aes(x = lon, y = lat, color = point1), size = 2, data = input.data2) 
     }
   }
   print(gg + scale_fill_discrete(name = colnames(nameA)))
