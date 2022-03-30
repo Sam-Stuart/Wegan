@@ -86,9 +86,9 @@ public class AnalysisBean implements Serializable {
                     case "SVM":
                         doDefaultSVM();
                         break;
-//                    case "Spatialvis":
-//                        doDefaultSpatialvis();
-//                    break;
+                    case "Spatialvis":
+                        doDefaultSpatialvis();
+                    break;
                 }
             }
         }
@@ -234,12 +234,12 @@ public class AnalysisBean implements Serializable {
         Classifying.PlotSVMSigCmpds(sb, sb.getCurrentImage("svm_imp"), "png", 72);
     }
     
-//    private void doDefaultSpatialvis(){
-//        System.out.print("INSIDE FD"); 
-//        Clustering.CreateSpatialvis(sb, false, false, false, "", "NULL", "NULL", "NULL", "", "NULL", "", "NULL", false, "NULL", false,
-//                false, sb.getCurrentImage("ggmap"), "png", 72, "false");
-//        System.out.print("AFTER FD");
-//    }
+    private void doDefaultSpatialvis(){
+        System.out.print("INSIDE FD"); 
+        Clustering.CreateSpatialvis(sb, false, false, false, "", "NULL", "NULL", "NULL", "", "NULL", "", "NULL", false, "NULL", false,
+                false, sb.getCurrentImage("ggmap"), "png", 72, "false");
+        System.out.print("AFTER FD");
+    }
     
     
     

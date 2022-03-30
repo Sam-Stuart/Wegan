@@ -7,7 +7,7 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="/frags/_anal_template.xhtml">
     <ui:define name="metaInfo">
-        <f:event type="preRenderView" listener="#{diversityBean.performDefaultAnalysis('Spatialvis')}"/> 
+        <f:event type="preRenderView" listener="#{AnalysisBean.performDefaultAnalysis('Spatialvis')}"/> 
         <f:event type="preRenderView" listener="#{downloader.setupDownloadTable()}"/>
     </ui:define>
     <ui:define name="content">
@@ -20,46 +20,46 @@
                         </p>                        
                         <h:panelGrid id="panelGrid" columns="4" cellpadding="3" columnClasses="colFront, colLeft, colRight">
                             <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
-                            <p:selectBooleanCheckbox value ="#{spatialvisBean.doOriginal}"/>
+                            <p:selectBooleanCheckbox value ="#{clusterBean.doOriginal}"/>
                             <h:outputLabel style="font-weight: bold" value="Is your data recorded as longtitude and latitude?"/>
-                            <p:selectBooleanCheckbox value ="#{spatialvisBean.doProj}"/>
+                            <p:selectBooleanCheckbox value ="#{clusterBean.doProj}"/>
                             <h:outputLabel style="font-weight: bold" value="Is your data recorded in WGS84?"/>
-                            <p:selectBooleanCheckbox value ="#{spatialvisBean.doDatum}"/>
+                            <p:selectBooleanCheckbox value ="#{clusterBean.doDatum}"/>
                             <h:outputLabel style="font-weight: bold" value="Is your data recorded in Alberta 10TM:"/>
-                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{spatialvisBean.crs_optionchosen}">
-                                    <f:selectItems value="#{spatialvisBean.crs_option}"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{clusterBean.crs_optionchosen}">
+                                    <f:selectItems value="#{clusterBean.crs_option}"/>
                                 </p:selectOneMenu> 
                             <h:outputLabel style="font-weight: bold" value="Fill in UTM espg code to convert data:"/>
-                            <p:inputText value = "#{spatialvisBean.crs_txt}"/>
+                            <p:inputText value = "#{clusterBean.crs_txt}"/>
                             <h:outputLabel style="font-weight: bold" value="Return elevation:"/>
-                            <p:selectBooleanCheckbox value ="#{spatialvisBean.doEle}"/>
+                            <p:selectBooleanCheckbox value ="#{clusterBean.doEle}"/>
                             <h:outputLabel style="font-weight: bold" value="Draw polygon on map:"/>
-                            <p:selectBooleanCheckbox value ="#{spatialvisBean.doPolygon}"/>
+                            <p:selectBooleanCheckbox value ="#{clusterBean.doPolygon}"/>
                             <h:outputLabel style="font-weight: bold" value="Draw path on map:"/>
-                            <p:selectBooleanCheckbox value ="#{spatialvisBean.doPath}"/>
+                            <p:selectBooleanCheckbox value ="#{clusterBean.doPath}"/>
                             <h:outputLabel style="font-weight: bold" value="Fill in zoom scale:"/>
-                            <p:inputText value = "#{spatialvisBean.zoom}"/>
+                            <p:inputText value = "#{clusterBean.zoom}"/>
                             <h:outputLabel style="font-weight: bold" value="Fill in mapping range scale:"/>
-                            <p:inputText value = "#{spatialvisBean.rangeA}"/>
+                            <p:inputText value = "#{clusterBean.rangeA}"/>
                             <h:outputLabel style="font-weight: bold" value="Select map source:"/>
-                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{spatialvisBean.sourcechosen}">
-                                    <f:selectItems value="#{spatialvisBean.source}"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{clusterBean.sourcechosen}">
+                                    <f:selectItems value="#{clusterBean.source}"/>
                                 </p:selectOneMenu> 
                             <h:outputLabel style="font-weight: bold" value="Select map type:"/>
-                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{spatialvisBean.maptypechosen}">
-                                    <f:selectItems value="#{spatialvisBean.maptype}"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{clusterBean.maptypechosen}">
+                                    <f:selectItems value="#{clusterBean.maptype}"/>
                                 </p:selectOneMenu>                            
                             <h:outputLabel style="font-weight: bold" value="Select a particular variable to be presented as point on map:"/>
-                                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{spatialvisBean.colorColName}">
-                                        <f:selectItems value="#{spatialvisBean.colorColOpts}" />
+                                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{clusterBean.colorColName}">
+                                        <f:selectItems value="#{clusterBean.colorColOpts}" />
                                     </p:selectOneMenu>
                             <h:outputLabel style="font-weight: bold" value="Select a particular variable to be presented as polygon on map:"/>
-                                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{spatialvisBean.varColName}">
-                                        <f:selectItems value="#{spatialvisBean.varColOpts}" />
+                                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{clusterBean.varColName}">
+                                        <f:selectItems value="#{clusterBean.varColOpts}" />
                                     </p:selectOneMenu>
                             <h:outputLabel style="font-weight: bold" value="Select a particular variable to be presented as path on map:"/>
-                                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{spatialvisBean.lineColName}">
-                                        <f:selectItems value="#{spatialvisBean.lineColOpts}" />
+                                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{clusterBean.lineColName}">
+                                        <f:selectItems value="#{clusterBean.lineColOpts}" />
                                     </p:selectOneMenu>
                             
                         </h:panelGrid>  
@@ -70,7 +70,7 @@
                                             onclick="PF('statusDialog').show()"
                                             oncomplete="PF('statusDialog').hide()"  
                                             update=":spatialvis:form1:spatialvisPane1  :cmdPane" 
-                                            actionListener="#{spatialvisBean.spatialvisUpdate_action()}"/>                          
+                                            actionListener="#{clusterBean.spatialvisUpdate_action()}"/>                          
 <!--                            <p:commandButton value="Customize Graph"
                                              styleClass="graphicsButton"
                                              style="box-shadow: none !important; text-shadow: none !important;"
@@ -92,7 +92,7 @@
                         <h:panelGrid id="spatialvisPane1" style="width: 100%;">
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
                                 <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
-                                    <h:outputText escape="false" value="#{spatialvisBean.fileeleresultpath}"/>
+                                    <h:outputText escape="false" value="#{clusterBean.fileeleresultpath}"/>
                                 </i>
 <!--                                // padding  -->
                             </h:panelGrid>
