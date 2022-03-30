@@ -14,6 +14,8 @@ import org.rosuda.REngine.Rserve.RserveException;
  */
 public class Clustering {
 
+    private static Object Logger;
+
     public static void PlotClustTree(SessionBean1 sb, String imgName, String format, int dpi, String smplDist, String clstDist) {
         try {
             RConnection RC = sb.getRConnection();
@@ -139,4 +141,80 @@ public class Clustering {
         }
         return null;
     }
+    
+//    public static void CreateSpatialvis(SessionBean1 sb, boolean data, boolean datum, boolean proj, String crs_txt, String crs_option, String source, String maptype, String zoom, String varColName, 
+//            String rangeA, String colorColName, boolean ele, String lineB, boolean polygon, boolean path, String imgName, String format, int dpi, String width) {
+//        try {
+//            System.out.print("UD");
+//            RConnection RC = sb.getRConnection(); //Start R connection
+//            String rCommand = "Raster_data(NA"
+//                                                 + ", \"" + data
+//                                                 + "\", \"" + datum
+//                                                 + "\", \"" + proj
+//                                                 + "\", \"" + crs_txt
+//                                                 + "\", \"" + crs_option
+//                                                 + "\", \"" + source
+//                                                 + "\", \"" + maptype
+//                                                 + "\", \"" + zoom
+//                                                 + "\", \"" + varColName
+//                                                 + "\", \"" + rangeA
+//                                                 + "\", \"" + colorColName
+//                                                 + "\", \"" + ele
+//                                                 + "\", \"" + lineB
+//                                                 + "\", \"" + polygon
+//                                                 + "\", \"" + path
+//                                                 + "\", \"" + imgName 
+//                                                 + "\", \"" + format 
+//                                                 + "\", " + dpi 
+//                                                 + ", width=NA)";
+//            RCenter.recordRCommand(RC, rCommand);
+//            sb.addGraphicsCMD("ggmap", rCommand);
+//            RC.voidEval(rCommand);
+//        } catch (RserveException rse) {
+//            System.out.println(rse);
+//        }
+//    }
+//    
+//    public static String[] varColumn(SessionBean1 sb){
+//        try {
+//            RConnection RC = sb.getRConnection();
+//            String rCommand = "VarCol(NA)";
+//            RCenter.recordRCommand(RC, rCommand);
+//            return RC.eval(rCommand).asStrings();
+//        } catch (RserveException rse) {
+//            System.out.println(rse);
+//        } catch (REXPMismatchException ex) {
+//            Logger.getLogger(Clustering.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        return null;
+//    }
+//    
+//    public static String[] colorColumn(SessionBean1 sb){
+//        try {
+//            RConnection RC = sb.getRConnection();
+//            String rCommand = "ColorCol(NA)";
+//            RCenter.recordRCommand(RC, rCommand);
+//            return RC.eval(rCommand).asStrings();
+//        } catch (RserveException rse) {
+//            System.out.println(rse);
+//        } catch (REXPMismatchException ex) {
+//            Logger.getLogger(Clustering.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        return null;
+//    }
+//    
+//
+//    public static String[] lineColumn(SessionBean1 sb){
+//        try {
+//            RConnection RC = sb.getRConnection();
+//            String rCommand = "LineCol(NA)";
+//            RCenter.recordRCommand(RC, rCommand);
+//            return RC.eval(rCommand).asStrings();
+//        } catch (RserveException rse) {
+//            System.out.println(rse);
+//        } catch (REXPMismatchException ex) {
+//            Logger.getLogger(DiversityUtils.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        return null;
+//    }
 }
