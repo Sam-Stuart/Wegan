@@ -9,18 +9,20 @@
     <h:form id="MapGraph">
         <h:panelGrid columns="1" style="width:380px;">
             <h:panelGrid id="panelGrid2" columns="2" cellpadding="6" columnClasses="colBrayLong,colBrayShort">
-                    <h:outputLabel style="font-weight: bold" value="Select the index of extrapolated species richness for boxplot (y-axis):"/>
-                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{unseendivBean.plotdatachosen}">
-                        <f:selectItems value="#{unseendivBean.plotdata}"/>
+                    <h:outputLabel style="font-weight: bold" value="Fill in the size of points:"/>
+                            <p:inputText value = "#{clusterBean.point_size}"/>
+                    <h:outputLabel style="font-weight: bold" value="Fill in the width of path:"/>
+                            <p:inputText value = "#{clusterBean.path_size}"/>
+                    <h:outputLabel style="font-weight: bold" value="Select border color of polygons:"/>
+                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{clusterBean.border_colchosen}">
+                        <f:selectItems value="#{clusterBean.border_col}"/>
                     </p:selectOneMenu>
-                    <h:outputLabel style="font-weight: bold" value="Select box colors:"/>
-                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{unseendivBean.box_colorchosen}">
-                        <f:selectItems value="#{unseendivBean.box_color}"/>
-                    </p:selectOneMenu>
-                    <h:outputLabel style="font-weight: bold" value="Select the outline colors of boxplot:"/>
-                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{unseendivBean.border_colchosen}">
-                        <f:selectItems value="#{unseendivBean.border_col}"/>
+                    <h:outputLabel style="font-weight: bold" value="Select the color of point:"/>
+                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{clusterBean.color_pointchosen}">
+                        <f:selectItems value="#{clusterBean.color_point}"/>
                     </p:selectOneMenu> 
+                    <h:outputLabel style="font-weight: bold" value="Should all points stay in the same color?"/>
+                            <p:selectBooleanCheckbox value ="#{clusterBean.doUni_point}"/>
                 <p:panelGrid></p:panelGrid>  
             </h:panelGrid>
             <h:panelGrid id="panelGrid4" columns="1" cellpadding="6" style="float: right">
@@ -29,8 +31,8 @@
                                  style="box-shadow: none !important; text-shadow: none !important"
                                 onclick="PF('statusDialog').show()"
                                 oncomplete="PF('graphApperanceUnseendiv').hide(); PF('statusDialog').hide()"  
-                                update=":unseendiv:form1:unseendivPane1  :cmdPane" 
-                                actionListener="#{unseendivBean.unseendivUpdateBox_action()}"/>
+                                update=":spatialvis:form1:spatialvisPane1  :cmdPane" 
+                                actionListener="#{clusterBean.spatialvisUpdate_action()}"/>
             </h:panelGrid>
         </h:panelGrid>
     </h:form>

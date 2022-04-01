@@ -7,7 +7,7 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="/frags/_anal_template.xhtml">
     <ui:define name="metaInfo">
-        <f:event type="preRenderView" listener="#{AnalysisBean.performDefaultAnalysis('Spatialvis')}"/> 
+        <f:event type="preRenderView" listener="#{analBean.performDefaultAnalysis('Spatialvis')}"/> 
         <f:event type="preRenderView" listener="#{downloader.setupDownloadTable()}"/>
     </ui:define>
     <ui:define name="content">
@@ -34,10 +34,6 @@
                             <h:outputLabel style="font-weight: bold" value="Return elevation:"/>
                             <p:selectBooleanCheckbox value ="#{clusterBean.doEle}"/>
                             <h:outputLabel style="font-weight: bold" value="Draw polygon on map:"/>
-                            <p:selectBooleanCheckbox value ="#{clusterBean.doPolygon}"/>
-                            <h:outputLabel style="font-weight: bold" value="Draw path on map:"/>
-                            <p:selectBooleanCheckbox value ="#{clusterBean.doPath}"/>
-                            <h:outputLabel style="font-weight: bold" value="Fill in zoom scale:"/>
                             <p:inputText value = "#{clusterBean.zoom}"/>
                             <h:outputLabel style="font-weight: bold" value="Fill in mapping range scale:"/>
                             <p:inputText value = "#{clusterBean.rangeA}"/>
@@ -50,16 +46,16 @@
                                     <f:selectItems value="#{clusterBean.maptype}"/>
                                 </p:selectOneMenu>                            
                             <h:outputLabel style="font-weight: bold" value="Select a particular variable to be presented as point on map:"/>
-                                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{clusterBean.colorColName}">
-                                        <f:selectItems value="#{clusterBean.colorColOpts}" />
+                                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{clusterBean.pointColName}">
+                                        <f:selectItems value="#{clusterBean.pointColOpts}" />
                                     </p:selectOneMenu>
                             <h:outputLabel style="font-weight: bold" value="Select a particular variable to be presented as polygon on map:"/>
-                                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{clusterBean.varColName}">
-                                        <f:selectItems value="#{clusterBean.varColOpts}" />
+                                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{clusterBean.polygonColName}">
+                                        <f:selectItems value="#{clusterBean.polygonColOpts}" />
                                     </p:selectOneMenu>
                             <h:outputLabel style="font-weight: bold" value="Select a particular variable to be presented as path on map:"/>
-                                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{clusterBean.lineColName}">
-                                        <f:selectItems value="#{clusterBean.lineColOpts}" />
+                                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{clusterBean.pathColName}">
+                                        <f:selectItems value="#{clusterBean.pathColOpts}" />
                                     </p:selectOneMenu>
                             
                         </h:panelGrid>  

@@ -146,8 +146,8 @@ public class Clustering {
         return null;
     }
     
-    public static void CreateSpatialvis(SessionBean1 sb, boolean data, boolean datum, boolean proj, String crs_txt, String crs_option, String source, String maptype, String zoom, String varColName, 
-            String rangeA, String colorColName, boolean ele, String lineB, boolean polygon, boolean path, String imgName, String format, int dpi, String width) {
+    public static void CreateSpatialvis(SessionBean1 sb, boolean data, boolean datum, boolean proj, String crs_txt, String crs_option, String source, String maptype, String zoom, String rangeA, boolean ele, 
+            String pointColName, String polygonColName, String pathColName, String point_size, String path_size, String border_col, String color_point, boolean uni_point, String imgName, String format, int dpi, String width) {
         try {
             System.out.print("UD");
             RConnection RC = sb.getRConnection(); //Start R connection
@@ -160,13 +160,16 @@ public class Clustering {
                                                  + "\", \"" + source
                                                  + "\", \"" + maptype
                                                  + "\", \"" + zoom
-                                                 + "\", \"" + varColName
                                                  + "\", \"" + rangeA
-                                                 + "\", \"" + colorColName
                                                  + "\", \"" + ele
-                                                 + "\", \"" + lineB
-                                                 + "\", \"" + polygon
-                                                 + "\", \"" + path
+                                                 + "\", \"" + pointColName
+                                                 + "\", \"" + polygonColName
+                                                 + "\", \"" + pathColName
+                                                 + "\", \"" + point_size
+                                                 + "\", \"" + path_size
+                                                 + "\", \"" + border_col
+                                                 + "\", \"" + color_point
+                                                 + "\", \"" + uni_point
                                                  + "\", \"" + imgName 
                                                  + "\", \"" + format 
                                                  + "\", " + dpi 

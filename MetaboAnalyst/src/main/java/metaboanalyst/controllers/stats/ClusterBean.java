@@ -375,6 +375,17 @@ public class ClusterBean implements Serializable{
     }
     
     
+    private boolean doUni_point = false;
+    
+    public boolean isdoUni_point() {
+        return doUni_point;
+    }
+
+    public void setdoUni_point(boolean doUni_point) {
+        this.doUni_point = doUni_point;
+    }
+    
+    
     // textbox 
     private String zoom = "";
     
@@ -406,77 +417,96 @@ public class ClusterBean implements Serializable{
         this.crs_txt = crs_txt;
     }
     
+    private String point_size = "";
+    
+    public String getPoint_size() {
+        return point_size;
+    }
+
+    public void setPoint_size(String point_size) {
+        this.point_size = point_size;
+    }
+    
+    private String path_size = "";
+    
+    public String getPath_size() {
+        return path_size;
+    }
+
+    public void setPath_size(String path_size) {
+        this.path_size = path_size;
+    }
         
     // static dropdown
-    private SelectItem[] colorColOpts = null;
+    private SelectItem[] pointColOpts = null;
     
-    public SelectItem[] getColorColOpts(){
+    public SelectItem[] getPointColOpts(){
         String[] columns = Clustering.colorColumn(sb);
         int columnsLen = columns.length;
-        colorColOpts = new SelectItem[columnsLen];
+        pointColOpts = new SelectItem[columnsLen];
         List<String> columnNames = Arrays.asList(columns);
         for (int i = 0; i < columnsLen; i++) {
-            colorColOpts[i] = new SelectItem(columnNames.get(i), columnNames.get(i));
+            pointColOpts[i] = new SelectItem(columnNames.get(i), columnNames.get(i));
         }
-        return colorColOpts;
+        return pointColOpts;
     }
     
-    private String colorColName = getColorColOpts()[0].getLabel();
+    private String pointColName = getPointColOpts()[0].getLabel();
     
-    public String getColorColName() {
-        return colorColName;
+    public String getPointColName() {
+        return pointColName;
     }
 
-    public void setColorColName(String colorColName) {
-        this.colorColName = colorColName;
+    public void setPointColName(String pointColName) {
+        this.pointColName = pointColName;
     }
     
     
-    private SelectItem[] varColOpts = null;
+    private SelectItem[] polygonColOpts = null;
     
-    public SelectItem[] getVarColOpts(){
+    public SelectItem[] getPolygonColOpts(){
         String[] columns = Clustering.varColumn(sb);
         int columnsLen = columns.length;
-        varColOpts = new SelectItem[columnsLen];
+        polygonColOpts = new SelectItem[columnsLen];
         List<String> columnNames = Arrays.asList(columns);
         for (int i = 0; i < columnsLen; i++) {
-            varColOpts[i] = new SelectItem(columnNames.get(i), columnNames.get(i));
+            polygonColOpts[i] = new SelectItem(columnNames.get(i), columnNames.get(i));
         }
-        return varColOpts;
+        return polygonColOpts;
     }
     
-    private String varColName = getVarColOpts()[0].getLabel();
+    private String polygonColName = getPolygonColOpts()[0].getLabel();
     
-    public String getVarColName() {
-        return varColName;
+    public String getPolygonColName() {
+        return polygonColName;
     }
 
-    public void setVarColName(String varColName) {
-        this.varColName = varColName;
+    public void setPolygonColName(String polygonColName) {
+        this.polygonColName = polygonColName;
     }
     
     
-    private SelectItem[] lineColOpts = null;
+    private SelectItem[] pathColOpts = null;
     
-    public SelectItem[] getLineColOpts(){
+    public SelectItem[] getPathColOpts(){
         String[] columns = Clustering.lineColumn(sb);
         int columnsLen = columns.length;
-        lineColOpts = new SelectItem[columnsLen];
+        pathColOpts = new SelectItem[columnsLen];
         List<String> columnNames = Arrays.asList(columns);
         for (int i = 0; i < columnsLen; i++) {
-            lineColOpts[i] = new SelectItem(columnNames.get(i), columnNames.get(i));
+            pathColOpts[i] = new SelectItem(columnNames.get(i), columnNames.get(i));
         }
-        return lineColOpts;
+        return pathColOpts;
     }
     
-    private String lineColName = getLineColOpts()[0].getLabel();
+    private String pathColName = getPathColOpts()[0].getLabel();
     
-    public String getLineColName() {
-        return lineColName;
+    public String getPathColName() {
+        return pathColName;
     }
 
-    public void setLineColName(String lineColName) {
-        this.lineColName = lineColName;
+    public void setPathColName(String pathColName) {
+        this.pathColName = pathColName;
     }
     
     
@@ -526,6 +556,38 @@ public class ClusterBean implements Serializable{
     public void setCrs_optionchosen(String crs_optionchosen) {
         this.crs_optionchosen = crs_optionchosen;
     }
+    
+    
+    private final SelectItem[] border_col;
+    private String border_colchosen = "NULL";
+    
+    public SelectItem[] getBorder_col() {
+        return border_col;
+    }
+    
+    public String getBorder_colchosen() {
+        return border_colchosen;
+    } 
+
+    public void setBorder_colchosen(String border_colchosen) {
+        this.border_colchosen = border_colchosen;
+    }
+    
+    
+    private final SelectItem[] color_point;
+    private String color_pointchosen = "NULL";
+    
+    public SelectItem[] getColor_point() {
+        return color_point;
+    }
+    
+    public String getColor_pointchosen() {
+        return color_pointchosen;
+    } 
+
+    public void setColor_pointchosen(String color_pointchosen) {
+        this.color_pointchosen = color_pointchosen;
+    }
 
     
     private String fileeleresult = "Elevation.csv";
@@ -547,6 +609,22 @@ public class ClusterBean implements Serializable{
         crs_option = new SelectItem[2];
         crs_option[0] = new SelectItem("NULL", "Not require conversion");
         crs_option[1] = new SelectItem("10TM", "10TM");
+        
+        border_col = new SelectItem[6];
+        border_col[0] = new SelectItem("NULL", "Skyblue");
+        border_col[1] = new SelectItem("green", "Green");
+        border_col[2] = new SelectItem("turquoise", "Turquoise");
+        border_col[3] = new SelectItem("steelblue", "Steelblue");
+        border_col[4] = new SelectItem("peach", "Peach");
+        border_col[5] = new SelectItem("wheat", "Wheat");
+        
+        color_point = new SelectItem[6];
+        color_point[0] = new SelectItem("NULL", "Blue");
+        color_point[1] = new SelectItem("green", "Green");
+        color_point[2] = new SelectItem("turquoise", "Turquoise");
+        color_point[3] = new SelectItem("steelblue", "Steelblue");
+        color_point[4] = new SelectItem("peach", "Peach");
+        color_point[5] = new SelectItem("wheat", "Wheat");
         
         maptype = new SelectItem[16];
         maptype[0] = new SelectItem("NULL", "Terrain");
@@ -571,7 +649,7 @@ public class ClusterBean implements Serializable{
     
     // ACTION BUTTON // 
     public void spatialvisUpdate_action() {
-        Clustering.CreateSpatialvis(sb, doOriginal, doDatum, doProj, crs_txt, crs_optionchosen,  sourcechosen, maptypechosen, zoom, varColName, rangeA, colorColName, doEle, 
-                lineColName, doPolygon, doPath, sb.getNewImage("ggmap"), "png", 72, "false"); 
+        Clustering.CreateSpatialvis(sb, doOriginal, doDatum, doProj, crs_txt, crs_optionchosen, sourcechosen, maptypechosen, zoom, rangeA,  doEle, pointColName, polygonColName,
+                pathColName, point_size, path_size, border_colchosen, color_pointchosen, doUni_point, sb.getNewImage("ggmap"), "png", 72, "false"); 
     }
 }

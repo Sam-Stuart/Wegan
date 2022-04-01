@@ -454,6 +454,11 @@
             <from-outcome>SOM</from-outcome>
             <to-view-id>/Secure/clustering/SOMView.xhtml</to-view-id>
             <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>Spatialvis</from-outcome>
+            <to-view-id>/Secure/clustering/SpatialvisView.xhtml</to-view-id>
+            <redirect/>
         </navigation-case> 
         <navigation-case>
             <from-outcome>RandomForest</from-outcome>

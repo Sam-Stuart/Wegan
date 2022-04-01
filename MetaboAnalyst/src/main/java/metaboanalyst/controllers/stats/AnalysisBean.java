@@ -220,7 +220,14 @@ public class AnalysisBean implements Serializable {
     private void doDefaultSOMClust() {
         Clustering.PlotSOM(sb, sb.getCurrentImage("som"), "png", 72, 1, 3, "linear", "gaussian");
     }
-
+    
+    private void doDefaultSpatialvis(){
+        System.out.print("INSIDE FD"); 
+        Clustering.CreateSpatialvis(sb, false, false, false, "", "NULL", "NULL", "NULL", "", "", false, "NULL", "NULL", "NULL", "", "", "NULL", "NULL",
+                false, sb.getCurrentImage("ggmap"), "png", 72, "false");
+        System.out.print("AFTER FD");
+    }
+    
     private void doDefaultRF() {
         Classifying.InitRF(sb, 500, 7, 1);
         Classifying.PlotRFClassication(sb, sb.getCurrentImage("rf_cls"), "png", 72);
@@ -234,12 +241,6 @@ public class AnalysisBean implements Serializable {
         Classifying.PlotSVMSigCmpds(sb, sb.getCurrentImage("svm_imp"), "png", 72);
     }
     
-    private void doDefaultSpatialvis(){
-        System.out.print("INSIDE FD"); 
-        Clustering.CreateSpatialvis(sb, false, false, false, "", "NULL", "NULL", "NULL", "", "NULL", "", "NULL", false, "NULL", false,
-                false, sb.getCurrentImage("ggmap"), "png", 72, "false");
-        System.out.print("AFTER FD");
-    }
     
     
     
