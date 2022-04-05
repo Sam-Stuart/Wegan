@@ -12,23 +12,34 @@
     </ui:define>
     <ui:define name="content">
         <h:form id="form" enctype="multipart/form-data"> 
-            
-            <h:panelGrid style="padding: 20px 20px 20px 40px; font-size:12px;">
+             <h:panelGrid style="padding:20px 40px 20px 40px; font-size: 13px; line-height: 25px; width:100%">
                 <h2 style="margin-top: 10px; margin-bottom: 4px">1) Upload your data</h2>
-                <h:panelGrid columns="2" style="border: gray solid thin; background-color: #F9F9FB; padding: 20px; width:760px">
-                    <p:outputLabel style="font-size:13px; font-weight: bold" value="Tab-delimited text (.txt) or comma-separated values (.csv) file:"/>
-                    <p:spacer/>
-                    <h:panelGrid columns="2" style="width:560px; height:120px; padding: 10px">
-
-                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Data File:"/>
+                <h:panelGrid style="width:100%; background-color: #75bafb;"></h:panelGrid>
+                <h:panelGrid style="width:100%; background-color: white; "></h:panelGrid>
+                <h:panelGrid style="width:100%; background-color: #75bafb;"></h:panelGrid>
+                <h:panelGrid style="width:100%; background-color: white; "></h:panelGrid>
+<!--            <h:panelGrid style="padding: 20px 20px 20px 40px; font-size:12px;">
+                <h2 style="margin-top: 10px; margin-bottom: 4px">1) Upload your data</h2>-->
+                 <h:panelGrid style="border: none; width: 100%; padding: 15px 20px 10px 25px; background-color: #8cbd4830; font-size: 14px;">
+                    <h2 style="margin-top: 10px; margin-bottom: 4px">Data table: Plain text file (.csv or .txt)</h2>
+                    <h:panelGrid columns="2" style="padding: 10px">
+                        <p:outputLabel style="font-size:14px; font-weight: bold" value="Data File:"/>
                         <p:fileUpload value="#{Clusterload.dataFile}" mode="simple"/>
-                    </h:panelGrid>
-                    <p:spacer/>
+                    </h:panelGrid>                   
+                    <h:panelGrid columns="3" style="padding: 10px; margin-left: 40px">
+                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Format:"/>
+                        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:170px" value="#{Clusterload.dataFormat}">
+                            <f:selectItems value="#{applicationBean1.csvFormatOpts}" />
+                        </p:selectOneMenu> 
+                    </h:panelGrid>                     
+                    <h:panelGrid columns="3" style="padding: 10px; margin-left: 40px">
+                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Labels:"/>
+                        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:170px" value="#{Clusterload.dataNames}">
+                            <f:selectItems value="#{applicationBean1.dataNamesOpts}" />
+                        </p:selectOneMenu> 
+                    </h:panelGrid>  
                     
-                    <p:outputLabel style="font-size:12px; font-weight: bold" value="Data Format:"/>
-                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:170px" value="#{Clusterload.dataFormat}">
-                        <f:selectItems value="#{applicationBean1.csvFormatOpts}" />
-                    </p:selectOneMenu>
+                    
                     
                     <h:panelGrid style="padding: 10px">
                         <p:commandButton value="Submit"

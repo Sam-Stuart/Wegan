@@ -697,7 +697,7 @@ XSet2MSet <- function(xset, dataType, analType, paired=F, format, lbl.type){
   rownames(data2) <- c("group", paste(round(groups(xset)[,"mzmed"], 3), round(groups(xset)[,"rtmed"]/60, 1), sep="/"));
   write.csv(data2, file="PeakTable.csv");
   mSet <- InitDataObjects("dataType", "analType", paired)
-  mSet <- Read.TextData(mSet, "PeakTable.csv", "format", "lbl.type")
+  mSet <- Read.TextData(mSet, "PeakTable.csv", "format", "lbl.type", "colOnly")
   print("mSet successfully created...")
   return(.set.mSet(mSetObj));
 }

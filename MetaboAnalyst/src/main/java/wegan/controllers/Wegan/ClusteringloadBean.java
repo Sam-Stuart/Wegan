@@ -10,6 +10,7 @@ import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
 import metaboanalyst.controllers.ApplicationBean1;
 import metaboanalyst.controllers.SessionBean1;
+import metaboanalyst.models.User;
 import metaboanalyst.rwrappers.RCenter;
 import metaboanalyst.rwrappers.RDataUtils;
 import metaboanalyst.utils.DataUtils;
@@ -30,7 +31,7 @@ public class ClusteringloadBean implements Serializable {
     /*
      * Handle file upoad (.csv or .txt)
      */
-    private String dataType = "conc";
+     private String dataType = "main";
 
     public String getDataType() {
         return dataType;
@@ -40,14 +41,24 @@ public class ClusteringloadBean implements Serializable {
         this.dataType = dataType;
     }
 
-    private String dataFormat = "colu";
+    private String dataFormat = "rowu";
 
     public String getDataFormat() {
         return dataFormat;
     }
-
+        
     public void setDataFormat(String dataFormat) {
         this.dataFormat = dataFormat;
+    }
+    
+    private String metaFormat = "rowu";
+
+    public String getMetaFormat() {
+        return metaFormat;
+    }
+
+    public void setMetaFormat(String metaFormat) {
+        this.metaFormat = metaFormat;
     }
 
     private UploadedFile dataFile;
@@ -59,6 +70,37 @@ public class ClusteringloadBean implements Serializable {
     public void setDataFile(UploadedFile dataFile) {
         this.dataFile = dataFile;
     }
+
+    private UploadedFile dataFileMeta;
+
+    public UploadedFile getDataFileMeta() {
+        return dataFileMeta;
+    }
+
+    public void setDataFileMeta(UploadedFile dataFileMeta) {
+        this.dataFileMeta = dataFileMeta;
+    }
+    
+    private String dataNames = "colOnly";
+
+    public String getDataNames() {
+        return dataNames;
+    }
+
+    public void setDataNames(String dataNames) {
+        this.dataNames = dataNames;
+    }
+    
+    private String metaNames = "colOnly";
+
+    public String getMetaNames() {
+        return metaNames;
+    }
+
+    public void setMetaNames(String metaNames) {
+        this.metaNames = metaNames;
+    }
+
 
     /*
     Data upload for statistics module
@@ -78,7 +120,7 @@ public class ClusteringloadBean implements Serializable {
                     return null;
                 }
 
-                if (RDataUtils.readTextData(RC, fileName, dataFormat, "disc")) {
+                if (RDataUtils.readTextData(RC, fileName, dataFormat, "disc", dataNames)) {
                     sb.setDataUploaded(true);
                     sb.updateMsg("Error", "Data Uploaded successfully");
                     return "Data check";
@@ -153,7 +195,7 @@ public class ClusteringloadBean implements Serializable {
             paired = true;
         }
 
-        if (sb.doLogin(zipDataType, "cluster", false, paired)) {
+        if (sb.doLogin(zipDataType, "stat", false, paired)) {
             try {
                 RConnection RC = sb.getRConnection();
                 //String homeDir = sb.getCurrentUser().getHomeDir();
@@ -183,26 +225,6 @@ public class ClusteringloadBean implements Serializable {
      */
     private String testDataOpt;
     
-    
-    
-    
-    //WEGAN FUCNTIONS 
-    
-    //*********------------------------------------------------------
-    
-    private String NMDSTestDataOpt;
-    
-    public String getNMDSTestDataOpt() {
-        return NMDSTestDataOpt;
-    }
-
-    public void setNMDSTestDataOpt(String NMDSTestDataOpt) {
-        this.NMDSTestDataOpt = NMDSTestDataOpt;
-    }
-    
-
-    
-    //*********------------------------------------------------------
     public String getTestDataOpt() {
         return testDataOpt;
     }
@@ -210,34 +232,29 @@ public class ClusteringloadBean implements Serializable {
     public void setTestDataOpt(String testDataOpt) {
         this.testDataOpt = testDataOpt;
     }
-
-     
-    //----------------------------------------------------------------- Test loader 
-    public String handleClusterTestFileUpload() {
-        String format = "";
+    
+    
+    //--------------Test data loader------------------- 
+    public String handleDiversityTestFileUpload() {
         boolean paired = false;
         boolean isZip = false;
         String testFile = null;
-
         
-        if (testDataOpt == null) {
-                    
 
+        if (testDataOpt == null) {
             sb.updateMsg("Error", "No data set is selected!");
             return null;
         }
 
-
-        
-        //DUNE DATA SELECTED*********************************************************
         else if (testDataOpt.equals("Dune")) {
             dataType = "Dune";
             testFile = ab.getTestDune();
-            format = "rowu";
-            
+            dataFormat = "rowu";
+            dataNames = "colOnly";
         } else if (testDataOpt.equals("BCI")) {
             testFile = ab.getTestBCI();
-            format = "rowu";
+            dataFormat = "rowu";
+            dataNames = "colOnly";
         } else {
             sb.updateMsg("Error", "Unknown data selected?");
             return null;
@@ -246,6 +263,7 @@ public class ClusteringloadBean implements Serializable {
             //sb.updateMsg("Error", "No login return null?");
             return null;
         }
+        
 
         RConnection RC = sb.getRConnection();
         if (isZip) {
@@ -254,9 +272,10 @@ public class ClusteringloadBean implements Serializable {
                 return null;
             }
         } else {
-            
+//            String testFileMeta = ab.getTestFileMeta();
+//            RDataUtils.readTextDataMeta(RC, testFileMeta, metaFormat, "disc", metaNames);
             //Tested cahnging Disc to cont
-            if (!RDataUtils.readTextData(RC, testFile, format, "disc")) {
+            if (!RDataUtils.readTextData(RC, testFile, dataFormat, "disc", dataNames)) {
                 sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
                 return null;
             }
@@ -264,28 +283,108 @@ public class ClusteringloadBean implements Serializable {
         sb.setDataUploaded(true);
         return "Data check";
     }
+        
     
     
     
-    public boolean runDCaR(String inputData,String ext){
-        RConnection RC = sb.getRConnection();
-        try {
-            //String rCommand = "InitDataObjects(\"" + dataType + "\", \"" + analType + "\", " + (isPaired ? "TRUE" : "FALSE") + ")";
+    
+    //WEGAN FUCNTIONS 
+    
+    //*********------------------------------------------------------
+    
+//    private String NMDSTestDataOpt;
+//    
+//    public String getNMDSTestDataOpt() {
+//        return NMDSTestDataOpt;
+//    }
+//
+//    public void setNMDSTestDataOpt(String NMDSTestDataOpt) {
+//        this.NMDSTestDataOpt = NMDSTestDataOpt;
+//    }
+    
 
-            //String rCommand = "CAWegan(\"" + inputData + "\", \"" + sb.getPath2()+ "\"  )";
+    
+    //*********------------------------------------------------------
+//    public String getTestDataOpt() {
+//        return testDataOpt;
+//    }
+//
+//    public void setTestDataOpt(String testDataOpt) {
+//        this.testDataOpt = testDataOpt;
+//    }
 
-            String rCommand = "DCAWegan(\"" + inputData + "\", \"" + sb.getPath2()+ "\", \"" + ext + "\"   )";
-            RC.voidEval(rCommand);
-            RCenter.recordRCommand(RC, rCommand);
-
-        } catch (RserveException rse) {
-            System.out.println(rse);
-            return false;
-        }
-        //;
-        return true ;
-            
-    }    
+     
+    //----------------------------------------------------------------- Test loader 
+//    public String handleClusterTestFileUpload() {
+//        String format = "";
+//        boolean paired = false;
+//        boolean isZip = false;
+//        String testFile = null;
+//
+//        
+//        if (testDataOpt == null) {
+//            sb.updateMsg("Error", "No data set is selected!");
+//            return null;
+//        }
+//
+//        //DUNE DATA SELECTED*********************************************************
+//        else if (testDataOpt.equals("Dune")) {
+//            dataType = "Dune";
+//            testFile = ab.getTestDune();
+//            format = "rowu";
+//            dataNames = "colOnly";
+//        } else if (testDataOpt.equals("BCI")) {
+//            testFile = ab.getTestBCI();
+//            format = "rowu";
+//            dataNames = "colOnly";
+//        } else {
+//            sb.updateMsg("Error", "Unknown data selected?");
+//            return null;
+//        }
+//        if (!sb.doLogin(dataType, "cluster", false, paired)) {
+//            //sb.updateMsg("Error", "No login return null?");
+//            return null;
+//        }
+//
+//        RConnection RC = sb.getRConnection();
+//        if (isZip) {
+//            if (!RDataUtils.readZipData(RC, testFile, dataType, "F")) {
+//                sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
+//                return null;
+//            }
+//        } else {
+//            
+//            //Tested cahnging Disc to cont
+//            if (!RDataUtils.readTextData(RC, testFile, dataFormat, "disc", dataNames)) {
+//                sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
+//                return null;
+//            }
+//        }
+//        sb.setDataUploaded(true);
+//        return "Data check";
+//    }
+//    
+//    
+//    
+//    public boolean runDCaR(String inputData,String ext){
+//        RConnection RC = sb.getRConnection();
+//        try {
+//            //String rCommand = "InitDataObjects(\"" + dataType + "\", \"" + analType + "\", " + (isPaired ? "TRUE" : "FALSE") + ")";
+//
+//            //String rCommand = "CAWegan(\"" + inputData + "\", \"" + sb.getPath2()+ "\"  )";
+//
+//            String rCommand = "DCAWegan(\"" + inputData + "\", \"" + sb.getPath2()+ "\", \"" + ext + "\"   )";
+//            RC.voidEval(rCommand);
+//            RCenter.recordRCommand(RC, rCommand);
+//
+//        } catch (RserveException rse) {
+//            System.out.println(rse);
+//            return false;
+//        }
+//        //;
+//        return true ;
+//            
+//    }    
     
     
     
@@ -355,7 +454,7 @@ public class ClusteringloadBean implements Serializable {
         if (sb.doLogin(dataType, "power", false, paired)) {
             RConnection RC = sb.getRConnection();
             String fileName = DataUtils.uploadFile(dataFile, sb, null, ab.isOnPublicServer());
-            if (RDataUtils.readTextData(RC, fileName, dataFormat, "disc")) {
+            if (RDataUtils.readTextData(RC, fileName, dataFormat, "disc", dataNames)) {
                 sb.setDataUploaded(true);
                 return "Data check";
             } else {
@@ -371,7 +470,7 @@ public class ClusteringloadBean implements Serializable {
             return null;
         }
         RConnection RC = sb.getRConnection();
-        RDataUtils.readTextData(RC, ab.getTestPowerPath(), "rowu", "disc");
+        RDataUtils.readTextData(RC, ab.getTestPowerPath(), "rowu", "disc", dataNames);//RC, fileName, dataFormat, "disc", dataNames
         sb.setDataUploaded(true);
         return "Data check";
     }
@@ -403,7 +502,7 @@ public class ClusteringloadBean implements Serializable {
         if (sb.doLogin(dataType, "roc", false, false)) {
             RConnection RC = sb.getRConnection();
             String fileName = DataUtils.uploadFile(dataFile, sb, null, ab.isOnPublicServer());
-            if (RDataUtils.readTextData(RC, fileName, dataFormat, "disc")) {
+            if (RDataUtils.readTextData(RC, fileName, dataFormat, "disc", dataNames)) {
                 sb.setDataUploaded(true);
                 return "Data check";
             } else {
@@ -420,9 +519,9 @@ public class ClusteringloadBean implements Serializable {
         }
         RConnection RC = sb.getRConnection();
         if (dataOpt.equals("data1")) {
-            RDataUtils.readTextData(RC, ab.getTestRocPath(), "rowu", "disc");
+            RDataUtils.readTextData(RC, ab.getTestRocPath(), "rowu", "disc", dataNames); //RC, fileName, dataFormat, "disc", dataNames
         } else {
-            RDataUtils.readTextData(RC, ab.getTestRocNewPath(), "rowu", "disc");
+            RDataUtils.readTextData(RC, ab.getTestRocNewPath(), "rowu", "disc", dataNames);
         }
         sb.setDataUploaded(true);
         return "Data check";

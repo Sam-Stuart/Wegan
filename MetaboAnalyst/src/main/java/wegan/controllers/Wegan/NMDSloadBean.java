@@ -60,7 +60,16 @@ public class NMDSloadBean implements Serializable {
         this.dataFile = dataFile;
     }
 
+    private String dataNames = "colOnly";
 
+    public String getDataNames() {
+        return dataNames;
+    }
+
+    public void setDataNames(String dataNames) {
+        this.dataNames = dataNames;
+    }
+    
     /*
      * Handle zip file examples (containing csv or txt files)
      */
@@ -280,7 +289,7 @@ public class NMDSloadBean implements Serializable {
         } else {
             
             //Tested cahnging Disc to cont
-            if (!RDataUtils.readTextData(RC, testFile, format, "cont")) {
+            if (!RDataUtils.readTextData(RC, testFile, dataFormat, "cont", dataNames)) {//fileName, dataFormat, "disc", dataNames
                 sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
                 return null;
             }

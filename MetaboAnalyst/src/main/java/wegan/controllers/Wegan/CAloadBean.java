@@ -60,6 +60,18 @@ public class CAloadBean implements Serializable {
         this.dataFile = dataFile;
     }
 
+    private String dataNames = "colOnly";
+
+    public String getDataNames() {
+        return dataNames;
+    }
+
+    public void setDataNames(String dataNames) {
+        this.dataNames = dataNames;
+    }
+    
+    
+    
     /*
     Data upload for statistics module
      */
@@ -78,7 +90,7 @@ public class CAloadBean implements Serializable {
                     return null;
                 }
                 //RDataUtils.readTextData(RC, fileName, dataFormat, "disc")
-                if (RDataUtils.readTextData(RC, fileName, dataFormat, "disc")) {
+                if (RDataUtils.readTextData(RC, fileName, dataFormat, "disc", dataNames)) {
                     sb.setDataUploaded(true);
                     return "Download";
                 } else {
@@ -246,7 +258,7 @@ public class CAloadBean implements Serializable {
         } else {
             
             //Tested cahnging Disc to cont
-            if (!RDataUtils.readTextData(RC, testFile, format, "disc")) {
+            if (!RDataUtils.readTextData(RC, testFile, format, "disc", dataNames)) {
                 sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
                 return null;
             }

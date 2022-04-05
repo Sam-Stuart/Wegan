@@ -7,6 +7,8 @@ package metaboanalyst.rwrappers;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.faces.model.SelectItem;
 import metaboanalyst.models.ComponentBean;
 import metaboanalyst.utils.DataUtils;
@@ -46,10 +48,10 @@ public class RDataUtils {
     }
 
     //should be in the same directory format specify sample in row or column
-    public static boolean readTextData(RConnection RC, String filePath, String format, String lblType) {
+    public static boolean readTextData(RConnection RC, String filePath, String dataFormat, String lblType, String dataNames) {
         try {
-            String rCommand = "Read.TextData(NA, \"" + filePath + "\", \"" + format + "\", \"" + lblType + "\");";
-            String rCommand2 = "Read.TextData(NA, \"" + "Replacing_with_your_file_path" + "\", \"" + format + "\", \"" + lblType + "\");";
+            String rCommand = "Read.TextData(NA, \"" + filePath + "\", \"" + dataFormat + "\", \"" + lblType + "\", \"" + dataNames + "\");";
+            String rCommand2 = "Read.TextData(NA, \"" + "Replacing_with_your_file_path" + "\", \"" + dataFormat + "\", \"" + lblType + "\", \"" + dataNames + "\");";
             RCenter.recordRCommand(RC, rCommand2);
             return (RC.eval(rCommand).asInteger() == 1);
         } catch (Exception rse) {

@@ -130,6 +130,17 @@ public class TimeBean implements Serializable{
     public void setViewOpt(String viewOpt) {
         this.viewOpt = viewOpt;
     }
+    
+    
+    private String dataNames = "colOnly";
+
+    public String getDataNames() {
+        return dataNames;
+    }
+
+    public void setDataNames(String dataNames) {
+        this.dataNames = dataNames;
+    }
 
     private boolean drawBorders = false;
 
@@ -149,7 +160,7 @@ public class TimeBean implements Serializable{
                 RDataUtils.setDesignType(RC, tsDesign);
                 String fileName = DataUtils.uploadFile(csvFile, sb, null, ab.isOnPublicServer());
 
-                if (RDataUtils.readTextData(RC, fileName, tsFormat, "disc")) {
+                if (RDataUtils.readTextData(RC, fileName, tsFormat, "disc", dataNames)) {
                     sb.setDataUploaded(true);
                     return "Data check";
                 } else {
@@ -181,7 +192,7 @@ public class TimeBean implements Serializable{
             try {
                 RConnection RC = sb.getRConnection();
                 RDataUtils.setDesignType(RC, tsDesign);
-                if (RDataUtils.readTextData(RC, fileName, tsFormat, "disc")) {
+                if (RDataUtils.readTextData(RC, fileName, tsFormat, "disc", dataNames)) {
                     sb.setDataUploaded(true);
                     return "Data check";
                 } else {

@@ -53,6 +53,7 @@ public class ApplicationBean1 implements Serializable {
     private static final String test_currency_data = "/data/currency.txt";
     private static final String test_pos_adduct_data = "/data/pos_add_list.txt";
     private static final String test_neg_adduct_data = "/data/neg_add_list.txt";
+    
     //WEGAN TEST DATA PATHS ----------------------------------------------------
     
     private static final String test_amf = "/data/WeganTestAMF.csv";
@@ -96,6 +97,7 @@ public class ApplicationBean1 implements Serializable {
     private final SelectItem[] cmpdIDOpts1;
     private final SelectItem[] zipOpts;
     private final SelectItem[] csvFormatOpts;
+    private final SelectItem[] dataNamesOpts;
     private final SelectItem[] rocFormatOpts;
     private final SelectItem[] tsFormatOpts;
     private final SelectItem[] testDataOpts;
@@ -134,7 +136,7 @@ public class ApplicationBean1 implements Serializable {
     private final SelectItem[] ciaDataSetOpts;
     private final SelectItem[] ciaTypeOpts;
     private final SelectItem[] plottingDataOpts;
-    
+    private final SelectItem[] betadisperDataOpts;
     
     //Wegan variables begin here (currently ot used, regulat TestDataOpt is used
     
@@ -187,8 +189,14 @@ public class ApplicationBean1 implements Serializable {
         csvFormatOpts = new SelectItem[4];
         csvFormatOpts[0] = new SelectItem("rowu", "Samples in rows (unpaired)");
         csvFormatOpts[1] = new SelectItem("colu", "Samples in columns (unpaired)");
-        csvFormatOpts[2] = new SelectItem("rowp", "Samples in rows (paired)");
-        csvFormatOpts[3] = new SelectItem("colp", "Samples in columns (paired)");
+        //csvFormatOpts[2] = new SelectItem("rowp", "Samples in rows (paired)");
+        //csvFormatOpts[3] = new SelectItem("colp", "Samples in columns (paired)");
+
+	dataNamesOpts = new SelectItem[4];
+        dataNamesOpts[0] = new SelectItem("colOnly", "Column labels only");
+        dataNamesOpts[1] = new SelectItem("rowOnly", "Row labels only");
+        dataNamesOpts[2] = new SelectItem("bothNames", "Both");
+        dataNamesOpts[3] = new SelectItem("noNames", "Neither");
 
         tsFormatOpts = new SelectItem[2];
         tsFormatOpts[0] = new SelectItem("rowts", "Samples in rows");
@@ -226,7 +234,9 @@ public class ApplicationBean1 implements Serializable {
         
         
         
-        
+        betadisperDataOpts = new SelectItem[2];
+        betadisperDataOpts[0] = new SelectItem("org","Original Data set");
+        betadisperDataOpts[1] = new SelectItem("norm","Normalized Data set");
         
         
         
@@ -751,6 +761,10 @@ public class ApplicationBean1 implements Serializable {
         return csvFormatOpts;
     }
 
+    public SelectItem[] getDataNamesOpts() {
+        return dataNamesOpts;
+    }
+
     public SelectItem[] getRocFormatOpts() {
         return rocFormatOpts;
     }
@@ -874,7 +888,11 @@ public class ApplicationBean1 implements Serializable {
     public SelectItem[] getVegdistMeasureOpts() {
         return vegdistMeasureOpts;
     }
-      
+        
+    public SelectItem[] getBetadisperDataOpts() {
+        return betadisperDataOpts;
+    }
+    
     public SelectItem[] getCiaTypeOpts() {
         return ciaTypeOpts;
     }
