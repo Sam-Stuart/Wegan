@@ -9,92 +9,173 @@
     <ui:define name="metaInfo">
         <f:event type="preRenderView" listener="#{oaBean.performDefaultAnalysis('NMDS')}"/> 
     </ui:define>
+    <ui:define name="myscript">
+        <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/jscripts/canvasXpress.min.js"></script>
+        <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/jscripts/graphics.js"></script>
+    </ui:define>
     <ui:define name="content">
+        <h:inputHidden id="mydir" value="#{sessionBean1.getJsonDir('nmds_score3d')}" />
+        <script type="text/javascript">
+            // for scatter plot
+            function addBind() {
+                mychart = $("[id='ac:chart']");
+                mychart.unbind('jqplotDataClick');
+                mychart.bind('jqplotDataClick',
+                        function (ev, seriesIndex, pointIndex, data) {
+                            //note, we use the internal index, not point index 
+                            remoteCall([{name: 'cmpdIndex', value: data[0]}]);
+                        });
+            }
+
+            function ext() {
+                this.cfg.seriesDefaults = {
+                    lineWidth: 1.0,
+                    linePattern: 'dashed',
+                    showMarker: false,
+                    markerOptions: {
+                        color: 'rgba(128, 0, 128, 0.5)'
+                    },
+                    shadow: false
+                };
+                this.cfg.axes = {
+                    yaxis: {
+                        showLabel: true,
+                        tickOptions: {
+                            formatString: "%#.2f"
+                        }
+                    },
+                    xaxis: {
+                        showLabel: true,
+                        tickOptions: {
+                            formatString: "%#.2f"
+                        }
+                    }
+                };
+            }
+        </script>
         <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
-            <p:tabView id="ordNMDS" style="width:100%; border: none; background: none; font-size: 13px;">
-                <p:tab title ="2D Ordination Plot" titleStyleClass="p-tab-nav">
+            <p:tabView id="NMDS">
+                <p:tab title ="2D Biplot" titleStyleClass="p-tab-nav">
                     <h:form id="form1">
                         <p>
-                            NMDS is performed on numeric data.                
+                            NMDS is performed on numeric data only. The use of data groupings will create more interesting plots. Load grouping data separately, where each row aligns with the rows in your data set, or include groupings as columns in your data set.
                         </p>
-                        <h:panelGrid id="panelGrid" columns="4" cellpadding="3" columnClasses="colRight, colRight, colRight, colLast">
-                            
-                            <p:panelGrid></p:panelGrid>
-                            
+                        <h3>Dataset Options:</h3>
+                        <h:panelGrid id="panelGrid1" columns="5" cellpadding="3" columnClasses="colBrayLong,colBrayShort,colBrayLong,colBrayShort, colLast">
+                                
                             <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
-                                <p:selectBooleanCheckbox value ="#{ordNMDSBean.doOriginal}"/> 
-
-                            <p:panelGrid></p:panelGrid>
-                            <p:panelGrid></p:panelGrid>
+                            <p:selectBooleanCheckbox value ="#{ordNMDSBean.doOriginal}"/> 
 
                             <h:outputLabel style="font-weight: bold" value="Perform Relative Abundance Transformation:"/>
-                                <p:selectBooleanCheckbox value ="#{ordNMDSBean.doAbundance}"/> 
+                            <p:selectBooleanCheckbox value ="#{ordNMDSBean.doAbundance}"/> 
                             
-                            <p:panelGrid></p:panelGrid>
                             <p:panelGrid></p:panelGrid>
 
                             <h:outputLabel style="font-weight: bold" value="Distance Measure:"/>
-                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordNMDSBean.vegdistOpts}">
-                                    <f:selectItems value="#{applicationBean1.vegdistMeasureOpts}" />
-                                </p:selectOneMenu> 
-                            
-                            <p:panelGrid></p:panelGrid>
-                            <p:panelGrid></p:panelGrid>
-    
-                            <h:outputLabel style="font-weight: bold" value="Add Ellipses:"/>
-                                <p:selectBooleanCheckbox value ="#{ordNMDSBean.ellipseOpts}"/> 
-                            
-                            <p:panelGrid></p:panelGrid>
-                            <p:panelGrid></p:panelGrid>
-                            
-                            <h:outputLabel style="font-weight: bold" value="Add Variable Arrows:"/>
-                                <p:selectBooleanCheckbox value ="#{ordNMDSBean.var_arrowsOpts}"/> 
-                            
-                            <p:panelGrid></p:panelGrid>
-                            <p:panelGrid></p:panelGrid>
-                            
-                            <h:outputLabel style="font-weight: bold" value="Add Environmental Arrows:"/>
-                                <p:selectBooleanCheckbox value ="#{ordNMDSBean.env_arrowsOpts}"/> 
-                            
-                            <p:panelGrid></p:panelGrid>
-                            <p:panelGrid></p:panelGrid>
-                            
-                            <h:outputLabel style="font-weight: bold" value="Add Environmental Centroids:"/>
-                                <p:selectBooleanCheckbox value ="#{ordNMDSBean.env_centOpts}"/> 
-                            
-                            <p:panelGrid></p:panelGrid>
-                            <p:panelGrid></p:panelGrid>
-                            
-                            <h:outputLabel style="font-weight: bold" value="Display Sample Names:"/>
-                                <p:selectBooleanCheckbox value ="#{ordNMDSBean.sampleNamesOpts}"/> 
-                            
-                            <p:panelGrid></p:panelGrid>
-                            <p:panelGrid></p:panelGrid>
-                            
-                            <h:outputLabel style="font-weight: bold" value="Use Point Styles for Grouping:"/>
-                                <p:selectBooleanCheckbox value ="#{ordNMDSBean.point_optionsOpts}"/> 
-                            
-                            <p:panelGrid></p:panelGrid>
-                            <p:panelGrid></p:panelGrid>
-                            
-                            <h:outputLabel style="font-weight: bold" value="Color Palette:"/>
-                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordNMDSBean.ordColorOpts}">
-                                    <f:selectItems value="#{applicationBean1.ordColorPaletteOpts}" />
-                                </p:selectOneMenu> 
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordNMDSBean.vegdistOpts}">
+                                <f:selectItems value="#{applicationBean1.vegdistMeasureOpts}" />
+                            </p:selectOneMenu> 
 
+                            <h:panelGrid columns="2" cellpadding="3">
+                            <h:outputLabel style="font-weight: bold" value="Constraining Data Column Selection:"/>
+                                <p:inputText style="width:400px; height:100px; line-height:5px;" value="#{ordNMDSBean.envDataCol}"/>
+                            </h:panelGrid>
                             <p:panelGrid></p:panelGrid>
-                            <p:panelGrid></p:panelGrid>
-                            <p:panelGrid></p:panelGrid>
-                            <p:panelGrid></p:panelGrid>
+                        </h:panelGrid>
+                        <h:panelGrid id="panelGrid1_2" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
                             
+                            <p:commandButton value="Customize Graph"
+                                             styleClass="graphicsButton"
+                                             style="box-shadow: none !important; text-shadow: none !important;"
+                                             actionListener="#{sessionBean1.graphicsLnk_action('ord_nmds_2D')}" 
+                                            oncomplete="PF('graphApperanceNMDS1').show()"/>  
+                
+                           
                             <p:commandButton value="Update" 
-                                             style="background: #75bafb; border: 5px #75bafb; color: black"
+                                             styleClass="updateButton"
+                                             style="box-shadow: none !important; text-shadow: none !important"
                                             onclick="PF('statusDialog').show()"
                                             oncomplete="PF('statusDialog').hide()"  
-                                            update=":ordNMDS:form1:nmdsPane1  :cmdPane" 
-                                            actionListener="#{ordNMDSBean.nmdsUpdate_action()}"/>  
+                                            update=":NMDS:form1:nmdsPane1  :cmdPane" 
+                                            actionListener="#{ordNMDSBean.nmdsUpdate_action1()}"/>                          
+                        </h:panelGrid>
                         
-<!--                                          -->
+                        <h:panelGrid class="resultsBar" columns="2">
+                            <h:panelGroup>
+                                <h:panelGrid columns="1" style="text-align : left;">
+                                    Results
+                                </h:panelGrid>
+                            </h:panelGroup> 
+                            <h:panelGroup>
+                                <h:panelGrid columns="3" class="resultsImages">
+                                    <i class="fa fa-question-circle"></i>
+                                </h:panelGrid>
+                            </h:panelGroup>                            
+                        </h:panelGrid>
+                        <h:panelGrid id="nmdsPane1" style="width: 100%;">
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
+                                    <h:outputText escape="false" value="#{ordNMDSBean.file2DSampleScoresPath}"/>
+                                </i>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
+                                    <h:outputText escape="false" value="#{ordNMDSBean.file2DColScoresPath}"/>
+                                </i>    
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
+                                    <h:outputText escape="false" value="#{ordNMDSBean.file2DEnvScoresPath}"/>
+                                </i>
+                            </h:panelGrid>  
+                            
+                        <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                            <p:commandButton value="Export"
+                                styleClass="exportButton"
+                                style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                actionListener="#{sessionBean1.graphicsLnk_action('ord_nmds_2D')}"
+                                oncomplete="PF('graphDialog').show()"/>
+                        </h:panelGrid>      
+                            
+                        <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                            <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('ord_nmds_2D')}" alt="nmds2D"/>
+                        </h:panelGrid>
+                        </h:panelGrid> 
+                    </h:form>
+                </p:tab>
+                
+                <p:tab title ="3D Biplot" titleStyleClass="p-tab-nav">
+                    <h:form id="form2">
+                        <p>
+                            The use of data groupings will create more interesting plots. Load grouping data separately, where each row aligns with the rows in your data set, or include groupings as columns in your data set.
+                        </p>
+                        <h3>Dataset Options:</h3>
+                        <h:panelGrid id="panelGrid2" columns="5" cellpadding="3" columnClasses="colBrayLong,colBrayShort,colBrayLong,colBrayShort, colLast">
+                                
+                            <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
+                            <p:selectBooleanCheckbox value ="#{ordNMDSBean.doOriginal}"/> 
+
+                            <h:outputLabel style="font-weight: bold" value="Perform Relative Abundance Transformation:"/>
+                            <p:selectBooleanCheckbox value ="#{ordNMDSBean.doAbundance}"/> 
+                            
+                            <p:panelGrid></p:panelGrid>
+
+                            <h:outputLabel style="font-weight: bold" value="Distance Measure:"/>
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordNMDSBean.vegdistOpts}">
+                                <f:selectItems value="#{applicationBean1.vegdistMeasureOpts}" />
+                            </p:selectOneMenu> 
+
+                            <p:panelGrid></p:panelGrid>
+                                
+                        </h:panelGrid>
+                        <h:panelGrid columns="1" cellpadding="3" style="float: right">    
+                            <p:commandButton value="Update" 
+                                             styleClass="updateButton"
+                                             style="box-shadow: none !important; text-shadow: none !important"
+                                            onclick="PF('statusDialog').show()"
+                                            oncomplete="PF('statusDialog').hide()"  
+                                            update=":NMDS:form2:nmdsPane2  :cmdPane" 
+                                            actionListener="#{ordNMDSBean.nmdsUpdate_action2()}"/>                           
                         </h:panelGrid>
                         <h:panelGrid class="resultsBar" columns="2">
                             <h:panelGroup>
@@ -104,64 +185,71 @@
                             </h:panelGroup> 
                             <h:panelGroup>
                                 <h:panelGrid columns="3" class="resultsImages">
-                                    <i class="fas fa-palette"></i>
-                                    <i class="fa fa-table"></i>
                                     <i class="fa fa-question-circle"></i>
-<!--                                                                       <i class="fas fa-table"></i>
-                                   <i class="fas fa-palette"></i>
-                                   <i class="far fa-question-circle"></i>-->
                                 </h:panelGrid>
-                            
                             </h:panelGroup>                            
-                        </h:panelGrid>   
-                        
-                        <h:panelGrid id="nmdsPane1" style="width: 100%;">
-                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
-                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('ord_nmds_2D')}" alt="nmds2dimage"/>
-                            </h:panelGrid>                           
+                        </h:panelGrid>
+                                                
+                        <h:panelGrid id="nmdsPane2" style="width: 100%;">
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
+                                    <h:outputText escape="false" value="#{ordNMDSBean.file3DSampleScoresPath}"/>
+                                </i>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
+                                    <h:outputText escape="false" value="#{ordNMDSBean.file3DColScoresPath}"/>
+                                </i>    
+                            </h:panelGrid>
                             
-                        </h:panelGrid>  
-
-                    </h:form>    
-                </p:tab>
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <p:commandButton value="Export"
+                                    styleClass="exportButton"
+                                    style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                    actionListener="#{sessionBean1.graphicsLnk_action('ord_nmds_3D')}"
+                                    oncomplete="PF('graphDialog').show()"/>
+                            </h:panelGrid>                              
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('ord_nmds_3D')}" alt="nmds3D"/>
+                            </h:panelGrid>
+                            
+                        </h:panelGrid> 
+                    </h:form>
+                </p:tab> 
+                
                 <p:tab title ="Scree Plot" titleStyleClass="p-tab-nav">
-                    <h:form id="form2">
+                    <h:form id="form3">
                         <p>
-                        NMDS is performed on numeric data.               
+                            The use of data groupings will create more interesting plots. Load grouping data separately, where each row aligns with the rows in your data set, or include groupings as columns in your data set.
                         </p>
-                        <h:panelGrid id="panelGrid" columns="4" cellpadding="3" columnClasses="colRight, colRight, colRight, colLast">
-                            
-                        <p:panelGrid></p:panelGrid>
-                                                                          
-                        <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
-                            <p:selectBooleanCheckbox value ="#{ordNMDSBean.doOriginal}"/> 
-                        
-                        <p:panelGrid></p:panelGrid>
-                        <p:panelGrid></p:panelGrid>
-                                                        
-                        <h:outputLabel style="font-weight: bold" value="Perform Relative Abundance Transformation:"/>
-                            <p:selectBooleanCheckbox value ="#{ordNMDSBean.doAbundance}"/> 
+                        <h3>Dataset Options:</h3>
+                        <h:panelGrid id="panelGrid3" columns="5" cellpadding="3" columnClasses="colBrayLong,colBrayShort,colBrayLong,colBrayShort, colLast">
                                 
-                        <p:panelGrid></p:panelGrid>
-                        <p:panelGrid></p:panelGrid>
-                                                        
-                        <h:outputLabel style="font-weight: bold" value="Distance Measure:"/>
+                            <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
+                            <p:selectBooleanCheckbox value ="#{ordNMDSBean.doOriginal}"/> 
+                            
+                            <h:outputLabel style="font-weight: bold" value="Perform Relative Abundance Transformation:"/>
+                            <p:selectBooleanCheckbox value ="#{ordNMDSBean.doAbundance}"/> 
+                            
+                            <p:panelGrid></p:panelGrid>
+
+                            <h:outputLabel style="font-weight: bold" value="Distance Measure:"/>
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordNMDSBean.vegdistOpts}">
                                 <f:selectItems value="#{applicationBean1.vegdistMeasureOpts}" />
                             </p:selectOneMenu> 
 
-                        <p:panelGrid></p:panelGrid>
-                        <p:panelGrid></p:panelGrid>
-                        <p:panelGrid></p:panelGrid>
-                        <p:panelGrid></p:panelGrid>
-
-                        <p:commandButton value="Update" 
-                                         style="background: #75bafb; border: 5px #75bafb; color: black"
-                                        onclick="PF('statusDialog').show()"
-                                        oncomplete="PF('statusDialog').hide()"  
-                                        update=":ordNMDS:form2:nmdsPane2  :cmdPane" 
-                                        actionListener="#{ordNMDSBean.nmdsUpdate_action()}"/>
-                        </h:panelGrid>                       
+                            <p:panelGrid></p:panelGrid>
+                                
+                        </h:panelGrid>
+                        <h:panelGrid columns="1" cellpadding="3" style="float: right">    
+                            <p:commandButton value="Update" 
+                                             styleClass="updateButton"
+                                             style="box-shadow: none !important; text-shadow: none !important"
+                                            onclick="PF('statusDialog').show()"
+                                            oncomplete="PF('statusDialog').hide()"                                            
+                                            update=":NMDS:form3:nmdsPane3  :cmdPane" 
+                                            actionListener="#{ordNMDSBean.nmdsUpdate_action3()}"/>                          
+                        </h:panelGrid>
                         <h:panelGrid class="resultsBar" columns="2">
                             <h:panelGroup>
                                 <h:panelGrid columns="1" style="text-align : left;">
@@ -170,67 +258,68 @@
                             </h:panelGroup> 
                             <h:panelGroup>
                                 <h:panelGrid columns="3" class="resultsImages">
-                                    <i class="fas fa-palette"></i>
-                                    <i class="fa fa-table"></i>
                                     <i class="fa fa-question-circle"></i>
-<!--                                                                       <i class="fas fa-table"></i>
-                                   <i class="fas fa-palette"></i>
-                                   <i class="far fa-question-circle"></i>-->
                                 </h:panelGrid>
-                            
-                            </h:panelGroup>                            
-                        </h:panelGrid> 
-                        <h:panelGrid id="nmdsPane2" style="text-align: center; width: 100%;">
-                            <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('ord_nmds_scree')}" alt="nmdsscreeimage"/>
-                        </h:panelGrid>        
+                            </h:panelGroup> 
+                        </h:panelGrid>
+                        <h:panelGrid id="nmdsPane3" style="width: 100%;">
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
+                                    <h:outputText escape="false" value="#{ordNMDSBean.fileScreePath}"/>
+                                </i>
+                            </h:panelGrid>
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <p:commandButton value="Export"
+                                    styleClass="exportButton"
+                                    style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                    actionListener="#{sessionBean1.graphicsLnk_action('ord_nmds_scree')}"
+                                    oncomplete="PF('graphDialog').show()"/>
+                            </h:panelGrid>                              
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('ord_nmds_scree')}" alt="nmdsscree"/>
+                            </h:panelGrid>                           
+                        </h:panelGrid>  
+                       
                     </h:form>
-                </p:tab>
+                </p:tab>    
+                
                 <p:tab title ="Stress Plot" titleStyleClass="p-tab-nav">
-                    <h:form id="form3">
+                    <h:form id="form4">
                         <p>
-                        NMDS is performed on numeric data.               
+                            The use of data groupings will create more interesting plots. Load grouping data separately, where each row aligns with the rows in your data set, or include groupings as columns in your data set.
                         </p>
-                        <h:panelGrid id="panelGrid" columns="4" cellpadding="3" columnClasses="colRight, colRight, colRight, colLast">
-                            
-                        <p:panelGrid></p:panelGrid>
-                                                                                 
-                        <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
-                            <p:selectBooleanCheckbox value ="#{ordNMDSBean.doOriginal}"/> 
-
-                        <p:panelGrid></p:panelGrid>
-                        <p:panelGrid></p:panelGrid>                        
-                        
-                        <h:outputLabel style="font-weight: bold" value="Perform Relative Abundance Transformation:"/>
-                            <p:selectBooleanCheckbox value ="#{ordNMDSBean.doAbundance}"/> 
+                        <h3>Dataset Options:</h3>
+                        <h:panelGrid id="panelGrid4" columns="5" cellpadding="3" columnClasses="colBrayLong,colBrayShort,colBrayLong,colBrayShort, colLast">
                                 
-                        <p:panelGrid></p:panelGrid>
-                        <p:panelGrid></p:panelGrid>
-                        
-                        <h:outputLabel style="font-weight: bold" value="Distance Measure:"/>
+                            <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
+                            <p:selectBooleanCheckbox value ="#{ordNMDSBean.doOriginal}"/> 
+                            
+                            <h:outputLabel style="font-weight: bold" value="Perform Relative Abundance Transformation:"/>
+                            <p:selectBooleanCheckbox value ="#{ordNMDSBean.doAbundance}"/> 
+                            
+                            <p:panelGrid></p:panelGrid>
+
+                            <h:outputLabel style="font-weight: bold" value="Distance Measure:"/>
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordNMDSBean.vegdistOpts}">
                                 <f:selectItems value="#{applicationBean1.vegdistMeasureOpts}" />
                             </p:selectOneMenu> 
-
-                        <p:panelGrid></p:panelGrid>
-                        <p:panelGrid></p:panelGrid>
-                        
-                        <h:outputLabel style="font-weight: bold" value="Dimension:"/>
+                            
+                            <h:outputLabel style="font-weight: bold" value="Dimension:"/>
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordNMDSBean.ordStressDimOpts}">
                                 <f:selectItems value="#{applicationBean1.ordStressDimensionOpts}" />
                             </p:selectOneMenu> 
-
-                        <p:panelGrid></p:panelGrid>
-                        <p:panelGrid></p:panelGrid>
-                        <p:panelGrid></p:panelGrid>
-                        <p:panelGrid></p:panelGrid>
-                        
-                        <p:commandButton value="Update" 
-                                         style="background: #75bafb; border: 5px #75bafb; color: black"
-                                        onclick="PF('statusDialog').show()"
-                                        oncomplete="PF('statusDialog').hide()"  
-                                        update=":ordNMDS:form3:nmdsPane3  :cmdPane" 
-                                        actionListener="#{ordNMDSBean.nmdsUpdate_action()}"/>
-                        </h:panelGrid>                       
+                            <p:panelGrid></p:panelGrid>
+                                
+                        </h:panelGrid>
+                        <h:panelGrid columns="1" cellpadding="3" style="float: right">    
+                            <p:commandButton value="Update" 
+                                             styleClass="updateButton"
+                                             style="box-shadow: none !important; text-shadow: none !important"
+                                            onclick="PF('statusDialog').show()"
+                                            oncomplete="PF('statusDialog').hide()"  
+                                            update=":NMDS:form4:nmdsPane4  :cmdPane" 
+                                            actionListener="#{ordNMDSBean.nmdsUpdate_action4()}"/>                          
+                        </h:panelGrid>
                         <h:panelGrid class="resultsBar" columns="2">
                             <h:panelGroup>
                                 <h:panelGrid columns="1" style="text-align : left;">
@@ -239,20 +328,43 @@
                             </h:panelGroup> 
                             <h:panelGroup>
                                 <h:panelGrid columns="3" class="resultsImages">
-                                    <i class="fas fa-palette"></i>
-                                    <i class="fa fa-table"></i>
                                     <i class="fa fa-question-circle"></i>
-<!--                                <i class="fas fa-table"></i>    -->
                                 </h:panelGrid>
+                            </h:panelGroup> 
+                        </h:panelGrid>
+                        <h:panelGrid id="nmdsPane4" style="width: 100%;">
                             
-                            </h:panelGroup>                            
-                        </h:panelGrid> 
-                        <h:panelGrid id="nmdsPane3" style="text-align: center; width: 100%;">
-                            <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('ord_nmds_stress')}" alt="nmdsstressimage"/>
-                        </h:panelGrid>        
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <p:commandButton value="Export"
+                                    styleClass="exportButton"
+                                    style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                    actionListener="#{sessionBean1.graphicsLnk_action('ord_nmds_stress')}"
+                                    oncomplete="PF('graphDialog').show()"/>
+                            </h:panelGrid>                              
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('ord_nmds_stress')}" alt="nmdsstress"/>
+                            </h:panelGrid>                       
+                            
+                        </h:panelGrid>  
+                       
                     </h:form>
                 </p:tab>
-            </p:tabView> 
-        </h:panelGrid> 
+                
+            </p:tabView>
+        </h:panelGrid>
+        <p:dialog modal="true" widgetVar="graphApperanceNMDS1" 
+            style="width: 400px; height:400px;" 
+            appendTo="@(body)" header="Graphics Center"
+            draggable="false" closable="true" resizable="false"> 
+            <ui:include src="_color_palette_nmds1.xhtml" />
+        </p:dialog>
+        <script type="text/javascript">
+            showNMDS3DScore();
+            $("[id='ac:chart']").bind('jqplotDataClick',
+                    function (ev, seriesIndex, pointIndex, data) {
+                        //note, we use the internal index, not point index 
+                        remoteCall([{name: 'cmpdIndex', value: data[0]}]);
+                    });
+        </script>
     </ui:define>
 </ui:composition>

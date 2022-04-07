@@ -11,64 +11,69 @@
     </ui:define>
     <ui:define name="content">
         <h:form>
-            <h:panelGrid style="padding:20px 40px 20px 50px; font-size: 12px; line-height: 23px">
-                <h2>Missing value estimation:</h2>
+            <h:panelGrid style="padding:20px 40px 20px 40px; font-size: 16px; line-height: 25px; width:100%; position: relative">
+                <h1>Missing value estimation:</h1>
+                <h:panelGrid style="width:100%; background-color: #75bafb;"></h:panelGrid>
+                <h:panelGrid style="width:100%; background-color: white; "></h:panelGrid>
+                <h:panelGrid style="width:100%; background-color: #75bafb;"></h:panelGrid>
+                <h:panelGrid style="width:100%; background-color: white; "></h:panelGrid>  
                 <p>
-                    Too many missing values will cause difficulties for downstream analysis. There are several different 
-                    methods for this purpose. The default method replaces all the missing values with a small values (the half of the 
-                    minimum positive values in the original data) assuming to be the detection limit. Click <b>next</b>
-                    if you want to use the default method. The assumption of this approach is that most missing values are caused 
-                    by low abundance metabolites (i.e.below the detection limit). 
+                    Too many missing values (i.e. blanks or NAs) may cause difficulties for downstream analyses. There are several different 
+                    methods to prevent future issues. The default method removes all variables with >50% missing values.
                 </p>
                 <p>   
-                    MetaboAnalyst also offers other methods, such as replace by mean/median, k-nearest neighbour (KNN), 
-                    probabilistic PCA (PPCA), Bayesian PCA (BPCA) method, Singular Value Decomposition (SVD) method to 
-                    impute the missing values (<a href="http://www.ncbi.nlm.nih.gov/pubmed/17344241">ref.</a>). 
-                    Please choose the one that is the most appropriate for your data. 
+                    Ecologystics also offers methods to estimate missing values: replace with half of the minimum positive value of the original data, the mean/median/minimum of the variable, the k-nearest neighbour (KNN), 
+                    using Probabilistic (PPCA) or Bayesian Principal Component Analysis (BPCA), or using Singular Value Decomposition (SVD) (<a href="http://www.ncbi.nlm.nih.gov/pubmed/17344241">ref.</a>). 
                 </p>
-                <h:panelGrid style="border: 1px dashed black; padding: 10px; background-color: #F9F9FB; width: 100%; line-height: 23px">
-                    <p:outputLabel value="Step 1. Remove features with too many missing values" style="font-size: 13px; font-weight: bold"/>
-                    <h:panelGrid columns="4" style="padding-bottom: 12px">
+                <h:panelGrid style=" border: none; width: 100%; padding: 5px 10px 10px 5px; background-color: #8cbd4830; font-size: 14px">
+                    <p:outputLabel value="Step 1. Remove variables with too many missing values" style="font-size: 14px; font-weight: bold"/>
+                    <h:panelGrid columns="4" style="font-size: 13px; padding-bottom: 12px">
                         <p:selectBooleanCheckbox value="#{procBean.removeMissing}"/> 
-                        <p:outputLabel value="Remove features with &gt;"/> 
+                        <p:outputLabel value="Remove variables with &gt;"/> 
                         <p:inputText style="width:40px" value="#{procBean.missingPercent}"/>
                         <p:outputLabel value="% missing values"/>
                     </h:panelGrid>
-                    <p:outputLabel value="Step 2. Estimate the remaining missing values" style="font-size: 13px; font-weight: bold"/>
-                    <p:selectOneRadio id="rowRadio" value="#{procBean.missingImputeOpt}" layout="custom">
+                    <p:outputLabel value="Step 2. Estimate the remaining missing values" style="font-size: 14px; font-weight: bold"/>
+                    <p:selectOneRadio id="rowRadio" value="#{procBean.missingImputeOpt}" layout="custom" style="font-size: 13px">
+                        <f:selectItem itemLabel="None" itemValue="none"/> 
                         <f:selectItem itemLabel="Replace by a small value (half of the minimum positive value in the original data)" itemValue="min"/>                         
                         <f:selectItem itemLabel="Exclude variables with missing value" itemValue="exclude"/> 
-                        <f:selectItem itemLabel="Replace by feature mode" itemValue="replaceCol"/> 
+                        <f:selectItem itemLabel="Replace by variable mode" itemValue="replaceCol"/> 
                         <f:selectItem itemLabel="Impute" itemValue="impute"/> 
                     </p:selectOneRadio>
                     <h:panelGrid columns="2">
                         <p:radioButton for="rowRadio" itemIndex="0"/>
-                        <p:outputLabel value="Replace by a small value (half of the minimum positive value in the original data)"/>                        
+                        <p:outputLabel style="font-size:13px" value="None"/>                         
                         <p:radioButton for="rowRadio" itemIndex="1"/>
-                        <p:outputLabel value="Exclude variables with missing values"/>
-                        <p:radioButton for="rowRadio" itemIndex="2"/>
+                        <p:outputLabel style="font-size:13px" value="Replace with half of the minimum positive value in the original data"/>                        
+                        <p:radioButton for="rowRadio" itemIndex="3"/>
                         <h:panelGroup>
-                            <p:outputLabel value="Replace by column (feature) "/>  
+                            <p:outputLabel style="font-size:13px" value="Replace with variable "/>  
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{procBean.replaceVarOpt}">
                                 <f:selectItem itemLabel="mean" itemValue="mean"/> 
                                 <f:selectItem itemLabel="median" itemValue="median"/> 
-                                <f:selectItem itemLabel="min" itemValue="colmin"/> 
+                                <f:selectItem itemLabel="minimum" itemValue="colmin"/> 
                             </p:selectOneMenu>
                         </h:panelGroup>
-                        <p:radioButton for="rowRadio" itemIndex="3"/>
+                        <p:radioButton for="rowRadio" itemIndex="4"/>
                         <h:panelGroup>
-                            <p:outputLabel value="Estimate missing values using "/>        
+                            <p:outputLabel style="font-size:13px" value="Estimate missing values using "/>        
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{procBean.imputeAlgOpt}">
                                 <f:selectItem itemLabel="KNN" itemValue="knn"/> 
                                 <f:selectItem itemLabel="PPCA" itemValue="ppca"/> 
                                 <f:selectItem itemLabel="BPCA" itemValue="bpca"/> 
-                                <f:selectItem itemLabel="SVD Impute" itemValue="svdImpute"/> 
+                                <f:selectItem itemLabel="SVD" itemValue="svdImpute"/> 
                             </p:selectOneMenu>
                         </h:panelGroup>
                     </h:panelGrid>
                 </h:panelGrid>
-                <h:panelGrid style="width: 100%; text-align: center">
-                    <p:commandButton value="Process" ajax="false" onclick="PF('statusDialog').show()" action="#{procBean.performMissingImpute()}"/>       
+                <h:panelGrid style="width: 100%; text-align: right">
+                    <p:commandButton
+                        value="Submit"                
+                        style="padding: 4px 7px 4px 7px; width: 100px; background: #75bafb; border-color: #75bafb; color: black; box-shadow: none !important; text-shadow: none !important; font-size: 18px;"                     
+                        ajax="false" 
+                        onclick="PF('statusDialog').show()" 
+                        action="#{procBean.performMissingImpute()}"/>         
                 </h:panelGrid> 
             </h:panelGrid> 
         </h:form>

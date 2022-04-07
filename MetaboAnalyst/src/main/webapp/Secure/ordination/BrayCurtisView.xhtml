@@ -110,14 +110,27 @@
                         </h:panelGrid>
                         <h:panelGrid id="brayPane1" style="width: 100%;">
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
-                                <h:outputText escape="false" value="#{brayBean.fileSampleScorePath}"/>
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
+                                    <h:outputText escape="false" value="#{brayBean.fileSampleScorePath}"/>
+                                </i>
                             </h:panelGrid>
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
-                                <h:outputText escape="false" value="#{brayBean.fileColScorePath}"/>
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
+                                    <h:outputText escape="false" value="#{brayBean.fileColScorePath}"/>
+                                </i>    
                             </h:panelGrid>
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
-                                <h:outputText escape="false" value="#{brayBean.fileMatPath}"/>
-                            </h:panelGrid>                            
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
+                                    <h:outputText escape="false" value="#{brayBean.fileMatPath}"/>
+                                </i>
+                            </h:panelGrid> 
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <p:commandButton value="Export"
+                                    styleClass="exportButton"
+                                    style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                    actionListener="#{sessionBean1.graphicsLnk_action('ord_bray_2D')}"
+                                    oncomplete="PF('graphDialog').show()"/>
+                            </h:panelGrid> 
                              <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
                                 <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('ord_bray_2D')}" alt="rda2D"/>
                             </h:panelGrid>                            
@@ -217,11 +230,20 @@
                                 <h:panelGrid columns="3" class="resultsImages">
                                     <i class="fa fa-question-circle"></i>
                                 </h:panelGrid>
-                            </h:panelGroup>                            
+                            </h:panelGroup> 
                         </h:panelGrid>
                         <h:panelGrid id="brayPane3" style="width: 100%;">
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
-                                <h:outputText escape="false" value="#{brayBean.fileScreePath}"/>
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
+                                    <h:outputText escape="false" value="#{brayBean.fileScreePath}"/>
+                                </i>
+                            </h:panelGrid>
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <p:commandButton value="Export"
+                                    styleClass="exportButton"
+                                    style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                    actionListener="#{sessionBean1.graphicsLnk_action('ord_bray_scree')}"
+                                    oncomplete="PF('graphDialog').show()"/>
                             </h:panelGrid>                            
                              <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
                                 <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('ord_bray_scree')}" alt="rdascree"/>

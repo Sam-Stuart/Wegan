@@ -9,6 +9,8 @@
     <h:form id="MapGraph">
         <h:panelGrid columns="1" style="width:380px;">
             <h:panelGrid id="panelGrid2" columns="2" cellpadding="6" columnClasses="colBrayLong,colBrayShort">
+                    <h:outputLabel style="font-weight: bold" value="Should all points stay in the same color?"/>
+                            <p:selectBooleanCheckbox value ="#{clusterBean.doUni_point}"/>
                     <h:outputLabel style="font-weight: bold" value="Fill in the size of points:"/>
                             <p:inputText value = "#{clusterBean.point_size}"/>
                     <h:outputLabel style="font-weight: bold" value="Fill in the width of path:"/>
@@ -21,8 +23,7 @@
                     <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{clusterBean.color_pointchosen}">
                         <f:selectItems value="#{clusterBean.color_point}"/>
                     </p:selectOneMenu> 
-                    <h:outputLabel style="font-weight: bold" value="Should all points stay in the same color?"/>
-                            <p:selectBooleanCheckbox value ="#{clusterBean.doUni_point}"/>
+                    
                 <p:panelGrid></p:panelGrid>  
             </h:panelGrid>
             <h:panelGrid id="panelGrid4" columns="1" cellpadding="6" style="float: right">
@@ -30,7 +31,7 @@
                                  styleClass="updateButton"
                                  style="box-shadow: none !important; text-shadow: none !important"
                                 onclick="PF('statusDialog').show()"
-                                oncomplete="PF('graphApperanceUnseendiv').hide(); PF('statusDialog').hide()"  
+                                oncomplete="PF('graphApperanceSpatialvis').hide(); PF('statusDialog').hide()"  
                                 update=":spatialvis:form1:spatialvisPane1  :cmdPane" 
                                 actionListener="#{clusterBean.spatialvisUpdate_action()}"/>
             </h:panelGrid>

@@ -152,6 +152,8 @@ public class TimeBean implements Serializable{
         this.drawBorders = drawBorders;
     }
 
+       
+    
     public String handleTsDataUpload() {
 
         if (sb.doLogin(tsDataType, "ts", false, false)) {

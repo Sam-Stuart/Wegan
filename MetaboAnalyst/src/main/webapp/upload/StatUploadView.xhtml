@@ -11,133 +11,85 @@
         <f:event type="preRenderView" listener="#{sessionBean1.registerPage('Upload')}"/> 
     </ui:define>
     <ui:define name="content">
-        <h:form enctype="multipart/form-data">
-            <h:panelGrid style="padding: 20px 20px 20px 40px; font-size:12px;">
-                <h2 style="margin-top: 10px; margin-bottom: 4px">1) Upload your data</h2>
-                <h:panelGrid columns="2" style="border: gray solid thin; background-color: #F9F9FB; padding: 20px; width:760px">
-                    <p:outputLabel style="font-size:13px; font-weight: bold" value="Tab-delimited text (.txt) or comma-separated values (.csv) file:"/>
-                    <p:spacer/>
-                    <h:panelGrid columns="2" style="width:560px; height:120px; padding: 10px">
-                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Data Type:"/>
-                        <p:selectOneRadio value="#{uploader.dataType}">
-                            <f:selectItems value="#{applicationBean1.csvOpts}"/>
-                        </p:selectOneRadio>
-                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Format:"/>
-                        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{uploader.dataFormat}">
-                            <f:selectItems value="#{applicationBean1.csvFormatOpts}" />
-                        </p:selectOneMenu>
-                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Data File:"/>
+        <h:form id="form" enctype="multipart/form-data"> 
+            <h:panelGrid style="padding:20px 40px 20px 40px; font-size: 13px; line-height: 25px; width:100%">
+                <h1 style="margin-top: 10px; margin-bottom: 4px">Upload your data</h1>
+                <h:panelGrid style="width:100%; background-color: #75bafb;"></h:panelGrid>
+                <h:panelGrid style="width:100%; background-color: white; "></h:panelGrid>
+                <h:panelGrid style="width:100%; background-color: #75bafb;"></h:panelGrid>
+                <h:panelGrid style="width:100%; background-color: white; "></h:panelGrid>
+
+                <h:panelGrid style="border: none; width: 100%; padding: 15px 20px 10px 25px; background-color: #8cbd4830; font-size: 14px;">
+                    <h2 style="margin-top: 10px; margin-bottom: 4px">Data table: Plain text file (.csv or .txt)</h2>
+                    <h:panelGrid columns="2" style="padding: 10px">
+                        <p:outputLabel style="font-size:14px; font-weight: bold" value="Data File:"/>
                         <p:fileUpload value="#{uploader.dataFile}" mode="simple"/>
-                    </h:panelGrid>
-                    <h:panelGrid style="padding: 20px">
-                        <p:commandButton value="Submit" ajax="false"
+                    </h:panelGrid>                   
+                    <h:panelGrid columns="3" style="padding: 10px; margin-left: 40px">
+                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Format:"/>
+                        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:170px" value="#{uploader.dataFormat}">
+                            <f:selectItems value="#{applicationBean1.csvFormatOpts}" />
+                        </p:selectOneMenu> 
+                    </h:panelGrid>                     
+                    <h:panelGrid columns="3" style="padding: 10px; margin-left: 40px">
+                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Labels:"/>
+                        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:170px" value="#{uploader.dataNames}">
+                            <f:selectItems value="#{applicationBean1.dataNamesOpts}" />
+                        </p:selectOneMenu> 
+                    </h:panelGrid>                  
+                    <h:panelGrid style="padding: 10px; float:right">
+                        <p:commandButton value="Submit" 
+                                         styleClass="updateButton"
+                                         style="box-shadow: none !important; text-shadow: none !important"
+                                         ajax="false"
                                          onclick="PF('statusDialog').show()" 
                                          oncomplete="PF('statusDialog').hide()"
-                                         action="#{uploader.handleFileUpload()}"/>                         
+                                         action="#{uploader.handleFileUpload()}"/>   
+                        
                     </h:panelGrid>
+                </h:panelGrid>
+                
+                <p:spacer style="width: 30px"/>
+                
+                <h:panelGrid style="border: none; width: 100%; padding: 15px 20px 10px 25px; background-color: #8cbd4830; font-size: 14px;">
 
-                    <p:spacer/><p:spacer/>
-                    <p:outputLabel style="font-size:13px; font-weight: bold" value="Zipped Files (.zip) :"/>
-                    <p:spacer/>
-                    <h:panelGrid columns="2" style="background-color: #F9F9FB; width:560px; height:120px; padding: 10px">
-                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Data Type:"/>
-                        <p:selectOneRadio value="#{uploader.zipDataType}">
-                            <f:selectItems value="#{applicationBean1.zipOpts}"/>
-                        </p:selectOneRadio>
-                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Data File:"/>
-                        <p:fileUpload value="#{uploader.zipFile}" mode="simple"/>
-                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Pair File:"/>
-                        <p:fileUpload value="#{uploader.pairFile}" mode="simple"/>
+                    <h2 style="margin-top: 20px; margin-bottom: 4px">Try our test data :</h2>
+                    <p:selectOneRadio id="customRadio" value="#{uploader.testDataOpt}" layout="custom">  
+                        <f:selectItems value="#{applicationBean1.testDataOpts}"/> 
+                    </p:selectOneRadio> 
+                    <h:panelGrid columns="3" style="padding: 10px 30px 20px 10px;line-height: 21px; width:760px">
+                    <p:radioButton for="customRadio" itemIndex="6"/>
+                    <p:outputLabel style="font-size:12px; font-weight: bold" value="Wolves and Elk"/>
+                    <h:panelGrid>
+                        Theoretical data set inspired by wolf and elk interactions at Yellowstone National Park, USA. Data consists of counts of wolves and elk (variables/columns) at different sampling times over a 4 year period (samples/rows). Both columns and rows are labeled.     
                     </h:panelGrid>
-                    <h:panelGrid style="padding: 20px">
-                        <p:commandButton value="Submit" ajax="false" 
+                    <p:radioButton for="customRadio" itemIndex="3"/>
+                    <p:outputLabel style="font-size:12px; font-weight: bold" value="BCI"/>
+                    <h:panelGrid>
+                        Barro Colorado Island tree species counts. Data consists of 225 species (variables/columns) and 50 1-hectare plots of land (samples/rows). Species are labeled, but land plots are not. (<a href="https://rdrr.io/cran/vegan/man/BCI.html">ref.</a>)                                       
+                    </h:panelGrid>
+                    <p:radioButton for="customRadio" itemIndex="1"/>
+                    <p:outputLabel style="font-size:12px; font-weight: bold" value="Iris"/>
+                    <h:panelGrid>
+                        Iris flower measurements with species data. Data consists of 4 measurements (petal width, petal length, sepal width, sepal length) and species groupings (variables/columns) for 150 iris flowers (samples/rows). There are 50 flowers from each of 3 species of iris: Iris setosa, Iris versicolor, and Iris virginica. Variables are labeled, but iris flowers are not. (<a href="https://www.rdocumentation.org/packages/datasets/versions/3.6.2/topics/iris">ref.</a>)                                           
+                    </h:panelGrid>
+                        <p:radioButton for="customRadio" itemIndex="5"/>
+                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Pit latrine"/>
+                        <h:panelGrid>
+                            Microbial species counts in pit latrines from Tanzania and Vietnam. Data was generated by metagenomic 16SrRNA sequencing of samples taken at different depths. Data consists of 52 species (variables/rows) and 81 depths (samples/columns). Both species and sampling depths are labeled. (<a href="https://sfamjournals.onlinelibrary.wiley.com/doi/10.1111/1751-7915.12334">ref.</a>)          
+                        </h:panelGrid>
+                        
+                   </h:panelGrid>
+                    <h:panelGrid style="float:right">
+                        <p:commandButton value="Submit" 
+                                         styleClass="updateButton"
+                                         style="box-shadow: none !important; text-shadow: none !important"
+                                         ajax="false" 
                                          onclick="PF('statusDialog').show()" 
                                          oncomplete="PF('statusDialog').hide()"                                         
-                                         action="#{uploader.handleZipFileUpload}"/>                               
-                    </h:panelGrid>
-                </h:panelGrid>
-
-                <h2 style="margin-top: 20px; margin-bottom: 4px"> 2) Try our test data :</h2>
-                <p:selectOneRadio id="customRadio" value="#{uploader.testDataOpt}" layout="custom">  
-                    <f:selectItems value="#{applicationBean1.testDataOpts}"/> 
-                </p:selectOneRadio>  
-                <h:panelGrid columns="3" style="border: gray solid thin; padding: 10px 30px 20px 10px; background-color: #F9F9FB; line-height: 21px; width:760px">
-                    <p:spacer style="width: 30px"/>
-                    <h:panelGrid style="width:150px; padding-left: 4px; padding-right: 4px">
-                        <p:outputLabel style="font-size:13px; font-weight: bold" value="Data Type"/>   
-                    </h:panelGrid>
-                    <p:outputLabel style="font-size:13px; font-weight: bold" value="Description"/>
-
-                    <p:radioButton for="customRadio" itemIndex="0"/>
-                    <p:outputLabel style="font-size:12px; font-weight: bold" value="Concentrations"/>
-                    <h:panelGrid>
-                        Metabolite concentrations of 77 urine samples from cancer patients measured by 1H NMR 
-                        (<a href="http://dx.doi.org/10.1007/s11306-010-0232-9">Eisner R, et al.</a>). 
-                        Group 1- cachexic; group 2 - control                                       
+                                         action="#{uploader.handleStatTestFileUpload}"/>                      
                     </h:panelGrid>
 
-                    <p:radioButton for="customRadio" itemIndex="1"/>
-                    <p:outputLabel style="font-size:12px; font-weight: bold" value="Concentrations"/>
-                    <h:panelGrid>
-                        Metabolite concentrations of 39 rumen samples measured by proton NMR from dairy cows fed with different 
-                        proportions of barley grain (<a href="http://dx.doi.org/10.1007/s11306-010-0227-6">Ametaj BN, et al.</a>). 
-                        Group label - 0, 15, 30, or 45 - indicating the percentage of grain in diet.                                       
-                    </h:panelGrid>
-
-                    <p:radioButton for="customRadio" itemIndex="2"/> 
-                    <p:outputLabel style="font-size:12px; font-weight: bold" value="NMR spectral bins"/>
-                    <h:panelGrid>   
-                        Binned 1H NMR spectra of 50 urine samples using 0.04 ppm constant width (<a href="http://www.ncbi.nlm.nih.gov/pubmed/17705523">Psihogios NG, et al.</a>) 
-                        Group 1-  control; group 2 - severe kidney disease.
-                    </h:panelGrid>
-
-                    <p:radioButton for="customRadio" itemIndex="3"/>     
-                    <p:outputLabel style="font-size:12px; font-weight: bold" value="NMR peak lists"/>
-                    <h:panelGrid>
-                        Peak lists and intensity files for 50 urine samples measured by 1H NMR (<a href="http://www.ncbi.nlm.nih.gov/pubmed/17705523">Psihogios NG, et al.</a>). 
-                        Group 1- control; group 2 - severe kidney disease.
-                    </h:panelGrid>
-
-                    <p:radioButton for="customRadio" itemIndex="4"/>  
-                    <p:outputLabel style="font-size:12px; font-weight: bold" value="Concentrations (paired)"/>
-                    <h:panelGrid>
-                        Compound concentrations of 14 urine samples collected from 7 cows at two time points using 1H NMR
-                        (unpublished data). Group 1- day 1, group 2- day 4. 
-                    </h:panelGrid>                                                
-
-                    <p:radioButton for="customRadio" itemIndex="5"/> 
-                    <p:outputLabel style="font-size:12px; font-weight: bold" value="MS peak intensities"/>
-                    <h:panelGrid>
-                        LC-MS peak intensity table for 12 mice spinal cord samples (<a href="http://www.ncbi.nlm.nih.gov/pubmed/15533037">Saghatelian et al.</a>). 
-                        Group 1- wild-type; group 2 - knock-out.            
-                    </h:panelGrid>
-
-                    <p:radioButton for="customRadio" itemIndex="6"/> 
-                    <p:outputLabel style="font-size:12px; font-weight: bold" value="MS peak lists"/>
-                    <h:panelGrid>
-                        Three-column LC-MS peak list files for 12 mice spinal cord samples (<a href="http://www.ncbi.nlm.nih.gov/pubmed/15533037">Saghatelian et al.</a>). 
-                        Group 1- wild-type; group 2 - knock-out.           
-                    </h:panelGrid>
-
-                    <p:radioButton for="customRadio" itemIndex="7" disabled="true"/> 
-                    <p:outputLabel style="font-size:12px; font-weight: bold" value="LC-MS spectra"/>
-                    <h:panelGrid>
-                        NetCDF spectra of 12 mice spinal cord samples collected by LC-MS (<a href="http://www.ncbi.nlm.nih.gov/pubmed/15533037">Saghatelian et al.</a>). 
-                        Group 1- wild-type; group 2 - knock-out (disabled, see <a href="http://www.metaboanalyst.ca/faces/docs/Faqs.xhtml#spec" target="_blank">recommendations</a>)           
-                    </h:panelGrid>
-
-                    <p:radioButton for="customRadio" itemIndex="8" disabled="true"/> 
-                    <p:outputLabel style="font-size:12px; font-weight: bold" value="GC-MS spectra"/>
-                    <h:panelGrid>
-                        NetCDF spectra collected by GC-MS. <u> This is a dummy data set for testing spectra processing only. 
-                            Each group is a triplicate of a single spectrum </u>. Group 1- Sunflower oil, group 2- Olive oil. 
-                            (disabled, see <a href="http://www.metaboanalyst.ca/faces/docs/Faqs.xhtml#spec" target="_blank">recommendations</a>) 
-                    </h:panelGrid>
-                </h:panelGrid>
-                <h:panelGrid style="width:100%; text-align: center">
-                    <p:commandButton value="Submit" ajax="false" 
-                                     onclick="PF('statusDialog').show()"
-                                     action="#{uploader.handleStatTestFileUpload}"/>                               
                 </h:panelGrid>
             </h:panelGrid>
         </h:form>

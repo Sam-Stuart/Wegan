@@ -12,7 +12,7 @@
     <h:head>
         <link rel="stylesheet" href="css/bootstrap.min.css"></link>
         <link rel="stylesheet" href="css/global.css"></link>
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous"></link>
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous"></link>
         <script type='text/javascript' src="/bootstrap.js"></script>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/> 
     
@@ -30,24 +30,55 @@
                 <h:panelGrid style="margin-left: 20px; margin-right: 20px; width:100%; background-color: white; "></h:panelGrid>
             </p:panelGrid>
 
+            <span><a style="text-decoration:none" href="#{facesContext.externalContext.requestContextPath}/faces/upload/ClusterUploadView.xhtml">
+<!--                <div class="card moduleButton">-->
+                <div id="corrBtn" class="card moduleButton tooltip" href="#{facesContext.externalContext.requestContextPath}/faces/upload/ClusterUploadView.xhtml">
+                    <div class="card-horizontal">
+                        <div class="img-square-wrapper">
+                            <img style="height:100px; width:100px; margin-left: 5px" src="#{facesContext.externalContext.requestContextPath}/resources/images/icons/cluster_icon.png"></img>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text moduleTitle" style="margin-left: 110px; margin-bottom: 0px">Clustering and Visualization</p>
+                            <p class="card-text moduleText" style="margin-left: 20px;">Geospatial Mapping, Heatmaps, Venn Diagrams and Other Clustering Methods</p>
+                            <!--<p class="card-text">Heatmap and Regression Analysis</p>-->
+                        </div>
+                    </div>
+                </div> 
+            </a></span>   
+            
             <span><a style="text-decoration:none" href="#{facesContext.externalContext.requestContextPath}/faces/upload/CaUploadView.xhtml">
-                <div id="corrBtn" class="card moduleButton" href="#{facesContext.externalContext.requestContextPath}/faces/upload/CaUploadView.xhtml">
+                <div id="corrBtn" class="card moduleButton tooltip" href="#{facesContext.externalContext.requestContextPath}/faces/upload/CaUploadView.xhtml">
                    
                     <div class="card-horizontal">
                         <div class="img-square-wrapper">
                             <img style="height:100px; width:100px; margin-left: 5px" src="#{facesContext.externalContext.requestContextPath}/resources/images/icons/ca_icon.png"></img>
                         </div>
                         <div class="card-body">
-                            <p class="card-text moduleTitle" style="float: right; margin-right: 10px;">Correlation Analysis</p>
+                            <p class="card-text moduleTitle" style="float: right; margin-right: 10px;">Correlation</p>
                             <p class="card-text moduleText" style="float: right; margin-right: 10px;">Heatmap and Regression</p>
                             <!--<p class="card-text">Heatmap and Regression Analysis</p>-->
                         </div>
                     </div>
-                    <!--<p:tooltip for="corrBtn" style="font-size: 11px;" value="Two variables will be tested for correlation, an independent variable and a dependent variable. Both must have numeric values." />-->
+                   
                 </div>
-
+                 <!--<p:tooltip for="corrBtn" style="font-size: 11px;" value="Two variables will be tested for correlation, an independent variable and a dependent variable. Both must have numeric values." />-->
             </a></span>
 
+            <span><a style="text-decoration:none" href="#{facesContext.externalContext.requestContextPath}/faces/upload/DispersalUploadView.xhtml">
+                <div class="card moduleButton">
+                    <div class="card-horizontal">
+                        <div class="img-square-wrapper">
+                            <img style="height:100px; width:100px; margin-left: 5px" src="#{facesContext.externalContext.requestContextPath}/resources/images/icons/disp_icon.png"></img>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text moduleTitle" style="float: right; margin-right: 10px;">Dispersal</p>
+                            <p class="card-text moduleText" style="margin-left: 10px;">Biogeographical, Beals Smoothing, and Beta Dispersal</p>
+                            <!--<p class="card-text">Heatmap and Regression Analysis</p>-->
+                        </div>
+                    </div>
+                </div> 
+            </a></span>  
+            
             <span><a style="text-decoration:none" href="#{facesContext.externalContext.requestContextPath}/faces/upload/DiversityUploadView.xhtml">
                 <div class="card moduleButton">
                     <div class="card-horizontal">
@@ -55,8 +86,8 @@
                             <img style="height:100px; width:100px; margin-left: 5px" src="#{facesContext.externalContext.requestContextPath}/resources/images/icons/diversity_icon.png"></img>
                         </div>
                         <div class="card-body">
-                            <p class="card-text moduleTitle" style="float: right; margin-right: 10px;">Diversity Analysis</p>
-                            <p class="card-text moduleText" style="margin-left: 30px;">Alpha, Beta, Gamma Diversity and Other Species Data Analysis</p>
+                            <p class="card-text moduleTitle" style="float: right; margin-right: 10px;">Diversity</p>
+                            <p class="card-text moduleText" style="margin-left: 30px;">Alpha, Beta, Gamma Diversity and Other Species Data Analyses</p>
                             <!--<p class="card-text">Heatmap and Regression Analysis</p>-->
                         </div>
                     </div>
@@ -70,7 +101,7 @@
                             <img style="height:100px; width:100px; margin-left: 5px" src="#{facesContext.externalContext.requestContextPath}/resources/images/icons/ord_icon.png"></img>
                         </div>
                         <div class="card-body">
-                            <p class="card-text moduleTitle" style="float: right; margin-right: 10px;">Ordination Analysis</p>
+                            <p class="card-text moduleTitle" style="float: right; margin-right: 10px;">Ordination</p>
                             <p class="card-text moduleText" style="margin-left: 60px;">PCA, CA, NDMS, PCoA and Other Multivariate Plotting Techniques</p>
                             <!--<p class="card-text">Heatmap and Regression Analysis</p>-->
                         </div>
@@ -78,49 +109,7 @@
                 </div> 
             </a></span>    
  
-            <span><a style="text-decoration:none" href="#{facesContext.externalContext.requestContextPath}/faces/upload/DCAUploadView.xhtml">
-                <div class="card moduleButton">
-                    <div class="card-horizontal">
-                        <div class="img-square-wrapper">
-                            <img style="height:100px; width:100px; margin-left: 5px" src="#{facesContext.externalContext.requestContextPath}/resources/images/icons/stat_icon.png"></img>
-                        </div>
-                        <div class="card-body">
-                            <p class="card-text moduleTitle" style="float: right; margin-right: 10px;">Classical Statistics</p>
-                            <p class="card-text moduleText" style="margin-left: 100px;">Univariate, Multivariate, and Classification</p>
-                            <!--<p class="card-text">Heatmap and Regression Analysis</p>-->
-                        </div>
-                    </div>
-                </div> 
-            </a></span>
- 
-            <span><a style="text-decoration:none" href="#{facesContext.externalContext.requestContextPath}/faces/upload/DispersalUploadView.xhtml">
-                <div class="card moduleButton">
-                    <div class="card-horizontal">
-                        <div class="img-square-wrapper">
-                            <img style="height:100px; width:100px; margin-left: 5px" src="#{facesContext.externalContext.requestContextPath}/resources/images/icons/disp_icon.png"></img>
-                        </div>
-                        <div class="card-body">
-                            <p class="card-text moduleTitle" style="float: right; margin-right: 10px;">Dispersal Analysis</p>
-                            <p class="card-text moduleText" style="margin-left: 10px;">Biogeographical, Beals Smoothing, and Beta Dispersal</p>
-                            <!--<p class="card-text">Heatmap and Regression Analysis</p>-->
-                        </div>
-                    </div>
-                </div> 
-            </a></span>     
-            <span><a style="text-decoration:none" href="#{facesContext.externalContext.requestContextPath}/faces/upload/ClusterUploadView.xhtml">
-                <div class="card moduleButton">
-                    <div class="card-horizontal">
-                        <div class="img-square-wrapper">
-                            <img style="height:100px; width:100px; margin-left: 5px" src="#{facesContext.externalContext.requestContextPath}/resources/images/icons/cluster_icon.png"></img>
-                        </div>
-                        <div class="card-body">
-                            <p class="card-text moduleTitle" style="margin-left: 110px; margin-bottom: 0px">Clustering and Visualization</p>
-                            <p class="card-text moduleText" style="margin-left: 20px;">Geospatial Mapping and Other Clustering Methods</p>
-                            <!--<p class="card-text">Heatmap and Regression Analysis</p>-->
-                        </div>
-                    </div>
-                </div> 
-            </a></span>   
+
             <span><a style="text-decoration:none" href="#{facesContext.externalContext.requestContextPath}/faces/upload/PlottingUploadView.xhtml">
                 <div class="card moduleButton">
                     <div class="card-horizontal">
@@ -134,8 +123,24 @@
                         </div>
                     </div>
                 </div> 
-            </a></span>            
-            <span><a style="text-decoration:none" href="#{facesContext.externalContext.requestContextPath}/faces/upload/CaUploadView.xhtml">
+            </a></span> 
+            
+            <span><a style="text-decoration:none" href="#{facesContext.externalContext.requestContextPath}/faces/upload/DCAUploadView.xhtml">
+                <div class="card moduleButton">
+                    <div class="card-horizontal">
+                        <div class="img-square-wrapper">
+                            <img style="height:100px; width:100px; margin-left: 5px" src="#{facesContext.externalContext.requestContextPath}/resources/images/icons/stat_icon.png"></img>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text moduleTitle" style="float: right; margin-right: 10px;">Statistics</p>
+                            <p class="card-text moduleText" style="margin-left: 100px;">Univariate, Multivariate, and Classification</p>
+                            <!--<p class="card-text">Heatmap and Regression Analysis</p>-->
+                        </div>
+                    </div>
+                </div> 
+            </a></span>
+            
+            <span><a style="text-decoration:none" href="#{facesContext.externalContext.requestContextPath}/faces/upload/TaxonomyUploadView.xhtml">
                 <div class="card moduleButton">
                     <div class="card-horizontal">
                         <div class="img-square-wrapper">

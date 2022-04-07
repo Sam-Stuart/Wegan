@@ -7,10 +7,14 @@ package metaboanalyst.controllers.stats;
 
 import java.io.File;
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.List;
 import javax.faces.bean.ManagedBean;
+import javax.faces.model.SelectItem;
 import metaboanalyst.controllers.ApplicationBean1;
 import metaboanalyst.controllers.SessionBean1;
 import metaboanalyst.rwrappers.Clustering;
+import metaboanalyst.rwrappers.DiversityUtils;
 import metaboanalyst.rwrappers.RDataUtils;
 import metaboanalyst.utils.DataUtils;
 import org.primefaces.context.RequestContext;
@@ -311,6 +315,7 @@ public class ClusterBean implements Serializable{
         return str;
     }
     
+
     private boolean doOriginal = false; 
     
     public boolean isdoOriginal() {
@@ -331,49 +336,6 @@ public class ClusterBean implements Serializable{
     public void setdoEle(boolean doEle) {
         this.doEle = doEle;
     }
-    
-    private boolean doPolygon = false;
-    
-    public boolean isdoPolygon() {
-        return doPolygon;
-    }
-
-    public void setdoPolygon(boolean doPolygon) {
-        this.doPolygon = doPolygon;
-    }
-    
-    private boolean doPath = false;
-    
-    public boolean isdoPath() {
-        return doPath;
-    }
-
-    public void setdoPath(boolean doPath) {
-        this.doPath = doPath;
-    }
-    
-    
-    private boolean doDatum = false;
-    
-    public boolean isdoDatum() {
-        return doDatum;
-    }
-
-    public void setdoDatum(boolean doDatum) {
-        this.doDatum = doDatum;
-    }
-    
-    
-    private boolean doProj = false;
-    
-    public boolean isdoProj() {
-        return doProj;
-    }
-
-    public void setdoProj(boolean doProj) {
-        this.doProj = doProj;
-    }
-    
     
     private boolean doUni_point = false;
     
@@ -588,7 +550,39 @@ public class ClusterBean implements Serializable{
     public void setColor_pointchosen(String color_pointchosen) {
         this.color_pointchosen = color_pointchosen;
     }
+    
+    
+    private final SelectItem[] proj;
+    private String projchosen = "NULL";
+    
+    public SelectItem[] getProj() {
+        return proj;
+    }
+    
+    public String getProjchosen() {
+        return projchosen;
+    } 
 
+    public void setProjchosen(String projchosen) {
+        this.projchosen = projchosen;
+    }
+    
+    
+    private final SelectItem[] datum;
+    private String datumchosen = "NULL";
+    
+    public SelectItem[] getDatum() {
+        return datum;
+    }
+    
+    public String getDatumchosen() {
+        return datumchosen;
+    } 
+
+    public void setDatumchosen(String datumchosen) {
+        this.datumchosen = datumchosen;
+    }
+    
     
     private String fileeleresult = "Elevation.csv";
     private String fileeleresultpath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileeleresult + "\">" + fileeleresult + "</a>";
@@ -602,13 +596,22 @@ public class ClusterBean implements Serializable{
     }
     
     public ClusterBean() {
+        proj = new SelectItem[2];
+        proj[0] = new SelectItem("NULL", "Coodinates");
+        proj[1] = new SelectItem("UTM", "UTM");
+        
+        datum = new SelectItem[2];
+        datum[0] = new SelectItem("NULL", "WGS84");
+        datum[1] = new SelectItem("NAD83", "NAD83");
+        
         source = new SelectItem[2];
         source[0] = new SelectItem("NULL", "Stamen");
         source[1] = new SelectItem("google", "Google");
         
-        crs_option = new SelectItem[2];
+        crs_option = new SelectItem[3];
         crs_option[0] = new SelectItem("NULL", "Not require conversion");
         crs_option[1] = new SelectItem("10TM", "10TM");
+        crs_option[2] = new SelectItem("Manual", "Manually fill in CRS code");
         
         border_col = new SelectItem[6];
         border_col[0] = new SelectItem("NULL", "Skyblue");
@@ -649,7 +652,9 @@ public class ClusterBean implements Serializable{
     
     // ACTION BUTTON // 
     public void spatialvisUpdate_action() {
-        Clustering.CreateSpatialvis(sb, doOriginal, doDatum, doProj, crs_txt, crs_optionchosen, sourcechosen, maptypechosen, zoom, rangeA,  doEle, pointColName, polygonColName,
-                pathColName, point_size, path_size, border_colchosen, color_pointchosen, doUni_point, sb.getNewImage("ggmap"), "png", 72, "false"); 
+        Clustering.CreateSpatialvis(sb, doOriginal, projchosen, crs_txt, crs_optionchosen, datumchosen, zoom, maptypechosen, sourcechosen, 
+                rangeA, doEle, border_colchosen, color_pointchosen, point_size, path_size, pointColName, polygonColName, pathColName, doUni_point,  
+                sb.getNewImage("ggmap"), "png", 72, "false"); 
     }
+
 }

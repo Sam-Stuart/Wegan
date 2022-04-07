@@ -71,7 +71,7 @@ public class DCAloadBean implements Serializable {
         this.dataNames = dataNames;
     }
     
-
+    
     /*
     Data upload for statistics module
      */
@@ -385,7 +385,11 @@ public class DCAloadBean implements Serializable {
         } else {
             
             //Tested cahnging Disc to cont
-            if (!RDataUtils.readTextData(RC, testFile, dataFormat, "disc", dataNames)) {
+
+//            if (!RDataUtils.readTextData(RC, testFile, dataFormat, "disc", dataNames)) {
+
+            if (!RDataUtils.readTextData(RC, testFile, format, "disc", dataNames)) {
+
                 sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
                 return null;
             }
@@ -501,7 +505,11 @@ public class DCAloadBean implements Serializable {
             return null;
         }
         RConnection RC = sb.getRConnection();
-        RDataUtils.readTextData(RC, ab.getTestPowerPath(), "rowu", "disc", dataNames);
+
+//        RDataUtils.readTextData(RC, ab.getTestPowerPath(), "rowu", "disc", dataNames);
+
+        RDataUtils.readTextData(RC, ab.getTestPowerPath(), "rowu", "disc", "colOnly");
+
         sb.setDataUploaded(true);
         return "Data check";
     }
@@ -550,9 +558,15 @@ public class DCAloadBean implements Serializable {
         }
         RConnection RC = sb.getRConnection();
         if (dataOpt.equals("data1")) {
-            RDataUtils.readTextData(RC, ab.getTestRocPath(), "rowu", "disc", dataNames);
+
+//            RDataUtils.readTextData(RC, ab.getTestRocPath(), "rowu", "disc", dataNames);
+//        } else {
+//            RDataUtils.readTextData(RC, ab.getTestRocNewPath(), "rowu", "disc", dataNames);
+
+            RDataUtils.readTextData(RC, ab.getTestRocPath(), "rowu", "disc", "colOnly");
         } else {
-            RDataUtils.readTextData(RC, ab.getTestRocNewPath(), "rowu", "disc", dataNames);
+            RDataUtils.readTextData(RC, ab.getTestRocNewPath(), "rowu", "disc", "colOnly");
+
         }
         sb.setDataUploaded(true);
         return "Data check";

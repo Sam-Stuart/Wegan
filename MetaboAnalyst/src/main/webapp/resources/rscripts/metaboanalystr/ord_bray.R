@@ -9,7 +9,7 @@
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2)
 #'@export
-ord.bray <- function(mSetObj=NA, abundance="NULL", distance="NULL", data=NULL, binary=NULL) { 
+ord.bray <- function(mSetObj=NA, abundance="false", distance="NULL", data="false", binary="false") { 
   
   library("natto")
   library("vegan")
@@ -17,7 +17,7 @@ ord.bray <- function(mSetObj=NA, abundance="NULL", distance="NULL", data=NULL, b
   
   #Obtain mSet dataset
   mSetObj <- .get.mSet(mSetObj)
-  if (is.null(data)) {
+  if (data=="false") {
     input <- mSetObj$dataSet$norm
   } else {
     input <- mSetObj$dataSet$orig
@@ -28,7 +28,7 @@ ord.bray <- function(mSetObj=NA, abundance="NULL", distance="NULL", data=NULL, b
   
   #Transform abundance data
   print("Should you have community species data, you may want to investigate the relative abundance (divide all values by column totals) versus absolute abundance (no change to data).")
-  if (abundance=="NULL") {
+  if (abundance=="false") {
     abundance1 <- "absolute"
     num_data1 <- num_data #Default abundance is absolute and no change is made to data
   } else {
@@ -44,7 +44,7 @@ ord.bray <- function(mSetObj=NA, abundance="NULL", distance="NULL", data=NULL, b
   } 
   
   #Generate dissimilarity matrix
-  if (is.null(binary)) {
+  if (binary=='false') {
     dist <- vegdist(num_data1, method=distance1, binary=FALSE) #Generate dissimilarity matrix
   } else {
     dist <- vegdist(num_data1, method=distance1, binary=TRUE) #Generate dissimilarity matrix for presence/absence data
@@ -381,11 +381,13 @@ Plot.bray.3D <- function(mSetObj=NA, color="NULL", var_arrows=NULL, meta_col_col
     cls <- paste("Group", cls)
   }
   bray3D_plot$score$facA <- cls
-  
+  print("before json")
+  print(bray3D_plot)
   imgName=paste(imgName, ".", format, sep="")
   json.obj <- RJSONIO::toJSON(bray3D_plot, .na='null')
   sink(imgName)
   cat(json.obj)
+  print("after json")
   sink()
   
   if(!.on.public.web){
@@ -418,6 +420,7 @@ Plot.bray.scree <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA)
 
   #Prepare eigenvalue data for plotting
   eigenvalues_data <- as.data.frame(cbind(1:6, eigenvalues/sum(eigenvalues))) #Divide each eigenvalue with the sum of all eigenvalues in order to obtain the variance explained by each dimension
+  maxVar <- max(eigenvalues/sum(eigenvalues))
 
   #Set plot dimensions
   if(is.na(width)){
@@ -436,7 +439,7 @@ Plot.bray.scree <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA)
   #Scree plot
   Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
   par(xpd=FALSE, mar=c(5.1, 4.1, 4.1, 2.1)) 
-  plot(x=eigenvalues_data$V1, y=eigenvalues_data$V2, type="l", xlim=c(1, 6), ylim=c(0, 1), xlab="Dimension", ylab="Proportion of Variance Explained", main="Bray-Curtis Analysis Scree Plot", yaxt="n", xaxt="n", col="blue", lwd=2)
+  plot(x=eigenvalues_data$V1, y=eigenvalues_data$V2, type="l", xlim=c(1, 6), ylim=c(0, maxVar+ 0.1), xlab="Dimension", ylab="Proportion of Variance Explained", main="Bray-Curtis Analysis Scree Plot", yaxt="n", xaxt="n", col="blue", lwd=2)
   points(x=eigenvalues_data$V1, y=eigenvalues_data$V2, cex=1.1, pch=19, col="blue")
   axis(2, las=2)
   axis(1, at=1:6)

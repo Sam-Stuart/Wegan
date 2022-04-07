@@ -14,6 +14,11 @@
             <p:tabView id="overviewTree">
                 <p:tab title ="Overview" titleStyleClass="p-tab-nav">
                     <h:form id="form1">
+                        <p>
+                            A dendrogram shows the hierarchical relationship between objects using hierarchical clustering. The nodes link to 
+                        the same brunch having similar characteristics/closer relationship. Adjusting "Distance Measure" and "Clustering Algorithm" 
+                        to adjust the dendrogram.
+                        </p> 
                         <h:panelGrid id="panelGrid" columns="5" cellpadding="3" columnClasses="colLeft,colRight,colLeft,colRight, colLast">
                             <h:outputLabel style="font-weight: bold" value="Distance Measure:"/>
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{clusterBean.clustDistOpt}">

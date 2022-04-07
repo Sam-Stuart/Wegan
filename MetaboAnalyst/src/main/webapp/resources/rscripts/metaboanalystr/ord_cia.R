@@ -10,7 +10,7 @@
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2)
 #'@export
-ord.cia <- function(mSetObj=NA, data=NULL, type="NULL", env_text="NULL") {
+ord.cia <- function(mSetObj=NA, data="false", type="NULL", env_text=" ") {
  
   library("ade4")
   library("adegraphics")
@@ -20,18 +20,25 @@ ord.cia <- function(mSetObj=NA, data=NULL, type="NULL", env_text="NULL") {
   #Extract input from mSetObj
   mSetObj <- .get.mSet(mSetObj)
 
-  ####FOR TESTING####
-  #metaData <- "NULL"
-  metaData <- .readDataTable("/home/louisa/Wegan/Wegan/MetaboAnalyst/src/main/webapp/resources/rscripts/metaboanalystr/test_data/dune_meta.csv")
-  envData <- .readDataTable("/home/louisa/Wegan/Wegan/MetaboAnalyst/src/main/webapp/resources/rscripts/metaboanalystr/test_data/dune_env.csv")
-  envData$Moisture <- as.numeric(as.character(envData$Moisture)) #Require more than one numeric envData column for numeric type option
-
-  if (is.null(data)) { #normalized data as input
+  if (data=="false") { #normalized data as input
     input <- mSetObj$dataSet$norm
   } else { #original data as input
     input <- mSetObj$dataSet$orig
   }
  
+  #input <- input[order(as.numeric(row.names(input))),] #Order rows
+  #metaData <- mSetObj$dataSet$origMeta
+  #envData <- mSetObj$dataSet$origEnv
+
+
+####TESTING####
+  input <- .readDataTable("/home/louisa/Wegan/MetaboAnalyst/src/main/webapp/resources/rscripts/metaboanalystr/test_data/iris_v2.csv")
+  input <- input[order(as.numeric(row.names(input))),] #Order rows
+  metaData <- .readDataTable("/home/louisa/Wegan/MetaboAnalyst/src/main/webapp/resources/rscripts/metaboanalystr/test_data/iris_meta.csv") 
+  envData <- .readDataTable("/home/louisa/Wegan/MetaboAnalyst/src/main/webapp/resources/rscripts/metaboanalystr/test_data/iris_env.csv")
+############
+
+
   #constraining data, used to correlate with rows in main data set
   if (is.data.frame(envData)==FALSE) { #No user uplaoded constraining data
     #AddErrMsg("No constraining dataset uploaded! Coinertia analysis requires two datasets for comparison. Please update dataset(s) or try a non-constraining method such as PCA, PCoA, NMDS, CA, Bray-Curtis or DCA.")
@@ -48,22 +55,29 @@ ord.cia <- function(mSetObj=NA, data=NULL, type="NULL", env_text="NULL") {
   #Text box instructions for selecting predictor variables. Text box should be interactive, meaning any change in text alters the result in real time. Default env_text is second column.
   cat("Identify constraining variables for co-inertia analysis using the column names with commas in between.")
  
-  #Set up constraining data using user selected columns
-  if (env_text=="NULL") {
-    env_text1 <- colnames(envData1) #Default is the all env columns
-  } else {
-    env_text1 <- env_text #taken from text box by java, fed as string into R code
-    env_text1 <- gsub("\n", "", env_text1, fixed=TRUE) #fixed=TRUE means we are dealing with one string, versus a vector of strings (fixed=FALSE)
-    env_text1 <- gsub(" ", "", env_text1, fixed=TRUE)
-    env_text1 <- gsub(",", "+", env_text1, fixed=TRUE)
-    env_text1 <- gsub(";", "+", env_text1, fixed=TRUE)
-    env_text1 <- gsub(":", "+", env_text1, fixed=TRUE)
-    env_text1 <- gsub("*", "+", env_text1, fixed=TRUE)
+  #Set up environmental data using user selected columns
+  if (is.data.frame(envData1)==TRUE) { #User uplaoded environmental data
+    if (env_text==" ") { #User doesn't specify columns-- all columns used
+      env_text1 <- colnames(envData1) #Default is the all env columns
+      cat(paste0("You have selected these constraining variables: ", paste(env_text1, collapse=", ")))
+      cat("If the selection is not what you intended, reenter environmental variable(s) in the text box, using the column names with commas in between.")
+    } else { #User enters columns
+      env_text1 <- env_text #taken from text box by java, fed as string into R code
+      env_text1 <- gsub("\n", "", env_text1, fixed=TRUE) #fixed=TRUE means we are dealing with one string, versus a vector of strings (fixed=FALSE)
+      env_text1 <- gsub(",", "+", env_text1, fixed=TRUE) 
+      env_text1 <- gsub(";", "+", env_text1, fixed=TRUE)
+      env_text1 <- gsub(" ", "", env_text1, fixed=TRUE)
+      env_text1 <- gsub(":", "+", env_text1, fixed=TRUE)
+      env_text1 <- gsub("*", "+", env_text1, fixed=TRUE)
+      cat(paste0("You have selected these constraining variables: ", gsub("+", ", ", env_text1, fixed=TRUE), "."))
+      cat("If the selection is not what you intended, reenter environmental variable(s) in the text box, using the column names with commas in between.")
+    }
+    env_cols <- unlist(strsplit(env_text1, "+", fixed=TRUE)) #Extract column names from env_text1
+    env_data <- as.data.frame(envData1[,which(colnames(envData1) %in% env_cols)]) #Subset environmental data set to select columns of interest
+    colnames(env_data) <- env_cols #Name columns
+  } else { #No environmetal data uploaded
+    env_data <- "NA"
   }
- 
-  env_cols <- unlist(strsplit(env_text1, "+", fixed=TRUE))
-  env_data <- as.data.frame(envData1[,which(colnames(envData1) %in% env_cols)])
-  colnames(env_data) <- env_cols
   
   if (type=="NULL") { #data for comparison is numeric
     type1 <- "Numeric"
@@ -90,8 +104,8 @@ ord.cia <- function(mSetObj=NA, data=NULL, type="NULL", env_text="NULL") {
   } else { #data is categorical
     type1 <- "Categorical"
     method <- "CA"
-    input.2 <- select_if(input, is.factor)
-    envData.2 <- select_if(env_data, is.factor)
+    input.2 <- select_if(input, is.character)
+    envData.2 <- select_if(env_data, is.character)
    
     if (ncol(input.2)<2) {
       #AddErrMsg("Main data set has less than 2 categorical columns! Please adjust your data set and rerun analysis.")
@@ -103,7 +117,7 @@ ord.cia <- function(mSetObj=NA, data=NULL, type="NULL", env_text="NULL") {
       stop("Environmental data set has less than 2 categorical columns! Please adjust your environmental data set and rerun analysis.")
     }
    
-    cat(paste0("You have selected these categorical constraining variables: ", paste(colnames(envData.1), collapse=", "), "."))
+    cat(paste0("You have selected these categorical constraining variables: ", paste(colnames(envData.2), collapse=", "), "."))
     cat("If the selection is not what you intended, reenter environmental variable(s) in the text box, using the column names with commas in between.")
   
     dudi_data <- dudi.coa(input.2, scannf=FALSE)
@@ -120,7 +134,7 @@ ord.cia <- function(mSetObj=NA, data=NULL, type="NULL", env_text="NULL") {
  
   #meta data for input, used to group samples for plotting
   if (is.data.frame(metaData)==FALSE) { #No user uplaoded grouping data
-    fac_data <- select_if(input, is.factor)
+    fac_data <- select_if(input, is.character)
     count.fac.cols <- ncol(fac_data)
     if (count.fac.cols >= 1) { #If main data set had at least one categorical column, call it grouping data
       metaData1 <- as.data.frame(fac_data)
@@ -200,7 +214,7 @@ return(.set.mSet(mSetObj))
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2)
 #'@export
-Plot.cia.scatter <- function(mSetObj=NA, meta_group=NULL, meta_colname="NULL", color="NULL", imgName, format="png", dpi=72, width=NA) {
+Plot.cia.scatter <- function(mSetObj=NA, meta_group="false", meta_colname="NULL", color="NULL", imgName, format="png", dpi=72, width=NA) {
  
   library("ade4")
   library("adegraphics")
@@ -237,7 +251,7 @@ Plot.cia.scatter <- function(mSetObj=NA, meta_group=NULL, meta_colname="NULL", c
     plot_2 <- s.match(scatter.var@data$dfxy, scatter.env@data$dfxy)
     update(plot_2, plabels.box.draw=TRUE, pgrid.draw=FALSE, plabels.cex=.8, plabels.optim=TRUE, plabels=row.names(input), ppoints.cex=0.5, psub.cex=0, plot=TRUE, main="Co-Inertia Scatter Plot\nArrows from Axis 2 Position to Axis 1 Position\n", xlab="\nAxis 1, Constraining Data Set Variance\n", ylab="Axis 2, Main Data Set Variance\n")
   } else { #Yes meta data
-    if (is.null(meta_group)) { #default is no meta grouping with color
+    if (meta_group=="false") { #default is no meta grouping with color
       scatter.var <- s.label(cia$mX, pgrid.draw=FALSE, ppoints.cex=1, plabels.cex=0, main="Co-Inertia Scatter Plot with Groupings\nArrows from Axis 2 Position to Axis 1 Position\n", xlab="\nAxis 1, Constraining Data Set Variance\n", ylab="Axis 2, Main Data Set Variance\n", plot = FALSE)
       scatter.env <- s.label(cia$mY, pgrid.draw=FALSE, ppoints.cex=1, plabels.cex=0, main="Co-Inertia Scatter Plot with Groupings\nArrows from Axis 2 Position to Axis 1 Position\n", xlab="\nAxis 1, Constraining Data Set Variance\n", ylab="Axis 2, Main Data Set Variance\n", plot = FALSE)
       plot_1 <- superpose(scatter.var, scatter.env, plot=FALSE)
@@ -346,6 +360,7 @@ Plot.cia.scree <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA) 
   eigenValues <- mSetObj$analSet$cia$eigenValues
  
   eigenValues_data <- cbind(eigenValues, eigenValues/sum(eigenValues))
+  maxVar <- max(eigenValues/sum(eigenValues))
   n <- nrow(eigenValues_data)
   eigenValues_data <- as.data.frame(cbind(1:n, eigenValues_data))
   colnames(eigenValues_data) <- c("Axis", "Eigen_Value", "Variance_Explained")
@@ -367,7 +382,7 @@ Plot.cia.scree <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA) 
   #Scree plot
   Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
   par(xpd=FALSE, mar=c(5.1, 4.1, 4.1, 2.1))
-  plot(x=eigenValues_data$Axis, y=eigenValues_data$Variance_Explained, type="l", xlim=c(1, n), xlab="Axis", ylab="Proportion of Variance Explained", main="Co-Inertia Analysis Scree Plot",  xaxt="n", yaxt="n", col="blue", lwd=2)
+  plot(x=eigenValues_data$Axis, y=eigenValues_data$Variance_Explained, type="l", xlim=c(1, n), ylim=c(0, maxVar+0.1), xlab="Axis", ylab="Proportion of Variance Explained", main="Co-Inertia Analysis Scree Plot",  xaxt="n", yaxt="n", col="blue", lwd=2)
   points(x=eigenValues_data$Axis, y=eigenValues_data$Variance_Explained, cex=1.1, pch=19, col="blue")
   axis(2, las=2)
   axis(1, at=1:n)

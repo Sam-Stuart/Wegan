@@ -9,7 +9,7 @@ import metaboanalyst.controllers.SessionBean1;
 import metaboanalyst.rwrappers.ChemoMetrics;
 import metaboanalyst.rwrappers.Classifying;
 import metaboanalyst.rwrappers.Clustering;
-import metaboanalyst.rwrappers.Dispersal;
+import metaboanalyst.rwrappers.DispersalUtils;
 import metaboanalyst.rwrappers.Ordiantion;
 import metaboanalyst.rwrappers.RCenter;
 import metaboanalyst.rwrappers.RDataUtils;

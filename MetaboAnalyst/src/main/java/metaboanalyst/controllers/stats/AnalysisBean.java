@@ -18,7 +18,8 @@ import metaboanalyst.rwrappers.RDataUtils;
 import metaboanalyst.rwrappers.SigVarSelect;
 import metaboanalyst.rwrappers.UniVarTests;
 import metaboanalyst.rwrappers.Ordiantion;
-import metaboanalyst.rwrappers.Dispersal;
+import metaboanalyst.rwrappers.DispersalUtils;
+import metaboanalyst.rwrappers.DiversityUtils;
 import metaboanalyst.utils.DataUtils;
 
 /**
@@ -35,9 +36,6 @@ public class AnalysisBean implements Serializable {
             if (!FacesContext.getCurrentInstance().isPostback()) {
                 //sb.registerPage(pageID);
                 switch (pageID) {
-                    case "PCA":
-                        doDefaultPCA();
-                        break;
                     case "ANOVA":
                         doDefaultANOVA();
                         break;
@@ -89,6 +87,17 @@ public class AnalysisBean implements Serializable {
                     case "Spatialvis":
                         doDefaultSpatialvis();
                     break;
+
+//                    case "DCA":
+//                        doDefaultDCA();
+//                        break; 
+//                    case "Diversity":
+//                        doDefaultDiversity();
+//                        break; 
+//                    case "Ggmap":
+//                        doDefaultGgmap();
+//                        break;
+
                 }
             }
         }
@@ -223,8 +232,7 @@ public class AnalysisBean implements Serializable {
     
     private void doDefaultSpatialvis(){
         System.out.print("INSIDE FD"); 
-        Clustering.CreateSpatialvis(sb, false, false, false, "", "NULL", "NULL", "NULL", "", "", false, "NULL", "NULL", "NULL", "", "", "NULL", "NULL",
-                false, sb.getCurrentImage("ggmap"), "png", 72, "false");
+        Clustering.CreateSpatialvis(sb, false, "NULL", "", "NULL", "NULL", "", "NULL", "NULL", "", false, "NULL", "NULL", "", "", "NULL", "NULL", "NULL", false, sb.getCurrentImage("ggmap"), "png", 72, "false");
         System.out.print("AFTER FD");
     }
     
@@ -243,5 +251,15 @@ public class AnalysisBean implements Serializable {
     
     
     
+    
+//    private void doDefaultGgmap(){
+////        if (!DiversityUtils.CreateRarefactionDiv(sb, false, "test", "test", false, "test")){
+////            RConnection RC = sb.getRConnection();
+////            sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
+////        }
+//        System.out.print("INSIDE FD"); 
+//        Clustering.CreateGGMap(sb, false, "NULL", "NULL", "", "NULL", "", "NULL", false, sb.getCurrentImage("ggmap"), "png", 72, "false");
+//        System.out.print("AFTER FD");
+//    }
     
 }

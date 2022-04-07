@@ -7,6 +7,7 @@ package metaboanalyst.rwrappers;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import metaboanalyst.controllers.SessionBean1;
+import org.rosuda.REngine.REXPMismatchException;
 import org.rosuda.REngine.Rserve.RConnection;
 import org.rosuda.REngine.Rserve.RserveException;
 import org.rosuda.REngine.REXPMismatchException;
@@ -146,29 +147,31 @@ public class Clustering {
         return null;
     }
     
-    public static void CreateSpatialvis(SessionBean1 sb, boolean data, boolean datum, boolean proj, String crs_txt, String crs_option, String source, String maptype, String zoom, String rangeA, boolean ele, 
-            String pointColName, String polygonColName, String pathColName, String point_size, String path_size, String border_col, String color_point, boolean uni_point, String imgName, String format, int dpi, String width) {
+    
+    public static void CreateSpatialvis(SessionBean1 sb, boolean data, String proj, String crs_txt, String crs_option, String datum, String zoom, 
+            String maptype, String source, String rangeA, boolean ele, String border_col, String color_point, String point_size, String path_size, 
+            String pointColName, String polygonColName, String pathColName, boolean uni_point, String imgName, String format, int dpi, String width) {
         try {
             System.out.print("UD");
             RConnection RC = sb.getRConnection(); //Start R connection
             String rCommand = "Raster_data(NA"
                                                  + ", \"" + data
-                                                 + "\", \"" + datum
                                                  + "\", \"" + proj
                                                  + "\", \"" + crs_txt
                                                  + "\", \"" + crs_option
-                                                 + "\", \"" + source
-                                                 + "\", \"" + maptype
+                                                 + "\", \"" + datum
                                                  + "\", \"" + zoom
+                                                 + "\", \"" + maptype
+                                                 + "\", \"" + source
                                                  + "\", \"" + rangeA
                                                  + "\", \"" + ele
-                                                 + "\", \"" + pointColName
-                                                 + "\", \"" + polygonColName
-                                                 + "\", \"" + pathColName
-                                                 + "\", \"" + point_size
-                                                 + "\", \"" + path_size
                                                  + "\", \"" + border_col
                                                  + "\", \"" + color_point
+                                                 + "\", \"" + point_size
+                                                 + "\", \"" + path_size
+                                                  + "\", \"" + pointColName
+                                                 + "\", \"" + polygonColName
+                                                 + "\", \"" + pathColName
                                                  + "\", \"" + uni_point
                                                  + "\", \"" + imgName 
                                                  + "\", \"" + format 
@@ -226,4 +229,5 @@ public class Clustering {
     }
     
     
+
 }

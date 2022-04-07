@@ -202,6 +202,7 @@ public class EnrichUploadBean implements Serializable {
         this.qeaTestDataOpt = qeaTestDataOpt;
     }
 
+    
     public String handleQeaDataUpload() {
         try {
             if (!sb.doLogin("conc", "msetqea", qeaClsOpt.equals("cont"), false)) {
@@ -236,7 +237,7 @@ public class EnrichUploadBean implements Serializable {
         }
         sb.setDataUploaded(true);
         RDataUtils.setCachexiaTestSet(sb.getRConnection(), "TRUE");
-        return processMsetQeaData(fileName, clsType, "rowu", lblType);        
+        return processMsetQeaData(fileName, clsType, "colu", lblType);        
     }
 
     private String processMsetQeaData(String fileName, String clsType, String dataFormat, String lblType) {

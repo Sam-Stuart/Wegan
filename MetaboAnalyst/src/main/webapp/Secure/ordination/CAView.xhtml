@@ -1,0 +1,143 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_anal_template.xhtml">
+    <ui:define name="metaInfo">
+        <f:event type="preRenderView" listener="#{oaBean.performDefaultAnalysis('CA')}"/> 
+        <f:event type="preRenderView" listener="#{downloader.setupDownloadTable()}"/>
+    </ui:define>
+    <ui:define name="content">
+        <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
+            <p:tabView id="overviewCA">
+                <p:tab title ="Biplot" titleStyleClass="p-tab-nav">
+                    <h:form id="form1">
+                        <h:panelGrid columns="4" cellpadding="3" columnClasses="colBrayLong,colBrayShort,colBrayLong,colBrayShort" >
+                            <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
+                            <p:selectBooleanCheckbox value ="#{oaCaBean.doOriginal}"/>
+                            <h:outputLabel style="font-weight: bold" value="Variable Arrows:"/>
+                            <p:selectBooleanCheckbox value ="#{oaCaBean.varArrows}"/> 
+                            <h:outputLabel style="font-weight: bold" value="Color Pallet:"/>
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{oaCaBean.color}">
+
+                                <f:selectItems value="#{applicationBean1.ordColorPaletteOpts}" />
+                            </p:selectOneMenu>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" cellpadding="3">
+                            <h:outputLabel style="font-weight: bold" value="Environmental Data Column Selection:"/>
+                            <p:inputText style="width:400px; height:100px; line-height:5px;" value="#{oaCaBean.envDataCol}"/>
+
+
+                        </h:panelGrid>
+                        <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
+                            <p:commandButton value="Update" 
+                                             styleClass="updateButton"
+                                             style="box-shadow: none !important; text-shadow: none !important"
+                                            onclick="PF('statusDialog').show()"
+                                            oncomplete="PF('statusDialog').hide()"  
+                                            update=":overviewCA:form1:caPane1  :cmdPane" 
+                                            actionListener="#{oaCaBean.caUpdate_action()}"/>
+
+                        </h:panelGrid>
+                        <h:panelGrid class="resultsBar" columns="2">
+                            <h:panelGroup>
+                                <h:panelGrid columns="1" style="text-align : left;">
+                                    Results
+                                </h:panelGrid>
+                            </h:panelGroup> 
+                            <h:panelGroup>
+                                <h:panelGrid columns="3" class="resultsImages">
+                                    <i class="fa fa-question-circle"></i>
+                                </h:panelGrid>
+                            </h:panelGroup>                            
+                        </h:panelGrid>
+                        <h:panelGrid id="caPane1" style="width: 100%;">
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
+                                    <h:outputText style="padding-left: 0px" escape="false" value="#{oaCaBean.fileRowScorePath}"/>
+
+                                </i>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
+                                    <h:outputText style="padding-left: 0px" escape="false" value="#{oaCaBean.fileColScorePath}"/>
+
+                                </i>
+                            </h:panelGrid>
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <p:commandButton value="Export"
+                                    styleClass="exportButton"
+                                    style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                    actionListener="#{sessionBean1.graphicsLnk_action('ord_ca_2D')}"
+                                    oncomplete="PF('graphDialog').show()"/>
+                            </h:panelGrid>                              
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('ord_ca_2D')}" alt="ord2D"/>
+                            </h:panelGrid>                            
+                        </h:panelGrid>
+                    </h:form>
+                </p:tab>
+                <p:tab title ="Scree Plot" titleStyleClass="p-tab-nav">
+                    <h:form id="form2">
+                        <h:panelGrid columns="4" cellpadding="3" columnClasses="colBrayLong,colBrayShort,colBrayLong,colBrayShort" >
+                            <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
+                            <p:selectBooleanCheckbox value ="#{oaCaBean.doOriginal}"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" cellpadding="3">
+                            <h:outputLabel style="font-weight: bold" value="Environmental Data Column Selection:"/>
+                            <p:inputText style="width:400px; height:100px; line-height:5px;" value="#{oaCaBean.envDataCol}"/>
+
+
+                        </h:panelGrid>
+                        <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
+                             
+                            <p:commandButton value="Update" 
+                                             styleClass="updateButton"
+                                             style="box-shadow: none !important; text-shadow: none !important"
+                                            onclick="PF('statusDialog').show()"
+                                            oncomplete="PF('statusDialog').hide()"  
+                                            update=":overviewCA:form1:caPane1  :cmdPane" 
+                                            actionListener="#{oaCaBean.caUpdate_action()}"/>
+
+                        </h:panelGrid>
+                        <h:panelGrid class="resultsBar" columns="2">
+                            <h:panelGroup>
+                                <h:panelGrid columns="1" style="text-align : left;">
+                                    Results
+                                </h:panelGrid>
+                            </h:panelGroup> 
+                            <h:panelGroup>
+                                <h:panelGrid columns="3" class="resultsImages">
+                                    <i class="fa fa-question-circle"></i>
+                                </h:panelGrid>
+                            </h:panelGroup>                            
+                        </h:panelGrid>
+                        <h:panelGrid id="caPane2" style="width: 100%;">
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
+                                    <h:outputText style="padding-left: 0px" escape="false" value="#{oaCaBean.fileScreePath}"/>    
+
+                                </i>
+                                
+                            </h:panelGrid>
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <p:commandButton value="Export"
+                                    styleClass="exportButton"
+                                    style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                    actionListener="#{sessionBean1.graphicsLnk_action('ord_ca_scree')}"
+                                    oncomplete="PF('graphDialog').show()"/>
+                            </h:panelGrid>                        
+                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('ord_ca_scree')}" alt="ord2D"/>
+                            </h:panelGrid>                            
+                        </h:panelGrid>
+                       
+                    </h:form>
+                </p:tab>
+            </p:tabView> 
+        </h:panelGrid> 
+    </ui:define>
+</ui:composition>
