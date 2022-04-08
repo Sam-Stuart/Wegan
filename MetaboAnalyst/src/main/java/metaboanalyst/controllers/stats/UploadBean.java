@@ -243,14 +243,14 @@ public class UploadBean implements Serializable {
         }
         
         //WEGAN DATA SELECTED*********************************************************
-        else if (testDataOpt.equals("Dune")) {
+        else if (testDataOpt.equals("dune")) {
             dataType = "main";
             //sb.updateMsg("Error", "Dune data selected");
             testFile = ab.getTestDune();
             dataFormat = "rowu";
             dataNames = "colOnly";
             
-        } else if (testDataOpt.equals("Iris")) {
+        } else if (testDataOpt.equals("iris")) {
             dataType = "main";
             testFile = ab.getTestIris();
             dataFormat = "rowu";
