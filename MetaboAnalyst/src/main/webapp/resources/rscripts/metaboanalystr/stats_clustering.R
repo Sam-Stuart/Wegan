@@ -1,4 +1,4 @@
-#'Plot Dendrogram
+#'Plot Dendrogram 
 #'@description Dendogram
 #'@param mSetObj Input name of the created mSet Object
 #'@param imgName Input a name for the plot
