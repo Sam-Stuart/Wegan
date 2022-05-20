@@ -32,15 +32,25 @@
                         </p>
                         <p>
                             Gamma diversity: the total species diversity in a landscape.
+               
                         </p>
-                        <h:panelGrid id="panelGrid" columns="4" cellpadding="3" columnClasses="colFront, colLeft, colRight">
+                        <h:panelGrid id="panelGrid" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
+                                <p:commandButton value="Help"
+                                             styleClass="helpButton"
+                                             style="box-shadow: none !important; text-shadow: none !important;"
+                                             actionListener="#{sessionBean1.graphicsLnk_action('pca_pair')}" 
+                                            oncomplete="PF('graphApperanceIndicesHelp').show()"/> 
+                        </h:panelGrid>
+                        
+                        <h:panelGrid id="panelGrid5" columns="4" cellpadding="3" columnClasses="colFront, colLeft, colRight">
                             <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
                             <p:selectBooleanCheckbox value ="#{indicesBean.doOriginal}"/> 
-                            <h:outputLabel style="font-weight: bold" value="Select grouping variable (x-axis):"/>
+                            
+                            <h:outputLabel style="font-weight: bold" value="Grouping variable:"/>
                                 <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{indicesBean.groupColName}">
                                     <f:selectItems value="#{indicesBean.groupColOpts}" />
                                 </p:selectOneMenu>
-                            <h:outputLabel style="font-weight: bold" value="Select method to calculate relative abundance:"/>
+                            <h:outputLabel style="font-weight: bold" value="Method:"/>
                                 <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{indicesBean.methodchosen}">
                                     <f:selectItems value="#{indicesBean.method}"/>
                                 </p:selectOneMenu>
@@ -67,7 +77,7 @@
                             </h:panelGroup> 
                             <h:panelGroup>
                                 <h:panelGrid columns="3" class="resultsImages">
-                                    <i class="fa fa-question-circle"></i>
+                                    <i id="question" class="fa fa-question-circle" title="Help with plot"></i>
                                 </h:panelGrid>
                             </h:panelGroup>                            
                         </h:panelGrid>                         
@@ -146,7 +156,10 @@
                             </h:panelGrid>
                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
                                 <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('Alpha_Plot')}" alt="TestPlot"/>
-                            </h:panelGrid>                            
+                            </h:panelGrid>  
+                            <p>
+                                A box graph with alpha diversity as y axis and the selected variable as x axis.
+                            </p>
                         </h:panelGrid> 
                     </h:form>
                 </p:tab>
@@ -285,6 +298,12 @@
                     </h:form>
                 </p:tab>
             </p:tabView>
+            <p:dialog modal="true" widgetVar="graphApperanceIndicesHelp" 
+                style="width: 400px; height:400px;" 
+                appendTo="@(body)" header="Help Center"
+                draggable="false" closable="true" resizable="false"> 
+                <ui:include src="_color_palette_indicesHelp.xhtml" />
+            </p:dialog>
             <p:dialog modal="true" widgetVar="graphApperanceIndices" 
                 style="width: 400px; height:400px;" 
                 appendTo="@(body)" header="Graphics Center"

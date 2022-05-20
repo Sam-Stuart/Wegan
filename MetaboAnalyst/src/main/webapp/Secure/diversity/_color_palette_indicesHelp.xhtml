@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="Help">
+        <h:panelGrid columns="1" style="width:380px;">
+            <p>
+                Use "Grouping variable" to change x-axis variable.
+            </p>
+            <p>
+                Use "Method" to select different relative abundance calculation based on specific dataset.
+            </p>
+            
+<!--            <h:panelGrid id="panelGrid2" columns="2" cellpadding="6" columnClasses="colBrayLong,colBrayShort">
+                
+                <h:outputLabel style="font-weight: bold" value="Select box colors:"/>
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{indicesBean.colorchosen}">
+                    <f:selectItems value="#{indicesBean.color}"/>
+                </p:selectOneMenu> 
+                <p:panelGrid></p:panelGrid>  
+            </h:panelGrid>
+            <h:panelGrid id="panelGrid4" columns="1" cellpadding="6" style="float: right">
+                <p:commandButton value="Update" 
+                                 styleClass="updateButton"
+                                 style="box-shadow: none !important; text-shadow: none !important"
+                                onclick="PF('statusDialog').show()"
+                                oncomplete="PF('graphApperanceIndices').hide(); PF('statusDialog').hide()"  
+                                update=":indices:form1:indicesPane1  :cmdPane" 
+                                actionListener="#{indicesBean.indicesAlphaUpdate_action()}"/>
+            </h:panelGrid>-->
+        </h:panelGrid>
+    </h:form>
+</ui:composition>
+
