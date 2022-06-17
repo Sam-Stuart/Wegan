@@ -134,6 +134,14 @@
     width: 40%;
 }
 
+.colNMDSLong {
+    width: 25%;
+}
+
+.colNMDSShort {
+    width: 10%;
+}
+
 .colBrayShort {
     width: 15%;
 }
@@ -228,8 +236,8 @@
 }
 
 .bgdButton {
-    background: #7fbf7f  !important; 
-    border: 5px #7fbf7f   !important; 
+    background: #75bafb !important; 
+    border: 5px #3a5d7d  !important; 
     color: black !important;
     text-shadow: none !important;
     box-shadow: none !important;
@@ -289,6 +297,18 @@
 .normButton {
     background: #75bafb !important; 
     border: 5px #75bafb !important; 
+    color: black !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
+    width: 150px; 
+    height: 30px;
+    font-size: 18px;
+    font-bold: false;
+}
+
+.autoNormButton {
+    background: #8cbd48 !important; 
+    border: 5px #8cbd48 !important; 
     color: black !important;
     text-shadow: none !important;
     box-shadow: none !important;
@@ -766,4 +786,38 @@ a.changeBlue:hover { /* change to blue on mouseover */
 
 .myTable tr:nth-child(even) {
     background-color: #E0ECFF;
+}
+
+
+/****** Large Devices only  *******/ 
+@media(min-width: 1200px){
+    .moduleButton {
+        
+    }
+    
+    
+    
+}
+
+/****** Medium Devices only  *******/ 
+@media(min-width: 992px) and (max-width: 1199px){
+    .moduleButton {
+        
+    }
+    
+    
+    
+}
+
+
+
+
+/****** small Devices only  *******/ 
+@media(max-width: 991px){
+    .moduleButton {
+        
+    }
+    
+    
+    
 }

@@ -19,7 +19,7 @@ import metaboanalyst.rwrappers.OAUtils;
 import metaboanalyst.utils.DataUtils;
 
 
-@ManagedBean(name = "oacaBean")
+@ManagedBean(name = "oaCaBean")
 public class OACABean implements Serializable {
 
     private final SessionBean1 sb = (SessionBean1) DataUtils.findBean("sessionBean1");
@@ -28,10 +28,10 @@ public class OACABean implements Serializable {
     private String usrName = usr.getName();
     
 
-    private String fileRowScores = "ca_row_scores.csv";
+    private String fileRowScores = "ca_sample_scores.csv";
     private String fileRowScorePath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileRowScores + "\">" + fileRowScores + "</a>";
     
-    private String fileColScores = "ca_column_scores.csv";
+    private String fileColScores = "ca_variable_scores.csv";
     private String fileColScorePath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileColScores + "\">" + fileColScores + "</a>";
    
     private String fileScree = "ca_scree_data.csv";
@@ -46,7 +46,7 @@ public class OACABean implements Serializable {
     
     private String groupPoint = "null";
     private String color = "null";
-    private String envDataCol = "null";
+    private String envDataCol = " ";
     
     public String getColor() {
         return color;

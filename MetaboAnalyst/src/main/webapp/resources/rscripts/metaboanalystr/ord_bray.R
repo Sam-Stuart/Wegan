@@ -104,9 +104,9 @@ ord.bray <- function(mSetObj=NA, abundance="false", distance="NULL", data="false
   eigenValues_data <- as.data.frame(cbind(eig_rownames, eigenValues_data))
   colnames(eigenValues_data) <- c("Dimension", "Eigen_Value", "Variance_Explained")
   write.csv(eigenValues_data, file="bray_curtis_scree_data.csv", row.names=FALSE)
-  write.csv(sample_scores, file="bray_curtis_row_scores.csv", row.names=row.names(input))
-  write.csv(var_scores, file="bray_curtis_column_scores.csv", row.names=TRUE)
-  write.csv(as.matrix(dist), file=paste0("bray_curtis_", distance1, "_dissimilarity_matrix.csv"), row.names=TRUE)
+  write.csv(sample_scores, file="bray_curtis_sample_scores.csv", row.names=row.names(input))
+  write.csv(var_scores, file="bray_curtis_variable_scores.csv", row.names=TRUE)
+  write.csv(as.matrix(dist), file="bray_curtis_dissimilarity_matrix.csv", row.names=TRUE)
   
   sink("column_impact_on_bray_curtis.txt") 
   cat("Data columns may significantly impact Bray-Curtis ordination\n")
@@ -420,6 +420,7 @@ Plot.bray.scree <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA)
 
   #Prepare eigenvalue data for plotting
   eigenvalues_data <- as.data.frame(cbind(1:6, eigenvalues/sum(eigenvalues))) #Divide each eigenvalue with the sum of all eigenvalues in order to obtain the variance explained by each dimension
+  maxVar <- max(eigenvalues/sum(eigenvalues))
 
   #Set plot dimensions
   if(is.na(width)){
@@ -438,7 +439,7 @@ Plot.bray.scree <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA)
   #Scree plot
   Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
   par(xpd=FALSE, mar=c(5.1, 4.1, 4.1, 2.1)) 
-  plot(x=eigenvalues_data$V1, y=eigenvalues_data$V2, type="l", xlim=c(1, 6), ylim=c(0, 1), xlab="Dimension", ylab="Proportion of Variance Explained", main="Bray-Curtis Analysis Scree Plot", yaxt="n", xaxt="n", col="blue", lwd=2)
+  plot(x=eigenvalues_data$V1, y=eigenvalues_data$V2, type="l", xlim=c(1, 6), ylim=c(0, maxVar+ 0.1), xlab="Dimension", ylab="Proportion of Variance Explained", main="Bray-Curtis Analysis Scree Plot", yaxt="n", xaxt="n", col="blue", lwd=2)
   points(x=eigenvalues_data$V1, y=eigenvalues_data$V2, cex=1.1, pch=19, col="blue")
   axis(2, las=2)
   axis(1, at=1:6)

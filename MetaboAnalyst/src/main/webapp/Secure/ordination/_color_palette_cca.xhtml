@@ -9,32 +9,35 @@
     <h:form id="ccaGraph">
         <h:panelGrid columns="1" style="width:380px;">
             <h:panelGrid id="panelGrid2" columns="2" cellpadding="5" columnClasses="colBrayLong,colBrayShort">
-                <h:outputLabel style="font-weight: bold" value="Variable Arrows:"/>
+                
+                <h:outputLabel style="font-weight: bold" value="Use Sample Names for Points:"/>
+                <p:selectBooleanCheckbox value ="#{ccaBean.sampleNames}"/>                 
+                
+                <h:outputLabel style="font-weight: bold" value="Add Variable Arrows:"/>
                 <p:selectBooleanCheckbox value ="#{ccaBean.varArrows}"/> 
-                
-                <h:outputLabel style="font-weight: bold" value="Environmental Arrows:"/>
-                <p:selectBooleanCheckbox value ="#{ccaBean.envArrows}"/> 
-                
-                <h:outputLabel style="font-weight: bold" value="Environmental Centroid:"/>
-                <p:selectBooleanCheckbox value ="#{ccaBean.envCentroid}"/> 
-                
-                <h:outputLabel style="font-weight: bold" value="Use Sample Names:"/>
-                <p:selectBooleanCheckbox value ="#{ccaBean.sampleNames}"/> 
 
+                <h3>Grouping Data Options</h3>
+                <p:panelGrid></p:panelGrid>
 
-                <h:outputLabel style="font-weight: bold" value="Ellipse:"/>
-                    <p:selectBooleanCheckbox value ="#{ccaBean.addEllipse}"/> 
-                    
-                <h:outputLabel style="font-weight: bold" value="Color Pallet:"/>
-                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ ccaBean.color}">
-                        <f:selectItems value="#{applicationBean1.ordColorPaletteOpts}" />
-                    </p:selectOneMenu>
-                
-                <h:outputLabel style="font-weight: bold" value="Color Grouping Column:"/>
+                <h:outputLabel style="font-weight: bold" value="Grouping Variable:"/>
                     <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ ccaBean.groupCol}">
                         <f:selectItems value="#{applicationBean1.vegdistMeasureOpts}" />
                     </p:selectOneMenu> 
-
+                <h:outputLabel style="font-weight: bold" value="Color Palette:"/>
+                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ ccaBean.color}">
+                        <f:selectItems value="#{applicationBean1.ordColorPaletteOpts}" />
+                    </p:selectOneMenu>
+                <h:outputLabel style="font-weight: bold" value="Add Ellipses:"/>
+                    <p:selectBooleanCheckbox value ="#{ccaBean.addEllipse}"/> 
+                    
+                <h3>Constraining Data Options</h3>
+                <p:panelGrid></p:panelGrid>
+                
+                <h:outputLabel style="font-weight: bold" value="Add Arrows for Constraining Variables:"/>
+                <p:selectBooleanCheckbox value ="#{ccaBean.envArrows}"/> 
+                
+                <h:outputLabel style="font-weight: bold" value="Add Centroids for Constraining Variables:"/>
+                <p:selectBooleanCheckbox value ="#{ccaBean.envCentroid}"/>                     
                 <p:panelGrid></p:panelGrid>  
 
 

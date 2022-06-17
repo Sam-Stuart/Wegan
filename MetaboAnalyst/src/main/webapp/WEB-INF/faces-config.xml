@@ -122,6 +122,12 @@
         </navigation-case> 
         
         <navigation-case>
+            <from-outcome>ANOSIM</from-outcome>
+            <to-view-id>/Secure/ordination/ANOSIMView.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case> 
+                
+        <navigation-case>
             <from-outcome>PCOA</from-outcome>
             <to-view-id>/Secure/ordination/PCOAView.xhtml</to-view-id>
             <redirect/>
@@ -242,11 +248,79 @@
             <to-view-id>/Secure/process/SanityCheck.xhtml</to-view-id>
             <redirect/>
         </navigation-case> 
+        
+        
+        <!--DIVERSITY FUNCTIONS-->
         <navigation-case>
             <from-outcome>Diversity</from-outcome>
             <to-view-id>/Secure/diversity/DiversityView.xhtml</to-view-id>
             <redirect/>
-        </navigation-case>      
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>Alpha</from-outcome>
+            <to-view-id>/Secure/diversity/AlphaView.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case> 
+        <navigation-case>
+            <from-outcome>Beta</from-outcome>
+            <to-view-id>/Secure/diversity/BetaView.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case> 
+        <navigation-case>
+            <from-outcome>Gamma</from-outcome>
+            <to-view-id>/Secure/diversity/GammaView.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>         
+        <navigation-case>
+            <from-outcome>Species</from-outcome>
+            <to-view-id>/Secure/diversity/SpeciesView.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>                             
+        <navigation-case>
+            <from-outcome>Test_Tutorial</from-outcome>
+            <to-view-id>/Secure/diversity/TestTutorialView.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>Indices</from-outcome>
+            <to-view-id>/Secure/diversity/IndicesView.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>  
+        <navigation-case>
+            <from-outcome>Rarefaction</from-outcome>
+            <to-view-id>/Secure/diversity/RarefactionView.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>Abunddist</from-outcome>
+            <to-view-id>/Secure/diversity/AbunddistView.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case> 
+        <navigation-case>
+            <from-outcome>Accummodel</from-outcome>
+            <to-view-id>/Secure/diversity/AccummodelView.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case> 
+        <navigation-case>
+            <from-outcome>Taxodiv</from-outcome>
+            <to-view-id>/Secure/diversity/TaxodivView.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case> 
+        <navigation-case>
+            <from-outcome>Fddiv</from-outcome>
+            <to-view-id>/Secure/diversity/FddivView.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case> 
+        <navigation-case>
+            <from-outcome>Unseendiv</from-outcome>
+            <to-view-id>/Secure/diversity/UnseendivView.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>  
+                                                                       
+                    
+                                                                                                                                                                                                                    
+                                                                                                                                                                                                                                                                                                                                                                                                                   
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
         <navigation-case>
             <from-outcome>Clustering</from-outcome>
             <to-view-id>/Secure/clustering/ClusteringView.xhtml</to-view-id>

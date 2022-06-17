@@ -85,13 +85,12 @@ ord.ca <- function(mSetObj=NA, data="NULL", fac_text="NULL") {
   mSetObj$analSet$ca$eigenValues <- coa$eig
   
   #Download relevent data
-  write.csv(samp.scores, file="ca_row_scores.csv", row.names=row.names(input))
-  write.csv(var_scores, file="ca_column_scores.csv", row.names=TRUE)
+  write.csv(samp.scores, file="ca_sample_scores.csv", row.names=row.names(input))
+  write.csv(var_scores, file="ca_variable_scores.csv", row.names=TRUE)
 
   eigenValues <- coa$eig
   n <- length(eigenValues)
   variance <- eigenValues/sum(eigenValues)
-  varMax <- variance[1]
   eigenValues_data <- as.data.frame(cbind(paste0("CA ", 1:n), eigenValues, variance))
   colnames(eigenValues_data) <- c("Axis", "Eigen_Value", "Correlation_Coefficient")
   write.csv(eigenValues_data, file="ca_scree_data.csv", row.names=FALSE)
@@ -229,7 +228,7 @@ Plot.ca.scree <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA) {
   
   n <- length(eigenValues)
   variance <- eigenValues/sum(eigenValues)
-  varMax <- variance[1]
+  maxVar <- variance[1]
   eigenValues_data <- as.data.frame(cbind(1:n, eigenValues, variance))
   colnames(eigenValues_data) <- c("Dimension", "Eigen_Value", "Correlation_Coefficient")
 
@@ -250,7 +249,7 @@ Plot.ca.scree <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA) {
   #Scree plot
   Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
   par(xpd=FALSE, mar=c(5.1, 4.1, 4.1, 2.1)) 
-  plot(x=eigenValues_data$Dimension, y=eigenValues_data$Correlation_Coefficient, type="l", xlim=c(1, n), ylim=c(0, 1), xlab="Dimension", ylab="Correlation Coefficient", main="Correspondence Analysis Scree Plot", yaxt="n", xaxt="n", col="blue", lwd=2)
+  plot(x=eigenValues_data$Dimension, y=eigenValues_data$Correlation_Coefficient, type="l", xlim=c(1, n), ylim=c(0, maxVar+0.1), xlab="Dimension", ylab="Correlation Coefficient", main="Correspondence Analysis Scree Plot", yaxt="n", xaxt="n", col="blue", lwd=2)
   points(x=eigenValues_data$Dimension, y=eigenValues_data$Correlation_Coefficient, cex=1.1, pch=19, col="blue")
   axis(2, las=2)
   axis(1, at=1:n)

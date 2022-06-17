@@ -4,6 +4,7 @@
 
 # note, this is usually used at the end of a function
 # for local, return itself; for web, push to global environment
+#'
 .set.mSet <- function(mSetObj=NA){
   if(.on.public.web){
     mSet <<- mSetObj;
@@ -12,6 +13,7 @@
   return(mSetObj);
 }
 
+#'
 .get.mSet <- function(mSetObj=NA){
   if(.on.public.web){
     return(mSet)
@@ -24,24 +26,21 @@
 #'@description This functions handles the construction of a mSetObj object for storing data for further processing and analysis.
 #'It is necessary to utilize this function to specify to MetaboAnalystR the type of data and the type of analysis you will perform. 
 #'@usage InitDataObjects(data.type, anal.type, paired=FALSE)
-#'@param data.type The type of data, either list (Compound lists), conc (Compound concentration data), 
-#'specbin (Binned spectra data), pktable (Peak intensity table), nmrpeak (NMR peak lists), mspeak (MS peak lists), 
-#'or msspec (MS spectra data)
-#'@param anal.type Indicate the analysis module to be performed: stat, pathora, pathqea, msetora, msetssp, msetqea, ts, 
-#'cmpdmap, smpmap, or pathinteg
+#'@param data.type The type of data, either main, meta (grouping data), env (constraining data)
+#'@param anal.type Indicate the analysis module to be performed: ord, corr, plot, tax, div, clust, stat, disp 
 #'@param paired Indicate if the data is paired or not. Logical, default set to FALSE
 #'@author Jeff Xia \email{jeff.xia@mcgill.ca}
 #'McGill University, Canada
 #'License: GNU GPL (>= 2)
 #'@export
 #'@import methods
-
+#'
 InitDataObjects <- function(data.type, anal.type, paired=FALSE){
   
   dataSet <- list();
   dataSet$type <- data.type;
-  dataSet$design.type <- "regular"; # one factor to two factor
-  dataSet$cls.type <- "disc"; # default until specified otherwise
+  dataSet$design.type <- "regular"; 
+  dataSet$cls.type <- "disc"; # default until specified otherwise (hard coded in bean)
   dataSet$format <- "rowu";
   dataSet$paired <- paired;
   analSet <- list();
@@ -80,6 +79,7 @@ InitDataObjects <- function(data.type, anal.type, paired=FALSE){
   return(.set.mSet(mSetObj));
 }
 
+
 #'For two factor time series only
 #'@description For two factor time series only
 #'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
@@ -88,6 +88,7 @@ InitDataObjects <- function(data.type, anal.type, paired=FALSE){
 #'McGill University, Canada
 #'License: GNU GPL (>= 2)
 #'@export
+#'
 SetDesignType <-function(mSetObj=NA, design){
   mSetObj <- .get.mSet(mSetObj);
   mSetObj$dataSet$design.type <- tolower(design);
@@ -98,6 +99,7 @@ SetDesignType <-function(mSetObj=NA, design){
 #'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
 #'@param cmd Commands 
 #'@export
+#'
 RecordRCommand <- function(mSetObj=NA, cmd){
   write(cmd, file = "Rhistory.R", append = TRUE);
   mSetObj <- .get.mSet(mSetObj); 
@@ -108,10 +110,12 @@ RecordRCommand <- function(mSetObj=NA, cmd){
 #'Export R Command History
 #'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
 #'@export
+#'
 GetRCommandHistory <- function(mSetObj=NA){
   mSetObj <- .get.mSet(mSetObj); 
   return(mSetObj$cmdSet);
 }
+
 
 #'Constructor to read uploaded CSV or TXT files into the dataSet object
 #'@description This function handles reading in CSV or TXT files and filling in the dataSet object created using "InitDataObjects". 
@@ -119,133 +123,300 @@ GetRCommandHistory <- function(mSetObj=NA){
 #'@param mSetObj Input the name of the created mSetObj (see InitDataObjects).
 #'@param filePath Input the path name for the CSV/TXT files to read.
 #'@param format Specify if samples are paired and in rows (rowp), unpaired and in rows (rowu),
-#'in columns and paired (colp), or in columns and unpaired (colu).
+#'in columns and paired (colp), in columns and unpaired (colu)
 #'@param lbl.type Specify the data label type, either discrete (disc) or continuous (cont).
 #'@author Jeff Xia \email{jeff.xia@mcgill.ca}, Jasmine Chong
 #'McGill University, Canada
 #'License: GNU GPL (>= 2)
 #'@export
+#'
+#Read.TextData <- function(mSetObj=NA, filePath, format="rowu", lbl.type="disc"){
+#  
+#  mSetObj <- .get.mSet(mSetObj);
+#  mSetObj$dataSet$cls.type <- lbl.type;
+#  mSetObj$dataSet$format <- format;
+#
+#  dat <- .readDataTable(filePath);
+#
+#  if(class(dat) == "try-error" | ncol(dat) == 1){
+#    AddErrMsg("Data format error. Failed to read in the data!");
+#    AddErrMsg("Make sure the data table is saved in tab separated values (.txt) or comma separated values (.csv) format.");
+#    AddErrMsg("Please also check the following: ");
+#    AddErrMsg("Either sample or variable names must in UTF-8 encoding; Latin, Greek letters are not allowed.");
+#    AddErrMsg("We recommend to use a combination of English letters, underscore, and numbers for naming purpose.");
+#    AddErrMsg("Make sure sample names and variable names are unique.");
+#    AddErrMsg("Missing values should be blank or NA without quote.");
+#    return(0);
+#  }
+#
+#  msg <- NULL;
+#  if(substring(format,4,5)=="ts"){
+#    # two factor time series data
+#    if(substring(format,1,3)=="row"){ # sample in row
+#      msg<-c(msg, "Samples in rows and variables in columns");
+#      smpl.nms <-dat[,1]; 
+#      all.nms <- colnames(dat);
+#      facA.lbl <- all.nms[2]; 
+#      cls.lbl <- facA <- dat[,2]; # default assign facA to cls.lbl in order for one-factor analysis
+#      facB.lbl <- all.nms[3];
+#      facB <- dat[,3];
+#      conc <- dat[,-c(1:3)];
+#      var.nms <- colnames(conc);
+#    }else{ # sample in col
+#      msg<-c(msg, "Samples in columns and variables in rows.");
+#      all.nms <- dat[,1];
+#      facA.lbl <- all.nms[1];
+#      cls.lbl <- facA <- dat[1,-1];
+#      facB.lbl <- all.nms[2];
+#      facB <- dat[2,-1];
+#      var.nms <- dat[-c(1:2),1];
+#      conc<-t(dat[-c(1:2),-1]);
+#      smpl.nms <- rownames(conc);
+#    }
+#    
+#    if(mSetObj$dataSet$design.type =="time" | mSetObj$dataSet$design.type =="time0"){
+#      # determine time factor
+#      if(!(tolower(facA.lbl) == "time" | tolower(facB.lbl) == "time")){
+#        AddErrMsg("No time points found in your data");
+#        AddErrMsg("The time points group must be labeled as <b>Time</b>");
+#        return(0);
+#      }
+#    }
+#  }else{
+#    
+#    if(substring(format,1,3)=="row"){ # sample in row
+#      msg <- c(msg, "Samples in rows and variables in columns");
+#      smpl.nms <-dat[,1];
+#      dat[,1] <- NULL;
+#      if(lbl.type == "qc"){
+#        rownames(dat) <- smpl.nms;
+#        mSetObj$dataSet$orig <- dat;
+#        mSetObj$dataSet$cmpd <- colnames(dat);
+#        return(1);
+#      }
+#      cls.lbl <- smpl.nms;
+#      conc <- dat[,-1];
+#      var.nms <- colnames(conc);
+#    }else{ # sample in col
+#      msg<-c(msg, "Samples in columns and variables in rows.");
+#      var.nms <- dat[-1,1];
+#      dat[,1] <- NULL;
+#      smpl.nms <- colnames(dat);
+#      cls.lbl <- dat[1,];
+#      conc <- t(dat[-1,]);
+#    }
+#  }
+#  
+#  mSetObj$dataSet$type.cls.lbl <- class(cls.lbl);
+#  
+#  # free memory
+#  dat <- NULL;
+#  
+#  msg <- c(msg, "The uploaded file is in comma separated values (.csv) format.");
+#  
+#  # try to remove empty line if present
+#  # identified if no sample names provided
+#  
+#  empty.inx <- is.na(smpl.nms) | smpl.nms == ""
+#  if(sum(empty.inx) > 0){
+#    msg <- c(msg, paste("<font color=\"red\">", sum(empty.inx), "empty rows</font> were detected and excluded from your data."));
+#    smpl.nms <- smpl.nms[!empty.inx];
+#    cls.lbl <-  cls.lbl[!empty.inx];
+#    conc <- conc[!empty.inx, ];
+#  }
+#  
+#  # try to check & remove empty lines if class label is empty
+#  # Added by B. Han
+#  empty.inx <- is.na(cls.lbl) | cls.lbl == ""
+#  if(sum(empty.inx) > 0){
+#    if(mSetObj$analSet$type != "roc"){
+#      msg <- c(msg, paste("<font color=\"red\">", sum(empty.inx), "empty labels</font> were detected and excluded from your data."));
+#      smpl.nms <- smpl.nms[!empty.inx];
+#      cls.lbl <-  cls.lbl[!empty.inx];
+#      conc <- conc[!empty.inx, ];
+#    }else{
+#      # force all NA to empty string, otherwise NA will become "NA" class label
+#      cls.lbl[is.na(cls.lbl)] <- "";
+#      msg <- c(msg, paste("<font color=\"orange\">", sum(empty.inx), "new samples</font> were detected from your data."));
+#    }
+#  }
+#  
+#  if(anal.type == "roc"){
+#    if(length(unique(cls.lbl[!empty.inx])) > 2){
+#      AddErrMsg("ROC analysis is only defined for two-group comparisions!");
+#      return(0);
+#    }
+#
+#  }
+#
+#
+#  # check for uniqueness of dimension name
+#  if(length(unique(smpl.nms))!=length(smpl.nms)){
+#    dup.nm <- paste(smpl.nms[duplicated(smpl.nms)], collapse=" ");
+#    AddErrMsg("Duplicate sample names are not allowed!");
+#    AddErrMsg(dup.nm);
+#    return(0);
+#  }
+#  
+#
+#
+#  # try to remove check & remove empty line if variable name is empty
+#  empty.inx <- is.na(var.nms) | var.nms == "";
+#  if(sum(empty.inx) > 0){
+#    msg <- c(msg, paste("<font color=\"red\">", sum(empty.inx), "empty variables</font> were detected and excluded from your data."));
+#    var.nms <- var.nms[!empty.inx];
+#    conc <- conc[,!empty.inx];
+#  }
+#  
+#  #if(length(unique(var.nms))!=length(var.nms)){
+#  #  dup.nm <- paste(var.nms[duplicated(var.nms)], collapse=" ");
+#  #  AddErrMsg("Duplicate variable names are not allowed!");
+#  #  AddErrMsg(dup.nm);
+#  # return(0);
+#  #}
+#  
+#  # now check for special characters in the data labels
+#  if(sum(is.na(iconv(smpl.nms)))>0){
+#    na.inx <- is.na(iconv(smpl.nms));
+#    nms <- paste(smpl.nms[na.inx], collapse="; ");
+#    AddErrMsg(paste("No special letters (i.e. Latin, Greek) are allowed in sample names!", nms, collapse=" "));
+#    return(0);
+#  }
+#  
+#  if(sum(is.na(iconv(var.nms)))>0){
+#    na.inx <- is.na(iconv(var.nms));
+#    nms <- paste(var.nms[na.inx], collapse="; ");
+#    AddErrMsg(paste("No special letters (i.e. Latin, Greek) are allowed in variable names!", nms, collapse=" "));
+#    return(0);
+#  }
+#  
+#  # only keep alphabets, numbers, ",", "." "_", "-" "/"
+#  smpl.nms <- gsub("[^[:alnum:]./_-]", "", smpl.nms);
+#  var.nms <- gsub("[^[:alnum:][:space:],'./_-]", "", var.nms); # allow space, comma and period
+#  cls.lbl <- ClearStrings(as.vector(cls.lbl));
+#
+#  # now assgin the dimension names
+#  rownames(conc) <- smpl.nms;
+#  colnames(conc) <- var.nms;
+#  
+#  # check if paired or not
+#  if(mSetObj$dataSet$paired){
+#    # save as it is and process in sanity check step
+#    mSetObj$dataSet$orig.cls <- mSetObj$dataSet$pairs <- cls.lbl;
+#  }else{
+#    if(lbl.type == "disc"){
+#      # check for class labels at least two replicates per class
+#      #if(min(table(cls.lbl)) < 3){
+#      #  AddErrMsg(paste ("A total of", length(levels(as.factor(cls.lbl))), "groups found with", length(smpl.nms), "samples."));
+#      #  AddErrMsg("At least three replicates are required in each group!");
+#      #  AddErrMsg("Or maybe you forgot to specify the data format?");
+#      #  return(0);
+#      #}
+#     
+#      mSetObj$dataSet$orig.cls <- mSetObj$dataSet$cls <- as.factor(as.character(cls.lbl));
+#      
+#      if(substring(format,4,5)=="ts"){
+#        
+#        mSetObj$dataSet$facA.type <- is.numeric(facA);
+#        mSetObj$dataSet$orig.facA <- mSetObj$dataSet$facA <- as.factor(as.character(facA));
+#        mSetObj$dataSet$facA.lbl <- facA.lbl;
+#        
+#        mSetObj$dataSet$facB.type <- is.numeric(facB);
+#        mSetObj$dataSet$orig.facB <- mSetObj$dataSet$facB <- as.factor(as.character(facB));
+#        mSetObj$dataSet$facB.lbl <- facB.lbl;
+#      }
+#      
+#    }else{ # continuous
+#      mSetObj$dataSet$orig.cls <- mSetObj$dataSet$cls <- as.numeric(cls.lbl);
+#    }
+#  }
+#  
+#  # for the current being to support MSEA and MetPA
+#  if(mSetObj$dataSet$type == "conc"){
+#    mSetObj$dataSet$cmpd <- var.nms;
+#  }
+#  
+#  mSetObj$dataSet$orig <- conc; # copy to be processed in the downstream
+#  mSetObj$msgSet$read.msg <- c(msg, paste("The uploaded data file contains a ", nrow(conc),
+#                                          " (samples) by ", ncol(conc), " (variables) data matrix.", sep=""));
+#  
+#  return(.set.mSet(mSetObj));
+#}
 
-Read.TextData <- function(mSetObj=NA, filePath, format="colu", lbl.type="disc"){
-  
-  mSetObj <- .get.mSet(mSetObj);
+Read.TextData <- function(mSetObj=NA, filePath, dataFormat="rowu", lbl.type="disc", dataNames="colOnly"){
+load_dplyr()  
+mSetObj <- .get.mSet(mSetObj);
   mSetObj$dataSet$cls.type <- lbl.type;
-  mSetObj$dataSet$format <- format;
+  mSetObj$dataSet$format <- dataFormat;
 
-  dat <- .readDataTable(filePath);
+  if (dataNames=="colOnly") { #yes column names, no row names
+    dat <- .readDataTable(filePath, dataNames="colOnly");
+  } else if (dataNames=="rowOnly") { #no col names, yes row names
+    dat <- .readDataTable(filePath, dataNames="rowOnly"); 
+  } else if (dataNames=="bothNames") { #yes col names, yes row names
+    dat <- .readDataTable(filePath, dataNames="bothNames");
+  } else { #no col names, no row names
+    dat <- .readDataTable(filePath, dataNames="noNames");
+  }
 
   if(class(dat) == "try-error" || ncol(dat) == 1){
-    AddErrMsg("Data format error. Failed to read in the data!");
-    AddErrMsg("Make sure the data table is saved as comma separated values (.csv) format!");
-    AddErrMsg("Please also check the followings: ");
-    AddErrMsg("Either sample or feature names must in UTF-8 encoding; Latin, Greek letters are not allowed.");
-    AddErrMsg("We recommend to use a combination of English letters, underscore, and numbers for naming purpose.");
-    AddErrMsg("Make sure sample names and feature (peak, compound) names are unique.");
-    AddErrMsg("Missing values should be blank or NA without quote.");
+    AddErrMsg("Data format error. Failed to read in the data!
+                /nMake sure the data table is saved in tab separated values (.txt) or comma separated values (.csv) format.
+                /nPlease also check the following:
+                /n/tBoth sample and variable names must in UTF-8 encoding.
+                /n/tMake sure sample names and variable names are unique.
+                /n/tMissing values should be blank or NA without quote.");
     return(0);
   }
-
+  
   msg <- NULL;
-  if(substring(format,4,5)=="ts"){
-    # two factor time series data
-    if(substring(format,1,3)=="row"){ # sample in row
-      msg<-c(msg, "Samples are in rows and features in columns");
-      smpl.nms <-dat[,1];
-      all.nms <- colnames(dat);
-      facA.lbl <- all.nms[2];
-      cls.lbl <- facA <- dat[,2]; # default assign facA to cls.lbl in order for one-factor analysis
-      facB.lbl <- all.nms[3];
-      facB <- dat[,3];
-      conc <- dat[,-c(1:3)];
-      var.nms <- colnames(conc);
-    }else{ # sample in col
-      msg<-c(msg, "Samples are in columns and features in rows.");
-      all.nms <- dat[,1];
-      facA.lbl <- all.nms[1];
-      cls.lbl <- facA <- dat[1,-1];
-      facB.lbl <- all.nms[2];
-      facB <- dat[2,-1];
-      var.nms <- dat[-c(1:2),1];
-      conc<-t(dat[-c(1:2),-1]);
-      smpl.nms <- rownames(conc);
-    }
-    
-    if(mSetObj$dataSet$design.type =="time" | mSetObj$dataSet$design.type =="time0"){
-      # determine time factor
-      if(!(tolower(facA.lbl) == "time" | tolower(facB.lbl) == "time")){
-        AddErrMsg("No time points found in your data");
-        AddErrMsg("The time points group must be labeled as <b>Time</b>");
-        return(0);
-      }
-    }
-  }else{
-    
-    if(substring(format,1,3)=="row"){ # sample in row
-      msg <- c(msg, "Samples are in rows and features in columns");
-      smpl.nms <-dat[,1];
-      dat[,1] <- NULL;
-      if(lbl.type == "qc"){
-        rownames(dat) <- smpl.nms;
-        mSetObj$dataSet$orig <- dat;
-        mSetObj$dataSet$cmpd <- colnames(dat);
-        return(1);
-      }
-      cls.lbl <- smpl.nms;
-      conc <- dat[,-1];
-      var.nms <- colnames(conc);
-    }else{ # sample in col
-      msg<-c(msg, "Samples are in columns and features in rows.");
-      var.nms <- dat[-1,1];
-      dat[,1] <- NULL;
-      smpl.nms <- colnames(dat);
-      cls.lbl <- dat[1,];
-      conc <- t(dat[-1,]);
-    }
+
+  if(substring(dataFormat,1,3)=="row"){ # sample in row
+    msg<-c(msg, paste0("&emsp;&emsp;&emsp;&emsp;", "- Samples in rows and variables in columns."));
+    smpl.nms <- rownames(dat);
+    all.nms <- colnames(dat);
+    cls.lbl <- smpl.nms;
+    facA <- dat[,1];
+    facA.lbl <- all.nms[1];
+    facB <- dat[,2];
+    facB.lbl <- all.nms[2];
+    var.nms <- all.nms;
+    dat1 <- dat;
+  }else{ # sample in col
+    msg<-c(msg, paste0("<ul>", "- Samples in columns and variables in rows.", "</ul>"));
+    all.nms <- rownames(dat);
+    smpl.nms <- colnames(dat);
+    cls.lbl <- smpl.nms;
+    facA <- dat[1,];
+    facA.lbl <- cls.lbl[1];
+    facB <- dat[2,];
+    facB.lbl <- cls.lbl[2];
+    var.nms <- all.nms;
+    dat1<-as.data.frame(t(dat));
+    colnames(dat1) <- all.nms;
+    rownames(dat1) <- smpl.nms;
   }
-  
+  mSetObj$dataSet$orig <- dat1;
   mSetObj$dataSet$type.cls.lbl <- class(cls.lbl);
-  
-  # free memory
-  dat <- NULL;
-  
-  msg <- c(msg, "The uploaded file is in comma separated values (.csv) format.");
   
   # try to remove empty line if present
   # identified if no sample names provided
-  
   empty.inx <- is.na(smpl.nms) | smpl.nms == ""
   if(sum(empty.inx) > 0){
     msg <- c(msg, paste("<font color=\"red\">", sum(empty.inx), "empty rows</font> were detected and excluded from your data."));
     smpl.nms <- smpl.nms[!empty.inx];
     cls.lbl <-  cls.lbl[!empty.inx];
-    conc <- conc[!empty.inx, ];
+    dat1 <- dat1[!empty.inx, ];
   }
   
   # try to check & remove empty lines if class label is empty
-  # Added by B. Han
   empty.inx <- is.na(cls.lbl) | cls.lbl == ""
   if(sum(empty.inx) > 0){
-    if(mSetObj$analSet$type != "roc"){
-      msg <- c(msg, paste("<font color=\"red\">", sum(empty.inx), "empty labels</font> were detected and excluded from your data."));
-      smpl.nms <- smpl.nms[!empty.inx];
-      cls.lbl <-  cls.lbl[!empty.inx];
-      conc <- conc[!empty.inx, ];
-    }else{
-      # force all NA to empty string, otherwise NA will become "NA" class label
-      cls.lbl[is.na(cls.lbl)] <- "";
-      msg <- c(msg, paste("<font color=\"orange\">", sum(empty.inx), "new samples</font> were detected from your data."));
-    }
+    # force all NA to empty string, otherwise NA will become "NA" class label
+    cls.lbl[is.na(cls.lbl)] <- "";
+    msg <- c(msg, paste("<font color=\"orange\">", sum(empty.inx), "new samples</font> were detected from your data."));
   }
   
-  if(anal.type == "roc"){
-    if(length(unique(cls.lbl[!empty.inx])) > 2){
-      AddErrMsg("ROC analysis is only defined for two-group comparisions!");
-      return(0);
-    }
-
-  }
-
-
   # check for uniqueness of dimension name
   if(length(unique(smpl.nms))!=length(smpl.nms)){
     dup.nm <- paste(smpl.nms[duplicated(smpl.nms)], collapse=" ");
@@ -254,22 +425,12 @@ Read.TextData <- function(mSetObj=NA, filePath, format="colu", lbl.type="disc"){
     return(0);
   }
   
-
-
-  # try to remove check & remove empty line if feature name is empty
-  empty.inx <- is.na(var.nms) | var.nms == "";
-  if(sum(empty.inx) > 0){
-    msg <- c(msg, paste("<font color=\"red\">", sum(empty.inx), "empty features</font> were detected and excluded from your data."));
-    var.nms <- var.nms[!empty.inx];
-    conc <- conc[,!empty.inx];
+  if(length(unique(var.nms))!=length(var.nms)){
+    dup.nm <- paste(var.nms[duplicated(var.nms)], collapse=" ");
+    AddErrMsg("Duplicate feature names are not allowed!");
+    AddErrMsg(dup.nm);
+    return(0);
   }
-  
-  #if(length(unique(var.nms))!=length(var.nms)){
-  #  dup.nm <- paste(var.nms[duplicated(var.nms)], collapse=" ");
-  #  AddErrMsg("Duplicate feature names are not allowed!");
-  #  AddErrMsg(dup.nm);
-  # return(0);
-  #}
   
   # now check for special characters in the data labels
   if(sum(is.na(iconv(smpl.nms)))>0){
@@ -286,14 +447,14 @@ Read.TextData <- function(mSetObj=NA, filePath, format="colu", lbl.type="disc"){
     return(0);
   }
   
-  # only keep alphabets, numbers, ",", "." "_", "-" "/"
+  # only keep alphabets, numbers, " ", ",", "." "_", "-" "/"
   smpl.nms <- gsub("[^[:alnum:]./_-]", "", smpl.nms);
   var.nms <- gsub("[^[:alnum:][:space:],'./_-]", "", var.nms); # allow space, comma and period
   cls.lbl <- ClearStrings(as.vector(cls.lbl));
-
+  
   # now assgin the dimension names
-  rownames(conc) <- smpl.nms;
-  colnames(conc) <- var.nms;
+  rownames(dat1) <- smpl.nms;
+  colnames(dat1) <- var.nms;
   
   # check if paired or not
   if(mSetObj$dataSet$paired){
@@ -301,75 +462,107 @@ Read.TextData <- function(mSetObj=NA, filePath, format="colu", lbl.type="disc"){
     mSetObj$dataSet$orig.cls <- mSetObj$dataSet$pairs <- cls.lbl;
   }else{
     if(lbl.type == "disc"){
-      # check for class labels at least two replicates per class
-      #if(min(table(cls.lbl)) < 3){
-      #  AddErrMsg(paste ("A total of", length(levels(as.factor(cls.lbl))), "groups found with", length(smpl.nms), "samples."));
-      #  AddErrMsg("At least three replicates are required in each group!");
-      #  AddErrMsg("Or maybe you forgot to specify the data format?");
-      #  return(0);
-      #}
-     
-      mSetObj$dataSet$orig.cls <- mSetObj$dataSet$cls <- as.factor(as.character(cls.lbl));
-      
-      if(substring(format,4,5)=="ts"){
-        
-        mSetObj$dataSet$facA.type <- is.numeric(facA);
-        mSetObj$dataSet$orig.facA <- mSetObj$dataSet$facA <- as.factor(as.character(facA));
-        mSetObj$dataSet$facA.lbl <- facA.lbl;
-        
-        mSetObj$dataSet$facB.type <- is.numeric(facB);
-        mSetObj$dataSet$orig.facB <- mSetObj$dataSet$facB <- as.factor(as.character(facB));
-        mSetObj$dataSet$facB.lbl <- facB.lbl;
-      }
-      
+      mSetObj$dataSet$orig.cls <- mSetObj$dataSet$cls <- cls.lbl;
+      mSetObj$dataSet$facA.type <- class(facA);
+      mSetObj$dataSet$orig.facA <- mSetObj$dataSet$facA <- facA;
+      mSetObj$dataSet$facA.lbl <- facA.lbl;
+      mSetObj$dataSet$facB.type <- class(facB);
+      mSetObj$dataSet$orig.facB <- mSetObj$dataSet$facB <- facB;
+      mSetObj$dataSet$facB.lbl <- facB.lbl;
     }else{ # continuous
-      mSetObj$dataSet$orig.cls <- mSetObj$dataSet$cls <- as.numeric(cls.lbl);
+      mSetObj$dataSet$orig.cls <- mSetObj$dataSet$cls <- cls.lbl;
     }
   }
+  mSetObj$dataSet$design.type <- "regular";
+  mSetObj$analSet$type <- "NA";
+  mSetObj$dataSet$cmpd <- "NA";
+  mSetObj$dataSet$type <- "main"
+  mSetObj$dataSet$orig <- dat1; # copy to be processed in the downstream
+  mSetObj$msgSet$read.msg <- c(msg, paste0("&emsp;&emsp;&emsp;&emsp;", "- The uploaded data file contains a ", nrow(dat1),
+                                          " (samples) by ", ncol(dat1), " (variables) data matrix."));
+  return(.set.mSet(mSetObj));
+}
+
+
+
+#'
+Read.TextDataMeta <- function(mSetObj=NA, filePath, metaFormat="rowu", lbl.type="disc", metaNames="colOnly"){
+  mSetObj <- .get.mSet(mSetObj);
   
-  # for the current being to support MSEA and MetPA
-  if(mSetObj$dataSet$type == "conc"){
-    mSetObj$dataSet$cmpd <- var.nms;
+  if (metaNames=="colOnly") { #yes column names, no row names
+    dat <- .readMetaDataTable(filePath, metaNames="colOnly");
+  } else if (metaNames=="rowOnly") { #no col names, yes row names
+    dat <- .readMetaDataTable(filePath, metaNames="rowOnly"); 
+  } else if (metaNames=="bothNames") { #yes col names, yes row names
+    dat <- .readMetaDataTable(filePath, metaNames="bothNames");
+  } else { #no col names, no row names
+    dat <- .readMetaDataTable(filePath, metaNames="noNames");
+  }
+
+  if(class(dat) == "try-error" || ncol(dat) == 0){
+    AddErrMsg("Data format error. Failed to read in the data!
+                /nMake sure the data table is saved in tab separated values (.txt) or comma separated values (.csv) format.
+                /nPlease also check the following:
+                /n/tBoth sample and variable names must in UTF-8 encoding.
+                /n/tMake sure sample names and variable names are unique.
+                /n/tMissing values should be blank or NA without quote.");
+    return(0);
+  }
+
+  if(substring(metaFormat,1,3)=="row"){ # sample in row
+    dat1 <- dat;
+  }else{ # sample in col
+    dat1<-as.data.frame(t(dat));
   }
   
-  mSetObj$dataSet$orig <- conc; # copy to be processed in the downstream
-  mSetObj$msgSet$read.msg <- c(msg, paste("The uploaded data file contains ", nrow(conc),
-                                          " (samples) by ", ncol(conc), " (", tolower(GetVariableLabel(mSetObj$dataSet$type)), ") data matrix.", sep=""));
-  
+  mSetObj$dataSet$origMeta <- dat1;
+  lbls.meta <- as.data.frame(c(1:nrow(mSetObj$dataSet$origMeta)))
+  colnames(lbls.meta) <- c("Sample")
+  orig.meta<-cbind(lbls.meta, mSetObj$dataSet$origMeta);
+  write.csv(orig.meta, file="data_grouping.csv", row.names=FALSE); 
+
   return(.set.mSet(mSetObj));
 }
 
-#'Constructor to read uploaded CSV or TXT files into the dataSet object
-#'@description This function handles reading in CSV or TXT files and filling in the dataSet object created using "InitDataObjects". 
-#'@usage Read.TextData(mSetObj=NA, filePath, format, lbl.type)
-#'@param mSetObj Input the name of the created mSetObj (see InitDataObjects).
-#'@param filePath Input the path name for the CSV/TXT files to read.
-#'@param format Specify if samples are paired and in rows (rowp), unpaired and in rows (rowu),
-#'in columns and paired (colp), or in columns and unpaired (colu).
-#'@param lbl.type Specify the data label type, either discrete (disc) or continuous (cont).
-#'@author Jeff Xia \email{jeff.xia@mcgill.ca}, Jasmine Chong
-#'McGill University, Canada
-#'License: GNU GPL (>= 2)
-#'@export
-
-Read.TextDataMeta <- function(mSetObj=NA, filePath, format="colu", lbl.type="disc"){
-  
+#'
+Read.TextDataEnv <- function(mSetObj=NA, filePath, envFormat="rowu", lbl.type="disc", envNames="colOnly"){
   mSetObj <- .get.mSet(mSetObj);
 
-  mSetObj$dataSet$origMeta <- .readDataTable(filePath);
+  if (envNames=="colOnly") { #yes column names, no row names
+    dat <- .readEnvDataTable(filePath, envNames="colOnly");
+  } else if (envNames=="rowOnly") { #no col names, yes row names
+    dat <- .readEnvDataTable(filePath, envNames="rowOnly"); 
+  } else if (envNames=="bothNames") { #yes col names, yes row names
+    dat <- .readEnvDataTable(filePath, envNames="bothNames");
+  } else { #no col names, no row names
+    dat <- .readEnvDataTable(filePath, envNames="noNames");
+  }
+
+  if(class(dat) == "try-error" || ncol(dat) == 0){
+    AddErrMsg("Data format error. Failed to read in the data!
+                /nMake sure the data table is saved in tab separated values (.txt) or comma separated values (.csv) format.
+                /nPlease also check the following:
+                /n/tBoth sample and variable names must in UTF-8 encoding.
+                /n/tMake sure sample names and variable names are unique.
+                /n/tMissing values should be blank or NA without quote.");
+    return(0);
+  }
+
+  if(substring(envFormat,1,3)=="row"){ # sample in row
+    dat1 <- dat;
+  }else{ # sample in col
+    dat1<-as.data.frame(t(dat));
+  } 
   
-  print(mSetObj$dataSet$origMeta)
+  mSetObj$dataSet$origEnv <- dat1;
+  lbls.env <- as.data.frame(c(1:nrow(mSetObj$dataSet$origEnv)))
+  colnames(lbls.env) <- c("Sample")
+  orig.env<-cbind(lbls.env, mSetObj$dataSet$origEnv);
+  write.csv(orig.env, file="data_constraining.csv", row.names=FALSE); 
+
   return(.set.mSet(mSetObj));
 }
 
-Read.TextDataEnv <- function(mSetObj=NA, filePath, format="colu", lbl.type="disc"){
-  
-  mSetObj <- .get.mSet(mSetObj);
-
-  mSetObj$dataSet$origEnv <- .readDataTable(filePath);
-
-  return(.set.mSet(mSetObj));
-}
 
 #'Read peak list files
 #'@description This function reads peak list files and fills the data into a dataSet object.  
@@ -384,7 +577,7 @@ Read.TextDataEnv <- function(mSetObj=NA, filePath, format="colu", lbl.type="disc
 #'McGill University, Canada
 #'License: GNU GPL (>= 2)
 #'@export
-
+#'
 Read.PeakList<-function(mSetObj=NA, foldername){
   mSetObj <- .get.mSet(mSetObj);
 
@@ -491,7 +684,7 @@ Read.PeakList<-function(mSetObj=NA, foldername){
   all.peaks <- all.peaks[gd.inx,]
   
   if(sum(!gd.inx) > 0){
-    msg<-c(msg, paste("<font color='red'>A total of", sum(!gd.inx), "peaks were excluded due to non-numeric values. </font>" ));
+    msg<-c(msg, paste("<font color='red'> A total of", sum(!gd.inx), "peaks were excluded due to non-numeric values. </font> " ));
   }
   msg<-c(msg, paste("These samples contain a total of ", dim(all.peaks)[1], "peaks," ));
   msg<-c(msg, paste("with an average of ", round(dim(all.peaks)[1]/length(files), 1), "peaks per sample" ));
@@ -584,6 +777,9 @@ ReadPairFile <- function(filePath="pairs.txt"){
   return(labels);
 }
 
+
+
+
 #'Save the processed data with class names
 #'@description This function saves the processed data with class names as CSV files. 
 #'Several files may be generated, the original data, processed data, peak normalized, and/or normalized data. 
@@ -603,65 +799,86 @@ SaveTransformedData <- function(mSetObj=NA){
       lbls <- cbind(as.character(mSetObj$dataSet$orig.facA),as.character(mSetObj$dataSet$orig.facB));
       colnames(lbls) <- c(mSetObj$dataSet$facA.lbl, mSetObj$dataSet$facB.lbl);
     }else{
-      lbls <- cbind("Label"= as.character(mSetObj$dataSet$orig.cls));
+      lbls <- cbind("Sample"= as.character(mSetObj$dataSet$orig.cls));
     }
     orig.data<-cbind(lbls, mSetObj$dataSet$orig);
-    if(dim(orig.data)[2]>200){
-      orig.data<-t(orig.data);
+    #if(dim(orig.data)[2]>200){
+    #  orig.data<-t(orig.data);
+    #}
+    write.csv(orig.data, file="data_original.csv", row.names=FALSE);
+  }
+
+    if(!is.null(mSetObj$dataSet[["origMeta"]])){
+        lbls.meta <- as.data.frame(c(1:nrow(mSetObj$dataSet$origMeta)))
+        colnames(lbls.meta) <- c("Sample")
+        orig.meta<-cbind(lbls.meta, mSetObj$dataSet$origMeta);
+        write.csv(orig.meta, file="data_grouping.csv", row.names=FALSE); 
     }
-    write.csv(orig.data, file="data_original.csv");
+
+    if(!is.null(mSetObj$dataSet[["origEnv"]])){
+        lbls.env <- as.data.frame(c(1:nrow(mSetObj$dataSet$origEnv)))
+        colnames(lbls.env) <- c("Sample")
+        orig.env<-cbind(lbls.env, mSetObj$dataSet$origEnv);
+        write.csv(orig.env, file="data_constraining.csv", row.names=FALSE); 
+    }
+
     if(!is.null(mSetObj$dataSet[["procr"]])){
       if(tsFormat){
         lbls <- cbind(as.character(mSetObj$dataSet$proc.facA),as.character(mSetObj$dataSet$proc.facB));
         colnames(lbls) <- c(mSetObj$dataSet$facA.lbl, mSetObj$dataSet$facB.lbl);
-      }else{
-        lbls <- cbind("Label"= as.character(mSetObj$dataSet$proc.cls));
+     }else{
+        lbls <- cbind("Sample"= as.character(mSetObj$dataSet$proc.cls));
       }
       proc.data<-cbind(lbls, mSetObj$dataSet$procr);
-      if(dim(proc.data)[2]>200){
-        proc.data<-t(proc.data);
-      }
-      write.csv(proc.data, file="data_processed.csv");
-      if(!is.null(mSetObj$dataSet[["norm"]])){
+     #if(dim(proc.data)[2]>200){
+     #  proc.data<-t(proc.data);
+     #}
+      write.csv(proc.data, file="data_processed.csv", row.names=FALSE);
+    }
+  
+    if(!is.null(mSetObj$dataSet[["norm"]])){
         if(tsFormat){
           lbls <- cbind(as.character(mSetObj$dataSet$facA),as.character(mSetObj$dataSet$facB));
           colnames(lbls) <- c(mSetObj$dataSet$facA.lbl, mSetObj$dataSet$facB.lbl);
         }else{
-          lbls <- cbind("Label"= as.character(mSetObj$dataSet$cls));
+          lbls <- cbind("Sample"= as.character(mSetObj$dataSet$cls));
         }
         
         # for ms peaks with rt and ms, insert two columns, without labels
-        # note in memory, features in columns
-        
-        if(!is.null(mSetObj$dataSet$three.col)){ 
-          ids <- matrix(unlist(strsplit(colnames(mSetObj$dataSet$norm), "/")),ncol=2, byrow=T);
-          colnames(ids) <- c("mz", "rt");
-          new.data <- data.frame(ids, t(mSetObj$dataSet$norm));
-          write.csv(new.data, file="peak_normalized_rt_mz.csv");
-        }
+        # note in memory, variables in columns
+      #  if(!is.null(mSetObj$dataSet$three.col)){  #I REMOVED THIS
+      #   ids <- matrix(unlist(strsplit(colnames(mSetObj$dataSet$norm), "/")),ncol=2, byrow=T);
+      #   colnames(ids) <- c("mz", "rt");
+      #   write.csv(new.data, file="peak_normalized_rt_mz.csv");
+      #}
         
         norm.data<-cbind(lbls, mSetObj$dataSet$norm);
-        if(dim(norm.data)[2]>200){
-          norm.data<-t(norm.data);
-        }
-        write.csv(norm.data, file="data_normalized.csv");
-      }
-    }
-  }
+
+        #if(dim(norm.data)[2]>200){
+        #  norm.data<-t(norm.data);
+        #}
+
+       write.csv(norm.data, file="data_normalized.csv", row.names=FALSE);
+     }
   return(.set.mSet(mSetObj));
 }
+
+
+
 
 #' Adds an error message
 #'@description The error message will be printed in all cases.
 #'Used in higher functions. 
 #'@param msg Error message to print 
 #'@export
+#'
 AddErrMsg <- function(msg){
   msg.vec <<- c(msg.vec, msg);
   print(msg);
 }
 
 # general message only print when running local
+#'
 AddMsg <- function(msg){
   msg.vec <<- c(msg.vec, msg);
   if(!.on.public.web){
@@ -670,10 +887,12 @@ AddMsg <- function(msg){
 }
 
 # return the latest message
+#'
 GetCurrentMsg <- function(){
   return(msg.vec[length(msg.vec)]);
 }
 
+#'
 GetMetaCheckMsg <- function(mSetObj=NA){
   return(current.msg);
 }
@@ -785,6 +1004,7 @@ PlotCmpdSummary<-function(mSetObj=NA, cmpdNm, format="png", dpi=72, width=NA){
 #' @param filenm Input the name of the file to download
 
 # read binary RDS files
+#'
 .read.metaboanalyst.lib <- function(filenm){
   if(.on.public.web){
     lib.path <- paste("../../libs/", filenm, sep="");
@@ -811,6 +1031,7 @@ PlotCmpdSummary<-function(mSetObj=NA, cmpdNm, format="png", dpi=72, width=NA){
 
 # read binary RDA files (old style should be all RDS)
 # type should mset or kegg
+#'
 .load.metaboanalyst.lib <- function(libtype, libname){
   
   destfile <- paste(libname, ".rda", sep="");
@@ -842,10 +1063,12 @@ PlotCmpdSummary<-function(mSetObj=NA, cmpdNm, format="png", dpi=72, width=NA){
 ##############################################
 ##############################################
 
+#'
 GetErrMsg<-function(){
   return(msg.vec);
 }
 
+#'
 GetKEGG.PathNames<-function(mSetObj=NA){
   mSetObj <- .get.mSet(mSetObj);
   return(names(metpa$path.ids));
@@ -857,7 +1080,7 @@ GetKEGG.PathNames<-function(mSetObj=NA){
 #'@author Jeff Xia\email{jeff.xia@mcgill.ca}
 #'McGill University, Canada
 #'License: GNU GPL (>= 2)
-
+#'
 KEGGID2Name<-function(ids){
   cmpd.db <- .read.metaboanalyst.lib("compound_db.rds");
   hit.inx<- match(ids, cmpd.db$kegg);
@@ -871,7 +1094,7 @@ KEGGID2Name<-function(ids){
 #'@author Jeff Xia\email{jeff.xia@mcgill.ca}
 #'McGill University, Canada
 #'License: GNU GPL (>= 2)
-
+#'
 KEGGPATHID2SMPDBIDs<-function(ids){
   hit.inx<-match(ids, path.map[,1]);
   return(path.map[hit.inx, 3]);
@@ -884,7 +1107,7 @@ KEGGPATHID2SMPDBIDs<-function(ids){
 #'@author Jeff Xia\email{jeff.xia@mcgill.ca}
 #'McGill University, Canada
 #'License: GNU GPL (>= 2)
-
+#'
 HMDBID2Name<-function(ids){
   cmpd.db <- .read.metaboanalyst.lib("compound_db.rds");
   hit.inx<- match(ids, cmpd.db$hmdb);
@@ -898,7 +1121,7 @@ HMDBID2Name<-function(ids){
 #'@author Jeff Xia\email{jeff.xia@mcgill.ca}
 #'McGill University, Canada
 #'License: GNU GPL (>= 2)
-
+#'
 KEGGID2HMDBID<-function(ids){
   
   cmpd.db <- .read.metaboanalyst.lib("compound_db.rds");
@@ -914,7 +1137,7 @@ KEGGID2HMDBID<-function(ids){
 #'@author Jeff Xia\email{jeff.xia@mcgill.ca}
 #'McGill University, Canada
 #'License: GNU GPL (>= 2)
-
+#'
 HMDBID2KEGGID<-function(ids){
   cmpd.db <- .read.metaboanalyst.lib("compound_db.rds");
   hit.inx<- match(ids, cmpd.db$hmdb);
@@ -971,6 +1194,7 @@ Setup.ConcData<-function(mSetObj=NA, conc){
 #'McGill University, Canada
 #'License: GNU GPL (>= 2)
 #'@export
+#'
 Setup.BiofluidType<-function(mSetObj=NA, type){
   mSetObj <- .get.mSet(mSetObj);
   mSetObj$dataSet$biofluid <- type;
@@ -978,6 +1202,7 @@ Setup.BiofluidType<-function(mSetObj=NA, type){
 }
 
 # all groups
+#'
 GetGroupNames <- function(mSetObj=NA){
   mSetObj <- .get.mSet(mSetObj);
   cls.lbl <- mSetObj$dataSet$prenorm.cls;
@@ -992,16 +1217,19 @@ GetGroupNames <- function(mSetObj=NA){
 }
 
 # groups entering analysis
+#'
 GetNormGroupNames <- function(mSetObj=NA){
   mSetObj <- .get.mSet(mSetObj);
   levels(mSetObj$dataSet$cls);
 }
 
+#'
 GetLiteralGroupNames <- function(mSetObj=NA){
   mSetObj <- .get.mSet(mSetObj);
   as.character(mSetObj$dataSet$prenorm.cls);
 }
 
+#'
 IsReadyForEditor <- function(mSetObj=NA){
   mSetObj <- .get.mSet(mSetObj);
   if(is.null(mSetObj$dataSet[["prenorm"]])){
@@ -1014,11 +1242,9 @@ IsReadyForEditor <- function(mSetObj=NA){
 #'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
 #'@param org Set organism ID
 #'@export
+#'
 SetOrganism <- function(mSetObj=NA, org){
   mSetObj <- .get.mSet(mSetObj);
   pathinteg.org <<- data.org <<- org;
   return(.set.mSet(mSetObj))
 }
-
-
-

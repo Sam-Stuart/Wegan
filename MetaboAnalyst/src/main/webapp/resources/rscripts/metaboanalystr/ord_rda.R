@@ -10,16 +10,16 @@
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2)
 #'@export
-
-ord.rda <- function(mSetObj=NA, abundance="false", env_text="NULL", data="false") { #3 user options on all results pages, plus ability to upload up to 2 supplemental data sets
+ord.rda <- function(mSetObj=NA, abundance="false", env_text=" ", data="false") { #3 user options on all results pages, plus ability to upload up to 2 supplemental data sets
+  
+  options(error=traceback)
 
   library("vegan")
   library("dplyr")
 
   print("The use of data groupings will create more interesting plots. Load grouping data separately, where each row aligns with the rows in your data set, or include groupings as columns in your main data set.")
   print("The use of environmental data, if available, will also create more interesting plots. Load environmental data separately, where each row aligns with the rows in your data set.")
-  metaData <- "NULL"
-  envData <- "NULL"
+
   #Obtain mSet dataset
   mSetObj <- .get.mSet(mSetObj)
   if (data=="false") {
@@ -27,11 +27,18 @@ ord.rda <- function(mSetObj=NA, abundance="false", env_text="NULL", data="false"
   } else {
     input <- mSetObj$dataSet$orig
   }
-  
-  #Obtain numeric data for ordination and catgroical data for grouping data
+   print("norm")
+   print(mSetObj$dataSet$norm)
+
+  cat("beforeMeta")
+  input <- input[order(as.numeric(row.names(input))),] #Order rows
+  metaData <- mSetObj$dataSet$origMeta
+  envData <- mSetObj$dataSet$origEnv
+
+  #Obtain numeric data for ordination and categorical data for grouping data
   num_data <- select_if(input, is.numeric)
-  fac_data <- select_if(input, is.factor)
-  count.fac.cols <- ncol(fac_data)
+  fac_data <- select_if(input, is.character)
+  count.char.cols <- ncol(fac_data)
   
   print("More: Should you have community species data, you may want to investigate the relative abundance (divide all values by column totals) versus absolute abundance (no change to data).")
   if (abundance=="false") {
@@ -55,17 +62,17 @@ ord.rda <- function(mSetObj=NA, abundance="false", env_text="NULL", data="false"
   
   #Text box instructions for selecting predictor variables. Text box should be interactive, meaning any change in text alters the result in real time. Default env_text is second column.
   if (is.data.frame(envData)==TRUE) { #User uplaoded environmental data  
-    cat("You uploaded environmental data. Identify environmental variables for DCA using the column names with commas in between.")
+    cat("You uploaded environmental data. Identify environmental variables for RDA using the column names with commas in between.")
   }
   
-  #Set up environmental data using user selected columns
+    #Set up environmental data using user selected columns
   if (is.data.frame(envData1)==TRUE) { #User uplaoded environmental data
-    if (env_text=="NULL") { 
+    if (env_text==" ") { #User doesn't specify columns-- all columns used
       env_text1 <- colnames(envData1) #Default is the all env columns
-      cat(paste0("You have selected these constraining environmental variables: ", paste(env_text1, collapse=", ")))
+      cat(paste0("You have selected these constraining variables: ", paste(env_text1, collapse=", ")))
       cat("If the selection is not what you intended, reenter environmental variable(s) in the text box, using the column names with commas in between.")
       
-    } else {
+    } else { #User enters columns
       env_text1 <- env_text #taken from text box by java, fed as string into R code
       env_text1 <- gsub("\n", "", env_text1, fixed=TRUE) #fixed=TRUE means we are dealing with one string, versus a vector of strings (fixed=FALSE)
       env_text1 <- gsub(",", "+", env_text1, fixed=TRUE) 
@@ -73,13 +80,13 @@ ord.rda <- function(mSetObj=NA, abundance="false", env_text="NULL", data="false"
       env_text1 <- gsub(" ", "", env_text1, fixed=TRUE)
       env_text1 <- gsub(":", "+", env_text1, fixed=TRUE)
       env_text1 <- gsub("*", "+", env_text1, fixed=TRUE)
-      cat(paste0("You have selected these constraining environmental variables: ", gsub("+", ", ", env_text1, fixed=TRUE), "."))
+      cat(paste0("You have selected these constraining variables: ", gsub("+", ", ", env_text1, fixed=TRUE), "."))
       cat("If the selection is not what you intended, reenter environmental variable(s) in the text box, using the column names with commas in between.")
     }
-  
-      env_cols <- unlist(strsplit(env_text1, "+", fixed=TRUE)) #Extract column names from env_text1
-      env_data <- as.data.frame(envData1[,which(colnames(envData1) %in% env_cols)]) #Subset environmental data set to select columns of interest
-      colnames(env_data) <- env_cols #Name columns
+    
+    env_cols <- unlist(strsplit(env_text1, "+", fixed=TRUE)) #Extract column names from env_text1
+    env_data <- as.data.frame(envData1[,which(colnames(envData1) %in% env_cols)]) #Subset environmental data set to select columns of interest
+    colnames(env_data) <- env_cols #Name columns
   } else { #No environmetal data uploaded
     env_data <- "NA"
   }
@@ -88,12 +95,12 @@ ord.rda <- function(mSetObj=NA, abundance="false", env_text="NULL", data="false"
   if(is.data.frame(envData1)==FALSE) { #Without environmental data
     rda <- rda(num_data1)
   } else{ #With user uploaded environmetal data
-    rda <- rda(X=num_data1, Y=env_data)
+    rda <- rda(num_data1 ~ ., env_data)
   }
 
-  #meta (grouping) data, used to group samples using colors or plotting symbols
+  #meta (grouping) data, used to group samples using colors
   if (is.data.frame(metaData)==FALSE) { #No user uplaoded grouping data
-    if (count.fac.cols >= 1) { #If species data had at least one categorical column, call it grouping data
+    if (count.char.cols >= 1) { #If species data had at least one categorical column, call it grouping data
       metaData1 <- as.data.frame(fac_data)
     } else {
       metaData1 <- "NA" #If species data had no categorical columns, grouping data is NULL
@@ -121,7 +128,7 @@ ord.rda <- function(mSetObj=NA, abundance="false", env_text="NULL", data="false"
     env_fit <- "NA"
   } else { #If environmental data uploaded
     env_data_numeric <- select_if(env_data, is.numeric)
-    env_data_factor <- select_if(env_data, is.factor)
+    env_data_factor <- select_if(env_data, is.character)
     env_fit <- envfit(rda, env_data, permutations=999, p.max=NULL, display="sites")
     if (ncol(env_data_factor)>0) {
       env_fit_fac <- envfit(rda, env_data_factor, permutations=999, p.max=NULL, display="sites")
@@ -148,26 +155,25 @@ ord.rda <- function(mSetObj=NA, abundance="false", env_text="NULL", data="false"
     }
     
     if (length(env_data_factor)>0) { #Repeat for categorical environmental variables
-      env_scores.fac <- signif(scores(env_fit, display="factors"), 5)
+      env_scores.char <- signif(scores(env_fit, display="factors"), 5)
     } else {
-      env_scores.fac <- "NA"
+      env_scores.char <- "NA"
     }
     
     if (is.matrix(env_scores.num)==TRUE) { #Numeric environmental variable scores turned into a matrix
-      if (is.matrix(env_scores.fac)==TRUE) { #Categorical environmental variable scores turned into a matrix
-        env_scores <- rbind(env_scores.num, env_scores.fac) #If both types of scores exist, combine them
+      if (is.matrix(env_scores.char)==TRUE) { #Categorical environmental variable scores turned into a matrix
+        env_scores <- rbind(env_scores.num, env_scores.char) #If both types of scores exist, combine them
       } else {  #No categorical environmental variables
         env_scores <- env_scores.num #Just scores for numeric data
       }
     } else { #No numeric environmental variables
-      env_scores <- env_scores.fac #Just scores for factor data
+      env_scores <- env_scores.char #Just scores for factor data
     }
   }
 
   #Produce relevant results
   summary <- summary(rda)
   eigenvalues <- eigenvals(rda)
-  print(eigenvalues)
  
   #Store results in mSetObj$analSet$rda
   mSetObj$analSet$rda$name <- "RDA"
@@ -187,10 +193,10 @@ ord.rda <- function(mSetObj=NA, abundance="false", env_text="NULL", data="false"
   mSetObj$analSet$rda$eigenvalues <- eigenvalues
 
   #Download relevant data
-  write.csv(samp.scores, file="rda_row_scores.csv", row.names=row.names(input))
-  write.csv(var_scores, file="rda_column_scores.csv", row.names=TRUE)
+  write.csv(samp.scores, file="rda_sample_scores.csv", row.names=row.names(input))
+  write.csv(var_scores, file="rda_variable_scores.csv", row.names=TRUE)
   if (is.data.frame(envData1)==TRUE) { #If environmental data uploaded
-    write.csv(env_scores, file="rda_environment_scores.csv", row.names=TRUE)
+    write.csv(env_scores, file="rda_constraining_data_scores.csv", row.names=TRUE)
   } 
 
   eigenValues_data <- cbind(eigenvalues, eigenvalues/sum(eigenvalues))
@@ -206,8 +212,8 @@ ord.rda <- function(mSetObj=NA, abundance="false", env_text="NULL", data="false"
   sink()  
 
   if (is.data.frame(envData1)==TRUE) { #If environmental data uploaded
-    sink("environment_impact_on_rda.txt") 
-    cat("Environmental data may significantly impact RDA\n")
+    sink("constraining_variables_impact_on_rda.txt") 
+    cat("Constraining data may significantly impact RDA\n")
     print(env_fit)
     sink()
   }
@@ -237,8 +243,6 @@ ord.rda <- function(mSetObj=NA, abundance="false", env_text="NULL", data="false"
 #'@param env_cent Boolean, TRUE to produce display factor environmental data centroids, FALSE (default) to produce ordination plot without environmental centroids
 #'@param sampleNames Boolean, TRUE to display data as variable names, FALSE (default) to display data as points
 #'@param meta_col_color Meta data column to use for plotting colors, Can be user inputted where options are given to java using function meta.columns()
-#'@param point_options Boolean, TRUE to turn data into points, FALSE (default) uses row names as data points
-#'@param meta_col_point Meta data column to use for plotting points, Can be user inputted where options are given to java using function meta.columns()
 #'@param imgName Input the image name
 #'@param format Select the image format, "png" or "pdf", default is "png" 
 #'@param dpi Input the dpi. If the image format is "pdf", users need not define the dpi. For "png" images, 
@@ -249,7 +253,9 @@ ord.rda <- function(mSetObj=NA, abundance="false", env_text="NULL", data="false"
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2)
 #'@export
-Plot.RDA.2D <- function(mSetObj=NA, color="NULL", var_arrows="false", env_arrows="false", env_cent="false", sampleNames="false", meta_col_color="NULL", point_options="false", meta_col_point="NULL", ellipse="false", imgName, format="png", dpi=72, width=NA) { #6 check boxes, 3 drop downs
+Plot.RDA.2D <- function(mSetObj=NA, color="NULL", var_arrows="false", env_arrows="false", env_cent="false", sampleNames="false", meta_col_color="NULL", ellipse="false", imgName, format="png", dpi=72, width=NA) { #6 check boxes, 3 drop downs
+  
+  options(error=traceback)
 
   library("vegan")
   library("viridis") 
@@ -258,7 +264,7 @@ Plot.RDA.2D <- function(mSetObj=NA, color="NULL", var_arrows="false", env_arrows
   mSetObj <- .get.mSet(mSetObj)
   rda <- mSetObj$analSet$rda$rda
   metaData <- mSetObj$analSet$rda$metaData
-  env_data <- mSetObj$analSet$rda$envDataPlotting
+  env_data <- mSetObj$analSet$rda$env_data
   num_data <- mSetObj$analSet$rda$num_data
   var_fit <- mSetObj$analSet$rda$variable.fit
   env_fit_fac <- mSetObj$analSet$rda$enviroment.factor.fit
@@ -306,9 +312,13 @@ Plot.RDA.2D <- function(mSetObj=NA, color="NULL", var_arrows="false", env_arrows
       points(rda, display="sites", pch=19)
     }
     
-    #Arrow options
+    #variable arrow options
     if (var_arrows!="false") { #If variable arrows selected
-      plot(var_fit, col="darkred", lwd=2)
+        if (color=="plasma") {
+            plot(var_fit, col="black")
+        } else {
+            plot(var_fit, col="darkred") 
+        }
     }
     
     if (is.data.frame(env_data)==TRUE) { #If environment data uploaded
@@ -324,21 +334,12 @@ Plot.RDA.2D <- function(mSetObj=NA, color="NULL", var_arrows="false", env_arrows
   } else { #If grouping data available
     
     #Set up grouping data column to use for colors
-    if (meta_col_color=="NULL") { #No column selected for grouping by color
+    if (is.data.frame(meta_col_color)==FALSE) { #No column selected for grouping by color
       meta_col_color_data <- as.factor(metaData[,1]) #Default grouping data column for grouping with color is the first
       meta_col_color_name <- colnames(metaData)[1] #Extract name
     } else { #column selected for grouping by color
       meta_col_color_data <- as.factor(metaData[,meta_col_color]) #User uploaded grouping data column for grouping with colors, options given to java using function meta.columns() below
       meta_col_color_name <- meta_col_color #Extract name
-    }
-    
-    #Set up grouping data column to use for points
-    if (meta_col_point=="NULL") { #No column selected for grouping by point shape
-      meta_col_point_data <- as.factor(metaData[,1]) #Default grouping data column for grouping with points is the first
-      meta_col_point_name <- colnames(metaData)[1] #Extract name
-    } else {
-      meta_col_point_data <- as.factor(metaData[,meta_col_point]) #User uploaded grouping data column for grouping with points, options given to java using function meta.columns() below
-      meta_col_point_name <- meta_col_point #Extract name
     }
     
     #Color options
@@ -360,26 +361,12 @@ Plot.RDA.2D <- function(mSetObj=NA, color="NULL", var_arrows="false", env_arrows
       cols <- colors[meta_col_color_data] #Grouping points Color pallete, user's choice
     }
     
-    #point options
-    pch_options <- c(19, 17, 15, 18, 1, 2, 0, 5, 6, 3, 4, 7, 8, 9, 10, 11, 12, 13, 14)
-    
-    if (point_options=="false") {
-      pchs <- 19 #No points option gets solid circle
-    } else {
-      pchs <- pch_options[meta_col_point_data] #Otherwise point options applied for grouping of user's choice
-    }
-    
     if (sampleNames!="false") { #If display data as lables
       with(metaData, text(rda, display="sites", col=cols, bg=cols)) # Text for samples
     } else { #display data as points
-      if (point_options!="false") { #Engage point options
-        with(metaData, points(rda, display="sites", col=cols, pch=pchs, bg=cols)) 
-        with(metaData, legend("bottomright", legend=levels(meta_col_point_data), col="black", pch=unique(pchs), pt.bg="black", title=meta_col_point_name))
-      } else { #No point options
-        with(metaData, points(rda, display="sites", col=cols, pch=pchs, bg=cols)) 
-      }
+        with(metaData, points(rda, display="sites", col=cols, pch=19, bg=cols)) 
     }
-    
+  
     #arrow options
     if (var_arrows!="false") { #If variable arrows selected
       plot(var_fit, col="darkred", lwd=2)
@@ -397,14 +384,13 @@ Plot.RDA.2D <- function(mSetObj=NA, color="NULL", var_arrows="false", env_arrows
     
     #Ellipse option
     if (ellipse!="false") { #if ellipses selected
-      with(metaData, ordiellipse(pcoa, meta_col_color_data, kind="sd", draw="polygon", border=colors, lwd=2)) # Include standard deviation ellipses that are the same color as the text.
+      with(metaData, ordiellipse(rda, meta_col_color_data, kind="sd", draw="polygon", border=colors, lwd=2)) # Include standard deviation ellipses that are the same color as the text.
     }
     
     #Legend for colors
     with(metaData, legend("topright", legend=levels(meta_col_color_data), col=colors, pch=19, title=meta_col_color_name)) # Include legend for colors in figure   
   }
-  
-  dev.off()
+    dev.off()
   
   return(.set.mSet(mSetObj))
   
@@ -427,18 +413,27 @@ Plot.RDA.2D <- function(mSetObj=NA, color="NULL", var_arrows="false", env_arrows
 #'License: GNU GPL (>= 2)
 #'@export
 Plot.RDA.scree <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA) {
-  
+    
+  options(error=traceback)
+
   #Extract necessary objects from mSetObj
   mSetObj <- .get.mSet(mSetObj)
   eigenvalues <- mSetObj$analSet$rda$eigenvalues
 
-  #Produce data set for plotting
-  eigenValues_data <- as.data.frame(cbind(eigenvalues, eigenvalues/sum(eigenvalues))) #Eigen values and variance explained
-  print(eigenValues_data)
+#  #Produce data set for plotting
+#  eigenValues_data <- as.data.frame(cbind(eigenvalues, eigenvalues/sum(eigenvalues))) #Eigen values and variance explained
+#  maxVar <- max(eigenvalues/sum(eigenvalues))
+#  n <- nrow(eigenValues_data) #also used in plot code below
+#  eigenValues_data <- as.data.frame(cbind(1:n, eigenValues_data)) #Add dimension column
+#  colnames(eigenValues_data) <- c("Dimension", "Eigen_Value", "Variance_Explained")
 
-  n <- nrow(eigenValues_data) #also used in plot code below
-  eigenValues_data <- as.data.frame(cbind(1:n, eigenValues_data)) #Add dimension column
-  colnames(eigenValues_data) <- c("Dimension", "Eigen_Value", "Variance_Explained")
+  pcvars <- eigenvalues[1:8]/sum(eigenvalues)
+  cumvars <- c(pcvars[1], pcvars[1]+pcvars[2], pcvars[1]+pcvars[2]+pcvars[3], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4]+pcvars[5], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4]+pcvars[5]+pcvars[6], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4]+pcvars[5]+pcvars[6]+pcvars[7], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4]+pcvars[5]+pcvars[6]+pcvars[7]+pcvars[8])
+  ylims <- range(c(pcvars,cumvars));
+  extd<-(ylims[2]-ylims[1])/10
+  miny<- ifelse(ylims[1]-extd>0, ylims[1]-extd, 0);
+  maxy<- ifelse(ylims[2]+extd>1, 1.0, ylims[2]+extd);
+  main <- "Redundancy Analysis Scree Plot"
 
   #Set plot dimensions
   if(is.na(width)){
@@ -456,11 +451,19 @@ Plot.RDA.scree <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA) 
   
   #Scree plot
   Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
-  par(xpd=FALSE, mar=c(5.1, 4.1, 4.1, 2.1)) 
-  plot(x=eigenValues_data$Dimension, y=eigenValues_data$Variance_Explained, type="l", xlim=c(1, n), ylim=c(0, 1), xlab="Dimension", ylab="Proportion of Variance Explained", main="Redundancy Analysis Scree Plot", yaxt="n", xaxt="n", col="blue", lwd=2)
-  points(x=eigenValues_data$Dimension, y=eigenValues_data$Variance_Explained, cex=1.1, pch=19, col="blue")
-  axis(2, las=2)
-  axis(1, at=1:n)
+  par(mar=c(5,5,6,3));
+  plot(pcvars, type='l', col='blue', main=main, xlab='Number of Dimensions', ylab='Stress', ylim=c(miny, maxy), axes=F)
+  text(pcvars, labels =paste(100*round(pcvars,3),'%'), adj=c(-0.3, -0.5), srt=45, xpd=T)
+  points(pcvars, col='red');
+  
+  lines(cumvars, type='l', col='green')
+  text(cumvars, labels =paste(100*round(cumvars,3),'%'), adj=c(-0.3, -0.5), srt=45, xpd=T)
+  points(cumvars, col='red');
+  
+  abline(v=1:8, lty=3);
+  axis(2);
+  axis(1, 1:length(pcvars), 1:length(pcvars));
+
   dev.off()
 }
 
@@ -479,15 +482,18 @@ Plot.RDA.scree <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA) 
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2)
 #'@export
-meta.columns <- function(mSetObj=NA) {
+rda.meta.columns <- function(mSetObj=NA) {
   
   mSetObj <- .get.mSet(mSetObj)
-  
-  metaData <- mSetObj$analSet$rda$metaData
-  name.all.meta.cols <- colnames(metaData)
 
-  return(name.all.meta.cols)
-  
+  metaData <- mSetObj$analSet$rda$metaData
+  if (is.data.frame(metaData)==FALSE) {
+    meta.col.names <- "No grouping data"
+  } else {
+    meta.col.names <- colnames(metaData)
+  }
+
+  return(meta.col.names)
 }
 
 

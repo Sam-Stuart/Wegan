@@ -46,101 +46,108 @@
                         </h:panelGrid> 
                         <h:panelGroup>
                                 <p>
-                                    To see a quick view of the coefficient matrices, click on their respective yellow icons. To view and download a csv file of the matrix, click the respective csv link.
+                                    To see a quick view of the coefficient matrices, click on their respective blue buttons with the eye icon. To view and download a csv file of the matrix, click the respective csv link.
                                 </p>
                         </h:panelGroup>
                         <p></p>
                         
-                        <h:panelGrid columns="4" style="width: 100%; line-height: 25px; text-align: left">
+                        <h:panelGrid columns="3" style="width: 100%; line-height: 25px; text-align: left; border-bottom: 2px solid #8cbd48">
                             <h:panelGrid >
                                 <p:commandButton icon ="fa fa-eye"
                                                  value="DD1 Matrix"
                                                  styleClass="bgdButton"
-                                                 style="box-shadow: none !important; text-shadow: none !important; "
+                                                 style="box-shadow: none !important; text-shadow: none !important;background: #75bafb !important; "
                                                  actionListener="#{sessionBean1.graphicsLnk_action('bgd_DD1')}" 
                                                  oncomplete="PF('DD1Matrix').show()"/>  
-                            </h:panelGrid>
-                            <h:panelGrid columns="2" style="width: 100%; padding-left: 0px; position:relative; left: -140px; top: 8px" >
-                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 10px">
-                                    <h:outputText style="padding-left: 0px" escape="false" value="#{BGDBean.fileDD1Path}"/>
-                                </i>
                             </h:panelGrid>
                             <h:panelGrid >
                                 <p:commandButton icon ="fa fa-eye"
                                                  value="DD2 Matrix"
                                                  styleClass="bgdButton"
-                                                 style="box-shadow: none !important; text-shadow: none !important;"
+                                                 style="box-shadow: none !important; text-shadow: none !important; background: #75bafb !important; "
                                                  actionListener="#{sessionBean1.graphicsLnk_action('bgd_DD2')}" 
                                                  oncomplete="PF('DD2Matrix').show()"/>  
                             </h:panelGrid>
-                            <h:panelGrid columns="2" style="width: 100%; padding-left: 0px;  position:relative; left: -140px; top: 4px" >
-                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 10px">
-                                    <h:outputText style="padding-left: 0px" escape="false" value="#{BGDBean.fileDD2Path}"/>
-                                </i>
-                            </h:panelGrid>
-                        </h:panelGrid>  
-                                               
-                        <h:panelGrid columns="4" style="width: 100%; line-height: 25px; text-align: left">
                             <h:panelGrid >
                                 <p:commandButton icon ="fa fa-eye"
                                                  value="DD3 Matrix"
                                                  styleClass="bgdButton"
-                                                 style="box-shadow: none !important; text-shadow: none !important;"
+                                                 style="box-shadow: none !important; text-shadow: none !important;background: #75bafb !important;"
                                                  actionListener="#{sessionBean1.graphicsLnk_action('bgd_DD3')}" 
                                                  oncomplete="PF('DD3Matrix').show()"/>  
                             </h:panelGrid>
-                            <h:panelGrid columns="2" style="width: 100%; padding-left: 0px; position:relative; left: -140px; top: 8px" >
-                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 10px">
+                            
+                        </h:panelGrid>  
+                        <h:panelGrid columns="3" style="width: 100%; line-height: 25px; text-align: left; border-bottom: 2px solid #8cbd48">
+                            <h:panelGrid columns="2" style="width: 100%; padding-left: 0px; position:relative; left: 0px; top: 8px" >
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">
+                                    <h:outputText style="padding-left: 0px" escape="false" value="#{BGDBean.fileDD1Path}"/>
+                                </i>
+                            </h:panelGrid>
+                            
+                            <h:panelGrid columns="2" style="width: 100%; padding-left: 0px;  position:relative; left: 0px; top: 8px" >
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">
+                                    <h:outputText style="padding-left: 0px" escape="false" value="#{BGDBean.fileDD2Path}"/>
+                                </i>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" style="width: 100%; padding-left: 0px; position:relative; left: 0px; top: 8px" >
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5px">
                                     <h:outputText style="padding-left: 0px" escape="false" value="#{BGDBean.fileDD3Path}"/>
                                 </i>
                             </h:panelGrid>
+                            
+                        </h:panelGrid>                        
+                        <h:panelGrid columns="3" style="width: 100%; line-height: 25px; text-align: left; border-bottom: 2px solid #8cbd48">
+                            
                             <h:panelGrid >
                                 <p:commandButton icon ="fa fa-eye"
                                                  value="DD4 Matrix"
                                                  styleClass="bgdButton"
-                                                 style="box-shadow: none !important; text-shadow: none !important;"
+                                                 style="box-shadow: none !important; text-shadow: none !important;background: #75bafb !important;"
                                                  actionListener="#{sessionBean1.graphicsLnk_action('bgd_DD4')}" 
                                                  oncomplete="PF('DD4Matrix').show()"/>  
                             </h:panelGrid>
-                            <h:panelGrid columns="2" style="width: 100%; padding-left: 0px; position:relative; left: -140px; top: 8px" >
-                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 10px">
-                                    <h:outputText style="padding-left: 0px" escape="false" value="#{BGDBean.fileDD4Path}"/>
-                                </i>
-                            </h:panelGrid>
-                        </h:panelGrid>  
-                        
-                         
-                        
-                        <h:panelGrid columns="4" style="width: 100%; line-height: 25px; text-align: left">
                             <h:panelGrid >
                                 <p:commandButton icon ="fa fa-eye"
                                                  value="McNemar"
                                                  styleClass="bgdButton"
-                                                 style="box-shadow: none !important; text-shadow: none !important;"
+                                                 style="box-shadow: none !important; text-shadow: none !important;background: #75bafb !important;"
                                                  actionListener="#{sessionBean1.graphicsLnk_action('bgd_McNemar')}" 
                                                  oncomplete="PF('McNemarMatrix').show()"/>  
-                            </h:panelGrid>
-                            <h:panelGrid columns="2" style="width: 100%; padding-left: 0px; position:relative; left: -84px; top: 8px" >
-                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 10px">
-                                    <h:outputText style="padding-left: 0px" escape="false" value="#{BGDBean.fileMcNemarPath}"/>
-                                </i>
                             </h:panelGrid>
                             <h:panelGrid >
                                 <p:commandButton icon ="fa fa-eye"
                                                  value="Probability McNemar"
                                                  styleClass="bgdButton"
-                                                 style="box-shadow: none !important; text-shadow: none !important;position: relative; left: 28px;"
+                                                 style="box-shadow: none !important; text-shadow: none !important;position: relative;  background-color: #75bafb !important;"
                                                  actionListener="#{sessionBean1.graphicsLnk_action('bgd_ProbMcNemar')}" 
                                                  oncomplete="PF('ProbMcNemarMatrix').show()"/>  
                             </h:panelGrid>
-                            <h:panelGrid columns="2" style="width: 100%; padding-left: 0px; position:relative; left: -55px; top: 8px" >
+                            
+                        </h:panelGrid>  
+                        
+                         
+                        
+                        
+                        <h:panelGrid columns="3" style="width:100%; text-align: left; border-bottom: 2px solid #8cbd48">
+                            <h:panelGrid columns="2" style="width: 100%; padding-left: 0px; position:relative; left: 0px; top: 8px" >
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 10px">
+                                    <h:outputText style="padding-right: 20px" escape="false" value="#{BGDBean.fileDD4Path}"/>
+                                </i>
+                            </h:panelGrid>
+                            
+                            <h:panelGrid columns="2" style="width: 100%; padding-left: 0px; position:relative; left: 19%; top: 8px" >
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 10px">
+                                    <h:outputText style="padding-left: 10px; width: 1100px" escape="false" value="#{BGDBean.fileMcNemarPath}"/>
+                                </i>
+                            </h:panelGrid>
+                            
+                            <h:panelGrid columns="2" style="width: 100%; padding-left: 10px; position:relative; left: 15%; top: 8px" >
                                 <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 10px">
                                     <h:outputText style="padding-left: 0px" escape="false" value="#{BGDBean.fileProbMcNemarPath}"/>
                                 </i>
                             </h:panelGrid>
                         </h:panelGrid> 
-                        
-                        
                         
                    </h:form>
                 </p:tab>

@@ -14,9 +14,9 @@ import org.rosuda.REngine.Rserve.RserveException;
  */
 public class ChemoMetrics {
 
-    public static void InitPCA(SessionBean1 sb) {
+    public static void InitPCA(SessionBean1 sb, boolean origData) {
         try {
-            String rCommand = "PCA.Anal(NA)";
+            String rCommand = "PCA.Anal(NA" + ", \"" + origData + "\")";
             RConnection RC = sb.getRConnection();
             RCenter.recordRCommand(RC, rCommand);
             RC.voidEval(rCommand);
@@ -25,16 +25,16 @@ public class ChemoMetrics {
         }
     }
 
-    public static void FlipPCA(SessionBean1 sb, String axisOpt) {
-        try {
-            String rCommand = "PCA.Flip(NA" + ", \"" + axisOpt + "\")";
-            RConnection RC = sb.getRConnection();
-            RCenter.recordRCommand(RC, rCommand);
-            RC.voidEval(rCommand);
-        } catch (RserveException rse) {
-            System.out.println(rse);
-        }
-    }
+//    public static void FlipPCA(SessionBean1 sb, String axisOpt) {
+//        try {
+//            String rCommand = "PCA.Flip(NA" + ", \"" + axisOpt + "\")";
+//            RConnection RC = sb.getRConnection();
+//            RCenter.recordRCommand(RC, rCommand);
+//            RC.voidEval(rCommand);
+//        } catch (RserveException rse) {
+//            System.out.println(rse);
+//        }
+//    }
 
     public static double[][] GetPCALoadingScore(SessionBean1 sb) {
         try {
@@ -83,11 +83,10 @@ public class ChemoMetrics {
             System.out.println(rse);
         }
     }
-
-    public static void PlotPCA2DScore(SessionBean1 sb, String imgName, String format, int dpi, int pc1Inx, int pc2Inx, double conf, int show, int greyScale) {
+    public static void PlotPCA2DScore(SessionBean1 sb, boolean ellipse, boolean var_arrows, boolean env_arrows, boolean env_cent, boolean sampleNames, String color, String meta_col_color, boolean noPoints, String imgName, String format, int dpi) {
         try {
             RConnection RC = sb.getRConnection();
-            String rCommand = "PlotPCA2DScore(NA" + ", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA, " + pc1Inx + "," + pc2Inx + "," + conf + "," + show + "," + greyScale + ")";
+            String rCommand = "PlotPCA2DScore(NA" + ", \"" + ellipse + "\", \"" + var_arrows + "\", \"" + env_arrows + "\", \"" + env_cent + "\", \"" + sampleNames + "\", \"" + color + "\", \"" + meta_col_color + "\", \"" + noPoints + "\", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
             sb.addGraphicsCMD("pca_score2d", rCommand);
             RCenter.recordRCommand(RC, rCommand);
             RC.voidEval(rCommand);
@@ -110,10 +109,10 @@ public class ChemoMetrics {
         }
     }
 
-    public static void PlotPCAPairSummary(SessionBean1 sb, String imageName, String format, int dpi, int pcNum) {
+    public static void PlotPCAPairSummary(SessionBean1 sb, String color, String imageName, String format, int dpi, int pcNum) {
         try {
             RConnection RC = sb.getRConnection();
-            String rCommand = "PlotPCAPairSummary(NA" + ", \"" + imageName + "\", \"" + format + "\", " + dpi + ", width=NA, " + pcNum + ")";
+            String rCommand = "PlotPCAPairSummary(NA" + ", \"" +color + "\", \"" + imageName + "\", \"" + format + "\", " + dpi + ", width=NA, " + pcNum + ")";
             sb.addGraphicsCMD("pca_pair", rCommand);
             RCenter.recordRCommand(RC, rCommand);
             RC.voidEval(rCommand);
