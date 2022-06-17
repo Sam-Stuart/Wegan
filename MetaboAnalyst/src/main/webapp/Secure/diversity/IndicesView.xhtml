@@ -15,17 +15,45 @@
             <p:tabView id="indices">
                 <p:tab title ="Alpha Diveristy Graph" titleStyleClass="p-tab-nav">
                     <h:form id="form1">
-                        <h:panelGrid id="panelGrid" columns="6" cellpadding="3" >
+                        <p>
+                            Species diversity includes the measure of species richness in a community, and the measure of individual species abundance, which are usually described by an Index, such as Shannon (H'), Simpson (Λ) and inverse Simpson diversity index (1/Λ). 
+                        </p>
+                        <p>
+                            Species richness: the number of species in a community or interested environment.
+                        </p>
+                        <p>
+                            Species evenness: relative abundance of the different species in a community (High species evenness = similar relative abundance across species; low species evenness = varied relative abundance across species).   
+                        </p>    
+                        <p>
+                            Alpha diversity: the mean species diversity in sites or habitats at a local scale.
+                        </p>
+                        <p>
+                            Beta diversity: the ratio between regional and local species diversity or the ratio between two sites or habitats.
+                        </p>
+                        <p>
+                            Gamma diversity: the total species diversity in a landscape.
+               
+                        </p>
+                        <h:panelGrid id="panelGrid" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
+                                <p:commandButton value="Help"
+                                             styleClass="helpButton"
+                                             style="box-shadow: none !important; text-shadow: none !important;"
+                                             actionListener="#{sessionBean1.graphicsLnk_action('pca_pair')}" 
+                                            oncomplete="PF('graphApperanceIndicesHelp').show()"/> 
+                        </h:panelGrid>
+                        
+                        <h:panelGrid id="panelGrid5" columns="4" cellpadding="3" columnClasses="colFront, colLeft, colRight">
                             <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
                             <p:selectBooleanCheckbox value ="#{indicesBean.doOriginal}"/> 
-                            <h:outputLabel style="font-weight: bold" value="Select grouping variable:"/>
-                                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{indicesBean.groupColName}">
-                                        <f:selectItems value="#{indicesBean.groupColOpts}" />
-                                    </p:selectOneMenu>
-                            <h:outputLabel style="font-weight: bold" value="Margin (select row or column):"/>
-                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{indicesBean.marginchosen}">
-                                <f:selectItems value="#{indicesBean.margin}"/>
-                            </p:selectOneMenu> 
+                            
+                            <h:outputLabel style="font-weight: bold" value="Grouping variable:"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{indicesBean.groupColName}">
+                                    <f:selectItems value="#{indicesBean.groupColOpts}" />
+                                </p:selectOneMenu>
+                            <h:outputLabel style="font-weight: bold" value="Method:"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{indicesBean.methodchosen}">
+                                    <f:selectItems value="#{indicesBean.method}"/>
+                                </p:selectOneMenu>
                         </h:panelGrid>  
                         <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
                             <p:commandButton value="Update" 
@@ -49,7 +77,7 @@
                             </h:panelGroup> 
                             <h:panelGroup>
                                 <h:panelGrid columns="3" class="resultsImages">
-                                    <i class="fa fa-question-circle"></i>
+                                    <i id="question" class="fa fa-question-circle" title="Help with plot"></i>
                                 </h:panelGrid>
                             </h:panelGroup>                            
                         </h:panelGrid>                         
@@ -114,6 +142,11 @@
                                     <h:outputText escape="false" value="#{indicesBean.filegammaresultpath}"/>
                                 </i>
                             </h:panelGrid> 
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
+                                    <h:outputText escape="false" value="#{indicesBean.filerelativeresultpath}"/>
+                                </i>
+                            </h:panelGrid> 
                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
                                 <p:commandButton value="Export"
                                     styleClass="exportButton"
@@ -123,24 +156,41 @@
                             </h:panelGrid>
                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
                                 <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('Alpha_Plot')}" alt="TestPlot"/>
-                            </h:panelGrid>                            
+                            </h:panelGrid>  
+                            <p>
+                                A box graph with alpha diversity as y axis and the selected variable as x axis.
+                            </p>
                         </h:panelGrid> 
                     </h:form>
                 </p:tab>
                 
                 <p:tab title ="Beta Diversity Graph" titleStyleClass="p-tab-nav">
                     <h:form id="form2">
-                        <h:panelGrid id="panelGrid" columns="6" cellpadding="3" >
+                        <p>
+                            Species diversity includes the measure of species richness in a community, and the measure of individual species abundance, which are usually described by an Index, such as Shannon (H'), Simpson (Λ) and inverse Simpson diversity index (1/Λ). 
+                        </p>
+                        <p>
+                            Species richness: the number of species in a community or interested environment.
+                        </p>
+                        <p>
+                            Species evenness: relative abundance of the different species in a community (High species evenness = similar relative abundance across species; low species evenness = varied relative abundance across species).   
+                        </p>    
+                        <p>
+                            Alpha diversity: the mean species diversity in sites or habitats at a local scale.
+                        </p>
+                        <p>
+                            Beta diversity: the ratio between regional and local species diversity or the ratio between two sites or habitats.
+                        </p>
+                        <p>
+                            Gamma diversity: the total species diversity in a landscape.
+                        </p>
+                        <h:panelGrid id="panelGrid" columns="4" cellpadding="3" columnClasses="colFront, colLeft, colRight">
                             <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
                             <p:selectBooleanCheckbox value ="#{indicesBean.doOriginal}"/> 
-                            <h:outputLabel style="font-weight: bold" value="Select grouping variable:"/>
+                            <h:outputLabel style="font-weight: bold" value="Select grouping variable (x-axis):"/>
                                     <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{indicesBean.groupColName}">
                                         <f:selectItems value="#{indicesBean.groupColOpts}" />
                                     </p:selectOneMenu>
-                            <h:outputLabel style="font-weight: bold" value="Margin (select row or column):"/>
-                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{indicesBean.marginchosen}">
-                                <f:selectItems value="#{indicesBean.margin}"/>
-                            </p:selectOneMenu> 
                         </h:panelGrid>  
                         <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
                             <p:commandButton value="Update" 
@@ -229,6 +279,11 @@
                                     <h:outputText escape="false" value="#{indicesBean.filegammaresultpath}"/>
                                 </i>
                             </h:panelGrid>
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
+                                    <h:outputText escape="false" value="#{indicesBean.filerelativeresultpath}"/>
+                                </i>
+                            </h:panelGrid> 
                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
                                 <p:commandButton value="Export"
                                     styleClass="exportButton"
@@ -243,6 +298,12 @@
                     </h:form>
                 </p:tab>
             </p:tabView>
+            <p:dialog modal="true" widgetVar="graphApperanceIndicesHelp" 
+                style="width: 400px; height:400px;" 
+                appendTo="@(body)" header="Help Center"
+                draggable="false" closable="true" resizable="false"> 
+                <ui:include src="_color_palette_indicesHelp.xhtml" />
+            </p:dialog>
             <p:dialog modal="true" widgetVar="graphApperanceIndices" 
                 style="width: 400px; height:400px;" 
                 appendTo="@(body)" header="Graphics Center"

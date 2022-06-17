@@ -13,18 +13,17 @@
     <ui:define name="content">
         <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
             <p:tabView id="abundancedist">
-                <p:tab title ="Abundance Log series Distribution" titleStyleClass="p-tab-nav">
+                <p:tab title ="Abundance Logseries Distribution" titleStyleClass="p-tab-nav">
                     <h:form id="form1">
-                        <h:panelGrid id="panelGrid" columns="4" cellpadding="3" >
-                            <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
-                            <p:selectBooleanCheckbox value ="#{abunddistBean.doOriginal}"/> 
-                            <h:outputLabel style="font-weight: bold" value="Tiesplit:"/>
-                            <p:selectBooleanCheckbox value = "#{abunddistBean.doTiesplit}"/>
-                            <h:outputLabel style="font-weight: bold" value="Truncate"/>
-                            <p:inputText value = "#{abunddistBean.truncate}"/>  
-                            <h:outputLabel style="font-weight: bold" value="Select particular sampling plot:"/>
-                            <p:inputText value = "#{abunddistBean.community}"/>  
-                        </h:panelGrid>  
+                        <p>
+                            The species abundance distribution characterizes the distribution of abundances of all species within a sample or ecological community (Matthews and Whittaker, 2014).
+                        </p>
+                        <h:panelGrid id="panelGrid" columns="4" cellpadding="3" columnClasses="colFront, colLeft, colRight">
+                                <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
+                                <p:selectBooleanCheckbox value ="#{abunddistBean.doOriginal}"/> 
+                                <h:outputLabel style="font-weight: bold" value="Select a sampling unit to perform analysis:"/>
+                                <p:inputText value = "#{abunddistBean.communityFisher}"/>  
+                        </h:panelGrid> 
                         <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
                             <p:commandButton value="Update" 
                                              styleClass="updateButton"
@@ -64,6 +63,9 @@
                                     <h:outputText escape="false" value="#{abunddistBean.filefisheroutputresultpath}"/>
                                 </i>
                             </h:panelGrid>
+                            <p>
+                                Fit Fisher's logseries to abundance data
+                            </p>
                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
                                 <p:commandButton value="Export"
                                     styleClass="exportButton"
@@ -79,16 +81,19 @@
                 </p:tab>              
                 <p:tab title ="Abundance Lognormal Distribution" titleStyleClass="p-tab-nav">
                     <h:form id="form2">
-                        <h:panelGrid id="panelGrid" columns="4" cellpadding="3" >
-                            <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
-                            <p:selectBooleanCheckbox value ="#{abunddistBean.doOriginal}"/> 
-                            <h:outputLabel style="font-weight: bold" value="Tiesplit:"/>
-                            <p:selectBooleanCheckbox value = "#{abunddistBean.doTiesplit}"/>
-                            <h:outputLabel style="font-weight: bold" value="Truncate"/>
-                            <p:inputText value = "#{abunddistBean.truncate}"/>  
-                            <h:outputLabel style="font-weight: bold" value="Select particular sampling plot:"/>
-                            <p:inputText value = "#{abunddistBean.community}"/>   
-                        </h:panelGrid>  
+                        <p>
+                            The species abundance distribution characterizes the distribution of abundances of all species within a sample or ecological community (Matthews and Whittaker, 2014).
+                        </p>
+                        <h:panelGrid id="panelGrid" columns="4" cellpadding="3" columnClasses="colFront, colLeft, colRight">
+                                <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
+                                <p:selectBooleanCheckbox value ="#{abunddistBean.doOriginal}"/> 
+                                <h:outputLabel style="font-weight: bold" value="Select a sampling unit to perform analysis:"/>
+                                <p:inputText value = "#{abunddistBean.communityPres}"/>  
+                                <h:outputLabel style="font-weight: bold" value=" More lognormal trend by splitting the frequencies in lognormal model (Tiesplit):"/>
+                                <p:selectBooleanCheckbox value = "#{abunddistBean.doTiesplit}"/>
+                                <h:outputLabel style="font-weight: bold" value="Truncation point for lognormal model, in log2 units(Truncate):"/>
+                                <p:inputText value = "#{abunddistBean.truncate}"/>                                  
+                        </h:panelGrid> 
                         <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;">     
                             <p:commandButton value="Update" 
                                              styleClass="updateButton"
@@ -147,6 +152,12 @@
                                     <h:outputText escape="false" value="#{abunddistBean.filemaxextraresultpath}"/>
                                 </i>
                             </h:panelGrid>
+                            <p>
+                                Traditional binning: grouping species frequencies into doubling octave classes to fit Preston's lognormal model.
+                            </p>
+                            <p>
+                                Without binning: fit the truncated Preston's lognormal model to species frequencies without pooling it into octaves.
+                            </p>
                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
                                 <p:commandButton value="Export"
                                     styleClass="exportButton"
@@ -160,19 +171,17 @@
                         </h:panelGrid> 
                     </h:form>
                 </p:tab>
-                <p:tab title ="Rank Abundance Model" titleStyleClass="p-tab-nav">
+                <p:tab title ="Ranked Abundance Distribution" titleStyleClass="p-tab-nav">
                     <h:form id="form3">
-                        
+                        <p>
+                            Ranked abundance distribution is to plot logarithmic abundances in decreasing order, or against ranks of species (Whittaker, 1965).
+                        </p>
 <!--                        <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> -->
-                            <h:panelGrid id="panelGrid" columns="4" cellpadding="3" >
+                            <h:panelGrid id="panelGrid" columns="4" cellpadding="3" columnClasses="colFront, colLeft, colRight">
                                 <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
                                 <p:selectBooleanCheckbox value ="#{abunddistBean.doOriginal}"/> 
-                                <h:outputLabel style="font-weight: bold" value="Tiesplit:"/>
-                                <p:selectBooleanCheckbox value = "#{abunddistBean.doTiesplit}"/>
-                                <h:outputLabel style="font-weight: bold" value="Truncate"/>
-                                <p:inputText value = "#{abunddistBean.truncate}"/>  
-                                <h:outputLabel style="font-weight: bold" value="Select particular sampling plot:"/>
-                                <p:inputText value = "#{abunddistBean.community}"/>  
+                                <h:outputLabel style="font-weight: bold" value="Select a sampling unit to perform analysis:"/>
+                                <p:inputText value = "#{abunddistBean.communityRank}"/>  
                             </h:panelGrid>  
                             <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
                                 <p:commandButton value="Update" 
@@ -227,6 +236,15 @@
                                     <h:outputText escape="false" value="#{abunddistBean.filemanresultpath}"/>
                                 </i>
                             </h:panelGrid>
+                            <p>
+                                X-axis: The abundance rank; can also be viewed as species richness. The most abundant species (Rank 1) --- the least abundant species (Rank N; N = species richness) 
+                            </p>
+                            <p>
+                                Y-axis: The relative abundance (a species abundance to the other species abundance). Usually measured on a log scale.
+                            </p>
+                            <p>
+                                The slope of the line that fits the graph reflects species evenness. A steep gradient indicates low evenness as the high-ranking species have much higher abundances than the low-ranking species. A shallow gradient indicates high evenness as the abundances of different species are similar.
+                            </p>
                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
                                 <p:commandButton value="Export"
                                     styleClass="exportButton"

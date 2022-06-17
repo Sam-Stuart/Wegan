@@ -1,3 +1,37 @@
+#'Extract column names from numeric variables-- used by ResidPlot()
+#'@usage PoolCol(mSetObj = NA)
+#'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
+#'@export
+PoolCol <- function(mSetObj = NA) {
+  #load_plyr()
+  #load_dplyr()
+  
+  mSetObj <- .get.mSet(mSetObj)
+
+  data(dune)
+  data(dune.env)
+
+  mSetObj$dataSet$norm <- dune
+  mSetObj$dataSet$origMeta <- dune.env
+  metaData <- mSetObj$dataSet$origMeta
+  
+  #if(is.null(mSetObj$dataSet[["procr"]])){
+  #  data<-mSetObj$dataSet$preproc
+  #}else if(is.null(mSetObj$dataSet[["prenorm"]])){
+  #  data<- mSetObj$dataSet$procr;
+  #}else{
+  #  data<-mSetObj$dataSet$prenorm
+  #}
+
+  metaData <- mSetObj$dataSet$origMeta
+
+  columnsMeta <- colnames(metaData)
+  #print(columnsNum)
+   
+  return(columnsMeta)
+  
+}
+
 
 #'Perform unseen species analysis 
 #'@description Perform unseen species analysis 
@@ -14,24 +48,24 @@
 #'License: GNU GPL (>= 2) ######
 #'@export
 
-sp_pool <- function(mSetObj = NA, data = "false", pool = "", smallsample = "false", 
-                         index = "NULL", permutations = "", minsize = "", parallel = "") {
+sp_pool <- function(mSetObj = NA, data = "false", pool = "NULL", smallsample = "false", 
+                         index = "NULL", permutations = "100", minsize = "3", parallel = "1") {
   print("start model")
   options(errors = traceback)   
   
-  library("plyr")
+  #library("plyr")
   library("dplyr")
   library("vegan")
   
   mSetObj <- .get.mSet(mSetObj)
   #Extract input from mSetObj
   
-  #data(dune)
-  #data(dune.env)
+  data(dune)
+  data(dune.env)
 
-  #mSetObj$dataSet$norm <- dune
-  #mSetObj$dataSet$origMeta <- dune.env
-  #metaData <- mSetObj$dataSet$origMeta
+  mSetObj$dataSet$norm <- dune
+  mSetObj$dataSet$origMeta <- dune.env
+  metaData <- mSetObj$dataSet$origMeta
   print(metaData)
 
   if (data == "false") { #normalized data as input
@@ -55,14 +89,15 @@ sp_pool <- function(mSetObj = NA, data = "false", pool = "", smallsample = "fals
   }
   print(index1)
   
-  if (permutations == "") {
+  print(permutations)
+  if (permutations == "100") {
     permutations1 = 100
   } else {
     permutation1 <- as.numeric(permutations)
   }
   print(permutations1)
   
-  if (minsize == "") {
+  if (minsize == "3") {
     minsize1 = 3
   } else if (as.numeric(minsize) > count(input)) {
     cat ("minsize has to be smaller than the total row number of the uploaded dataset.")
@@ -71,53 +106,73 @@ sp_pool <- function(mSetObj = NA, data = "false", pool = "", smallsample = "fals
   }
   print(minsize1)
   
-  if (parallel == "") {
+  if (parallel == "1") {
     parallel1 = 1
   } else {
-    parallel1 = parallel
+    parallel1 = as.numeric(parallel)
   }
   print(parallel1)
-  
-  #if (pool == "") {
-  #  pool1 <- metaData[,1]
-  #} else {
-  #  pool1 <- as.numeric(pool)
-  #}
-  #print(pool1)
-  
-  #if (display == "NULL") {
-  #  display1 = "jack1"
-  #} else {
-  #  display1 = display
-  #}
-  
-  #input.2 <- select_if(input, is.numeric)
-  cat("Input dataset has to be pure numeric data")
+      
+  input.2 <- select_if(input, is.numeric)
+  #cat("Input dataset has to be pure numeric data")
   
   sp1_all <- specpool(input.2)
   sp1_all_small <- specpool(input.2, smallsample = smallsample1)
-  if (pool == "") {
+
+  if (pool == "NULL") {
     pool1 <- metaData[,2]
-    sp1_in <- specpool(input.2, pool = pool1)
-    sp1_in_small <- specpool(input.2, pool = pool1, smallsample = smallsample1)
   } else {
-    pool1 <- metaData[, as.numeric(pool)]
-    #pool2 <- metaData[,pool1]
-    sp1_in <- specpool(input.2, pool = pool2)
-    sp1_in_small <- specpool(input.2, pool = pool2, smallsample = smallsample1)
-    print(pool2)
+    print(pool)
+    B.frame <- metaData%>%
+        select(all_of(pool))
+    print(B.frame)
+    B.frame <- as.data.frame(B.frame)
+    pool1 <- B.frame[,1]
+    print(pool1)
+    #group.name <- colnames(B.frame[1])
   }
-  #spec <- with(metaData, sp1_in)
-  #sp1_in <- specpool(input.2, pool = pool1, smallsample = smallsample1)
+  
+  #print(pool1)
+  sp1_in <- specpool(input.2, pool = pool1)
+  print(sp1_in)
+  sp1_in_small <- specpool(input.2, pool = pool1, smallsample = smallsample1)
+  print(sp1_in_small)
+
   est <- estimateR(input.2)
+  print("estimateR")
+  print(est)
   sp2 <- specpool2vect(sp1_in, index = index1)
+  print("specpool2vect")
+  print(sp2)  
+
   pool.ac <- poolaccum(input.2, permutations = permutations1, minsize = minsize1)
   est.ac <- estaccumR(input.2, permutations = permutations1, parallel = parallel1)
+  print(est.ac)
   sum.sp_all <- summary(sp1_all, alpha = 0.05)
   sum.sp_in <- summary(sp1_in, alpha = 0.05)
   
   rare <- specnumber(input.2)
-  
+  print("richness")
+  print(rare)
+  plot <- rare/specpool2vect(sp1_in_small)
+  print("plot data")
+  print(plot)  
+
+
+  #if (pool == "") {
+  #  pool1 <- metaData[,2]
+  #  sp1_in <- specpool(input.2, pool = pool1)
+  #  sp1_in_small <- specpool(input.2, pool = pool1, smallsample = smallsample1)
+  #} else {
+  #  pool1 <- metaData[, as.numeric(pool)]
+  #  #pool2 <- metaData[,pool1]
+  #  sp1_in <- specpool(input.2, pool = pool2)
+  #  sp1_in_small <- specpool(input.2, pool = pool2, smallsample = smallsample1)
+  #  print(pool2)
+  #}
+  #spec <- with(metaData, sp1_in)
+  #sp1_in <- specpool(input.2, pool = pool1, smallsample = smallsample1)
+
   mSetObj$analset$sp1_all <- sp1_all
   mSetObj$analset$sp1_all_small <- sp1_all_small
   mSetObj$analset$sp1_in <- sp1_in
@@ -133,6 +188,8 @@ sp_pool <- function(mSetObj = NA, data = "false", pool = "", smallsample = "fals
   mSetObj$analset$env.data <- metaData
   mSetObj$analset$rare <- rare
   mSetObj$analset$fac_data <- pool1
+  mSetObj$analset$metaData <- metaData
+  mSetObj$analset$treatmentName <- pool
   
   write.csv(mSetObj$analset$sp1_all, "Incidence-based estimates_freq_all sites.csv")
   write.csv(mSetObj$analset$sp1_all_small, "Incidence-based estimates_freq_all sites_smallsample.csv")
@@ -156,8 +213,6 @@ sp_pool <- function(mSetObj = NA, data = "false", pool = "", smallsample = "fals
 #'@param plot_data Input the y-axis values, drop down options are pooled values using index "jack1" (default),"jack2", "chao", "boot" or "Species"
 #'@param box.color Input box color of boxplot, options are "skyblue" (default), "green", "turquoise", "steelblue", "peach", "wheat"  
 #'@param border.col options include "blue" (default), "green", "turquoise" & "steelblue", "peach" & "wheat"
-#'@param xlab Input x axis title, default is "Treatment"
-#'@param ylab Input y axis title, default is "Estimate"
 #'@param imgName Input the image name
 #'@param format Select the image format, "png" or "pdf", default is "png" 
 #'@param dpi Input the dpi. If the image format is "pdf", users need not define the dpi. For "png" images, 
@@ -169,29 +224,39 @@ sp_pool <- function(mSetObj = NA, data = "false", pool = "", smallsample = "fals
 #'License: GNU GPL (>= 2)
 #'@export
 
-pool_boxplot <- function(mSetObj=NA, plot_data = "NULL", box.color = "NULL", xlab = "", ylab = "",
+pool_boxplot <- function(mSetObj=NA, plot_data = "NULL", box.color = "NULL",
                       border.col = "NULL", imgName, format="png", dpi=72, width=NA) {
   #library(plyr)
   #library(vegan)
   #library(dplyr)
   
   mSetObj <- .get.mSet(mSetObj)
-  
+
+  treat <- factor(mSetObj$analset$fac_data)
+  print(treat)
+  #treat <- as.character(treat)
+
+  #boxplot(specnumber(dune)/specpool2vect(pool) ~ Management, col="hotpink",border="cyan3", notch=TRUE)
   if (plot_data == "NULL") {
-    plot_data1 <- mSetObj$analset$rare/specpool2vect(mSetObj$analset$sp1_in)
-  } else if (plot_data == "S") {
-    plot_data1 <- mSetObj$analset$est.ac$S
+    plot_data1 <- rowMeans(mSetObj$analset$est.ac$S)
+    ylab1 = "Richness"
+  #} else if (plot_data == "S") {
+  #  plot_data1 <- (mSetObj$analset$rare/specpool2vect(mSetObj$analset$sp1_in))
+  #  ylab1 = "Estimates (species)"
   } else if (plot_data == "chao") {
-    plot_data1 <- mSetObj$analset$est.ac$chao
+    plot_data1 <- rowMeans(mSetObj$analset$est.ac$chao)
+    ylab1 = "Estimates (chao)"
   } else if (plot_data == "ace") {
-    plot_data1 <- mSetObj$analset$est.ac$ace
+    plot_data1 <- rowMeans(mSetObj$analset$est.ac$ace)
+    ylab1 = "Estimates (ace)"
   }
+  print(mSetObj$analset$est.ac)
   print(plot_data1)
   
-  treat <- factor(mSetObj$analset$fac_data)
-  #print(treat)
-  #treat <- as.character(treat)
-  
+  metaData <- mSetObj$analset$metaData
+  pool <- mSetObj$analset$treatmentName
+  print(pool)
+
   #Set plot dimensions
   if(is.na(width)){
     w <- 10.5
@@ -220,8 +285,8 @@ pool_boxplot <- function(mSetObj=NA, plot_data = "NULL", box.color = "NULL", xla
     box.color1 = "lightsteelblue1"
   } else if (box.color == "peach") {
     box.color1 = "peachpuff"
-  } else if (box.color == "wheat") {
-    box.color1 = "wheat1"
+  } else if (box.color == "thistle") {
+    box.color1 = "thistle"
   } 
   print(box.color1)
   
@@ -233,28 +298,28 @@ pool_boxplot <- function(mSetObj=NA, plot_data = "NULL", box.color = "NULL", xla
     border.col1 = "turquoise4"
   } else if (border.col == "steelblue") {
     border.col1 = "lightsteelblue4"
-  } else if (border.col1 == "peach") {
-    border.col1 = "tan2"  
-  } else if (border.col1 == "wheat") {
-    border.col1 <- "wheat3" 
+  } else if (border.col == "peach") {
+    border.col1 = "salmon3"  
+  } else if (border.col == "thistle") {
+    border.col1 <- "orchid4" 
   }
   print(border.col1)
   
   #pars <- expand.grid(col = box.color1, stringsAsFactors = FALSE)
   
-  if (xlab == "") {
-    xlab1 = "Treatment"
+  if (pool == "NULL") {
+    xlab1 = colnames(metaData[2])
   } else {
-    xlab1 = xlab
+    xlab1 = pool
   }
   print(xlab1)
   
-  if (ylab == "") {
-    ylab1 = "Estimate"
-  } else {
-    ylab1 = ylab
-  }
-  print(ylab1)
+  #if (ylab == "") {
+  #  ylab1 = "Estimate"
+  #} else {
+  #  ylab1 = ylab
+  #}
+  #print(ylab1)
 
   #print(plot_data1)
   #print(treat)
@@ -287,7 +352,7 @@ pool_boxplot <- function(mSetObj=NA, plot_data = "NULL", box.color = "NULL", xla
 #'License: GNU GPL (>= 2)
 #'@export
 
-rich_est_curve <- function(mSetObj=NA, color="NULL", imgName, format="png", dpi=72, width=NA) {
+RichEstCurve <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA) {
 
   #library(plyr)
   #library(vegan)
@@ -296,6 +361,7 @@ rich_est_curve <- function(mSetObj=NA, color="NULL", imgName, format="png", dpi=
   #install.packages("tidyverse")
   #library(tidyverse)
   library(ggplot2)
+  library(svglite)
   #library("viridis")
   #library("stringr")
   #library(lettice)
@@ -316,7 +382,7 @@ rich_est_curve <- function(mSetObj=NA, color="NULL", imgName, format="png", dpi=
   min.list <- list()  
   max.list <- list()
   c <- nrow(plot_data$S)
-  print(Smean)
+  #print(Smean)
   print(c)  
 
   for (i in 1:c) {
@@ -334,7 +400,7 @@ rich_est_curve <- function(mSetObj=NA, color="NULL", imgName, format="png", dpi=
   min.data <- cbind(min.data, max.data)
   colnames(min.data) <- c("min", "max")
   Sgg <- cbind(Smean, min.data) 
-  print(Sgg)
+  #print(Sgg)
   
   Chmean <- as.data.frame(rowMeans(plot_data$chao))
   Chmean <- cbind(plot_data$N, Chmean, "chao")
@@ -346,8 +412,8 @@ rich_est_curve <- function(mSetObj=NA, color="NULL", imgName, format="png", dpi=
   min.list.ch <- list()  
   max.list.ch <- list()
   ch <- nrow(plot_data$chao)
-  print(Chmean)
-  print(ch)
+  #print(Chmean)
+  #print(ch)
 
   for (i in 1:ch) {
     a.ch <- plot_data$chao[i,]
@@ -364,7 +430,7 @@ rich_est_curve <- function(mSetObj=NA, color="NULL", imgName, format="png", dpi=
   min.data.ch <- cbind(min.data.ch, max.data.ch)
   colnames(min.data.ch) <- c("min", "max")
   chgg <- cbind(Chmean, min.data.ch)
-  print(chgg)
+  #print(chgg)
 
   
   j1mean <- as.data.frame(rowMeans(plot_data$jack1))
@@ -377,8 +443,8 @@ rich_est_curve <- function(mSetObj=NA, color="NULL", imgName, format="png", dpi=
   min.list.j1 <- list()  
   max.list.j1 <- list()
   j1 <- nrow(plot_data$jack1)
-  print(j1mean)
-  print(j1)
+  #print(j1mean)
+  #print(j1)
 
   for (i in 1:j1) {
     a.j1 <- plot_data$jack1[i,]
@@ -395,7 +461,7 @@ rich_est_curve <- function(mSetObj=NA, color="NULL", imgName, format="png", dpi=
   min.data.j1 <- cbind(min.data.j1, max.data.j1)
   colnames(min.data.j1) <- c("min", "max")
   j1gg <- cbind(j1mean, min.data.j1)
-  print(j1gg)
+  #print(j1gg)
 
   
   j2mean <- as.data.frame(rowMeans(plot_data$jack2))
@@ -408,8 +474,8 @@ rich_est_curve <- function(mSetObj=NA, color="NULL", imgName, format="png", dpi=
   min.list.j2 <- list()  
   max.list.j2 <- list()
   j2 <- nrow(plot_data$jack2)
-  print(j2mean)
-  print(j2)
+  #print(j2mean)
+  #print(j2)
 
   for (i in 1:j2) {
     a.j2 <- plot_data$jack2[i,]
@@ -426,7 +492,7 @@ rich_est_curve <- function(mSetObj=NA, color="NULL", imgName, format="png", dpi=
   min.data.j2 <- cbind(min.data.j2, max.data.j2)
   colnames(min.data.j2) <- c("min", "max")
   j2gg <- cbind(j2mean, min.data.j2)
-  print(j2gg)
+  #print(j2gg)
 
   
   bmean <- as.data.frame(rowMeans(plot_data$boot))
@@ -439,8 +505,8 @@ rich_est_curve <- function(mSetObj=NA, color="NULL", imgName, format="png", dpi=
   min.list.b <- list()  
   max.list.b <- list()
   bt <- nrow(plot_data$boot)
-  print(bmean)
-  print(bt)
+  #print(bmean)
+  #print(bt)
 
   for (i in 1:bt) {
     a.b <- plot_data$boot[i,]
@@ -457,7 +523,7 @@ rich_est_curve <- function(mSetObj=NA, color="NULL", imgName, format="png", dpi=
   min.data.b<- cbind(min.data.b, max.data.b)
   colnames(min.data.b) <- c("min", "max")
   bgg <- cbind(bmean, min.data.b)
-  print(bgg)  
+  #print(bgg)  
 
   plot_dataA <- rbind(Sgg, chgg, j1gg, j2gg, bgg)
   print(plot_dataA)
@@ -478,36 +544,54 @@ rich_est_curve <- function(mSetObj=NA, color="NULL", imgName, format="png", dpi=
   
   Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
   
-  if (color == "NULL") { 
-    color1 <- c("azure2") #default fill palette is grayscale
-  } else if (color == "green") { #manual user entry. Selection of this option causes text box to appear
-    color1 <- c("darkseagreen")
-  } else if (color == "red") { 
-    color1 <- c("bisque")
-  } else if (color == "gray") { 
-    color1 <- c("darkslategray2")
-  } else if (color == "wheat") { 
-    color1 <- c("cornsilk2")
-  } else if (color == "orange") { 
-    color1 <- c("coral")
-  } 
-  print(color1)
+  #if (color == "NULL") { 
+  #  color1 <- c("azure2") #default fill palette is grayscale
+  #} else if (color == "green") { #manual user entry. Selection of this option causes text box to appear
+  #  color1 <- c("darkseagreen")
+  #} else if (color == "red") { 
+  #  color1 <- c("bisque")
+  #} else if (color == "gray") { 
+  #  color1 <- c("darkslategray2")
+  #} else if (color == "wheat") { 
+  #  color1 <- c("cornsilk2")
+  #} else if (color == "orange") { 
+  #  color1 <- c("coral")
+  #} 
+  #print(color1)
  
   #pars <- expand.grid(col = color1, stringsAsFactors = FALSE)
    
   print("ready for ggplot") 
+
   p <- ggplot(plot_dataA, aes(x = Size, y = Richness)) +
     geom_line(aes(color = Index)) +
     facet_grid(Index ~ ., scales = "free_y") +
-    geom_line(aes(x = Size, y = min, color = color1), linetype = "dotdash") +
-    geom_line(aes(x = Size, y = max, color = color1), linetype = "dotdash") + 
-    xlim(0,20)
+    geom_line(aes(x = Size, y = min), color = "darkgray", linetype = "dotdash") +
+    geom_line(aes(x = Size, y = max), color = "darkgray", linetype = "dotdash") + 
+    xlim(0,20) 
+    
+  #png(imgName)
   
-  # Suppress the legend since color isn't actually providing any information
-  #  opts(legend.position = "none")
-  png(imgName)
-  print(p)
 
+  if (format == "png") {
+     png(imgName)
+  } else if (format == "tiff") {
+     tiff(imgName)
+  } else if (format == "svg") {
+     ggsave(file = "imgName.svg", plot = p + theme(legend.position = "none"))
+  } else if (format == "pdf") {
+     ggsave(file = "imgName.pdf") 
+  } 
+
+  print(p + theme(legend.position = "none")) 
+  # + labs(title = "Extrapolated species richness in relation to the number of samples")
+
+  #scale_color_manual(labels = c("CI", "Bootstrap", "Chao", "jackknife1", "jackknife2", "S"), name = "Variants of extrapolated richness", vales = c(color1, "red", "green", "blue", "yellow", "black"))
+  #Suppress the legend since color isn't actually providing any information
+  #opts(legend.position = "none")
+  #geom_line(aes(x = Size, y = min, color = color1), linetype = "dotdash") +
+  #geom_line(aes(x = Size, y = max, color = color1), linetype = "dotdash") + 
+  
   #print("after ggplot")
 
   #ggsave(mSetObj$imgSet$pool.plot)

@@ -256,7 +256,7 @@
             <to-view-id>/Secure/diversity/DiversityView.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
-        <navigation-case>
+<!--        <navigation-case>
             <from-outcome>Alpha</from-outcome>
             <to-view-id>/Secure/diversity/AlphaView.xhtml</to-view-id>
             <redirect/>
@@ -280,7 +280,7 @@
             <from-outcome>Test_Tutorial</from-outcome>
             <to-view-id>/Secure/diversity/TestTutorialView.xhtml</to-view-id>
             <redirect/>
-        </navigation-case>
+        </navigation-case>-->
         <navigation-case>
             <from-outcome>Indices</from-outcome>
             <to-view-id>/Secure/diversity/IndicesView.xhtml</to-view-id>
@@ -316,7 +316,11 @@
             <to-view-id>/Secure/diversity/UnseendivView.xhtml</to-view-id>
             <redirect/>
         </navigation-case>  
-                                                                       
+        <navigation-case>
+            <from-outcome>Spatialvis</from-outcome>
+            <to-view-id>/Secure/diversity/SpatialvisView.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>                                                               
                     
                                                                                                                                                                                                                     
                                                                                                                                                                                                                                                                                                                                                                                                                    
@@ -543,6 +547,12 @@
             <to-view-id>/Secure/analysis/RSVMView.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
+<!--        <navigation-case>
+            <from-outcome></from-outcome>
+            <to-view-id>/Secure/analysis/SpatialvisView.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>-->
+        
         <navigation-case>
             <from-outcome>msetssp</from-outcome>
             <to-view-id>/Secure/enrichment/SspProfileView.xhtml</to-view-id>

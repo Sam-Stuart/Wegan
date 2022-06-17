@@ -28,9 +28,9 @@ public class AlphaBetaGammaBean implements Serializable {
     
     
     // ACTION BUTTONS //
-    public void alphaUpdate_action() {
-        DiversityUtils.PlotAlpha(sb); 
-    }
+//    public void alphaUpdate_action() {
+//        DiversityUtils.PlotAlpha(sb); 
+//    }
     
     
     

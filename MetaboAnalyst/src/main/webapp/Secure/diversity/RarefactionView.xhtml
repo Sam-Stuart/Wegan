@@ -15,21 +15,23 @@
             <p:tabView id="rarefaction">
                 <p:tab title ="Rarefaction Curve Plot" titleStyleClass="p-tab-nav">
                     <h:form id="form1">
-                        <h:panelGrid id="panelGrid" columns="6" cellpadding="3" >
+                        <p>
+                            Rarefaction is a statistical technique to evaluate species richness from the results of sampling. It assumes that total abundance imbalances between taxa are due to sampling differences and NOT due to differences in actual abundances.
+                            This technique is often applied to operational taxonomic units(OTUs). Rarefaction can be used to determine whether rared species in sampled community has been sufficiently observed or recorded.
+                        </p>                        
+                        <h:panelGrid id="panelGrid" columns="4" cellpadding="3" columnClasses="colFront, colLeft, colRight">
                             <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
-                            <p:selectBooleanCheckbox value ="#{rarefactionBean.doOriginal}"/> 
-                            <h:outputLabel style="font-weight: bold" value="Select samples size:"/>
+                            <p:selectBooleanCheckbox value ="#{rarefactionBean.doOriginal}"/>                     
+                            <h:outputLabel style="font-weight: bold" value="Fill in subsample size for rarefying community:"/>
                             <p:inputText value = "#{rarefactionBean.sample}"/>
-                            <h:outputLabel style="font-weight: bold" value="Rarefaction Type:"/>
+                            <h:outputLabel style="font-weight: bold" value="Return Standard Error:"/>
+                            
+                            
+                            <p:selectBooleanCheckbox value ="#{rarefactionBean.doSe}"/> 
+                            <h:outputLabel style="font-weight: bold" value="Select returned rarefied value:"/>
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{rarefactionBean.typechosen}">
                                 <f:selectItems value="#{rarefactionBean.type}"/>
                             </p:selectOneMenu> 
-                            <h:outputLabel style="font-weight: bold" value="Margin (select row or column):"/>
-                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{rarefactionBean.marginchosen}">
-                                <f:selectItems value="#{rarefactionBean.margin}"/>
-                            </p:selectOneMenu> 
-                            <h:outputLabel style="font-weight: bold" value="Return Standard Error:"/>
-                            <p:selectBooleanCheckbox value ="#{rarefactionBean.doSe}"/> 
                         </h:panelGrid>  
                         <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
                             <p:commandButton value="Update" 
@@ -43,7 +45,7 @@
                                              styleClass="graphicsButton"
                                              style="box-shadow: none !important; text-shadow: none !important;"
                                              actionListener="#{sessionBean1.graphicsLnk_action('pca_pair')}" 
-                                            oncomplete="PF('graphApperanceRare1').show()"/> 
+                                             oncomplete="PF('graphApperanceRare1').show()"/> 
                         </h:panelGrid>
                         <h:panelGrid class="resultsBar" columns="2">
                             <h:panelGroup>
@@ -56,13 +58,22 @@
                                     <i class="fa fa-question-circle"></i>
                                 </h:panelGrid>
                             </h:panelGroup>                            
-                        </h:panelGrid>                         
+                        </h:panelGrid>
                         <h:panelGrid id="rarefactionPane1" style="width: 100%;">
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
                                 <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
                                     <h:outputText escape="false" value="#{rarefactionBean.filerareresultpath}"/>
                                 </i>
-                            </h:panelGrid>                
+<!--                                // padding  -->
+                            </h:panelGrid>
+                            <p>
+                            The rarefaction curve is a plot of the number of species (richness) against the number of samples. This curve is created by randomly re-sampling the pool of N samples several times and then plotting the average number of species found on each sample. 
+                            Generally, the curve initially grows rapidly (as the most common species are found) and then slightly flattens (as the rarest species remain to be sampled), as the sampling effort (x-axis) increasing.
+                            </p>
+                            <p>
+                            In rarefaction curve plot, each curve represents species richness in one sample. The numbers labeled on the curves are sampling unit sequencing number, e.g: the curve has label "1" indicates the species richness in first sampling unit.
+                            The curve will remain flatten as only the rarest species remain to be sampled. The sample unit labeled on the top curve has the most diverse community, while the lowest curve indicate the least diverse community.  
+                            </p>
                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
                                 <p:commandButton value="Export"
                                     styleClass="exportButton"
@@ -79,21 +90,21 @@
                 
                 <p:tab title ="Rarefaction Scatter Plot" titleStyleClass="p-tab-nav">
                     <h:form id="form2">
-                        <h:panelGrid id="panelGrid" columns="6" cellpadding="3" >
+                        <p>
+                            Rarefaction is a statistical technique to evaluate species richness from the results of sampling. It assumes that total abundance imbalances between taxa are due to sampling differences and NOT due to differences in actual abundances.
+                            This technique is often applied to operational taxonomic units(OTUs). Rarefaction can be used to determine whether rared species in sampled community has been sufficiently observed or recorded.
+                        </p>
+                        <h:panelGrid id="panelGrid" columns="4" cellpadding="3" columnClasses="colFront, colLeft, colRight">
                             <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
                             <p:selectBooleanCheckbox value ="#{rarefactionBean.doOriginal}"/> 
-                            <h:outputLabel style="font-weight: bold" value="Select samples size:"/>
+                            <h:outputLabel style="font-weight: bold" value="Fill in subsample value or vector for rarefying community:"/>
                             <p:inputText value = "#{rarefactionBean.sample}"/>
-                            <h:outputLabel style="font-weight: bold" value="Rarefaction Type:"/>
+                            <h:outputLabel style="font-weight: bold" value="Return Standard Error:"/>
+                            <p:selectBooleanCheckbox value ="#{rarefactionBean.doSe}"/>   
+                            <h:outputLabel style="font-weight: bold" value="Select returned rarefied value:"/>
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{rarefactionBean.typechosen}">
                                 <f:selectItems value="#{rarefactionBean.type}"/>
                             </p:selectOneMenu> 
-                            <h:outputLabel style="font-weight: bold" value="Margin (select row or column):"/>
-                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{rarefactionBean.marginchosen}">
-                                <f:selectItems value="#{rarefactionBean.margin}"/>
-                            </p:selectOneMenu> 
-                            <h:outputLabel style="font-weight: bold" value="Return Standard Error:"/>
-                            <p:selectBooleanCheckbox value ="#{rarefactionBean.doSe}"/>     
                         </h:panelGrid>  
                         <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
                             <p:commandButton value="Update" 
@@ -129,6 +140,9 @@
                                     <h:outputText escape="false" value="#{rarefactionBean.filerareresultpath}"/>
                                 </i>
                             </h:panelGrid>
+                            <p>
+                            The rarefaction scatter plot shows the rarefied number of species (y-axis) against the observed number of species (x-axis). 
+                            </p>
                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
                                 <p:commandButton value="Export"
                                     styleClass="exportButton"

@@ -73,36 +73,36 @@ public class UnseendivBean implements Serializable {
     }
  
     
-    private final SelectItem[] plot_data;
-    private String plot_datachosen = "NULL";
+    private final SelectItem[] plotdata;
+    private String plotdatachosen = "NULL";
     
-    public SelectItem[] getPlot_data() {
-        return plot_data;
+    public SelectItem[] getPlotdata() {
+        return plotdata;
     }
     
-    public String getPlot_datachosen() {
-        return plot_datachosen;
+    public String getPlotdatachosen() {
+        return plotdatachosen;
     } 
 
-    public void setPlot_datachosen(String plot_datachosen) {
-        this.plot_datachosen = plot_datachosen;
+    public void setPlotdatachosen(String plotdatachosen) {
+        this.plotdatachosen = plotdatachosen;
     }
     
     
-    private final SelectItem[] color;
-    private String colorchosen = "NULL";
-    
-    public SelectItem[] getColor() {
-        return color;
-    }
-    
-    public String getColorchosen() {
-        return colorchosen;
-    } 
-
-    public void setColorchosen(String colorchosen) {
-        this.colorchosen = colorchosen;
-    }
+//    private final SelectItem[] color;
+//    private String colorchosen = "NULL";
+//    
+//    public SelectItem[] getColor() {
+//        return color;
+//    }
+//    
+//    public String getColorchosen() {
+//        return colorchosen;
+//    } 
+//
+//    public void setColorchosen(String colorchosen) {
+//        this.colorchosen = colorchosen;
+//    }
  
     
     private final SelectItem[] box_color;
@@ -138,18 +138,43 @@ public class UnseendivBean implements Serializable {
  
     
     // textbox
-    private String pool = "";
+//    private String pool = "";
+//    
+//    public String getPool() {
+//        return pool;
+//    }
+//
+//    public void setPool(String pool) {
+//        this.pool = pool;
+//    }
     
-    public String getPool() {
-        return pool;
+    
+    private SelectItem[] poolColOpts = null;
+    
+    public SelectItem[] getPoolColOpts(){
+        String[] columns = DiversityUtils.poolColumn(sb);
+        int columnsLen = columns.length;
+        poolColOpts = new SelectItem[columnsLen];
+        List<String> columnNames = Arrays.asList(columns);
+        for (int i = 0; i < columnsLen; i++) {
+            poolColOpts[i] = new SelectItem(columnNames.get(i), columnNames.get(i));
+        }
+        return poolColOpts;
+    }
+    
+    private String poolColName = getPoolColOpts()[0].getLabel();
+    
+    public String getPoolColName() {
+        return poolColName;
     }
 
-    public void setPool(String pool) {
-        this.pool = pool;
+    public void setPoolColName(String poolColName) {
+        this.poolColName = poolColName;
     }
+
     
     
-    private String permutations = "";
+    private String permutations = "100";
     
     public String getPermutations() {
         return permutations;
@@ -160,7 +185,7 @@ public class UnseendivBean implements Serializable {
     }
     
   
-    private String minsize = "";
+    private String minsize = "3";
     
     public String getMinsize() {
         return minsize;
@@ -171,7 +196,7 @@ public class UnseendivBean implements Serializable {
     }
     
     
-    private String parallel = "";
+    private String parallel = "1";
     
     public String getParallel() {
         return parallel;
@@ -193,26 +218,26 @@ public class UnseendivBean implements Serializable {
 //    }
     
     
-    private String xlab = "";
-    
-    public String getXlab() {
-        return xlab;
-    }
-
-    public void setXlab(String xlab) {
-        this.xlab = xlab;
-    }
-    
-    
-    private String ylab = "";
-    
-    public String getYlab() {
-        return ylab;
-    }
-
-    public void setYlab(String ylab) {
-        this.ylab = ylab;
-    }
+//    private String xlab = "";
+//    
+//    public String getXlab() {
+//        return xlab;
+//    }
+//
+//    public void setXlab(String xlab) {
+//        this.xlab = xlab;
+//    }
+//    
+//    
+//    private String ylab = "";
+//    
+//    public String getYlab() {
+//        return ylab;
+//    }
+//
+//    public void setYlab(String ylab) {
+//        this.ylab = ylab;
+//    }
 
     
     private String fileunfreqresult = "Incidence-based estimates_freq_all sites.csv";
@@ -317,6 +342,15 @@ public class UnseendivBean implements Serializable {
     
     
     public UnseendivBean() {
+//        color = new SelectItem[6];
+//        color[0] = new SelectItem("NULL", "Grayscale");
+//        color[1] = new SelectItem("green", "Greenscale");
+//        color[2] = new SelectItem("red", "Redscale");
+//        color[3] = new SelectItem("royalblue", "Bluescale");
+//        color[4] = new SelectItem("wheat", "Yellowscale");
+//        color[5] = new SelectItem("darkslategray", "Darkgrayscale");
+    
+
         index = new SelectItem[5];
         index[0] = new SelectItem("NULL", "Jack1");
         index[1] = new SelectItem("jack2", "Jack2");
@@ -324,11 +358,11 @@ public class UnseendivBean implements Serializable {
         index[3] = new SelectItem("boot", "Boot");
         index[4] = new SelectItem("Species", "Species");
         
-        plot_data = new SelectItem[4];
-        plot_data[0] = new SelectItem("NULL", "Richness");
-        plot_data[1] = new SelectItem("S", "Species");
-        plot_data[2] = new SelectItem("chao", "Chao");
-        plot_data[3] = new SelectItem("ace", "ACE");
+        plotdata = new SelectItem[3];
+        //plotdata[0] = new SelectItem("NULL", "Richness");
+        plotdata[0] = new SelectItem("NULL", "Species");
+        plotdata[1] = new SelectItem("chao", "Chao");
+        plotdata[2] = new SelectItem("ace", "ACE");
                 
         box_color = new SelectItem[6];
         box_color[0] = new SelectItem("NULL", "Skyblue");
@@ -336,7 +370,7 @@ public class UnseendivBean implements Serializable {
         box_color[2] = new SelectItem("turquoise", "Turquoise");
         box_color[3] = new SelectItem("steelblue", "Steelblue");
         box_color[4] = new SelectItem("peach", "Peach");
-        box_color[5] = new SelectItem("wheat", "Wheat");
+        box_color[5] = new SelectItem("thistle", "Thistle");
         
         border_col = new SelectItem[6];
         border_col[0] = new SelectItem("NULL", "Blue");
@@ -344,32 +378,20 @@ public class UnseendivBean implements Serializable {
         border_col[2] = new SelectItem("turquoise", "Turquoise");
         border_col[3] = new SelectItem("steelblue", "Steelblue");
         border_col[4] = new SelectItem("peach", "Peach");
-        border_col[5] = new SelectItem("wheat", "Wheat");
-        
-        color = new SelectItem[6];
-        color[0] = new SelectItem("NULL", "Grayscale");
-        color[1] = new SelectItem("green", "Greenscale");
-        color[2] = new SelectItem("red", "Redscale");
-        color[3] = new SelectItem("royalblue", "Bluescale");
-        color[4] = new SelectItem("wheat", "Yellowscale");
-        color[5] = new SelectItem("darkslategray", "Darkgrayscale");
-        
+        border_col[5] = new SelectItem("thistle", "Thistle");      
         
     }
     
-    //DiversityUtils.CreateUnseenDiv(sb, false, "", false, "NULL", "", "", "");
-    //    DiversityUtils.PlotPoolBoxplot(sb, "NULL", "", "NULL", "", "", "NULL", sb.getCurrentImage("boxplot_richness"), "png", 72, "false");
-    //    DiversityUtils.PlotUnseenCurve(sb, "NULL",sb.getCurrentImage("plot_matrices"), "png", 72, "false");
-        
+
     // ACTION BUTTON // 
     public void unseendivUpdateBox_action() {
-        DiversityUtils.CreateUnseenDiv(sb, doOriginal, pool, doSmallsample, indexchosen, permutations, minsize, parallel); 
-        DiversityUtils.PlotPoolBoxplot(sb, plot_datachosen, box_colorchosen, xlab, ylab, border_colchosen, sb.getNewImage("boxplot_richness"), "png", 72, "false");        DiversityUtils.PlotUnseenCurve(sb, colorchosen, sb.getNewImage("plot_matrices"), "png", 72, "false");
+        DiversityUtils.CreateUnseenDiv(sb, doOriginal, poolColName, doSmallsample, indexchosen, permutations, minsize, parallel); 
+        DiversityUtils.PlotPoolBoxplot(sb, plotdatachosen, box_colorchosen, border_colchosen, sb.getNewImage("boxplot_richness"), "png", 72, "false");        
     }
     
     public void unseendivUpdateLine_action() {
-        DiversityUtils.CreateUnseenDiv(sb, doOriginal, pool, doSmallsample, indexchosen, permutations, minsize, parallel); 
-        DiversityUtils.PlotUnseenCurve(sb, colorchosen, sb.getNewImage("plot_matrices"), "png", 72, "false");
+        DiversityUtils.CreateUnseenDiv(sb, doOriginal, poolColName, doSmallsample, indexchosen, permutations, minsize, parallel); 
+        DiversityUtils.PlotUnseenCurve(sb, sb.getNewImage("plot_matrices"), "png", 72, "false");
     }
     
 }

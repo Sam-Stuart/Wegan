@@ -58,18 +58,40 @@ public class AbunddistBean implements Serializable {
     
     
     // textbox 
-    private String community = "";
+    private String communityFisher = "";
     
-    public String getCommunity() {
-        return community;
+    public String getCommunityFisher() {
+        return communityFisher;
     }
 
-    public void setCommunity(String community) {
-        this.community = community;
+    public void setCommunityFisher(String communityFisher) {
+        this.communityFisher = communityFisher;
     }
     
     
-    private String truncate = "";
+    private String communityPres = "";
+    
+    public String getCommunityPres() {
+        return communityPres;
+    }
+
+    public void setCommunityPres(String communityPres) {
+        this.communityPres = communityPres;
+    }
+    
+    
+    private String communityRank = "";
+    
+    public String getCommunityRank() {
+        return communityRank;
+    }
+
+    public void setCommunityRank(String communityRank) {
+        this.communityRank = communityRank;
+    }
+    
+    
+    private String truncate = "-1";
     
     public String getTruncate() {
         return truncate;
@@ -335,17 +357,17 @@ public class AbunddistBean implements Serializable {
     
     // ACTION BUTTON // 
     public void AbunddistFisherUpdate_action() {
-        DiversityUtils.CreateAbundDistDiv(sb, doOriginal, community, doTiesplit, truncate);       
+        DiversityUtils.CreateAbundFisherDistDiv(sb, doOriginal, communityFisher);       
         DiversityUtils.PlotAbundFisherPlotDiv(sb, bar_colorchosen, line_color_addFitchosen, sb.getNewImage("Abundance_Fisher_Dist_Plot"), "png", 72, "false");
     } 
     
     public void AbunddistPrestUpdate_action() {
-        DiversityUtils.CreateAbundDistDiv(sb, doOriginal, community, doTiesplit, truncate);       
+        DiversityUtils.CreateAbundPresDistDiv(sb, doOriginal, communityPres, doTiesplit, truncate);       
         DiversityUtils.PlotAbundPrestPlotDiv(sb, bar_colorchosen, line_color_addPoichosen, line_color_addMaxchosen, sb.getNewImage("Abundance_Prest_Dist_Plot"), "png", 72, "false");
     } 
     
     public void AbunddistRankUpdate_action() {
-        DiversityUtils.CreateAbundDistDiv(sb, doOriginal, community, doTiesplit, truncate);       
+        DiversityUtils.CreateAbundRankDistDiv(sb, doOriginal, communityRank);       
         DiversityUtils.PlotAbundRankPlotDiv(sb, sb.getNewImage("Abundance_Rank_Dist_Plot"), "png", 72, "false");
     } 
     

@@ -84,20 +84,20 @@ public class RarefactionBean implements Serializable {
         this.typechosen = typechosen;
     }
     
-    private final SelectItem[] margin;
-    private String marginchosen = "NULL";
-    
-    public SelectItem[] getMargin() {
-        return margin;
-    }
-    
-    public String getMarginchosen() {
-        return marginchosen;
-    } 
-
-    public void setMarginchosen(String marginchosen) {
-        this.marginchosen = marginchosen;
-    }
+//    private final SelectItem[] margin;
+//    private String marginchosen = "NULL";
+//    
+//    public SelectItem[] getMargin() {
+//        return margin;
+//    }
+//    
+//    public String getMarginchosen() {
+//        return marginchosen;
+//    } 
+//
+//    public void setMarginchosen(String marginchosen) {
+//        this.marginchosen = marginchosen;
+//    }
         
     private String step = "";
     
@@ -165,9 +165,9 @@ public class RarefactionBean implements Serializable {
         color[2] = new SelectItem("heat", "Heat");
         color[3] = new SelectItem("cm", "Cm");
         
-        margin = new SelectItem[2];
-        margin[0] = new SelectItem("NULL", "1");
-        margin[1] = new SelectItem("2", "2");
+//        margin = new SelectItem[2];
+//        margin[0] = new SelectItem("NULL", "1");
+//        margin[1] = new SelectItem("2", "2");
         
         colorb = new SelectItem[4];
         colorb[0] = new SelectItem("NULL", "Black");
@@ -192,12 +192,12 @@ public class RarefactionBean implements Serializable {
     
     // ACTION BUTTON // 
     public void rareCurveUpdate_action() {
-        DiversityUtils.CreateRarefactionDiv(sb, doOriginal, typechosen, sample, doSe, marginchosen);       
+        DiversityUtils.CreateRarefactionDiv(sb, doOriginal, typechosen, sample, doSe);       
         DiversityUtils.PlotRarefactionCurveDiversity(sb, step, colorchosen, sb.getNewImage("Rarefaction_Curve_Plot"), "png", 72, "false");
     }
     
     public void rareScatterUpdate_action() {
-        DiversityUtils.CreateRarefactionDiv(sb, doOriginal, typechosen, sample, doSe, marginchosen);       
+        DiversityUtils.CreateRarefactionDiv(sb, doOriginal, typechosen, sample, doSe);       
         DiversityUtils.PlotRarefactionPlotDiversity(sb, colorbchosen, sb.getNewImage("Rarefaction_Linear_Plot"), "png", 72, "false");
     }
     

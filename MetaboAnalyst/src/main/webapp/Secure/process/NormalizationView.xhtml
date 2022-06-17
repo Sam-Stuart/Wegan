@@ -231,8 +231,8 @@
                     <p:tab title ="Levene's Test">
                         <h:form id="formLT">
                         <h:panelGrid style="text-align: center; width: 100%;">
-                            <h:panelGrid columns="2" cellpadding="2">
-                            <h:outputLabel style="font-weight: bold" value="Fill in independant variable:"/>
+                            <h:panelGrid columns="2" cellpadding="2" columnClasses="colFront, colLeft, colRight">
+                            <h:outputLabel style="font-weight: bold" value="Fill in independant variable (x-axis, e.g.: linear regression):"/>
                                 <p:inputText style="width:400px; height:100px; line-height:5px;" value="#{normBean.predText}"/>
                             </h:panelGrid>
                             <h:panelGrid id="panelGrid1_2" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;">          
@@ -261,12 +261,12 @@
                     <p:tab title ="Residual Plot View">
                         <h:form id="formRP">
                         <h:panelGrid style="text-align: left; width: 100%;">
-                            <h:panelGrid columns="2" cellpadding="2">
-                                <h:outputLabel style="font-weight: bold" value="Select dependent variable:"/>
+                            <h:panelGrid columns="2" cellpadding="2" columnClasses="colFront, colLeft, colRight">
+                                <h:outputLabel style="font-weight: bold" value="Select dependent variable (y-axis, e.g.: linear regression):"/>
                                     <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{normBean.assumptionColName}">
                                         <f:selectItems value="#{normBean.assumpColOpts}" />
                                     </p:selectOneMenu>
-                                <h:outputLabel style="font-weight: bold" value="Fill in independant variable:"/>
+                                <h:outputLabel style="font-weight: bold" value="Fill in independant variable (x-axis, e.g.: linear regression):"/>
                                     <p:inputText style="width:400px; height:100px; line-height:5px;" value="#{normBean.predText}"/>
                             
                             </h:panelGrid>

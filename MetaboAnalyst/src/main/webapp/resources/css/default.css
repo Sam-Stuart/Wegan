@@ -330,6 +330,18 @@
     font-bold: false;
 }
 
+.helpButton{
+    background: #502efa !important; 
+    border: 5px #502efa !important; 
+    color: black !important;
+    text-shadow: none !important;
+    box-shadow: none !important;
+    width: 100px; 
+    height: 30px;
+    font-size: 18px;
+    font-bold: false;
+}
+
 .ui-button, .ui-button span, button.ui-button.ui-state-default span, .ui-button.ui-state-default span {
     text-shadow: none !important;
     font-weight: bold;
