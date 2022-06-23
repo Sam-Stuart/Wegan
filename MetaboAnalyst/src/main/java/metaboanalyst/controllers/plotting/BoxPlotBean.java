@@ -43,8 +43,9 @@ public class BoxPlotBean implements Serializable {
     
     }
     
-    private String box_xAxis= "NA";
-
+    private String box_xAxis= "NULL";
+    private String box_yAxis= "NULL";
+    
     public String getBox_xAxis() {
         return box_xAxis;
     }
@@ -53,7 +54,7 @@ public class BoxPlotBean implements Serializable {
         this.box_xAxis = box_xAxis;
     }
     
-    private String box_yAxis= "NA";
+    
 
     public String getBox_yAxis() {
         return box_yAxis;
@@ -64,32 +65,64 @@ public class BoxPlotBean implements Serializable {
     }
    
     private SelectItem[] boxColumnOpts = null;
+    private SelectItem[] factorBoxColumnOpts = null;
+    private SelectItem[] numericBoxColumnOpts = null;
     
     public SelectItem[] getBoxColumnOpts(){
-        String[] columns = PlottingUtils.GetDataColumns(sb);
+        String[] columns = PlottingUtils.GetDataColumnsBoxPlt(sb);
         int columnsLen = columns.length;
-        boxColumnOpts = new SelectItem[columnsLen+1];
+        boxColumnOpts = new SelectItem[columnsLen];
         List<String> columnNames = Arrays.asList(columns);
-        boxColumnOpts[0] = new SelectItem("All", "All");
+        //boxColumnOpts[0] = new SelectItem("All", " ");
         for (int i = 0; i < (columnsLen); i++) {
-            boxColumnOpts[i+1] = new SelectItem(columnNames.get(i), columnNames.get(i));
+            boxColumnOpts[i] = new SelectItem(columnNames.get(i), columnNames.get(i));
         }
         
         //List<String> columnNames = Arrays.asList(columns);
         return boxColumnOpts;
     }
     
-    private String xLabel = "null";
-    private String yLabel = "null";
-    private String legendTitle = "null";
-    private String mainTitle = "null";
-    private String boxLabels = "null";
-    private String facA = "null";
-    private String facB = "null";
-    private String facC = "null"; 
-    private String color = "null";
-    private String type  = "null";
+    public SelectItem[] getFactorBoxColumnOpts(){
+        String[] columns = PlottingUtils.GetFactorDataColumnsBoxPlt(sb);
+        int columnsLen = columns.length;
+        factorBoxColumnOpts = new SelectItem[columnsLen];
+        List<String> columnNames = Arrays.asList(columns);
+        //boxColumnOpts[0] = new SelectItem("All", " ");
+        for (int i = 0; i < (columnsLen); i++) {
+            factorBoxColumnOpts[i] = new SelectItem(columnNames.get(i), columnNames.get(i));
+        }
+        
+        //List<String> columnNames = Arrays.asList(columns);
+        return factorBoxColumnOpts;
+    }
+    public SelectItem[] getNumericBoxColumnOpts(){
+        String[] columns = PlottingUtils.GetNumericDataColumnsBoxPlt(sb);
+        int columnsLen = columns.length;
+        numericBoxColumnOpts = new SelectItem[columnsLen];
+        List<String> columnNames = Arrays.asList(columns);
+        //boxColumnOpts[0] = new SelectItem("All", " ");
+        for (int i = 0; i < (columnsLen); i++) {
+            numericBoxColumnOpts[i] = new SelectItem(columnNames.get(i), columnNames.get(i));
+        }
+        
+        //List<String> columnNames = Arrays.asList(columns);
+        return numericBoxColumnOpts;
+    }
     
+    private String xLabel = " ";
+    private String yLabel = " ";
+    private String legendTitle = "NULL";
+    private String mainTitle = "NULL";
+    private String boxLabels = "NULL";
+    //private String facA = "NULL";
+    //private String facB = "NULL";
+    private String facC = "NULL"; 
+    private String color = "NULL";
+    private String type  = "NULL";
+    private String data = "NULL";
+    
+    
+    private String facA = getBoxColumnOpts()[4].getLabel();
     
     
     public String getFacA() {
@@ -99,6 +132,8 @@ public class BoxPlotBean implements Serializable {
     public void setFacA(String facA) {
         this.facA = facA;
     }
+    
+    private String facB = getBoxColumnOpts()[3].getLabel();
     
     public String getFacB() {
         return facB;
@@ -171,14 +206,20 @@ public class BoxPlotBean implements Serializable {
     public void setType(String type) {
         this.type = type;
     }
+    public String getData() {
+        return data;
+    }
+
+    public void setData(String data) {
+        this.data = data;
+    }
     
     public void boxplotBtn_action() {
-        
-        if (!PlottingUtils.CreateBoxPlot(sb, facA, facB, facC, type, color, xLabel, yLabel, boxLabels, legendTitle, mainTitle)){
+        if (!PlottingUtils.CreateBoxPlot(sb, box_xAxis, box_yAxis, facC, color, xLabel, yLabel, legendTitle, mainTitle, data)){
             RConnection RC = sb.getRConnection();
             sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
         }else {
-            PlottingUtils.PlotBoxPlot(sb, sb.getNewImage("boxplot"), "png", 72);
+            PlottingUtils.PlotBoxPlot(sb, sb.getNewImage("plot_box_chart"), "png", 72);
         }
 //        DispersalUtils.CreateBetaDisper(sb, groups, labels, anovaString);
 //        DispersalUtils.PlotBetaDisper(sb, sb.getNewImage("betadisper"), "png", 72, 5);

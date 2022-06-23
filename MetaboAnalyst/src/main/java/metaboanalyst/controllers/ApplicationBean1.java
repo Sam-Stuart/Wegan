@@ -290,11 +290,12 @@ public class ApplicationBean1 implements Serializable {
         ordColorPaletteOpts[2] = new SelectItem("grey", "Grayscale");
         ordColorPaletteOpts[3] = new SelectItem("none", "No Color");
         
-        boxPltColorPaletteOpts = new SelectItem[4];
-        boxPltColorPaletteOpts[0] = new SelectItem("viridis", "Viridis");
-        boxPltColorPaletteOpts[1] = new SelectItem("plasma", "Plasma");
-        boxPltColorPaletteOpts[2] = new SelectItem("grey", "Grayscale");
-        boxPltColorPaletteOpts[3] = new SelectItem("rainbow", "Rainbow");
+        boxPltColorPaletteOpts = new SelectItem[5];
+        boxPltColorPaletteOpts[0] = new SelectItem("v", "Viridis");
+        boxPltColorPaletteOpts[1] = new SelectItem("p", "Plasma");
+        boxPltColorPaletteOpts[2] = new SelectItem("g", "Grayscale");
+        boxPltColorPaletteOpts[3] = new SelectItem("r", "Rainbow");
+        boxPltColorPaletteOpts[4] = new SelectItem("b", "Light Blue");
         
         ordStressDimensionOpts = new SelectItem[5];
         ordStressDimensionOpts[0] = new SelectItem("NULL", "1");

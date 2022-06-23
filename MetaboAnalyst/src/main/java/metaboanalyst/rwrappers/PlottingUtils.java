@@ -107,21 +107,22 @@ public class PlottingUtils {
     
     
     
-    public static boolean CreateBoxPlot(SessionBean1 sb, String facA, String facB, String facC, String type, String fillColor ,
-                          String xlab, String ylab, String boxlabs, String legendTitle, String mainTitle) {
+    public static boolean CreateBoxPlot(SessionBean1 sb, String facA, String facB, String facC, String fillColor ,
+                          String xlab, String ylab, String legendTitle, String mainTitle, String data) {
         try {
             RConnection RC = sb.getRConnection();
             String rCommand = "boxPlot_setup(NA"
                                                 + ", \"" + facA
                                                 + "\", \"" + facB
                                                 + "\", \"" + facC
-                                                + "\", \"" + type
                                                 + "\", \"" + fillColor
                                                 + "\", \"" + xlab
                                                 + "\", \"" + ylab
-                                                + "\", \"" + boxlabs
                                                 + "\", \"" + legendTitle
-                                                + "\", \"" + mainTitle + "\")";
+                                                + "\", \"" + mainTitle
+                                                + "\", \"" + data + "\")";
+            
+            
             RCenter.recordRCommand(RC, rCommand);
             RC.voidEval(rCommand);
             return true;
@@ -172,6 +173,46 @@ public class PlottingUtils {
         try {
             RConnection RC = sb.getRConnection();
             String rCommand = "lin.reg.columns(NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            return RC.eval(rCommand).asStrings();
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        } catch (REXPMismatchException ex) {
+            Logger.getLogger(CAUtils.class.getName()).log(Level.SEVERE, null, ex);   /* Currently using CAUtils ..... Need to channnnne to PlottingUtils    */ 
+        }
+        return null;
+    }
+    
+    public static String[] GetDataColumnsBoxPlt(SessionBean1 sb){
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "all.columns(NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            return RC.eval(rCommand).asStrings();
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        } catch (REXPMismatchException ex) {
+            Logger.getLogger(CAUtils.class.getName()).log(Level.SEVERE, null, ex);   /* Currently using CAUtils ..... Need to channnnne to PlottingUtils    */ 
+        }
+        return null;
+    }
+    public static String[] GetFactorDataColumnsBoxPlt(SessionBean1 sb){
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "factor.columns(NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            return RC.eval(rCommand).asStrings();
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        } catch (REXPMismatchException ex) {
+            Logger.getLogger(CAUtils.class.getName()).log(Level.SEVERE, null, ex);   /* Currently using CAUtils ..... Need to channnnne to PlottingUtils    */ 
+        }
+        return null;
+    }
+    public static String[] GetNumericDataColumnsBoxPlt(SessionBean1 sb){
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "numeric.columns(NA)";
             RCenter.recordRCommand(RC, rCommand);
             return RC.eval(rCommand).asStrings();
         } catch (RserveException rse) {

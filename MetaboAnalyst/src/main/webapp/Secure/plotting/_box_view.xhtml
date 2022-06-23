@@ -8,31 +8,28 @@
                 xmlns:p="http://primefaces.org/ui">
     
     <p>
-        A boxplot is a standardized way of displaying the distribution of data. The median (middle quartile) marks the mid-point of the data and is shown by the line that divides the box 
+        A box plot is a standardized way of displaying the distribution of data. The median (middle quartile) marks the mid-point of the data and is shown by the line that divides the box 
         into two parts. Half the scores are greater than or equal to this value and half are less. The middle "box" represents the middle 50% of scores for the group. 
     </p>
-        <h:panelGrid id="panelGrid" columns="4" cellpadding="5" >  
-                            
-        <h:outputLabel  style="font-weight: bold" value="X Axis Data:"/>
+    <h:panelGrid id="panelGrid" columns="5" cellpadding="5" columnClasses="colLeft,colRight,colLeft,colRight, colLast"> 
+        <h:outputLabel  style="font-weight: bold" value="Factor Data:"/>
         <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{boxPlotBean.box_xAxis}">
-            <f:selectItems value="#{boxPlotBean.boxColumnOpts}" />
+            <f:selectItems value="#{boxPlotBean.factorBoxColumnOpts}" />
 
         </p:selectOneMenu>
-        
-        <h:outputLabel  style="font-weight: bold" value="Y Axis Data:"/>
+        <h:outputLabel  style="font-weight: bold" value="Numerical Data:"/>
         <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{boxPlotBean.box_yAxis}">
-            <f:selectItems value="#{boxPlotBean.boxColumnOpts}" />
-
+            <f:selectItems value="#{boxPlotBean.numericBoxColumnOpts}" />
         </p:selectOneMenu>
-        
-        
+        <spacer></spacer>
         
         <h:outputLabel style="font-weight: bold; " value="X Axis Label: "/>
         <p:inputText style="left: -220px;" value="#{boxPlotBean.xLabel}"></p:inputText>
         <h:outputLabel style="font-weight: bold" value="Y Axis Label: "/>
         <p:inputText value="#{boxPlotBean.yLabel}" style="  align-content: left"></p:inputText>  
+        <spacer></spacer>
         
-        <h:outputLabel style="font-weight: bold" value="Color Pallet:"/>
+        <h:outputLabel style="font-weight: bold" value="Color Pallete:"/>
         <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{boxPlotBean.color}">
             <f:selectItems value="#{applicationBean1.boxPltColorPaletteOpts}" />
         </p:selectOneMenu>
@@ -49,7 +46,7 @@
                         onclick="PF('statusDialog').show()"
                         oncomplete="PF('statusDialog').hide()"  
                         update=":ac:form2:boxPane  :cmdPane"
-                        actionListener="#{BoxPlotBean.boxplotBtn_action()}"/>
+                        actionListener="#{boxPlotBean.boxplotBtn_action()}"/>
     </h:panelGrid>
     <h:panelGrid class="resultsBar" columns="2">
         <h:panelGroup>
