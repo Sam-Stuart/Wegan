@@ -254,6 +254,52 @@ axis.text = element_text(size=12, colour="black"),
   
 }
 
+
+#'JSON object conversion for linear regression plot
+#'@description Build JSON object from linear regression plot. mSetObj was used with lin.reg.plot so that 'response', 'predictor', and plot are already stored in the object
+#'@param mSetObj Input the name of the created mSetObj
+
+#'@author  Gina Sykes \email{gsykes@ualberta.ca}
+#'University of Alberta, Canada
+#'License: GNU GPL (>= 2)
+#'@export
+
+
+lin.reg.plot.json <- fubction(mSetObj=NA){
+
+  library("ggplot2")
+  library("RJSONIO")
+  
+  mSetObj <- .get.mSet(mSetObj)
+  
+  imgName <- mSetObj$imgSet$plot.linReg1
+  a0 <- mSetObj$analSet$linReg1$plot
+  facA <- mSetObj$analSet$linReg1$res$response
+  facB <- mSetObj$analSet$linReg1$res$predictor
+
+  build <- ggplot_build(a0)
+  # colnames(build$data[[1]]);  c("x", "y", "flipped_aes", "PANEL", "group", "colour", "fill",  "size", "linetype", "weight", "alpha")
+  linear_plot_json <- list()
+  linear_plot_json$main <- "Univariate Linear Regression Line of Best Fit" #title
+  linear_plot_json$axis <- c(facA, facB) #axis titles
+  linear_plot_json$points$coords <- build$data[[1]][,c("x","y")] #[,1:2]
+  linear_plot_json$points$cols <- build$data[[1]][,grepl("col",colnames(build$data[[1]]))] #[,6] #colours
+  linear_plot_json$points$shape <- build$data[[1]][,c("group")]#[,5]
+  linear_plot_json$points$size <- build$data[[1]][,c("size")]#[,7]
+
+  imgName <- paste(imgName, ".json", sep="")
+  json.obj <- RJSONIO::toJSON(linear_plot_json, .na='null')
+  sink(imgName)
+  cat(json.obj)
+  sink()
+
+  if(!.on.public.web){
+    return(.set.mSet(mSetObj))
+    }
+  
+}
+
+
 # #'Perform Linear Regression'
 # #'@description Build a linear regression model for one user selected predictor variable
 # #'@param mSetObj Input the name of the created mSetObj
