@@ -1,79 +1,107 @@
-#'Perform Linear Regression'
-#'@description Build a linear regression model for one user selected predictor variable
+#'Generate linear regression plot
+#'@description Plot line of best fit on scatter plot of linear regression model on 2 variables in data
 #'@param mSetObj Input the name of the created mSetObj
 #'@param facA Input the name of the response column (java uses Columns() to give user options)
 #'@param facB Input the name of the predictor column (java uses Columns() to give user options)
-#'@param weights Set weight values, default is NULL
+#'@param color Set color for scatterplot dots (default "NULL" is black); (static dropdown)
+###@param weights Set weight values, default is NULL
+#'@param data Boolean, whether to use original data; "false" (default) means normalized or "true" means original (checkbox)
+
+#'@param no_plot_eq Boolean, FALSE (default) to show linear model equation on plot, TRUE for plot without annotation of model equation (at top); y is 0.75*max(y) (checkbox)
+#'@param no_plot_rsq Boolean, FALSE (default) to show linear model rsq value on plot, TRUE for plot without annotation of rsq value (at top); y is 0.75*max(y) (checkbox)
+
+#@param plot_eq Boolean, TRUE (default) to show linear model equation on plot, FALSE for plot without annotation of model equation (at top); y is 0.75*max(y)
+#@param plot_rsq Boolean, TRUE (default) to show linear model rsq value on plot, FALSE for plot without annotation of rsq value (at top); y is 0.75*max(y)
+#'@param plot_rsq_adj Boolean, TRUE to show linear model adjusted rsq value on plot, FALSE (default) for plot without annotation of adjusted rsq value (at top); y is 0.75*max(y) (checkbox)
+
+#'@param imgName Input the image name
+#'@param format Select the image format, "png" or "pdf", default is "png" 
+#'@param dpi Input the dpi. If the image format is "pdf", users need not define the dpi. For "png" images, 
+#'the default dpi is 72. It is suggested that for high-resolution images, select a dpi of 300.  
+#'@param width Input the width, there are 2 default widths. The first, width=NULL, is 10.5.
+#'The second default is width=0, where the width is 7.2. Otherwise users can input their own width. 
 #'@author Louisa Normington\email{normingt@ualberta.ca}
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2)
 #'@export
+lin.reg.plot <- function(mSetObj=NA, facA="NULL", facB="NULL",
+                         color="NULL",# weights=NULL,
+         data="false", 
+  # plot_eq="true", plot_rsq="true", plot_rsq_adj="false",
+  no_plot_eq="false", no_plot_rsq="false", plot_rsq_adj="false",
+                  imgName, format="png", dpi=72, width=NA){
 
-lin.reg.anal.one <- function(mSetObj=NA, facA="NULL", facB="NULL", weights=NULL){
+  library("ggpmisc")
+  library("ggplot2")
   
   mSetObj <- .get.mSet(mSetObj)
-  mSetObj$dataSet$norm <- mSetObj$dataSet$norm[order(as.numeric(rownames(mSetObj$dataSet$norm))),,drop=FALSE]
-  #Dependent var default is first column. Independent var default is second column.
+  
+  # mSetObj$dataSet$norm <- mSetObj$dataSet$norm[order(as.numeric(rownames(mSetObj$dataSet$norm))),,drop=FALSE]
 
-
+   ### SET DATA (whether to use original data or not)
+  if (data=="false") { 
+    input <- mSetObj$dataSet$norm #default use norm
+  } else {
+    input <- mSetObj$dataSet$orig
+  }
+  
+  ### SET VARIABLES
   #Set dependent (response) variable name
   if (facA == "NULL"){
-    facA <- colnames(mSetObj$dataSet$norm)[1] #Default is first column.
+    facA <- colnames(data)[1] #Default is 1st column.
   } else {
     facA <- facA #Determined using Columns() function below (java will present options in drop down menu)
   }
-  
   #Set independent (predictor) variable name
   if (facB == "NULL"){
-    facB <- colnames(mSetObj$dataSet$norm)[2] #Default is second column.
+    facB <- colnames(data)[2] #Default is 2nd column.
   } else {
     facB <- facB #Determined using Columns() function below (java will present options in drop down menu)
   }
-
-  #Variable type check
+  
+  # VARIABLE TYPE CHECK
   if (is.factor(mSetObj$dataSet$norm[,facA] || mSetObj$dataSet$norm[,facB])==TRUE){
     #AddErrMsg("You have chosen 1 or more categorical columns! Try selecting another independent and/or dependent variable. You can also try other regression models such as penalized, logistic, SVM or random forest.")
     stop("You have chosen 1 or more categorical columns! Try selecting another independent and/or dependent variable. You can also try other regression models such as penalized, logistic, SVM or random forest.") #Error msg
   }
-  
-  #Define formula
+
+  #DEFINE FORMULA
   formula <- as.formula(paste0(facA, "~", facB)) 
+
+  #GENERATE MODEL, with or without weights
+  # if (is.null(weights)==TRUE) {
+    model <- lm(formula=formula, data=input,#mSetObj$dataSet$norm,
+                weights=NULL) #Create linear model, no weights
+ #  } else {
+ #    weights <- weights #Java upload weights as a vector of numeric values
+ #    if (length(weights) == nrow(mSetObj$dataSet$norm)) { #There must be one weight for every row in the data set
+ #      model <- lm(formula=formula, data=input, #mSetObj$dataSet$norm,
+ # weights=weights) #Create linear model, with weights
+ #    } else {
+ #      #AddErrMsg("The length of the weights vector does not equal the number of rows in the data set! Check that the weights vector is correct.") #Error msg 
+ #      stop("The length of the weights vector does not equal the number of rows in the data set! Check that the weights vector is correct.") #Error msg 
+ #    }
+ #  }
+ 
+    
+  ## alpha(yint) + Beta(slope) * X
+  # EXTRACTING MODEL RESULTS
+  # later, print()/cat() these:
+  summary <- summary(model) #PRINT #Summary w coeff, resid & fit
+  fitted<-fitted(model) #PRINT
+  covar<-vcov(model) #PRINT
+  conf.int<-confint(model, level=0.95) #PRINT
   
-  #Generate model with or without weights
-  if (is.null(weights)==TRUE) {
-    model <- lm(formula=formula, data=mSetObj$dataSet$norm, weights=NULL) #Create linear model, no weights
-  } else {
-    weights <- weights #Java upload weights as a vector of numeric values
-    if (length(weights) == nrow(mSetObj$dataSet$norm)) { #There must be one weight for every row in the data set
-      model <- lm(formula=formula, data=mSetObj$dataSet$norm, weights=weights) #Create linear model, with weights
-    } else {
-      #AddErrMsg("The length of the weights vector does not equal the number of rows in the data set! Check that the weights vector is correct.") #Error msg 
-      stop("The length of the weights vector does not equal the number of rows in the data set! Check that the weights vector is correct.") #Error msg 
-    }
-  }
-  
-  #Store model
-  mSetObj$analSet$linReg1$mod <- model
-  
-  #Extract results
-  fitted <- fitted(model) #Predicted values
-  summary <- summary(model) #Summary includes coefficients, residuals and fit parameters
-  residuals <- model$residuals # Get the residuals 
-  conf.int <- confint(model, level=0.95) #Confidence intervals for predictor variables
-  covar <- vcov(model) #Covariance matrix for preductor variables
   fileName <- paste0("linear_regession_summary_", facA, "~", facB, ".txt") #File name for summary
   coeffs <- summary[["coefficients"]] #Extract model coefficients
-  beta <- round(coeffs[2], 2)
-  alpha <- round(coeffs[1], 2)
-  equation <- paste(facA, " = ", paste(paste(beta, facB, sep="*"), alpha, sep=" + ")) #Create equation with intercept, coefficient and predictor variable name
-  r.squared <- summary[["adj.r.squared"]] #Extract R^2 value
-  r_sq <- round(r.squared, 2)
-  r.squared.eq <- paste("R-squared: ", r_sq) #Generate R^2 equation
-  r.squared.adj <- summary[["adj.r.squared"]] #Extract adjusted R^2 value
-  r_sq_adj <- round(r.squared.adj, 2)
-  r.squared.adj.eq <- paste("R-squared adjusted: ", r_sq_adj) #Generate adjusted R^2 equation
-  
-  # #Test residuals for normality. Error will be visable to user.
+  beta <- round(coeffs[2], digits = 2)
+  alpha <- round(coeffs[1], digits = 2)
+  equation <- paste(facA, " = ",
+ paste( paste(beta, facB, sep="*"), alpha, sep=" + ") ) # equation with intercept, coefficient and predictor variable name
+  r_sq <- round(summary[["r.squared"]], digits = 2) #Extract R^2
+  r_sq_adj <- round(summary[["adj.r.squared"]], digits = 2) #Extract adjusted R^2 value
+
+  # #Test residuals for normality. Error will be visible to user.
   # norm_resid <- shapiro.test(residuals) 
   # if (norm_resid$p.value < 0.05){
   #   norm_resid_text <- paste0("The residuals are normally distributed. This model is valid.") #To be used in summary, not to be displayed
@@ -81,86 +109,314 @@ lin.reg.anal.one <- function(mSetObj=NA, facA="NULL", facB="NULL", weights=NULL)
   #   #AddErrMsg("The residuals are NOT normally distributed. This model is invalid. Try other preprocessing options, or try other regression models such as SVM or random forest.")
   #   stop("The residuals are NOT normally distributed. This model is invalid. Try other preprocessing options, or try other regression models such as SVM or random forest.")
   # }
-  
-  #Store results
-  mSetObj$analSet$linReg1$res <- list(response=facA, predictor=facB, summary=summary, predicted.values=fitted, confidence.intervals=conf.int, covariance.matrix=covar, equation=equation, r.squared.eq=r.squared.eq, r.squared.adj.eq=r.squared.adj.eq, fileName=fileName, formula=formula) #Note where the summary is stored
-  
+ 
+   # STORE MODEL
+  mSetObj$analSet$linReg1$mod <- model
+
+  #STORE RESULTS: x/y var names, model summary, fitted values,conf intervals, covar mat, equation, rsq, rsq_adj, filename, formula
+  ### change response to xlab, predictor to ylab
+  mSetObj$analSet$linReg1$res <- list(response=facA, predictor=facB, summary=summary, predicted.values=fitted, 
+confidence.intervals=conf.int, covariance.matrix=covar, equation=equation, r.squared.eq=paste("R-squared = ", r_sq),
+ r.squared.adj.eq=paste("R-squared adjusted = ", r_sq_adj), fileName=fileName, formula=formula
+) #Note where the summary is stored
   #Download text document containing the summary, called the fileName. Document goes into the working directory and should be accessible to the user as part of the report.
-  sink(fileName) 
-
-  cat("Formula:\n")
-  print(formula)
-
-  print(summary)
-  # print(norm_resid)
-  # cat("Normality of residuals result:\n")
-  # cat(paste0(norm_resid_text, "\n"))
-
-  cat("\nConfidence intervals for predictor variables:")
-  print(conf.int)
-
-  cat("\nPredicted values:")
-  print(fitted)
-
-  cat("\nCovariance matrix for predictor variables:")
-  print(covar)
-  sink()
   
+#SET POINT COLOR
+  if (color == "NULL") {
+      color1 <- "black" # default
+    } else if (color == "blue") {
+      color1 <- "blue"
+    } else if (color == "red") {
+      color1 <- "red"
+    } else if(color == "green"){
+      color1 <- "green"
+    } else if(color == "grey"){
+      color1 <- "grey"
+    }
   
-  return(.set.mSet(mSetObj))
-  
-}
-
-
-#'Plot line of best fit for linear regression with one predictor variable
-#'@description Scatter plot with line of best fit, where response variable is y and predictor variable is x
-#'@usage Plot.linReg1(mSetObj, imgName, format="png", dpi=72, width=NA)
-#'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
-#'@param imgName Input the image name
-#'@param format Select the image format, "png" or "pdf", default is "png" 
-#'@param dpi Input the dpi. If the image format is "pdf", users need not define the dpi. For "png" images, 
-#'the default dpi is 72. It is suggested that for high-resolution images, select a dpi of 300.  
-#'@param width Input the width, there are 2 default widths. The first, width=NULL, is 10.5.
-#'The second default is width=0, where the width is 7.2. Otherwise users can input their own width.   
-#'@author Louisa Normington\email{normingt@ualberta.ca}
-#'University of Alberta, Canada
-#'License: GNU GPL (>= 2)
-#'@export
-
-plot.linReg1 <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA){
-  
-  #Extract necessary objects from mSetObj
-  mSetObj <- .get.mSet(mSetObj)
-  facA <- mSetObj$analSet$linReg1$res$response #For x-axis label
-  facB <- mSetObj$analSet$linReg1$res$predictor #For y-axis label
-  response <- mSetObj$dataSet$norm[,facA] #First column is reponse variable by default
-  predictor <- mSetObj$dataSet$norm[,facB] #User selects predictor variable in drop down menu
-  model <- mSetObj$analSet$linReg1$mod
-  
-  #Set plot dimensions
-  if(is.na(width)){
-    w <- 7.2
-  } else if(width == 0){
-    w <- 7.2
-  } else{
-    w <- width
-  }
-  h <- w
+  #SET PLOT DIMENSIONS
+  # if(is.na(width)){
+  #   w <- 7.2
+  # } else if(width == 0){
+  #   w <- 7.2
+  # } else{
+  #   w <- width
+  # }
+  # h <- w
   
   #Name plot for download
   imgName <- paste(imgName, "dpi", dpi, ".", format, sep="")
   mSetObj$imgSet$plot.linReg1 <- imgName
   
-  #Generate plot
-  Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
-  plot(response, predictor, xlab=facA, ylab=facB, main="Univariate Linear Regression Line of Best Fit", yaxt="n")
-  axis(2, las=2)
-  abline(model)
-  dev.off()
+  #GENERATE PLOT
+  # Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
+ 
+  ### THEME 
+#  theme_lineplot <- theme_bw() +    # ggthemes::theme_base() 
+#   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+# axis.text = element_text(size=12, colour="black"), 
+#    axis.title=element_text(size=12),
+#  legend.title=element_text(12), legend.text=element_text(size=12), plot.title=element_text(face='bold',hjust = 0.5)
+#   )
+  
+   a0 <- ggplot(data = input, aes_(x = as.name(facA), y = as.name(facB)) )+
+   labs(title="Univariate Linear Regression Line of Best Fit") +
+     ylab(facB)+ xlab(facA) +
+     geom_smooth(se=FALSE, color='black', fullrange = TRUE, method='lm') +
+     geom_point(shape=16, color=color1) +
+     theme_bw() + 
+  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
+axis.text = element_text(size=12, colour="black"), 
+   axis.title=element_text(size=12),
+ legend.title=element_text(12), legend.text=element_text(size=12), plot.title=element_text(face='bold',hjust = 0.5)
+  )
+
+## {GGPMISC} ANNOTATION LOOP   
+   if (plot_rsq_adj == "false"){ # default
+  ### EQUATION, RSQ
+   if (no_plot_eq == "false" && no_plot_rsq == "false") { #default
+     a0 <- a0 + ggpmisc::stat_poly_eq(aes(label = paste(after_stat(eq.label), after_stat(rr.label),  sep = "*\"  |  \"*")),
+      eq.with.lhs =  paste0("italic(`",facB,"`)~`=`~"),
+      eq.x.rhs =  paste0("~italic(`*` ~`",facA,"`)"),
+      rr.digits = 2, coef.digits = 2, parse = TRUE,
+      label.y = 0.75 * max(input[,facB]) )
+  ### EQUATION
+    } else if (no_plot_eq == "false" && no_plot_rsq == "true") {
+   a0 <- a0 + ggpmisc::stat_poly_eq(aes(label = 
+    paste0(after_stat(eq.label) )),
+    eq.with.lhs =  paste0("italic(`",facB,"`)~`=`~"),
+    eq.x.rhs =  paste0("~italic(`*` ~`",facA,"`)"),
+    rr.digits = 2, coef.digits = 2, parse = TRUE,
+    label.y = 0.75 * max(input[,facB]) ) 
+  ### NOTHING
+    } else if (no_plot_eq == "true" && no_plot_rsq == "true") {
+      a0 <- a0
+  ### RSQ
+    } else if (no_plot_eq == "true" && no_plot_rsq == "false") {
+   a0 <- a0 + ggpmisc::stat_poly_eq(aes(label = 
+      paste0(after_stat(rr.label) )),
+      rr.digits = 2, coef.digits = 2, parse = TRUE,
+      label.y = 0.75 * max(input[,facB]) ) 
+    }
+   
+   } else if (plot_rsq_adj == "true"){
+  ### EQUATION, RSQ, RSQ_ADJ     
+   if (no_plot_eq == "false" && no_plot_rsq == "false") {
+     a0 <- a0 + ggpmisc::stat_poly_eq(aes(label = paste(after_stat(eq.label), after_stat(rr.label), after_stat(adj.rr.label),
+      sep = "*\"  |  \"*")), size = 3,
+      eq.with.lhs =  paste0("italic(`",facB,"`)~`=`~"),  eq.x.rhs =  paste0("~italic(`*` ~`",facA,"`)"),
+      rr.digits = 2, coef.digits = 2, parse = TRUE,
+      label.y = 0.75 * max(input[,facB]) ) 
+  ### EQUATION, RSQ_ADJ 
+    } else if (no_plot_eq == "false" && no_plot_rsq == "true") {
+   a0 <- a0 + ggpmisc::stat_poly_eq(aes(label = paste(after_stat(eq.label), after_stat(adj.rr.label), sep = "*\"  |  \"*")),
+      eq.with.lhs =  paste0("italic(`",facB,"`)~`=`~"),
+      eq.x.rhs =  paste0("~italic(`*` ~`",facA,"`)"),
+      rr.digits = 2, coef.digits = 2, parse = TRUE,
+      label.y = 0.75 * max(input[,facB]) ) 
+  ### RSQ_ADJ 
+    } else if (no_plot_eq == "true" && no_plot_rsq == "true") {
+     a0 <- a0 + ggpmisc::stat_poly_eq(aes(label = 
+       paste0(after_stat(adj.rr.label) )),
+       rr.digits = 2, coef.digits = 2, parse = TRUE,
+       label.y = 0.75 * max(input[,facB]) ) 
+  ### RSQ, RSQ_ADJ 
+    } else if (no_plot_eq == "true" && no_plot_rsq == "false") {
+     a0 <- a0 + ggpmisc::stat_poly_eq(aes(label = paste(after_stat(rr.label), after_stat(adj.rr.label),  sep = "*\"  |  \"*")),
+       rr.digits = 2, coef.digits = 2, parse = TRUE,
+       label.y = 0.75 * max(input[,facB]) ) 
+    } 
+     
+   }
+
+#STORE IN mset
+  mSetObj$analSet$linReg1$plot <- a0
+
+### need these anymore?
+  # sink(fileName) 
+  # cat("Formula:\n")
+  # print(formula)
+  # print(summary)
+  # # print(norm_resid)
+  # # cat("Normality of residuals result:\n")
+  # # cat(paste0(norm_resid_text, "\n"))
+  # cat("\nConfidence intervals for predictor variables:")
+  # print(conf.int)
+  # cat("\nPredicted values:")
+  # print(fitted)
+  # cat("\nCovariance matrix for predictor variables:")
+  # print(covar)
+  # sink()
+  # 
+  # dev.off()
   
   return(.set.mSet(mSetObj))
   
 }
+
+# #'Perform Linear Regression'
+# #'@description Build a linear regression model for one user selected predictor variable
+# #'@param mSetObj Input the name of the created mSetObj
+# #'@param facA Input the name of the response column (java uses Columns() to give user options)
+# #'@param facB Input the name of the predictor column (java uses Columns() to give user options)
+# #'@param weights Set weight values, default is NULL
+# #'@author Louisa Normington\email{normingt@ualberta.ca}
+# #'University of Alberta, Canada
+# #'License: GNU GPL (>= 2)
+# #'@export
+# 
+# lin.reg.anal.one <- function(mSetObj=NA, facA="NULL", facB="NULL", weights=NULL){
+#   
+#   mSetObj <- .get.mSet(mSetObj)
+#   mSetObj$dataSet$norm <- mSetObj$dataSet$norm[order(as.numeric(rownames(mSetObj$dataSet$norm))),,drop=FALSE]
+#   #Dependent var default is first column. Independent var default is second column.
+# 
+# 
+#   #Set dependent (response) variable name
+#   if (facA == "NULL"){
+#     facA <- colnames(mSetObj$dataSet$norm)[1] #Default is first column.
+#   } else {
+#     facA <- facA #Determined using Columns() function below (java will present options in drop down menu)
+#   }
+#   
+#   #Set independent (predictor) variable name
+#   if (facB == "NULL"){
+#     facB <- colnames(mSetObj$dataSet$norm)[2] #Default is second column.
+#   } else {
+#     facB <- facB #Determined using Columns() function below (java will present options in drop down menu)
+#   }
+# 
+#   #Variable type check
+#   if (is.factor(mSetObj$dataSet$norm[,facA] || mSetObj$dataSet$norm[,facB])==TRUE){
+#     #AddErrMsg("You have chosen 1 or more categorical columns! Try selecting another independent and/or dependent variable. You can also try other regression models such as penalized, logistic, SVM or random forest.")
+#     stop("You have chosen 1 or more categorical columns! Try selecting another independent and/or dependent variable. You can also try other regression models such as penalized, logistic, SVM or random forest.") #Error msg
+#   }
+#   
+#   #Define formula
+#   formula <- as.formula(paste0(facA, "~", facB)) 
+#   
+#   #Generate model with or without weights
+#   if (is.null(weights)==TRUE) {
+#     model <- lm(formula=formula, data=mSetObj$dataSet$norm, weights=NULL) #Create linear model, no weights
+#   } else {
+#     weights <- weights #Java upload weights as a vector of numeric values
+#     if (length(weights) == nrow(mSetObj$dataSet$norm)) { #There must be one weight for every row in the data set
+#       model <- lm(formula=formula, data=mSetObj$dataSet$norm, weights=weights) #Create linear model, with weights
+#     } else {
+#       #AddErrMsg("The length of the weights vector does not equal the number of rows in the data set! Check that the weights vector is correct.") #Error msg 
+#       stop("The length of the weights vector does not equal the number of rows in the data set! Check that the weights vector is correct.") #Error msg 
+#     }
+#   }
+#   
+#   #Store model
+#   mSetObj$analSet$linReg1$mod <- model
+#   
+#   #Extract results
+#   fitted <- fitted(model) #Predicted values
+#   summary <- summary(model) #Summary includes coefficients, residuals and fit parameters
+#   residuals <- model$residuals # Get the residuals 
+#   conf.int <- confint(model, level=0.95) #Confidence intervals for predictor variables
+#   covar <- vcov(model) #Covariance matrix for preductor variables
+#   fileName <- paste0("linear_regession_summary_", facA, "~", facB, ".txt") #File name for summary
+#   coeffs <- summary[["coefficients"]] #Extract model coefficients
+#   beta <- round(coeffs[2], 2)
+#   alpha <- round(coeffs[1], 2)
+#   equation <- paste(facA, " = ", paste(paste(beta, facB, sep="*"), alpha, sep=" + ")) #Create equation with intercept, coefficient and predictor variable name
+#   r.squared <- summary[["adj.r.squared"]] #Extract R^2 value
+#   r_sq <- round(r.squared, 2)
+#   r.squared.eq <- paste("R-squared: ", r_sq) #Generate R^2 equation
+#   r.squared.adj <- summary[["adj.r.squared"]] #Extract adjusted R^2 value
+#   r_sq_adj <- round(r.squared.adj, 2)
+#   r.squared.adj.eq <- paste("R-squared adjusted: ", r_sq_adj) #Generate adjusted R^2 equation
+#   
+#   # #Test residuals for normality. Error will be visable to user.
+#   # norm_resid <- shapiro.test(residuals) 
+#   # if (norm_resid$p.value < 0.05){
+#   #   norm_resid_text <- paste0("The residuals are normally distributed. This model is valid.") #To be used in summary, not to be displayed
+#   # } else {
+#   #   #AddErrMsg("The residuals are NOT normally distributed. This model is invalid. Try other preprocessing options, or try other regression models such as SVM or random forest.")
+#   #   stop("The residuals are NOT normally distributed. This model is invalid. Try other preprocessing options, or try other regression models such as SVM or random forest.")
+#   # }
+#   
+#   #Store results
+#   mSetObj$analSet$linReg1$res <- list(response=facA, predictor=facB, summary=summary, predicted.values=fitted, confidence.intervals=conf.int, covariance.matrix=covar, equation=equation, r.squared.eq=r.squared.eq, r.squared.adj.eq=r.squared.adj.eq, fileName=fileName, formula=formula) #Note where the summary is stored
+#   
+#   #Download text document containing the summary, called the fileName. Document goes into the working directory and should be accessible to the user as part of the report.
+#   sink(fileName) 
+# 
+#   cat("Formula:\n")
+#   print(formula)
+# 
+#   print(summary)
+#   # print(norm_resid)
+#   # cat("Normality of residuals result:\n")
+#   # cat(paste0(norm_resid_text, "\n"))
+# 
+#   cat("\nConfidence intervals for predictor variables:")
+#   print(conf.int)
+# 
+#   cat("\nPredicted values:")
+#   print(fitted)
+# 
+#   cat("\nCovariance matrix for predictor variables:")
+#   print(covar)
+#   sink()
+#   
+#   
+#   return(.set.mSet(mSetObj))
+#   
+# }
+# 
+# 
+# #'Plot line of best fit for linear regression with one predictor variable
+# #'@description Scatter plot with line of best fit, where response variable is y and predictor variable is x
+# #'@usage Plot.linReg1(mSetObj, imgName, format="png", dpi=72, width=NA)
+# #'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
+# #'@param imgName Input the image name
+# #'@param format Select the image format, "png" or "pdf", default is "png" 
+# #'@param dpi Input the dpi. If the image format is "pdf", users need not define the dpi. For "png" images, 
+# #'the default dpi is 72. It is suggested that for high-resolution images, select a dpi of 300.  
+# #'@param width Input the width, there are 2 default widths. The first, width=NULL, is 10.5.
+# #'The second default is width=0, where the width is 7.2. Otherwise users can input their own width.   
+# #'@author Louisa Normington\email{normingt@ualberta.ca}
+# #'University of Alberta, Canada
+# #'License: GNU GPL (>= 2)
+# #'@export
+# 
+# plot.linReg1 <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA){
+#   
+#   #Extract necessary objects from mSetObj
+#   mSetObj <- .get.mSet(mSetObj)
+#   facA <- mSetObj$analSet$linReg1$res$response #For x-axis label
+#   facB <- mSetObj$analSet$linReg1$res$predictor #For y-axis label
+#   response <- mSetObj$dataSet$norm[,facA] #First column is reponse variable by default
+#   predictor <- mSetObj$dataSet$norm[,facB] #User selects predictor variable in drop down menu
+#   model <- mSetObj$analSet$linReg1$mod
+#   
+#   #Set plot dimensions
+#   if(is.na(width)){
+#     w <- 7.2
+#   } else if(width == 0){
+#     w <- 7.2
+#   } else{
+#     w <- width
+#   }
+#   h <- w
+#   
+#   #Name plot for download
+#   imgName <- paste(imgName, "dpi", dpi, ".", format, sep="")
+#   mSetObj$imgSet$plot.linReg1 <- imgName
+#   
+#   #Generate plot
+#   Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
+#   plot(response, predictor, xlab=facA, ylab=facB, main="Univariate Linear Regression Line of Best Fit", yaxt="n")
+#   axis(2, las=2)
+#   abline(model)
+#   dev.off()
+#   
+#   return(.set.mSet(mSetObj))
+#   
+# }
 
 
 ##############################################
