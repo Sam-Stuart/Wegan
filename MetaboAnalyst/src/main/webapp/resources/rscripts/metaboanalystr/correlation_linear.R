@@ -1,35 +1,36 @@
-#'Generate linear regression plot
+#'#'Generate linear regression plot
 #'@description Plot line of best fit on scatter plot of linear regression model on 2 variables in data
 #'@param mSetObj Input the name of the created mSetObj
 #'@param facA Input the name of the response column (java uses Columns() to give user options)
 #'@param facB Input the name of the predictor column (java uses Columns() to give user options)
-#'@param color Set color for scatterplot dots (default "NULL" is black); (static dropdown)
-###@param weights Set weight values, default is NULL
 #'@param data Boolean, whether to use original data; "false" (default) means normalized or "true" means original (checkbox)
-
-#'@param no_plot_eq Boolean, FALSE (default) to show linear model equation on plot, TRUE for plot without annotation of model equation (at top); y is 0.75*max(y) (checkbox)
-#'@param no_plot_rsq Boolean, FALSE (default) to show linear model rsq value on plot, TRUE for plot without annotation of rsq value (at top); y is 0.75*max(y) (checkbox)
-
-#@param plot_eq Boolean, TRUE (default) to show linear model equation on plot, FALSE for plot without annotation of model equation (at top); y is 0.75*max(y)
-#@param plot_rsq Boolean, TRUE (default) to show linear model rsq value on plot, FALSE for plot without annotation of rsq value (at top); y is 0.75*max(y)
-#'@param plot_rsq_adj Boolean, TRUE to show linear model adjusted rsq value on plot, FALSE (default) for plot without annotation of adjusted rsq value (at top); y is 0.75*max(y) (checkbox)
-
+#'
+#'@param col_dots Set color for scatterplot dots (default "NULL" is black); (static dropdown)
+#'@param col_line Set color for line (default "NULL" is black); (static dropdown)
+###@param weights Set weight values, default is NULL
+#' @param plot_ci Boolean, "false" (default), omit 95% confidence interval around line, "true" add interval around line
+#'@param no_plot_eq Boolean, "false" (default) to show linear model equation on plot, "true" for plot without annotation of model equation (at top); y is 0.75*max(y) (checkbox)
+#'@param no_plot_rsq Boolean, "false" (default) to show linear model rsq value on plot, "true" for plot without annotation of rsq value (at top); y is 0.75*max(y) (checkbox)
+#'
+#'@param plot_rsq_adj Boolean, "true" to show linear model adjusted rsq value on plot, "false" (default) for plot without annotation of adjusted rsq value (at top); y is 0.75*max(y) (checkbox)
+#'
 #'@param imgName Input the image name
 #'@param format Select the image format, "png" or "pdf", default is "png" 
 #'@param dpi Input the dpi. If the image format is "pdf", users need not define the dpi. For "png" images, 
 #'the default dpi is 72. It is suggested that for high-resolution images, select a dpi of 300.  
 #'@param width Input the width, there are 2 default widths. The first, width=NULL, is 10.5.
 #'The second default is width=0, where the width is 7.2. Otherwise users can input their own width. 
-#'@author Louisa Normington\email{normingt@ualberta.ca}
+#'@author Gina Sykes \email{gsykes@ualberta.ca}
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2)
 #'@export
 lin.reg.plot <- function(mSetObj=NA, facA="NULL", facB="NULL",
-                         color="NULL",# weights=NULL,
-         data="false", 
+             data="false", col_dots="NULL", col_line="NULL", plot_ci="false",# weights=NULL,
   # plot_eq="true", plot_rsq="true", plot_rsq_adj="false",
   no_plot_eq="false", no_plot_rsq="false", plot_rsq_adj="false",
-                  imgName, format="png", dpi=72, width=NA){
+                  imgName
+  # ,format="png", dpi=72, width=NA
+  ){
 
   library("ggpmisc")
   library("ggplot2")
@@ -48,13 +49,13 @@ lin.reg.plot <- function(mSetObj=NA, facA="NULL", facB="NULL",
   ### SET VARIABLES
   #Set dependent (response) variable name
   if (facA == "NULL"){
-    facA <- colnames(data)[1] #Default is 1st column.
+    facA <- colnames(input)[1] #Default is 1st column.
   } else {
     facA <- facA #Determined using Columns() function below (java will present options in drop down menu)
   }
   #Set independent (predictor) variable name
   if (facB == "NULL"){
-    facB <- colnames(data)[2] #Default is 2nd column.
+    facB <- colnames(input)[2] #Default is 2nd column.
   } else {
     facB <- facB #Determined using Columns() function below (java will present options in drop down menu)
   }
@@ -121,19 +122,8 @@ confidence.intervals=conf.int, covariance.matrix=covar, equation=equation, r.squ
 ) #Note where the summary is stored
   #Download text document containing the summary, called the fileName. Document goes into the working directory and should be accessible to the user as part of the report.
   
-#SET POINT COLOR
-  if (color == "NULL") {
-      color1 <- "black" # default
-    } else if (color == "blue") {
-      color1 <- "blue"
-    } else if (color == "red") {
-      color1 <- "red"
-    } else if(color == "green"){
-      color1 <- "green"
-    } else if(color == "grey"){
-      color1 <- "grey"
-    }
-  
+  # PLOT
+
   #SET PLOT DIMENSIONS
   # if(is.na(width)){
   #   w <- 7.2
@@ -148,27 +138,69 @@ confidence.intervals=conf.int, covariance.matrix=covar, equation=equation, r.squ
   imgName <- paste(imgName, "dpi", dpi, ".", format, sep="")
   mSetObj$imgSet$plot.linReg1 <- imgName
   
+    #SET POINT COLOR
+  if (col_dots == "NULL") {
+      col_dots1 <- "black" # default
+    } else if (col_dots == "blue") {
+      col_dots1 <- "blue"
+    } else if (col_dots == "red") {
+      col_dots1 <- "red"
+    } else if(col_dots == "green"){
+      col_dots1 <- "green"
+    } else if(col_dots == "grey"){
+      col_dots1 <- "grey"
+    }
+  
+  #SET LINE COLOR
+  if (col_line == "NULL") {
+      col_line1 <- "black" # default
+    } else if (col_line == "blue") {
+      col_line1 <- "blue"
+    } else if (col_line == "red") {
+      col_line1 <- "red"
+    } else if(col_line == "green"){
+      col_line1 <- "green"
+    } else if(col_line == "grey"){
+      col_line1 <- "grey"
+    }
+  
+  #SET WHETHER TO ADD 95% CONF INT
+  if (plot_ci == "false") {
+      plot_ci1 <- FALSE # default
+    } else {
+      plot_ci1 <- TRUE
+    }
+
+  # #IF THERE IS A LINE COLOR, OVERRIDE DOT COLOR TO BLACK
+  # if(!all.equal(col_line1, "black")){
+  #   col_dots1 <- "black"
+  # }
+  
   #GENERATE PLOT
   # Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
  
-  ### THEME 
-#  theme_lineplot <- theme_bw() +    # ggthemes::theme_base() 
-#   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
-# axis.text = element_text(size=12, colour="black"), 
-#    axis.title=element_text(size=12),
-#  legend.title=element_text(12), legend.text=element_text(size=12), plot.title=element_text(face='bold',hjust = 0.5)
-#   )
+  # THEME 
+  #  theme_lineplot <- theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), axis.text = element_text(size=12, colour="black"),    axis.title=element_text(size=12), legend.title=element_text(12), legend.text=element_text(size=12), plot.title=element_text(face='bold',hjust = 0.5)
+  #   )
   
-   a0 <- ggplot(data = input, aes_(x = as.name(facA), y = as.name(facB)) )+
+ ## NOTE THE .data ARGUMENT; 
+ ##  To avoid a note from CMD check about .data, use #' @importFrom rlang .data
+ ## in any roxygen code block (typically in package documentation as generated by
+ ## usethis::use_package_doc()) ; https://ggplot2.tidyverse.org/articles/ggplot2-in-packages.html
+
+a0 <- ggplot(data = input,
+    aes(x = .data[[facA]], y = .data[[facB]]) ) +
+   # aes_(x = as.name(facA), y = as.name(facB)) )+
    labs(title="Univariate Linear Regression Line of Best Fit") +
      ylab(facB)+ xlab(facA) +
-     geom_smooth(se=FALSE, color='black', fullrange = TRUE, method='lm') +
-     geom_point(shape=16, color=color1) +
+     geom_smooth(se=plot_ci1, color=col_line1, fullrange = TRUE, method='lm') +
+     geom_point(shape=16, color=col_dots1) +
      theme_bw() + 
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(),
 axis.text = element_text(size=12, colour="black"), 
    axis.title=element_text(size=12),
- legend.title=element_text(12), legend.text=element_text(size=12), plot.title=element_text(face='bold',hjust = 0.5)
+ # legend.title=element_text(12), legend.text=element_text(size=12), 
+plot.title=element_text(face='bold',hjust = 0.5)
   )
 
 ## {GGPMISC} ANNOTATION LOOP   
@@ -265,7 +297,7 @@ axis.text = element_text(size=12, colour="black"),
 #'@export
 
 
-lin.reg.plot.json <- fubction(mSetObj=NA){
+lin.reg.plot.json <- function(mSetObj=NA){
 
   library("ggplot2")
   library("RJSONIO")
@@ -486,6 +518,7 @@ lin.reg.columns <- function(mSetObj=NA){
   library("dplyr")
   
   data <- select_if(mSetObj$dataSet$norm, is.numeric)
+# data <- select(mSetObj$dataSet$norm, tidyselect::where(is.numeric)) 
   count.all.numeric.cols <- ncol(data)
   name.all.numeric.cols <- colnames(data)
   
