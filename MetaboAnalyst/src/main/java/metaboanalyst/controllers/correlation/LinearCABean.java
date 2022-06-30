@@ -29,16 +29,16 @@ import org.rosuda.REngine.Rserve.RConnection;
 public class LinearCABean implements Serializable {
 
     private final SessionBean1 sb = (SessionBean1) DataUtils.findBean("sessionBean1");
-
-    private boolean addWeights = false;
-    
-    public boolean isaddWeights() {
-        return addWeights;
-    }
-
-    public void setAddWeights(boolean addWeights) {
-        this.addWeights = addWeights;
-    }
+// commented out weights 202206-29
+//    private boolean addWeights = false;
+//    
+//    public boolean isaddWeights() {
+//        return addWeights;
+//    }
+//
+//    public void setAddWeights(boolean addWeights) {
+//        this.addWeights = addWeights;
+//    }
 
     
     private SelectItem[] corrColumnOpts = null;
@@ -73,7 +73,7 @@ public class LinearCABean implements Serializable {
 
     public void setCorrColumnNameB(String corrColumnNameB) {
         this.corrColumnNameB = corrColumnNameB;
-    }
+    }    
     
     private List<String> corrLinearResults = null;
     
@@ -83,14 +83,111 @@ public class LinearCABean implements Serializable {
         
         return corrLinearResults;
     }
+
+  // CHECK BOX for using normalized data (default) or original data
+    private boolean doOriginal = false;
+
+    public boolean isdoOriginal() {
+        return doOriginal;
+    }
+
+    public void setdoOriginal(boolean doOriginal) {
+        this.doOriginal = doOriginal;
+    }
+  // CHECK BOX for adding (default) or omitting equation to plot (at top), see correlation_linear.R 
+  // when >1 of rsq, eq, & rsqadj are checked, values are seperated by " | " 
+     private boolean doPlotEqOmit = false;
+
+    public boolean isdoPlotEqOmit() {
+        return doPlotEqOmit;
+    }
+
+    public void setdoPlotEqOmit(boolean doPlotEqOmit) {
+        this.doPlotEqOmit = doPlotEqOmit;
+    } 
+  // CHECK BOX for adding (default) or omitting rsq to plot (at top), see correlation_linear.R 
+  // when >1 of rsq, eq, & rsqadj are checked, values are seperated by " | " 
+     private boolean doPlotRsqOmit = false;
+
+    public boolean isdoPlotRsqOmit() {
+        return doPlotRsqOmit;
+    }
+
+    public void setdoPlotRsqOmit(boolean doPlotRsqOmit) {
+        this.doPlotRsqOmit = doPlotRsqOmit;
+    }     
+  // CHECK BOX for omitting (default) or adding rsq-adj to plot (at top), see correlation_linear.R 
+  // when >1 of rsq, eq, & rsqadj are checked, values are seperated by " | " 
+     private boolean doPlotRsqAdj = false;
+
+    public boolean isdoPlotRsqAdj() {
+        return doPlotRsqAdj;
+    }
+
+    public void setdoPlotRsqAdj(boolean doPlotRsqAdj) {
+        this.doPlotRsqAdj = doPlotRsqAdj;
+    }  
+  // CHECK BOX for omitting (default) or adding confidence interval to line, see correlation_linear.R 
+     private boolean doPlotConfInt = false;
+
+    public boolean isdoPlotConfInt() {
+        return doPlotConfInt;
+    }
+
+    public void setdoPlotConfInt(boolean doPlotConfInt) {
+        this.doPlotConfInt = doPlotConfInt;
+    }    
+    
+ //STATIC DROPDOWN for selecting colour of dots on plot
+//    replaced: corColorOpts
+    private String corColorDotsOpts = "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corColorOpts
+
+    public String getCorColorDotsOpts() {
+        return corColorDotsOpts;
+    }
+
+    public void setCorColorDotsOpts(String corColorDotsOpts) {
+        this.corColorDotsOpts = corColorDotsOpts;
+    }
+
+ //STATIC DROPDOWN for selecting colour of line on plot
+    private String corColorLineOpts = "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corColorOpts
+
+    public String getCorColorLineOpts() {
+        return corColorLineOpts;
+    }
+
+    public void setCorColorLineOpts(String corColorLineOpts) {
+        this.corColorLineOpts = corColorLineOpts;
+    }
+    
+//    // ACTION BUTTONS //
+//    public void corrLin1Btn_action() {
+//        CAUtils.CreateLinearModel(sb, corrColumnNameA, corrColumnNameB);
+//        //CAUtils.CreateLinearModel(sb, "/Users/danaallen/NetBeansProjects/Wegan/MetaboAnalyst/target/MetaboAnalyst-4.34/resources/data/dune_weights.csv");
+//        CAUtils.PlotLinearCA(sb, sb.getNewImage("corr_linear"), "png", 72);
+//    }
+//
+//    
+//}
+    
+// ORDER OF ARGUMENTS 202206-29
+  
+// mSetObj=NA, facA="NULL", facB="NULL", data="false",
+//    col_dots="NULL", col_line="NULL", plot_ci="false", # weights=NULL,
+// no_plot_eq="false", no_plot_rsq="false",
+//plot_rsq_adj="false", imgName # ,format="png", dpi=72, width=NA
     
     // ACTION BUTTONS //
     public void corrLin1Btn_action() {
-        CAUtils.CreateLinearModel(sb, corrColumnNameA, corrColumnNameB);
+//        CAUtils.CreateLinearModel(sb, corrColumnNameA, corrColumnNameB);
         //CAUtils.CreateLinearModel(sb, "/Users/danaallen/NetBeansProjects/Wegan/MetaboAnalyst/target/MetaboAnalyst-4.34/resources/data/dune_weights.csv");
-        CAUtils.PlotLinearCA(sb, sb.getNewImage("corr_linear"), "png", 72);
+        
+        CAUtils.PlotLinearCA(sb, corrColumnNameA, corrColumnNameB, 
+                doOriginal, corColorDotsOpts, corColorLineOpts, 
+               doPlotConfInt, doPlotEqOmit, doPlotRsqOmit,
+                doPlotRsqAdj, sb.getCurrentImage("corr_linear"));
     }
 
     
 }
-
