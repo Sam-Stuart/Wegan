@@ -72,13 +72,29 @@ public class CABean implements Serializable {
         UniVarTests.PlotCorrHeatMap(sb, sb.getCurrentImage("corr"), "png", 72, "col", "pearson", "bwm", "overview", "F", "F", "F", 100);
     }
 
+//    private void doDefaultLinear() {
+//        
+//        if (!CAUtils.CreateLinearModel(sb, "NULL", "NULL")){
+//            RConnection RC = sb.getRConnection();
+//            sb.updateMsg("Error", RDataUtils.getErrMsg(RC)); 
+//        }
+//        CAUtils.PlotLinearCA(sb, sb.getCurrentImage("corr_linear"), "png", 72);
+//    }
+    
     private void doDefaultLinear() {
         
-        if (!CAUtils.CreateLinearModel(sb, "NULL", "NULL")){
-            RConnection RC = sb.getRConnection();
-            sb.updateMsg("Error", RDataUtils.getErrMsg(RC)); 
-        }
-        CAUtils.PlotLinearCA(sb, sb.getCurrentImage("corr_linear"), "png", 72);
+//        if (!CAUtils.CreateLinearModel(sb, "NULL", "NULL")){
+//            RConnection RC = sb.getRConnection();
+//            sb.updateMsg("Error", RDataUtils.getErrMsg(RC)); 
+//        }
+//        CAUtils.PlotLinearCA(sb, sb.getCurrentImage("corr_linear"), "png", 72);
+//sb, facA="NULL", facB="NULL", data="false",
+//col_dots="NULL", col_line="NULL", plot_ci="false",# weights=NULL,
+//  no_plot_eq="false", no_plot_rsq="false", plot_rsq_adj="false", imgName
+        CAUtils.PlotLinearCA(sb, "NULL", "NULL", false,
+                "NULL", "NULL", false, 
+                false, false, false,
+                sb.getCurrentImage("corr_linear"));
     }
 
     private void doDefaultPenalized() {
