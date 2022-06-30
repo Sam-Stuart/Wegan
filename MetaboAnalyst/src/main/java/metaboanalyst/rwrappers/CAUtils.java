@@ -38,10 +38,42 @@ public class CAUtils {
         }
     }
     
-    public static boolean PlotLinearCA(SessionBean1 sb, String imgName, String format, int dpi) {
-        try {
+//    public static boolean PlotLinearCA(SessionBean1 sb, String imgName, String format, int dpi) {
+//        try {
+//            RConnection RC = sb.getRConnection();
+//            String rCommand = "plot.linReg1(NA" + ", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
+//            RCenter.recordRCommand(RC, rCommand);
+//            sb.addGraphicsCMD("corr_linear", rCommand);
+//            RC.voidEval(rCommand);
+//            return true;
+//        } catch (RserveException rse) {
+//            System.out.println(rse);
+//            return false;
+//        }
+//    }
+
+//        public static boolean PlotLinearCA(SessionBean1 sb, String facA, String facB, String color, Boolean weights, Boolean data, Boolean no_plot_eq, Boolean no_plot_rsq, Boolean plot_rsq_adj,  String imgName, String format, int dpi) {
+        public static boolean PlotLinearCA(SessionBean1 sb, String facA, String facB, 
+                Boolean data, String col_dots, String col_line, 
+                Boolean plot_ci, Boolean no_plot_eq, 
+                Boolean no_plot_rsq, Boolean plot_rsq_adj, String imgName) {
+    try {
             RConnection RC = sb.getRConnection();
-            String rCommand = "plot.linReg1(NA" + ", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
+            String rCommand = "lin.reg.plot(NA" + ", \"" 
+                    + facA + "\", \""
+                    + facB + "\", \""
+                    + data + "\", \""                    
+                    + col_dots + "\", \""
+                    + col_line + "\", \""
+                    + plot_ci + "\", \""
+                    + no_plot_eq + "\", \""
+                    + no_plot_rsq + "\", \""
+                    + plot_rsq_adj + "\", \""
+                    + "\", imgName)";
+//                    + imgName + "\", \""
+//                    + "\", \"" + format 
+//                    + "\", " + dpi 
+//                    + ", width=NA)";
             RCenter.recordRCommand(RC, rCommand);
             sb.addGraphicsCMD("corr_linear", rCommand);
             RC.voidEval(rCommand);
@@ -51,7 +83,7 @@ public class CAUtils {
             return false;
         }
     }
-
+    
     public static void CreatePenalizedModel(SessionBean1 sb, String method, String facA, Boolean weights) {
         System.out.println(method);
         try {
