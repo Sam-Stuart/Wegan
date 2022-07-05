@@ -1,4 +1,3 @@
-
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
@@ -7,7 +6,7 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:p="http://primefaces.org/ui">
 
-    <h:form id="formgraph">
+<!--    <h:form id="formgraph">
         <h:panelGrid columns="2" style="width:380px;">
             <h:panelGrid columns="2" style="padding-top: 10px; padding-left: 20px">
                 <h:outputLabel value="Format:"/>
@@ -26,11 +25,11 @@
                     <f:selectItem itemLabel="600 DPI" itemValue="600"/> 
                 </p:selectOneMenu> 
                 <h:outputLabel value="Size:"/>
-<!--                <p:selectOneMenu value="#{sessionBean1.sizeOpt}">
+                <p:selectOneMenu value="#{sessionBean1.sizeOpt}">
                     <f:selectItem itemLabel="Default" itemValue="NA"/>  
                     <f:selectItem itemLabel="Full page" itemValue="7"/>  
                     <f:selectItem itemLabel="Half page" itemValue="3.5"/>  
-                </p:selectOneMenu> -->
+                </p:selectOneMenu> 
             </h:panelGrid>
             <p:commandButton value="Submit" 
                              update=":formgraph:glink"
@@ -40,6 +39,57 @@
         </h:panelGrid>
         <h:panelGrid style="width:400px; text-align: center; padding-top: 10px; padding-bottom: 20px">
             <h:outputText id="glink" escape="false" value="#{sessionBean1.imgDownloadTxt}"/>  
+        </h:panelGrid>
+    </h:form>
+</ui:composition>-->
+<!--from _color_palette_linear.xhtml-->
+
+    <h:form id="formgraph">
+        <h:panelGrid columns="1" style="width:380px;">
+            <h:panelGrid id="panelGrid1" columns="2" cellpadding="5" columnClasses="colBrayLong,colBrayShort">
+                
+                <h:outputLabel style="font-weight: bold" value="Add Equation to Plot:"/>
+                <p:selectBooleanCheckbox value ="#{linearCABean.doPlotEqOmit}"/> 
+                
+                <h:outputLabel style="font-weight: bold" value="Add R-squared to Plot:"/>
+                <p:selectBooleanCheckbox value ="#{linearCABean.doPlotRsqOmit}"/> 
+                                
+                <h:outputLabel style="font-weight: bold" value="Add Adjusted R-squared"/>
+                <p:selectBooleanCheckbox value ="#{linearCABean.doPlotRsqAdj}"/> 
+                
+                <h3>Line and Point Color Options</h3>
+                <p:panelGrid></p:panelGrid>
+
+                <h:outputLabel style="font-weight: bold" value=":Point Color:"/>
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linearCABean.corColorDotOpts}">
+                    <f:selectItems value="#{applicationBean1.corColorDotOpts}" />
+                </p:selectOneMenu> 
+                
+                <h:outputLabel style="font-weight: bold" value="Line Color:"/>
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linearCABean.corColorLineOpts}">
+                    <f:selectItems value="#{applicationBean1.corColorLineOpts}" />
+                </p:selectOneMenu>  
+                                
+                <h:outputLabel style="font-weight: bold" value="Color Palette:"/>
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{pcaBean.ordColorOpts}">
+                    <f:selectItems value="#{applicationBean1.ordColorPaletteOpts}" />
+                </p:selectOneMenu> 
+                
+                <!--<h:outputLabel style="font-weight: bold" value="Add Ellipses:"/>-->
+                <!--<p:selectBooleanCheckbox value ="#{pcaBean.ellipseOpts}"/>-->   
+
+                <p:panelGrid></p:panelGrid>
+
+            </h:panelGrid>
+            <h:panelGrid id="panelGrid2" columns="1" cellpadding="5" style="float: right">
+                <p:commandButton value="Update" 
+                                 styleClass="updateButton"
+                                 style="box-shadow: none !important; text-shadow: none !important"
+                                onclick="PF('statusDialog').show()"
+                                oncomplete="PF('graphApperanceLinear').hide(); PF('statusDialog').hide()"  
+                                update=":ac:form1:corrLinPane1  :cmdPane"
+                                actionListener="#{linearCABean.corrLin1Btn_action()}"/>
+            </h:panelGrid>
         </h:panelGrid>
     </h:form>
 </ui:composition>

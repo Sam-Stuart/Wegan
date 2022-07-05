@@ -30,15 +30,15 @@ public class LinearCABean implements Serializable {
 
     private final SessionBean1 sb = (SessionBean1) DataUtils.findBean("sessionBean1");
 // commented out weights 202206-29
-//    private boolean addWeights = false;
-//    
-//    public boolean isaddWeights() {
-//        return addWeights;
-//    }
-//
-//    public void setAddWeights(boolean addWeights) {
-//        this.addWeights = addWeights;
-//    }
+    private boolean addWeights = false;
+    
+    public boolean isaddWeights() {
+        return addWeights;
+    }
+
+    public void setAddWeights(boolean addWeights) {
+        this.addWeights = addWeights;
+    }
 
     
     private SelectItem[] corrColumnOpts = null;
@@ -186,7 +186,8 @@ public class LinearCABean implements Serializable {
         CAUtils.PlotLinearCA(sb, corrColumnNameA, corrColumnNameB, 
                 doOriginal, corColorDotsOpts, corColorLineOpts, 
                doPlotConfInt, doPlotEqOmit, doPlotRsqOmit,
-                doPlotRsqAdj, sb.getCurrentImage("corr_linear"));
+//                doPlotRsqAdj, sb.getCurrentImage("corr_linear"));
+         doPlotRsqAdj, sb.getCurrentImage("corr_linear"),"png", 72);
     }
 
     
