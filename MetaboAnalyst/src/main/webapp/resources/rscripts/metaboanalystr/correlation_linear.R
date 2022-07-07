@@ -1,42 +1,42 @@
-pcoa.meta.columns <- function(mSetObj=NA) {
-  
-  mSetObj <- .get.mSet(mSetObj)
+#pcoa.meta.columns <- function(mSetObj=NA) {
+# 
+# mSetObj <- .get.mSet(mSetObj)
 
-print("no no no")
+#print("no no no")
   
-  if("pcoa" %in%  names(mSetObj$analSet) ){
-  if("metaData" %in% names(mSetObj$analSet$pcoa)){
-    metaData <- mSetObj$analSet$pcoa$metaData
-  }
-} else{
-  metaData <-"No groupings"
-}
-  if (is.data.frame(metaData)==FALSE) {
-    name.all.meta.cols <- "No groupings"
-  } else {
-    name.all.meta.cols <- c(colnames(metaData), "No groupings")
-  }
-  return(name.all.meta.cols)
+#  if("pcoa" %in%  names(mSetObj$analSet) ){
+#  if("metaData" %in% names(mSetObj$analSet$pcoa)){
+#    metaData <- mSetObj$analSet$pcoa$metaData
+#  }
+#} else{
+#  metaData <-"No groupings"
+#}
+#  if (is.data.frame(metaData)==FALSE) {
+#    name.all.meta.cols <- "No groupings"
+#  } else {
+#    name.all.meta.cols <- c(colnames(metaData), "No groupings")
+#  }
+#  return(name.all.meta.cols)
   
-}
+#}
 
-pcoa.scree.dim <- function(mSetObj=NA) {
-  mSetObj <- .get.mSet(mSetObj)
+#pcoa.scree.dim <- function(mSetObj=NA) {
+#  mSetObj <- .get.mSet(mSetObj)
 
-print("no2 no2 no2")
+#print("no2 no2 no2")
   
-  if("pcoa" %in%  names(mSetObj$analSet) ){
-  if("input" %in% names(mSetObj$analSet$pcoa)){
-     num_data <- mSetObj$analSet$pcoa$input
-  }
-} else{
-  num_data <-data.frame(one=c(1,2,3,4),two=c(5,6,7,8))
-}
-  dim <- ncol(num_data)
-  max <- min(dim, 8)
-  pcoa.scree.dim.opts <- 2:max
-  return(pcoa.scree.dim.opts)
-}
+#  if("pcoa" %in%  names(mSetObj$analSet) ){
+#  if("input" %in% names(mSetObj$analSet$pcoa)){
+#     num_data <- mSetObj$analSet$pcoa$input
+#  }
+#} else{
+#  num_data <-data.frame(one=c(1,2,3,4),two=c(5,6,7,8))
+#}
+#  dim <- ncol(num_data)
+#  max <- min(dim, 8)
+#  pcoa.scree.dim.opts <- 2:max
+#  return(pcoa.scree.dim.opts)
+#}
 
 
 #'#'Generate linear regression plot
@@ -331,21 +331,20 @@ plot.title=element_text(face='bold',hjust = 0.5)
     } 
      
    }
-   
-   
+
+  print(a0)
+  dev.off()
 
 #STORE IN mset
   mSetObj$analSet$linReg1$plot <- a0
 
-  print(a0)
-  
 ### Printing Values
   sink(fileName)
   cat("Formula:\n")
   print(formula)
   cat("Model:\n")
   print(equation)
-  cat("\Linear Model Assumption Check:")
+  cat("Linear Model Assumption Check:")
   print(df)
   print(failed)
   print(summary)
@@ -359,8 +358,6 @@ plot.title=element_text(face='bold',hjust = 0.5)
   cat("\nCovariance matrix for predictor variables:")
   print(covar)
   sink()
-  
-  dev.off()
   
   return(.set.mSet(mSetObj))
   

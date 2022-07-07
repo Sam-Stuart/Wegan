@@ -29,7 +29,7 @@
 
                             <h:outputLabel style="font-weight: bold" value="Point Colour"/>
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linearCABean.corColorDotsOpts}"> 
-                                <f:selectItems value="#{applicationBean1.corColorDotsOpts}" />
+                                <f:selectItems value="#{applicationBean1.corLinColorDotsOpts}" />
                             </p:selectOneMenu>
                             <!--<spacer></spacer>-->
                             
@@ -40,7 +40,7 @@
                             
                             <h:outputLabel style="font-weight: bold" value="Line Colour:"/>
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linearCABean.corColorLineOpts}"> 
-                                <f:selectItems value="#{applicationBean1.corColorLineOpts}" />
+                                <f:selectItems value="#{applicationBean1.corLinColorLineOpts}" />
                             </p:selectOneMenu>
                             
                             <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
@@ -52,128 +52,7 @@
                         <h3>Add Model Values to Plot:</h3>
                         <p:panelGrid></p:panelGrid>
                         
-<!--                        <p style="font-size: 13px">
-                            Add Model Values to Plot:                
-                        </p>-->
-                        <!--colRightShort-->
-                        <!--columnClasses="colLeft,colRight,colLeft,colRight, colLast"-->
-                        <h:panelGrid id="panelGrid" columns="4" cellpadding="3" columnClasses="colRightShort,colRightShort,colRightShort">
-                        <!--<h:panelGrid id="panelGrid" columns="4" cellpadding="3" columnClasses="colRightShort,colRightShort,colRightShort, colLast">-->
-                                                  
-                            <h:outputLabel style="font-weight: bold" value="Equation: "/>
-                            <p:selectBooleanCheckbox value ="#{linearCABean.doPlotEqOmit}"/> 
-                            
-                            <h:outputLabel style="font-weight: bold" value="R-squared:"/>
-                            <p:selectBooleanCheckbox value ="#{linearCABean.doPlotRsqOmit}"/> 
-                            
-                            <h:outputLabel style="font-weight: bold" value="Adjusted R-squared:"/>
-                            <p:selectBooleanCheckbox value ="#{linearCABean.doPlotRsqAdj}"/> 
-                            <spacer></spacer>
-                            </h:panelGrid>    
-                        
-<!--this works, but not nice formatting:-->
-<!--
-                        <h:panelGrid id="panelGrid" columns="5" cellpadding="3" columnClasses="colLeft,colRight,colLeft,colRight, colLast">
-                            
-                            <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
-                            <p:selectBooleanCheckbox value ="#{linearCABean.doOriginal}"/> 
-                            <spacer></spacer>                            
-                            <h:outputLabel style="font-weight: bold" value="Add Equation to Plot:"/>
-                            <p:selectBooleanCheckbox value ="#{linearCABean.doPlotEqOmit}"/> 
-                            
-                            <h:outputLabel style="font-weight: bold" value="Add R-squared to Plot:"/>
-                            <p:selectBooleanCheckbox value ="#{linearCABean.doPlotRsqOmit}"/> 
-                            
-                            <h:outputLabel style="font-weight: bold" value="Add Adjusted R-squared to Plot:"/>
-                            <p:selectBooleanCheckbox value ="#{linearCABean.doPlotRsqAdj}"/> 
-                            
-                        </h:panelGrid>    
-                        
-                        <h:panelGrid id="panelGrid1" columns="5" cellpadding="3" columnClasses="colLeft,colRight,colLeft,colRight, colLast">
-                           
-                            <h:outputLabel style="font-weight: bold" value="Dependant Variable:"/>
-dynamic dropdown: because it doesn't reference applicationBean1 (which is done for staticdropdowns)                             
-                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linearCABean.corrColumnNameA}">
-                                <f:selectItems value="#{linearCABean.corrColumnOpts}" />
-                            </p:selectOneMenu>
-
-                            <h:outputLabel style="font-weight: bold" value="Select Point Colour"/>
-                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linearCABean.corColorDotsOpts}"> 
-                                <f:selectItems value="#{applicationBean1.corColorDotsOpts}" />
-                            </p:selectOneMenu>
-                            <spacer></spacer>                     
-                            <h:outputLabel style="font-weight: bold" value="Select Line Colour"/>
-                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linearCABean.corColorLineOpts}"> 
-                                <f:selectItems value="#{applicationBean1.corColorLineOpts}" />
-                            </p:selectOneMenu>
-                            
-                            <h:outputLabel style="font-weight: bold" value="Independant Variable:"/>
-                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linearCABean.corrColumnNameB}">
-                                <f:selectItems value="#{linearCABean.corrColumnOpts}" />
-                            </p:selectOneMenu>
-                        </h:panelGrid>
-                        <h:panelGrid></h:panelGrid>-->
-                        
-                        
-                        
-                        
-   <!--what it used to be-->
-<!--                        <h:panelGrid id="panelGrid" columns="5" cellpadding="3" columnClasses="colLeft,colRight,colLeft,colRight, colLast">
-                            
-                            <h:outputLabel style="font-weight: bold" value="Dependant Variable:"/>
-dynamic dropdown: because it doesn't reference applicationBean1 (which is done for staticdropdowns)                             
-                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linearCABean.corrColumnNameA}">
-                                <f:selectItems value="#{linearCABean.corrColumnOpts}" />
-                            </p:selectOneMenu>
-
-                            <h:outputLabel style="font-weight: bold" value="Include Weights:"/>
-                            <p:selectBooleanCheckbox value ="#{linearCABean.addWeights}"/> 
-
-                            <p:panelGrid></p:panelGrid>
-                            
-                            <h:outputLabel style="font-weight: bold" value="Independant Variable:"/>
-                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linearCABean.corrColumnNameB}">
-                                <f:selectItems value="#{linearCABean.corrColumnOpts}" />
-                            </p:selectOneMenu>
-                        </h:panelGrid> -->
-                        
-<!--                        
-                        <h:panelGrid id="panelGrid1" columns="5" cellpadding="3" columnClasses="colNMDSLong,colNMDSShort,colNMDSLong,colNMDSShort, colLast">
-                                
-                            <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
-                            <p:selectBooleanCheckbox value ="#{ordPCOABean.doOriginal}"/> 
-                            
-                            <h:outputLabel style="font-weight: bold" value="Data Is Presence/Absence:"/>
-                            <p:selectBooleanCheckbox value ="#{ordPCOABean.doBinary}"/> 
-                            <spacer></spacer>
-                            <h:outputLabel style="font-weight: bold" value="Perform Relative Abundance Transformation:"/>
-                            <p:selectBooleanCheckbox value ="#{ordPCOABean.doAbundance}"/> 
-                            
-                            <h:outputLabel style="font-weight: bold" value="Distance Metric for Measuring Dissimilarity:"/>
-                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordPCOABean.vegdistOpts}">
-                                <f:selectItems value="#{applicationBean1.vegdistMeasureOpts}" />
-                            </p:selectOneMenu> 
-                            <spacer></spacer>
-
-                        </h:panelGrid>
-                        <h:panelGrid></h:panelGrid>
-                        <h:panelGrid id="panelGrid1_2" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
-                            
-                            <p:commandButton value="Customize Graph"
-                                             styleClass="graphicsButton"
-                                             style="box-shadow: none !important; text-shadow: none !important;"
-                                             actionListener="#{sessionBean1.graphicsLnk_action('ord_pcoa_2D')}" 
-                                            oncomplete="PF('graphApperancePCOA').show()"/>  
-                                           
-                            <p:commandButton value="Update" 
-                                             styleClass="updateButton"
-                                             style="box-shadow: none !important; text-shadow: none !important"
-                                            onclick="PF('statusDialog').show()"
-                                            oncomplete="PF('statusDialog').hide()"  
-                                            update=":PCOA:form1:pcoaPane1  :cmdPane" 
-                                            actionListener="#{ordPCOABean.pcoa_2D_Update_action()}"/>                          
-                        </h:panelGrid>                        -->
-                        
+     
                         <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
                             <p:commandButton value="Update" 
                                             styleClass="updateButton"
@@ -187,19 +66,16 @@ dynamic dropdown: because it doesn't reference applicationBean1 (which is done f
                         <ui:include src="_results_bar_linear.xhtml" />
                                   
                         <h:panelGrid id="corrLinPane1" style="width: 100%;">
-                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px;">
-                                <h:outputLabel style="font-size: 13px; font-weight: bold" value="Formula: #{linearCABean.corrLinearResults.get(0)}"/>
-                            </h:panelGrid>
-                            <!--<h:panelGrid class="subResultsBar"></h:panelGrid>--> 
-                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px;">
-                                <h:outputLabel style="font-size: 13px; font-weight: bold" value="#{linearCABean.corrLinearResults.get(1)}"/>
-                            </h:panelGrid>
-                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px;">
-                                <h:outputLabel style="font-size: 13px; font-weight: bold" value="#{linearCABean.corrLinearResults.get(2)}"/>
-                            </h:panelGrid>
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <p:commandButton value="Export"
+                                    styleClass="exportButton"
+                                    style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                    actionListener="#{sessionBean1.graphicsLnk_action('corr_linear')}"
+                                    oncomplete="PF('graphDialog').show()"/>
+                            </h:panelGrid> 
                              <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
-                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_linear')}" alt="CorrerlationLinearimage"/>
-                            </h:panelGrid>                           
+                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_linear')}" alt="corrLinear"/>
+                            </h:panelGrid>  
                             
                         </h:panelGrid>         
                     </h:form>
@@ -266,7 +142,7 @@ dynamic dropdown: because it doesn't reference applicationBean1 (which is done f
             <p:remoteCommand name="remoteCall"  
                              process="@this"
                              partialSubmit="true"
-                             update=":ac:form1:corrLinPane1  :cmdPane"
+                             update=":linCA:form1:corrLinPane1  :cmdPane"
                              actionListener="#{sessionBean1.setCurrentCmpdIndex}" 
                              />
         </h:form>

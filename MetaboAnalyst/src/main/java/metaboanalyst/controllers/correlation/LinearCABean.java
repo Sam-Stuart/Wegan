@@ -75,15 +75,17 @@ public class LinearCABean implements Serializable {
         this.corrColumnNameB = corrColumnNameB;
     }    
     
-    private List<String> corrLinearResults = null;
     
-    public List<String> getCorrLinearResults(){
-        String[] results = CAUtils.GetLinearCAResults(sb);
-        corrLinearResults = Arrays.asList(results);
-        
-        return corrLinearResults;
-    }
 
+//    private List<String> corrLinearResults = null;
+//    
+//    public List<String> getCorrLinearResults(){
+//        String[] results = CAUtils.GetLinearCAResults(sb);
+//        corrLinearResults = Arrays.asList(results);
+//        
+//        return corrLinearResults;
+//    }
+    
   // CHECK BOX for using normalized data (default) or original data
     private boolean doOriginal = false;
 
