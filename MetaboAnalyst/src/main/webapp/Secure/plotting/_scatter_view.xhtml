@@ -5,11 +5,173 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:p="http://primefaces.org/ui">
-    
-    <p>
-        THIS IS THE SCATTER VIEW
-    </p>
-        
+    <script>
+//d3 graph testing 
+////set the dimensions and margins of the graph
+var margin = {top: 10, right: 30, bottom: 30, left: 60},
+    width = 460 - margin.left - margin.right,
+    height = 400 - margin.top - margin.bottom;
+
+// append the svg object to the body of the pagevar svg = d3.select("#my_dataviz")
+var svg = d3.select("#my_dataviz")
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .style("margin","auto")
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+
+//Read the data
+  //d3.csv("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/iris.csv", function(data) {
+  d3.json("Scatterplot.json", function(data) {
+  // Add X axis
+  
+  var x = d3.scaleLinear()
+    .domain([4, 8])
+    .range([ 0, width ]);
+  svg.append("g")
+    .attr("transform", "translate(0," + height + ")")
+    .call(d3.axisBottom(x));
+
+  // Add Y axis
+  var y = d3.scaleLinear()
+    .domain([0, 9])
+    .range([ height, 0]);
+  svg.append("g")
+    .call(d3.axisLeft(y));
+
+  // Color scale: give me a specie name, I return a color
+  var color = d3.scaleOrdinal()
+    .domain(["setosa", "versicolor", "virginica" ])
+    .range([ "#440154ff", "#21908dff", "#fde725ff"]);
+  
+  var imgLink = d3.scaleOrdinal()
+    .domain(["setosa", "versicolor", "virginica" ])
+    .range([ "fileout.png", "fileout2.png", "fileout3.png"]);
+
+
+  // Add dots
+  svg.append('g')
+    .selectAll('.mypoint')
+    .data(data)
+    .enter()
+    .append('image')
+      .attr("xlink:href", function (d) { return imgLink(d.Species); })
+      .attr("x", function (d) { return x(d.Sepal_Length); } )
+      .attr("y", function (d) { return y(d.Petal_Length); } )
+      .attr("width", 25)
+      .attr("height", 25)
+      .style("fill", function (d) { return color(d.Species); } )
+      .on("mouseover", mouseover )
+      .on("mousemove", mousemove )
+      .on("mouseleave", mouseleave );
+
+
+
+})
+
+//var margin = {top: 10, right: 30, bottom: 30, left: 60},
+//    width = 460 - margin.left - margin.right,
+//    height = 400 - margin.top - margin.bottom;
+//
+//
+//var D=[
+//  { x: 100, y : 100},
+//  {x: 200, y : 200},
+//  {x: 300, y : 300},
+//  {x: 400, y : 100},
+//  {x: 340, y : 120},
+//  {x: 50, y : 100},
+//  {x: 10, y : 10},
+//  {x: 120, y : 106},
+//  {x: 100, y : 5}
+//];
+//
+//var svg = d3.select("#my_dataviz").append("svg")
+//    .attr("width", width + margin.left + margin.right)
+//    .attr("height", height + margin.top + margin.bottom)
+//  .append("g")
+//    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+//  // Add X axis
+//  var x = d3.scaleLinear()
+//    .domain([0, 600])
+//    .range([ 0, width ]);
+//  svg.append("g")
+//    .attr("transform", "translate(0," + height + ")")
+//    .call(d3.axisBottom(x));
+//
+//  // Add Y axis
+//  var y = d3.scaleLinear()
+//    .domain([0, 400])
+//    .range([ height, 0]);
+//  svg.append("g")
+//    .call(d3.axisLeft(y));
+//  // Add a tooltip div. Here I define the general feature of the tooltip: stuff that do not depend on the data point.
+//  // Its opacity is set to 0: we don't see it by default.
+  var tooltip = d3.select("#my_dataviz")
+   .append("div")
+    .style("opacity", 0)
+    .attr("class", "tooltip")
+    .style("background-color", "white")
+   .style("border", "solid")
+   .style("border-width", "1px")
+    .style("border-radius", "5px")
+    .style("padding", "10px");
+
+ var mouseover = function(d) {
+   tooltip
+     .style("opacity", 1);
+  };
+  var mousemove = function(d) {
+    tooltip
+      .html("X value: " + d.Sepal_Length + "       Y Value: " + d.Petal_Length)
+      .style("left", (d3.mouse(this)[0]+90) + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
+      .style("top", (d3.mouse(this)[1]) + "px");
+  };
+    // A function that change this tooltip when the leaves a point: just need to set opacity to 0 again
+  var mouseleave = function(d) {
+    tooltip
+      .transition()
+      .duration(200)
+      .style("opacity", 0);
+  };
+//  
+//  
+
+
+
+</script>     
+
+    <h:panelGrid id="panelGrid" columns="4" cellpadding="3" columnClasses="colLeft,colRight,colLeft,colRight, colLast">
+        <h:outputLabel style="font-weight: bold" value="Independant Variable:"/>
+        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linear.linColumnNameA}">
+            <f:selectItems value="#{linear.linColumnOpts}" />
+        </p:selectOneMenu>
+        <h:outputLabel style="font-weight: bold" value="Dependant Variable:"/>
+        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linear.linColumnNameB}">
+            <f:selectItems value="#{linear.linColumnOpts}" />
+        </p:selectOneMenu>
+
+
+    </h:panelGrid>
+    <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right;"> 
+
+        <p:commandButton value="Customize Graph"
+                         styleClass="graphicsButton"
+                         style="box-shadow: none !important; text-shadow: none !important;"
+                         actionListener="#{sessionBean1.graphicsLnk_action('pca_pair')}" 
+                        oncomplete="PF('graphApperanceLinear').show()"/>  
+
+
+        <p:commandButton value="Update" 
+                         styleClass="updateButton"
+                         style="box-shadow: none !important; text-shadow: none !important"
+                        onclick="PF('statusDialog').show()"
+                        oncomplete="PF('statusDialog').hide()"  
+                        update=":ac:form1:linPane  :cmdPane" 
+                        actionListener="#{linear.linearBtn_action()}"/>                          
+    </h:panelGrid>     
     <h:panelGrid class="resultsBar" columns="2">
         <h:panelGroup>
             <h:panelGrid columns="1" style="text-align : left;">
@@ -29,7 +191,8 @@
          <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
             <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('plot_scatter_chart')}" alt="ScatterChartImage"/>
         </h:panelGrid>                           
-
+            <div id="my_dataviz" style="margin:auto; width:auto"></div>
+            
     </h:panelGrid>
 </ui:composition>
                

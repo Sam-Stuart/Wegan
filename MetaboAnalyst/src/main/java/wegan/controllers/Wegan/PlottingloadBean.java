@@ -296,7 +296,7 @@ public class PlottingloadBean implements Serializable {
             dataType = "Dune";
             //sb.updateMsg("Error", "Dune data selected");
 
-            testFile = ab.getTestDune();
+            testFile = ab.getTestIris();
             format = "rowu";
             
         } else if (testDataOpt.equals("BCI")) {

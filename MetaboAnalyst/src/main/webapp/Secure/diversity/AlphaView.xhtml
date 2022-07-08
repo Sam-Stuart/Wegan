@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 <html>
+
+
+
    <head>
       <style>
          .bar {
@@ -15,258 +18,104 @@
             font-weight: bold;
          }
       </style>
-      <!--<script src = "https://d3js.org/d3.v4.min.js"></script>-->
-      <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/jscripts/d3.min.js"></script>
-      <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/jscripts/d3.js"></script>
+      <script src="https://d3js.org/d3.v4.min.js"></script>
+      <script src="#{facesContext.externalContext.requestContextPath}/resources/jscripts/d3.min.js"></script>
+      <script  src="#{facesContext.externalContext.requestContextPath}/resources/jscripts/d3.js"></script>
       <title> Animated bar chart </title>
    </head>
 
    <body>
-      <div id="scatter_plot"></div>
-      <script>
-//        var margin = {top: 20, right: 20, bottom: 30, left: 50},
-//            width = 960 - margin.left - margin.right,
-//            height = 600 - margin.top - margin.bottom;
-//
-//        var D=[
-//          {x: 100, y : 100},
-//          {x: 200, y : 200},
-//          {x: 300, y : 300},
-//          {x: 400, y : 400},
-//          {x: 500, y : 500}
-//        ];
-//
-//        var svg = d3.select("#my_dataviz").append("svg")
-//            .attr("width", width + margin.left + margin.right)
-//            .attr("height", height + margin.top + margin.bottom)
-//          .append("g")
-//            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-//
-//        svg.append('g').selectAll('.myPoint')
-//          .data(D)
-//          .enter()
-//          .append('image')
-//          .attr("xlink:href", "diversity_icon.png")
-//          .attr("x", function(d){ return d.x })
-//          .attr("y", function(d){ return d.y })
-//          .attr("width", 16)
-//          .attr("height", 16);
-  
-        var w = 940,
-            h = 300,
-            pad = 20,
-            left_pad = 100,
-            Data_url = "data.json";
+      
+     <!-- Load d3.js -->
+<script src="https://d3js.org/d3.v4.js"></script>
 
-          var svg = d3
-            .select("#scatter_plot")
-            .append("svg")
-            .attr("width", w)
-            .attr("height", h);
+<!-- Create a div where the graph will take place -->
+<div id="my_dataviz"></div>
+      <svg width="1000" height="1000"></svg>
+   <script>
+//d3 graph testing 
+// set the dimensions and margins of the graph
+var margin = {top: 10, right: 30, bottom: 30, left: 60},
+    width = 460 - margin.left - margin.right,
+    height = 400 - margin.top - margin.bottom;
 
-          var x = d3.scale
-              .linear()
-              .domain([0, 23])
-              .range([left_pad, w - pad]),
-            y = d3.scale
-              .linear()
-              .domain([0, 6])
-              .range([pad, h - pad * 2]);
+// append the svg object to the body of the page
+var svg = d3.select("#my_dataviz")
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
 
-          var xAxis = d3.svg
-              .axis()
-              .scale(x)
-              .orient("bottom")
-              .ticks(24)
-              .tickFormat(function (d, i) {
-                var m = d > 12 ? "p" : "a";
-                return d % 12 == 0 ? 12 + m : (d % 12) + m;
-              }),
-            yAxis = d3.svg
-              .axis()
-              .scale(y)
-              .orient("left")
-              .ticks(7)
-              .tickFormat(function (d, i) {
-                return [
-                  "Sunday",
-                  "Monday",
-                  "Tuesday",
-                  "Wednesday",
-                  "Thursday",
-                  "Friday",
-                  "Saturday",
-                ][d];
-              });
+//Read the data
+d3.csv("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/iris.csv", function(data) {
 
-          svg
-            .append("g")
-            .attr("class", "axis")
-            .attr("transform", "translate(0, " + (h - pad) + ")")
-            .call(xAxis);
+  // Add X axis
+  var x = d3.scaleLinear()
+    .domain([4, 8])
+    .range([ 0, width ]);
+  svg.append("g")
+    .attr("transform", "translate(0," + height + ")")
+    .call(d3.axisBottom(x));
 
-          svg
-            .append("g")
-            .attr("class", "axis")
-            .attr("transform", "translate(" + (left_pad - pad) + ", 0)")
-            .call(yAxis);
+  // Add Y axis
+  var y = d3.scaleLinear()
+    .domain([0, 9])
+    .range([ height, 0]);
+  svg.append("g")
+    .call(d3.axisLeft(y));
 
-          svg
-            .append("text")
-            .attr("class", "loading")
-            .text("Loading ...")
-            .attr("x", function () {
-              return w / 2;
-            })
-            .attr("y", function () {
-              return h / 2 - 5;
-            });
+  // Color scale: give me a specie name, I return a color
+  var color = d3.scaleOrdinal()
+    .domain(["setosa", "versicolor", "virginica" ])
+    .range([ "#440154ff", "#21908dff", "#fde725ff"])
 
-          d3.json(Data_url, function (punchcard_data) {
-            var max_r = d3.max(
-                punchcard_data.map(function (d) {
-                  return d[2];
-                })
-              ),
-              r = d3.scale
-                .linear()
-                .domain([
-                  0,
-                  d3.max(punchcard_data, function (d) {
-                    return d[2];
-                  }),
-                ])
-                .range([0, 12]);
+  // Add dots
+  svg.append('g')
+    .selectAll("dot")
+    .data(data)
+    .enter()
+    .append("circle")
+      .attr("cx", function (d) { return x(d.Sepal_Length); } )
+      .attr("cy", function (d) { return y(d.Petal_Length); } )
+      .attr("r", 5)
+      .style("fill", function (d) { return color(d.Species) } )
 
-            svg.selectAll(".loading").remove();
+})
 
-            svg
-              .selectAll("circle")
-              .data(punchcard_data)
-              .enter()
-              .append("circle")
-              .attr("class", "circle")
-              .attr("cx", function (d) {
-                return x(d[1]);
-              })
-              .attr("cy", function (d) {
-                return y(d[0]);
-              })
-              .transition()
-              .duration(800)
-              .attr("r", function (d) {
-                return r(d[2]);
-              });
-          });
-//         console.log("start of d3 script")
-//         
-//         var svg = d3.select("#scatter_plot").append("svg"),
-//         margin = 200, width = svg.attr("width") - margin,
-//         height = svg.attr("height") - margin;
-//         console.log(svg)
-//         svg.append("text")
-//            .attr("transform", "translate(100,0)")
-//            .attr("x", 50).attr("y", 50)
-//            .attr("font-size", "20px")
-//            .attr("class", "title")
-//            .text("Population bar chart")
-//            
-//         var x = d3.scaleBand().range([0, width]).padding(0.4),
-//         y = d3.scaleLinear().range([height, 0]);
-//         console.log(x)
-//         var g = svg.append("g")
-//            .attr("transform", "translate(" + 100 + "," + 100 + ")");
-//
-//         d3.json("data.json", function(error, data) {
-//            if (error) {
-//               throw error;
-//            }
-//               
-//            x.domain(data.map(function(d) { return d.year; }));
-//            y.domain([0, d3.max(data, function(d) { return d.population; })]);
-//                     
-//            g.append("g")
-//               .attr("transform", "translate(0," + height + ")")
-//               .call(d3.axisBottom(x))
-//               .append("text")
-//               .attr("y", height - 250)
-//               .attr("x", width - 100)
-//               .attr("text-anchor", "end")
-//               .attr("font-size", "18px")
-//               .attr("stroke", "blue").text("year");
-//               
-//            g.append("g")
-//               .append("text")
-//               .attr("transform", "rotate(-90)")
-//               .attr("y", 6)
-//               .attr("dy", "-5.1em")
-//               .attr("text-anchor", "end")
-//               .attr("font-size", "18px")
-//               .attr("stroke", "blue")
-//               .text("population");
-//                         
-//            g.append("g")
-//               .attr("transform", "translate(0, 0)")
-//               .call(d3.axisLeft(y))
-//
-//            g.selectAll(".bar")
-//               .data(data)
-//               .enter()
-//               .append("rect")
-//               .attr("class", "bar")
-//               .on("mouseover", onMouseOver) 
-//               .on("mouseout", onMouseOut)   
-//               .attr("x", function(d) { return x(d.year); })
-//               .attr("y", function(d) { return y(d.population); })
-//               .attr("width", x.bandwidth()).transition()
-//               .ease(d3.easeLinear).duration(200)
-//               .delay(function (d, i) {
-//                  return i * 25;
-//               })
-//                  
-//            .attr("height", function(d) { return height - y(d.population); });
-//         });
-//          
-//          
-//         function onMouseOver(d, i) {
-//            d3.select(this)
-//            .attr('class', 'highlight');
-//               
-//            d3.select(this)
-//               .transition()     
-//               .duration(200)
-//               .attr('width', x.bandwidth() + 5)
-//               .attr("y", function(d) { return y(d.population) - 10; })
-//               .attr("height", function(d) { return height - y(d.population) + 10; });
-//              
-//            g.append("text")
-//               .attr('class', 'val')
-//               .attr('x', function() {
-//                  return x(d.year);
-//               })
-//               
-//            .attr('y', function() {
-//               return y(d.value) - 10;
-//            })
-//         }
-//          
-//         function onMouseOut(d, i) {
-//             
-//            d3.select(this)
-//               .attr('class', 'bar');
-//            
-//            d3.select(this)
-//               .transition()     
-//               .duration(200)
-//               .attr('width', x.bandwidth())
-//               .attr("y", function(d) { return y(d.population); })
-//               .attr("height", function(d) { return height - y(d.population); });
-//            
-//            d3.selectAll('.val')
-//               .remove()
-//         }
-         
-       
-      </script>
+</script>   
+     <ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+    
+    <p>
+        THIS IS THE SCATTER VIEW
+    </p>
+        
+    <h:panelGrid class="resultsBar" columns="2">
+        <h:panelGroup>
+            <h:panelGrid columns="1" style="text-align : left;">
+                Results
+            </h:panelGrid>
+        </h:panelGroup> 
+        <h:panelGroup>
+            <h:panelGrid columns="3" class="resultsImages">
+                <i class="fas fa-palette"></i>
+                <i class="fa fa-table"></i>
+                <i class="fa fa-question-circle"></i>
+            </h:panelGrid>
+
+        </h:panelGroup>                            
+    </h:panelGrid>  
+    <h:panelGrid id="plotScatterPane1" style="width: 100%;">
+         <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+            <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('plot_scatter_chart')}" alt="ScatterChartImage"/>
+        </h:panelGrid>                           
+
+    </h:panelGrid>
+</ui:composition> 
    </body>
 </html>

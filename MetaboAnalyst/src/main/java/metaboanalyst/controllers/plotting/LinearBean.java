@@ -37,7 +37,9 @@ public class LinearBean implements Serializable {
     private final ApplicationBean1 ab = (ApplicationBean1) DataUtils.findBean("applicationBean1");
     private final SessionBean1 sb = (SessionBean1) DataUtils.findBean("sessionBean1");
 
-    
+
+
+
     private String linearPlotType = "l";
 
     public String getLinearPlotType() {
