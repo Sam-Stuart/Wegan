@@ -11,19 +11,22 @@
         <h:panelGrid columns="1" style="width:380px;">
             <h:panelGrid id="panelGrid1" columns="2" cellpadding="5" columnClasses="colBrayLong,colBrayShort">
                 
+                <h3>On-Plot Display Options</h3>
+                <p:panelGrid></p:panelGrid>                
+                
                 <h:outputLabel style="font-weight: bold" value="Add Equation to Plot:"/>
                 <p:selectBooleanCheckbox value ="#{linearCABean.doPlotEqOmit}"/> 
                 
                 <h:outputLabel style="font-weight: bold" value="Add R-squared to Plot:"/>
                 <p:selectBooleanCheckbox value ="#{linearCABean.doPlotRsqOmit}"/> 
                                 
-                <h:outputLabel style="font-weight: bold" value="Add Adjusted R-squared"/>
+                <h:outputLabel style="font-weight: bold" value="Add Adjusted R-squared to Plot:"/>
                 <p:selectBooleanCheckbox value ="#{linearCABean.doPlotRsqAdj}"/> 
                 
-                <h3>Line and Point Color Options</h3>
+                <h3>Line and Point Options</h3>
                 <p:panelGrid></p:panelGrid>
 
-                <h:outputLabel style="font-weight: bold" value=":Point Color:"/>
+                <h:outputLabel style="font-weight: bold" value="Point Color:"/>
                 <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linearCABean.corColorDotsOpts}">
                     <f:selectItems value="#{applicationBean1.corLinColorDotsOpts}" />
                 </p:selectOneMenu> 
@@ -33,8 +36,10 @@
                     <f:selectItems value="#{applicationBean1.corLinColorLineOpts}" />
                 </p:selectOneMenu>  
                                 
-
-                <p:panelGrid></p:panelGrid>
+                <h:outputLabel style="font-weight: bold" value="Add 95% Confidence Interval:"/>
+                <p:selectBooleanCheckbox value ="#{linearCABean.doPlotConfInt}"/> 
+                
+                <!--<p:panelGrid></p:panelGrid>-->
 
             </h:panelGrid>
             <h:panelGrid id="panelGrid2" columns="1" cellpadding="5" style="float: right">
