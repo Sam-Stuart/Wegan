@@ -1,60 +1,16 @@
-#pcoa.meta.columns <- function(mSetObj=NA) {
-# 
-# mSetObj <- .get.mSet(mSetObj)
-
-#print("no no no")
-  
-#  if("pcoa" %in%  names(mSetObj$analSet) ){
-#  if("metaData" %in% names(mSetObj$analSet$pcoa)){
-#    metaData <- mSetObj$analSet$pcoa$metaData
-#  }
-#} else{
-#  metaData <-"No groupings"
-#}
-#  if (is.data.frame(metaData)==FALSE) {
-#    name.all.meta.cols <- "No groupings"
-#  } else {
-#    name.all.meta.cols <- c(colnames(metaData), "No groupings")
-#  }
-#  return(name.all.meta.cols)
-  
-#}
-
-#pcoa.scree.dim <- function(mSetObj=NA) {
-#  mSetObj <- .get.mSet(mSetObj)
-
-#print("no2 no2 no2")
-  
-#  if("pcoa" %in%  names(mSetObj$analSet) ){
-#  if("input" %in% names(mSetObj$analSet$pcoa)){
-#     num_data <- mSetObj$analSet$pcoa$input
-#  }
-#} else{
-#  num_data <-data.frame(one=c(1,2,3,4),two=c(5,6,7,8))
-#}
-#  dim <- ncol(num_data)
-#  max <- min(dim, 8)
-#  pcoa.scree.dim.opts <- 2:max
-#  return(pcoa.scree.dim.opts)
-#}
-
-
 #'#'Generate linear regression plot
 #'@description Plot line of best fit on scatter plot of linear regression model on 2 variables in data
 #'@param mSetObj Input the name of the created mSetObj
 #'@param facA Input the name of the response column (java uses Columns() to give user options)
 #'@param facB Input the name of the predictor column (java uses Columns() to give user options)
 #'@param data Boolean, whether to use original data; "false" (default) means normalized or "true" means original (checkbox)
-#'
 #'@param col_dots Set color for scatterplot dots (default "NULL" is black); (static dropdown)
 #'@param col_line Set color for line (default "NULL" is black); (static dropdown)
 ###@param weights Set weight values, default is NULL
-#' @param plot_ci Boolean, "false" (default), omit 95% confidence interval around line, "true" add interval around line
+#' @param plot_ci Boolean, "false" (default), omit 95% confidence interval around line, "true" add interval around line (checkbox)
 #'@param no_plot_eq Boolean, "false" (default) to show linear model equation on plot, "true" for plot without annotation of model equation (at top); y is 0.75*max(y) (checkbox)
 #'@param no_plot_rsq Boolean, "false" (default) to show linear model rsq value on plot, "true" for plot without annotation of rsq value (at top); y is 0.75*max(y) (checkbox)
-#'
 #'@param plot_rsq_adj Boolean, "true" to show linear model adjusted rsq value on plot, "false" (default) for plot without annotation of adjusted rsq value (at top); y is 0.75*max(y) (checkbox)
-#'
 #'@param imgName Input the image name
 #'@param format Select the image format, "png" or "pdf", default is "png" 
 #'@param dpi Input the dpi. If the image format is "pdf", users need not define the dpi. For "png" images, 
@@ -122,7 +78,7 @@ lin.reg.plot <- function(mSetObj=NA, facA="NULL", facB="NULL",
  #  }
  
     
-  ## alpha(yint) + Beta(slope) * X
+  ## alpha(yint) + beta(slope) * x
   # EXTRACTING MODEL RESULTS
   # later, print()/cat() these:
   summary <- summary(model) #PRINT #Summary w coeff, resid & fit
@@ -146,32 +102,36 @@ lin.reg.plot <- function(mSetObj=NA, facA="NULL", facB="NULL",
 
   mod <- c(mod_shp, mod_bp, mod_dw)
   names(mod) <- c("Shapiro-Wilk test for Normality of Residuals", "Beusch-Pagan test for Homoscedasticity", "Durbin-Watson test for Autocorrelation (Independent Residual Errors)")
+  fix<-c("Try other preprocessing options, or try other regression models such as SVM or random forest.",
+  "Try transforming the dependent variable (e.g., log transformation), or try redefining the dependent variable as a rate.",
+  "Is this time series data? Try looking into adding a lag in the independent/dependent variable, or adding a seasonal dummy variable to the model."
+  )
   mod1 <- mod # numeric
   n_fail <- sum(mod < 0.05) # was: nassump_fail
   
   if(any(mod < 0.001)){ # format numbers for printing
-  mod[mod < 0.001] <- formatC( mod[mod < 0.001] , format = "e", digits = 3)
-  mod[mod1 > 0.001] <- round( mod1[mod1 > 0.001], digits = 3)
+  mod[mod < 0.001] <-
+   formatC( mod[mod < 0.001] , format = "e", digits = 3)
+  
+  mod[mod1 > 0.001] <-
+   round( mod1[mod1 > 0.001], digits = 3)
   }
    
   if(n_fail > 0){
    mod <- mod[mod1 < 0.05]
   
-       failed <- paste(
-      paste(n_fail, " model assumption test(s) failed: \n ",
-       paste(
-        paste0( names(mod), "\n", paste0("P-Value: ", mod)), sep="\n"),
-                sep="" ),
-      "Conforming to these assumptions is required for use of the linear model. Therefore, the linear model is not applicable. If the goal is to visually explore your data, please use the Plotting module.",  sep="\n") 
-    
-    ## Try other preprocessing options, or try other regression models such as SVM or random forest.
-    #AddErrMsg(failed)
-    stop(failed)
+f0 <- paste0(n_fail, " linear model assumption test(s) failed: \n ")
+
+ failed<-c(f0, paste0(
+      names(mod), " (P-Value: ", mod, ")\n", fix[mod1 < 0.05], "\n"  ) )
+      # "Please be advised that conforming to these assumptions is necessary for use of the linear model.  If the goal is to visually explore your data, try the Plotting module." 
+    # AddErrMsg(failed)
+    message(failed)
     } else {
     failed <- paste0("No model assumption tests failed.")
     }
   
-  df <- data.frame("Normality (Shapiro-Wilk)..." = mod_shapiro,
+  df <- data.frame("Normality (Shapiro-Wilk)..." = mod_shp,
           "Homoscedasticity (Breusch-Pagan)..." = mod_bp,
            "Autocorrelation of Residuals (Durbin-Watson)..." = mod_dw,
            "N Assumptions Failed..." = n_fail,
@@ -268,12 +228,12 @@ axis.text = element_text(size=12, colour="black"),
  # legend.title=element_text(12), legend.text=element_text(size=12), 
 plot.title=element_text(face='bold',hjust = 0.5)
   )
+   
 
+ #GENERATE PLOT
+ Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
    
-     #GENERATE PLOT
-  Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
-   
-   
+
 ## {GGPMISC} ANNOTATION LOOP   
    if (plot_rsq_adj == "false"){ # default
   ### EQUATION, RSQ
@@ -302,7 +262,7 @@ plot.title=element_text(face='bold',hjust = 0.5)
       label.y = 0.75 * max(input[,facB]) ) 
     }
    
-   } else if (plot_rsq_adj != "false"){
+   } else {
   ### EQUATION, RSQ, RSQ_ADJ     
    if (no_plot_eq == "false" && no_plot_rsq == "false") {
      a0 <- a0 + ggpmisc::stat_poly_eq(aes(label = paste(after_stat(eq.label), after_stat(rr.label), after_stat(adj.rr.label),
@@ -332,11 +292,13 @@ plot.title=element_text(face='bold',hjust = 0.5)
      
    }
 
-  print(a0)
-  dev.off()
 
 #STORE IN mset
   mSetObj$analSet$linReg1$plot <- a0
+
+ print(a0)
+# a0
+ dev.off()
 
 ### Printing Values
   sink(fileName)
@@ -613,9 +575,11 @@ lin.reg.get.results <- function(mSetObj=NA){
 
   mSetObj <- .get.mSet(mSetObj)
 
-  lin.reg.result <- c(mSetObj$analSet$linReg1$res$equation,
-mSetObj$analSet$linReg1$res$r.squared.eq,
-mSetObj$analSet$linReg1$res$r.squared.adj.eq)
+#   lin.reg.result <- c(mSetObj$analSet$linReg1$res$equation,
+# mSetObj$analSet$linReg1$res$r.squared.eq,
+# mSetObj$analSet$linReg1$res$r.squared.adj.eq)
+
+lin.reg.result <- mSetObj$analSet$linReg1$plot
 
   return(lin.reg.result)
 
