@@ -14,13 +14,13 @@
                 <h3>On-Plot Display Options</h3>
                 <p:panelGrid></p:panelGrid>                
                 
-                <h:outputLabel style="font-weight: bold" value="Add Equation to Plot:"/>
+                <h:outputLabel style="font-weight: bold" value="Show Equation on Plot:"/>
                 <p:selectBooleanCheckbox value ="#{linearCABean.doPlotEqOmit}"/> 
                 
-                <h:outputLabel style="font-weight: bold" value="Add R-squared to Plot:"/>
+                <h:outputLabel style="font-weight: bold" value="Show R-squared on Plot:"/>
                 <p:selectBooleanCheckbox value ="#{linearCABean.doPlotRsqOmit}"/> 
                                 
-                <h:outputLabel style="font-weight: bold" value="Add Adjusted R-squared to Plot:"/>
+                <h:outputLabel style="font-weight: bold" value="Show Adjusted R-squared on Plot:"/>
                 <p:selectBooleanCheckbox value ="#{linearCABean.doPlotRsqAdj}"/> 
                 
                 <h3>Line and Point Options</h3>
@@ -36,8 +36,20 @@
                     <f:selectItems value="#{applicationBean1.corLinColorLineOpts}" />
                 </p:selectOneMenu>  
                                 
-                <h:outputLabel style="font-weight: bold" value="Add 95% Confidence Interval:"/>
+                <h:outputLabel style="font-weight: bold" value="Show 95% Confidence Interval:"/>
                 <p:selectBooleanCheckbox value ="#{linearCABean.doPlotConfInt}"/> 
+                
+                <h3>Titles</h3>
+                <p:panelGrid></p:panelGrid>                 
+                
+                <h:outputLabel style="font-weight: bold" value="Plot Title:"/>
+                <p:inputText value = "#{linearCABean.corPlotTitle}"/> 
+                
+                <h:outputLabel style="font-weight: bold" value="X-Axis Label"/>
+                <p:inputText value = "#{linearCABean.corPlotXlab}"/> 
+                
+                 <h:outputLabel style="font-weight: bold" value="Y-Axis Label"/>
+                <p:inputText value = "#{linearCABean.corPlotYlab}"/> 
                 
                 <!--<p:panelGrid></p:panelGrid>-->
 
