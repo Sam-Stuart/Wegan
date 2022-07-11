@@ -11,6 +11,9 @@
 #'@param no_plot_eq Boolean, "false" (default) to show linear model equation on plot, "true" for plot without annotation of model equation (at top); y is 0.75*max(y) (checkbox)
 #'@param no_plot_rsq Boolean, "false" (default) to show linear model rsq value on plot, "true" for plot without annotation of rsq value (at top); y is 0.75*max(y) (checkbox)
 #'@param plot_rsq_adj Boolean, "true" to show linear model adjusted rsq value on plot, "false" (default) for plot without annotation of adjusted rsq value (at top); y is 0.75*max(y) (checkbox)
+#'@param plot_title Input name of plot title, default to "Univariate Linear Regression Line of Best Fit" (textbox)
+#'@param plot_xaxis Input name for plot x-axis, default to facA (textbox)
+#'@param plot_yaxis Input name for plot y-axis, default to facB (textbox)
 #'@param imgName Input the image name
 #'@param format Select the image format, "png" or "pdf", default is "png" 
 #'@param dpi Input the dpi. If the image format is "pdf", users need not define the dpi. For "png" images, 
@@ -24,7 +27,8 @@
 lin.reg.plot <- function(mSetObj=NA, facA="NULL", facB="NULL",
              data="false", col_dots="NULL", col_line="NULL", plot_ci="false",# weights=NULL,
   # plot_eq="true", plot_rsq="true", plot_rsq_adj="false",
-  no_plot_eq="false", no_plot_rsq="false", plot_rsq_adj="false",
+  no_plot_eq="false", no_plot_rsq="false", plot_rsq_adj="false", 
+plot_title="NULL",  plot_xlab="NULL",  plot_ylab="NULL",
                   imgName, format="png", dpi=72, width=NA
   ){
 
@@ -204,6 +208,28 @@ f0 <- paste0(n_fail, " linear model assumption test(s) failed: \n ")
       plot_ci1 <- TRUE
     }
 
+  # PLOT TITLE
+  if(plot_title == "NULL"){
+    plot_title1 <- "Univariate Linear Regression Line of Best Fit"
+  } else {
+    plot_title1 <- plot_title
+  }
+
+  # PLOT YAXIS
+  if(plot_ylab == "NULL"){
+    plot_ylab1 <- facB
+  } else {
+    plot_ylab1 <- plot_ylab
+  }
+  
+  # PLOT XAXIS
+  if(plot_xlab == "NULL"){
+    plot_xlab1 <- facA
+  } else {
+    plot_xlab1 <- plot_xlab
+  }
+
+
   # #IF THERE IS A LINE COLOR, OVERRIDE DOT COLOR TO BLACK
   # if(!all.equal(col_line1, "black")){
   #   col_dots1 <- "black"
@@ -217,8 +243,8 @@ f0 <- paste0(n_fail, " linear model assumption test(s) failed: \n ")
    a0 <- ggplot(data = input,
    # aes(x = .data[[facA]], y = .data[[facB]]) ) +
     aes_(x = as.name(facA), y = as.name(facB)) )+
-   labs(title="Univariate Linear Regression Line of Best Fit") +
-     ylab(facB)+ xlab(facA) +
+   labs(title=plot_title1) +
+     ylab(plot_ylab1)+ xlab(plot_xlab1) +
      geom_smooth(se=plot_ci1, color=col_line1, fullrange = TRUE, method='lm') +
      geom_point(shape=16, color=col_dots1) +
      theme_bw() + 
