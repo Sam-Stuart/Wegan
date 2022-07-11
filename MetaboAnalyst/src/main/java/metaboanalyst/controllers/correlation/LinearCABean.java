@@ -163,6 +163,41 @@ public class LinearCABean implements Serializable {
         this.corColorLineOpts = corColorLineOpts;
     }
     
+  
+  // TEXT BOX 
+    private String corPlotTitle = "";
+    
+    public String getCorPlotTitle() {
+        return corPlotTitle;
+    }
+
+    public void setCorPlotTitle(String corPlotTitle) {
+        this.corPlotTitle = corPlotTitle;
+    }
+ 
+  // TEXT BOX 
+    private String corPlotXlab = "";
+    
+    public String getCorPlotXlab() {
+        return corPlotXlab;
+    }
+
+    public void setCorPlotXlab(String corPlotXlab) {
+        this.corPlotXlab = corPlotXlab;
+    }       
+    
+ // TEXT BOX 
+    private String corPlotYlab = "";
+    
+    public String getCorPlotYlab() {
+        return corPlotYlab;
+    }
+
+    public void setCorPlotYlab(String corPlotYlab) {
+        this.corPlotYlab = corPlotYlab;
+    }   
+     
+    
 //    // ACTION BUTTONS //
 //    public void corrLin1Btn_action() {
 //        CAUtils.CreateLinearModel(sb, corrColumnNameA, corrColumnNameB);
@@ -187,9 +222,10 @@ public class LinearCABean implements Serializable {
         
         CAUtils.PlotLinearCA(sb, corrColumnNameA, corrColumnNameB, 
                 doOriginal, corColorDotsOpts, corColorLineOpts, 
-               doPlotConfInt, doPlotEqOmit, doPlotRsqOmit,
+               doPlotConfInt, doPlotEqOmit, doPlotRsqOmit, doPlotRsqAdj,
+               corPlotTitle, corPlotXlab, corPlotYlab,
 //                doPlotRsqAdj, sb.getCurrentImage("corr_linear"));
-         doPlotRsqAdj, sb.getCurrentImage("corr_linear"),"png", 72);
+          sb.getCurrentImage("corr_linear"),"png", 72);
     }
 
     
