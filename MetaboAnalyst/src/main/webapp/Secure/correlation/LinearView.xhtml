@@ -18,7 +18,7 @@
                         <p style="font-size: 13px">
                             A dependent variable (x-axis) and an independent variable (y-axis) are correlated using a linear model. Along with Pearson R statistics, the line of best fit indicates how closely correlated the two variables are. Only numeric variables are used to build the model.               
                         </p>
-                        
+                        <!--columns was 5, change back if problems-->
                     <h:panelGrid id="panelGrid" columns="5" cellpadding="3" columnClasses="colLeft,colRight,colLeft,colRight, colLast">
 
                             <h:outputLabel style="font-weight: bold" value="Dependant Variable:"/>
@@ -90,7 +90,12 @@ dynamic dropdown: because it doesn't reference applicationBean1 (done for static
                                 <h:panelGrid columns="1" style="text-align : left;">
                                     Results
                                 </h:panelGrid>
-                            </h:panelGroup> 
+                            </h:panelGroup>
+                         <h:panelGroup>
+                                <h:panelGrid columns="3" class="resultsImages">
+                                    <i id="question" class="fa fa-question-circle" title="FROM NMDS - Only numeric variables are available to be displayed in linear correlation. ."></i>
+                                </h:panelGrid>
+                            </h:panelGroup>   
                         </h:panelGrid>          
                         <h:panelGrid id="corrLinPane1" style="width: 100%;">  
                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
