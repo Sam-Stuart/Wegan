@@ -93,7 +93,7 @@ public class CABean implements Serializable {
 //  no_plot_eq="false", no_plot_rsq="false", plot_rsq_adj="false", imgName
         CAUtils.PlotLinearCA(sb, "NULL", "NULL", false,
                 "NULL", "NULL", false, 
-                false, false, false,
+                false, false, false, "NULL","NULL","NULL",
 //                sb.getCurrentImage("corr_linear"));
         sb.getCurrentImage("corr_linear"), "png", 72);
     }
