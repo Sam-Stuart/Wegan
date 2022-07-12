@@ -15,10 +15,10 @@
                 <p:panelGrid></p:panelGrid>                
                 
                 <h:outputLabel style="font-weight: bold" value="Show Equation on Plot:"/>
-                <p:selectBooleanCheckbox value ="#{linearCABean.doPlotEqOmit}"/> 
+                <p:selectBooleanCheckbox value ="#{linearCABean.doPlotEq}"/> 
                 
                 <h:outputLabel style="font-weight: bold" value="Show R-squared on Plot:"/>
-                <p:selectBooleanCheckbox value ="#{linearCABean.doPlotRsqOmit}"/> 
+                <p:selectBooleanCheckbox value ="#{linearCABean.doPlotRsq}"/> 
                                 
                 <h:outputLabel style="font-weight: bold" value="Show Adjusted R-squared on Plot:"/>
                 <p:selectBooleanCheckbox value ="#{linearCABean.doPlotRsqAdj}"/> 
@@ -59,7 +59,7 @@
                                  styleClass="updateButton"
                                  style="box-shadow: none !important; text-shadow: none !important"
                                 onclick="PF('statusDialog').show()"
-                                oncomplete="PF('graphAppearanceLinear').hide(); PF('statusDialog').hide()"  
+                                oncomplete="PF('graphApperanceLinear').hide(); PF('statusDialog').hide()"  
                                 update=":linCA:form1:corrLinPane1  :cmdPane"
                                 actionListener="#{linearCABean.corrLin1Btn_action()}"/>
             </h:panelGrid>
