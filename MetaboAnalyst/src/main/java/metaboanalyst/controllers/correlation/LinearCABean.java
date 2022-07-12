@@ -98,25 +98,25 @@ public class LinearCABean implements Serializable {
     }
   // CHECK BOX for adding (default) or omitting equation to plot (at top), see correlation_linear.R 
   // when >1 of rsq, eq, & rsqadj are checked, values are seperated by " | " 
-     private boolean doPlotEqOmit = false;
+     private boolean doPlotEq = false;
 
-    public boolean isdoPlotEqOmit() {
-        return doPlotEqOmit;
+    public boolean isdoPlotEq() {
+        return doPlotEq;
     }
 
-    public void setdoPlotEqOmit(boolean doPlotEqOmit) {
-        this.doPlotEqOmit = doPlotEqOmit;
+    public void setdoPlotEq(boolean doPlotEq) {
+        this.doPlotEq = doPlotEq;
     } 
   // CHECK BOX for adding (default) or omitting rsq to plot (at top), see correlation_linear.R 
   // when >1 of rsq, eq, & rsqadj are checked, values are seperated by " | " 
-     private boolean doPlotRsqOmit = false;
+     private boolean doPlotRsq = false;
 
-    public boolean isdoPlotRsqOmit() {
-        return doPlotRsqOmit;
+    public boolean isdoPlotRsq() {
+        return doPlotRsq;
     }
 
-    public void setdoPlotRsqOmit(boolean doPlotRsqOmit) {
-        this.doPlotRsqOmit = doPlotRsqOmit;
+    public void setdoPlotRsq(boolean doPlotRsq) {
+        this.doPlotRsq = doPlotRsq;
     }     
   // CHECK BOX for omitting (default) or adding rsq-adj to plot (at top), see correlation_linear.R 
   // when >1 of rsq, eq, & rsqadj are checked, values are seperated by " | " 
@@ -165,7 +165,7 @@ public class LinearCABean implements Serializable {
     
   
   // TEXT BOX 
-    private String corPlotTitle = "";
+    private String corPlotTitle = " ";
     
     public String getCorPlotTitle() {
         return corPlotTitle;
@@ -176,7 +176,7 @@ public class LinearCABean implements Serializable {
     }
  
   // TEXT BOX 
-    private String corPlotXlab = "";
+    private String corPlotXlab = " ";
     
     public String getCorPlotXlab() {
         return corPlotXlab;
@@ -187,7 +187,7 @@ public class LinearCABean implements Serializable {
     }       
     
  // TEXT BOX 
-    private String corPlotYlab = "";
+    private String corPlotYlab = " ";
     
     public String getCorPlotYlab() {
         return corPlotYlab;
@@ -212,21 +212,22 @@ public class LinearCABean implements Serializable {
   
 // mSetObj=NA, facA="NULL", facB="NULL", data="false",
 //    col_dots="NULL", col_line="NULL", plot_ci="false", # weights=NULL,
-// no_plot_eq="false", no_plot_rsq="false",
+// plot_eq="false", plot_rsq="false",
 //plot_rsq_adj="false", imgName # ,format="png", dpi=72, width=NA
     
     // ACTION BUTTONS //
     public void corrLin1Btn_action() {
 //        CAUtils.CreateLinearModel(sb, corrColumnNameA, corrColumnNameB);
         //CAUtils.CreateLinearModel(sb, "/Users/danaallen/NetBeansProjects/Wegan/MetaboAnalyst/target/MetaboAnalyst-4.34/resources/data/dune_weights.csv");
+//        corrLin1_Update_action
         
         CAUtils.PlotLinearCA(sb, corrColumnNameA, corrColumnNameB, 
                 doOriginal, corColorDotsOpts, corColorLineOpts, 
-               doPlotConfInt, doPlotEqOmit, doPlotRsqOmit, doPlotRsqAdj,
+               doPlotConfInt, doPlotEq, doPlotRsq, doPlotRsqAdj,
                corPlotTitle, corPlotXlab, corPlotYlab,
-//                doPlotRsqAdj, sb.getCurrentImage("corr_linear"));
-          sb.getCurrentImage("corr_linear"),"png", 72);
+//                 sb.getCurrentImage("corr_linear"),"png", 72);
+          sb.getNewImage("corr_linear"),"png", 72); 
     }
-
+   
     
 }
