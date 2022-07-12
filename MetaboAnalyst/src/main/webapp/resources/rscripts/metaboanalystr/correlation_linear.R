@@ -8,8 +8,8 @@
 #'@param col_line Set color for line (default "NULL" is black); (static dropdown)
 ###@param weights Set weight values, default is NULL
 #' @param plot_ci Boolean, "false" (default), omit 95% confidence interval around line, "true" add interval around line (checkbox)
-#'@param no_plot_eq Boolean, "false" (default) to show linear model equation on plot, "true" for plot without annotation of model equation (at top); y is 0.75*max(y) (checkbox)
-#'@param no_plot_rsq Boolean, "false" (default) to show linear model rsq value on plot, "true" for plot without annotation of rsq value (at top); y is 0.75*max(y) (checkbox)
+#'@param plot_eq Boolean, "false" (default) to show linear model equation on plot, "true" for plot without annotation of model equation (at top); y is 0.75*max(y) (checkbox)
+#'@param plot_rsq Boolean, "false" (default) to show linear model rsq value on plot, "true" for plot without annotation of rsq value (at top); y is 0.75*max(y) (checkbox)
 #'@param plot_rsq_adj Boolean, "true" to show linear model adjusted rsq value on plot, "false" (default) for plot without annotation of adjusted rsq value (at top); y is 0.75*max(y) (checkbox)
 #'@param plot_title Input name of plot title, default to "Univariate Linear Regression Line of Best Fit" (textbox)
 #'@param plot_xaxis Input name for plot x-axis, default to facA (textbox)
@@ -27,7 +27,7 @@
 lin.reg.plot <- function(mSetObj=NA, facA="NULL", facB="NULL",
              data="false", col_dots="NULL", col_line="NULL", plot_ci="false",# weights=NULL,
   # plot_eq="true", plot_rsq="true", plot_rsq_adj="false",
-  no_plot_eq="false", no_plot_rsq="false", plot_rsq_adj="false", 
+  plot_eq="false", plot_rsq="false", plot_rsq_adj="false", 
 plot_title="NULL",  plot_xlab="NULL",  plot_ylab="NULL",
                   imgName, format="png", dpi=72, width=NA
   ){
@@ -263,14 +263,14 @@ plot.title=element_text(face='bold',hjust = 0.5)
 ## {GGPMISC} ANNOTATION LOOP   
    if (plot_rsq_adj == "false"){ # default
   ### EQUATION, RSQ
-   if (no_plot_eq == "false" && no_plot_rsq == "false") { #default
+   if (plot_eq == "false" && plot_rsq == "false") { #default
      a0 <- a0 + ggpmisc::stat_poly_eq(aes(label = paste(after_stat(eq.label), after_stat(rr.label),  sep = "*\"  |  \"*")),
       eq.with.lhs =  paste0("italic(`",facB,"`)~`=`~"),
       eq.x.rhs =  paste0("~italic(`*` ~`",facA,"`)"),
       rr.digits = 2, coef.digits = 2, parse = TRUE,
       label.y = 0.75 * max(input[,facB]) )
   ### EQUATION
-    } else if (no_plot_eq == "false" && no_plot_rsq != "false") {
+    } else if (plot_eq == "false" && plot_rsq != "false") {
    a0 <- a0 + ggpmisc::stat_poly_eq(aes(label = 
     paste0(after_stat(eq.label) )),
     eq.with.lhs =  paste0("italic(`",facB,"`)~`=`~"),
@@ -278,10 +278,10 @@ plot.title=element_text(face='bold',hjust = 0.5)
     rr.digits = 2, coef.digits = 2, parse = TRUE,
     label.y = 0.75 * max(input[,facB]) ) 
   ### NOTHING
-    } else if (no_plot_eq != "false" && no_plot_rsq != "false") {
+    } else if (plot_eq != "false" && plot_rsq != "false") {
       a0 <- a0
   ### RSQ
-    } else if (no_plot_eq != "false" && no_plot_rsq == "false") {
+    } else if (plot_eq != "false" && plot_rsq == "false") {
    a0 <- a0 + ggpmisc::stat_poly_eq(aes(label = 
       paste0(after_stat(rr.label) )),
       rr.digits = 2, coef.digits = 2, parse = TRUE,
@@ -290,27 +290,27 @@ plot.title=element_text(face='bold',hjust = 0.5)
    
    } else {
   ### EQUATION, RSQ, RSQ_ADJ     
-   if (no_plot_eq == "false" && no_plot_rsq == "false") {
+   if (plot_eq == "false" && plot_rsq == "false") {
      a0 <- a0 + ggpmisc::stat_poly_eq(aes(label = paste(after_stat(eq.label), after_stat(rr.label), after_stat(adj.rr.label),
       sep = "*\"  |  \"*")), size = 3,
       eq.with.lhs =  paste0("italic(`",facB,"`)~`=`~"),  eq.x.rhs =  paste0("~italic(`*` ~`",facA,"`)"),
       rr.digits = 2, coef.digits = 2, parse = TRUE,
       label.y = 0.75 * max(input[,facB]) ) 
   ### EQUATION, RSQ_ADJ 
-    } else if (no_plot_eq == "false" && no_plot_rsq != "false") {
+    } else if (plot_eq == "false" && plot_rsq != "false") {
    a0 <- a0 + ggpmisc::stat_poly_eq(aes(label = paste(after_stat(eq.label), after_stat(adj.rr.label), sep = "*\"  |  \"*")),
       eq.with.lhs =  paste0("italic(`",facB,"`)~`=`~"),
       eq.x.rhs =  paste0("~italic(`*` ~`",facA,"`)"),
       rr.digits = 2, coef.digits = 2, parse = TRUE,
       label.y = 0.75 * max(input[,facB]) ) 
   ### RSQ_ADJ 
-    } else if (no_plot_eq != "false" && no_plot_rsq != "false") {
+    } else if (plot_eq != "false" && plot_rsq != "false") {
      a0 <- a0 + ggpmisc::stat_poly_eq(aes(label = 
        paste0(after_stat(adj.rr.label) )),
        rr.digits = 2, coef.digits = 2, parse = TRUE,
        label.y = 0.75 * max(input[,facB]) ) 
   ### RSQ, RSQ_ADJ 
-    } else if (no_plot_eq != "false" && no_plot_rsq == "false") {
+    } else if (plot_eq != "false" && plot_rsq == "false") {
      a0 <- a0 + ggpmisc::stat_poly_eq(aes(label = paste(after_stat(rr.label), after_stat(adj.rr.label),  sep = "*\"  |  \"*")),
        rr.digits = 2, coef.digits = 2, parse = TRUE,
        label.y = 0.75 * max(input[,facB]) ) 
