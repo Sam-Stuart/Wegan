@@ -18,8 +18,9 @@
                         <p style="font-size: 13px">
                             A dependent variable (x-axis) and an independent variable (y-axis) are correlated using a linear model. Along with Pearson R statistics, the line of best fit indicates how closely correlated the two variables are. Only numeric variables are used to build the model.               
                         </p>
-                      
-                    <h:panelGrid id="panelGrid" columns="5" cellpadding="3" columnClasses="colLeft,colRight,colLeft,colRight, colLast">
+                      <!--colLeftLong25 colRightShort30 colRight35 colLeft20 colBrayLong40 colBrayShort15-->
+                      <h:panelGrid id="panelGrid" columns="5" cellpadding="3" columnClasses="colLeft,colRightShort,colLeft,colRightShort, colLast">
+                    <!--<h:panelGrid id="panelGrid" columns="5" cellpadding="3" columnClasses="colLeft,colRight,colLeft,colRight, colLast">-->
                             <h:outputLabel style="font-weight: bold" value="Dependant Variable:"/>
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linearCABean.corrColumnNameA}">
                                 <f:selectItems value="#{linearCABean.corrColumnOpts}" />
@@ -42,7 +43,7 @@
                                              styleClass="graphicsButton"
                                              style="box-shadow: none !important; text-shadow: none !important;"
                                              actionListener="#{sessionBean1.graphicsLnk_action('corr_linear')}" 
-                                            oncomplete="PF('graphAppearanceLinear').show()"/>  
+                                            oncomplete="PF('graphApperanceLinear').show()"/>  
                                            
                             <p:commandButton value="Update" 
                                              styleClass="updateButton"
@@ -160,7 +161,7 @@
                              actionListener="HASHTAG{sessionBean1.setCurrentCmpdIndex}" 
                              />
         </h:form>-->
-        <p:dialog modal="true" widgetVar="graphAppearanceLinear" 
+        <p:dialog modal="true" widgetVar="graphApperanceLinear" 
             style="width: 400px; height:400px;" 
             appendTo="@(body)" header="Graphics Center"
             draggable="false" closable="true" resizable="false"> 
