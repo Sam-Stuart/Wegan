@@ -76,7 +76,7 @@ public static boolean PlotLinearCA(SessionBean1 sb,Boolean data,
 //                    + plot_title + "\", \""
 //                    + plot_xaxis + "\", \""
 //                    + plot_yaxis + "\", \""
-////                    + "\", imgName)";
+////                  + "\", imgName)";
 //                    + imgName + "\", \"" 
 //                    + format + "\", "
 //                    + dpi 
