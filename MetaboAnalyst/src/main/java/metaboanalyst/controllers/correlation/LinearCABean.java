@@ -5,13 +5,18 @@
  */
 package metaboanalyst.controllers.correlation;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
+// added:
+import javax.faces.context.FacesContext; 
 import javax.faces.model.SelectItem;
 import metaboanalyst.controllers.SessionBean1;
+//addded:
+import metaboanalyst.models.User;
 import metaboanalyst.rwrappers.UniVarTests;
 import metaboanalyst.rwrappers.CAUtils;
 import metaboanalyst.rwrappers.RDataUtils;
@@ -29,17 +34,24 @@ import org.rosuda.REngine.Rserve.RConnection;
 public class LinearCABean implements Serializable {
 
     private final SessionBean1 sb = (SessionBean1) DataUtils.findBean("sessionBean1");
-// commented out weights 202206-29
-    private boolean addWeights = false;
+
+     //TABLES FOR DOWNLOAD
+    private User usr = sb.getCurrentUser();
+    private String usrName = usr.getName();
     
-    public boolean isaddWeights() {
-        return addWeights;
+    
+    private String fileLinModVals = "corr_linear_model_summary.txt";
+    private String fileLinModValsPath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileLinModVals + "\">" + fileLinModVals + "</a>";
+ 
+    public String getFileLinModValsPath() {
+        return fileLinModValsPath;
     }
-
-    public void setAddWeights(boolean addWeights) {
-        this.addWeights = addWeights;
-    }
-
+        
+    public void setFileLinModValsPath(String fileLinModValsPath) {
+        this.fileLinModValsPath = fileLinModValsPath;
+    } 
+    
+    
     
     private SelectItem[] corrColumnOpts = null;
     
@@ -217,16 +229,35 @@ public class LinearCABean implements Serializable {
     
     // ACTION BUTTONS //
     public void corrLin1Btn_action() {
-//        CAUtils.CreateLinearModel(sb, corrColumnNameA, corrColumnNameB);
+        CAUtils.CreateLinearModel(sb, corrColumnNameA, corrColumnNameB, doOriginal);
         //CAUtils.CreateLinearModel(sb, "/Users/danaallen/NetBeansProjects/Wegan/MetaboAnalyst/target/MetaboAnalyst-4.34/resources/data/dune_weights.csv");
 //        corrLin1_Update_action
         
-        CAUtils.PlotLinearCA(sb, corrColumnNameA, corrColumnNameB, 
+        CAUtils.PlotLinearCA(sb, 
+//                corrColumnNameA, corrColumnNameB, 
                 doOriginal, corColorDotsOpts, corColorLineOpts, 
                doPlotConfInt, doPlotEq, doPlotRsq, doPlotRsqAdj,
                corPlotTitle, corPlotXlab, corPlotYlab,
 //                 sb.getCurrentImage("corr_linear"),"png", 72);
           sb.getNewImage("corr_linear"),"png", 72); 
+    }
+   
+   
+
+
+ // ACTION BUTTONS //
+    public void corrLin2Btn_action() {
+        CAUtils.CreateLinearModel(sb, corrColumnNameA, corrColumnNameB, doOriginal);
+        //CAUtils.CreateLinearModel(sb, "/Users/danaallen/NetBeansProjects/Wegan/MetaboAnalyst/target/MetaboAnalyst-4.34/resources/data/dune_weights.csv");
+//        corrLin1_Update_action
+        
+        CAUtils.PlotLinearPredictCA(sb, doOriginal,
+                corColorDotsOpts, corColorLineOpts, doPlotConfInt,
+                doPlotEq, doPlotRsq, doPlotRsqAdj,
+               corPlotTitle, corPlotXlab, corPlotYlab,
+          sb.getNewImage("corr_linear_pred"),"png", 72);
+                
+
     }
    
     
