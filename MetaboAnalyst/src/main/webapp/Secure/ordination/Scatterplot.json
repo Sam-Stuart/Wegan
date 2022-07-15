@@ -1,0 +1,22 @@
+{
+	"graphName": "Principal Coordinate Analysis",
+	"xAxisLabel": "This is the xLabel",
+	"yAxisLabel": "This is the yLabel",
+	"data": {
+		"1": {
+			"x": 2,
+			"y": 3,
+			"name": "Species Name"
+		},
+		"2": {
+			"x": 7,
+			"y": 2,
+			"name": "Species Name 1"
+		},
+		"3": {
+			"x": 10,
+			"y": 1,
+			"name": "Species Name 2"
+		}
+	}
+}
