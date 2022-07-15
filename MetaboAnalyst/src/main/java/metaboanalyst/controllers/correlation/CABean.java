@@ -86,6 +86,10 @@ public class CABean implements Serializable {
                 false, false, false, " ", " "," ",
                 sb.getCurrentImage("corr_linear_pred"), "png", 72);
         
+        CAUtils.PlotLinearNormResidCA(sb, "NULL", "NULL", false,
+                "NULL", "NULL", " ", " "," ",
+                sb.getCurrentImage("corr_linear_normres"), "png", 72);
+        
     }
     
 //    private void doDefaultLinear() {

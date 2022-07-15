@@ -407,6 +407,9 @@ lin.reg.plot <- function(mSetObj=NA,
    
 #STORE IN mset
   mSetObj$analSet$linReg1$plot <- a0
+  mSetObj$analSet$linReg1$plot_title <- plot_title1
+  mSetObj$analSet$linReg1$plot_ylab <- plot_ylab1
+  mSetObj$analSet$linReg1$plot_xlab <- plot_xlab1
 
   print(a0)
   # a0
@@ -647,6 +650,10 @@ if(plot_xlab == " "){
 #STORE IN mset
   mSetObj$analSet$linReg1$plotpredicted <- a0
 
+  # mSetObj$analSet$linReg1$plot_title <- plot_title1
+  # mSetObj$analSet$linReg1$plot_ylab <- plot_ylab1
+  # mSetObj$analSet$linReg1$plot_xlab <- plot_xlab1
+
   print(a0)
   # a0
   dev.off()
@@ -655,6 +662,185 @@ if(plot_xlab == " "){
   
 }
 
+
+
+#'Generate Normality of Residuals (qqplot) plot for model
+#'@description Plot line of best fit on scatter plot of linear regression model on 2 variables in data
+#'@param mSetObj Input the name of the created mSetObj
+#'@param data Boolean, whether to use original data; "false" (default) means normalized or "true" means original (checkbox)
+#'@param col_line Set color for line (default "NULL" is black); (static dropdown)
+#'@param col_dots Set color for scatterplot dots (default "NULL" is black); (static dropdown)
+#'@param plot_title Input the name of the title (default: "Univariate Linear Regression Line of Best Fit", textbox)
+#'@param plot_xlab Input the name to use for x-axis label (default: facA, textbox)
+#'@param plot_ylab Input the name to use for y-axis label (default: facB, textbox)
+#'@param imgName Input the image name
+#'@param format Select the image format, "png" or "pdf", default is "png" 
+#'@param dpi Input the dpi. If the image format is "pdf", users need not define the dpi. For "png" images, 
+#'the default dpi is 72. It is suggested that for high-resolution images, select a dpi of 300.  
+#'@param width Input the width, there are 2 default widths. The first, width=NULL, is 10.5.
+#'The second default is width=0, where the width is 7.2. Otherwise users can input their own width. 
+#'@author Gina Sykes \email{gsykes@ualberta.ca}
+#'University of Alberta, Canada
+#'License: GNU GPL (>= 2)
+#' @importFrom rlang .data
+#'@export
+lin.qq.plot <- function(mSetObj=NA,
+                         facA = "NULL",
+                         facB = "NULL",
+             data = "false",
+ col_dots = "NULL",
+ col_line = "NULL",
+
+  plot_title = " ",
+  plot_ylab = " ",
+  plot_xlab = " ",
+  imgName,
+  format = "png",
+  dpi = 72,
+  width = NA
+  ){
+
+  library("ggplot2")
+  
+  mSetObj <- .get.mSet(mSetObj)
+  
+  ## DATA: NORMAL OR NOT
+   if (data == "false") { 
+    input <- mSetObj$dataSet$norm #default use norm
+  } else {
+    input <- mSetObj$dataSet$orig
+  }
+  
+#    ### iF VARIABLES ARE SET
+#   #Set dependent (response) variable name
+#   if (facA == "NULL"){
+#     if( !"res" %in% names(mSetObj$analSet$linReg1) ){
+#        facA <- mSetObj$analSet$linReg1$res$response
+#     } else {
+#     facA <- colnames(input)[1] #Default is 1st column.
+#   }
+# } else {
+#     facA <- facA #Determined using Columns() function below (java will present options in drop down menu)
+#   }
+#   #Set independent (predictor) variable name
+#   if (facB == "NULL"){
+#     if( !"res" %in% names(mSetObj$analSet$linReg1) ){
+#        facB <-  mSetObj$analSet$linReg1$res$predictor
+#     } else {
+#     facB <- colnames(input)[2] #Default is 2nd column.
+#   }
+# } else {
+#     facB <- facB #Determined using Columns() function below (java will present options in drop down menu)
+#   }
+#   
+#   # VARIABLE TYPE CHECK
+#   if (is.factor(input[,facA] || input[,facB]) == TRUE){
+#     #AddErrMsg("You have chosen 1 or more categorical columns! Try selecting another independent and/or dependent variable. You can also try other regression models such as penalized, logistic, SVM or random forest.")
+#     stop("You have chosen 1 or more categorical columns! Try selecting another independent and/or dependent variable. You can also try other regression models such as penalized, logistic, SVM or random forest.") #Error msg
+#   }
+  
+    # EXTRACT PLOT COMPONENTS
+   
+   facA <- mSetObj$analSet$linReg1$res$response
+   facB <-  mSetObj$analSet$linReg1$res$predictor
+   fileName <- mSetObj$analSet$linReg1$res$fileName
+   # formula <- mSetObj$analSet$linReg1$res$formula
+   # model <- mSetObj$analSet$linReg1$mod
+
+  # PLOT
+
+  #SET PLOT DIMENSIONS
+  if(is.na(width)){
+    w <- 7.2
+  } else if(width == 0){
+    w <- 7.2
+  } else{
+    w <- width
+  }
+  h <- w
+  
+  #Name plot for download
+  imgName <- paste(imgName, "dpi", dpi, ".", format, sep="")
+  mSetObj$imgSet$plot.linReg1 <- imgName
+  
+    #SET POINT COLOR
+  if (col_dots == "NULL") {
+      col_dots1 <- "black" # default
+    } else if (col_dots == "blue") {
+      col_dots1 <- "blue"
+    } else if (col_dots == "red") {
+      col_dots1 <- "red"
+    } else if(col_dots == "green"){
+      col_dots1 <- "green"
+    } else if(col_dots == "grey"){
+      col_dots1 <- "grey"
+    }
+  
+  #SET LINE COLOR
+  if (col_line == "NULL") {
+      col_line1 <- "black" # default
+    } else if (col_line == "blue") {
+      col_line1 <- "blue"
+    } else if (col_line == "red") {
+      col_line1 <- "red"
+    } else if(col_line == "green"){
+      col_line1 <- "green"
+    } else if(col_line == "grey"){
+      col_line1 <- "grey"
+    }
+
+
+  # PLOT TITLE
+  if(plot_title == " "){
+    plot_title1 <- paste0("Normality of Residuals (", facA, ")")
+  } else {
+    plot_title1 <- plot_title
+  }
+  
+  # PLOT YAXIS
+  if(plot_ylab == " "){
+  plot_ylab1 <- "Emprical"
+  } else { # facA, response
+    plot_ylab1 <- plot_ylab
+  }
+
+  # PLOT XAXIS
+  if(plot_xlab == " "){
+   plot_xlab1 <- "Theoretical"
+  } else { #prediction
+    plot_xlab1 <- plot_xlab
+  }
+ 
+  a0 <- ggplot(data =  input,
+   # aes(x = .data[[facA]], y = .data[[facB]]) ) +
+   aes_(sample =  as.name(facA)) )+
+    labs(title = plot_title1) +
+     ylab(plot_ylab1)+ xlab(plot_xlab1) +
+    stat_qq(shape = 16, color = col_dots1) +
+    stat_qq_line(color = col_line1, fullrange = TRUE) +
+     theme_bw() + 
+  theme(panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        axis.text = element_text(size = 12, colour = "black"), 
+        axis.title = element_text(size = 12),
+        # legend.title=element_text(12), legend.text=element_text(size=12), 
+        plot.title = element_text(face = 'bold', hjust = 0.5)
+  )
+
+     #GENERATE PLOT
+  Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
+   
+  
+#STORE IN mset
+  mSetObj$analSet$linReg1$plot_normresid <- a0
+
+  print(a0)
+  # a0
+  dev.off()
+  
+  return(.set.mSet(mSetObj))
+  
+}
 
 
 
@@ -1050,15 +1236,22 @@ lin.reg.plot.json <- function(mSetObj=NA){
   facA <- mSetObj$analSet$linReg1$res$response
   facB <- mSetObj$analSet$linReg1$res$predictor
 
+  plot_title1 <- mSetObj$analSet$linReg1$plot_title
+  plot_ylab1 <- mSetObj$analSet$linReg1$plot_ylab
+  plot_xlab1 <- mSetObj$analSet$linReg1$plot_xlab
+
+
   build <- ggplot_build(a0)
   # colnames(build$data[[1]]);  c("x", "y", "flipped_aes", "PANEL", "group", "colour", "fill",  "size", "linetype", "weight", "alpha")
   linear_plot_json <- list()
-  linear_plot_json$main <- "Univariate Linear Regression Line of Best Fit" #title
-  linear_plot_json$axis <- c(facA, facB) #axis titles
+  linear_plot_json$main <- plot_title1 #title
+  linear_plot_json$axis <- c(plot_xlab1, plot_ylab1) #axis titles
   linear_plot_json$points$coords <- build$data[[1]][,c("x","y")] #[,1:2]
   linear_plot_json$points$cols <- build$data[[1]][,grepl("col",colnames(build$data[[1]]))] #[,6] #colours
   linear_plot_json$points$shape <- build$data[[1]][,c("group")]#[,5]
   linear_plot_json$points$size <- build$data[[1]][,c("size")]#[,7]
+  linear_plot_json$lines$cols <- build$data[[2]][,grepl("col",colnames(build$data[[2]]))]
+  linear_plot_json$lines$ci <- build$data[[1]][,c("se")] 
 
   imgName <- paste(imgName, ".json", sep="")
   json.obj <- RJSONIO::toJSON(linear_plot_json, .na='null')

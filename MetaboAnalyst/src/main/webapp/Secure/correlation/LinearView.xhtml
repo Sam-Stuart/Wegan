@@ -117,7 +117,7 @@
                                              styleClass="graphicsButton"
                                              style="box-shadow: none !important; text-shadow: none !important;"
                                              actionListener="#{sessionBean1.graphicsLnk_action('corr_linear_pred')}" 
-                                            oncomplete="PF('graphApperanceLinear').show()"/>  
+                                            oncomplete="PF('graphApperanceLinear2').show()"/>  
                               
                               <p:commandButton value="Update" 
                                              styleClass="updateButton"
@@ -168,6 +168,75 @@
                       </h:panelGrid>
                     </h:form>
                 </p:tab>
+                
+                <p:tab title ="Normality of Residuals Plot" titleStyleClass="p-tab-nav">
+                    <h:form id="form3">
+                        <p>
+                            Normality of residuals is one of the assumptions for a linear model. This plot (also called a 'Q-Q' plot) checks this assumption by comparing the distribution of model residuals (empirical) and theoretical normal distribution. In interpreting the plot, the closer points are to the diagonal line then the more likely the residuals are normally distributed. 
+                        </p>
+                        <h:panelGrid id="panelGrid3" columns="5" cellpadding="3" columnClasses="colLeft,colRightShort,colLeft,colRightShort, colLast">
+                       <!--"colLeft,colRightShort,colLeft,colRightShort, colLast"-->
+                            <h:outputLabel style="font-weight: bold" value="Dependant Variable:"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linearCABean.corrColumnNameA}">
+                                    <f:selectItems value="#{linearCABean.corrColumnOpts}" />
+                                </p:selectOneMenu>
+                            
+                            <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
+                                <p:selectBooleanCheckbox value ="#{linearCABean.doOriginal}"/> 
+                            <p:panelGrid></p:panelGrid>
+                            
+                            <h:outputLabel style="font-weight: bold" value="Independant Variable:"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linearCABean.corrColumnNameB}">
+                                    <f:selectItems value="#{linearCABean.corrColumnOpts}" />
+                                </p:selectOneMenu>
+                        </h:panelGrid>
+                        
+                        <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;">                   
+                              <p:commandButton value="Customize Graph"
+                                             styleClass="graphicsButton"
+                                             style="box-shadow: none !important; text-shadow: none !important;"
+                                             actionListener="#{sessionBean1.graphicsLnk_action('corr_linear_normres')}" 
+                                            oncomplete="PF('graphApperanceLinear3').show()"/>  
+                              
+                              <p:commandButton value="Update" 
+                                             styleClass="updateButton"
+                                             style="box-shadow: none !important; text-shadow: none !important"
+                                            onclick="PF('statusDialog').show()"
+                                            oncomplete="PF('statusDialog').hide()"  
+                                            update=":linCA:form3:panelGrid3  :cmdPane" 
+                                            actionListener="#{linearCABean.corrLin3Btn_action()}"/>     
+                              
+                        </h:panelGrid>
+                        
+                        <h:panelGrid class="resultsBar" columns="2">
+                            <h:panelGroup>
+                                <h:panelGrid columns="1" style="text-align : left;">
+                                    Results
+                                </h:panelGrid>
+                            </h:panelGroup> 
+                            <h:panelGroup>
+                                <h:panelGrid columns="3" class="resultsImages">
+                                    <i id="question" class="fa fa-question-circle" title="Based on the linear model generated, the predicted response variable is plotted against the actual variable."></i>
+                                </h:panelGrid>
+                            </h:panelGroup>
+                          </h:panelGrid>
+                           
+                        <h:panelGrid id="corrLinPane3" style="width: 100%;">
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <p:commandButton value="Export"
+                                    styleClass="exportButton"
+                                    style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                    actionListener="#{sessionBean1.graphicsLnk_action('corr_linear_normres')}"
+                                    oncomplete="PF('graphDialog').show()"/>
+                            </h:panelGrid>                               
+                             
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_linear_normres')}" alt="CorrelationLinearNormResimage"/>
+                            </h:panelGrid>                                                   
+                      </h:panelGrid>
+                    </h:form>
+                </p:tab>
+                
             </p:tabView> 
         </h:panelGrid>
 <!--        <p:dialog modal="true" widgetVar="exportDialog" style="width:600px; height: 580px" appendTo="@(body)">  
@@ -188,6 +257,19 @@
             draggable="false" closable="true" resizable="false"> 
             <ui:include src="_color_palette_linear.xhtml" />
         </p:dialog>
+         <p:dialog modal="true" widgetVar="graphApperanceLinear2" 
+            style="width: 400px; height:400px;" 
+            appendTo="@(body)" header="Graphics Center"
+            draggable="false" closable="true" resizable="false"> 
+            <ui:include src="_color_palette_linear2.xhtml" />
+        </p:dialog>
+        <p:dialog modal="true" widgetVar="graphApperanceLinear3" 
+            style="width: 400px; height:400px;" 
+            appendTo="@(body)" header="Graphics Center"
+            draggable="false" closable="true" resizable="false"> 
+            <ui:include src="_color_palette_linear3.xhtml" />
+        </p:dialog>
+
         
     </ui:define>
 </ui:composition>

@@ -261,4 +261,18 @@ public class LinearCABean implements Serializable {
     }
    
     
+     public void corrLin3Btn_action() {
+        CAUtils.CreateLinearModel(sb, corrColumnNameA, corrColumnNameB, doOriginal);
+        //CAUtils.CreateLinearModel(sb, "/Users/danaallen/NetBeansProjects/Wegan/MetaboAnalyst/target/MetaboAnalyst-4.34/resources/data/dune_weights.csv");
+//        corrLin1_Update_action
+        
+        CAUtils.PlotLinearNormResidCA(sb, corrColumnNameA, corrColumnNameB, doOriginal,
+                corColorDotsOpts, corColorLineOpts, 
+               corPlotTitle, corPlotXlab, corPlotYlab,
+          sb.getNewImage("corr_linear_normres"),"png", 72);
+                
+
+    }
+    
+    
 }

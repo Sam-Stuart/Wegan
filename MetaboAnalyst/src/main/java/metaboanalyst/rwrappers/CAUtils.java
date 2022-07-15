@@ -123,8 +123,36 @@ public static boolean PlotLinearPredictCA(SessionBean1 sb,
             return false;
         }
     }    
-     
 
+   
+public static boolean PlotLinearNormResidCA(SessionBean1 sb,
+        String facA, String facB,
+        Boolean data, 
+        String col_dots, String col_line, 
+        String plot_title, String plot_xlab, String plot_ylab, 
+                String imgName, String format, int dpi) {
+    try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "lin.qq.plot(NA" + ", \"" 
+                    + facA + "\", \""
+                    + facB + "\", \""
+                    + data + "\", \"" 
+                    + col_dots + "\", \"" 
+                    + col_line + "\", \"" 
+                    + plot_title + "\", \"" 
+                    + plot_xlab + "\", \"" 
+                    + plot_ylab + "\", \"" 
+                    + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            sb.addGraphicsCMD("corr_linear_normres", rCommand);
+            RC.voidEval(rCommand);
+//            RC.eval(rCommand);
+            return true;
+        } catch (RserveException rse) {
+            System.out.println(rse);
+            return false;
+        }
+    }    
 
 //    public static boolean PlotLinearCA(SessionBean1 sb, String imgName, String format, int dpi) {
 //        try {
