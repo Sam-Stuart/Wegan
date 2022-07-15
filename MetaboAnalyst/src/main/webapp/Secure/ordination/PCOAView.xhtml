@@ -14,130 +14,120 @@
         <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/jscripts/graphics.js"></script>
         <script src="https://d3js.org/d3.v4.min.js"></script>
         <script type="text/javascript">
-    var margin = {top: 10, right: 30, bottom: 30, left: 60},
-    width = 460 - margin.left - margin.right,
-    height = 400 - margin.top - margin.bottom;
+            var margin = {top: 10, right: 30, bottom: 30, left: 60},
+            width = 460 - margin.left - margin.right,
+            height = 400 - margin.top - margin.bottom;
 
-// append the svg object to the body of the pagevar svg = d3.select("#my_dataviz")
-    var svg = d3.select("#my_dataviz")
-      .style("margin","auto")
-    .style("display", "flex")
-    .style("flex-direction", "column")
-    .style("align-items", "center")
-    .style("justify-content", "center")
-    .append("svg")
-    .style("order", 2)
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-  
-    .append("g")
-    .attr("transform",
-          "translate(" + margin.left + "," + margin.top + ")");
+            // append the svg object to the body of the pagevar svg = d3.select("#my_dataviz")
+            var svg = d3.select("#my_dataviz")
+            .style("margin","auto")
+            .style("display", "flex")
+            .style("flex-direction", "column")
+            .style("align-items", "center")
+            .style("justify-content", "center")
+            .append("svg")
+            .style("order", 2)
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform",
+                  "translate(" + margin.left + "," + margin.top + ")");
 
-//Read the data
-  //d3.csv("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/iris.csv", function(data) {
-  d3.json("Scatterplot.json", function(data) {
-    //Extract data
-    const title = data.graphName;
-    const xLabel = data.xAxisLabel;
-    const yLabel = data.yAxisLabel;
-    const values = Object.values(data.data);
-        
-    //Define Xaxis
-    var x = d3.scaleLinear()
-    .domain(d3.extent(values, d => d.x))
-    .range([ 0, width ]);
-  svg.append("g")
-    .attr("transform", "translate(0," + height + ")")
-    .call(d3.axisBottom(x));
-    
-   svg.append("text").text(xLabel).attr("x", 2*width/3).attr("y", height + 30).style("font-size", "15px")
+            //Read the data
+            d3.json("Scatterplot.json", function(data) {
+                //Extract data
+                const title = data.graphName;
+                const xLabel = data.xAxisLabel;
+                const yLabel = data.yAxisLabel;
+                const values = Object.values(data.data);
 
-  // Add Y axis
-  var y = d3.scaleLinear()
-    .domain(d3.extent(values, d => d.y))
-    .range([ height, 0]);
-  svg.append("g")
-    .call(d3.axisLeft(y));
-    
-    svg.append("text").text(yLabel).attr("y", -30).style("text-anchor", "end").attr("dy", ".75rem").attr("transform", "rotate(-90)").style("font-size", "15px")
+                //Define Xaxis
+                var x = d3.scaleLinear()
+                .domain(d3.extent(values, d => d.x))
+                .range([ 0, width ]);
+                svg.append("g")
+                .attr("transform", "translate(0," + height + ")")
+                .call(d3.axisBottom(x));
 
-  // Color scale: give me a specie name, I return a color
-  var color = d3.scaleOrdinal()
-    .domain(values.map(value => value.name))
-    .range([ "#440154ff", "#21908dff", "#fde725ff"]);
+                svg.append("text").text(xLabel).attr("x", 2*width/3).attr("y", height + 30).style("font-size", "15px")
 
-//  var imgLink = d3.scaleOrdinal()
-//    .domain(["setosa", "versicolor", "virginica" ])
-//    .range([ "fileout.png", "fileout2.png", "fileout3.png"]);
+                // Add Y axis
+                var y = d3.scaleLinear()
+                .domain(d3.extent(values, d => d.y))
+                .range([ height, 0]);
+                svg.append("g")
+                .call(d3.axisLeft(y));
 
+                svg.append("text").text(yLabel).attr("y", -30).style("text-anchor", "end").attr("transform", "rotate(-90)").style("font-size", "15px")
 
-    // Add dots
-    svg.append('g')
-      .selectAll('.mypoint')
-      .data(values)
-      .enter()
-      .append('circle')
-//        .attr("xlink:href", function (d) { return imgLink(d.Species); })
-        .attr("cx", function (d) { return x(d.x); } )
-        .attr("cy", function (d) { return y(d.y); } )
-        .attr("r", 5)
-        .style("fill", function (d) { return color(d.name); })
-        .on("mouseover", function(d) {
-            tooltip
-            .style("opacity", 1)
-            .html(d.name + " (" + d.x + "," + d.y + ")")
-            .style("left", event.pageX + "px")
-            .style("top", (event.pageY) + "px")
-        })
-        .on("mouseout", mouseleave);
+                // Color scale: give me a specie name, I return a color
+                var color = d3.scaleOrdinal()
+                .domain(values.map(value => value.name))
+                .range([ "#440154ff", "#21908dff", "#fde725ff"]);
 
-        var tooltip = d3.select("body")
-       .append("div")
-        .style("opacity", 0)
-        .style("position", "absolute")
-        .attr("class", "tooltip")
-        .style("background-color", "white")
-       .style("border", "solid")
-       .style("border-width", "1px")
-        .style("border-radius", "5px")
-        .style("padding", "10px");
-
-     var mouseover = function(d) {
-       tooltip
-         .style("opacity", 1)
-         .text("X value: " + d.x + "Y value:" + d.x);
-      };
-      // A function that change this tooltip when the leaves a point: just need to set opacity to 0 again
-      var mouseleave = function(d) {
-        tooltip
-          .transition()
-          .duration(200)
-          .style("opacity", 0);
-      };
-//      Create legend for each entry
-        var legends = svg
-            .selectAll("legends")
-            .data(values.map(value => value.name))
-            .enter()
-            .append("circle")
-            .style("fill", d => color(d))
-            .attr("r", 5)
-            .attr("cx", 2 * width / 3)
-            .attr("cy", (d, i) => 10 +  i * 20)
-        
-        var legendsLabel = svg
-                .selectAll("legends-label")
-                .data(values.map(value => value.name))
+                // Add dots
+                svg.append('g')
+                .selectAll('.mypoint')
+                .data(values)
                 .enter()
-                .append("text")
-                .text(d => d)
-                .attr("x",  2* width / 3 + 10)
-                .attr("y", (d, i) =>10 +  i * 20)
-        
-//        create title
-        var titleDiv = d3.select("#my_dataviz").append("div").html(title).style("text-align", "center" ).style("order", 1).style("font-size", "18px").style("margin-bottom", "1rem");
-    })
+                .append('circle')
+                .attr("cx", function (d) { return x(d.x); } )
+                .attr("cy", function (d) { return y(d.y); } )
+                .attr("r", 5)
+                .style("fill", function (d) { return color(d.name); })
+                .on("mouseover", function(d) {
+                    tooltip
+                    .style("opacity", 0.8)
+                    .html(d.name + " (" + d.x + "," + d.y + ")")
+                    .style("left", (event.pageX + 5) + "px")
+                    .style("top",  event.pageY + "px")
+                })
+                .on("mouseout", function(d) {
+                    tooltip
+                    .transition(200)
+                    .style("opacity", 0);
+                });
+
+                var tooltip = d3.select("body")
+                .append("div")
+                .style("opacity", 0)
+                .style("position", "absolute")
+                .attr("class", "tooltip")
+                .style("background-color", "white")
+                .style("border", "solid")
+                .style("border-width", "1px")
+                .style("border-radius", "5px")
+                .style("padding", "10px");
+
+                //      Create legend for each entry
+                var legends = svg
+                    .selectAll("legends")
+                    .data(color.domain())
+                    .enter()
+                    .append("circle")
+                    .style("fill", d => color(d))
+                    .attr("r", 5)
+                    .attr("cx", 2 * width / 3)
+                    .attr("cy", (d, i) => 10 +  i * 20)
+
+                var legendsLabel = svg
+                    .selectAll("legends-label")
+                    .data(color.domain())
+                    .enter()
+                    .append("text")
+                    .text(d => d)
+                    .attr("x",  2* width / 3 + 10)
+                    .attr("y", (d, i) =>10 +  i * 20)
+
+                //        create title
+                var titleDiv = d3.select("#my_dataviz")
+                        .append("div")
+                        .html(title)
+                        .style("text-align", "center" )
+                        .style("order", 1)
+                        .style("font-size", "18px")
+                        .style("margin-bottom", "1rem");
+            })
         </script>
     </ui:define>
     <ui:define name="content">
