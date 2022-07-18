@@ -90,6 +90,10 @@ public class CABean implements Serializable {
                 "NULL", "NULL", " ", " "," ",
                 sb.getCurrentImage("corr_linear_normres"), "png", 72);
         
+        CAUtils.PlotLinearResidFitCA(sb, "NULL", "NULL", false,
+                "NULL", "NULL", " ", " "," ",
+                sb.getCurrentImage("corr_linear_resfit"), "png", 72);
+        
     }
     
 //    private void doDefaultLinear() {
