@@ -346,19 +346,22 @@ lin.reg.plot <- function(mSetObj=NA,
   Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
    
   
+# stat_poly_eq(aes(label = paste0("atop(", ..eq.label..,",",..rr.label..,")")), output.type = "text" 
+
 ## {GGPMISC} ANNOTATION LOOP   
    if (plot_rsq_adj == "false"){ # default
   ### EQUATION, RSQ
    if (plot_eq != "false" && plot_rsq != "false") { 
-     a0 <- a0 + ggpmisc::stat_poly_eq(aes(label = paste(after_stat(eq.label), after_stat(rr.label),  sep = "*\"  |  \"*")),
+    a0 <- a0 + ggpmisc::stat_poly_eq(aes(label = paste(after_stat(eq.label), after_stat(rr.label),  sep = "*\"  |  \"*")),
+    # a0 <- a0 + ggpmisc::stat_poly_eq(aes(label = paste0("atop(", after_stat(eq.label),",", after_stat(rr.label),")")), output.type = "text",
       eq.with.lhs =  paste0("italic(`", facB,"`)~`=`~"),
       eq.x.rhs =  paste0("~italic(`*` ~`", facA,"`)"),
       rr.digits = 2, coef.digits = 2, parse = TRUE,
       label.y = 0.75 * max(input[,facB]) )
   ### EQUATION
     } else if (plot_eq != "false" && plot_rsq == "false") {
-   a0 <- a0 + ggpmisc::stat_poly_eq(aes(label = 
-    paste0(after_stat(eq.label) )),
+   a0 <- a0 + ggpmisc::stat_poly_eq(aes(label = paste0(after_stat(eq.label) )),
+# a0 <- a0 + ggpmisc::stat_poly_eq(aes(label = paste0("atop(", after_stat(eq.label),",", after_stat(rr.label),")")), output.type = "text",
     eq.with.lhs =  paste0("italic(`", facB,"`)~`=`~"),
     eq.x.rhs =  paste0("~italic(`*` ~`", facA,"`)"),
     rr.digits = 2, coef.digits = 2, parse = TRUE,
@@ -368,8 +371,8 @@ lin.reg.plot <- function(mSetObj=NA,
       a0 <- a0
   ### RSQ
     } else if (plot_eq == "false" && plot_rsq != "false") {
-   a0 <- a0 + ggpmisc::stat_poly_eq(aes(label = 
-      paste0(after_stat(rr.label) )),
+    a0 <- a0 + ggpmisc::stat_poly_eq(aes(label = paste0(after_stat(rr.label) )),
+# a0 <- a0 + ggpmisc::stat_poly_eq(aes(label = paste0("atop(", after_stat(rr.label),")")), output.type = "text",
       rr.digits = 2, coef.digits = 2, parse = TRUE,
       label.y = 0.75 * max(input[,facB]) ) 
     }
@@ -378,7 +381,9 @@ lin.reg.plot <- function(mSetObj=NA,
   ### EQUATION, RSQ, RSQ_ADJ     
    if (plot_eq != "false" && plot_rsq != "false") {
      a0 <- a0 + ggpmisc::stat_poly_eq(aes(label = paste(after_stat(eq.label), after_stat(rr.label), after_stat(adj.rr.label),
-      sep = "*\"  |  \"*")), size = 3,
+     sep = "*\"  |  \"*")), size = 3,
+# a0 <- a0 + ggpmisc::stat_poly_eq(aes(label = paste0("atop(", after_stat(eq.label),",", after_stat(rr.label), ",", after_stat(adj.rr.label),")")), 
+# output.type = "text", size = 3,
       eq.with.lhs =  paste0("italic(`", facB,"`)~`=`~"),  
       eq.x.rhs =  paste0("~italic(`*` ~`", facA, "`)"),
       rr.digits = 2, coef.digits = 2, parse = TRUE,
@@ -386,19 +391,21 @@ lin.reg.plot <- function(mSetObj=NA,
   ### EQUATION, RSQ_ADJ 
     } else if (plot_eq != "false" && plot_rsq == "false") {
    a0 <- a0 + ggpmisc::stat_poly_eq(aes(label = paste(after_stat(eq.label), after_stat(adj.rr.label), sep = "*\"  |  \"*")),
+# a0 <- a0 + ggpmisc::stat_poly_eq(aes(label = paste0("atop(", after_stat(eq.label), ",", after_stat(adj.rr.label),")")), output.type = "text",
       eq.with.lhs =  paste0("italic(`", facB, "`)~`=`~"),
       eq.x.rhs =  paste0("~italic(`*` ~`", facA, "`)"),
       rr.digits = 2, coef.digits = 2, parse = TRUE,
       label.y = 0.75 * max(input[,facB]) ) 
   ### RSQ_ADJ 
     } else if (plot_eq == "false" && plot_rsq == "false") {
-     a0 <- a0 + ggpmisc::stat_poly_eq(aes(label = 
-       paste0(after_stat(adj.rr.label) )),
+     a0 <- a0 + ggpmisc::stat_poly_eq(aes(label =  paste0(after_stat(adj.rr.label) )),
+# a0 <- a0 + ggpmisc::stat_poly_eq(aes(label = paste0("atop(", after_stat(adj.rr.label),")")), output.type = "text",
        rr.digits = 2, coef.digits = 2, parse = TRUE,
        label.y = 0.75 * max(input[,facB]) ) 
   ### RSQ, RSQ_ADJ 
     } else if (plot_eq == "false" && plot_rsq != "false") {
      a0 <- a0 + ggpmisc::stat_poly_eq(aes(label = paste(after_stat(rr.label), after_stat(adj.rr.label),  sep = "*\"  |  \"*")),
+# a0 <- a0 + ggpmisc::stat_poly_eq(aes(label = paste0("atop(", after_stat(rr.label), ",", after_stat(adj.rr.label),")")), output.type = "text",
        rr.digits = 2, coef.digits = 2, parse = TRUE,
        label.y = 0.75 * max(input[,facB]) ) 
     } 
@@ -406,10 +413,12 @@ lin.reg.plot <- function(mSetObj=NA,
    }
    
 #STORE IN mset
-  mSetObj$analSet$linReg1$plot <- a0
-  mSetObj$analSet$linReg1$plot_title <- plot_title1
-  mSetObj$analSet$linReg1$plot_ylab <- plot_ylab1
-  mSetObj$analSet$linReg1$plot_xlab <- plot_xlab1
+
+  mSetObj$analSet$linReg1$plotted <- list(plot = a0, title = plot_title1, xlab = plot_xlab1, ylab = plot_ylab1)
+  # mSetObj$analSet$linReg1$plot <- a0
+  # mSetObj$analSet$linReg1$plot_title <- plot_title1
+  # mSetObj$analSet$linReg1$plot_ylab <- plot_ylab1
+  # mSetObj$analSet$linReg1$plot_xlab <- plot_xlab1
 
   print(a0)
   # a0
@@ -648,11 +657,8 @@ if(plot_xlab == " "){
 #    }
    
 #STORE IN mset
-  mSetObj$analSet$linReg1$plotpredicted <- a0
-
-  # mSetObj$analSet$linReg1$plot_title <- plot_title1
-  # mSetObj$analSet$linReg1$plot_ylab <- plot_ylab1
-  # mSetObj$analSet$linReg1$plot_xlab <- plot_xlab1
+  
+  mSetObj$analSet$linReg1$plotPred <- list(plot = a0, title = plot_title1, xlab = plot_xlab1, ylab = plot_ylab1)
 
   print(a0)
   # a0
@@ -832,7 +838,8 @@ lin.qq.plot <- function(mSetObj=NA,
    
   
 #STORE IN mset
-  mSetObj$analSet$linReg1$plot_normresid <- a0
+
+  mSetObj$analSet$linReg1$plotNorm <- list(plot = a0, title = plot_title1, xlab = plot_xlab1, ylab = plot_ylab1)
 
   print(a0)
   # a0
@@ -841,6 +848,83 @@ lin.qq.plot <- function(mSetObj=NA,
   return(.set.mSet(mSetObj))
   
 }
+
+
+
+
+#'JSON object conversion for linear regression plot
+#'@description Build JSON object from linear regression plot. mSetObj was used with lin.reg.plot so that 'response', 'predictor', and plot are already stored in the object
+#'@param mSetObj Input the name of the created mSetObj
+#'@param which_plot Designate string representing which plot to convert; options are "plot" or "plotted" (or "NULL", default) for the default correlation plot; "pred" for Predicted vs Actual plot; "norm" for Normality of Residuals plot or "fit" for Fitted vs Residuals plot
+
+#'@author  Gina Sykes \email{gsykes@ualberta.ca}
+#'University of Alberta, Canada
+#'License: GNU GPL (>= 2)
+#'@export
+
+
+lin.reg.plot.json <- function(mSetObj=NA, which_plot = "NULL"){
+
+  library("ggplot2")
+  library("RJSONIO")
+  
+  mSetObj <- .get.mSet(mSetObj)
+ 
+if(which_plot == "NULL" | which_plot == "plot" | which_plot == "plotted"){
+  a0 <- mSetObj$analSet$linReg1$plotted$plot
+  plot_title1 <- mSetObj$analSet$linReg1$plotted$title
+  plot_ylab1 <- mSetObj$analSet$linReg1$plotted$ylab
+  plot_xlab1 <- mSetObj$analSet$linReg1$plotted$xlab
+} else if(which_plot == "pred"){
+  a0 <- mSetObj$analSet$linReg1$plotPred$plot
+  plot_title1 <- mSetObj$analSet$linReg1$plotPred$title
+  plot_ylab1 <- mSetObj$analSet$linReg1$plotPred$ylab
+  plot_xlab1 <- mSetObj$analSet$linReg1$plotPred$xlab
+} else if(which_plot == "norm"){
+  a0 <- mSetObj$analSet$linReg1$plotNorm$plot
+  plot_title1 <- mSetObj$analSet$linReg1$plotNorm$title
+  plot_ylab1 <- mSetObj$analSet$linReg1$plotNorm$ylab
+  plot_xlab1 <- mSetObj$analSet$linReg1$plotNorm$xlab
+} else if(which_plot == "fit"){
+  a0 <- mSetObj$analSet$linReg1$plotFit$plot
+  plot_title1 <- mSetObj$analSet$linReg1$plotFit$title
+  plot_ylab1 <- mSetObj$analSet$linReg1$plotFit$ylab
+  plot_xlab1 <- mSetObj$analSet$linReg1$plotFit$xlab
+}
+  imgName <- mSetObj$imgSet$plot.linReg1
+  facA <- mSetObj$analSet$linReg1$res$response
+  facB <- mSetObj$analSet$linReg1$res$predictor
+
+
+  build <- ggplot_build(a0)
+  # colnames(build$data[[1]]);  c("x", "y", "flipped_aes", "PANEL", "group", "colour", "fill",  "size", "linetype", "weight", "alpha")
+  linear_plot_json <- list()
+  linear_plot_json$main <- plot_title1 #title
+  linear_plot_json$axis <- c(plot_xlab1, plot_ylab1) #axis titles
+  linear_plot_json$points$coords <- build$data[[1]][,c("x","y")] #[,1:2]
+  linear_plot_json$points$cols <- build$data[[1]][,grepl("col",colnames(build$data[[1]]))] #[,6] #colours
+  linear_plot_json$points$shape <- build$data[[1]][,c("group")]#[,5]
+  linear_plot_json$points$size <- build$data[[1]][,c("size")]#[,7]
+  linear_plot_json$lines$cols <- build$data[[2]][,grepl("col",colnames(build$data[[2]]))]
+  linear_plot_json$label <- build$data[[3]][,c("label")]
+  # linear_plot_json$lines$ci <- build$data[[1]][,c("se")]
+  ci<- build$data[[1]][,c("x","y", "ymin", "ymax")]
+  colnames(ci) <- c("x","y","CI_down", "CI_up")
+  linear_plot_json$lines$ci <- ci # build$data[[1]][,c("ymin", "ymax")]
+
+  imgName <- paste(imgName, ".json", sep="")
+  json.obj <- RJSONIO::toJSON(linear_plot_json, .na='null')
+  sink(imgName)
+  cat(json.obj)
+  sink()
+
+  if(!.on.public.web){
+    return(.set.mSet(mSetObj))
+    }
+  
+}
+
+
 
 
 
@@ -1213,57 +1297,6 @@ lin.qq.plot <- function(mSetObj=NA,
 #   
 # }
 
-
-#'JSON object conversion for linear regression plot
-#'@description Build JSON object from linear regression plot. mSetObj was used with lin.reg.plot so that 'response', 'predictor', and plot are already stored in the object
-#'@param mSetObj Input the name of the created mSetObj
-
-#'@author  Gina Sykes \email{gsykes@ualberta.ca}
-#'University of Alberta, Canada
-#'License: GNU GPL (>= 2)
-#'@export
-
-
-lin.reg.plot.json <- function(mSetObj=NA){
-
-  library("ggplot2")
-  library("RJSONIO")
-  
-  mSetObj <- .get.mSet(mSetObj)
-  
-  imgName <- mSetObj$imgSet$plot.linReg1
-  a0 <- mSetObj$analSet$linReg1$plot
-  facA <- mSetObj$analSet$linReg1$res$response
-  facB <- mSetObj$analSet$linReg1$res$predictor
-
-  plot_title1 <- mSetObj$analSet$linReg1$plot_title
-  plot_ylab1 <- mSetObj$analSet$linReg1$plot_ylab
-  plot_xlab1 <- mSetObj$analSet$linReg1$plot_xlab
-
-
-  build <- ggplot_build(a0)
-  # colnames(build$data[[1]]);  c("x", "y", "flipped_aes", "PANEL", "group", "colour", "fill",  "size", "linetype", "weight", "alpha")
-  linear_plot_json <- list()
-  linear_plot_json$main <- plot_title1 #title
-  linear_plot_json$axis <- c(plot_xlab1, plot_ylab1) #axis titles
-  linear_plot_json$points$coords <- build$data[[1]][,c("x","y")] #[,1:2]
-  linear_plot_json$points$cols <- build$data[[1]][,grepl("col",colnames(build$data[[1]]))] #[,6] #colours
-  linear_plot_json$points$shape <- build$data[[1]][,c("group")]#[,5]
-  linear_plot_json$points$size <- build$data[[1]][,c("size")]#[,7]
-  linear_plot_json$lines$cols <- build$data[[2]][,grepl("col",colnames(build$data[[2]]))]
-  linear_plot_json$lines$ci <- build$data[[1]][,c("se")] 
-
-  imgName <- paste(imgName, ".json", sep="")
-  json.obj <- RJSONIO::toJSON(linear_plot_json, .na='null')
-  sink(imgName)
-  cat(json.obj)
-  sink()
-
-  if(!.on.public.web){
-    return(.set.mSet(mSetObj))
-    }
-  
-}
 
 
 # #'Perform Linear Regression'
