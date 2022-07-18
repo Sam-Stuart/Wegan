@@ -16,9 +16,9 @@
                 <p:tab title ="Line of Best Fit" titleStyleClass="p-tab-nav">
                     <h:form id="form1">
                         <p style="font-size: 13px">
-                            A dependent variable (x-axis) and an independent variable (y-axis) are correlated using a linear model. Along with Pearson R statistics, the line of best fit indicates how closely correlated the two variables are. Only numeric variables are used to build the model.               
+                            <!--add a hyperlink: from CaUploadView: /home/gina/Desktop/Wegan/MetaboAnalyst/src/main/webapp/upload/CaUploadView.xhtml : Iris setosa, Iris versicolor, and Iris virginica. Variables are labeled, but samples are not. (<a href="">view data set</a>) (<a href="https:/www.rdocumentation.org/packages/datasets/versions/3.6.2/topics/iris">Becker, R. <i>et al. The New S Language</i>. 1988. </a>)--> 
+                            A dependent variable (x-axis) and an independent variable (y-axis) are correlated using a linear model. Along with Pearson R statistics, the line of best fit indicates how closely correlated the two variables are. (<a href="https:/www.rdocumentation.org/packages/stats/versions/3.6.2/topics/lm">Chambers, R. M. <i> Linear models. Chapter 4 of Statistical Models in S</i>. 1992. </a>)
                         </p>
-                        <!--add a hyperlink: from CaUploadView: /home/gina/Desktop/Wegan/MetaboAnalyst/src/main/webapp/upload/CaUploadView.xhtml : Iris setosa, Iris versicolor, and Iris virginica. Variables are labeled, but samples are not. (<a href="">view data set</a>) (<a href="https://www.rdocumentation.org/packages/datasets/versions/3.6.2/topics/iris">Becker, R. <i>et al. The New S Language</i>. 1988. </a>)--> 
                       <!--colLeftLong25 colRightShort30 colRight35 colLeft20 colBrayLong40 colBrayShort15-->
                       <h:panelGrid id="panelGrid" columns="5" cellpadding="3" columnClasses="colLeft,colRightShort,colLeft,colRightShort, colLast">
                     <!--<h:panelGrid id="panelGrid" columns="5" cellpadding="3" columnClasses="colLeft,colRight,colLeft,colRight, colLast">-->
@@ -39,7 +39,7 @@
                             
                     </h:panelGrid>                            
                         <h:panelGrid></h:panelGrid>     
-                        <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
+                        <h:panelGrid id="panelGrid1" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
                             <p:commandButton value="Customize Graph"
                                              styleClass="graphicsButton"
                                              style="box-shadow: none !important; text-shadow: none !important;"
@@ -64,7 +64,15 @@
                             </h:panelGroup>
                          <h:panelGroup>
                                 <h:panelGrid columns="3" class="resultsImages">
-                                    <i id="question" class="fa fa-question-circle" title="Only numeric variables are available to be displayed in linear correlation. ."></i>
+                                    <i id="question" class="fa fa-question-circle" title="Only numeric variables are used in linear correlation. The linear model can be written in the form (Y = X * Beta + epsilon), where:
+Y = dependent variable; 
+X = independent variable;
+Beta = regression parameter coefficients (including the intercept);
+Epsilon = error values (the sum of all other influences on Y after accounting for X)
+
+The model makes several assumptions about the error term, namely linearity, normality, homoscedasticity, independence, and that the model is not disproportionately influenced by outliers. 
+
+The R-squared value is the fraction of variance explained by the model; the adjusted R-squared value is the R-squared value adjusted for the number of predictors in a regression model. The confidence interval represents the level of certainty about the predicted values; if the same procedure was repeatedly used to make new estimates, the confidence interval would contain the average of all the estimates 95% of the time. https://www.census.gov/programs-surveys/saipe/guidance/confidence-intervals.html "></i>
                                 </h:panelGrid>
                             </h:panelGroup>   
                         </h:panelGrid>
@@ -112,7 +120,7 @@
                                 </p:selectOneMenu>
                         </h:panelGrid>
                         
-                        <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;">                   
+                        <h:panelGrid id="panelGrid1" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;">                   
                               <p:commandButton value="Customize Graph"
                                              styleClass="graphicsButton"
                                              style="box-shadow: none !important; text-shadow: none !important;"
@@ -137,7 +145,15 @@
                             </h:panelGroup> 
                             <h:panelGroup>
                                 <h:panelGrid columns="3" class="resultsImages">
-                                    <i id="question" class="fa fa-question-circle" title="Based on the linear model generated, the predicted response variable is plotted against the actual variable."></i>
+                                    <i id="question" class="fa fa-question-circle" title="Based on the linear model generated, the predicted response variable is plotted against the actual variable. The linear model can be written in the form (Y = X * Beta + epsilon), where:
+Y = dependent variable; 
+X = independent variable;
+Beta = regression parameter coefficients (including the intercept);
+Epsilon = error values (the sum of all other influences on Y after accounting for X)
+
+The model makes several assumptions about the error term, namely linearity, normality, homoscedasticity, independence, and that the model is not disproportionately influenced by outliers. 
+
+The R-squared value is the fraction of variance explained by the model; the adjusted R-squared value is the R-squared value adjusted for the number of predictors in a regression model. The confidence interval represents the level of certainty about the predicted values; if the same procedure was repeatedly used to make new estimates, the confidence interval would contain the average of all the estimates 95% of the time. https://www.census.gov/programs-surveys/saipe/guidance/confidence-intervals.html "></i>
                                 </h:panelGrid>
                             </h:panelGroup>
                           </h:panelGrid>
@@ -172,7 +188,7 @@
                 <p:tab title ="Normality of Residuals Plot" titleStyleClass="p-tab-nav">
                     <h:form id="form3">
                         <p>
-                            Normality of residuals is one of the assumptions for a linear model. This plot (also called a 'Q-Q' plot) checks this assumption by comparing the distribution of model residuals (empirical) and theoretical normal distribution. In interpreting the plot, the closer points are to the diagonal line then the more likely the residuals are normally distributed. 
+                            Normality of residuals is one of the assumptions for a linear model. This plot (also called a 'Q-Q' plot) checks this assumption by comparing the distribution of model residuals (empirical) and theoretical normal distribution. In interpreting the plot, the closer the points are to the diagonal line, the better the evidence that the residuals are normally distributed. 
                         </p>
                         <h:panelGrid id="panelGrid3" columns="5" cellpadding="3" columnClasses="colLeft,colRightShort,colLeft,colRightShort, colLast">
                        <!--"colLeft,colRightShort,colLeft,colRightShort, colLast"-->
@@ -191,7 +207,7 @@
                                 </p:selectOneMenu>
                         </h:panelGrid>
                         
-                        <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;">                   
+                        <h:panelGrid id="panelGrid1" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;">                   
                               <p:commandButton value="Customize Graph"
                                              styleClass="graphicsButton"
                                              style="box-shadow: none !important; text-shadow: none !important;"
@@ -216,7 +232,15 @@
                             </h:panelGroup> 
                             <h:panelGroup>
                                 <h:panelGrid columns="3" class="resultsImages">
-                                    <i id="question" class="fa fa-question-circle" title="Based on the linear model generated, the predicted response variable is plotted against the actual variable."></i>
+                                    <i id="question" class="fa fa-question-circle" title="Based on the linear model generated, the predicted response variable is plotted against the actual variable. The linear model can be written in the form (Y = X * Beta + epsilon), where:
+Y = dependent variable; 
+X = independent variable;
+Beta = regression parameter coefficients (including the intercept);
+Epsilon = error values (the sum of all other influences on Y after accounting for X)
+
+The model makes several assumptions about the error term, namely linearity, normality, homoscedasticity, independence, and that the model is not disproportionately influenced by outliers. 
+
+The R-squared value is the fraction of variance explained by the model; the adjusted R-squared value is the R-squared value adjusted for the number of predictors in a regression model. The confidence interval represents the level of certainty about the predicted values; if the same procedure was repeatedly used to make new estimates, the confidence interval would contain the average of all the estimates 95% of the time. https://www.census.gov/programs-surveys/saipe/guidance/confidence-intervals.html "></i>
                                 </h:panelGrid>
                             </h:panelGroup>
                           </h:panelGrid>
@@ -232,6 +256,83 @@
                              
                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
                                 <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_linear_normres')}" alt="CorrelationLinearNormResimage"/>
+                            </h:panelGrid>                                                   
+                      </h:panelGrid>
+                    </h:form>
+                </p:tab>
+                
+                <p:tab title ="Residuals vs Fitted Plot" titleStyleClass="p-tab-nav">
+                    <h:form id="form4">
+                        <p>
+                            Linearity is one of the assumptions for a linear model. This plot checks this assumption by comparing the model residuals and predicted values ('Fitted'). In interpreting the plot, if the mean of residuals does not deviate from zero this can be taken as evidence that the assumption of linearity holds.
+                        </p>
+                        <h:panelGrid id="panelGrid4" columns="5" cellpadding="3" columnClasses="colLeft,colRightShort,colLeft,colRightShort, colLast">
+                        <!-- how to word the linearity assumption https:/sscc.wisc.edu/sscc/pubs/RegDiag-R/linearity.html-->
+                       <!--"colLeft,colRightShort,colLeft,colRightShort, colLast"-->
+                            <h:outputLabel style="font-weight: bold" value="Dependant Variable:"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linearCABean.corrColumnNameA}">
+                                    <f:selectItems value="#{linearCABean.corrColumnOpts}" />
+                                </p:selectOneMenu>
+                            
+                            <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
+                                <p:selectBooleanCheckbox value ="#{linearCABean.doOriginal}"/> 
+                            <p:panelGrid></p:panelGrid>
+                            
+                            <h:outputLabel style="font-weight: bold" value="Independant Variable:"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linearCABean.corrColumnNameB}">
+                                    <f:selectItems value="#{linearCABean.corrColumnOpts}" />
+                                </p:selectOneMenu>
+                        </h:panelGrid>
+                        
+                        <h:panelGrid id="panelGrid1" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;">                   
+                              <p:commandButton value="Customize Graph"
+                                             styleClass="graphicsButton"
+                                             style="box-shadow: none !important; text-shadow: none !important;"
+                                             actionListener="#{sessionBean1.graphicsLnk_action('corr_linear_resfit')}" 
+                                            oncomplete="PF('graphApperanceLinear4').show()"/>  
+                              
+                              <p:commandButton value="Update" 
+                                             styleClass="updateButton"
+                                             style="box-shadow: none !important; text-shadow: none !important"
+                                            onclick="PF('statusDialog').show()"
+                                            oncomplete="PF('statusDialog').hide()"  
+                                            update=":linCA:form4:panelGrid4  :cmdPane" 
+                                            actionListener="#{linearCABean.corrLin4Btn_action()}"/>     
+                              
+                        </h:panelGrid>
+                        
+                        <h:panelGrid class="resultsBar" columns="2">
+                            <h:panelGroup>
+                                <h:panelGrid columns="1" style="text-align : left;">
+                                    Results
+                                </h:panelGrid>
+                            </h:panelGroup> 
+                            <h:panelGroup>
+                                <h:panelGrid columns="3" class="resultsImages">
+                                    <i id="question" class="fa fa-question-circle" title="Based on the linear model generated, the predicted response variable is plotted against the actual variable. The linear model can be written in the form (Y = X * Beta + epsilon), where:
+Y = dependent variable; 
+X = independent variable;
+Beta = regression parameter coefficients (including the intercept);
+Epsilon = error values (the sum of all other influences on Y after accounting for X)
+
+The model makes several assumptions about the error term, namely linearity, normality, homoscedasticity, independence, and that the model is not disproportionately influenced by outliers. 
+
+The R-squared value is the fraction of variance explained by the model; the adjusted R-squared value is the R-squared value adjusted for the number of predictors in a regression model. The confidence interval represents the level of certainty about the predicted values; if the same procedure was repeatedly used to make new estimates, the confidence interval would contain the average of all the estimates 95% of the time. https://www.census.gov/programs-surveys/saipe/guidance/confidence-intervals.html "></i>
+                                </h:panelGrid>
+                            </h:panelGroup>
+                          </h:panelGrid>
+                           
+                        <h:panelGrid id="corrLinPane4" style="width: 100%;">
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <p:commandButton value="Export"
+                                    styleClass="exportButton"
+                                    style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                    actionListener="#{sessionBean1.graphicsLnk_action('corr_linear_resfit')}"
+                                    oncomplete="PF('graphDialog').show()"/>
+                            </h:panelGrid>                               
+                             
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_linear_resfit')}" alt="CorrelationLinearResfitimage"/>
                             </h:panelGrid>                                                   
                       </h:panelGrid>
                     </h:form>
@@ -268,6 +369,12 @@
             appendTo="@(body)" header="Graphics Center"
             draggable="false" closable="true" resizable="false"> 
             <ui:include src="_color_palette_linear3.xhtml" />
+        </p:dialog>
+        <p:dialog modal="true" widgetVar="graphApperanceLinear4" 
+            style="width: 400px; height:400px;" 
+            appendTo="@(body)" header="Graphics Center"
+            draggable="false" closable="true" resizable="false"> 
+            <ui:include src="_color_palette_linear4.xhtml" />
         </p:dialog>
 
         
