@@ -14,7 +14,7 @@ var svg = d3
     .style("align-items", "center")
     .style("justify-content", "center")
     .append("svg")
-    .style("order", 2)
+    .style("order", 3)
     .style("border", "solid")
     .style("border-width", "1px")
     .attr("width", width + margin.left + margin.right)
@@ -65,6 +65,9 @@ d3.json("LinearCorrelation.json", function (data) {
     const xLabel = data.xAxisLabel;
     const yLabel = data.yAxisLabel;
     const values = Object.values(data.data);
+    const equation = `${yLabel} = ${data.slope} * ${xLabel} + ${data["y-intercept"]}`;
+    const Rsquare = data.RSquare;
+    const RsquareAdjusted = data.RSquareAdjusted;
 
     calLinearRegression(values);
 
@@ -216,8 +219,6 @@ d3.json("LinearCorrelation.json", function (data) {
                 })
         );
 
-    console.log(values);
-
     // Append line
     svg.append("path")
         .datum(values)
@@ -225,7 +226,17 @@ d3.json("LinearCorrelation.json", function (data) {
         .attr("d", line)
         .style("stroke", "black")
         .style("stroke-width", "3")
-        .style("fill", "none");
+        .style("fill", "none")
+        .on("mouseover", function (d) {
+            tooltip
+                .style("opacity", 0.8)
+                .html(equation)
+                .style("left", event.pageX + 5 + "px")
+                .style("top", event.pageY + "px");
+        })
+        .on("mouseout", function (d) {
+            tooltip.transition(200).style("opacity", 0);
+        });
 
     //        create title
     d3.select("#my_dataviz")
@@ -235,4 +246,54 @@ d3.json("LinearCorrelation.json", function (data) {
         .style("order", 1)
         .style("font-size", "18px")
         .style("margin-bottom", "1rem");
+
+    //Equation
+    var equationGroup = svg.append("g").classed("equation", true);
+    var equationLabel = equationGroup.append("text").text(equation);
+    var RsquareLabel = equationGroup
+        .append("text")
+        .text(`R Square = ${Rsquare}`)
+        .attr("y", 15)
+        .style("opacity", 0)
+        .attr("x", width / 2);
+    var RsquareAdjustedLabel = equationGroup
+        .append("text")
+        .text(`R Square Adjusted = ${RsquareAdjusted}`)
+        .attr("y", 30)
+        .style("opacity", 0)
+        .attr("x", width / 2);
+
+    // Create checkboxes
+    var options = ["Show R square", "Show R square adjusted"];
+    var checkBoxContainer = d3
+        .select("#my_dataviz")
+        .append("div")
+        .style("display", "inherit")
+        .style("order", 2)
+        .selectAll(".checkbox")
+        .data(options)
+        .enter()
+        .append("div")
+        .classed("checkbox", true);
+
+    checkBoxContainer
+        .append("input")
+        .attr("type", "checkbox")
+        .attr("id", (d, i) => `checkbox${i + 1}`)
+        .attr("value", (d) => d)
+        .on("change", updateEquation);
+
+    checkBoxContainer
+        .append("label")
+        .text((d) => d)
+        .attr("for", (d, i) => `checkbox${i + 1}`);
+
+    function updateEquation() {
+        if (d3.select("#checkbox1").property("checked"))
+            RsquareLabel.transition(200).style("opacity", "1");
+        else RsquareLabel.transition(200).style("opacity", "0");
+        if (d3.select("#checkbox2").property("checked"))
+            RsquareAdjustedLabel.transition(200).style("opacity", "1");
+        else RsquareAdjustedLabel.transition(200).style("opacity", "0");
+    }
 });

@@ -2,6 +2,10 @@
     "graphName": "Correlation Analysis",
     "xAxisLabel": "This is the xLabel",
     "yAxisLabel": "This is the yLabel",
+    "slope": 2,
+    "y-intercept": 5,
+    "RSquare": 0.9993,
+    "RSquareAdjusted": 0.039293,
     "data": {
         "1": {
             "x": 2,
