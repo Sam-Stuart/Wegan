@@ -112,6 +112,7 @@ public class SessionBean1 implements Serializable {
     public String getPath2() {
         String y = ab.getRootContext() + getCurrentUser().getRelativeDir();
         //String x = ab.getRootContext();
+        
         return y;
         //return usualPath + tmpPath;
     }

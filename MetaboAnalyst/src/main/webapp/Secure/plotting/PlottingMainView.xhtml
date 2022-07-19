@@ -7,6 +7,8 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="/frags/_anal_template.xhtml">
     <ui:define name="metaInfo">
+        
+
         <f:event type="preRenderView" listener="#{sessionBean1.registerPage('Plotting')}"/>
         <f:event type="preRenderView" listener="#{plottingMainBean.performDefaultAnalysis('plotting')}"/> 
     </ui:define>
@@ -15,6 +17,7 @@
         <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/jscripts/graphics.js"></script>
     </ui:define>
     <ui:define name="content">
+        <h:inputHidden id="mydir" value="#{sessionBean1.currentUser.relativeDir}" />
         <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
             <p:tabView id="ac" style="width:100%; border: #00ff00; background: none; font-size: 13px;">
                 <p:tab title ="Linear Graph" titleStyleClass="p-tab-nav">

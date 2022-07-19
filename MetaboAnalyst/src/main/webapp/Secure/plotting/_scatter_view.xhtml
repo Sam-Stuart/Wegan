@@ -5,9 +5,13 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:p="http://primefaces.org/ui">
+    
     <script>
 //d3 graph testing 
 ////set the dimensions and margins of the graph
+
+var URL = document.getElementById("mydir").value;
+    console.log(URL);  
 var margin = {top: 10, right: 30, bottom: 30, left: 60},
     width = 460 - margin.left - margin.right,
     height = 400 - margin.top - margin.bottom;
@@ -24,9 +28,9 @@ var svg = d3.select("#my_dataviz")
 
 //Read the data
   //d3.csv("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/iris.csv", function(data) {
-  d3.json("Scatterplot.json", function(data) {
+  d3.json( URL +"/Scatterplot.json", function(data) {
   // Add X axis
-  
+  console.log(data);
   var x = d3.scaleLinear()
     .domain([4, 8])
     .range([ 0, width ]);
@@ -69,7 +73,7 @@ var svg = d3.select("#my_dataviz")
 
 
 
-})
+});
 
 //var margin = {top: 10, right: 30, bottom: 30, left: 60},
 //    width = 460 - margin.left - margin.right,
@@ -142,7 +146,9 @@ var svg = d3.select("#my_dataviz")
 
 
 </script>     
-
+    
+    
+    
     <h:panelGrid id="panelGrid" columns="4" cellpadding="3" columnClasses="colLeft,colRight,colLeft,colRight, colLast">
         <h:outputLabel style="font-weight: bold" value="Independant Variable:"/>
         <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linear.linColumnNameA}">

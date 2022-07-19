@@ -64,7 +64,7 @@ scatterPlot_setup <- function(mSetObj = NA, facA=NULL, facB=NULL, type = NULL, l
 
   jsonString <- RJSONIO::toJSON(mSetObj$analSet$scatterPlot);
   jsonData <- RJSONIO::toJSON(mSetObj$dataSet$norm)
-  
+  print(mSetObj$analSet$scatterPlot)
   sink("Scatterplot.json");
   cat(jsonData);
   sink();
