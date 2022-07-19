@@ -9,6 +9,10 @@
     <ui:define name="metaInfo">
         <f:event type="preRenderView" listener="#{caBean.performDefaultAnalysis('Linear')}"/> 
     </ui:define>
+    <ui:define name="myscript">
+        <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/jscripts/d3.min.js"></script>
+        <script type="text/javascript" src="./LinearCorrelation.js"></script>
+    </ui:define>
     <ui:define name="content">
         <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
             <h1>Linear Regression:</h1>
@@ -84,7 +88,7 @@
                                     oncomplete="PF('graphDialog').show()"/>
                             </h:panelGrid> 
                              <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
-                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_linear')}" alt="corrLinear"/>
+                                 <div id="my_dataviz"></div>
                             </h:panelGrid>  
                             
                        </h:panelGrid>  
