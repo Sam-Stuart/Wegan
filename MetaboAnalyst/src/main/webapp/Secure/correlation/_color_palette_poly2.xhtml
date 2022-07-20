@@ -7,7 +7,7 @@
                 xmlns:p="http://primefaces.org/ui">
 
 
-    <h:form id="linGraph">
+    <h:form id="polyGraph2">
         <h:panelGrid columns="1" style="width:380px;">
             <h:panelGrid id="panelGrid1" columns="2" cellpadding="5" columnClasses="colBrayLong,colBrayShort">
                 
@@ -15,13 +15,13 @@
                 <p:panelGrid></p:panelGrid>                
                 
                 <h:outputLabel style="font-weight: bold" value="Show Equation on Plot:"/>
-                <p:selectBooleanCheckbox value ="#{linearCABean.doPlotEq}"/> 
+                <p:selectBooleanCheckbox value ="#{polyCABean.doPlotEq}"/> 
                 
                 <h:outputLabel style="font-weight: bold" value="Show R-squared on Plot:"/>
-                <p:selectBooleanCheckbox value ="#{linearCABean.doPlotRsq}"/> 
+                <p:selectBooleanCheckbox value ="#{polyCABean.doPlotRsq}"/> 
                                 
                 <h:outputLabel style="font-weight: bold" value="Show Adjusted R-squared on Plot:"/>
-                <p:selectBooleanCheckbox value ="#{linearCABean.doPlotRsqAdj}"/> 
+                <p:selectBooleanCheckbox value ="#{polyCABean.doPlotRsqAdj}"/> 
                 
                 <h3>Line and Point Options</h3>
                 <p:panelGrid></p:panelGrid>
@@ -37,19 +37,19 @@
                 </p:selectOneMenu>  
                                 
                 <h:outputLabel style="font-weight: bold" value="Show 95% Confidence Interval:"/>
-                <p:selectBooleanCheckbox value ="#{linearCABean.doPlotConfInt}"/> 
+                <p:selectBooleanCheckbox value ="#{polyCABean.doPlotConfInt}"/> 
                 
                 <h3>Titles</h3>
                 <p:panelGrid></p:panelGrid>                 
                 
                 <h:outputLabel style="font-weight: bold" value="Plot Title:"/>
-                <p:inputText value = "#{linearCABean.corPlotTitle}"/> 
+                <p:inputText value = "#{polyCABean.corPlotTitle}"/> 
                 
                 <h:outputLabel style="font-weight: bold" value="X-Axis Label"/>
-                <p:inputText value = "#{linearCABean.corPlotXlab}"/> 
+                <p:inputText value = "#{polyCABean.corPlotXlab}"/> 
                 
                  <h:outputLabel style="font-weight: bold" value="Y-Axis Label"/>
-                <p:inputText value = "#{linearCABean.corPlotYlab}"/> 
+                <p:inputText value = "#{polyCABean.corPlotYlab}"/> 
                 
                 <!--<p:panelGrid></p:panelGrid>-->
 
@@ -59,9 +59,9 @@
                                  styleClass="updateButton"
                                  style="box-shadow: none !important; text-shadow: none !important"
                                 onclick="PF('statusDialog').show()"
-                                oncomplete="PF('graphApperanceLinear').hide(); PF('statusDialog').hide()"  
-                                update=":linCA:form1:corrLinPane1  :cmdPane"
-                                actionListener="#{linearCABean.corrLin1Btn_action()}"/>
+                                oncomplete="PF('graphApperancePolyPred').hide(); PF('statusDialog').hide()"  
+                                update=":polyCA:form2:corrPolyPane2  :cmdPane"
+                                actionListener="#{polyCABean.corrPoly2Btn_action()}"/>
             </h:panelGrid>
         </h:panelGrid>
     </h:form>
