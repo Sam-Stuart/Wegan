@@ -113,9 +113,15 @@ public class CABean implements Serializable {
     }
 
     private void doDefaultPolynomial() {
-        CAUtils.CreatePolynomialModel(sb, "NULL", "NULL");
-        CAUtils.PlotPolynomialCA(sb, "NULL", sb.getCurrentImage("corr_poly"), "png", 72);
-        CAUtils.PlotPolynomialPredictCA(sb, 2, sb.getCurrentImage("corr_poly_pred"), "png", 72);
+        CAUtils.CreatePolynomialModel(sb, "NULL", "NULL", false);
+        CAUtils.PlotPolynomialCA(sb, "NULL",
+                false, "NULL", "NULL", false,
+                 false, false, false, " "," "," ",
+                sb.getCurrentImage("corr_poly"), "png", 72);
+        CAUtils.PlotPolynomialPredictCA(sb,  "NULL",
+                false, "NULL", "NULL", false,
+                " "," "," ",
+                sb.getCurrentImage("corr_poly_pred"), "png", 72);
     }
 
     private void doDefaultMultivariate() {
