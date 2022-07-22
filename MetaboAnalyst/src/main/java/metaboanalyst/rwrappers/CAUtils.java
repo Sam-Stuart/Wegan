@@ -183,6 +183,19 @@ public static boolean PlotLinearResidFitCA(SessionBean1 sb,
         }
     }
 
+ 
+//    public static void ConvertLinearJSONCA(SessionBean1 sb, String which_plot) {
+//        try {
+//            RConnection RC = sb.getRConnection();
+//            String rCommand = "lin.reg.plot.json(NA" + ", \"" + which_plot + "\" )";
+//            RCenter.recordRCommand(RC, rCommand);
+////            sb.addGraphicsCMD(imgName, rCommand);
+//            RC.voidEval(rCommand);
+//        } catch (RserveException rse) {
+//            System.out.println(rse);
+//        }
+//    }    
+
 //    public static boolean PlotLinearCA(SessionBean1 sb, String imgName, String format, int dpi) {
 //        try {
 //            RConnection RC = sb.getRConnection();
@@ -234,11 +247,12 @@ public static boolean PlotLinearResidFitCA(SessionBean1 sb,
 //        }
 //    }
     
-    public static void CreatePenalizedModel(SessionBean1 sb, String method, String facA, Boolean weights) {
+// PENALIZED
+    public static void CreatePenalizedModel(SessionBean1 sb, String method, String facA, Boolean data) {
         System.out.println(method);
         try {
             RConnection RC = sb.getRConnection();
-            String rCommand = "pen.reg.anal(NA" + ", \"" + method + "\", \"" + facA + "\", weights=NULL)";
+            String rCommand = "pen.reg.anal(NA" + ", \"" + method + "\", \"" + facA + "\", \"" + data + "\" )";
             RCenter.recordRCommand(RC, rCommand);
             //sb.addGraphicsCMD("corr_penalized", rCommand);
             RC.voidEval(rCommand);
@@ -246,11 +260,23 @@ public static boolean PlotLinearResidFitCA(SessionBean1 sb,
             System.out.println(rse);
         }
     }
+ 
     
-    public static void PlotPenalizedCA(SessionBean1 sb, String imgName, String format, int dpi) {
+    public static void PlotPenalizedCA(SessionBean1 sb, Boolean data, 
+             String col_dots, String col_line, Boolean plot_ci, 
+                String plot_title, String plot_xlab, String plot_ylab,
+            String imgName, String format, int dpi) {
         try {
             RConnection RC = sb.getRConnection();
-            String rCommand = "plot.pred.penReg(NA" + ", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
+            String rCommand = "pen.pred.plot(NA" + ", \"" 
+                    + data + "\", \""                    
+                    + col_dots + "\", \""
+                    + col_line + "\", \""
+                    + plot_ci + "\", \""
+                    + plot_title + "\", \""
+                    + plot_xlab + "\", \""
+                    + plot_ylab + "\", \""
+                    + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
             RCenter.recordRCommand(RC, rCommand);
             sb.addGraphicsCMD("corr_penalized", rCommand);
             RC.voidEval(rCommand);
@@ -259,10 +285,20 @@ public static boolean PlotLinearResidFitCA(SessionBean1 sb,
         }
     }
  
-    public static void PlotPenalizedCVCA(SessionBean1 sb, String imgName, String format, int dpi) {
+    public static void PlotPenalizedCVCA(SessionBean1 sb, Boolean data,
+             String col_dots, String col_line, 
+                String plot_title, String plot_xlab, String plot_ylab,
+            String imgName, String format, int dpi) {
         try {
             RConnection RC = sb.getRConnection();
-            String rCommand = "plot.cv.penReg(NA" + ", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
+            String rCommand = "pen.cv.plot(NA" + ", \"" 
+                    + data + "\", \""                    
+                    + col_dots + "\", \""
+                    + col_line + "\", \""
+                    + plot_title + "\", \""
+                    + plot_xlab + "\", \""
+                    + plot_ylab + "\", \""
+                    + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
             RCenter.recordRCommand(RC, rCommand);
             sb.addGraphicsCMD("corr_penalized2", rCommand);
             RC.voidEval(rCommand);
@@ -274,7 +310,7 @@ public static boolean PlotLinearResidFitCA(SessionBean1 sb,
     public static void CreatePolynomialModel(SessionBean1 sb, String facA, String facB, Boolean data) {
         try {
             RConnection RC = sb.getRConnection();
-            String rCommand = "poly.reg.anal(NA" + ", \"" + facA + "\", \"" + facB + data + "\" )";
+            String rCommand = "poly.reg.anal(NA" + ", \"" + facA + "\", \"" + facB + "\", \"" + data + "\" )";
             RCenter.recordRCommand(RC, rCommand);
             //sb.addGraphicsCMD("corr_penalized", rCommand);
             RC.voidEval(rCommand);
@@ -340,6 +376,7 @@ public static boolean PlotLinearResidFitCA(SessionBean1 sb,
         }
     }    
  
+//    MULTIVARIATE
     public static void CreateMultivariateModel(SessionBean1 sb) {
         try {
             RConnection RC = sb.getRConnection();
@@ -387,7 +424,8 @@ public static boolean PlotLinearResidFitCA(SessionBean1 sb,
             System.out.println(rse);
         }
     }    
-
+    
+//MACHINE LEARNING (ML)
     public static void CreateSVMModel(SessionBean1 sb, String facA, String facB) {
         try {
             RConnection RC = sb.getRConnection();
@@ -457,7 +495,8 @@ public static boolean PlotLinearResidFitCA(SessionBean1 sb,
             System.out.println(rse);
         }
     }
-    
+ 
+// LOGISTIC   
         public static void CreateLogisticModel(SessionBean1 sb, String facA, String facB) {
         try {
             RConnection RC = sb.getRConnection();
