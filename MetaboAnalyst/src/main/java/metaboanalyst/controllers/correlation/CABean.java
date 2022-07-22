@@ -93,6 +93,7 @@ public class CABean implements Serializable {
         CAUtils.PlotLinearResidFitCA(sb, "NULL", "NULL", false,
                 "NULL", "NULL", " ", " "," ",
                 sb.getCurrentImage("corr_linear_resfit"), "png", 72);
+//        CAUtils.ConvertLinearJSONCA(sb, "NULL");
         
     }
     
@@ -108,8 +109,10 @@ public class CABean implements Serializable {
 
     private void doDefaultPenalized() {
         CAUtils.CreatePenalizedModel(sb, "NULL", "NULL", false);
-        CAUtils.PlotPenalizedCA(sb, sb.getCurrentImage("corr_penalized"), "png", 72);
-        CAUtils.PlotPenalizedCVCA(sb, sb.getCurrentImage("corr_penalized2"), "png", 72);
+        CAUtils.PlotPenalizedCA(sb, false, "NULL", "NULL", false," "," "," ",
+                sb.getCurrentImage("corr_penalized"), "png", 72);
+        CAUtils.PlotPenalizedCVCA(sb, false, "NULL", "NULL"," "," "," ",
+                sb.getCurrentImage("corr_penalized2"), "png", 72);
     }
 
     private void doDefaultPolynomial() {
@@ -119,8 +122,7 @@ public class CABean implements Serializable {
                  false, false, false, " "," "," ",
                 sb.getCurrentImage("corr_poly"), "png", 72);
         CAUtils.PlotPolynomialPredictCA(sb,  "NULL",
-                false, "NULL", "NULL", false,
-                " "," "," ",
+                false, "NULL", "NULL", false, " "," "," ",
                 sb.getCurrentImage("corr_poly_pred"), "png", 72);
     }
 
