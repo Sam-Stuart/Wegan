@@ -75,6 +75,118 @@ public class PenalizedCABean implements Serializable {
         this.columnNameB = columnNameB;
     }
     
+       // CHECK BOX for using normalized data (default) or original data
+    private boolean doOriginal = false;
+
+    public boolean isdoOriginal() {
+        return doOriginal;
+    }
+
+    public void setdoOriginal(boolean doOriginal) {
+        this.doOriginal = doOriginal;
+    }
+    
+    // CHECK BOX for adding (default) or omitting equation to plot (at top), see correlation_linear.R 
+  // when >1 of rsq, eq, & rsqadj are checked, values are seperated by " | " 
+     private boolean doPlotEq = false;
+
+    public boolean isdoPlotEq() {
+        return doPlotEq;
+    }
+
+    public void setdoPlotEq(boolean doPlotEq) {
+        this.doPlotEq = doPlotEq;
+    } 
+  // CHECK BOX for adding (default) or omitting rsq to plot (at top), see correlation_linear.R 
+  // when >1 of rsq, eq, & rsqadj are checked, values are seperated by " | " 
+     private boolean doPlotRsq = false;
+
+    public boolean isdoPlotRsq() {
+        return doPlotRsq;
+    }
+
+    public void setdoPlotRsq(boolean doPlotRsq) {
+        this.doPlotRsq = doPlotRsq;
+    }     
+  // CHECK BOX for omitting (default) or adding rsq-adj to plot (at top), see correlation_linear.R 
+  // when >1 of rsq, eq, & rsqadj are checked, values are seperated by " | " 
+     private boolean doPlotRsqAdj = false;
+
+    public boolean isdoPlotRsqAdj() {
+        return doPlotRsqAdj;
+    }
+
+    public void setdoPlotRsqAdj(boolean doPlotRsqAdj) {
+        this.doPlotRsqAdj = doPlotRsqAdj;
+    }  
+  // CHECK BOX for omitting (default) or adding confidence interval to line, see correlation_linear.R 
+     private boolean doPlotConfInt = false;
+
+    public boolean isdoPlotConfInt() {
+        return doPlotConfInt;
+    }
+
+    public void setdoPlotConfInt(boolean doPlotConfInt) {
+        this.doPlotConfInt = doPlotConfInt;
+    }    
+    
+ //STATIC DROPDOWN for selecting colour of dots on plot
+//    replaced: corColorOpts
+    private String corColorDotsOpts = "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corColorOpts
+
+    public String getCorColorDotsOpts() {
+        return corColorDotsOpts;
+    }
+
+    public void setCorColorDotsOpts(String corColorDotsOpts) {
+        this.corColorDotsOpts = corColorDotsOpts;
+    }
+
+ //STATIC DROPDOWN for selecting colour of line on plot
+    private String corColorLineOpts = "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corColorOpts
+
+    public String getCorColorLineOpts() {
+        return corColorLineOpts;
+    }
+
+    public void setCorColorLineOpts(String corColorLineOpts) {
+        this.corColorLineOpts = corColorLineOpts;
+    }
+    
+  
+  // TEXT BOX 
+    private String corPlotTitle = " ";
+    
+    public String getCorPlotTitle() {
+        return corPlotTitle;
+    }
+
+    public void setCorPlotTitle(String corPlotTitle) {
+        this.corPlotTitle = corPlotTitle;
+    }
+ 
+  // TEXT BOX 
+    private String corPlotXlab = " ";
+    
+    public String getCorPlotXlab() {
+        return corPlotXlab;
+    }
+
+    public void setCorPlotXlab(String corPlotXlab) {
+        this.corPlotXlab = corPlotXlab;
+    }       
+    
+ // TEXT BOX 
+    private String corPlotYlab = " ";
+    
+    public String getCorPlotYlab() {
+        return corPlotYlab;
+    }
+
+    public void setCorPlotYlab(String corPlotYlab) {
+        this.corPlotYlab = corPlotYlab;
+    }   
+    
     
     private List<String> corrPenalResults = null;
     
@@ -88,14 +200,20 @@ public class PenalizedCABean implements Serializable {
 // ACTION BUTTONS //
     public void penalizedUpdate_action() {
         System.out.println(corrFunctionMethods);
-        CAUtils.CreatePenalizedModel(sb, corrFunctionMethods, columnNameA, addWeights);
-        CAUtils.PlotPenalizedCA(sb, sb.getNewImage("corr_penalized"), "png", 72);
+        CAUtils.CreatePenalizedModel(sb, corrFunctionMethods, columnNameA, doOriginal);
+        CAUtils.PlotPenalizedCA(sb, doOriginal, 
+                 corColorDotsOpts, corColorLineOpts, doPlotConfInt,
+               corPlotTitle, corPlotXlab, corPlotYlab,
+                sb.getNewImage("corr_penalized"), "png", 72);
     }
     
     public void penalizedUpdate2_action() {
         System.out.println(corrFunctionMethods);
-        CAUtils.CreatePenalizedModel(sb, corrFunctionMethods, columnNameA, addWeights);
-        CAUtils.PlotPenalizedCVCA(sb, sb.getNewImage("corr_penalized2"), "png", 72);
+        CAUtils.CreatePenalizedModel(sb, corrFunctionMethods, columnNameA, doOriginal);
+        CAUtils.PlotPenalizedCVCA(sb, doOriginal,
+                corColorDotsOpts, corColorLineOpts,
+               corPlotTitle, corPlotXlab, corPlotYlab,
+                sb.getNewImage("corr_penalized2"), "png", 72);
     }
 
 
@@ -120,7 +238,7 @@ public class PenalizedCABean implements Serializable {
     // ACTION BUTTONS //
     public void corrPenalPredBtn_action() {
         System.out.println("Inside poly");
-        CAUtils.CreatePolynomialModel(sb, columnNameA, columnNameB);
+        CAUtils.CreatePolynomialModel(sb, columnNameA, columnNameB, doOriginal);
 
         System.out.println("Done poly");
     }    

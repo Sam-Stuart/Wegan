@@ -21,6 +21,8 @@ import metaboanalyst.rwrappers.UniVarTests;
 import metaboanalyst.rwrappers.CAUtils;
 import metaboanalyst.rwrappers.RDataUtils;
 
+//added: from RarefactionBean 202207-
+//import metaboanalyst.controllers.ApplicationBean1;
 import metaboanalyst.utils.DataUtils;
 import org.primefaces.context.RequestContext;
 import org.primefaces.model.DualListModel;
@@ -34,6 +36,7 @@ import org.rosuda.REngine.Rserve.RConnection;
 public class LinearCABean implements Serializable {
 
     private final SessionBean1 sb = (SessionBean1) DataUtils.findBean("sessionBean1");
+//     private final ApplicationBean1 ab = (ApplicationBean1) DataUtils.findBean("applicationBean1");
 
      //TABLES FOR DOWNLOAD
     private User usr = sb.getCurrentUser();
@@ -41,6 +44,7 @@ public class LinearCABean implements Serializable {
     
     
     private String fileLinModVals = "corr_linear_model_summary.txt";
+//            getSummaryLinDownload();
     private String fileLinModValsPath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileLinModVals + "\">" + fileLinModVals + "</a>";
  
     public String getFileLinModValsPath() {
@@ -209,6 +213,16 @@ public class LinearCABean implements Serializable {
         this.corPlotYlab = corPlotYlab;
     }   
      
+//    private String corPlotLinearWhich = "NULL";
+// 
+//    public String getCorPlotLinearWhich() {
+//        return corPlotLinearWhich;
+//    }
+//        
+//    public void setCorPlotLinearWhich(String corPlotLinearWhich) {
+//        this.corPlotLinearWhich = corPlotLinearWhich;
+//    } 
+    
     
 //    // ACTION BUTTONS //
 //    public void corrLin1Btn_action() {
@@ -219,13 +233,6 @@ public class LinearCABean implements Serializable {
 //
 //    
 //}
-    
-// ORDER OF ARGUMENTS 202206-29
-  
-// mSetObj=NA, facA="NULL", facB="NULL", data="false",
-//    col_dots="NULL", col_line="NULL", plot_ci="false", # weights=NULL,
-// plot_eq="false", plot_rsq="false",
-//plot_rsq_adj="false", imgName # ,format="png", dpi=72, width=NA
     
     // ACTION BUTTONS //
     public void corrLin1Btn_action() {
@@ -240,10 +247,9 @@ public class LinearCABean implements Serializable {
                corPlotTitle, corPlotXlab, corPlotYlab,
 //                 sb.getCurrentImage("corr_linear"),"png", 72);
           sb.getNewImage("corr_linear"),"png", 72); 
+//        CAUtils.ConvertLinearJSONCA(sb, corPlotLinearWhich);
     }
    
-   
-
 
  // ACTION BUTTONS //
     public void corrLin2Btn_action() {
@@ -256,7 +262,7 @@ public class LinearCABean implements Serializable {
                 doPlotEq, doPlotRsq, doPlotRsqAdj,
                corPlotTitle, corPlotXlab, corPlotYlab,
           sb.getNewImage("corr_linear_pred"),"png", 72);
-                
+//         CAUtils.ConvertLinearJSONCA(sb, corPlotLinearWhich);        
 
     }
    
@@ -270,9 +276,28 @@ public class LinearCABean implements Serializable {
                 corColorDotsOpts, corColorLineOpts, 
                corPlotTitle, corPlotXlab, corPlotYlab,
           sb.getNewImage("corr_linear_normres"),"png", 72);
-                
+//         CAUtils.ConvertLinearJSONCA(sb, corPlotLinearWhich);                 
 
     }
+     
+      public void corrLin4Btn_action() {
+        CAUtils.CreateLinearModel(sb, corrColumnNameA, corrColumnNameB, doOriginal);
+        //CAUtils.CreateLinearModel(sb, "/Users/danaallen/NetBeansProjects/Wegan/MetaboAnalyst/target/MetaboAnalyst-4.34/resources/data/dune_weights.csv");
+//        corrLin1_Update_action
+        
+        CAUtils.PlotLinearResidFitCA(sb, corrColumnNameA, corrColumnNameB, doOriginal,
+                corColorDotsOpts, corColorLineOpts, 
+               corPlotTitle, corPlotXlab, corPlotYlab,
+          sb.getNewImage("corr_linear_resfit"),"png", 72);
+//        CAUtils.ConvertLinearJSONCA(sb, corPlotLinearWhich);              
+
+    }
+      
+//        private String getSummaryLinDownload(){
+//        String facA = getCorrColumnNameA();
+//        String facB = getCorrColumnNameB();
+//        return "linear_regession_summary_" + facA + "~" + facB + ".txt";
+//    }
     
     
 }

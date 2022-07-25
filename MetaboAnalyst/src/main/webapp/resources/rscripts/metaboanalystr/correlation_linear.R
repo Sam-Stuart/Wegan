@@ -75,11 +75,11 @@ lin.reg.anal <- function(mSetObj = NA,
   covar <- vcov(model) #PRINT
   conf.int <- confint(model, level=0.95) #PRINT
   
-  fileName <- paste0("linear_regression_summary", ".txt") #File name for summary
+  fileName <- paste0("corr_linear_model_summary", ".txt") #File name for summary
 # fileName <- paste0("linear_regression_summary_", facA, "~", facB, ".txt") #File name for summary
   coeffs <- summary[["coefficients"]] #Extract model coefficients
-  beta <- round(coeffs[2], digits = 2)
-  alpha <- round(coeffs[1], digits = 2)
+  beta <- round(coeffs[2], digits = 2) # slope
+  alpha <- round(coeffs[1], digits = 2) # yint
   equation <- paste(facA, " = ",
  paste( paste(beta, facB, sep="*"), alpha, sep=" + ") ) # equation with intercept, coefficient and predictor variable name
   r_sq <- round(summary[["r.squared"]], digits = 2) #Extract R^2
@@ -89,17 +89,27 @@ lin.reg.anal <- function(mSetObj = NA,
   mod_shp <- stats::shapiro.test(model$residuals)$p.value
   mod_bp <- lmtest::bptest(model)$p.value
   mod_dw <- lmtest::dwtest(model)$p.value
+  mod_res <- lmtest::resettest(model)$p.value #linearity
 
-  mod <- c(mod_shp, mod_bp, mod_dw)
-  names(mod) <- c("Shapiro-Wilk test for Normality of Residuals", "Beusch-Pagan test for Homoscedasticity", "Durbin-Watson test for Autocorrelation (Independent Residual Errors)")
+#   Ramsey Regression Equation Specification Error Test (RESET) to detect specification errors in the model. It was also created in 1968 by a UW-Madison student for his dissertation! The RESET performs a nested model comparison with the current model and the current model plus some polynomial terms, and then returns the result of an F-test. The idea is, if the added non-linear terms explain variance in the outcome, then there is a specification error of some kind, such as the failure to include some curvilinear term or the use of a general linear model where a generalized linear model should have been used.
+# https://sscc.wisc.edu/sscc/pubs/RegDiag-R/linearity.html
+# A significant p-value is an indication that the relationship between the predictors and the outcome needs to be further investigated.
+  
+  mod <- c(mod_shp, mod_bp, mod_dw
+           # , mod_res
+           )
+  names(mod) <- c("Shapiro-Wilk test for Normality of Residuals", "Beusch-Pagan test for Homoscedasticity", "Durbin-Watson test for Autocorrelation (Independent Residual Errors)"
+                  # , "RESET for Linearity"
+                  )
   fix<-c("Try other preprocessing options, or try other regression models such as SVM or random forest.",
   "Try transforming the dependent variable (e.g., log transformation), or try redefining the dependent variable as a rate.",
   "Is this time series data? Try looking into adding a lag in the independent/dependent variable, or adding a seasonal dummy variable to the model."
-  )
+  # ,"Try modifying the model or otherwise accounting for endogeneity (unobserved confounding)"
+  ) # fit a generalized linear model
   mod1 <- mod # numeric
   n_fail <- sum(mod < 0.05) # was: nassump_fail
   
-  if(any(mod < 0.001)){ # format numbers for printing; 3 digits after decimal
+  if(any(mod < 0.001)){ # format numbers for printing; 3 decimals after decimal
   mod[mod < 0.001] <-
    formatC( mod[mod < 0.001] , format = "e", digits = 3)
   
@@ -107,28 +117,28 @@ lin.reg.anal <- function(mSetObj = NA,
    round( mod1[mod1 > 0.001], digits = 3)
   }
    
-  if(n_fail > 0){ # if any failed tests
-   mod <- mod[mod1 < 0.05] # subset for failed tests
+  if(n_fail > 0){ # subset for failed tests
+   mod <- mod[mod1 < 0.05]
   
    f0 <- paste0(n_fail, " linear model assumption test(s) failed: \n")
    
  failed<-c(f0, paste0( 
          names(mod), " (P-Value: ", mod, ")/n", fix[mod1 < 0.05], "\n" ) )
-      # "Please be advised that conforming to these assumptions is necessary for use of the linear model. If the goal is to visually explore your data, try the Plotting module." 
+      # "Please be advised that conforming to these assumptions is necessary for use of the linear model.  If the goal is to visually explore your data, try the Plotting module." 
     #AddErrMsg(failed)
     message(failed)
     } else {
     failed <- paste0("No model assumption tests failed.")
     }
   
-### based on: # https://github.com/rempsyc/rempsyc/blob/main/R/nice_assumptions.R
   df <- data.frame("Normality (Shapiro-Wilk)..." = mod_shp,
           "Homoscedasticity (Breusch-Pagan)..." = mod_bp,
            "Autocorrelation of Residuals (Durbin-Watson)..." = mod_dw,
+          # "Linearity (RESET)..." = mod_res,
            "N Assumptions Failed..." = n_fail,
                    check.names = FALSE)
   row.names(df) <- NULL
-  ##### - MODEL ASSUMPTIONS TEST DONE - ####
+ ##### - MODEL ASSUMPTIONS TEST DONE - ####
   
   # #Test residuals for normality. Error will be visible to user.
   # norm_resid <- shapiro.test(residuals) 
@@ -151,12 +161,12 @@ lin.reg.anal <- function(mSetObj = NA,
 ### Printing Values ## ERROR CHECK: BACKSLASH FOLLOWED BY N
   sink(fileName)
   cat("Formula:\n")
-  print(formula)
+  print(deparse(formula))
   cat("Model:\n")
   print(equation)
   cat("\nLinear Model Assumption Check:")
   print(df)
-  print(failed)
+  cat(failed)
   print(summary)
   # print(norm_resid)
   # cat("Normality of residuals result:\n")
@@ -238,11 +248,10 @@ lin.reg.plot <- function(mSetObj=NA,
   #RETRIEVE RESULTS: 
  facA <- mSetObj$analSet$linReg1$res$response
  facB <-  mSetObj$analSet$linReg1$res$predictor
-   
-   fileName <- mSetObj$analSet$linReg1$res$fileName
-   # predicted.values <- mSetObj$analSet$linReg1$res$predicted.values
-   formula <- mSetObj$analSet$linReg1$res$formula
-   model <- mSetObj$analSet$linReg1$mod   
+ fileName <- mSetObj$analSet$linReg1$res$fileName
+ # predicted.values <- mSetObj$analSet$linReg1$res$predicted.values
+ formula <- mSetObj$analSet$linReg1$res$formula
+ model <- mSetObj$analSet$linReg1$mod   
  
   
   # PLOT
@@ -342,9 +351,7 @@ lin.reg.plot <- function(mSetObj=NA,
         plot.title = element_text(face = 'bold', hjust = 0.5)
   )
 
-     #GENERATE PLOT
-  Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
-   
+
   
 # stat_poly_eq(aes(label = paste0("atop(", ..eq.label..,",",..rr.label..,")")), output.type = "text" 
 
@@ -414,23 +421,96 @@ lin.reg.plot <- function(mSetObj=NA,
    
 #STORE IN mset
 
-  mSetObj$analSet$linReg1$plotted <- list(plot = a0, title = plot_title1, xlab = plot_xlab1, ylab = plot_ylab1)
-  # mSetObj$analSet$linReg1$plot <- a0
-  # mSetObj$analSet$linReg1$plot_title <- plot_title1
-  # mSetObj$analSet$linReg1$plot_ylab <- plot_ylab1
-  # mSetObj$analSet$linReg1$plot_xlab <- plot_xlab1
+  mSetObj$analSet$linReg1$plotted <- 
+list(plot = a0, title = plot_title1, xlab = plot_xlab1, ylab = plot_ylab1)
+
+    #GENERATE PLOT
+  Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
 
   print(a0)
   # a0
   dev.off()
   
-  return(.set.mSet(mSetObj))
+# JSON MAKING
+
+ build <- ggplot_build(a0)
+linear_plot_json <- list()
+#  df <- data.frame(x=build$data[[1]][,c("x")],
+#                  y=build$data[[1]][,c("y")],
+#              point_cols = build$data[[1]][,grepl("col",colnames(build$data[[1]]))],
+#              point_shape = build$data[[1]][,c("group")],
+#              point_size = build$data[[1]][,c("size")],
+#              line_cols = build$data[[2]][,grepl("col",colnames(build$data[[2]]))][1] )
   
+  if(grepl("ymin", colnames(build$data[[1]])) && grepl("ymax", colnames(build$data[[1]])) ){
+           #   df$CI_down <-build$data[[1]][,c("ymin")] 
+           #  df$CI_up <- build$data[[1]][,c("ymax")]
+    ci<- build$data[[1]][,c("x","y", "ymin", "ymax")] 
+ colnames(ci) <- c("x","y","CI_down", "CI_up")
+ linear_plot_json$lines$ci <- ci # build$data[[1]][,c("ymin", "ymax")]
+ } else{
+  # df$CI_down <- NULL
+  # df$CI_up <- NULL
+     linear_plot_json$lines$ci <- data.frame(x=build$data[[1]][,c("x")], y=build$data[[1]][,c("y")], CI_down = 0, CI_up = 0)
+}
+
+
+#aa<-apply(df, 1, function(x){
+#  paste(x, sep= paste0(colnames(df),": ") )
+#})
+#bb<-apply(aa, 2, function(x){ paste(
+#    paste0(colnames(df),": "), x
+#  ) })
+
+#cc<- apply(bb, 2,  function(x){
+#          paste(x, collapse=",")
+#        } )
+#dd<-paste( seq_along(cc),": {",cc, "}" )
+#ee<- paste(
+#  "data: {", 
+#  paste(dd, collapse=","), "}"
+#)
+
+# linear_plot_json <- list()
+  linear_plot_json$main <- plot_title1 #title
+  linear_plot_json$axis <- c(plot_xlab1, plot_ylab1) #axis titles
+#  linear_plot_json$data <- ee
+  
+   linear_plot_json$points$coords <- build$data[[1]][,c("x","y")] #[,1:2]
+   linear_plot_json$points$cols <- build$data[[1]][,grepl("col",colnames(build$data[[1]]))] #[,6] #colours
+   linear_plot_json$points$shape <- build$data[[1]][,c("group")]#[,5]
+   linear_plot_json$points$size <- build$data[[1]][,c("size")]#[,7]
+   linear_plot_json$lines$cols <- build$data[[2]][,grepl("col",colnames(build$data[[2]]))]
+ # ## linear_plot_json$label <- build$data[[3]][,c("label")]
+ #  # linear_plot_json$lines$ci <- build$data[[1]][,c("se")]
+  
+  linear_plot_json$r_sq <-
+    round(summary(model)[["r.squared"]], digits = 2) #Extract R^2
+  linear_plot_json$r_sq_adj <-
+    round(summary(model)[["adj.r.squared"]], digits = 2) #Extract adjusted R^2 
+  linear_plot_json$slope <-
+    round(summary(model)[["coefficients"]][2], digits = 2) # beta
+  linear_plot_json$yint <-
+    round(summary(model)[["coefficients"]][1], digits = 2) # alpha
+
+ imgName2 <- paste(imgName, ".json", sep="")
+ json.obj <- RJSONIO::toJSON(linear_plot_json, .na='null')
+ sink(imgName2)
+ cat(json.obj)
+ sink()
+print(json.obj)
+print("we built this city json rock and roll")
+
+# lin.reg.plot.json(mSetObj, "plotted")
+# lin.reg.plot.json(mSetObj)
+
+ if(!.on.public.web){
+  return(.set.mSet(mSetObj))
+    }
 }
 
 
 ### PREDICTED PLOTTING FUNCTION
-
 #'Generate prediction/actual linear regression plot
 #'@description Plot line of best fit on scatter plot of linear regression model on 2 variables in data
 #'@param mSetObj Input the name of the created mSetObj
@@ -496,7 +576,9 @@ lin.pred.plot <- function(mSetObj=NA,
    prediction <- mSetObj$analSet$linReg1$res$predicted.values
    # formula <- mSetObj$analSet$linReg1$res$formula
    # model <- mSetObj$analSet$linReg1$mod   
- 
+ dfpred<-data.frame( fpred = prediction, fA = input[,facA])
+formula<-as.formula(paste0("fA~fpred"))
+   model <- lm(formula = formula, data = dfpred, weights = NULL)
 
   # PLOT
 
@@ -664,7 +746,81 @@ if(plot_xlab == " "){
   # a0
   dev.off()
   
+# lin.reg.plot.json(mSetObj=mSetObj, which_plot = "pred")
+
+# JSON MAKING
+
+ build <- ggplot_build(a0)
+
+  df <- data.frame(x=build$data[[1]][,c("x")],
+                  y=build$data[[1]][,c("y")],
+              point_cols = build$data[[1]][,grepl("col",colnames(build$data[[1]]))],
+              point_shape = build$data[[1]][,c("group")],
+              point_size = build$data[[1]][,c("size")],
+              line_cols = build$data[[2]][,grepl("col",colnames(build$data[[2]]))][1] )
+  
+  if(grepl("ymin", colnames(build$data[[1]])) && grepl("ymax", colnames(build$data[[1]])) ){
+              df$CI_down <-build$data[[1]][,c("ymin")] 
+              df$CI_up <- build$data[[1]][,c("ymax")]
+   # ci<- build$data[[1]][,c("x","y", "ymin", "ymax")] ; colnames(ci) <- c("x","y","CI_down", "CI_up");  linear_plot_json$lines$ci <- ci # build$data[[1]][,c("ymin", "ymax")]
+ } else{
+   df$CI_down <- NULL
+   df$CI_up <- NULL
+     # linear_plot_json$lines$ci <- data.frame(x=build$data[[1]][,c("x")], y=build$data[[1]][,c("y")], CI_down = 0, CI_up = 0)
+}
+# 
+
+aa<-apply(df, 1, function(x){
+  paste(x, sep= paste0(colnames(df),": ") )
+})
+bb<-apply(aa, 2, function(x){ paste(
+    paste0(colnames(df),": "), x
+  ) })
+cc<- apply(bb, 2,  function(x){
+          paste(x, collapse=",")
+        } )
+dd<-paste( seq_along(cc),": {",cc, "}" )
+ee<- paste(
+  "data: {", 
+  paste(dd, collapse=","), "}"
+)
+
+linear_plot_json <- list()
+  linear_plot_json$main <- plot_title1 #title
+  linear_plot_json$axis <- c(plot_xlab1, plot_ylab1) #axis titles
+  linear_plot_json$data <- ee
+  
+ #  linear_plot_json$points$coords <- build$data[[1]][,c("x","y")] #[,1:2]
+ #  linear_plot_json$points$cols <- build$data[[1]][,grepl("col",colnames(build$data[[1]]))] #[,6] #colours
+ #  linear_plot_json$points$shape <- build$data[[1]][,c("group")]#[,5]
+ #  linear_plot_json$points$size <- build$data[[1]][,c("size")]#[,7]
+ #  linear_plot_json$lines$cols <- build$data[[2]][,grepl("col",colnames(build$data[[2]]))]
+ # ## linear_plot_json$label <- build$data[[3]][,c("label")]
+ #  # linear_plot_json$lines$ci <- build$data[[1]][,c("se")]
+  
+  linear_plot_json$r_sq <-
+    round(summary(model)[["r.squared"]], digits = 2) #Extract R^2
+  linear_plot_json$r_sq_adj <-
+    round(summary(model)[["adj.r.squared"]], digits = 2) #Extract adjusted R^2 
+  linear_plot_json$slope <-
+    round(summary(model)[["coefficients"]][2], digits = 2) # beta
+  linear_plot_json$yint <-
+    round(summary(model)[["coefficients"]][1], digits = 2) # alpha
+
+ imgName2 <- paste(imgName, ".json", sep="")
+ json.obj <- RJSONIO::toJSON(linear_plot_json, .na='null')
+ sink(imgName2)
+ cat(json.obj)
+ sink()
+print(json.obj)
+print("carry on my wayward json")
+
+# lin.reg.plot.json(mSetObj, "plotted")
+# lin.reg.plot.json(mSetObj)
+
+ if(!.on.public.web){
   return(.set.mSet(mSetObj))
+    }
   
 }
 
@@ -751,7 +907,7 @@ lin.qq.plot <- function(mSetObj=NA,
    facB <-  mSetObj$analSet$linReg1$res$predictor
    fileName <- mSetObj$analSet$linReg1$res$fileName
    # formula <- mSetObj$analSet$linReg1$res$formula
-   # model <- mSetObj$analSet$linReg1$mod
+   model <- mSetObj$analSet$linReg1$mod
 
   # PLOT
 
@@ -798,11 +954,11 @@ lin.qq.plot <- function(mSetObj=NA,
 
   # PLOT TITLE
   if(plot_title == " "){
-    plot_title1 <- paste0("Normality of Residuals (", facA, ")")
+    plot_title1 <- paste0("Normality of Residuals (", facA, " ~ ", facB, ")")
   } else {
     plot_title1 <- plot_title
   }
-  
+
   # PLOT YAXIS
   if(plot_ylab == " "){
   plot_ylab1 <- "Emprical"
@@ -817,13 +973,17 @@ lin.qq.plot <- function(mSetObj=NA,
     plot_xlab1 <- plot_xlab
   }
  
-  a0 <- ggplot(data =  input,
+
+  # a0 <- ggplot(data =  input,
    # aes(x = .data[[facA]], y = .data[[facB]]) ) +
-   aes_(sample =  as.name(facA)) )+
-    labs(title = plot_title1) +
+   # aes_(sample =  as.name(facA)) )+
+  a0 <- ggplot() +
+ geom_qq(aes(sample = rstandard(model)), shape = 16, color = col_dots1) +
+  geom_abline(color = col_line1) +
+ labs(title = plot_title1) +
      ylab(plot_ylab1)+ xlab(plot_xlab1) +
-    stat_qq(shape = 16, color = col_dots1) +
-    stat_qq_line(color = col_line1, fullrange = TRUE) +
+    # stat_qq(shape = 16, color = col_dots1) +
+    # stat_qq_line(color = col_line1, fullrange = TRUE) +
      theme_bw() + 
   theme(panel.grid.major = element_blank(), 
         panel.grid.minor = element_blank(),
@@ -841,12 +1001,347 @@ lin.qq.plot <- function(mSetObj=NA,
 
   mSetObj$analSet$linReg1$plotNorm <- list(plot = a0, title = plot_title1, xlab = plot_xlab1, ylab = plot_ylab1)
 
+# lin.reg.plot.json(mSetObj=mSetObj, which_plot = "norm")
+
+  print(a0)
+  # a0
+  dev.off()
+
+  # JSON MAKING
+ build <- ggplot_build(a0)
+
+  df <- data.frame(x=build$data[[1]][,c("x")],
+                  y=build$data[[1]][,c("y")],
+              point_cols = build$data[[1]][,grepl("col",colnames(build$data[[1]]))],
+              point_shape = build$data[[1]][,c("group")],
+              point_size = build$data[[1]][,c("size")],
+              line_cols = build$data[[2]][,grepl("col",colnames(build$data[[2]]))][1] )
+  
+  if(grepl("ymin", colnames(build$data[[1]])) && grepl("ymax", colnames(build$data[[1]])) ){
+              df$CI_down <-build$data[[1]][,c("ymin")] 
+              df$CI_up <- build$data[[1]][,c("ymax")]
+   # ci<- build$data[[1]][,c("x","y", "ymin", "ymax")] ; colnames(ci) <- c("x","y","CI_down", "CI_up");  linear_plot_json$lines$ci <- ci # build$data[[1]][,c("ymin", "ymax")]
+ } else{
+   df$CI_down <- NULL
+   df$CI_up <- NULL
+     # linear_plot_json$lines$ci <- data.frame(x=build$data[[1]][,c("x")], y=build$data[[1]][,c("y")], CI_down = 0, CI_up = 0)
+}
+# 
+
+aa<-apply(df, 1, function(x){
+  paste(x, sep= paste0(colnames(df),": ") )
+})
+bb<-apply(aa, 2, function(x){ paste(
+    paste0(colnames(df),": "), x
+  ) })
+cc<- apply(bb, 2,  function(x){
+          paste(x, collapse=",")
+        } )
+dd<-paste( seq_along(cc),": {",cc, "}" )
+ee<- paste(
+  "data: {", 
+  paste(dd, collapse=","), "}"
+)
+
+linear_plot_json <- list()
+  linear_plot_json$main <- plot_title1 #title
+  linear_plot_json$axis <- c(plot_xlab1, plot_ylab1) #axis titles
+  linear_plot_json$data <- ee
+  
+ #  linear_plot_json$points$coords <- build$data[[1]][,c("x","y")] #[,1:2]
+ #  linear_plot_json$points$cols <- build$data[[1]][,grepl("col",colnames(build$data[[1]]))] #[,6] #colours
+ #  linear_plot_json$points$shape <- build$data[[1]][,c("group")]#[,5]
+ #  linear_plot_json$points$size <- build$data[[1]][,c("size")]#[,7]
+ #  linear_plot_json$lines$cols <- build$data[[2]][,grepl("col",colnames(build$data[[2]]))]
+ # ## linear_plot_json$label <- build$data[[3]][,c("label")]
+ #  # linear_plot_json$lines$ci <- build$data[[1]][,c("se")]
+  
+  linear_plot_json$r_sq <-
+    round(summary(model)[["r.squared"]], digits = 2) #Extract R^2
+  linear_plot_json$r_sq_adj <-
+    round(summary(model)[["adj.r.squared"]], digits = 2) #Extract adjusted R^2 
+  linear_plot_json$slope <-
+    round(summary(model)[["coefficients"]][2], digits = 2) # beta
+  linear_plot_json$yint <-
+    round(summary(model)[["coefficients"]][1], digits = 2) # alpha
+
+ imgName2 <- paste(imgName, ".json", sep="")
+ json.obj <- RJSONIO::toJSON(linear_plot_json, .na='null')
+ sink(imgName2)
+ cat(json.obj)
+ sink()
+print(json.obj)
+print("livin json a prayer")
+
+# lin.reg.plot.json(mSetObj, "plotted")
+# lin.reg.plot.json(mSetObj)
+
+ if(!.on.public.web){
+  return(.set.mSet(mSetObj))
+    }
+  
+}
+
+
+#'Generate Residuals vs. Fitted values plot for model
+#'@description Plot residuals and predicted (fitted or yhat values) of linear regression model on 2 variables in data (check linearity assumption)
+#'@param mSetObj Input the name of the created mSetObj
+#'@param data Boolean, whether to use original data; "false" (default) means normalized or "true" means original (checkbox)
+#'@param col_line Set color for line (default "NULL" is blue); (static dropdown)
+#'@param col_dots Set color for scatterplot dots (default "NULL" is black); (static dropdown)
+#'@param plot_title Input the name of the title (default: "Univariate Linear Regression Line of Best Fit", textbox)
+#'@param plot_xlab Input the name to use for x-axis label (default: facA, textbox)
+#'@param plot_ylab Input the name to use for y-axis label (default: facB, textbox)
+#'@param imgName Input the image name
+#'@param format Select the image format, "png" or "pdf", default is "png" 
+#'@param dpi Input the dpi. If the image format is "pdf", users need not define the dpi. For "png" images, 
+#'the default dpi is 72. It is suggested that for high-resolution images, select a dpi of 300.  
+#'@param width Input the width, there are 2 default widths. The first, width=NULL, is 10.5.
+#'The second default is width=0, where the width is 7.2. Otherwise users can input their own width. 
+#'@author Gina Sykes \email{gsykes@ualberta.ca}
+#'University of Alberta, Canada
+#'License: GNU GPL (>= 2)
+#' @importFrom rlang .data
+#'@export
+lin.resfit.plot <- function(mSetObj=NA,
+                         facA = "NULL",
+                         facB = "NULL",
+             data = "false",
+ col_dots = "NULL",
+ col_line = "NULL",
+
+  plot_title = " ",
+  plot_ylab = " ",
+  plot_xlab = " ",
+  imgName,
+  format = "png",
+  dpi = 72,
+  width = NA
+  ){
+
+  library("ggplot2")
+  
+  mSetObj <- .get.mSet(mSetObj)
+  
+  ## DATA: NORMAL OR NOT
+   if (data == "false") { 
+    input <- mSetObj$dataSet$norm #default use norm
+  } else {
+    input <- mSetObj$dataSet$orig
+  }
+  
+  ### iF VARIABLES ARE SET
+   #Set dependent (response) variable name
+   if (facA == "NULL"){
+     if( !"res" %in% names(mSetObj$analSet$linReg1) ){
+        facA <- mSetObj$analSet$linReg1$res$response
+     } else {
+     facA <- colnames(input)[1] #Default is 1st column.
+   }
+ } else {
+     facA <- facA #Determined using Columns() function below (java will present options in drop down menu)
+   }
+   #Set independent (predictor) variable name
+   if (facB == "NULL"){
+     if( !"res" %in% names(mSetObj$analSet$linReg1) ){
+        facB <-  mSetObj$analSet$linReg1$res$predictor
+     } else {
+     facB <- colnames(input)[2] #Default is 2nd column.
+   }
+ } else {
+     facB <- facB #Determined using Columns() function (java will present options in drop down menu)
+   }
+   
+   # VARIABLE TYPE CHECK
+   if (is.factor(input[,facA] || input[,facB]) == TRUE){
+     #AddErrMsg("You have chosen 1 or more categorical columns! Try selecting another independent and/or dependent variable. You can also try other regression models such as penalized, logistic, SVM or random forest.")
+     stop("You have chosen 1 or more categorical columns! Try selecting another independent and/or dependent variable. You can also try other regression models such as penalized, logistic, SVM or random forest.") #Error msg
+   }
+  
+    # EXTRACT PLOT COMPONENTS
+   
+   # facA <- mSetObj$analSet$linReg1$res$response
+   # facB <-  mSetObj$analSet$linReg1$res$predictor
+   fileName <- mSetObj$analSet$linReg1$res$fileName
+   # formula <- mSetObj$analSet$linReg1$res$formula
+   # model <- mSetObj$analSet$linReg1$mod
+
+   formula <- as.formula(paste0(facA, "~", facB)) 
+   model <- lm(formula = formula, data = input, weights = NULL)
+
+  # PLOT
+
+  #SET PLOT DIMENSIONS
+  if(is.na(width)){
+    w <- 7.2
+  } else if(width == 0){
+    w <- 7.2
+  } else{
+    w <- width
+  }
+  h <- w
+  
+  #Name plot for download
+  imgName <- paste(imgName, "dpi", dpi, ".", format, sep="")
+  mSetObj$imgSet$plot.linReg1 <- imgName
+  
+    #SET POINT COLOR
+  if (col_dots == "NULL") {
+      col_dots1 <- "black" # default
+    } else if (col_dots == "blue") {
+      col_dots1 <- "blue"
+    } else if (col_dots == "red") {
+      col_dots1 <- "red"
+    } else if(col_dots == "green"){
+      col_dots1 <- "green"
+    } else if(col_dots == "grey"){
+      col_dots1 <- "grey"
+    }
+  
+  #SET LINE COLOR
+  if (col_line == "NULL") {
+      col_line1 <- "blue" # default
+    } else if (col_line == "black") {
+      col_line1 <- "black"
+    } else if (col_line == "red") {
+      col_line1 <- "red"
+    } else if(col_line == "green"){
+      col_line1 <- "green"
+    } else if(col_line == "grey"){
+      col_line1 <- "grey"
+    }
+
+
+  # PLOT TITLE
+  if(plot_title == " "){
+    plot_title1 <- paste0("Residuals vs. Fitted (", facA," ~ ", facB, ")")
+  } else {
+    plot_title1 <- plot_title
+  }
+  
+  # PLOT YAXIS
+  if(plot_ylab == " "){
+  plot_ylab1 <- "Residuals"
+  } else { # facA, response
+    plot_ylab1 <- plot_ylab
+  }
+
+  # PLOT XAXIS
+  if(plot_xlab == " "){
+   plot_xlab1 <- "Fitted"
+  } else { #prediction
+    plot_xlab1 <- plot_xlab
+  }
+  
+  
+  # a0 <- ggplot(data =  input,
+   # aes(x = .data[[facA]], y = .data[[facB]]) ) +
+   # aes_(sample =  as.name(facA)) )+
+  a0 <- ggplot(data = data.frame(resid = residuals(model), fit = fitted(model)),  
+   aes(x = fit, y = resid)) +
+    labs(title = plot_title1) +
+     ylab(plot_ylab1)+ xlab(plot_xlab1) +
+    geom_point(shape = 16, color = col_dots1) + 
+     geom_hline(yintercept = 0) +
+    geom_smooth(color = col_line1, fullrange = TRUE) +
+     theme_bw() + 
+  theme(panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        axis.text = element_text(size = 12, colour = "black"), 
+        axis.title = element_text(size = 12),
+        # legend.title=element_text(12), legend.text=element_text(size=12), 
+        plot.title = element_text(face = 'bold', hjust = 0.5)
+  )
+
+     #GENERATE PLOT
+  Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
+   
+  
+#STORE IN mset
+
+  mSetObj$analSet$linReg1$plotFit <- list(plot = a0, title = plot_title1, xlab = plot_xlab1, ylab = plot_ylab1)
+
+  # lin.reg.plot.json(mSetObj=mSetObj, which_plot = "fit")
+
+  
   print(a0)
   # a0
   dev.off()
   
-  return(.set.mSet(mSetObj))
+ # JSON MAKING
+
+ build <- ggplot_build(a0)
+
+  df <- data.frame(x=build$data[[1]][,c("x")],
+                  y=build$data[[1]][,c("y")],
+              point_cols = build$data[[1]][,grepl("col",colnames(build$data[[1]]))],
+              point_shape = build$data[[1]][,c("group")],
+              point_size = build$data[[1]][,c("size")],
+              line_cols = build$data[[2]][,grepl("col",colnames(build$data[[2]]))][1] )
   
+  if(grepl("ymin", colnames(build$data[[1]])) && grepl("ymax", colnames(build$data[[1]])) ){
+              df$CI_down <-build$data[[1]][,c("ymin")] 
+              df$CI_up <- build$data[[1]][,c("ymax")]
+   # ci<- build$data[[1]][,c("x","y", "ymin", "ymax")] ; colnames(ci) <- c("x","y","CI_down", "CI_up");  linear_plot_json$lines$ci <- ci # build$data[[1]][,c("ymin", "ymax")]
+ } else{
+   df$CI_down <- NULL
+   df$CI_up <- NULL
+     # linear_plot_json$lines$ci <- data.frame(x=build$data[[1]][,c("x")], y=build$data[[1]][,c("y")], CI_down = 0, CI_up = 0)
+}
+# 
+
+aa<-apply(df, 1, function(x){
+  paste(x, sep= paste0(colnames(df),": ") )
+})
+bb<-apply(aa, 2, function(x){ paste(
+    paste0(colnames(df),": "), x
+  ) })
+cc<- apply(bb, 2,  function(x){
+          paste(x, collapse=",")
+        } )
+dd<-paste( seq_along(cc),": {",cc, "}" )
+ee<- paste(
+  "data: {", 
+  paste(dd, collapse=","), "}"
+)
+
+linear_plot_json <- list()
+  linear_plot_json$main <- plot_title1 #title
+  linear_plot_json$axis <- c(plot_xlab1, plot_ylab1) #axis titles
+  linear_plot_json$data <- ee
+  
+ #  linear_plot_json$points$coords <- build$data[[1]][,c("x","y")] #[,1:2]
+ #  linear_plot_json$points$cols <- build$data[[1]][,grepl("col",colnames(build$data[[1]]))] #[,6] #colours
+ #  linear_plot_json$points$shape <- build$data[[1]][,c("group")]#[,5]
+ #  linear_plot_json$points$size <- build$data[[1]][,c("size")]#[,7]
+ #  linear_plot_json$lines$cols <- build$data[[2]][,grepl("col",colnames(build$data[[2]]))]
+ # ## linear_plot_json$label <- build$data[[3]][,c("label")]
+ #  # linear_plot_json$lines$ci <- build$data[[1]][,c("se")]
+  
+  linear_plot_json$r_sq <-
+    round(summary(model)[["r.squared"]], digits = 2) #Extract R^2
+  linear_plot_json$r_sq_adj <-
+    round(summary(model)[["adj.r.squared"]], digits = 2) #Extract adjusted R^2 
+  linear_plot_json$slope <-
+    round(summary(model)[["coefficients"]][2], digits = 2) # beta
+  linear_plot_json$yint <-
+    round(summary(model)[["coefficients"]][1], digits = 2) # alpha
+
+ imgName2 <- paste(imgName, ".json", sep="")
+ json.obj <- RJSONIO::toJSON(linear_plot_json, .na='null')
+ sink(imgName2)
+ cat(json.obj)
+ sink()
+print(json.obj)
+print("json the road again")
+
+# lin.reg.plot.json(mSetObj, "plotted")
+# lin.reg.plot.json(mSetObj)
+
+ if(!.on.public.web){
+  return(.set.mSet(mSetObj))
+    }
+
 }
 
 
@@ -862,7 +1357,6 @@ lin.qq.plot <- function(mSetObj=NA,
 #'License: GNU GPL (>= 2)
 #'@export
 
-
 lin.reg.plot.json <- function(mSetObj=NA, which_plot = "NULL"){
 
   library("ggplot2")
@@ -870,7 +1364,7 @@ lin.reg.plot.json <- function(mSetObj=NA, which_plot = "NULL"){
   
   mSetObj <- .get.mSet(mSetObj)
  
-if(which_plot == "NULL" | which_plot == "plot" | which_plot == "plotted"){
+if(which_plot == "NULL" || which_plot == "plot" || which_plot == "plotted"){
   a0 <- mSetObj$analSet$linReg1$plotted$plot
   plot_title1 <- mSetObj$analSet$linReg1$plotted$title
   plot_ylab1 <- mSetObj$analSet$linReg1$plotted$ylab
@@ -892,8 +1386,9 @@ if(which_plot == "NULL" | which_plot == "plot" | which_plot == "plotted"){
   plot_xlab1 <- mSetObj$analSet$linReg1$plotFit$xlab
 }
   imgName <- mSetObj$imgSet$plot.linReg1
-  facA <- mSetObj$analSet$linReg1$res$response
-  facB <- mSetObj$analSet$linReg1$res$predictor
+  # facA <- mSetObj$analSet$linReg1$res$response
+  # facB <- mSetObj$analSet$linReg1$res$predictor
+  model <- mSetObj$analSet$linReg1$mod
 
 
   build <- ggplot_build(a0)
@@ -906,17 +1401,24 @@ if(which_plot == "NULL" | which_plot == "plot" | which_plot == "plotted"){
   linear_plot_json$points$shape <- build$data[[1]][,c("group")]#[,5]
   linear_plot_json$points$size <- build$data[[1]][,c("size")]#[,7]
   linear_plot_json$lines$cols <- build$data[[2]][,grepl("col",colnames(build$data[[2]]))]
-  linear_plot_json$label <- build$data[[3]][,c("label")]
-  # linear_plot_json$lines$ci <- build$data[[1]][,c("se")]
-  ci<- build$data[[1]][,c("x","y", "ymin", "ymax")]
-  colnames(ci) <- c("x","y","CI_down", "CI_up")
-  linear_plot_json$lines$ci <- ci # build$data[[1]][,c("ymin", "ymax")]
+ #  linear_plot_json$label <- build$data[[3]][,c("label")]
+ # linear_plot_json$lines$ci <- build$data[[1]][,c("se")]
+ # ci<- build$data[[1]][,c("x","y", "ymin", "ymax")]
+ # colnames(ci) <- c("x","y","CI_down", "CI_up")
+ # linear_plot_json$lines$ci <- ci # build$data[[1]][,c("ymin", "ymax")]
+
+  linear_plot_json$model$r_sq <- round(summary(model)[["r.squared"]], digits = 2) #Extract R^2
+  linear_plot_json$model$r_sq_adj <- round(summary(model)[["adj.r.squared"]], digits = 2) #Extract adjusted R^2 
+  linear_plot_json$model$slope <- round(summary(model)[["coefficients"]][2], digits = 2) # beta
+  linear_plot_json$model$yint <- round(summary(model)[["coefficients"]][1], digits = 2) # alpha
 
   imgName <- paste(imgName, ".json", sep="")
   json.obj <- RJSONIO::toJSON(linear_plot_json, .na='null')
   sink(imgName)
   cat(json.obj)
   sink()
+print(json.obj)
+print("got it")
 
   if(!.on.public.web){
     return(.set.mSet(mSetObj))
