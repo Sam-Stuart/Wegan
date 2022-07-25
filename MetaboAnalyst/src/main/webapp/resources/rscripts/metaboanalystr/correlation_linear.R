@@ -434,50 +434,53 @@ list(plot = a0, title = plot_title1, xlab = plot_xlab1, ylab = plot_ylab1)
 # JSON MAKING
 
  build <- ggplot_build(a0)
-
-  df <- data.frame(x=build$data[[1]][,c("x")],
-                  y=build$data[[1]][,c("y")],
-              point_cols = build$data[[1]][,grepl("col",colnames(build$data[[1]]))],
-              point_shape = build$data[[1]][,c("group")],
-              point_size = build$data[[1]][,c("size")],
-              line_cols = build$data[[2]][,grepl("col",colnames(build$data[[2]]))][1] )
+linear_plot_json <- list()
+#  df <- data.frame(x=build$data[[1]][,c("x")],
+#                  y=build$data[[1]][,c("y")],
+#              point_cols = build$data[[1]][,grepl("col",colnames(build$data[[1]]))],
+#              point_shape = build$data[[1]][,c("group")],
+#              point_size = build$data[[1]][,c("size")],
+#              line_cols = build$data[[2]][,grepl("col",colnames(build$data[[2]]))][1] )
   
   if(grepl("ymin", colnames(build$data[[1]])) && grepl("ymax", colnames(build$data[[1]])) ){
-              df$CI_down <-build$data[[1]][,c("ymin")] 
-              df$CI_up <- build$data[[1]][,c("ymax")]
-   # ci<- build$data[[1]][,c("x","y", "ymin", "ymax")] ; colnames(ci) <- c("x","y","CI_down", "CI_up");  linear_plot_json$lines$ci <- ci # build$data[[1]][,c("ymin", "ymax")]
+           #   df$CI_down <-build$data[[1]][,c("ymin")] 
+           #  df$CI_up <- build$data[[1]][,c("ymax")]
+    ci<- build$data[[1]][,c("x","y", "ymin", "ymax")] 
+ colnames(ci) <- c("x","y","CI_down", "CI_up")
+ linear_plot_json$lines$ci <- ci # build$data[[1]][,c("ymin", "ymax")]
  } else{
-   df$CI_down <- NULL
-   df$CI_up <- NULL
-     # linear_plot_json$lines$ci <- data.frame(x=build$data[[1]][,c("x")], y=build$data[[1]][,c("y")], CI_down = 0, CI_up = 0)
+  # df$CI_down <- NULL
+  # df$CI_up <- NULL
+     linear_plot_json$lines$ci <- data.frame(x=build$data[[1]][,c("x")], y=build$data[[1]][,c("y")], CI_down = 0, CI_up = 0)
 }
-# 
 
-aa<-apply(df, 1, function(x){
-  paste(x, sep= paste0(colnames(df),": ") )
-})
-bb<-apply(aa, 2, function(x){ paste(
-    paste0(colnames(df),": "), x
-  ) })
-cc<- apply(bb, 2,  function(x){
-          paste(x, collapse=",")
-        } )
-dd<-paste( seq_along(cc),": {",cc, "}" )
-ee<- paste(
-  "data: {", 
-  paste(dd, collapse=","), "}"
-)
 
-linear_plot_json <- list()
+#aa<-apply(df, 1, function(x){
+#  paste(x, sep= paste0(colnames(df),": ") )
+#})
+#bb<-apply(aa, 2, function(x){ paste(
+#    paste0(colnames(df),": "), x
+#  ) })
+
+#cc<- apply(bb, 2,  function(x){
+#          paste(x, collapse=",")
+#        } )
+#dd<-paste( seq_along(cc),": {",cc, "}" )
+#ee<- paste(
+#  "data: {", 
+#  paste(dd, collapse=","), "}"
+#)
+
+# linear_plot_json <- list()
   linear_plot_json$main <- plot_title1 #title
   linear_plot_json$axis <- c(plot_xlab1, plot_ylab1) #axis titles
-  linear_plot_json$data <- ee
+#  linear_plot_json$data <- ee
   
- #  linear_plot_json$points$coords <- build$data[[1]][,c("x","y")] #[,1:2]
- #  linear_plot_json$points$cols <- build$data[[1]][,grepl("col",colnames(build$data[[1]]))] #[,6] #colours
- #  linear_plot_json$points$shape <- build$data[[1]][,c("group")]#[,5]
- #  linear_plot_json$points$size <- build$data[[1]][,c("size")]#[,7]
- #  linear_plot_json$lines$cols <- build$data[[2]][,grepl("col",colnames(build$data[[2]]))]
+   linear_plot_json$points$coords <- build$data[[1]][,c("x","y")] #[,1:2]
+   linear_plot_json$points$cols <- build$data[[1]][,grepl("col",colnames(build$data[[1]]))] #[,6] #colours
+   linear_plot_json$points$shape <- build$data[[1]][,c("group")]#[,5]
+   linear_plot_json$points$size <- build$data[[1]][,c("size")]#[,7]
+   linear_plot_json$lines$cols <- build$data[[2]][,grepl("col",colnames(build$data[[2]]))]
  # ## linear_plot_json$label <- build$data[[3]][,c("label")]
  #  # linear_plot_json$lines$ci <- build$data[[1]][,c("se")]
   
