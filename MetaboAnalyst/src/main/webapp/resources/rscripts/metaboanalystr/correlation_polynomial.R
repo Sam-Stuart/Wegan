@@ -316,6 +316,8 @@ poly.reg.plot <- function(mSetObj=NA, # was called plot.polyReg
   
 library("ggplot2")
 library("ggpmisc")
+# library("stringr")
+# library("JSONIO")
 
   #Extract necessary objects from mSetObj
   mSetObj <- .get.mSet(mSetObj)
@@ -519,8 +521,51 @@ formula2 <- as.formula(
   print(a0)
   # a0
   dev.off()
-  
+
+# JSON MAKING
+build <- ggplot_build(a0)
+linear_plot_json <- list()
+ #### NON-PASTE VERSION
+if(grepl("ymin", colnames(build$data[[1]])) && grepl("ymax", colnames(build$data[[1]])) ){
+   ci<- build$data[[1]][,c("x","y", "ymin", "ymax")] 
+   colnames(ci) <- c("x","y","CI_down", "CI_up")
+   linear_plot_json$lines$ci <- ci # build$data[[1]][,c("ymin", "ymax")]
+ } else{
+   linear_plot_json$lines$ci <- data.frame(x=build$data[[1]][,c("x")], y=build$data[[1]][,c("y")], CI_down = 0, CI_up = 0)
+ }
+   
+  linear_plot_json$main <- plot_title1 #title
+  linear_plot_json$axis <- c(plot_xlab1, plot_ylab1) #axis titles
+  linear_plot_json$points$coords <- build$data[[1]][,c("x","y")] #[,1:2]
+  linear_plot_json$points$cols <- build$data[[1]][,grepl("col",colnames(build$data[[1]]))] #[,6] #colours
+  linear_plot_json$points$shape <- build$data[[1]][,c("group")]#[,5]
+  linear_plot_json$points$size <- build$data[[1]][,c("size")]#[,7]
+  linear_plot_json$lines$cols <- build$data[[2]][,grepl("col",colnames(build$data[[2]]))]
+ ## linear_plot_json$label <- build$data[[3]][,c("label")]
+  # linear_plot_json$lines$ci <- build$data[[1]][,c("se")]
+     
+
+#### BOTH VERSIONS
+  linear_plot_json$r_sq <-
+    round(summary(model)[["r.squared"]], digits = 2) #Extract R^2
+  linear_plot_json$r_sq_adj <-
+    round(summary(model)[["adj.r.squared"]], digits = 2) #Extract adjusted R^2 
+  linear_plot_json$slope <-
+    round(summary(model)[["coefficients"]][2], digits = 2) # beta
+  linear_plot_json$yint <-
+    round(summary(model)[["coefficients"]][1], digits = 2) # alpha
+
+ imgName2 <- paste(imgName, ".json", sep="")
+ json.obj <- RJSONIO::toJSON(linear_plot_json, .na='null')
+ sink(imgName2)
+ cat(json.obj)
+ sink()
+print(json.obj)
+print("I'm json the highway to hell")
+
+if(!.on.public.web){
   return(.set.mSet(mSetObj))
+    }
   
 }
 
@@ -568,6 +613,7 @@ poly.pred.plot <- function(mSetObj=NA,
   imgName, format="png", dpi=72, width=NA){
   
 library("ggplot2")
+#library("JSONIO")
 
   ## was called: plot.pred.polyReg
   #Extract necessary objects from mSetObj
@@ -706,9 +752,50 @@ formula2 <- as.formula(
   print(a0)
   # a0
   dev.off()
-  
-  return(.set.mSet(mSetObj))
 
+
+# JSON MAKING
+build <- ggplot_build(a0)
+linear_plot_json <- list()
+ #### NON-PASTE VERSION
+if(grepl("ymin", colnames(build$data[[1]])) && grepl("ymax", colnames(build$data[[1]])) ){
+   ci<- build$data[[1]][,c("x","y", "ymin", "ymax")] 
+   colnames(ci) <- c("x","y","CI_down", "CI_up")
+   linear_plot_json$lines$ci <- ci # build$data[[1]][,c("ymin", "ymax")]
+ } else{
+   linear_plot_json$lines$ci <- data.frame(x=build$data[[1]][,c("x")], y=build$data[[1]][,c("y")], CI_down = 0, CI_up = 0)
+ }
+   
+  linear_plot_json$main <- plot_title1 #title
+  linear_plot_json$axis <- c(plot_xlab1, plot_ylab1) #axis titles
+  linear_plot_json$points$coords <- build$data[[1]][,c("x","y")] #[,1:2]
+  linear_plot_json$points$cols <- build$data[[1]][,grepl("col",colnames(build$data[[1]]))] #[,6] #colours
+  linear_plot_json$points$shape <- build$data[[1]][,c("group")]#[,5]
+  linear_plot_json$points$size <- build$data[[1]][,c("size")]#[,7]
+  linear_plot_json$lines$cols <- build$data[[2]][,grepl("col",colnames(build$data[[2]]))]
+ ## linear_plot_json$label <- build$data[[3]][,c("label")]
+  # linear_plot_json$lines$ci <- build$data[[1]][,c("se")]
+     
+  linear_plot_json$r_sq <-
+    round(summary(model)[["r.squared"]], digits = 2) #Extract R^2
+  linear_plot_json$r_sq_adj <-
+    round(summary(model)[["adj.r.squared"]], digits = 2) #Extract adjusted R^2 
+  linear_plot_json$slope <-
+    round(summary(model)[["coefficients"]][2], digits = 2) # beta
+  linear_plot_json$yint <-
+    round(summary(model)[["coefficients"]][1], digits = 2) # alpha
+
+ imgName2 <- paste(imgName, ".json", sep="")
+ json.obj <- RJSONIO::toJSON(linear_plot_json, .na='null')
+ sink(imgName2)
+ cat(json.obj)
+ sink()
+print(json.obj)
+print("Hey little sister who's the only json")
+
+if(!.on.public.web){
+  return(.set.mSet(mSetObj))
+    }
 }
 
 

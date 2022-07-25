@@ -37,6 +37,7 @@ public class PolyCABean implements Serializable {
     
 
     private String filePolySummary = getSummaryPolyDownload();
+//    private String filePolySummary = "polynomial_regession_summary_degree.txt";
     private String filePolySummaryPath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + filePolySummary + "\">" + filePolySummary + "</a>";
     
     public String getFilePolySummaryPath() {
