@@ -69,6 +69,7 @@ d3.json("LinearCorrelation.json", function (data) {
     const Rsquare = data.RSquare;
     const RsquareAdjusted = data.RSquareAdjusted;
 
+    //Calculate linear regression (add yhat to objects)
     calLinearRegression(values);
 
     //Convert to number type. Make sure that they are numbers
@@ -83,7 +84,8 @@ d3.json("LinearCorrelation.json", function (data) {
         .scaleLinear()
         .domain(d3.extent(values, (d) => d.x))
         .range([0, width]);
-    svg.append("g")
+    var xAxis = svg
+        .append("g")
         .attr("transform", "translate(0," + height + ")")
         .call(d3.axisBottom(x));
 
@@ -98,7 +100,7 @@ d3.json("LinearCorrelation.json", function (data) {
         .scaleLinear()
         .domain(d3.extent(values, (d) => d.y))
         .range([height, 0]);
-    svg.append("g").call(d3.axisLeft(y));
+    var yAxis = svg.append("g").call(d3.axisLeft(y));
 
     svg.append("text")
         .text(yLabel)
@@ -124,9 +126,74 @@ d3.json("LinearCorrelation.json", function (data) {
             return y(d.yhat);
         });
 
+    // Add a clipPath: everything out of this area won't be drawn.
+    var clip = svg
+        .append("defs")
+        .append("SVG:clipPath")
+        .attr("id", "clip")
+        .append("SVG:rect")
+        .attr("width", width)
+        .attr("height", height)
+        .attr("x", 0)
+        .attr("y", 0);
+
+    // Create the scatter variable: where both the circles and the brush take place
+    var scatter = svg.append("g").attr("clip-path", "url(#clip)");
+
+    // Set the zoom and Pan features: how much you can zoom, on which part, and what to do when there is a zoom
+    var zoom = d3
+        .zoom()
+        .scaleExtent([0.5, 20]) // This control how much you can unzoom (x0.5) and zoom (x20)
+        .extent([
+            [0, 0],
+            [width, height],
+        ])
+        .on("zoom", updateChart);
+
+    // This add an invisible rect on top of the chart area. This rect can recover pointer events: necessary to understand when the user zoom
+    scatter
+        .append("rect")
+        .attr("width", width)
+        .attr("height", height)
+        .style("fill", "none")
+        .style("pointer-events", "all")
+        .lower();
+
+    scatter.call(zoom);
+    // now the user can zoom and it will trigger the function called updateChart
+
+    // A function that updates the chart when the user zoom and thus new boundaries are available
+    function updateChart() {
+        // recover the new scale
+        var newX = d3.event.transform.rescaleX(x);
+        var newY = d3.event.transform.rescaleY(y);
+
+        // update axes with these new boundaries
+        xAxis.call(d3.axisBottom(newX));
+        yAxis.call(d3.axisLeft(newY));
+
+        // update circle position
+        scatter
+            .selectAll("circle")
+            .attr("cx", function (d) {
+                return newX(d.x);
+            })
+            .attr("cy", function (d) {
+                return newY(d.y);
+            });
+
+        scatter.select(".line").attr(
+            "d",
+            d3
+                .line()
+                .x((d) => newX(d.x))
+                .y((d) => newY(d.yhat))
+        );
+    }
+
     // Add dots
-    svg.append("g")
-        .selectAll(".mypoint")
+    scatter
+        .selectAll("circle")
         .data(values)
         .enter()
         .append("circle")
@@ -158,6 +225,7 @@ d3.json("LinearCorrelation.json", function (data) {
             tooltip.transition(200).style("opacity", 0);
         });
 
+    //Tool tip
     var tooltip = d3
         .select("body")
         .append("div")
@@ -220,7 +288,8 @@ d3.json("LinearCorrelation.json", function (data) {
         );
 
     // Append line
-    svg.append("path")
+    scatter
+        .append("path")
         .datum(values)
         .attr("class", "line")
         .attr("d", line)
@@ -247,7 +316,7 @@ d3.json("LinearCorrelation.json", function (data) {
         .style("font-size", "18px")
         .style("margin-bottom", "1rem");
 
-    //Equation
+    // Equation;
     var equationGroup = svg.append("g").classed("equation", true);
     var equationLabel = equationGroup.append("text").text(equation);
     var RsquareLabel = equationGroup
