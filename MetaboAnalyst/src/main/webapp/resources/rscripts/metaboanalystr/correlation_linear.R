@@ -75,7 +75,7 @@ lin.reg.anal <- function(mSetObj = NA,
   covar <- vcov(model) #PRINT
   conf.int <- confint(model, level=0.95) #PRINT
   
-  fileName <- paste0("linear_regression_summary", ".txt") #File name for summary
+  fileName <- paste0("corr_linear_model_summary", ".txt") #File name for summary
 # fileName <- paste0("linear_regression_summary_", facA, "~", facB, ".txt") #File name for summary
   coeffs <- summary[["coefficients"]] #Extract model coefficients
   beta <- round(coeffs[2], digits = 2) # slope
@@ -161,12 +161,12 @@ lin.reg.anal <- function(mSetObj = NA,
 ### Printing Values ## ERROR CHECK: BACKSLASH FOLLOWED BY N
   sink(fileName)
   cat("Formula:\n")
-  print(formula)
+  print(deparse(formula))
   cat("Model:\n")
   print(equation)
   cat("\nLinear Model Assumption Check:")
   print(df)
-  print(failed)
+  cat(failed)
   print(summary)
   # print(norm_resid)
   # cat("Normality of residuals result:\n")
@@ -248,11 +248,10 @@ lin.reg.plot <- function(mSetObj=NA,
   #RETRIEVE RESULTS: 
  facA <- mSetObj$analSet$linReg1$res$response
  facB <-  mSetObj$analSet$linReg1$res$predictor
-   
-   fileName <- mSetObj$analSet$linReg1$res$fileName
-   # predicted.values <- mSetObj$analSet$linReg1$res$predicted.values
-   formula <- mSetObj$analSet$linReg1$res$formula
-   model <- mSetObj$analSet$linReg1$mod   
+ fileName <- mSetObj$analSet$linReg1$res$fileName
+ # predicted.values <- mSetObj$analSet$linReg1$res$predicted.values
+ formula <- mSetObj$analSet$linReg1$res$formula
+ model <- mSetObj$analSet$linReg1$mod   
  
   
   # PLOT
@@ -463,7 +462,7 @@ bb<-apply(aa, 2, function(x){ paste(
 cc<- apply(bb, 2,  function(x){
           paste(x, collapse=",")
         } )
-dd<-paste( names(cc),": {",cc, "}" )
+dd<-paste( seq_along(cc),": {",cc, "}" )
 ee<- paste(
   "data: {", 
   paste(dd, collapse=","), "}"
@@ -574,7 +573,9 @@ lin.pred.plot <- function(mSetObj=NA,
    prediction <- mSetObj$analSet$linReg1$res$predicted.values
    # formula <- mSetObj$analSet$linReg1$res$formula
    # model <- mSetObj$analSet$linReg1$mod   
- 
+ dfpred<-data.frame( fpred = prediction, fA = input[,facA])
+formula<-as.formula(paste0("fA~fpred"))
+   model <- lm(formula = formula, data = dfpred, weights = NULL)
 
   # PLOT
 
@@ -1033,7 +1034,7 @@ bb<-apply(aa, 2, function(x){ paste(
 cc<- apply(bb, 2,  function(x){
           paste(x, collapse=",")
         } )
-dd<-paste( names(cc),": {",cc, "}" )
+dd<-paste( seq_along(cc),": {",cc, "}" )
 ee<- paste(
   "data: {", 
   paste(dd, collapse=","), "}"
@@ -1295,7 +1296,7 @@ bb<-apply(aa, 2, function(x){ paste(
 cc<- apply(bb, 2,  function(x){
           paste(x, collapse=",")
         } )
-dd<-paste( names(cc),": {",cc, "}" )
+dd<-paste( seq_along(cc),": {",cc, "}" )
 ee<- paste(
   "data: {", 
   paste(dd, collapse=","), "}"

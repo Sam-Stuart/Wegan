@@ -21,6 +21,8 @@ import metaboanalyst.rwrappers.UniVarTests;
 import metaboanalyst.rwrappers.CAUtils;
 import metaboanalyst.rwrappers.RDataUtils;
 
+//added: from RarefactionBean 202207-
+//import metaboanalyst.controllers.ApplicationBean1;
 import metaboanalyst.utils.DataUtils;
 import org.primefaces.context.RequestContext;
 import org.primefaces.model.DualListModel;
@@ -34,6 +36,7 @@ import org.rosuda.REngine.Rserve.RConnection;
 public class LinearCABean implements Serializable {
 
     private final SessionBean1 sb = (SessionBean1) DataUtils.findBean("sessionBean1");
+//     private final ApplicationBean1 ab = (ApplicationBean1) DataUtils.findBean("applicationBean1");
 
      //TABLES FOR DOWNLOAD
     private User usr = sb.getCurrentUser();
@@ -51,6 +54,7 @@ public class LinearCABean implements Serializable {
     public void setFileLinModValsPath(String fileLinModValsPath) {
         this.fileLinModValsPath = fileLinModValsPath;
     } 
+    
     
     
     private SelectItem[] corrColumnOpts = null;
@@ -289,11 +293,11 @@ public class LinearCABean implements Serializable {
 
     }
       
-        private String getSummaryLinDownload(){
-        String facA = getCorrColumnNameA();
-        String facB = getCorrColumnNameB();
-        return "linear_regession_summary_" + facA + "~" + facB + ".txt";
-    }
+//        private String getSummaryLinDownload(){
+//        String facA = getCorrColumnNameA();
+//        String facB = getCorrColumnNameB();
+//        return "linear_regession_summary_" + facA + "~" + facB + ".txt";
+//    }
     
     
 }
