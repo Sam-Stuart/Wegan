@@ -64,11 +64,7 @@
                             </h:panelGroup>
                          <h:panelGroup>
                                 <h:panelGrid columns="3" class="resultsImages">
-                                    <i id="question" class="fa fa-question-circle" title="Only numeric variables are used in linear correlation. The linear model can be written in the form (Y = X * Beta + epsilon), where:
-Y = dependent variable; 
-X = independent variable;
-Beta = regression parameter coefficients (including the intercept);
-Epsilon = error values (the sum of all other influences on Y after accounting for X)
+                                    <i id="question" class="fa fa-question-circle" title="Only numeric variables are used in linear correlation. The linear model can be written in the form (Y = X * Beta + epsilon), where: y = dependent variable; x = independent variable; Beta = regression parameter coefficients (including the intercept); Epsilon = error values (the sum of all other influences on Y after accounting for X).
 
 The model makes several assumptions about the error term, namely linearity, normality, homoscedasticity, independence, and that the model is not disproportionately influenced by outliers. 
 
@@ -188,7 +184,7 @@ The R-squared value is the fraction of variance explained by the model; the adju
                 <p:tab title ="Normality of Residuals Plot" titleStyleClass="p-tab-nav">
                     <h:form id="form3">
                         <p>
-                            Normality of residuals is one of the assumptions for a linear model. This plot (also called a 'Q-Q' plot) checks this assumption by comparing the distribution of model residuals (empirical) and theoretical normal distribution. In interpreting the plot, the closer the points are to the diagonal line, the better the evidence that the residuals are normally distributed. 
+                            Normality of residuals is one of the assumptions for a linear model. This plot (also called a 'Q-Q' plot) checks this assumption by comparing the distribution of standardized model residuals (empirical) and the theoretical normal distribution. In interpreting the plot, the closer the points are to the diagonal line, the better the evidence that the residuals are normally distributed. (<a href="https://sscc.wisc.edu/sscc/pubs/RegDiag-R/normality.html">UMadison, Statistics Dept. <i> Normality. Regression Diagnostics with R</i>. 2021. </a>)
                         </p>
                         <h:panelGrid id="panelGrid3" columns="5" cellpadding="3" columnClasses="colLeft,colRightShort,colLeft,colRightShort, colLast">
                        <!--"colLeft,colRightShort,colLeft,colRightShort, colLast"-->
