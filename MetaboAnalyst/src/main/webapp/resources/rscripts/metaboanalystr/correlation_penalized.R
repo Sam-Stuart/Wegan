@@ -5,7 +5,7 @@
 #'@param method Set penalized regression method, default is ridge
 #'@param facA Input the name of the response column (java uses Columns() to give user options)
 #'@param data Boolean, whether to use original data; "false" (default) means normalized or "true" means original (checkbox)
-#'@author Gina Sykes\email{gsykes@ualberta.ca}
+#'@author Louisa Normington\email{normingt@ualberta.ca}
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2)
 #'@export
