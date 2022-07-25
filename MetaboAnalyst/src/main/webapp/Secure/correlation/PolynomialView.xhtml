@@ -40,7 +40,7 @@
                                 </p:selectOneMenu>
                             
                              <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
-                            <p:selectBooleanCheckbox value ="#{linearCABean.doOriginal}"/>
+                            <p:selectBooleanCheckbox value ="#{polyCABean.doOriginal}"/>
                         </h:panelGrid>
                         
                         
@@ -142,7 +142,7 @@ The R-squared value is the fraction of variance explained by the model; the adju
                                              styleClass="graphicsButton"
                                              style="box-shadow: none !important; text-shadow: none !important;"
                                              actionListener="#{sessionBean1.graphicsLnk_action('corr_poly')}" 
-                                            oncomplete="PF('graphApperancePolyPred').show()"/>  
+                                            oncomplete="PF('graphApperancePoly2').show()"/>  
                                            
                             <p:commandButton value="Update" 
                                              styleClass="updateButton"
