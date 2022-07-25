@@ -454,11 +454,11 @@ list(plot = a0, title = plot_title1, xlab = plot_xlab1, ylab = plot_ylab1)
 }
 # 
 
-aa<-apply(testdf, 1, function(x){
+aa<-apply(df, 1, function(x){
   paste(x, sep= paste0(colnames(df),": ") )
 })
 bb<-apply(aa, 2, function(x){ paste(
-    paste0(colnames(testdf),": "), x
+    paste0(colnames(df),": "), x
   ) })
 cc<- apply(bb, 2,  function(x){
           paste(x, collapse=",")
@@ -766,16 +766,16 @@ if(plot_xlab == " "){
 }
 # 
 
-aa<-apply(testdf, 1, function(x){
+aa<-apply(df, 1, function(x){
   paste(x, sep= paste0(colnames(df),": ") )
 })
 bb<-apply(aa, 2, function(x){ paste(
-    paste0(colnames(testdf),": "), x
+    paste0(colnames(df),": "), x
   ) })
 cc<- apply(bb, 2,  function(x){
           paste(x, collapse=",")
         } )
-dd<-paste( names(cc),": {",cc, "}" )
+dd<-paste( seq_along(cc),": {",cc, "}" )
 ee<- paste(
   "data: {", 
   paste(dd, collapse=","), "}"
@@ -1024,11 +1024,11 @@ lin.qq.plot <- function(mSetObj=NA,
 }
 # 
 
-aa<-apply(testdf, 1, function(x){
+aa<-apply(df, 1, function(x){
   paste(x, sep= paste0(colnames(df),": ") )
 })
 bb<-apply(aa, 2, function(x){ paste(
-    paste0(colnames(testdf),": "), x
+    paste0(colnames(df),": "), x
   ) })
 cc<- apply(bb, 2,  function(x){
           paste(x, collapse=",")
@@ -1286,11 +1286,11 @@ lin.resfit.plot <- function(mSetObj=NA,
 }
 # 
 
-aa<-apply(testdf, 1, function(x){
+aa<-apply(df, 1, function(x){
   paste(x, sep= paste0(colnames(df),": ") )
 })
 bb<-apply(aa, 2, function(x){ paste(
-    paste0(colnames(testdf),": "), x
+    paste0(colnames(df),": "), x
   ) })
 cc<- apply(bb, 2,  function(x){
           paste(x, collapse=",")
