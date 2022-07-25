@@ -435,31 +435,61 @@ list(plot = a0, title = plot_title1, xlab = plot_xlab1, ylab = plot_ylab1)
 # JSON MAKING
 
  build <- ggplot_build(a0)
-linear_plot_json <- list()
-linear_plot_json$main <- plot_title1 #title
-linear_plot_json$axis <- c(plot_xlab1, plot_ylab1) #axis titles
-linear_plot_json$points$coords <- build$data[[1]][,c("x","y")] #[,1:2]
-linear_plot_json$points$cols <- build$data[[1]][,grepl("col",colnames(build$data[[1]]))] #[,6] #colours
-linear_plot_json$points$shape <- build$data[[1]][,c("group")]#[,5]
-linear_plot_json$points$size <- build$data[[1]][,c("size")]#[,7]
-linear_plot_json$lines$cols <- build$data[[2]][,grepl("col",colnames(build$data[[2]]))]
-##  linear_plot_json$label <- build$data[[3]][,c("label")]
 
-if(grepl("ymin",colnames(build$data[[1]]) ) && grepl("ymax",colnames(build$data[[1]]) ) ){
-ci<- build$data[[1]][,c("x","y", "ymin", "ymax")]
-colnames(ci) <- c("x","y","CI_down", "CI_up")
-linear_plot_json$lines$ci <- ci # build$data[[1]][,c("ymin", "ymax")]
-} else {
-linear_plot_json$lines$ci <- data.frame(
-x = build$data[[1]][,c("x")], 
-y = build$data[[1]][,c("y")], 
-CI_down = 0, CI_up = 0)
+  df <- data.frame(x=build$data[[1]][,c("x")],
+                  y=build$data[[1]][,c("y")],
+              point_cols = build$data[[1]][,grepl("col",colnames(build$data[[1]]))],
+              point_shape = build$data[[1]][,c("group")],
+              point_size = build$data[[1]][,c("size")],
+              line_cols = build$data[[2]][,grepl("col",colnames(build$data[[2]]))][1] )
+  
+  if(grepl("ymin", colnames(build$data[[1]])) && grepl("ymax", colnames(build$data[[1]])) ){
+              df$CI_down <-build$data[[1]][,c("ymin")] 
+              df$CI_up <- build$data[[1]][,c("ymax")]
+   # ci<- build$data[[1]][,c("x","y", "ymin", "ymax")] ; colnames(ci) <- c("x","y","CI_down", "CI_up");  linear_plot_json$lines$ci <- ci # build$data[[1]][,c("ymin", "ymax")]
+ } else{
+   df$CI_down <- NULL
+   df$CI_up <- NULL
+     # linear_plot_json$lines$ci <- data.frame(x=build$data[[1]][,c("x")], y=build$data[[1]][,c("y")], CI_down = 0, CI_up = 0)
 }
+# 
 
- linear_plot_json$model$r_sq <- round(summary(model)[["r.squared"]], digits = 2) #Extract R^2
- linear_plot_json$model$r_sq_adj <- round(summary(model)[["adj.r.squared"]], digits = 2) #Extract adjusted R^2
- linear_plot_json$model$slope <- round(summary(model)[["coefficients"]][2], digits = 2) # beta
- linear_plot_json$model$yint <- round(summary(model)[["coefficients"]][1], digits = 2) # alpha
+aa<-apply(testdf, 1, function(x){
+  paste(x, sep= paste0(colnames(df),": ") )
+})
+bb<-apply(aa, 2, function(x){ paste(
+    paste0(colnames(testdf),": "), x
+  ) })
+cc<- apply(bb, 2,  function(x){
+          paste(x, collapse=",")
+        } )
+dd<-paste( names(cc),": {",cc, "}" )
+ee<- paste(
+  "data: {", 
+  paste(dd, collapse=","), "}"
+)
+
+linear_plot_json <- list()
+  linear_plot_json$main <- plot_title1 #title
+  linear_plot_json$axis <- c(plot_xlab1, plot_ylab1) #axis titles
+  linear_plot_json$data <- ee
+  
+ #  linear_plot_json$points$coords <- build$data[[1]][,c("x","y")] #[,1:2]
+ #  linear_plot_json$points$cols <- build$data[[1]][,grepl("col",colnames(build$data[[1]]))] #[,6] #colours
+ #  linear_plot_json$points$shape <- build$data[[1]][,c("group")]#[,5]
+ #  linear_plot_json$points$size <- build$data[[1]][,c("size")]#[,7]
+ #  linear_plot_json$lines$cols <- build$data[[2]][,grepl("col",colnames(build$data[[2]]))]
+ # ## linear_plot_json$label <- build$data[[3]][,c("label")]
+ #  # linear_plot_json$lines$ci <- build$data[[1]][,c("se")]
+  
+  linear_plot_json$r_sq <-
+    round(summary(model)[["r.squared"]], digits = 2) #Extract R^2
+  linear_plot_json$r_sq_adj <-
+    round(summary(model)[["adj.r.squared"]], digits = 2) #Extract adjusted R^2 
+  linear_plot_json$slope <-
+    round(summary(model)[["coefficients"]][2], digits = 2) # beta
+  linear_plot_json$yint <-
+    round(summary(model)[["coefficients"]][1], digits = 2) # alpha
 
  imgName2 <- paste(imgName, ".json", sep="")
  json.obj <- RJSONIO::toJSON(linear_plot_json, .na='null')
@@ -717,31 +747,61 @@ if(plot_xlab == " "){
 # JSON MAKING
 
  build <- ggplot_build(a0)
-linear_plot_json <- list()
-linear_plot_json$main <- plot_title1 #title
-linear_plot_json$axis <- c(plot_xlab1, plot_ylab1) #axis titles
-linear_plot_json$points$coords <- build$data[[1]][,c("x","y")] #[,1:2]
-linear_plot_json$points$cols <- build$data[[1]][,grepl("col",colnames(build$data[[1]]))] #[,6] #colours
-linear_plot_json$points$shape <- build$data[[1]][,c("group")]#[,5]
-linear_plot_json$points$size <- build$data[[1]][,c("size")]#[,7]
-linear_plot_json$lines$cols <- build$data[[2]][,grepl("col",colnames(build$data[[2]]))]
-##  linear_plot_json$label <- build$data[[3]][,c("label")]
 
-if(grepl("ymin",colnames(build$data[[1]]) ) && grepl("ymax",colnames(build$data[[1]]) ) ){
-ci<- build$data[[1]][,c("x","y", "ymin", "ymax")]
-colnames(ci) <- c("x","y","CI_down", "CI_up")
-linear_plot_json$lines$ci <- ci # build$data[[1]][,c("ymin", "ymax")]
-} else {
-linear_plot_json$lines$ci <- data.frame(
-x = build$data[[1]][,c("x")], 
-y = build$data[[1]][,c("y")], 
-CI_down = 0, CI_up = 0)
+  df <- data.frame(x=build$data[[1]][,c("x")],
+                  y=build$data[[1]][,c("y")],
+              point_cols = build$data[[1]][,grepl("col",colnames(build$data[[1]]))],
+              point_shape = build$data[[1]][,c("group")],
+              point_size = build$data[[1]][,c("size")],
+              line_cols = build$data[[2]][,grepl("col",colnames(build$data[[2]]))][1] )
+  
+  if(grepl("ymin", colnames(build$data[[1]])) && grepl("ymax", colnames(build$data[[1]])) ){
+              df$CI_down <-build$data[[1]][,c("ymin")] 
+              df$CI_up <- build$data[[1]][,c("ymax")]
+   # ci<- build$data[[1]][,c("x","y", "ymin", "ymax")] ; colnames(ci) <- c("x","y","CI_down", "CI_up");  linear_plot_json$lines$ci <- ci # build$data[[1]][,c("ymin", "ymax")]
+ } else{
+   df$CI_down <- NULL
+   df$CI_up <- NULL
+     # linear_plot_json$lines$ci <- data.frame(x=build$data[[1]][,c("x")], y=build$data[[1]][,c("y")], CI_down = 0, CI_up = 0)
 }
+# 
 
- linear_plot_json$model$r_sq <- round(summary(model)[["r.squared"]], digits = 2) #Extract R^2
- linear_plot_json$model$r_sq_adj <- round(summary(model)[["adj.r.squared"]], digits = 2) #Extract adjusted R^2
- linear_plot_json$model$slope <- round(summary(model)[["coefficients"]][2], digits = 2) # beta
- linear_plot_json$model$yint <- round(summary(model)[["coefficients"]][1], digits = 2) # alpha
+aa<-apply(testdf, 1, function(x){
+  paste(x, sep= paste0(colnames(df),": ") )
+})
+bb<-apply(aa, 2, function(x){ paste(
+    paste0(colnames(testdf),": "), x
+  ) })
+cc<- apply(bb, 2,  function(x){
+          paste(x, collapse=",")
+        } )
+dd<-paste( names(cc),": {",cc, "}" )
+ee<- paste(
+  "data: {", 
+  paste(dd, collapse=","), "}"
+)
+
+linear_plot_json <- list()
+  linear_plot_json$main <- plot_title1 #title
+  linear_plot_json$axis <- c(plot_xlab1, plot_ylab1) #axis titles
+  linear_plot_json$data <- ee
+  
+ #  linear_plot_json$points$coords <- build$data[[1]][,c("x","y")] #[,1:2]
+ #  linear_plot_json$points$cols <- build$data[[1]][,grepl("col",colnames(build$data[[1]]))] #[,6] #colours
+ #  linear_plot_json$points$shape <- build$data[[1]][,c("group")]#[,5]
+ #  linear_plot_json$points$size <- build$data[[1]][,c("size")]#[,7]
+ #  linear_plot_json$lines$cols <- build$data[[2]][,grepl("col",colnames(build$data[[2]]))]
+ # ## linear_plot_json$label <- build$data[[3]][,c("label")]
+ #  # linear_plot_json$lines$ci <- build$data[[1]][,c("se")]
+  
+  linear_plot_json$r_sq <-
+    round(summary(model)[["r.squared"]], digits = 2) #Extract R^2
+  linear_plot_json$r_sq_adj <-
+    round(summary(model)[["adj.r.squared"]], digits = 2) #Extract adjusted R^2 
+  linear_plot_json$slope <-
+    round(summary(model)[["coefficients"]][2], digits = 2) # beta
+  linear_plot_json$yint <-
+    round(summary(model)[["coefficients"]][1], digits = 2) # alpha
 
  imgName2 <- paste(imgName, ".json", sep="")
  json.obj <- RJSONIO::toJSON(linear_plot_json, .na='null')
@@ -749,7 +809,7 @@ CI_down = 0, CI_up = 0)
  cat(json.obj)
  sink()
 print(json.obj)
-print("we built this city json rock and roll")
+print("carry on my wayward json")
 
 # lin.reg.plot.json(mSetObj, "plotted")
 # lin.reg.plot.json(mSetObj)
@@ -843,7 +903,7 @@ lin.qq.plot <- function(mSetObj=NA,
    facB <-  mSetObj$analSet$linReg1$res$predictor
    fileName <- mSetObj$analSet$linReg1$res$fileName
    # formula <- mSetObj$analSet$linReg1$res$formula
-   # model <- mSetObj$analSet$linReg1$mod
+   model <- mSetObj$analSet$linReg1$mod
 
   # PLOT
 
@@ -909,13 +969,17 @@ lin.qq.plot <- function(mSetObj=NA,
     plot_xlab1 <- plot_xlab
   }
  
-  a0 <- ggplot(data =  input,
+
+  # a0 <- ggplot(data =  input,
    # aes(x = .data[[facA]], y = .data[[facB]]) ) +
-   aes_(sample =  as.name(facA)) )+
-    labs(title = plot_title1) +
+   # aes_(sample =  as.name(facA)) )+
+  a0 <- ggplot() +
+ geom_qq(aes(sample = rstandard(model)), shape = 16, color = col_dots1) +
+  geom_abline(color = col_line1) +
+ labs(title = plot_title1) +
      ylab(plot_ylab1)+ xlab(plot_xlab1) +
-    stat_qq(shape = 16, color = col_dots1) +
-    stat_qq_line(color = col_line1, fullrange = TRUE) +
+    # stat_qq(shape = 16, color = col_dots1) +
+    # stat_qq_line(color = col_line1, fullrange = TRUE) +
      theme_bw() + 
   theme(panel.grid.major = element_blank(), 
         panel.grid.minor = element_blank(),
@@ -941,31 +1005,61 @@ lin.qq.plot <- function(mSetObj=NA,
 
   # JSON MAKING
  build <- ggplot_build(a0)
-linear_plot_json <- list()
-linear_plot_json$main <- plot_title1 #title
-linear_plot_json$axis <- c(plot_xlab1, plot_ylab1) #axis titles
-linear_plot_json$points$coords <- build$data[[1]][,c("x","y")] #[,1:2]
-linear_plot_json$points$cols <- build$data[[1]][,grepl("col",colnames(build$data[[1]]))] #[,6] #colours
-linear_plot_json$points$shape <- build$data[[1]][,c("group")]#[,5]
-linear_plot_json$points$size <- build$data[[1]][,c("size")]#[,7]
-linear_plot_json$lines$cols <- build$data[[2]][,grepl("col",colnames(build$data[[2]]))]
-##  linear_plot_json$label <- build$data[[3]][,c("label")]
 
-if(grepl("ymin",colnames(build$data[[1]]) ) && grepl("ymax",colnames(build$data[[1]]) ) ){
-ci<- build$data[[1]][,c("x","y", "ymin", "ymax")]
-colnames(ci) <- c("x","y","CI_down", "CI_up")
-linear_plot_json$lines$ci <- ci # build$data[[1]][,c("ymin", "ymax")]
-} else {
-linear_plot_json$lines$ci <- data.frame(
-x = build$data[[1]][,c("x")], 
-y = build$data[[1]][,c("y")], 
-CI_down = 0, CI_up = 0)
+  df <- data.frame(x=build$data[[1]][,c("x")],
+                  y=build$data[[1]][,c("y")],
+              point_cols = build$data[[1]][,grepl("col",colnames(build$data[[1]]))],
+              point_shape = build$data[[1]][,c("group")],
+              point_size = build$data[[1]][,c("size")],
+              line_cols = build$data[[2]][,grepl("col",colnames(build$data[[2]]))][1] )
+  
+  if(grepl("ymin", colnames(build$data[[1]])) && grepl("ymax", colnames(build$data[[1]])) ){
+              df$CI_down <-build$data[[1]][,c("ymin")] 
+              df$CI_up <- build$data[[1]][,c("ymax")]
+   # ci<- build$data[[1]][,c("x","y", "ymin", "ymax")] ; colnames(ci) <- c("x","y","CI_down", "CI_up");  linear_plot_json$lines$ci <- ci # build$data[[1]][,c("ymin", "ymax")]
+ } else{
+   df$CI_down <- NULL
+   df$CI_up <- NULL
+     # linear_plot_json$lines$ci <- data.frame(x=build$data[[1]][,c("x")], y=build$data[[1]][,c("y")], CI_down = 0, CI_up = 0)
 }
+# 
 
- linear_plot_json$model$r_sq <- round(summary(model)[["r.squared"]], digits = 2) #Extract R^2
- linear_plot_json$model$r_sq_adj <- round(summary(model)[["adj.r.squared"]], digits = 2) #Extract adjusted R^2
- linear_plot_json$model$slope <- round(summary(model)[["coefficients"]][2], digits = 2) # beta
- linear_plot_json$model$yint <- round(summary(model)[["coefficients"]][1], digits = 2) # alpha
+aa<-apply(testdf, 1, function(x){
+  paste(x, sep= paste0(colnames(df),": ") )
+})
+bb<-apply(aa, 2, function(x){ paste(
+    paste0(colnames(testdf),": "), x
+  ) })
+cc<- apply(bb, 2,  function(x){
+          paste(x, collapse=",")
+        } )
+dd<-paste( names(cc),": {",cc, "}" )
+ee<- paste(
+  "data: {", 
+  paste(dd, collapse=","), "}"
+)
+
+linear_plot_json <- list()
+  linear_plot_json$main <- plot_title1 #title
+  linear_plot_json$axis <- c(plot_xlab1, plot_ylab1) #axis titles
+  linear_plot_json$data <- ee
+  
+ #  linear_plot_json$points$coords <- build$data[[1]][,c("x","y")] #[,1:2]
+ #  linear_plot_json$points$cols <- build$data[[1]][,grepl("col",colnames(build$data[[1]]))] #[,6] #colours
+ #  linear_plot_json$points$shape <- build$data[[1]][,c("group")]#[,5]
+ #  linear_plot_json$points$size <- build$data[[1]][,c("size")]#[,7]
+ #  linear_plot_json$lines$cols <- build$data[[2]][,grepl("col",colnames(build$data[[2]]))]
+ # ## linear_plot_json$label <- build$data[[3]][,c("label")]
+ #  # linear_plot_json$lines$ci <- build$data[[1]][,c("se")]
+  
+  linear_plot_json$r_sq <-
+    round(summary(model)[["r.squared"]], digits = 2) #Extract R^2
+  linear_plot_json$r_sq_adj <-
+    round(summary(model)[["adj.r.squared"]], digits = 2) #Extract adjusted R^2 
+  linear_plot_json$slope <-
+    round(summary(model)[["coefficients"]][2], digits = 2) # beta
+  linear_plot_json$yint <-
+    round(summary(model)[["coefficients"]][1], digits = 2) # alpha
 
  imgName2 <- paste(imgName, ".json", sep="")
  json.obj <- RJSONIO::toJSON(linear_plot_json, .na='null')
@@ -984,8 +1078,9 @@ print("livin json a prayer")
   
 }
 
+
 #'Generate Residuals vs. Fitted values plot for model
-#'@description Plot line of best fit on scatter plot of linear regression model on 2 variables in data
+#'@description Plot residuals and predicted (fitted or yhat values) of linear regression model on 2 variables in data (check linearity assumption)
 #'@param mSetObj Input the name of the created mSetObj
 #'@param data Boolean, whether to use original data; "false" (default) means normalized or "true" means original (checkbox)
 #'@param col_line Set color for line (default "NULL" is blue); (static dropdown)
@@ -1172,31 +1267,61 @@ lin.resfit.plot <- function(mSetObj=NA,
  # JSON MAKING
 
  build <- ggplot_build(a0)
-linear_plot_json <- list()
-linear_plot_json$main <- plot_title1 #title
-linear_plot_json$axis <- c(plot_xlab1, plot_ylab1) #axis titles
-linear_plot_json$points$coords <- build$data[[1]][,c("x","y")] #[,1:2]
-linear_plot_json$points$cols <- build$data[[1]][,grepl("col",colnames(build$data[[1]]))] #[,6] #colours
-linear_plot_json$points$shape <- build$data[[1]][,c("group")]#[,5]
-linear_plot_json$points$size <- build$data[[1]][,c("size")]#[,7]
-linear_plot_json$lines$cols <- build$data[[2]][,grepl("col",colnames(build$data[[2]]))]
-##  linear_plot_json$label <- build$data[[3]][,c("label")]
 
-if(grepl("ymin",colnames(build$data[[1]]) ) && grepl("ymax",colnames(build$data[[1]]) ) ){
-ci<- build$data[[1]][,c("x","y", "ymin", "ymax")]
-colnames(ci) <- c("x","y","CI_down", "CI_up")
-linear_plot_json$lines$ci <- ci # build$data[[1]][,c("ymin", "ymax")]
-} else {
-linear_plot_json$lines$ci <- data.frame(
-x = build$data[[1]][,c("x")], 
-y = build$data[[1]][,c("y")], 
-CI_down = 0, CI_up = 0)
+  df <- data.frame(x=build$data[[1]][,c("x")],
+                  y=build$data[[1]][,c("y")],
+              point_cols = build$data[[1]][,grepl("col",colnames(build$data[[1]]))],
+              point_shape = build$data[[1]][,c("group")],
+              point_size = build$data[[1]][,c("size")],
+              line_cols = build$data[[2]][,grepl("col",colnames(build$data[[2]]))][1] )
+  
+  if(grepl("ymin", colnames(build$data[[1]])) && grepl("ymax", colnames(build$data[[1]])) ){
+              df$CI_down <-build$data[[1]][,c("ymin")] 
+              df$CI_up <- build$data[[1]][,c("ymax")]
+   # ci<- build$data[[1]][,c("x","y", "ymin", "ymax")] ; colnames(ci) <- c("x","y","CI_down", "CI_up");  linear_plot_json$lines$ci <- ci # build$data[[1]][,c("ymin", "ymax")]
+ } else{
+   df$CI_down <- NULL
+   df$CI_up <- NULL
+     # linear_plot_json$lines$ci <- data.frame(x=build$data[[1]][,c("x")], y=build$data[[1]][,c("y")], CI_down = 0, CI_up = 0)
 }
+# 
 
- linear_plot_json$model$r_sq <- round(summary(model)[["r.squared"]], digits = 2) #Extract R^2
- linear_plot_json$model$r_sq_adj <- round(summary(model)[["adj.r.squared"]], digits = 2) #Extract adjusted R^2
- linear_plot_json$model$slope <- round(summary(model)[["coefficients"]][2], digits = 2) # beta
- linear_plot_json$model$yint <- round(summary(model)[["coefficients"]][1], digits = 2) # alpha
+aa<-apply(testdf, 1, function(x){
+  paste(x, sep= paste0(colnames(df),": ") )
+})
+bb<-apply(aa, 2, function(x){ paste(
+    paste0(colnames(testdf),": "), x
+  ) })
+cc<- apply(bb, 2,  function(x){
+          paste(x, collapse=",")
+        } )
+dd<-paste( names(cc),": {",cc, "}" )
+ee<- paste(
+  "data: {", 
+  paste(dd, collapse=","), "}"
+)
+
+linear_plot_json <- list()
+  linear_plot_json$main <- plot_title1 #title
+  linear_plot_json$axis <- c(plot_xlab1, plot_ylab1) #axis titles
+  linear_plot_json$data <- ee
+  
+ #  linear_plot_json$points$coords <- build$data[[1]][,c("x","y")] #[,1:2]
+ #  linear_plot_json$points$cols <- build$data[[1]][,grepl("col",colnames(build$data[[1]]))] #[,6] #colours
+ #  linear_plot_json$points$shape <- build$data[[1]][,c("group")]#[,5]
+ #  linear_plot_json$points$size <- build$data[[1]][,c("size")]#[,7]
+ #  linear_plot_json$lines$cols <- build$data[[2]][,grepl("col",colnames(build$data[[2]]))]
+ # ## linear_plot_json$label <- build$data[[3]][,c("label")]
+ #  # linear_plot_json$lines$ci <- build$data[[1]][,c("se")]
+  
+  linear_plot_json$r_sq <-
+    round(summary(model)[["r.squared"]], digits = 2) #Extract R^2
+  linear_plot_json$r_sq_adj <-
+    round(summary(model)[["adj.r.squared"]], digits = 2) #Extract adjusted R^2 
+  linear_plot_json$slope <-
+    round(summary(model)[["coefficients"]][2], digits = 2) # beta
+  linear_plot_json$yint <-
+    round(summary(model)[["coefficients"]][1], digits = 2) # alpha
 
  imgName2 <- paste(imgName, ".json", sep="")
  json.obj <- RJSONIO::toJSON(linear_plot_json, .na='null')
