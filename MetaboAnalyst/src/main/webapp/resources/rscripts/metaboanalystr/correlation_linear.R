@@ -463,12 +463,12 @@ linear_plot_json$lines$cols <- build_line[,grepl("col",colnames(build_line))]
 linear_plot_json$lines$size <- build_line[,c("size")]
  ## linear_plot_json$label <- build$data[[3]][,c("label")]
  ## linear_plot_json$lines$ci <- build$data[[1]][,c("se")]
-if(grepl("ymin", colnames(build$data[[1]])) && grepl("ymax", colnames(build$data[[1]])) ){
-   ci<- build$data[[1]][,c("x","y", "ymin", "ymax")] 
+  if(any(grepl("ymin", colnames(build_line))) && any(grepl("ymax", colnames(build_line))) ){
+   ci<- build_line[,c("x","y", "ymin", "ymax")] 
    colnames(ci) <- c("x","y","CI_down", "CI_up")
    linear_plot_json$lines$ci <- ci # build$data[[1]][,c("ymin", "ymax")]
  } else{
-   linear_plot_json$lines$ci <- data.frame(x=build$data[[1]][,c("x")], y=build$data[[1]][,c("y")], CI_down = 0, CI_up = 0)
+    linear_plot_json$lines$ci <- data.frame(x=build_line[,c("x")], y=build_line[,c("y")], CI_down = 0, CI_up = 0)
  }   
   
 #   #### PASTE VERSION
@@ -581,6 +581,7 @@ lin.pred.plot <- function(mSetObj=NA,
 
   library("ggpmisc")
   library("ggplot2")
+# library("JSONIO")
   
   mSetObj <- .get.mSet(mSetObj)
   
@@ -701,8 +702,8 @@ if(plot_xlab == " "){
 
 ## for JSON object:
 if(plot_ci1 == TRUE){
-aj <- a0
-} else{
+ aj <- a0
+ } else{
 aj <- ggplot(data =  data.frame(
     fpred = prediction, fA = input[,facA]),
    # aes(x = .data[[facA]], y = .data[[facB]]) ) +
@@ -805,13 +806,13 @@ linear_plot_json$lines$cols <- build_line[,grepl("col",colnames(build_line))]
 linear_plot_json$lines$size <- build_line[,c("size")]
  ## linear_plot_json$label <- build$data[[3]][,c("label")]
   # linear_plot_json$lines$ci <- build$data[[1]][,c("se")]
-if(grepl("ymin", colnames(build$data[[1]])) && grepl("ymax", colnames(build$data[[1]])) ){
-   ci<- build$data[[1]][,c("x","y", "ymin", "ymax")] 
+if(any(grepl("ymin", colnames(build_line))) && any(grepl("ymax", colnames(build_line))) ){
+   ci<- build_line[,c("x","y", "ymin", "ymax")] 
    colnames(ci) <- c("x","y","CI_down", "CI_up")
    linear_plot_json$lines$ci <- ci # build$data[[1]][,c("ymin", "ymax")]
  } else{
-   linear_plot_json$lines$ci <- data.frame(x=build$data[[1]][,c("x")], y=build$data[[1]][,c("y")], CI_down = 0, CI_up = 0)
- }   
+    linear_plot_json$lines$ci <- data.frame(x=build_line[,c("x")], y=build_line[,c("y")], CI_down = 0, CI_up = 0)
+ }
 
 #   #### PASTE VERSION
 #    df <- data.frame(x=build$data[[1]][,c("x")],
