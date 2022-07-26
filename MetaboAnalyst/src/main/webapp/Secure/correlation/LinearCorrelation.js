@@ -22,53 +22,29 @@ var svg = d3
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-function calLinearRegression(data) {
-    var n = data.length;
-    var x_mean = 0;
-    var y_mean = 0;
-    var term1 = 0;
-    var term2 = 0;
-
-    data.forEach((d) => {
-        x_mean += d.x;
-        y_mean += d.y;
-    });
-
-    // calculate mean x and y
-    x_mean /= n;
-    y_mean /= n;
-
-    // calculate coefficients
-    var xr = 0;
-    var yr = 0;
-    data.forEach((d) => {
-        xr = d.x - x_mean;
-        yr = d.y - y_mean;
-        term1 += xr * yr;
-        term2 += xr * xr;
-    });
-
-    var b1 = term1 / term2;
-    var b0 = y_mean - b1 * x_mean;
-    // perform regression
-
-    // fit line using coeffs
-    data.forEach((d) => {
-        d.yhat = b0 + d.x * b1;
-    });
-
-    console.log(b0, b1);
-}
-
 //Read the data
 d3.json("LinearCorrelation.json", function (data) {
     //Extract data
     const title = data.main;
     const [xLabel, yLabel] = data.axis;
     const point_coords = data.points.coords;
+    const line_coords = data.lines.coords;
+    const CI = data.lines.ci;
     const equation = `${yLabel} = ${data.slope} * ${xLabel} + ${data.yint}`;
     const Rsquare = data.r_sq;
     const RsquareAdjusted = data.r_sq_adj;
+
+    //This will be used to draw the line and the confidence interval
+    const line_values = [];
+    line_coords.x.forEach((e, i) => {
+        const line_coord = {
+            x: e,
+            y: line_coords.y[i],
+            CI_down: CI.CI_down[i],
+            CI_up: CI.CI_up[i],
+        };
+        line_values.push(line_coord);
+    });
 
     //Create an array of objects of points
     const values = [];
@@ -76,9 +52,6 @@ d3.json("LinearCorrelation.json", function (data) {
         const point = { x: e, y: point_coords.y[i] };
         values.push(point);
     });
-
-    //Calculate linear regression (add yhat to objects)
-    calLinearRegression(values);
 
     //Convert to number type. Make sure that they are numbers
     values.forEach((d) => {
@@ -118,12 +91,6 @@ d3.json("LinearCorrelation.json", function (data) {
         .attr("transform", "rotate(-90)")
         .style("font-size", "15px");
 
-    // Color scale: give me a specie name, I return a color
-    var color = d3
-        .scaleOrdinal()
-        .domain(values.map((value) => value.name))
-        .range(["#440154ff", "#21908dff", "#fde725ff"]);
-
     //Create line
     var line = d3
         .line()
@@ -131,7 +98,7 @@ d3.json("LinearCorrelation.json", function (data) {
             return x(d.x);
         })
         .y(function (d) {
-            return y(d.yhat);
+            return y(d.y);
         });
 
     // Add a clipPath: everything out of this area won't be drawn.
@@ -195,9 +162,46 @@ d3.json("LinearCorrelation.json", function (data) {
             d3
                 .line()
                 .x((d) => newX(d.x))
-                .y((d) => newY(d.yhat))
+                .y((d) => newY(d.y))
+        );
+
+        scatter.select(".confidence_interval").attr(
+            "d",
+            d3
+                .area()
+                .x(function (d) {
+                    return newX(d.x);
+                })
+                .y0(function (d) {
+                    return newY(d.CI_up);
+                })
+                .y1(function (d) {
+                    return newY(d.CI_down);
+                })
         );
     }
+
+    // Appennd confidence interval
+    scatter
+        .append("path")
+        .classed("confidence_interval", true)
+        .datum(line_values)
+        .attr("fill", "#CBCBCB")
+        .attr("stroke", "none")
+        .attr(
+            "d",
+            d3
+                .area()
+                .x(function (d) {
+                    return x(d.x);
+                })
+                .y0(function (d) {
+                    return y(d.CI_up);
+                })
+                .y1(function (d) {
+                    return y(d.CI_down);
+                })
+        );
 
     // Add dots
     scatter
@@ -218,12 +222,12 @@ d3.json("LinearCorrelation.json", function (data) {
         .attr("cy", function (d) {
             return y(d.y);
         })
-        .attr("r", 5)
+        .attr("r", 3)
         .style("fill", "black")
         .on("mouseover", function (d) {
             tooltip
                 .style("opacity", 0.8)
-                .html(d.name + " (" + d.x + "," + d.y + ")")
+                .html("(" + d.x + "," + d.y + ")")
                 .style("left", event.pageX + 5 + "px")
                 .style("top", event.pageY + "px");
         })
@@ -245,30 +249,10 @@ d3.json("LinearCorrelation.json", function (data) {
         .style("border-radius", "5px")
         .style("padding", "10px");
 
-    // Appennd confidence interval
-    svg.append("path")
-        .datum(values)
-        .attr("fill", "#cce5df")
-        .attr("stroke", "none")
-        .attr(
-            "d",
-            d3
-                .area()
-                .x(function (d) {
-                    return x(d.x);
-                })
-                .y0(function (d) {
-                    return y(0.1);
-                })
-                .y1(function (d) {
-                    return y(0.3);
-                })
-        );
-
     // Append line
     scatter
         .append("path")
-        .datum(values)
+        .datum(line_values)
         .attr("class", "line")
         .attr("d", line)
         .style("stroke", "black")
