@@ -446,7 +446,7 @@ linear_plot_json$points$coords <- build_points[,c("x","y")] #[,1:2]
 linear_plot_json$points$cols <- build_points[,grepl("col",colnames(build_points))] #[,6] #colours
 linear_plot_json$points$shape <- build_points[,c("group")]#[,5]
 linear_plot_json$points$size <- build_points[,c("size")]#[,7]
-linear_plot_json$points$coords <- build_line[,c("x","y")]
+linear_plot_json$lines$coords <- build_line[,c("x","y")]
 linear_plot_json$lines$cols <- build_line[,grepl("col",colnames(build_line))]
 linear_plot_json$lines$size <- build_line[,c("size")]
  ## linear_plot_json$label <- build$data[[3]][,c("label")]
@@ -773,7 +773,7 @@ linear_plot_json$points$coords <- build_points[,c("x","y")] #[,1:2]
 linear_plot_json$points$cols <- build_points[,grepl("col",colnames(build_points))] #[,6] #colours
 linear_plot_json$points$shape <- build_points[,c("group")]#[,5]
 linear_plot_json$points$size <- build_points[,c("size")]#[,7]
-linear_plot_json$points$coords <- build_line[,c("x","y")]
+linear_plot_json$lines$coords <- build_line[,c("x","y")]
 linear_plot_json$lines$cols <- build_line[,grepl("col",colnames(build_line))]
 linear_plot_json$lines$size <- build_line[,c("size")]
  ## linear_plot_json$label <- build$data[[3]][,c("label")]
@@ -935,7 +935,7 @@ lin.qq.plot <- function(mSetObj=NA,
    # formula <- mSetObj$analSet$linReg1$res$formula
    # model <- mSetObj$analSet$linReg1$mod
 
- formula <- as.formula(paste0(facA, "~", facB)) 
+   formula <- as.formula(paste0(facA, "~", facB)) 
    model <- lm(formula = formula, data = input, weights = NULL)
 
   # PLOT
@@ -980,7 +980,6 @@ lin.qq.plot <- function(mSetObj=NA,
       col_line1 <- "grey"
     }
 
-
   # PLOT TITLE
   if(plot_title == " "){
     plot_title1 <- paste0("Normality of Residuals (", facA, " ~ ", facB, ")")
@@ -1004,16 +1003,23 @@ lin.qq.plot <- function(mSetObj=NA,
  
 
   # a0 <- ggplot(data =  input,
-   # aes(x = .data[[facA]], y = .data[[facB]]) ) +
-   # aes_(sample =  as.name(facA)) )+
-  a0 <- ggplot() +
- geom_qq(aes(sample = rstandard(model)), shape = 16, color = col_dots1) +
-  geom_abline(color = col_line1) +
- labs(title = plot_title1) +
-     ylab(plot_ylab1)+ xlab(plot_xlab1) +
-    # stat_qq(shape = 16, color = col_dots1) +
-    # stat_qq_line(color = col_line1, fullrange = TRUE) +
-     theme_bw() + 
+  # aes(x = .data[[facA]], y = .data[[facB]]) ) +
+  # aes_(sample =  as.name(facA)) )+
+
+  y_val <- quantile(stats::rstandard(model), c(0.25, 0.75))
+  x_val <- qnorm(c(0.25, 0.75))
+  slope_val <- diff(y_val)/diff(x_val)
+  int_val <- y_val[1L] - slope * x_val[1L]
+  
+a0 <- ggplot() +
+  geom_qq(aes(sample = stats::rstandard(model) ),  shape = 16, color = col_dots1) +
+  geom_abline(color = col_line1, slope = slope_val, intercept = int_val) +
+  labs(title = plot_title1) +
+  ylab(plot_ylab1)+ xlab(plot_xlab1) +
+     # stat_qq(shape = 16, color = col_dots1) +
+     # stat_qq_line(aes(sample = stats::rstandard(model) ), color = col_line1) +
+     # geom_qq_line(aes(sample = stats::rstandard(model) ), color = col_line1)+
+  theme_bw() + 
   theme(panel.grid.major = element_blank(), 
         panel.grid.minor = element_blank(),
         axis.text = element_text(size = 12, colour = "black"), 
@@ -1022,39 +1028,35 @@ lin.qq.plot <- function(mSetObj=NA,
         plot.title = element_text(face = 'bold', hjust = 0.5)
   )
 
-     #GENERATE PLOT
-  Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
-   
-  
 #STORE IN mset
-
   mSetObj$analSet$linReg1$plotNorm <- list(plot = a0, title = plot_title1, xlab = plot_xlab1, ylab = plot_ylab1)
 
-# lin.reg.plot.json(mSetObj=mSetObj, which_plot = "norm")
-
+ #GENERATE PLOT
+  Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
+ 
   print(a0)
   # a0
   dev.off()
 
   # JSON MAKING
 build <- ggplot_build(a0)
-## different for this plot! line is 2!
-build_line <- build$data[[2]] ### line is 2
+build_line <- build$data[[2]] ### NOTE line is 2 in list, points is 1
 build_points <- build$data[[1]]
 linear_plot_json <- list()
 
  #### NON-PASTE VERSION
 linear_plot_json$main <- plot_title1 #title
 linear_plot_json$axis <- c(plot_xlab1, plot_ylab1) #axis titles
+
 linear_plot_json$points$coords <- build_points[,c("x","y")] #[,1:2]
 linear_plot_json$points$cols <- build_points[,grepl("col",colnames(build_points))] #[,6] #colours
 linear_plot_json$points$shape <- build_points[,c("group")]#[,5]
 linear_plot_json$points$size <- build_points[,c("size")]#[,7]
-# linear_plot_json$points$coords <- build_line[,c("x","y")]
+# linear_plot_json$lines$coords <- build_line[,c("x","y")]
 linear_plot_json$lines$cols <- build_line[,grepl("col",colnames(build_line))]
 linear_plot_json$lines$size <- build_line[,c("size")]
  ## linear_plot_json$label <- build$data[[3]][,c("label")]
-  # linear_plot_json$lines$ci <- build$data[[1]][,c("se")]
+ ## linear_plot_json$lines$ci <- build$data[[1]][,c("se")]
    
 
 #   #### PASTE VERSION
@@ -1094,14 +1096,14 @@ linear_plot_json$lines$size <- build_line[,c("size")]
  
   
   #### BOTH VERSIONS
-  linear_plot_json$r_sq <-"NULL"
-   # round(summary(model)[["r.squared"]], digits = 2) #Extract R^2
-  linear_plot_json$r_sq_adj <-"NULL"
-   # round(summary(model)[["adj.r.squared"]], digits = 2) #Extract adjusted R^2 
+  linear_plot_json$r_sq <-"NA"
+   # summary(model)[["r.squared"]] #Extract R^2
+  linear_plot_json$r_sq_adj <-"NA"
+   # summary(model)[["adj.r.squared"]]  #Extract adjusted R^2 
   linear_plot_json$slope <- build_line[,c("slope")]
-    # round(summary(model)[["coefficients"]][2], digits = 2) # beta
+    # summary(model)[["coefficients"]][2] # beta
   linear_plot_json$yint <- build_line[,c("intercept")]
-   # round(summary(model)[["coefficients"]][1], digits = 2) # alpha
+   # summary(model)[["coefficients"]][1] # alpha
 
  imgName2 <- paste(imgName, ".json", sep="")
  json.obj <- RJSONIO::toJSON(linear_plot_json, .na='null')
@@ -1111,8 +1113,9 @@ linear_plot_json$lines$size <- build_line[,c("size")]
 print(json.obj)
 print("livin json a prayer")
 
-# lin.reg.plot.json(mSetObj, "plotted")
 # lin.reg.plot.json(mSetObj)
+# lin.reg.plot.json(mSetObj=mSetObj, which_plot = "norm")
+
 
  if(!.on.public.web){
   return(.set.mSet(mSetObj))
@@ -1158,6 +1161,7 @@ lin.resfit.plot <- function(mSetObj=NA,
   ){
 
   library("ggplot2")
+# library("JSONIO")
   
   mSetObj <- .get.mSet(mSetObj)
   
@@ -1294,17 +1298,12 @@ formula2 <- as.formula(paste0("fit~resit"))
         plot.title = element_text(face = 'bold', hjust = 0.5)
   )
 
-     #GENERATE PLOT
-  Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
-   
-  
 #STORE IN mset
-
   mSetObj$analSet$linReg1$plotFit <- list(plot = a0, title = plot_title1, xlab = plot_xlab1, ylab = plot_ylab1)
 
-  # lin.reg.plot.json(mSetObj=mSetObj, which_plot = "fit")
-
-  
+  #GENERATE PLOT
+  Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
+   
   print(a0)
   # a0
   dev.off()
@@ -1312,10 +1311,11 @@ formula2 <- as.formula(paste0("fit~resit"))
  # JSON MAKING
 build <- ggplot_build(a0)
 build_line <- build$data[[3]] ### line is 2 and 3! 2 is horizontal black line
+build_line2 <- build$data[[2]]
 build_points <- build$data[[1]]
 linear_plot_json <- list()
 
- #### NON-PASTE VERSION
+ #### NON-PASTE VERSION-
 linear_plot_json$main <- plot_title1 #title
 linear_plot_json$axis <- c(plot_xlab1, plot_ylab1) #axis titles
 linear_plot_json$points$coords <- build_points[,c("x","y")] #[,1:2]
@@ -1323,11 +1323,16 @@ linear_plot_json$points$cols <- build_points[,grepl("col",colnames(build_points)
 linear_plot_json$points$shape <- build_points[,c("group")]#[,5]
 linear_plot_json$points$size <- build_points[,c("size")]#[,7]
 linear_plot_json$lines$coords <- build_line[,c("x","y")]
-linear_plot_json$lines2$yintercept <- build$data[[3]][,c("yintercept")]
 linear_plot_json$lines$cols <- build_line[,grepl("col",colnames(build_line))]
 linear_plot_json$lines$size <- build_line[,c("size")]
- ## linear_plot_json$label <- build$data[[3]][,c("label")]
-  # linear_plot_json$lines$ci <- build$data[[1]][,c("se")]
+
+linear_plot_json$lines2$cols <- build_line2[,grepl("col",colnames(build_line2))]
+linear_plot_json$lines2$size <- build_line2[,c("size")]
+linear_plot_json$lines2$yint <- build_line2[,c("yintercept")]
+linear_plot_json$lines2$slope <- 0
+
+## linear_plot_json$label <- build$data[[3]][,c("label")]
+## linear_plot_json$lines$ci <- build$data[[1]][,c("se")]
 #if(grepl("ymin", colnames(build_line)) && grepl("ymax", colnames(build_line)) ){
 #   ci<- build_line[,c("x","y", "ymin", "ymax")] 
 #   colnames(ci) <- c("x","y","CI_down", "CI_up")
@@ -1374,13 +1379,13 @@ linear_plot_json$lines$size <- build_line[,c("size")]
   
   #### BOTH VERSIONS
   linear_plot_json$r_sq <-
-    round(summary(model2)[["r.squared"]], digits = 2) #Extract R^2
+    summary(model2)[["r.squared"]] #Extract R^2
   linear_plot_json$r_sq_adj <-
-    round(summary(model2)[["adj.r.squared"]], digits = 2) #Extract adjusted R^2 
+    summary(model2)[["adj.r.squared"]] #Extract adjusted R^2 
   linear_plot_json$slope <-
-    round(summary(model2)[["coefficients"]][2], digits = 2) # beta
+    summary(model2)[["coefficients"]][2] # beta
   linear_plot_json$yint <-
-    round(summary(model2)[["coefficients"]][1], digits = 2) # alpha
+    summary(model2)[["coefficients"]][1] # alpha
 
  imgName2 <- paste(imgName, ".json", sep="")
  json.obj <- RJSONIO::toJSON(linear_plot_json, .na='null')
@@ -1392,6 +1397,8 @@ print("json the road again")
 
 # lin.reg.plot.json(mSetObj, "plotted")
 # lin.reg.plot.json(mSetObj)
+# lin.reg.plot.json(mSetObj=mSetObj, which_plot = "fit")
+
 
  if(!.on.public.web){
   return(.set.mSet(mSetObj))
