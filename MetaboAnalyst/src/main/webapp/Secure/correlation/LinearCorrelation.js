@@ -61,14 +61,20 @@ function calLinearRegression(data) {
 //Read the data
 d3.json("LinearCorrelation.json", function (data) {
     //Extract data
-    const title = data.graphName;
-    const xLabel = data.xAxisLabel;
-    const yLabel = data.yAxisLabel;
-    const values = Object.values(data.data);
-    const equation = `${yLabel} = ${data.slope} * ${xLabel} + ${data["y-intercept"]}`;
-    const Rsquare = data.RSquare;
-    const RsquareAdjusted = data.RSquareAdjusted;
+    const title = data.main;
+    const [xLabel, yLabel] = data.axis;
+    const coords = data.points.coords;
+    const equation = `${yLabel} = ${data.slope} * ${xLabel} + ${data.yint}`;
+    const Rsquare = data.r_sq;
+    const RsquareAdjusted = data.r_sq_adj;
 
+    const values = [];
+    coords.x.forEach((e, i) => {
+        const point = { x: e, y: coords.y[i] };
+        values.push(point);
+    });
+
+    console.log(values);
     //Calculate linear regression (add yhat to objects)
     calLinearRegression(values);
 
