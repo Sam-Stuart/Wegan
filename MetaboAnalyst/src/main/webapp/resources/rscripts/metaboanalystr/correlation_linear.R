@@ -1009,7 +1009,7 @@ lin.qq.plot <- function(mSetObj=NA,
   y_val <- quantile(stats::rstandard(model), c(0.25, 0.75))
   x_val <- qnorm(c(0.25, 0.75))
   slope_val <- diff(y_val)/diff(x_val)
-  int_val <- y_val[1L] - slope * x_val[1L]
+  int_val <- y_val[1L] - slope_val * x_val[1L]
   
 a0 <- ggplot() +
   geom_qq(aes(sample = stats::rstandard(model) ),  shape = 16, color = col_dots1) +
@@ -1100,9 +1100,9 @@ linear_plot_json$lines$size <- build_line[,c("size")]
    # summary(model)[["r.squared"]] #Extract R^2
   linear_plot_json$r_sq_adj <-"NA"
    # summary(model)[["adj.r.squared"]]  #Extract adjusted R^2 
-  linear_plot_json$slope <- build_line[,c("slope")]
+  linear_plot_json$slope <- build_line[,c("slope")] #slope_val 
     # summary(model)[["coefficients"]][2] # beta
-  linear_plot_json$yint <- build_line[,c("intercept")]
+  linear_plot_json$yint <- build_line[,c("intercept")] #int_val 
    # summary(model)[["coefficients"]][1] # alpha
 
  imgName2 <- paste(imgName, ".json", sep="")
@@ -1211,7 +1211,7 @@ lin.resfit.plot <- function(mSetObj=NA,
    formula <- as.formula(paste0(facA, "~", facB)) 
    model <- lm(formula = formula, data = input, weights = NULL)
 dfres <- data.frame(resid = residuals(model), fit = fitted(model))
-formula2 <- as.formula(paste0("fit~resit")) 
+formula2 <- as.formula(paste0("fit~resid")) 
    model2 <- lm(formula = formula2, data = dfres, weights = NULL)
 
   # PLOT
