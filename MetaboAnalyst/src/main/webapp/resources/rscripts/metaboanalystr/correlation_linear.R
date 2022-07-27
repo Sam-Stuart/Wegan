@@ -517,7 +517,12 @@ linear_plot_json$lines$size <- build_line[,c("size")]
   linear_plot_json$yint <-
     summary(model)[["coefficients"]][1] # alpha
 
- imgName2 <- paste(imgName, ".json", sep="")
+
+i1 <- gsub(paste("dpi", dpi, sep = ""), "", imgName)
+i2 <- gsub( paste(".",format, sep=""), "", i1)
+i3 <- gsub( "\\_\\d+\\_", "", i2)
+imgName2 <- paste(i3, ".json", sep="")  
+
  json.obj <- RJSONIO::toJSON(linear_plot_json, .na='null')
  sink(imgName2)
  cat(json.obj)
@@ -860,7 +865,11 @@ if(any(grepl("ymin", colnames(build_line))) && any(grepl("ymax", colnames(build_
   linear_plot_json$yint <-
    summary(model)[["coefficients"]][1] # alpha
 
- imgName2 <- paste(imgName, ".json", sep="")
+i1 <- gsub(paste("dpi", dpi, sep = ""), "", imgName)
+i2 <- gsub( paste(".",format, sep=""), "", i1)
+i3 <- gsub( "\\_\\d+\\_", "", i2)
+imgName2 <- paste(i3, ".json", sep="")  
+
  json.obj <- RJSONIO::toJSON(linear_plot_json, .na='null')
  sink(imgName2)
  cat(json.obj)
@@ -1134,7 +1143,10 @@ linear_plot_json$lines$size <- build_line[,c("size")]
   linear_plot_json$yint <- build_line[,c("intercept")] #int_val 
    # summary(model)[["coefficients"]][1] # alpha
 
- imgName2 <- paste(imgName, ".json", sep="")
+ i1 <- gsub(paste("dpi", dpi, sep = ""), "", imgName)
+i2 <- gsub( paste(".",format, sep=""), "", i1)
+i3 <- gsub( "\\_\\d+\\_", "", i2)
+imgName2 <- paste(i3, ".json", sep="")  
  json.obj <- RJSONIO::toJSON(linear_plot_json, .na='null')
  sink(imgName2)
  cat(json.obj)
@@ -1416,7 +1428,11 @@ linear_plot_json$lines2$slope <- 0
   linear_plot_json$yint <-
     summary(model2)[["coefficients"]][1] # alpha
 
- imgName2 <- paste(imgName, ".json", sep="")
+i1 <- gsub(paste("dpi", dpi, sep = ""), "", imgName)
+i2 <- gsub( paste(".",format, sep=""), "", i1)
+i3 <- gsub( "\\_\\d+\\_", "", i2)
+imgName2 <- paste(i3, ".json", sep="")  
+
  json.obj <- RJSONIO::toJSON(linear_plot_json, .na='null')
  sink(imgName2)
  cat(json.obj)
