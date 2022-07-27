@@ -14,6 +14,7 @@
         <script type="text/javascript" src="./LinearCorrelation.js"></script>
     </ui:define>
     <ui:define name="content">
+                 <h:inputHidden id="mydir" value="#{sessionBean1.currentUser.relativeDir}" />
         <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
             <h1>Linear Regression:</h1>
             <p:tabView id="linCA" style="border-bottom-color: #8cbd48 !important">
@@ -53,8 +54,9 @@
                             <p:commandButton value="Update" 
                                              styleClass="updateButton"
                                              style="box-shadow: none !important; text-shadow: none !important"
+                                             id="update-button"
                                             onclick="PF('statusDialog').show()"
-                                            oncomplete="PF('statusDialog').hide()"  
+                                            oncomplete="PF('statusDialog').hide(); render()"  
                                             update=":linCA:form1:corrLinPane1  :cmdPane" 
                                             actionListener="#{linearCABean.corrLin1Btn_action()}"/> 
                             
