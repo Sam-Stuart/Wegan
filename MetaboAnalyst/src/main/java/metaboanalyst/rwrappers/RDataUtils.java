@@ -426,6 +426,19 @@ public class RDataUtils {
         }
     }
     
+    
+    //retrieve best noramlization method name
+    public static String extractBestNormName(RConnection RC) {
+        try {
+            String rCommand = "extractBestNorm(NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            return RC.eval(rCommand).asString();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    
     //plot a boxplot and density for each compound
     public static void plotNormSummaryGraph(SessionBean1 sb, String imgName, String format, int dpi) {
         try {
