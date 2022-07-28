@@ -49,14 +49,13 @@
                                              styleClass="graphicsButton"
                                              style="box-shadow: none !important; text-shadow: none !important;"
                                              actionListener="#{sessionBean1.graphicsLnk_action('corr_linear')}" 
-                                            oncomplete="PF('graphApperanceLinear').show()"/>  
+                                            oncomplete="PF('graphApperanceLinear').show();"/>  
                                            
                             <p:commandButton value="Update" 
                                              styleClass="updateButton"
                                              style="box-shadow: none !important; text-shadow: none !important"
-                                             id="update-button"
                                             onclick="PF('statusDialog').show()"
-                                            oncomplete="PF('statusDialog').hide(); render()"  
+                                            oncomplete="PF('statusDialog').hide();"  
                                             update=":linCA:form1:corrLinPane1  :cmdPane" 
                                             actionListener="#{linearCABean.corrLin1Btn_action()}"/> 
                             
