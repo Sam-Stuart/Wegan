@@ -41,6 +41,12 @@ function render() {
         const equation = `${yLabel} = ${data.slope} * ${xLabel} + ${data.yint}`;
         const Rsquare = data.r_sq;
         const RsquareAdjusted = data.r_sq_adj;
+        const showLabel = {
+            CI: data.bool_ci,
+            equation: data.bool_eq,
+            rSquare: data.bool_rsq,
+            rSquareAdjusted: data.bool_rsq_adj,
+        };
 
         //This will be used to draw the line and the confidence interval
         const line_values = [];
@@ -194,26 +200,27 @@ function render() {
         }
 
         // Appennd confidence interval
-        scatter
-            .append("path")
-            .classed("confidence_interval", true)
-            .datum(line_values)
-            .attr("fill", "#CBCBCB")
-            .attr("stroke", "none")
-            .attr(
-                "d",
-                d3
-                    .area()
-                    .x(function (d) {
-                        return x(d.x);
-                    })
-                    .y0(function (d) {
-                        return y(d.CI_up);
-                    })
-                    .y1(function (d) {
-                        return y(d.CI_down);
-                    })
-            );
+        if (showLabel.CI)
+            scatter
+                .append("path")
+                .classed("confidence_interval", true)
+                .datum(line_values)
+                .attr("fill", "#CBCBCB")
+                .attr("stroke", "none")
+                .attr(
+                    "d",
+                    d3
+                        .area()
+                        .x(function (d) {
+                            return x(d.x);
+                        })
+                        .y0(function (d) {
+                            return y(d.CI_up);
+                        })
+                        .y1(function (d) {
+                            return y(d.CI_down);
+                        })
+                );
 
         // Add dots
         scatter
@@ -292,19 +299,22 @@ function render() {
 
         // Equation;
         var equationGroup = svg.append("g").classed("equation", true);
-        var equationLabel = equationGroup.append("text").text(equation);
-        var RsquareLabel = equationGroup
-            .append("text")
-            .text(`R Square = ${Rsquare}`)
-            .attr("y", 15)
-            .style("opacity", 0)
-            .attr("x", width / 2);
-        var RsquareAdjustedLabel = equationGroup
-            .append("text")
-            .text(`R Square Adjusted = ${RsquareAdjusted}`)
-            .attr("y", 30)
-            .style("opacity", 0)
-            .attr("x", width / 2);
+
+        if (showLabel.equation) equationGroup.append("text").text(equation);
+
+        if (showLabel.rSquare)
+            equationGroup
+                .append("text")
+                .text(`R Square = ${Rsquare}`)
+                .attr("y", 15)
+                .attr("x", width / 2);
+
+        if (showLabel.rSquareAdjusted)
+            equationGroup
+                .append("text")
+                .text(`R Square Adjusted = ${RsquareAdjusted}`)
+                .attr("y", 30)
+                .attr("x", width / 2);
 
         // function updateEquation() {
         //     if (d3.select("#checkbox1").property("checked"))
