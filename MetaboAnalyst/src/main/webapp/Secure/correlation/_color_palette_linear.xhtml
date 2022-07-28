@@ -59,7 +59,7 @@
                                  styleClass="updateButton"
                                  style="box-shadow: none !important; text-shadow: none !important"
                                 onclick="PF('statusDialog').show()"
-                                oncomplete="PF('graphApperanceLinear').hide(); PF('statusDialog').hide()"  
+                                oncomplete="PF('graphApperanceLinear').hide(); PF('statusDialog').hide(); setTimeout(render, 2000)"  
                                 update=":linCA:form1:corrLinPane1  :cmdPane"
                                 actionListener="#{linearCABean.corrLin1Btn_action()}"/>
             </h:panelGrid>
