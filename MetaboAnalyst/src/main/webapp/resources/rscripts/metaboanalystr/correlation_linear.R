@@ -471,6 +471,33 @@ linear_plot_json$lines$size <- build_line[,c("size")]
     linear_plot_json$lines$ci <- data.frame(x=build_line[,c("x")], y=build_line[,c("y")], CI_down = 0, CI_up = 0)
  }   
   
+
+## BOOLS
+if(plot_ci1 == TRUE){
+ linear_plot_json$bool_ci <- TRUE
+ } else{
+linear_plot_json$bool_ci <- FALSE
+}
+
+if (plot_eq == "false"){ # default
+ linear_plot_json$bool_eq <- FALSE
+} else{
+linear_plot_json$bool_eq <- TRUE
+}
+
+if (plot_rsq == "false"){ # default
+ linear_plot_json$bool_rsq <- FALSE
+} else{
+linear_plot_json$bool_rsq <- TRUE
+}
+
+if (plot_rsq_adj == "false"){ # default
+ linear_plot_json$bool_rsq_adj <- FALSE
+} else{
+linear_plot_json$bool_rsq_adj <- TRUE
+}
+
+
 #   #### PASTE VERSION
 #    df <- data.frame(x=build$data[[1]][,c("x")],
 #                   y=build$data[[1]][,c("y")],
@@ -818,6 +845,12 @@ if(any(grepl("ymin", colnames(build_line))) && any(grepl("ymax", colnames(build_
  } else{
     linear_plot_json$lines$ci <- data.frame(x=build_line[,c("x")], y=build_line[,c("y")], CI_down = 0, CI_up = 0)
  }
+## BOOLS
+if(plot_ci1 == TRUE){
+ linear_plot_json$bool_ci <- TRUE
+ } else{
+linear_plot_json$bool_ci <- FALSE
+}
 
 #   #### PASTE VERSION
 #    df <- data.frame(x=build$data[[1]][,c("x")],
