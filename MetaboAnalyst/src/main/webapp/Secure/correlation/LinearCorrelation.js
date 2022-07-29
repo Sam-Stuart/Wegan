@@ -123,7 +123,7 @@ function renderLinearBestFit(jsonName, id) {
         var clip = svg
             .append("defs")
             .append("SVG:clipPath")
-            .attr("id", "clip")
+            .attr("id", "clip" + id)
             .append("SVG:rect")
             .attr("width", width)
             .attr("height", height)
@@ -131,7 +131,7 @@ function renderLinearBestFit(jsonName, id) {
             .attr("y", 0);
 
         // Create the scatter variable: where both the circles and the brush take place
-        var scatter = svg.append("g").attr("clip-path", "url(#clip)");
+        var scatter = svg.append("g").attr("clip-path", `url(#clip${id})`);
 
         // Set the zoom and Pan features: how much you can zoom, on which part, and what to do when there is a zoom
         var zoom = d3
@@ -258,7 +258,7 @@ function renderLinearBestFit(jsonName, id) {
         var tooltip = d3
             .select("body")
             .append("div")
-            .attr("id", "tooltip")
+            .attr("id", "tooltip" + id)
             .style("opacity", 0)
             .style("position", "absolute")
             .attr("class", "tooltip")
