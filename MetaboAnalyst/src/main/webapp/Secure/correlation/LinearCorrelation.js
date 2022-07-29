@@ -12,10 +12,10 @@ var margin = { top: 30, right: 30, bottom: 50, left: 60 },
 
 //Read the data
 
-function render() {
-    d3.json("/MetaboAnalyst" + URL + "/corr_linear.json", function (data) {
+function renderLinearBestFit(jsonName, id) {
+    d3.json("/MetaboAnalyst" + URL + "/" + jsonName, function (data) {
         var svg = d3
-            .select("#my_dataviz")
+            .select(`#${id}`)
             .style("margin", "auto")
             .style("display", "flex")
             .style("flex-direction", "column")
@@ -289,7 +289,7 @@ function render() {
             });
 
         //        create title
-        d3.select("#my_dataviz")
+        d3.select(`#${id}`)
             .append("div")
             .html(title)
             .style("text-align", "center")
@@ -327,4 +327,5 @@ function render() {
     });
 }
 
-render();
+renderLinearBestFit("corr_linear.json", "my_dataviz");
+renderLinearBestFit("corr_linear_pred.json", "my_dataviz1");
