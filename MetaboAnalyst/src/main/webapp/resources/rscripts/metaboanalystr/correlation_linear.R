@@ -108,35 +108,41 @@ lin.reg.anal <- function(mSetObj = NA,
   "Is this time series data? Try looking into adding a lag in the independent/dependent variable, or adding a seasonal dummy variable to the model."
   # ,"Try modifying the model or otherwise accounting for endogeneity (unobserved confounding)"
   ) # fit a generalized linear model
-  mod1 <- mod # numeric
-  n_fail <- sum(mod < 0.05) # was: nassump_fail
+  mod_num <- mod # numeric
+  n_fail <- formatC( sum(mod < 0.05), drop0trailing = TRUE)# was: nassump_fail
   
   if(any(mod < 0.001)){ # format numbers for printing; 3 decimals after decimal
   mod[mod < 0.001] <-
    formatC( mod[mod < 0.001] , format = "e", digits = 3)
   
-  mod[mod1 > 0.001] <-
-   round( mod1[mod1 > 0.001], digits = 3)
+  mod[mod_num > 0.001] <-
+   round( mod_num[mod_num > 0.001], digits = 3)
   }
+  
+  mod_df <- mod
+  names(mod_df) <- c('mod_shp', 'mod_bp', 'mod_dw'
+           # , 'mod_res'
+           )
    
   if(n_fail > 0){ # subset for failed tests
-   mod <- mod[mod1 < 0.05]
+   mod <- mod[mod_num < 0.05]
   
    f0 <- paste0(n_fail, " linear model assumption test(s) failed: \n")
    
- failed<-c(f0, paste0( 
-         names(mod), " (P-Value: ", mod, ")/n", fix[mod1 < 0.05], "\n" ) )
-      # "Please be advised that conforming to these assumptions is necessary for use of the linear model.  If the goal is to visually explore your data, try the Plotting module." 
+ failed<-c(f0, paste( 
+         names(mod), " (P-Value: ", mod, ")\n",
+         fix[mod_num < 0.05], "\n", sep = "" ) )
+      # "Please be advised that conforming to these assumptions is necessary for use of the linear model. The results of these tests provide an indication as to how appropriately these assumptions are met. If the goal is to visually explore your data, try the Plotting module." 
     #AddErrMsg(failed)
     message(failed)
     } else {
-    failed <- paste0("No model assumption tests failed.")
+    failed <- ("No model assumption tests failed.")
     }
   
-  df <- data.frame("Normality (Shapiro-Wilk)..." = mod_shp,
-          "Homoscedasticity (Breusch-Pagan)..." = mod_bp,
-           "Autocorrelation of Residuals (Durbin-Watson)..." = mod_dw,
-          # "Linearity (RESET)..." = mod_res,
+  df <- data.frame("Normality (Shapiro-Wilk)..." = mod_df['mod_shp'], #mod_df[mod_num %in% mod_shp]
+          "Homoscedasticity (Breusch-Pagan)..." = mod_df['mod_bp'], #mod_df[mod_num %in% mod_bp]
+           "Autocorrelation of Residuals\n (Durbin-Watson)..." = mod_df['mod_dw'], #mod_df[mod_num %in% mod_dw]
+          # "Linearity (RESET)..." = mod_df['mod_res'], #mod_df[mod_num %in% mod_res]
            "N Assumptions Failed..." = n_fail,
                    check.names = FALSE)
   row.names(df) <- NULL
