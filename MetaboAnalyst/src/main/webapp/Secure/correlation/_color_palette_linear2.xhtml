@@ -97,7 +97,7 @@
                         text-shadow: none !important;
                     "
                     onclick="PF('statusDialog').show()"
-                    oncomplete="PF('graphApperanceLinear2').hide(); PF('statusDialog').hide(); setTimeout(function() {renderLinearBestFit('corr_linear_pred.json', 'my_dataviz1')}, 2000)"
+                    oncomplete="PF('graphApperanceLinear2').hide(); setTimeout(function() {renderLinearBestFit('corr_linear_pred.json', 'my_dataviz1'); PF('statusDialog').hide()}, 2000)"
                     update=":linCA:form2:corrLinPane2  :cmdPane"
                     actionListener="#{linearCABean.corrLin2Btn_action()}"
                 />
