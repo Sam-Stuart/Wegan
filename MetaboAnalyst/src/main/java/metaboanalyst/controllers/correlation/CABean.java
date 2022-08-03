@@ -78,7 +78,8 @@ public class CABean implements Serializable {
             RConnection RC = sb.getRConnection();
             sb.updateMsg("Error", RDataUtils.getErrMsg(RC)); 
         }
-        CAUtils.PlotLinearCA(sb, false, "NULL", "NULL", false,
+        CAUtils.PlotLinearCA(sb,  "NULL", "NULL",
+                false, "NULL", "NULL", false,
                  false, false, false, " "," "," ",
                 sb.getCurrentImage("corr_linear"), "png", 72);
         
