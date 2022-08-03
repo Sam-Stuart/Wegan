@@ -342,7 +342,7 @@ public class PCABean implements Serializable {
         } else {
             //ChemoMetrics.PlotPCA3DScore(sb, sb.getNewImage("pca_score3d"), "png", 72, pcaScore3dX, pcaScore3dY, pcaScore3dZ, rotationAngle);
             ChemoMetrics.InitPCA(sb, doOriginal);
-            ChemoMetrics.PlotPCA3DScore(sb, sb.getNewImage("pca_score3d"), "json", 72, pcaScore3dX, pcaScore3dY, pcaScore3dZ);
+            ChemoMetrics.PlotPCA3DScore(sb, sb.getNewImage("pca_score3d"), "json", ordColorOpts, pcaMetaColumnName);
             //  RequestContext.getCurrentInstance().scrollTo("ac:form4:score3dPane");
         }
         return null;
@@ -517,7 +517,7 @@ public class PCABean implements Serializable {
         ChemoMetrics.PlotPCALoading(sb, sb.getNewImage("pca_loading"), "png", 72, 1, 2, "scatter", 1);  // setLoadingTable(pcImpInx);
         ChemoMetrics.PlotPCABiplot(sb, sb.getNewImage("pca_biplot"), "png", 72, 1, 2);
         // ChemoMetrics.PlotPCA3DScore(sb, sb.getCurrentImage("pca_score3d"), "png", 72, 1, 2, 3, 40);
-        ChemoMetrics.PlotPCA3DScore(sb, sb.getNewImage("pca_score3d"), "json", 72, 1, 2, 3);
+        ChemoMetrics.PlotPCA3DScore(sb, sb.getNewImage("pca_score3d"), "json", "NULL", "NULL");
     }
     
     private String flipOpt="y";
