@@ -25,10 +25,10 @@ lin.reg.anal <- function(mSetObj = NA,
  ### SET DATA (whether to use original data or not)
   if (data == "false") { 
     input <- mSetObj$dataSet$norm #default use norm
-mSetObj$dataSet$usenorm <- TRUE
+    # mSetObj$dataSet$usenorm <- TRUE
   } else {
     input <- mSetObj$dataSet$orig
-mSetObj$dataSet$usenorm <- FALSE
+   # mSetObj$dataSet$usenorm <- FALSE
   }
   
   ### SET VARIABLES
@@ -93,9 +93,9 @@ mSetObj$dataSet$usenorm <- FALSE
   mod_dw <- lmtest::dwtest(model)$p.value
   mod_res <- lmtest::resettest(model)$p.value #linearity
 
-#   Ramsey Regression Equation Specification Error Test (RESET) to detect specification errors in the model (created in 1968 by a student for their dissertation). The RESET performs a nested model comparison with the current model and the current model plus some polynomial terms, and then returns the result of an F-test. The idea is, if the added non-linear terms explain variance in the outcome, then there is a specification error of some kind, such as the failure to include some curvilinear term or the use of a general linear model where a generalized linear model should have been used.
-# https://sscc.wisc.edu/sscc/pubs/RegDiag-R/linearity.html
-# A significant p-value is an indication that the relationship between the predictors and the outcome needs to be further investigated.
+  #   Ramsey Regression Equation Specification Error Test (RESET) to detect specification errors in the model (created in 1968 by a student for their dissertation). The RESET performs a nested model comparison with the current model and the current model plus some polynomial terms, and then returns the result of an F-test. The idea is, if the added non-linear terms explain variance in the outcome, then there is a specification error of some kind, such as the failure to include some curvilinear term or the use of a general linear model where a generalized linear model should have been used.
+  # https://sscc.wisc.edu/sscc/pubs/RegDiag-R/linearity.html
+  # A significant p-value is an indication that the relationship between the predictors and the outcome needs to be further investigated.
   
   mod <- c(mod_shp, mod_bp, mod_dw
            # , mod_res
@@ -191,7 +191,6 @@ mSetObj$dataSet$usenorm <- FALSE
 #'@description Plot line of best fit on scatter plot of linear regression model on 2 variables in data
 #'@param mSetObj Input the name of the created mSetObj
 #'@param data Boolean, whether to use original data; "false" (default) means normalized or "true" means original (checkbox)
-
 #'@param col_dots Set color for scatterplot dots (default "NULL" is black); (static dropdown)
 #'@param col_line Set color for line (default "NULL" is black); (static dropdown)
 ###@param weights Set weight values, default is NULL
@@ -241,7 +240,7 @@ lin.reg.plot <- function(mSetObj=NA,
   mSetObj <- .get.mSet(mSetObj)
   
   ## DATA: NORMAL OR NOT
-#   if (mSetObj$dataSet$usenorm == TRUE) { 
+  #   if (mSetObj$dataSet$usenorm == TRUE) { 
    if (data == "false") { 
     input <- mSetObj$dataSet$norm #default use norm
   } else {
@@ -252,12 +251,11 @@ lin.reg.plot <- function(mSetObj=NA,
  facA <- mSetObj$analSet$linReg1$res$response
  facB <-  mSetObj$analSet$linReg1$res$predictor
  fileName <- mSetObj$analSet$linReg1$res$fileName
- # predicted.values <- mSetObj$analSet$linReg1$res$predicted.values
-# formula <- mSetObj$analSet$linReg1$res$formula 
-# model <- mSetObj$analSet$linReg1$mod 
-formula <- as.formula(paste(facA, "~", facB, sep = ""))
+ formula <- as.formula(paste(facA, "~", facB, sep = ""))
  model <- lm(formula = formula, data = input, weights = NULL)
-
+ # predicted.values <- mSetObj$analSet$linReg1$res$predicted.values
+ # formula <- mSetObj$analSet$linReg1$res$formula 
+ # model <- mSetObj$analSet$linReg1$mod 
   
   # PLOT
 
@@ -271,14 +269,14 @@ formula <- as.formula(paste(facA, "~", facB, sep = ""))
   }
   h <- w
   
-  #Name plot for download
-## must put imgName2 first, re-writing imgName var in next line
-imgName2 <- paste(gsub( "\\_\\d+\\_", "", imgName),
+  #NAME PLOT FOR DOWNLOAD
+  # must put imgName2 first, re-writing imgName var in next line
+  imgName2 <- paste(gsub( "\\_\\d+\\_", "", imgName),
  ".json", sep="") 
-imgName <- paste(imgName, "dpi", dpi, ".", format, sep="")
+  imgName <- paste(imgName, "dpi", dpi, ".", format, sep="")
   mSetObj$imgSet$plot.linReg1 <- imgName
   
-    #SET POINT COLOR
+  #SET POINT COLOR
   col_dots1 <- 
 				switch(
 					col_dots,
@@ -303,7 +301,7 @@ imgName <- paste(imgName, "dpi", dpi, ".", format, sep="")
 					NULL
 				)
   
-  #SET WHETHER TO ADD 95% CONF INT
+  # CONF INT (95%)
   if (plot_ci == "false") {
       plot_ci1 <- FALSE # default
     } else {
@@ -476,7 +474,7 @@ linear_plot_json$lines$size <- build_line[,c("size")]
  }   
   
 
-## BOOLS
+## BOOLEANS
 if(plot_ci1 == TRUE){
  linear_plot_json$bool_ci <- TRUE
  } else{
@@ -552,8 +550,8 @@ linear_plot_json$bool_rsq_adj <- TRUE
  sink(imgName2)
  cat(json.obj)
  sink()
-print(json.obj)
-print("we built this city json rock and roll")
+ print(json.obj)
+ print("we built this city json rock and roll")
 
 # lin.reg.plot.json(mSetObj, "plotted")
 # lin.reg.plot.json(mSetObj)
@@ -568,8 +566,9 @@ print("we built this city json rock and roll")
 #'Generate prediction/actual linear regression plot
 #'@description Plot line of best fit on scatter plot of linear regression model on 2 variables in data
 #'@param mSetObj Input the name of the created mSetObj
+#'@param facA Input the name of the response column (java uses Columns() to give user options)
+#'@param facB Input the name of the predictor column (java uses Columns() to give user options)
 #'@param data Boolean, whether to use original data; "false" (default) means normalized or "true" means original (checkbox)
-
 #'@param col_dots Set color for scatterplot dots (default "NULL" is black); (static dropdown)
 #'@param col_line Set color for line (default "NULL" is black); (static dropdown)
 ###@param weights Set weight values, default is NULL
@@ -616,13 +615,13 @@ lin.pred.plot <- function(mSetObj=NA,
   mSetObj <- .get.mSet(mSetObj)
   
   ## DATA: NORMAL OR NOT
-#  if (mSetObj$dataSet$usenorm == TRUE) { 
+  #  if (mSetObj$dataSet$usenorm == TRUE) { 
    if (data == "false") { 
     input <- mSetObj$dataSet$norm #default use norm
-#  mSetObj$dataSet$usenorm == TRUE
+    #  mSetObj$dataSet$usenorm <- TRUE
   } else {
     input <- mSetObj$dataSet$orig
-# mSetObj$dataSet$usenorm == FALSE
+    # mSetObj$dataSet$usenorm <- FALSE
   }
   
   #RETRIEVE RESULTS:
@@ -648,21 +647,19 @@ lin.pred.plot <- function(mSetObj=NA,
  } else {
      facB <- facB #Determined using Columns() function (java will present options in drop down menu)
    }
-
-# facA <- mSetObj$analSet$linReg1$res$response
-# facB <-  mSetObj$analSet$linReg1$res$predictor
    
-   fileName <- mSetObj$analSet$linReg1$res$fileName
-    formula1 <- as.formula(paste(facA, "~", facB, sep=""))
-    model1 <- lm(formula = formula1, data = input, weights = NULL)
-    prediction <- fitted(model1)
+   
    # formula <- mSetObj$analSet$linReg1$res$formula
    # model <- mSetObj$analSet$linReg1$mod   
    # prediction <- mSetObj$analSet$linReg1$res$predicted.values
-   dfpred <- data.frame( fpred = prediction, fA = input[,facA])
-   formula <- as.formula("fA~fpred")
-   model <- lm(formula = formula, data = dfpred, weights = NULL)
 
+    fileName <- mSetObj$analSet$linReg1$res$fileName
+    formula1 <- as.formula(paste(facA, "~", facB, sep=""))
+    model1 <- lm(formula = formula1, data = input, weights = NULL)
+    prediction <- fitted(model1)
+    dfpred <- data.frame( fpred = prediction, fA = input[,facA])
+    formula <- as.formula("fA~fpred")
+    model <- lm(formula = formula, data = dfpred, weights = NULL)
 
 
   # PLOT
@@ -677,14 +674,14 @@ lin.pred.plot <- function(mSetObj=NA,
   }
   h <- w
   
-  #Name plot for download
-## must put imgName2 first, re-writing imgName var in next line
-imgName2 <- paste(gsub( "\\_\\d+\\_", "", imgName),
+  #NAME PLOT FOR DOWNLOAD
+  # must put imgName2 first, re-writing imgName var in next line
+  imgName2 <- paste(gsub( "\\_\\d+\\_", "", imgName),
  ".json", sep="") 
   imgName <- paste(imgName, "dpi", dpi, ".", format, sep="")
   mSetObj$imgSet$plot.linReg1 <- imgName
   
-    #SET POINT COLOR
+  #SET POINT COLOR
   col_dots1 <- 
 				switch(
 					col_dots,
@@ -709,7 +706,7 @@ imgName2 <- paste(gsub( "\\_\\d+\\_", "", imgName),
 					NULL
 				)
    
-   #SET WHETHER TO ADD 95% CONF INT
+   # CONF INT (95%)
    if (plot_ci == "false") {
        plot_ci1 <- FALSE # default
      } else {
@@ -733,14 +730,14 @@ imgName2 <- paste(gsub( "\\_\\d+\\_", "", imgName),
    }
    
    # PLOT XAXIS
-if(plot_xlab == " "){
+   if(plot_xlab == " "){
     plot_xlab1 <- "Predicted"
    } else { #prediction
      plot_xlab1 <- plot_xlab 
    }
  
   
-    # plot(x = prediction, y = input[,facA], xlab = "Predicted", ylab = "Actual", main = method, yaxt = "n")
+  # plot(x = prediction, y = input[,facA], xlab = "Predicted", ylab = "Actual", main = method, yaxt = "n")
   
   ## y actual input[,facA] fA
   ## x prediction fpred
@@ -759,18 +756,6 @@ if(plot_xlab == " "){
         plot.title = element_text(face = 'bold', hjust = 0.5)
   )
 
-## for JSON object:
-if(plot_ci1 == TRUE){
- aj <- a0
- } else{
-aj <- ggplot(data = dfpred, # data.frame(fpred = prediction, fA = input[,facA]),
-  aes(x = fpred, y = fA)) +
-     labs(title = plot_title1) + ylab(plot_ylab1)+ xlab(plot_xlab1) +
-     geom_smooth(se = TRUE, color = col_line1, fullrange = TRUE, method = 'lm') +
-     geom_point(shape = 16, color = col_dots1) +
-     theme_bw() + theme(panel.grid.major = element_blank(),panel.grid.minor = element_blank(), axis.text = element_text(size = 12, colour = "black"),  axis.title = element_text(size = 12), plot.title = element_text(face = 'bold', hjust = 0.5)  )
-}
-
   
 #STORE IN mset
   
@@ -786,6 +771,18 @@ aj <- ggplot(data = dfpred, # data.frame(fpred = prediction, fA = input[,facA]),
 # lin.reg.plot.json(mSetObj=mSetObj, which_plot = "pred")
 
 # JSON MAKING
+
+if(plot_ci1 == TRUE){
+ aj <- a0
+ } else{
+aj <- ggplot(data = dfpred, # data.frame(fpred = prediction, fA = input[,facA]),
+  aes(x = fpred, y = fA)) +
+     labs(title = plot_title1) + ylab(plot_ylab1)+ xlab(plot_xlab1) +
+     geom_smooth(se = TRUE, color = col_line1, fullrange = TRUE, method = 'lm') +
+     geom_point(shape = 16, color = col_dots1) +
+     theme_bw() + theme(panel.grid.major = element_blank(),panel.grid.minor = element_blank(), axis.text = element_text(size = 12, colour = "black"),  axis.title = element_text(size = 12), plot.title = element_text(face = 'bold', hjust = 0.5)  )
+}
+
 build <- ggplot_build(aj)
 build_line <- build$data[[1]] ### line is 1
 build_points <- build$data[[2]]
@@ -810,13 +807,12 @@ if(any(grepl("ymin", colnames(build_line))) && any(grepl("ymax", colnames(build_
     linear_plot_json$lines$ci <- data.frame(x = build_line[,c("x")], y = build_line[,c("y")], CI_down = 0, CI_up = 0)
  }
 
-## BOOLS
+## BOOLEANS
 if(plot_ci1 == TRUE){
  linear_plot_json$bool_ci <- TRUE
  } else{
 linear_plot_json$bool_ci <- FALSE
 }
- 
   
   #### MODEL VARS FOR LINE
   linear_plot_json$r_sq <-
@@ -828,13 +824,13 @@ linear_plot_json$bool_ci <- FALSE
   linear_plot_json$yint <-
    summary(model)[["coefficients"]][1] # alpha
 
-## Make json
+## WRITE JSON
  json.obj <- RJSONIO::toJSON(linear_plot_json, .na='null')
  sink(imgName2)
  cat(json.obj)
  sink()
-print(json.obj)
-print("carry on my wayward json")
+ print(json.obj)
+ print("carry on my wayward json")
 
 # lin.reg.plot.json(mSetObj, "plotted")
 # lin.reg.plot.json(mSetObj)
@@ -850,8 +846,10 @@ print("carry on my wayward json")
 #'Generate Normality of Residuals (qqplot) plot for model
 #'@description Plot line of best fit on scatter plot of linear regression model on 2 variables in data
 #'@param mSetObj Input the name of the created mSetObj
+#'@param facA Input the name of the response column (java uses Columns() to give user options)
+#'@param facB Input the name of the predictor column (java uses Columns() to give user options)
 #'@param data Boolean, whether to use original data; "false" (default) means normalized or "true" means original (checkbox)
-#'@param col_line Set color for line (default "NULL" is black); (static dropdown)
+#'@param col_line Set color for line (default "NULL" is blue); (static dropdown)
 #'@param col_dots Set color for scatterplot dots (default "NULL" is black); (static dropdown)
 #'@param plot_title Input the name of the title (default: "Univariate Linear Regression Line of Best Fit", textbox)
 #'@param plot_xlab Input the name to use for x-axis label (default: facA, textbox)
@@ -889,7 +887,7 @@ lin.qq.plot <- function(mSetObj=NA,
   mSetObj <- .get.mSet(mSetObj)
   
   ## DATA: NORMAL OR NOT
-# if(mSetObj$dataSet$usenorm == TRUE) {
+  # if(mSetObj$dataSet$usenorm == TRUE) {
    if (data == "false") { 
     input <- mSetObj$dataSet$norm #default use norm
   } else {
@@ -918,24 +916,22 @@ lin.qq.plot <- function(mSetObj=NA,
      facB <- facB #Determined using Columns() function (java will present options in drop down menu)
    }
 
-mSetObj$analSet$linReg1$res$response <- facA
-mSetObj$analSet$linReg1$res$predictor <-facB
 
-#
 #  # VARIABLE TYPE CHECK
 #  if (is.factor(input[,facA] || input[,facB]) == TRUE){
 #    #AddErrMsg("You have chosen 1 or more categorical columns! Try selecting another independent and/or dependent variable. You can also try other regression models such as penalized, logistic, SVM or random forest.")
 #    stop("You have chosen 1 or more categorical columns! Try selecting another independent and/or dependent variable. You can also try other regression models such as penalized, logistic, SVM or random forest.") #Error msg
 #  }
   
-    # EXTRACT PLOT COMPONENTS
-   
-  #  facA <- mSetObj$analSet$linReg1$res$response
-  #  facB <-  mSetObj$analSet$linReg1$res$predictor
-   fileName <- mSetObj$analSet$linReg1$res$fileName
+  # EXTRACT PLOT COMPONENTS
+   # mSetObj$analSet$linReg1$res$response <- facA
+   # mSetObj$analSet$linReg1$res$predictor <-facB
+   # facA <- mSetObj$analSet$linReg1$res$response
+   # facB <-  mSetObj$analSet$linReg1$res$predictor
    # formula <- mSetObj$analSet$linReg1$res$formula
    # model <- mSetObj$analSet$linReg1$mod
 
+   fileName <- mSetObj$analSet$linReg1$res$fileName
    formula <- as.formula(paste(facA, "~", facB, sep = "")) 
    model <- lm(formula = formula, data = input, weights = NULL)
 
@@ -951,14 +947,14 @@ mSetObj$analSet$linReg1$res$predictor <-facB
   }
   h <- w
   
-  #Name plot for download
-## must put imgName2 first, re-writing imgName var in next line
-imgName2 <- paste(gsub( "\\_\\d+\\_", "", imgName),
+  #NAME PLOT FOR DOWNLOAD
+  # must put imgName2 first, re-writing imgName var in next line
+  imgName2 <- paste(gsub( "\\_\\d+\\_", "", imgName),
  ".json", sep="") 
   imgName <- paste(imgName, "dpi", dpi, ".", format, sep="")
   mSetObj$imgSet$plot.linReg1 <- imgName
   
-    #SET POINT COLOR
+  #SET POINT COLOR
   col_dots1 <- 
 				switch(
 					col_dots,
@@ -974,7 +970,7 @@ imgName2 <- paste(gsub( "\\_\\d+\\_", "", imgName),
    col_line1 <- 
 				switch(
 					col_line,
-					"NULL" = "black",
+					"NULL" = "blue",
 					"black" = "black",
 					"blue" = "blue",
 					"red" = "red",
@@ -992,7 +988,7 @@ imgName2 <- paste(gsub( "\\_\\d+\\_", "", imgName),
 
   # PLOT YAXIS
   if(plot_ylab == " "){
-  plot_ylab1 <- "Emprical"
+  plot_ylab1 <- "Empirical"
   } else { # facA, response
     plot_ylab1 <- plot_ylab
   }
@@ -1042,13 +1038,12 @@ a0 <- ggplot() +
   # a0
   dev.off()
 
-  # JSON MAKING
+# JSON MAKING
 build <- ggplot_build(a0)
 build_line <- build$data[[2]] ### NOTE line is 2 in list, points is 1
 build_points <- build$data[[1]]
 linear_plot_json <- list()
 
- #### NON-PASTE VERSION
 linear_plot_json$main <- plot_title1 #title
 linear_plot_json$axis <- c(plot_xlab1, plot_ylab1) #axis titles
 
@@ -1061,43 +1056,6 @@ linear_plot_json$lines$cols <- build_line[,grepl("col",colnames(build_line))]
 linear_plot_json$lines$size <- build_line[,c("size")]
  ## linear_plot_json$label <- build$data[[3]][,c("label")]
  ## linear_plot_json$lines$ci <- build$data[[1]][,c("se")]
-   
-
-#   #### PASTE VERSION
-#    df <- data.frame(x=build$data[[1]][,c("x")],
-#                   y=build$data[[1]][,c("y")],
-#               point_cols = build$data[[1]][,grepl("col",colnames(build$data[[1]]))],
-#               point_shape = build$data[[1]][,c("group")],
-#               point_size = build$data[[1]][,c("size")],
-#               line_cols = build$data[[2]][,grepl("col",colnames(build$data[[2]]))][1] ) 
-#   
-#   if(grepl("ymin", colnames(build$data[[1]])) && grepl("ymax", colnames(build$data[[1]])) ){
-#   df$CI_down <-build$data[[1]][,c("ymin")] 
-#   df$CI_up <- build$data[[1]][,c("ymax")]
-#  } else{
-#    df$CI_down <- NULL
-#    df$CI_up <- NULL
-# }
-# 
-# aa<-apply(df, 1, function(x){
-#   paste(x, sep= paste0(colnames(df),": ") )
-# })
-# bb<-apply(aa, 2, function(x){ paste(
-#     paste0(colnames(df),": "), x
-#   ) })
-# cc<- apply(bb, 2,  function(x){
-#           paste(x, collapse=",")
-#         } )
-# dd<-paste( seq_along(cc),": {",cc, "}" )
-# ee<- paste(
-#   "data: {", 
-#   paste(dd, collapse=","), "}"
-# )
-# 
-#   linear_plot_json$main <- plot_title1 #title
-#   linear_plot_json$axis <- c(plot_xlab1, plot_ylab1) #axis titles
-#   linear_plot_json$data <- ee
- 
   
   #### MODEL VARS FOR LINE
   linear_plot_json$r_sq <-"NA"
@@ -1109,13 +1067,13 @@ linear_plot_json$lines$size <- build_line[,c("size")]
   linear_plot_json$yint <- build_line[,c("intercept")] #int_val 
    # summary(model)[["coefficients"]][1] # alpha
 
-## MAKE JSON 
+## WRITE JSON 
  json.obj <- RJSONIO::toJSON(linear_plot_json, .na='null')
  sink(imgName2)
  cat(json.obj)
  sink()
-print(json.obj)
-print("livin json a prayer")
+ print(json.obj)
+ print("livin json a prayer")
 
 # lin.reg.plot.json(mSetObj)
 # lin.reg.plot.json(mSetObj=mSetObj, which_plot = "norm")
@@ -1131,6 +1089,8 @@ print("livin json a prayer")
 #'Generate Residuals vs. Fitted values plot for model
 #'@description Plot residuals and predicted (fitted or yhat values) of linear regression model on 2 variables in data (check linearity assumption)
 #'@param mSetObj Input the name of the created mSetObj
+#'@param facA Input the name of the response column (java uses Columns() to give user options)
+#'@param facB Input the name of the predictor column (java uses Columns() to give user options)
 #'@param data Boolean, whether to use original data; "false" (default) means normalized or "true" means original (checkbox)
 #'@param col_line Set color for line (default "NULL" is blue); (static dropdown)
 #'@param col_dots Set color for scatterplot dots (default "NULL" is black); (static dropdown)
@@ -1170,7 +1130,7 @@ lin.resfit.plot <- function(mSetObj=NA,
   mSetObj <- .get.mSet(mSetObj)
   
   ## DATA: NORMAL OR NOT
-#  if (mSetObj$dataSet$usenorm == TRUE) { 
+  #  if (mSetObj$dataSet$usenorm == TRUE) { 
    if (data == "false") { 
     input <- mSetObj$dataSet$norm #default use norm
   } else {
@@ -1200,25 +1160,22 @@ lin.resfit.plot <- function(mSetObj=NA,
      facB <- facB #Determined using Columns() function (java will present options in drop down menu)
    }
    
-
-mSetObj$analSet$linReg1$res$response <- facA
-mSetObj$analSet$linReg1$res$predictor <-facB
-
-
    # VARIABLE TYPE CHECK
    # if (is.factor(input[,facA] || input[,facB]) == TRUE){
    #  #AddErrMsg("You have chosen 1 or more categorical columns! Try selecting another independent and/or dependent variable. You can also try other regression models such as penalized, logistic, SVM or random forest.")
    #  stop("You have chosen 1 or more categorical columns! Try selecting another independent and/or dependent variable. You can also try other regression models such as penalized, logistic, SVM or random forest.") #Error msg
    # }
   
-    # EXTRACT PLOT COMPONENTS
+   # EXTRACT PLOT COMPONENTS
    
    # facA <- mSetObj$analSet$linReg1$res$response
    # facB <-  mSetObj$analSet$linReg1$res$predictor
-   fileName <- mSetObj$analSet$linReg1$res$fileName
    # formula <- mSetObj$analSet$linReg1$res$formula
    # model <- mSetObj$analSet$linReg1$mod
+   # mSetObj$analSet$linReg1$res$response <- facA
+   # mSetObj$analSet$linReg1$res$predictor <-facB
 
+   fileName <- mSetObj$analSet$linReg1$res$fileName
    formula <- as.formula(paste0(facA, "~", facB)) 
    model <- lm(formula = formula, data = input, weights = NULL)
    dfres <- data.frame(resid = residuals(model), fit = fitted(model))
@@ -1237,14 +1194,14 @@ mSetObj$analSet$linReg1$res$predictor <-facB
   }
   h <- w
   
-  #Name plot for download
-## must put imgName2 first, re-writing imgName var in next line
-imgName2 <- paste(gsub( "\\_\\d+\\_", "", imgName),
+  #NAME PLOT FOR DOWNLOAD
+  # must put imgName2 first, re-writing imgName var in next line
+  imgName2 <- paste(gsub( "\\_\\d+\\_", "", imgName),
  ".json", sep="") 
   imgName <- paste(imgName, "dpi", dpi, ".", format, sep="")
   mSetObj$imgSet$plot.linReg1 <- imgName
   
-     #SET POINT COLOR
+  #SET POINT COLOR
   col_dots1 <- 
 				switch(
 					col_dots,
@@ -1260,7 +1217,7 @@ imgName2 <- paste(gsub( "\\_\\d+\\_", "", imgName),
    col_line1 <- 
 				switch(
 					col_line,
-					"NULL" = "black",
+					"NULL" = "blue",
 					"black" = "black",
 					"blue" = "blue",
 					"red" = "red",
@@ -1268,7 +1225,6 @@ imgName2 <- paste(gsub( "\\_\\d+\\_", "", imgName),
 					"grey" = "grey",
 					NULL
 				)
-
 
   # PLOT TITLE
   if(plot_title == " "){
@@ -1291,17 +1247,17 @@ imgName2 <- paste(gsub( "\\_\\d+\\_", "", imgName),
     plot_xlab1 <- plot_xlab
   }
   
-  
-  # a0 <- ggplot(data =  input,
+
+   # a0 <- ggplot(data =  input,
    # aes(x = .data[[facA]], y = .data[[facB]]) ) +
    # aes_(sample =  as.name(facA)) )+
-  a0 <- ggplot(data = data.frame(resid = residuals(model), fit = fitted(model)),  
-   aes(x = fit, y = resid)) +
-    labs(title = plot_title1) +
+  a0 <- ggplot(data = dfres, #data.frame(resid = residuals(model), fit = fitted(model)),  
+     aes(x = fit, y = resid)) +
+     labs(title = plot_title1) +
      ylab(plot_ylab1)+ xlab(plot_xlab1) +
-    geom_point(shape = 16, color = col_dots1) + 
+     geom_point(shape = 16, color = col_dots1) + 
      geom_hline(yintercept = 0) +
-    geom_smooth(color = col_line1, fullrange = TRUE, se = FALSE) +
+     geom_smooth(color = col_line1, fullrange = TRUE, se = FALSE) +
      theme_bw() + 
   theme(panel.grid.major = element_blank(), 
         panel.grid.minor = element_blank(),
@@ -1338,6 +1294,7 @@ linear_plot_json$lines$coords <- build_line[,c("x","y")]
 linear_plot_json$lines$cols <- build_line[,grepl("col",colnames(build_line))]
 linear_plot_json$lines$size <- build_line[,c("size")]
 
+# horizontal black line
 linear_plot_json$lines2$cols <- build_line2[,grepl("col",colnames(build_line2))]
 linear_plot_json$lines2$size <- build_line2[,c("size")]
 linear_plot_json$lines2$yint <- build_line2[,c("yintercept")]
@@ -1358,8 +1315,8 @@ linear_plot_json$lines2$slope <- 0
  sink(imgName2)
  cat(json.obj)
  sink()
-print(json.obj)
-print("json the road again")
+ print(json.obj)
+ print("json the road again")
 
 # lin.reg.plot.json(mSetObj, "plotted")
 # lin.reg.plot.json(mSetObj)
