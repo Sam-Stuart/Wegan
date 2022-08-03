@@ -94,6 +94,7 @@ public static boolean PlotLinearCA(SessionBean1 sb,Boolean data,
     }    
     
 public static boolean PlotLinearPredictCA(SessionBean1 sb,
+        String facA, String facB,
         Boolean data, 
         String col_dots, String col_line, Boolean plot_ci, 
         Boolean plot_eq, Boolean plot_rsq, Boolean plot_rsq_adj,
@@ -102,6 +103,8 @@ public static boolean PlotLinearPredictCA(SessionBean1 sb,
     try {
             RConnection RC = sb.getRConnection();
             String rCommand = "lin.pred.plot(NA" + ", \"" 
+                    + facA + "\", \""
+                    + facB + "\", \""
                     + data + "\", \"" 
                     + col_dots + "\", \"" 
                     + col_line + "\", \"" 

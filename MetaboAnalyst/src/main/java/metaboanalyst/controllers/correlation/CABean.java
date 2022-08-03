@@ -82,7 +82,9 @@ public class CABean implements Serializable {
                  false, false, false, " "," "," ",
                 sb.getCurrentImage("corr_linear"), "png", 72);
         
-        CAUtils.PlotLinearPredictCA(sb, false, "NULL", "NULL", false,
+        CAUtils.PlotLinearPredictCA(sb, "NULL", "NULL",
+                false, 
+                "NULL", "NULL", false,
                 false, false, false, " ", " "," ",
                 sb.getCurrentImage("corr_linear_pred"), "png", 72);
         
