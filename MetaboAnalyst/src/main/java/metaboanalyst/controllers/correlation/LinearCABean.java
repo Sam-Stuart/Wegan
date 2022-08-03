@@ -112,39 +112,6 @@ public class LinearCABean implements Serializable {
         this.doOriginal = doOriginal;
     }
     
-//    // CHECK BOX for using normalized data (default) or original data
-//    private boolean doOriginalTwo = false;
-//
-//    public boolean isdoOriginalTwo() {
-//        return doOriginalTwo;
-//    }
-//
-//    public void setdoOriginalTwo(boolean doOriginalTwo) {
-//        this.doOriginalTwo = doOriginalTwo;
-//    }
-//    
-//    // CHECK BOX for using normalized data (default) or original data
-//    private boolean doOriginalThree = false;
-//
-//    public boolean isdoOriginalThree() {
-//        return doOriginalThree;
-//    }
-//
-//    public void setdoOriginalThree(boolean doOriginalThree) {
-//        this.doOriginalThree = doOriginalThree;
-//    }
-//    
-//    // CHECK BOX for using normalized data (default) or original data
-//    private boolean doOriginalFour = false;
-//
-//    public boolean isdoOriginalFour() {
-//        return doOriginalFour;
-//    }
-//
-//    public void setdoOriginalFour(boolean doOriginalFour) {
-//        this.doOriginalFour = doOriginalFour;
-//    }
-    
     
   // CHECK BOX for adding (default) or omitting equation to plot (at top), see correlation_linear.R 
   // when >1 of rsq, eq, & rsqadj are checked, values are seperated by " | " 
@@ -275,7 +242,7 @@ public class LinearCABean implements Serializable {
 //        corrLin1_Update_action
         
         CAUtils.PlotLinearCA(sb, 
-//                corrColumnNameA, corrColumnNameB, 
+                corrColumnNameA, corrColumnNameB, 
                 doOriginal, 
                 corColorDotsOpts, corColorLineOpts, 
                doPlotConfInt, doPlotEq, doPlotRsq, doPlotRsqAdj,

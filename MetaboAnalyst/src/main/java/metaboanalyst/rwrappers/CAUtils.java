@@ -58,30 +58,28 @@ public class CAUtils {
     }
     
 
-public static boolean PlotLinearCA(SessionBean1 sb,Boolean data,
+public static boolean PlotLinearCA(SessionBean1 sb,
+        String facA, String facB, Boolean data,
         String col_dots, String col_line, Boolean plot_ci, 
         Boolean plot_eq, Boolean plot_rsq, Boolean plot_rsq_adj, 
                 String plot_title, String plot_xlab, String plot_ylab, 
                 String imgName, String format, int dpi) {
     try {
             RConnection RC = sb.getRConnection();
-//            String rCommand = "lin.reg.plot(NA" + ", \"" 
-//                    + data + "\", \""                    
-//                    + col_dots + "\", \""
-//                    + col_line + "\", \""
-//                    + plot_ci + "\", \""
-//                    + plot_eq + "\", \""
-//                    + plot_rsq + "\", \""
-//                    + plot_rsq_adj + "\", \""
-//                    + plot_title + "\", \""
-//                    + plot_xaxis + "\", \""
-//                    + plot_yaxis + "\", \""
-////                  + "\", imgName)";
-//                    + imgName + "\", \"" 
-//                    + format + "\", "
-//                    + dpi 
-//                    + ", width=NA)";
-            String rCommand = "lin.reg.plot(NA" + ", \"" + data + "\", \"" + col_dots + "\", \"" + col_line + "\", \"" + plot_ci + "\", \"" + plot_eq + "\", \"" + plot_rsq + "\", \"" + plot_rsq_adj + "\", \"" + plot_title + "\", \"" + plot_xlab + "\", \"" + plot_ylab + "\", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
+            String rCommand = "lin.reg.plot(NA" + ", \"" 
+                    + facA + "\", \""
+                    + facB + "\", \""
+                    + data + "\", \""
+                    + col_dots + "\", \""
+                    + col_line + "\", \"" 
+                    + plot_ci + "\", \"" 
+                    + plot_eq + "\", \"" 
+                    + plot_rsq + "\", \"" 
+                    + plot_rsq_adj + "\", \"" 
+                    + plot_title + "\", \"" 
+                    + plot_xlab + "\", \"" 
+                    + plot_ylab + "\", \"" 
+                    + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
             RCenter.recordRCommand(RC, rCommand);
             sb.addGraphicsCMD("corr_linear", rCommand);
             RC.voidEval(rCommand);

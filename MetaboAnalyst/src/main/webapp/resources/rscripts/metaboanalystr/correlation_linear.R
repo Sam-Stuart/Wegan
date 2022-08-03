@@ -196,6 +196,8 @@ lin.reg.anal <- function(mSetObj = NA,
 #'Generate linear regression plot
 #'@description Plot line of best fit on scatter plot of linear regression model on 2 variables in data
 #'@param mSetObj Input the name of the created mSetObj
+#'@param facA Input the name of the response column (java uses Columns() to give user options)
+#'@param facB Input the name of the predictor column (java uses Columns() to give user options)
 #'@param data Boolean, whether to use original data; "false" (default) means normalized or "true" means original (checkbox)
 #'@param col_dots Set color for scatterplot dots (default "NULL" is black); (static dropdown)
 #'@param col_line Set color for line (default "NULL" is black); (static dropdown)
@@ -219,8 +221,8 @@ lin.reg.anal <- function(mSetObj = NA,
 #' @importFrom rlang .data
 #'@export
 lin.reg.plot <- function(mSetObj=NA,
-                        # facA = "NULL",
-                        # facB = "NULL",
+                         facA = "NULL",
+                         facB = "NULL",
             data = "false",
              
   col_dots = "NULL",
@@ -253,12 +255,34 @@ lin.reg.plot <- function(mSetObj=NA,
     input <- mSetObj$dataSet$orig
   }
 
+  ### iF VARIABLES ARE SET
+   #Set dependent (response) variable name
+   if (facA == "NULL"){
+     if( !"res" %in% names(mSetObj$analSet$linReg1) ){
+        facA <- mSetObj$analSet$linReg1$res$response
+     } else {
+     facA <- colnames(input)[1] #Default is 1st column.
+   }
+ } else {
+     facA <- facA #Determined using Columns() function below (java will present options in drop down menu)
+   }
+   #Set independent (predictor) variable name
+   if (facB == "NULL"){
+     if( !"res" %in% names(mSetObj$analSet$linReg1) ){
+        facB <-  mSetObj$analSet$linReg1$res$predictor
+     } else {
+     facB <- colnames(input)[2] #Default is 2nd column.
+   }
+ } else {
+     facB <- facB #Determined using Columns() function (java will present options in drop down menu)
+   }
+
   #RETRIEVE RESULTS: 
- facA <- mSetObj$analSet$linReg1$res$response
- facB <-  mSetObj$analSet$linReg1$res$predictor
  fileName <- mSetObj$analSet$linReg1$res$fileName
  formula <- as.formula(paste(facA, "~", facB, sep = ""))
  model <- lm(formula = formula, data = input, weights = NULL)
+ # facA <- mSetObj$analSet$linReg1$res$response
+ # facB <-  mSetObj$analSet$linReg1$res$predictor
  # predicted.values <- mSetObj$analSet$linReg1$res$predicted.values
  # formula <- mSetObj$analSet$linReg1$res$formula 
  # model <- mSetObj$analSet$linReg1$mod 
@@ -557,6 +581,7 @@ linear_plot_json$bool_rsq_adj <- TRUE
  cat(json.obj)
  sink()
  print(json.obj)
+ print(paste("PLOT1: facA: ", facA, " | facB: ", facB,  sep = ""))
  print("we built this city json rock and roll")
 
 # lin.reg.plot.json(mSetObj, "plotted")
@@ -836,6 +861,7 @@ linear_plot_json$bool_ci <- FALSE
  cat(json.obj)
  sink()
  print(json.obj)
+ print(paste("PLOT2: facA: ", facA, " | facB: ", facB,  sep = ""))
  print("carry on my wayward json")
 
 # lin.reg.plot.json(mSetObj, "plotted")
@@ -1079,6 +1105,7 @@ linear_plot_json$lines$size <- build_line[,c("size")]
  cat(json.obj)
  sink()
  print(json.obj)
+ print(paste("PLOT3: facA: ", facA, " | facB: ", facB,  sep = ""))
  print("livin json a prayer")
 
 # lin.reg.plot.json(mSetObj)
@@ -1322,6 +1349,7 @@ linear_plot_json$lines2$slope <- 0
  cat(json.obj)
  sink()
  print(json.obj)
+ print(paste("PLOT4: facA: ", facA, " | facB: ", facB,  sep = ""))
  print("json the road again")
 
 # lin.reg.plot.json(mSetObj, "plotted")
