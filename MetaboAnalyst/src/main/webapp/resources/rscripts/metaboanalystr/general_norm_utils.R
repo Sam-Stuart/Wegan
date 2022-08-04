@@ -74,6 +74,16 @@ BestNormalize <- function(mSetObj=NA){
   skewMean_unlist <- unlist(skewMean)
   bestNorm <- names(which.min(abs(skewMean_unlist)))
   print(bestNorm)
+  mSetObj$dataSet$bestnorm <- bestNorm
+  return(.set.mSet(mSetObj));
+}
+
+
+
+#Extract best normalization name
+extractBestNorm <- function(mSetObj=NA) {
+  mSetObj <- .get.mSet(mSetObj);
+  bestNorm <- mSetObj$dataSet$bestnorm
   return(bestNorm);
 }
 

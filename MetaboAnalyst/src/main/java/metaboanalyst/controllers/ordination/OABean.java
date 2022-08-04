@@ -148,7 +148,7 @@ public class OABean implements Serializable {
 //        ChemoMetrics.PlotPCALoading(sb, sb.getCurrentImage("pca_loading"), "png", 72, 1, 2, "scatter", 1);  // setLoadingTable(pcImpInx);
 //        ChemoMetrics.PlotPCABiplot(sb, sb.getCurrentImage("pca_biplot"), "png", 72, 1, 2);
         //ChemoMetrics.PlotPCA3DScore(sb, sb.getCurrentImage("pca_score3d"), "png", 72, 1, 2, 3, 40);
-        ChemoMetrics.PlotPCA3DScore(sb, sb.getCurrentImage("pca_score3d"), "json", 72, 1, 2, 3);
+        ChemoMetrics.PlotPCA3DScore(sb, sb.getCurrentImage("pca_score3d"), "json", "NULL", "NULL");
     }
     
     private void doDefaultDCA(){
