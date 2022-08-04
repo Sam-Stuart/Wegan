@@ -23,8 +23,6 @@ var svg = d3
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-var input = d3.select("#my_dataviz").append("input").attr("type", "number");
-
 //Read the data
 d3.json("Scatterplot.json", function (data) {
     //Extract data
@@ -32,12 +30,6 @@ d3.json("Scatterplot.json", function (data) {
     const xLabel = data.xAxisLabel;
     const yLabel = data.yAxisLabel;
     const values = Object.values(data.data);
-
-    //Set default value for input
-    input.attr(
-        "value",
-        d3.max(values, (d) => d.x)
-    );
 
     //Define Xaxis
     var x = d3
@@ -160,29 +152,4 @@ d3.json("Scatterplot.json", function (data) {
         .style("order", 1)
         .style("font-size", "18px")
         .style("margin-bottom", "1rem");
-
-    // Update Xaxis
-    function updatePlot() {
-        // Get the value of the button
-        xlim = this.value;
-
-        var oldDomain = x.domain();
-        // Update X axis
-        x.domain([oldDomain[0], xlim]);
-        xAxis.transition().duration(1000).call(d3.axisBottom(x));
-
-        // Update chart
-        svg.selectAll("circle")
-            .data(values)
-            .transition()
-            .duration(1000)
-            .attr("cx", function (d) {
-                return x(d.x);
-            })
-            .attr("cy", function (d) {
-                return y(d.y);
-            });
-    }
-
-    input.on("input", updatePlot);
 });
