@@ -226,13 +226,13 @@
                                 </h:panelGrid>
                             </h:panelGroup>                            -->
                         </h:panelGrid>
-                        <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+<!--                        <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
                             <p:commandButton value="Export"
                                 styleClass="exportButton"
                                 style="box-shadow: none !important; float:right; text-shadow: none !important;"
-                                actionListener="#{sessionBean1.graphicsLnk_action('pca_score3d')}"
+                                actionListener="{sessionBean1.graphicsLnk_action('pca_score3d')}"
                                 oncomplete="PF('graphDialog').show()"/>
-                        </h:panelGrid>  
+                        </h:panelGrid>  -->
                         <h:panelGrid id="score3dPane" style="text-align: center; width: 100%;">
                             <canvas id='canvas1' width='670px' height='630px'/>
                         </h:panelGrid>

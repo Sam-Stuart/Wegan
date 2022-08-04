@@ -540,13 +540,6 @@ PlotPCA3DScore <- function(mSetObj=NA, imgName, format="json", color="NULL", met
   
   metaData <- mSetObj$analSet$pca$metaData
 
-  if (meta_col_color=="No groupings") {
-    print("no groupings")
-  }
-  if (color=="none") { 
-    print("color none")
-  }
-
   if (is.data.frame(metaData)==FALSE || meta_col_color=="No groupings" || color=="NULL") { #no metaData or no metaData groupings
     cols <- rep("#000000", nrow(mSetObj$dataSet$norm))
     colorData <- data.frame(V1=rep(NA, nrow(mSetObj$dataSet$norm)), color=cols)
