@@ -540,7 +540,7 @@ PlotPCA3DScore <- function(mSetObj=NA, imgName, format="json", color="NULL", met
   
   metaData <- mSetObj$analSet$pca$metaData
 
-  if (is.data.frame(metaData)==FALSE || meta_col_color=="No groupings" || color=="NULL") { #no metaData or no metaData groupings
+  if (is.data.frame(metaData)==FALSE || meta_col_color=="No groupings" || color=="none") { #no metaData or no metaData groupings
     cols <- rep("#000000", nrow(mSetObj$dataSet$norm))
     colorData <- data.frame(V1=rep(NA, nrow(mSetObj$dataSet$norm)), color=cols)
   } else {
@@ -581,11 +581,9 @@ PlotPCA3DScore <- function(mSetObj=NA, imgName, format="json", color="NULL", met
 
   imgName = paste(imgName, ".", format, sep="");
   json.obj <- RJSONIO::toJSON(pca3d, .na='null');
-  print("made json")
   sink(imgName);
   cat(json.obj);
   sink();
-  print("sunk json")
   
   if(!.on.public.web){
     return(.set.mSet(mSetObj));
