@@ -73,6 +73,18 @@ public class RDataUtils {
         }
     }    
 
+    public static boolean readTextDataTax(RConnection RC, String filePath, String taxFormat, String lblType, String taxNames) {
+        try {
+            String rCommand = "Read.TextDataTax(NA, \"" + filePath + "\", \"" + taxFormat + "\", \"" + lblType + "\", \"" + taxNames + "\");";
+            String rCommand2 = "Read.TextDataTax(NA, \"" + "Replacing_with_your_file_path" + "\", \"" + taxFormat + "\", \"" + lblType + "\", \"" + taxNames + "\");";
+            RCenter.recordRCommand(RC, rCommand2);
+            return (RC.eval(rCommand).asInteger() == 1);
+        } catch (Exception rse) {
+            System.out.println(rse);
+            return false;
+        }
+    } 
+        
     public static boolean readTextDataEnv(RConnection RC, String filePath, String envFormat, String lblType, String envNames) {
         try {
             String rCommand = "Read.TextDataEnv(NA, \"" + filePath + "\", \"" + envFormat + "\", \"" + lblType + "\", \"" + envNames + "\");";
