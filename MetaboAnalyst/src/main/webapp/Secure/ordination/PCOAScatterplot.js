@@ -52,7 +52,7 @@ d3.json("Scatterplot.json", function (data) {
         .scaleLinear()
         .domain(d3.extent(values, (d) => d.y))
         .range([height, 0]);
-    svg.append("g").call(d3.axisLeft(y));
+    var yAxis = svg.append("g").call(d3.axisLeft(y));
 
     svg.append("text")
         .text(yLabel)
@@ -68,12 +68,70 @@ d3.json("Scatterplot.json", function (data) {
         .domain(values.map((value) => value.name))
         .range(["#440154ff", "#21908dff", "#fde725ff"]);
 
+    // Add a clipPath: everything out of this area won't be drawn.
+    var clip = svg
+        .append("defs")
+        .append("SVG:clipPath")
+        .attr("id", "clip")
+        .append("SVG:rect")
+        .attr("width", width)
+        .attr("height", height)
+        .attr("x", 0)
+        .attr("y", 0);
+
+    // Create the scatter variable: where both the circles and the brush take place
+    var scatter = svg.append("g").attr("clip-path", "url(#clip})");
+
+    // Set the zoom and Pan features: how much you can zoom, on which part, and what to do when there is a zoom
+    var zoom = d3
+        .zoom()
+        .scaleExtent([0.5, 20]) // This control how much you can unzoom (x0.5) and zoom (x20)
+        .extent([
+            [0, 0],
+            [width, height],
+        ])
+        .on("zoom", updateChart);
+
+    // This add an invisible rect on top of the chart area. This rect can recover pointer events: necessary to understand when the user zoom
+    scatter
+        .append("rect")
+        .attr("width", width)
+        .attr("height", height)
+        .style("fill", "none")
+        .style("pointer-events", "all")
+        .lower();
+
+    scatter.call(zoom);
+    // now the user can zoom and it will trigger the function called updateChart
+
+    // A function that updates the chart when the user zoom and thus new boundaries are available
+    function updateChart() {
+        // recover the new scale
+        var newX = d3.event.transform.rescaleX(x);
+        var newY = d3.event.transform.rescaleY(y);
+
+        // update axes with these new boundaries
+        xAxis.call(d3.axisBottom(newX));
+        yAxis.call(d3.axisLeft(newY));
+
+        // update circle position
+        scatter
+            .selectAll(".points")
+            .attr("cx", function (d) {
+                return newX(d.x);
+            })
+            .attr("cy", function (d) {
+                return newY(d.y);
+            });
+    }
+
     // Add dots
-    svg.append("g")
+    scatter
         .selectAll(".mypoint")
         .data(values)
         .enter()
         .append("circle")
+        .classed("points", true)
         .attr("id", "mypoint")
         .attr("x-value", function (d) {
             return d.x;
@@ -87,7 +145,7 @@ d3.json("Scatterplot.json", function (data) {
         .attr("cy", function (d) {
             return y(d.y);
         })
-        .attr("r", 5)
+        .attr("r", 3)
         .style("fill", function (d) {
             return color(d.name);
         })
@@ -144,8 +202,7 @@ d3.json("Scatterplot.json", function (data) {
         });
 
     //        create title
-    var titleDiv = d3
-        .select("#my_dataviz")
+    d3.select("#my_dataviz")
         .append("div")
         .html(title)
         .style("text-align", "center")
