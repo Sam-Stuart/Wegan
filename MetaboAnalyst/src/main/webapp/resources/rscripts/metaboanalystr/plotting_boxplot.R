@@ -216,6 +216,10 @@ factor.columns <- function(mSetObj=NA) {
   mSetObj <- .get.mSet(mSetObj)
   data <- mSetObj$analSet$boxPlot$data;
   data_fac <- select_if(data, is.character) #factor columns for grouping
+  if(is.null(data_fac)){
+    fac.col.names <- "No Grouping Data in this dataset";
+    return(fac.col.names);
+  }
   fac.col.names <- colnames(data_fac)
   return(fac.col.names)
 }

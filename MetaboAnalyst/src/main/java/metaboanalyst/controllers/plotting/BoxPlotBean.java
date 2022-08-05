@@ -82,6 +82,21 @@ public class BoxPlotBean implements Serializable {
         return boxColumnOpts;
     }
     
+//    private SelectItem[] pcaMetaColumnOpts = null;
+//    public SelectItem[] getPcaMetaColumnOpts(){
+//        String[] columns = OAUtils.GetPCAMetaColumns(sb);
+//        int columnsLen = columns.length;
+//        pcaMetaColumnOpts = new SelectItem[columnsLen];
+//        List<String> columnNames = Arrays.asList(columns);
+//        for (int i = 0; i < columnsLen; i++) {
+//            pcaMetaColumnOpts[i] = new SelectItem(columnNames.get(i), columnNames.get(i));
+//        }
+//        return pcaMetaColumnOpts;
+//    }
+//    private String pcaMetaColumnName = getPcaMetaColumnOpts()[0].getLabel();
+//    
+    
+    
     public SelectItem[] getFactorBoxColumnOpts(){
         String[] columns = PlottingUtils.GetFactorDataColumnsBoxPlt(sb);
         int columnsLen = columns.length;
@@ -121,9 +136,8 @@ public class BoxPlotBean implements Serializable {
     private String type  = "NULL";
     private String data = "NULL";
     
-    
-    private String facA = getBoxColumnOpts()[4].getLabel();
-    
+    private String facA = getFactorBoxColumnOpts()[0].getLabel();
+    private String facB = getNumericBoxColumnOpts()[0].getLabel();
     
     public String getFacA() {
         return facA;
@@ -133,7 +147,7 @@ public class BoxPlotBean implements Serializable {
         this.facA = facA;
     }
     
-    private String facB = getBoxColumnOpts()[3].getLabel();
+    
     
     public String getFacB() {
         return facB;
