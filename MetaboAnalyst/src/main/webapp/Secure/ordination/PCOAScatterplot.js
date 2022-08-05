@@ -80,7 +80,7 @@ d3.json("Scatterplot.json", function (data) {
         .attr("y", 0);
 
     // Create the scatter variable: where both the circles and the brush take place
-    var scatter = svg.append("g").attr("clip-path", "url(#clip})");
+    var scatter = svg.append("g").attr("clip-path", "url(#clip)");
 
     // Set the zoom and Pan features: how much you can zoom, on which part, and what to do when there is a zoom
     var zoom = d3
