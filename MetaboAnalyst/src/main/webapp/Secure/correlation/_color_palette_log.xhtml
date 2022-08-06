@@ -7,49 +7,46 @@
                 xmlns:p="http://primefaces.org/ui">
 
 
-    <h:form id="linGraph">
+    <h:form id="logGraph">
         <h:panelGrid columns="1" style="width:380px;">
             <h:panelGrid id="panelGrid1" columns="2" cellpadding="5" columnClasses="colBrayLong,colBrayShort">
                 
-                <h3>On-Plot Display Options</h3>
-                <p:panelGrid></p:panelGrid>                
-                
-                <h:outputLabel style="font-weight: bold" value="Show Equation on Plot:"/>
-                <p:selectBooleanCheckbox value ="#{linearCABean.doPlotEq}"/> 
-                
-                <h:outputLabel style="font-weight: bold" value="Show R-squared on Plot:"/>
-                <p:selectBooleanCheckbox value ="#{linearCABean.doPlotRsq}"/> 
-                                
-                <h:outputLabel style="font-weight: bold" value="Show Adjusted R-squared on Plot:"/>
-                <p:selectBooleanCheckbox value ="#{linearCABean.doPlotRsqAdj}"/> 
-                
-                <h3>Line and Point Options</h3>
+                <h3>Plot and Color</h3>
                 <p:panelGrid></p:panelGrid>
-
-                <h:outputLabel style="font-weight: bold" value="Point Color:"/>
-                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linearCABean.corColorDotsOpts}">
-                    <f:selectItems value="#{applicationBean1.corLinColorDotsOpts}" />
-                </p:selectOneMenu> 
                 
-                <h:outputLabel style="font-weight: bold" value="Line Color:"/>
-                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linearCABean.corColorLineOpts}">
-                    <f:selectItems value="#{applicationBean1.corLinColorLineOpts}" />
+                <h:outputLabel style="font-weight: bold" value="Color Palette:"/>
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{logCABean.logPaletteOpts}">
+                    <f:selectItems value="#{applicationBean1.logColorPaletteOpts}" />
                 </p:selectOneMenu>  
                                 
                 <h:outputLabel style="font-weight: bold" value="Show 95% Confidence Interval:"/>
-                <p:selectBooleanCheckbox value ="#{linearCABean.doPlotConfInt}"/> 
+                <p:selectBooleanCheckbox value ="#{logCABean.doPlotConfInt}"/> 
                 
-                <h3>Titles</h3>
-                <p:panelGrid></p:panelGrid>                 
+                <h3>Legend and Axis</h3>
+                <p:panelGrid></p:panelGrid>
+                
+                <h:outputLabel style="font-weight: bold" value="Legend Position"/>
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{logCABean.logPlotLegPosOpts}">
+                    <f:selectItems value="#{applicationBean1.logLegPosOpts}" />
+                </p:selectOneMenu> 
+                
+                <h:outputLabel style="font-weight: bold" value="Show Legend as Horizontal:"/>
+                <p:selectBooleanCheckbox value ="#{logCABean.doPlotLegHoriz}"/> 
+                
+                <h:outputLabel style="font-weight: bold" value="Rotate x-tick labels:"/>
+                <p:selectBooleanCheckbox value ="#{logCABean.doPlotConfInt}"/>            
+                
+                <h3>Titles and Legend</h3>
+                <p:panelGrid></p:panelGrid>    
                 
                 <h:outputLabel style="font-weight: bold" value="Plot Title:"/>
-                <p:inputText value = "#{linearCABean.corPlotTitle}"/> 
+                <p:inputText value = "#{logCABean.corPlotTitle}"/> 
                 
                 <h:outputLabel style="font-weight: bold" value="X-Axis Label"/>
-                <p:inputText value = "#{linearCABean.corPlotXlab}"/> 
+                <p:inputText value = "#{logCABean.corPlotXlab}"/> 
                 
                  <h:outputLabel style="font-weight: bold" value="Y-Axis Label"/>
-                <p:inputText value = "#{linearCABean.corPlotYlab}"/> 
+                <p:inputText value = "#{logCABean.corPlotYlab}"/> 
                 
                 <!--<p:panelGrid></p:panelGrid>-->
 
@@ -59,9 +56,9 @@
                                  styleClass="updateButton"
                                  style="box-shadow: none !important; text-shadow: none !important"
                                 onclick="PF('statusDialog').show()"
-                                oncomplete="PF('graphApperanceLinear').hide(); PF('statusDialog').hide()"  
-                                update=":linCA:form1:corrLinPane1  :cmdPane"
-                                actionListener="#{linearCABean.corrLin1Btn_action()}"/>
+                                oncomplete="PF('graphApperanceLog').hide(); PF('statusDialog').hide()"  
+                                update=":logCA:form1:corrLogPane1  :cmdPane"
+                                actionListener="#{logCABean.corrLogBtn1_action()}"/>
             </h:panelGrid>
         </h:panelGrid>
     </h:form>
