@@ -111,7 +111,10 @@ public class ApplicationBean1 implements Serializable {
     private final SelectItem[] scaleNormOpts;
     private final SelectItem[] ordStressDimensionOpts;
     private final SelectItem[] corLinColorDotsOpts;    
-    private final SelectItem[] corLinColorLineOpts;    
+    private final SelectItem[] corLinColorLineOpts; 
+    private final SelectItem[] logModType;
+    private final SelectItem[] logLegPosOpts;  
+    private final SelectItem[] logColorPaletteOpts;
     private final SelectItem[] ordColorPaletteOpts;
     private final SelectItem[] pcaPairsColorPaletteOpts;
     private final SelectItem[] pairAnalOpts;
@@ -299,6 +302,29 @@ public class ApplicationBean1 implements Serializable {
         corLinColorLineOpts[2] = new SelectItem("red", "Red");
         corLinColorLineOpts[3] = new SelectItem("green", "Green");
         corLinColorLineOpts[4] = new SelectItem("grey", "Grey");
+        
+        logModType = new SelectItem[3];
+        logModType[0] = new SelectItem("NULL", "Binomial");
+        logModType[1] = new SelectItem("multinomial", "Multinomial");
+        logModType[2] = new SelectItem("ordinal", "Ordinal");
+        
+        logLegPosOpts = new SelectItem[4];
+        logLegPosOpts[0] = new SelectItem("NULL", "Bottom");
+        logLegPosOpts[1] = new SelectItem("top", "Top");
+        logLegPosOpts[2] = new SelectItem("right", "Right");
+        logLegPosOpts[3] = new SelectItem("left", "Left");
+        
+//        blambus metro hero ipsum circus blambus viridus
+        logColorPaletteOpts = new SelectItem[7];
+        logColorPaletteOpts[0] = new SelectItem("NULL", "Blambus");
+        logColorPaletteOpts[1] = new SelectItem("metro", "Metro");
+        logColorPaletteOpts[2] = new SelectItem("hero", "Hero");
+        logColorPaletteOpts[3] = new SelectItem("ipsum", "Ipsum");
+        logColorPaletteOpts[4] = new SelectItem("circus", "Circus");
+        logColorPaletteOpts[5] = new SelectItem("viridis", "Virdis");
+        logColorPaletteOpts[6] = new SelectItem("breakfast.club", "Breakfast Club");
+        logColorPaletteOpts[7] = new SelectItem("aqua", "Aqua");
+        //    logPlotLegPosOpts logPaletteOpts logLegPosOpts logPaletteColOpts logColorPaletteOpts
         
         ordColorPaletteOpts = new SelectItem[4];
         ordColorPaletteOpts[0] = new SelectItem("NULL", "Viridis");
@@ -943,6 +969,18 @@ public class ApplicationBean1 implements Serializable {
     
     public SelectItem[] getCorLinColorLineOpts() {
         return corLinColorLineOpts;
+    }
+    
+    public SelectItem[] getLogLegPosOpts() {
+        return logLegPosOpts;
+    }
+    
+    public SelectItem[] getLogColorPaletteOpts(){
+        return logColorPaletteOpts;
+    }
+    
+    public SelectItem[] getLogModType() {
+        return logModType;
     }
     
     public SelectItem[] getOrdColorPaletteOpts() {
