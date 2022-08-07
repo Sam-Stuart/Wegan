@@ -21,45 +21,49 @@
                               
                             Choose model type 'binomial' when there are 2 possible outcomes in the dependent variable. If there are more than 2, choose type 'multinomial'. However, if the dependent variable is also inherently ordered (for example, representing sizes small, medium, and large) use the text box to input the ascending variable order and choose model type 'ordinal'. 
                             The reference level of a categorical variable (level being a unique value) can be thought of as a variable's baseline (or 'default') observed value. This means that the model results are given relative to this value. To input the reference level, use the given text box (otherwise the first level alphabetically is used).
-                            
                            
                             The train data for model building is 70% of the dataset, while the test data for model testing is 30% of the dataset.
                         </p>
 
                         <h:panelGrid id="corrLogPane1" columns="3" cellpadding="3" columnClasses="colLeft,colRight,colLast">
                             <h:outputLabel style="font-weight: bold" value="Response variable:"/>
-                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{logCABean.responseVar}">
-                                <f:selectItems value="#{logCABean.columnOpts}" />
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{logisticCABean.responseVar}">
+                                <f:selectItems value="#{logisticCABean.columnOpts}" />
                             </p:selectOneMenu>
                             <spacer></spacer>
                             <h:outputLabel style="font-weight: bold" value="Reference level:"/>
-                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{logCABean.responseLevelVar}">
-                                <f:selectItems value="#{logCABean.columnLevelOpts}" />
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{logisticCABean.responseLevelVar}">
+                                <f:selectItems value="#{logisticCABean.columnLevelOpts}" />
                             </p:selectOneMenu>
                             <spacer></spacer>
                             <h:outputLabel style="font-weight: bold" value="Indicate independent variables using the column names with commas in between:"/>
-                            <p:inputText style="width:400px; height:40px" value="#{logCABean.indInput}"/> 
+                            <p:inputText style="width:400px; height:40px" value="#{logisticCABean.indInput}"/> 
                             
                             <h:outputLabel style="font-weight: bold" value="Indicate ascending order of dependent variable level names with commas in between:"/>
-                            <p:inputText style="width:400px; height:40px" value="#{logCABean.indInput}"/> 
+                            <p:inputText style="width:400px; height:40px" value="#{logisticCABean.indInput}"/> 
 
+                            <h:outputLabel style="font-weight: bold" value="Logistic Model Type:"/>
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{logisticCABean.logModelType}">
+                                <f:selectItems value="#{applicationBean1.logModType}" />
+                            </p:selectOneMenu>
+                            
                         </h:panelGrid>
                         <p:panelGrid></p:panelGrid>
                         
                        <h:panelGrid id="panelGrid1_2" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
-                            <p:commandButton value="Customize Graph"
+                            <p:commandButton value="Customize"
                                              styleClass="graphicsButton"
                                              style="box-shadow: none !important; text-shadow: none !important;"
                                              actionListener="#{sessionBean1.graphicsLnk_action('corr_log_eff')}" 
                                             oncomplete="PF('graphApperanceLog').show()"/>  
                                            
-                            <p:commandButton value="Update" 
+                            <p:commandButton value=" Update " 
                                              styleClass="updateButton"
                                              style="box-shadow: none !important; text-shadow: none !important"
                                             onclick="PF('statusDialog').show()"
                                             oncomplete="PF('statusDialog').hide()"  
                                             update=":logCA:form1:corrLogPane1  :cmdPane" 
-                                            actionListener="#{logCABean.corrLogBtn1_action()}"/> 
+                                            actionListener="#{logisticCABean.corrLogBtn1_action()}"/> 
                             
                         </h:panelGrid>
                         
@@ -81,11 +85,11 @@ The R &#xb2; value is the fraction of variance explained by the model and is a v
                         </h:panelGrid>                     
                               <!--name was: 'corr_logistic1'-->                       
                           <h:panelGrid id="corrLogPane1_2" style="width: 100%;"> 
-<!--                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
                                 <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
-                                    <h:outputText escape="false" value="hash{linearCABean.fileLinModValsPath}"/>
+                                    <h:outputText escape="false" value="#{logisticCABean.fileLogModValsPath}"/>
                                 </i>
-                            </h:panelGrid>-->
+                            </h:panelGrid>
                             
                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
                                 <p:commandButton value="Export"
@@ -112,30 +116,30 @@ The R &#xb2; value is the fraction of variance explained by the model and is a v
 
                         <h:panelGrid id="corrLogPane2" columns="3" cellpadding="3" columnClasses="colLeft,colRight,colLast">
                             <h:outputLabel style="font-weight: bold" value="Dependant Variable:"/>
-                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{logCABean.columnNameA}">
-                                <f:selectItems value="#{logCABean.columnOpts}" />
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{logisticCABean.columnNameA}">
+                                <f:selectItems value="#{logisticCABean.columnOpts}" />
                             </p:selectOneMenu>
                             <spacer></spacer>
                             <h:outputLabel style="font-weight: bold" value="Indicate independent variables using the column names with commas in between:"/>
-                            <p:inputText style="width:400px; height:40px" value="#{logCABean.indInput}"/> 
+                            <p:inputText style="width:400px; height:40px" value="#{logisticCABean.indInput}"/> 
                         </h:panelGrid>
 
                         <p:panelGrid></p:panelGrid>
                         
                          <h:panelGrid id="panelGrid1" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;">                   
-                            <p:commandButton value="Customize Graph"
+                            <p:commandButton value="Customize"
                                              styleClass="graphicsButton"
                                              style="box-shadow: none !important; text-shadow: none !important;"
                                              actionListener="#{sessionBean1.graphicsLnk_action('corr_log_roc')}"
                                             oncomplete="PF('graphApperanceLog2').show()"/>  
                               
-                            <p:commandButton value="Update" 
+                            <p:commandButton value=" Update " 
                                              styleClass="updateButton"
                                              style="box-shadow: none !important; text-shadow: none !important"
                                             onclick="PF('statusDialog').show()"
                                             oncomplete="PF('statusDialog').hide()"  
                                             update=":logCA:form2:corrLogPane2  :cmdPane" 
-                                            actionListener="#{logCABean.corrLogBtn2_action()}"/>     
+                                            actionListener="#{logisticCABean.corrLogBtn2_action()}"/>     
                               
                         </h:panelGrid>
                         
