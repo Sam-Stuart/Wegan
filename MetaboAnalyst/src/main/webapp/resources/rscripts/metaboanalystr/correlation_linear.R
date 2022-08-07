@@ -130,8 +130,8 @@ lin.reg.anal <- function(mSetObj = NA,
    f0 <- paste0(n_fail, " linear model assumption test(s) failed: \n")
    
  failed<-c(f0, paste( 
-         names(mod), " (P-Value: ", mod, ")\n",
-         fix[mod_num < 0.05], "\n", sep = "" ) )
+         "TEST: ", names(mod), " (P-Value: ", mod, ")\n",
+         "TRY: ", fix[mod_num < 0.05], "\n", sep = "" ) )
       # "Please be advised that conforming to these assumptions is necessary for use of the linear model. The results of these tests provide an indication as to how appropriately these assumptions are met. If the goal is to visually explore your data, try the Plotting module." 
     #AddErrMsg(failed)
     message(failed)
