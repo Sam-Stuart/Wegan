@@ -75,6 +75,7 @@ public class PenalizedCABean implements Serializable {
         this.columnNameB = columnNameB;
     }
     
+    
        // CHECK BOX for using normalized data (default) or original data
     private boolean doOriginal = false;
 
@@ -85,40 +86,7 @@ public class PenalizedCABean implements Serializable {
     public void setdoOriginal(boolean doOriginal) {
         this.doOriginal = doOriginal;
     }
-    
-    // CHECK BOX for adding (default) or omitting equation to plot (at top), see correlation_linear.R 
-  // when >1 of rsq, eq, & rsqadj are checked, values are seperated by " | " 
-     private boolean doPlotEq = false;
-
-    public boolean isdoPlotEq() {
-        return doPlotEq;
-    }
-
-    public void setdoPlotEq(boolean doPlotEq) {
-        this.doPlotEq = doPlotEq;
-    } 
-  // CHECK BOX for adding (default) or omitting rsq to plot (at top), see correlation_linear.R 
-  // when >1 of rsq, eq, & rsqadj are checked, values are seperated by " | " 
-     private boolean doPlotRsq = false;
-
-    public boolean isdoPlotRsq() {
-        return doPlotRsq;
-    }
-
-    public void setdoPlotRsq(boolean doPlotRsq) {
-        this.doPlotRsq = doPlotRsq;
-    }     
-  // CHECK BOX for omitting (default) or adding rsq-adj to plot (at top), see correlation_linear.R 
-  // when >1 of rsq, eq, & rsqadj are checked, values are seperated by " | " 
-     private boolean doPlotRsqAdj = false;
-
-    public boolean isdoPlotRsqAdj() {
-        return doPlotRsqAdj;
-    }
-
-    public void setdoPlotRsqAdj(boolean doPlotRsqAdj) {
-        this.doPlotRsqAdj = doPlotRsqAdj;
-    }  
+   
   // CHECK BOX for omitting (default) or adding confidence interval to line, see correlation_linear.R 
      private boolean doPlotConfInt = false;
 
