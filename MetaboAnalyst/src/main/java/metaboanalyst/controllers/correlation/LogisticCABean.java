@@ -5,6 +5,7 @@
  */
 package metaboanalyst.controllers.correlation;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,6 +13,7 @@ import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.model.SelectItem;
 import metaboanalyst.controllers.SessionBean1;
+import metaboanalyst.models.User;
 import metaboanalyst.rwrappers.UniVarTests;
 import metaboanalyst.rwrappers.CAUtils;
 import metaboanalyst.rwrappers.RDataUtils;
@@ -100,6 +102,22 @@ public class LogisticCABean implements Serializable {
     }
     
  
+    //TABLES FOR DOWNLOAD
+    private User usr = sb.getCurrentUser();
+    private String usrName = usr.getName();
+    
+    
+    private String fileLogModVals = "corr_logistic_model_summary.txt";
+//            getSummaryLinDownload();
+    private String fileLogModValsPath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileLogModVals + "\">" + fileLogModVals + "</a>";
+ 
+    public String getFileLogModValsPath() {
+        return fileLogModValsPath;
+    }
+        
+    public void setFileLogModValsPath(String fileLogModValsPath) {
+        this.fileLogModValsPath = fileLogModValsPath;
+    } 
     
     
     
