@@ -99,10 +99,10 @@ if (is.null(facData)) {
 
 ## CHECK: are all input predictors in data
  predictors <- unlist(strsplit(predtext, "+", fixed=TRUE), use.names = FALSE) ## use.names = FALSE speeds up unlist
- if(any(!colnames(data) %in% predictors){
-stop(paste( "'", predictors[!predictors %in% colnames(data)],
- "' not found in data variable names ('", 
-paste(colnames(data), collapse = "' , '")
+ if(any(!colnames(data) %in% predictors)){
+stop(paste0( "'", predictors[!predictors %in% colnames(data)],
+ "' not found in data variables ('", 
+paste(colnames(data), collapse = "', '"), 
 "'): check spelling of text box input."))
 }
 
@@ -141,13 +141,13 @@ if(!is.factor(model_data[,1])){
       reference <- reference
     }
     
-## CHECK IF REFERENCE INPUT IS VALID # how is reference level output?
- if(any(!levels(model_data[,1]) %in% reference){
-    stop(paste0("reference ('", reference, 
-    "') not found in dependent variable levels ('",
-    paste(levels(model_data[,1]), collapse = "' , '"), 
-    "')"))
-}
+# ## CHECK IF REFERENCE INPUT IS VALID # how is reference level output?
+#  if(any(!levels(model_data[,1]) %in% reference)){
+#     stop(paste0("reference ('", reference, 
+#     "') not found in dependent variable levels ('",
+#     paste(levels(model_data[,1]), collapse = "', '"), 
+#     "')"))
+# }
 
     #SET REFERENCE LEVEL
     model_data[,1] <- relevel(as.factor(model_data[,1]), ref = reference) 
@@ -166,9 +166,9 @@ if(!is.factor(model_data[,1])){
 
     ### CHECK IF ORDERTEXT HAS VALID NAMES:
   if(any(!levels(model_data[,1]) %in% ordertext)){
-   stop(paste( "'", ordertext[!ordertext %in% levels(model_data[,1])], 
+   stop(paste0( "'", ordertext[!ordertext %in% levels(model_data[,1])], 
      "' not found in dependent variable levels of data (variable levels: '",
-     paste(levels(model_data[,1]), collapse "' , '") , 
+     paste(levels(model_data[,1]), collapse = "', '"), 
      "'): check spelling of text box input."))
      }
       model_data[,1] <- ordered(model_data[,1], levels = paste(ordertext, sep = ","))
@@ -182,7 +182,7 @@ if(!is.factor(model_data[,1])){
     
     #EXTRACT RESULTS
     summary <- summary(model) #Summary of effects: Response/predictor odds ratios, SE and confidence intervals
-    order <- paste(ordertext, collapse = " < ")
+    order <- paste0(ordertext, collapse = " < ")
     fitted <- fitted(model) #Linear predicted values
     conf.int <- confint(model, level = 0.95) #Confidence intervals for predictor variables
     oddsRatio <- exp(coef(model))
