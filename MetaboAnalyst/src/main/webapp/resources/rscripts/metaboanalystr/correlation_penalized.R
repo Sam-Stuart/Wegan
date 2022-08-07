@@ -32,6 +32,8 @@ pen.reg.anal <- function(mSetObj=NA,
     input <- mSetObj$dataSet$orig
   }
   
+  #File name for summary download
+  fileName <- "penalized_regression_summary.txt"
 
   #Text will be visible to user. 
   cat("One dependent variable and two or more independent variables will be tested for correlation. Only numeric variables will be used.")
@@ -41,19 +43,19 @@ pen.reg.anal <- function(mSetObj=NA,
   #Subset data to select only numeric variables
   data <- dplyr::select_if(input, is.numeric)
   
-  #Data check
-  if (ncol(data)<3) {
+  #DATA CHECK
+  if (ncol(data) < 3) {
       stop("Your data set only has 2 variables! Try using linear, polynomial or SVM regression.")
   }
   
-  #Set response variable name
+  #SET RESPONSE VARIABLE NAME
   if (facA=="NULL"){
     facA <- colnames(input)[1] #facA is the name of the response variable name. Default is first column.
   } else {
     facA <- facA #Determined using numeric.columns() function below (java will present options in drop down menu)
   }
   
-  #Generate test and train data for model building
+  #GENERATE TEST/TRAIN DATA FOR MODEL BUILDING
   set.seed(37) #Ensures same selction of data for test and train each time
   index <- sample(1:nrow(data), 0.7*nrow(data)) #Select 70% of dataset
   train_data <- data[index,] #70% of dataset
@@ -65,7 +67,10 @@ pen.reg.anal <- function(mSetObj=NA,
   cat("The train data for model building is 70% of the dataset, while the test data for model testing is 30% of the dataset.") #Text will be visible to user.
   
   # if (is.null(weights)==TRUE) { #No weights for model building
-    
+  
+## METHOD TYPE LOOP
+  
+  ### ELASTIC NET
     if (method == "elastic net") {
       
       #Build model
@@ -78,13 +83,14 @@ pen.reg.anal <- function(mSetObj=NA,
       method <- "Elastic Net Regression"
       
       #File name for summary download
-      fileName <- "elastic_net_regression_summary.txt"
+      #fileName <- "elastic_net_regression_summary.txt"
       
       #Cross validation results for plotting
-      cv <- cv.glmnet(x = as.matrix(predictors_train), y = as.matrix(response_train), alpha=bestAlpha)
+      cv <- glmnet::cv.glmnet(x = as.matrix(predictors_train), y = as.matrix(response_train), alpha=bestAlpha)
       
     } else if (method == "lasso") {
       
+## LASSO
       #Build model
       lambda <- 10^seq(-3, 3, length = 100)
       params <- caret::train(predictors_train, response_train, weights = NULL, method = "glmnet", 
@@ -97,13 +103,14 @@ pen.reg.anal <- function(mSetObj=NA,
       method <- "Lasso Regression"
       
       #File name for summary download
-      fileName <- "lasso_regression_summary.txt"
+      #fileName <- "lasso_regression_summary.txt"
       
       #Cross validation results for plotting
-      cv <- cv.glmnet(x = as.matrix(predictors_train), y = as.matrix(response_train), alpha=bestAlpha)
+      cv <- glmnet::cv.glmnet(x = as.matrix(predictors_train), y = as.matrix(response_train), alpha=bestAlpha)
       
     } else {
       
+ ## RIDGE
       #Build model for ridge regression
       lambda <- 10^seq(-3, 3, length = 100)
       params <- caret::train(predictors_train, response_train, weights = NULL, method = "glmnet", 
@@ -116,7 +123,7 @@ pen.reg.anal <- function(mSetObj=NA,
       method <- "Ridge Regression"
       
       #File name for summary download
-      fileName <- "ridge_regression_summary.txt" 
+      #fileName <- "ridge_regression_summary.txt" 
       
       #Cross validation results for plotting
       cv <- glmnet::cv.glmnet(x = as.matrix(predictors_train), y = as.matrix(response_train), alpha=bestAlpha)
@@ -192,8 +199,8 @@ pen.reg.anal <- function(mSetObj=NA,
   
   #Extract results
   summary <- params 
-  resp.col.num <- which(colnames(data) == facA)
-  fitted <- predict(model, newx = as.matrix(data[,-resp.col.num]))
+  #resp.col.num <- which(colnames(data) == facA)
+  fitted <- predict(model, newx = as.matrix(data[,colnames(data) != facA]))
   colnames(fitted) <- "Predicted values"
   call <- model[["call"]]
   formula <- as.formula(paste(facA, "~", paste(colnames(predictors_train), collapse = "+", sep = "")))
@@ -267,9 +274,6 @@ pen.pred.plot <- function(mSetObj=NA,
   col_dots="NULL",
   col_line="NULL", 
   plot_ci="false",
-  # plot_eq="false", 
-  # plot_rsq="false", 
-  # plot_rsq_adj="false",
   plot_title=" ",
   plot_ylab=" ",
   plot_xlab=" ",
@@ -279,6 +283,7 @@ pen.pred.plot <- function(mSetObj=NA,
   #install.packages("Metrics")
   library("Metrics")
   library("ggplot2")
+  # library("JSONIO")
   
   #Extract necessary objects from mSetObj
   mSetObj <- .get.mSet(mSetObj)
@@ -292,6 +297,11 @@ pen.pred.plot <- function(mSetObj=NA,
   predictors_train <- mSetObj$analSet$penReg$res$predictors.train.data
   formula <- paste(facA, "~", paste(colnames(predictors_train), collapse = "+", sep = ""))
 
+   dfpred <- data.frame(fpred = as.vector(test_prediction), fA = test_data[,facA])
+   formula2 <- as.formula("fA~fpred")
+   model2 <- lm(formula = formula, data = dfpred, weights = NULL)
+
+
   #Set plot dimensions
   if(is.na(width)){
     w <- 10.5
@@ -302,37 +312,39 @@ pen.pred.plot <- function(mSetObj=NA,
   }
   h <- w
   
-  #Name plot for download
+ #NAME PLOT FOR DOWNLOAD
+  # must put imgName2 first, re-writing imgName var in next line
+  imgName2 <- paste(gsub( "\\_\\d+\\_", "", imgName),
+ ".json", sep="") 
   imgName <- paste(imgName, "dpi", dpi, ".", format, sep="")
   mSetObj$imgSet$plot.pred.penReg <- imgName
   
-   #SET POINT COLOR
-  if (col_dots == "NULL") {
-      col_dots1 <- "black" # default
-    } else if (col_dots == "blue") {
-      col_dots1 <- "blue"
-    } else if (col_dots == "red") {
-      col_dots1 <- "red"
-    } else if(col_dots == "green"){
-      col_dots1 <- "green"
-    } else if(col_dots == "grey"){
-      col_dots1 <- "grey"
-    }
-  
+ #SET POINT COLOR
+  col_dots1 <- 
+				switch(
+					col_dots,
+					"NULL" = "black",
+					"black" = "black",
+					"blue" = "blue",
+					"red" = "red",
+					"green" = "green",
+					"grey" = "grey",
+					NULL
+				)
   #SET LINE COLOR
-  if (col_line == "NULL") {
-      col_line1 <- "black" # default
-    } else if (col_line == "blue") {
-      col_line1 <- "blue"
-    } else if (col_line == "red") {
-      col_line1 <- "red"
-    } else if(col_line == "green"){
-      col_line1 <- "green"
-    } else if(col_line == "grey"){
-      col_line1 <- "grey"
-    }
+   col_line1 <- 
+				switch(
+					col_line,
+					"NULL" = "black",
+					"black" = "black",
+					"blue" = "blue",
+					"red" = "red",
+					"green" = "green",
+					"grey" = "grey",
+					NULL
+				)
 
-  #SET WHETHER TO ADD 95% CONF INT
+  #95% CONF INT
   if (plot_ci == "false") {
       plot_ci1 <- FALSE # default
     } else {
@@ -369,7 +381,7 @@ pen.pred.plot <- function(mSetObj=NA,
   aes(x = fpred, y = fA)) +
     labs(title = plot_title1) +
      ylab(plot_ylab1)+ xlab(plot_xlab1) +
-     geom_smooth(se = plot_ci1, color = col_line1, fullrange = TRUE) +
+     geom_smooth(se = plot_ci1, color = col_line1, fullrange = TRUE, method = "lm") +
      geom_point(shape = 16, color = col_dots1) +
      theme_bw() + 
   theme(panel.grid.major = element_blank(), 
@@ -389,8 +401,64 @@ pen.pred.plot <- function(mSetObj=NA,
   print(a0)
   # a0
   dev.off()
+
+# GENERATE JSON
+build <- ggplot_build(a0)
+linear_plot_json <- list()
+
+build_line <- build$data[[1]] ### line is 1
+build_points <- build$data[[2]] # points is 2
+linear_plot_json <- list()
+
+linear_plot_json$main <- plot_title1 #title
+linear_plot_json$axis <- c(plot_xlab1, plot_ylab1) #axis titles
+linear_plot_json$points$coords <- build_points[,c("x","y")] #[,1:2]
+linear_plot_json$points$cols <- build_points[,grepl("col",colnames(build_points))] #[,6] #colours
+linear_plot_json$points$shape <- build_points[,c("group")]#[,5]
+linear_plot_json$points$size <- build_points[,c("size")]#[,7]
+linear_plot_json$lines$coords <- build_line[,c("x","y")]
+linear_plot_json$lines$cols <- build_line[,grepl("col",colnames(build_line))]
+linear_plot_json$lines$size <- build_line[,c("size")]
+ ## linear_plot_json$label <- build$data[[3]][,c("label")]
+ ## linear_plot_json$lines$ci <- build$data[[1]][,c("se")]
+  if(any(grepl("ymin", colnames(build_line))) && any(grepl("ymax", colnames(build_line))) ){
+   ci<- build_line[,c("x","y", "ymin", "ymax")] 
+   colnames(ci) <- c("x","y","CI_down", "CI_up")
+   linear_plot_json$lines$ci <- ci # build$data[[1]][,c("ymin", "ymax")]
+ } else{
+    linear_plot_json$lines$ci <- data.frame(x = build_line[,c("x")], y = build_line[,c("y")], CI_down = 0, CI_up = 0)
+ }   
   
+## BOOLEANS
+if(plot_ci1 == TRUE){
+ linear_plot_json$bool_ci <- TRUE
+ } else{
+linear_plot_json$bool_ci <- FALSE
+}
+
+#### MODEL VARS FOR LINE
+  linear_plot_json$r_sq <-
+    summary(model2)[["r.squared"]] #Extract R^2
+  linear_plot_json$r_sq_adj <-
+    summary(model2)[["adj.r.squared"]] #Extract adjusted R^2 
+  linear_plot_json$slope <-
+    summary(model2)[["coefficients"]][2] # beta
+  linear_plot_json$yint <-
+    summary(model2)[["coefficients"]][1] # alpha
+
+ 
+ json.obj <- RJSONIO::toJSON(linear_plot_json, .na='null')
+ sink(imgName2)
+ cat(json.obj)
+ sink()
+print(json.obj)
+print(paste("PLOT1 | facA: ", facA, " | method: ", method, sep = ""))
+print"")
+
+if(!.on.public.web){
   return(.set.mSet(mSetObj))
+    }  
+
 }
 
 #'Produce cross validation plot for penalized regression
@@ -420,9 +488,6 @@ pen.cv.plot <- function(mSetObj=NA,
   col_dots="NULL",
   col_line="NULL", 
   # plot_ci="false",
-  # plot_eq="false", 
-  # plot_rsq="false", 
-  # plot_rsq_adj="false",
   plot_title=" ",
   plot_ylab=" ",
   plot_xlab=" ",
@@ -432,6 +497,7 @@ pen.cv.plot <- function(mSetObj=NA,
 
   library("ggplot2")
   library("broom")
+  # library("JSONIO")
   
   #Extract necessary objects from mSetObj
   mSetObj <- .get.mSet(mSetObj)
@@ -449,35 +515,37 @@ pen.cv.plot <- function(mSetObj=NA,
   }
   h <- w
   
-  #Name plot for download
+  #NAME PLOT FOR DOWNLOAD
+  # must put imgName2 first, re-writing imgName var in next line
+  imgName2 <- paste(gsub( "\\_\\d+\\_", "", imgName),
+ ".json", sep="") 
   imgName <- paste(imgName, "dpi", dpi, ".", format, sep="")
   mSetObj$imgSet$plot.cv.penReg <- imgName
 
  #SET POINT COLOR
-  if (col_dots == "NULL") {
-      col_dots1 <- "black" # default
-    } else if (col_dots == "blue") {
-      col_dots1 <- "blue"
-    } else if (col_dots == "red") {
-      col_dots1 <- "red"
-    } else if(col_dots == "green"){
-      col_dots1 <- "green"
-    } else if(col_dots == "grey"){
-      col_dots1 <- "grey"
-    }
-  
+  col_dots1 <- 
+				switch(
+					col_dots,
+					"NULL" = "black",
+					"black" = "black",
+					"blue" = "blue",
+					"red" = "red",
+					"green" = "green",
+					"grey" = "grey",
+					NULL
+				)
   #SET LINE COLOR
-  if (col_line == "NULL") {
-      col_line1 <- "black" # default
-    } else if (col_line == "blue") {
-      col_line1 <- "blue"
-    } else if (col_line == "red") {
-      col_line1 <- "red"
-    } else if(col_line == "green"){
-      col_line1 <- "green"
-    } else if(col_line == "grey"){
-      col_line1 <- "grey"
-    }
+   col_line1 <- 
+				switch(
+					col_line,
+					"NULL" = "black",
+					"black" = "black",
+					"blue" = "blue",
+					"red" = "red",
+					"green" = "green",
+					"grey" = "grey",
+					NULL
+				)
   
   # PLOT TITLE
   if(plot_title == " "){ 
@@ -530,7 +598,61 @@ a0 <- ggplot(broom::tidy(cv), aes(lambda, estimate)) +
   # a0
   dev.off()
   
+# GENERATE JSON
+build <- ggplot_build(a0)
+linear_plot_json <- list()
+
+build_line <- build$data[[3]] ### line is 1
+build_points <- build$data[[1]] # points is 1 or 2
+## or 2
+build_points2 <- build$data[[2]] # points is 1 or 2
+build_line2 <- build$data[[4]] ### xint -3.2, linetype = 1
+build_line3 <- build$data[[5]] ### xint -1.78, linetype = 2
+
+linear_plot_json <- list()
+
+linear_plot_json$main <- plot_title1 #title
+linear_plot_json$axis <- c(plot_xlab1, plot_ylab1) #axis titles
+linear_plot_json$points$coords <- build_points[,c("x","y")] #[,1:2]
+linear_plot_json$points$cols <- build_points[,grepl("col",colnames(build_points))] #[,6] #colours
+linear_plot_json$points$shape <- build_points[,c("group")]#[,5]
+linear_plot_json$points$size <- build_points[,c("size")]#[,7]
+linear_plot_json$lines$coords <- build_line[,c("x","y")]
+linear_plot_json$lines$cols <- build_line[,grepl("col",colnames(build_line))]
+linear_plot_json$lines$size <- build_line[,c("size")]
+ ## linear_plot_json$label <- build$data[[3]][,c("label")]
+ ## linear_plot_json$lines$ci <- build$data[[1]][,c("se")]
+  if(any(grepl("ymin", colnames(build_line))) && any(grepl("ymax", colnames(build_line))) ){
+   ci<- build_line[,c("x","y", "ymin", "ymax")] 
+   colnames(ci) <- c("x","y","CI_down", "CI_up")
+   linear_plot_json$lines$ci <- ci # build$data[[1]][,c("ymin", "ymax")]
+ } else{
+    linear_plot_json$lines$ci <- data.frame(x = build_line[,c("x")], y = build_line[,c("y")], CI_down = 0, CI_up = 0)
+ }   
+  
+#### MODEL VARS FOR LINE
+  linear_plot_json$r_sq <-
+    summary(model)[["r.squared"]] #Extract R^2
+  linear_plot_json$r_sq_adj <-
+    summary(model)[["adj.r.squared"]] #Extract adjusted R^2 
+  linear_plot_json$slope <-
+    summary(model)[["coefficients"]][2] # beta
+  linear_plot_json$yint <-
+    summary(model)[["coefficients"]][1] # alpha
+
+ 
+ json.obj <- RJSONIO::toJSON(linear_plot_json, .na='null')
+ sink(imgName2)
+ cat(json.obj)
+ sink()
+print(json.obj)
+print(paste("PLOT2 | facA: ", facA, " | method: ", method, sep = ""))
+print"")
+
+if(!.on.public.web){
   return(.set.mSet(mSetObj))
+    }
+
 }
 
 
@@ -557,7 +679,7 @@ pen.numeric.columns <- function(mSetObj=NA){
   #install.packages("dplyr")
   library("dplyr")
   
-  data <- select_if(mSetObj$dataSet$norm, is.numeric)
+  data <- dplyr::select_if(mSetObj$dataSet$norm, is.numeric)
   count.all.numeric.cols <- ncol(data)
   name.all.numeric.cols <- colnames(data)
   
