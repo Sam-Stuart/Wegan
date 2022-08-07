@@ -27,7 +27,6 @@ log.reg.anal <- function(mSetObj=NA,
   # library("tidyselect") # tidyselect helper 'where' is not exported to namespace, but workaround exists (so still need package) ; to replace deprecated select_ variant `select_if`
 # library("JSONIO")
 
-
   mSetObj <- .get.mSet(mSetObj)
 
    ### SET DATA (whether to use original data or not)
@@ -52,8 +51,8 @@ log.reg.anal <- function(mSetObj=NA,
   if (facA == "NULL") {
   #  facData <- data %>% dplyr::select(tidyselect::vars_select_helpers$where(is.character))
   # facData <- data %>%  dplyr::select(tidyselect::vars_select_helpers$where(is.character) | tidyselect::vars_select_helpers$where(is.factor))
-    # facData <- data %>% dplyr::select_if(is.character) %>% dplyr:: select_if(is.factor)# | is.factor)
-    # facData <- data[,sapply(data, is.factor) & sapply(data, is.character), drop = FALSE]
+  # facData <- data %>% dplyr::select_if(is.character) %>% dplyr:: select_if(is.factor)# | is.factor)
+  # facData <- data[,sapply(data, is.factor) & sapply(data, is.character), drop = FALSE]
 
   facData <- data %>% dplyr::select_if(function(col) {is.character(col) | is.factor(col)})    
 
@@ -119,6 +118,45 @@ if(!is.factor(model_data[,1])){
  #CHECK NUMBER OF LEVELS 
   levels.num <- nlevels(model_data[,1])
 
+# REFERENCE LEVEL
+    if (reference == "NULL") {
+      ref.col <- as.data.frame(model_data[,1])
+      print("'ref.col' (response col):") 
+      print(ref.col) 
+      ref.col.levels <- levels(model_data[,1])
+      reference <- ref.col.levels[1] #Reference level defaults the 1st level of the response column
+      print("reference:")
+      print(reference)
+    } else {
+      reference <- reference
+    }
+
+# ## CHECK IF REFERENCE INPUT IS VALID # how is reference level output?
+#  if(any(!levels(model_data[,1]) %in% reference)){
+#     stop(paste0("reference ('", reference, 
+#     "') not found in dependent variable levels ('",
+#     paste(levels(model_data[,1]), collapse = "', '"), 
+#     "')"))
+# }
+
+## ordertext: (ONLY USED FOR ORDINAL)
+ if (ordertext == "NULL") {
+      ordertext <- levels( ordered(model_data[,1]) )#Default is use order as inputted
+    } else {
+      ordertext <- ordertext #Order is user inputted in ascending order, taken from text box by java, entered into R code as one character value (names separated by commas) (string)
+      ordertext <- gsub(" ", "", ordertext, fixed = TRUE)
+      ordertext <- unlist(strsplit(ordertext, ",", fixed = TRUE))
+    }
+
+   ### CHECK IF ORDERTEXT HAS VALID NAMES:
+  if(any(!levels(model_data[,1]) %in% ordertext)){
+   stop(paste0( "'", ordertext[!ordertext %in% levels(model_data[,1])], 
+     "' not found in dependent variable levels of data (variable levels: '",
+     paste(levels(model_data[,1]), collapse = "', '"), 
+     "'): check spelling of text box input."))
+     }
+
+### TYPE OF LOG REGRESSION LOOP:
 ## ORDINAL
   if (type == "ordinal") {
 
@@ -128,28 +166,6 @@ if(!is.factor(model_data[,1])){
     } 
 
     #REFERENCE LEVEL: SET FOR RESPONSE VARIABLE
-    #IDENTIFY DEFAULT REF LEVEL
-    if (reference == "NULL") {
-      ref.col <- as.data.frame(model_data[,1])
-      print("ref.col") 
-      print(ref.col) 
-      ref.col.levels <- levels(model_data[,1])
-      reference <- ref.col.levels[1] #Reference level defaults the 1st level of the response column
-      print("reference")
-      print(reference)
-    } else {
-      reference <- reference
-    }
-    
-# ## CHECK IF REFERENCE INPUT IS VALID # how is reference level output?
-#  if(any(!levels(model_data[,1]) %in% reference)){
-#     stop(paste0("reference ('", reference, 
-#     "') not found in dependent variable levels ('",
-#     paste(levels(model_data[,1]), collapse = "', '"), 
-#     "')"))
-# }
-
-    #SET REFERENCE LEVEL
     model_data[,1] <- relevel(as.factor(model_data[,1]), ref = reference) 
   
     #ORDER OF RESPONSE VARIABLE LEVELS
@@ -158,25 +174,18 @@ if(!is.factor(model_data[,1])){
 
     if (ordertext == "NULL") {
       model_data[,1] <- ordered(model_data[,1]) #Default is use order as inputted
-      ordertext <- levels(model_data[,1])
+     # ordertext <- levels(model_data[,1])
     } else { 
       ordertext <- ordertext #Order is user inputted in ascending order, taken from text box by java, entered into R code as one character value (names separated by commas) (string)
-      ordertext <- gsub(" ", "", ordertext, fixed = TRUE)
-      ordertext <- unlist(strsplit(ordertext, ",", fixed = TRUE))
-
-    ### CHECK IF ORDERTEXT HAS VALID NAMES:
-  if(any(!levels(model_data[,1]) %in% ordertext)){
-   stop(paste0( "'", ordertext[!ordertext %in% levels(model_data[,1])], 
-     "' not found in dependent variable levels of data (variable levels: '",
-     paste(levels(model_data[,1]), collapse = "', '"), 
-     "'): check spelling of text box input."))
-     }
       model_data[,1] <- ordered(model_data[,1], levels = paste(ordertext, sep = ","))
     }
     
 #### ADD CONFLICT BETWEEN REFERENCE AND LEVEL ORDER?
 
     #BUILD MODEL
+    ## NOTE ABOUT ORDINAL MODEL CALLING with polr() from {MASS}:
+     # Hess argument (T/F); whether the Hessian (observed info matrix) should be returned
+     # (Used when calling summary() or vcov() on the fit (also returned for user) )
     model <- MASS::polr(formula, data = model_data, method = "logistic", Hess = TRUE)
     model_name <- "Ordinal Logistic Regression"
     
@@ -230,7 +239,7 @@ if(!is.factor(model_data[,1])){
     
   } else if (type=="multinomial") {
 
-    
+ ## MULTINOMIAL
     #CHECK NUMBER OF LEVELS
     model_data_as_factor <- as.factor(model_data[,1]) 
     levels.num <- nlevels(model_data_as_factor)
@@ -239,30 +248,11 @@ if(!is.factor(model_data[,1])){
       stop("The dependent variable has less than 3 levels! Try binomial regression instead.")
     }
 
-    
-    if (reference == "NULL") {
-      ref.col <- as.data.frame(model_data[,1])
-      ref.col.levels <- levels(as.factor(ref.col))
-      reference <- ref.col.levels[1] #Ref level defaults to the 1st level of the response column
-      print("reference")
-      print(reference)
-    } else {
-      reference <- reference
-    }
-    
- ## CHECK IF REFERENCE INPUT IS VALID # how is reference level output?
- if(any(!levels(model_data[,1]) %in% reference){
-    stop(paste0("reference ('", reference, 
-    "') not found in dependent variable levels ('",
-    paste(levels(model_data[,1]), collapse = "' , '"), 
-    "')"))
-}
-
  ## SET REFERENCE
  model_data[,1] <- factor(model_data[,1], levels = 
 c(reference, levels(model_data[,1])[!levels(model_data[,1]) %in% reference])
 )
-    #Set reference--ISNT WORKING!!!!!!!!!!! - gps - bc if the var isn't ordered then it won't take it
+    #Set reference--ISNT WORKING!!!!!!!!!!! - gps - bc if the var isn't ordered then it won't take it?
     #model_data[,1] <- relevel(as.factor(model_data[,1]), ref=reference) 
 
     #Build model for multinomial regression
@@ -315,7 +305,7 @@ model = model, model.data = model_data, response = facA, predictor = predictors)
     print(covar)
     cat("\nConfidence intervals for predictor variables:\n")
     print(conf.int)
-    cat("\nHessian matrix:\n")
+    cat("\nHessian (observed information) matrix:\n")
     print(Hessian)
     sink()
   
@@ -330,22 +320,6 @@ model = model, model.data = model_data, response = facA, predictor = predictors)
       #AddErrMsg("The dependent variable has more than 2 levels! Try multinomial regression instead.")
       stop("The dependent variable has more than 2 levels! Try multinomial regression instead.")
     }
-    
-    #Obtain reference level for response variable
-    if (reference == "NULL") {
-      ref.col <- as.data.frame(model_data[,1]) 
-      reference <- levels(ref.col)[1] #Reference category is default the first level of the response column
-    } else {
-      reference <- reference
-    }
-    
-## CHECK IF REFERENCE INPUT IS VALID # how is reference level output?
- if(any(!levels(model_data[,1]) %in% reference){
-    stop(paste0("reference ('", reference, 
-    "') not found in dependent variable levels ('",
-    paste(levels(model_data[,1]), collapse = "' , '"), 
-    "')"))
-}
 
     #Set reference
     model_data[,1] <- relevel(as.factor(model_data[,1]), ref = reference) 
