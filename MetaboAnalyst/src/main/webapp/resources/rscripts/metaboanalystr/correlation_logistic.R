@@ -38,6 +38,8 @@ log.reg.anal <- function(mSetObj=NA,
   
   data <- input
 
+  fileName <- paste0("corr_logistic_model_summary.txt") #File name for results
+
   #TEXT SHOULD BE VISIBLE TO USER 
   cat("One categorical dependent variable and one or more independent variables will be tested for correlation. Independent variables can be categorical or numeric." )
   cat("By default, the first categorical variable is treated as the dependent variable. If the dataset has more than one categorical variable, you may change the dependent variable using the drop down menu.")
@@ -202,7 +204,7 @@ if(!is.factor(model_data[,1])){
     zValues <- coeffs / std.errors
     pValues <- pnorm(abs(zValues), lower.tail = FALSE)*2
     Hessian <- model[["Hessian"]]
-    fileName <- paste0("ordinal_logistic_regression_reference_", reference, "_summary.txt") #File name for results
+    # fileName <- paste0("ordinal_logistic_regression_reference_", reference, "_summary.txt") #File name for results
     
     #STORE RESULTS
     mSetObj$analSet$logOrdReg$res <- list(summary = summary, model.data = model_data, response = facA, predictor = predictors, predicted.values = fitted, confidence.intervals = conf.int, 
@@ -271,7 +273,8 @@ c(reference, levels(model_data[,1])[!levels(model_data[,1]) %in% reference])
     zValues <- coeffs / std.errors
     pValues <- pnorm(abs(zValues), lower.tail = FALSE)*2
     Hessian <- model[["Hessian"]]
-    fileName <- paste0("multinomial_logistic_regression_reference_", reference, "_summary.txt") #File name for results
+    # fileName <- paste0("multinomial_logistic_regression_reference_", reference, "_summary.txt") #File name for results
+
     #Store results
     mSetObj$analSet$logMultinomReg$res <- list(summary = summary, model.data = model_data,
  response = facA, predictor = predictors, 
@@ -343,7 +346,7 @@ model = model, model.data = model_data, response = facA, predictor = predictors)
     std.errors <- sqrt(diag(covar))
     zValues <- coeffs / std.errors
     pValues <- pnorm(abs(zValues), lower.tail = FALSE)*2
-    fileName <- paste0("binomial_logistic_regression_reference_", reference, "_summary.txt") #File name for results
+    # fileName <- paste0("binomial_logistic_regression_reference_", reference, "_summary.txt") #File name for results
 
     #Store results
     mSetObj$analSet$logBinomReg$res <- list(summary = summary, model.data = model_data,
