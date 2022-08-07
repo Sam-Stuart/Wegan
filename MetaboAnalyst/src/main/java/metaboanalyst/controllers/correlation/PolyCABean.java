@@ -36,8 +36,8 @@ public class PolyCABean implements Serializable {
     private String usrName = usr.getName();
     
 
-    private String filePolySummary = getSummaryPolyDownload();
-//    private String filePolySummary = "polynomial_regession_summary_degree.txt";
+//    private String filePolySummary = getSummaryPolyDownload();
+    private String filePolySummary = "polynomial_regession_summary.txt";
     private String filePolySummaryPath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + filePolySummary + "\">" + filePolySummary + "</a>";
     
     public String getFilePolySummaryPath() {
@@ -112,8 +112,7 @@ public class PolyCABean implements Serializable {
     public void setdoOriginal(boolean doOriginal) {
         this.doOriginal = doOriginal;
     }
-  // CHECK BOX for adding (default) or omitting equation to plot (at top), see correlation_linear.R 
-  // when >1 of rsq, eq, & rsqadj are checked, values are seperated by " | " 
+  // CHECK BOX 
      private boolean doPlotEq = false;
 
     public boolean isdoPlotEq() {
@@ -123,8 +122,7 @@ public class PolyCABean implements Serializable {
     public void setdoPlotEq(boolean doPlotEq) {
         this.doPlotEq = doPlotEq;
     } 
-  // CHECK BOX for adding (default) or omitting rsq to plot (at top), see correlation_linear.R 
-  // when >1 of rsq, eq, & rsqadj are checked, values are seperated by " | " 
+  // CHECK BOX 
      private boolean doPlotRsq = false;
 
     public boolean isdoPlotRsq() {
@@ -134,8 +132,7 @@ public class PolyCABean implements Serializable {
     public void setdoPlotRsq(boolean doPlotRsq) {
         this.doPlotRsq = doPlotRsq;
     }     
-  // CHECK BOX for omitting (default) or adding rsq-adj to plot (at top), see correlation_linear.R 
-  // when >1 of rsq, eq, & rsqadj are checked, values are seperated by " | " 
+  // CHECK BOX
      private boolean doPlotRsqAdj = false;
 
     public boolean isdoPlotRsqAdj() {
@@ -145,7 +142,7 @@ public class PolyCABean implements Serializable {
     public void setdoPlotRsqAdj(boolean doPlotRsqAdj) {
         this.doPlotRsqAdj = doPlotRsqAdj;
     }  
-  // CHECK BOX for omitting (default) or adding confidence interval to line, see correlation_linear.R 
+  // CHECK BOX 
      private boolean doPlotConfInt = false;
 
     public boolean isdoPlotConfInt() {
@@ -252,7 +249,7 @@ public class PolyCABean implements Serializable {
     public void corrPoly1Btn_action() {
         CAUtils.CreatePolynomialModel(sb, columnNameA, columnNameB, doOriginal);
         
-        CAUtils.PlotPolynomialCA(sb, polyDegree, doOriginal,
+        CAUtils.PlotPolynomialCA(sb, polyDegree, columnNameA, columnNameB , doOriginal,
                 corColorDotsOpts, corColorLineOpts, doPlotConfInt,
                 doPlotEq, doPlotRsq, doPlotRsqAdj,
                corPlotTitle, corPlotXlab, corPlotYlab,
@@ -261,13 +258,13 @@ public class PolyCABean implements Serializable {
     // ACTION BUTTONS //
     public void corrPolyPredBtn_action() {
         CAUtils.CreatePolynomialModel(sb, columnNameA, columnNameB, doOriginal);
-        CAUtils.PlotPolynomialCA(sb, polyDegree, doOriginal,
-                corColorDotsOpts, corColorLineOpts, doPlotConfInt,
-                doPlotEq, doPlotRsq, doPlotRsqAdj,
-               corPlotTitle, corPlotXlab, corPlotYlab,
-                sb.getNewImage("corr_poly"), "png", 72);
+//        CAUtils.PlotPolynomialCA(sb, polyDegree, columnNameA, columnNameB, doOriginal,
+//                corColorDotsOpts, corColorLineOpts, doPlotConfInt,
+//                doPlotEq, doPlotRsq, doPlotRsqAdj,
+//               corPlotTitle, corPlotXlab, corPlotYlab,
+//                sb.getNewImage("corr_poly"), "png", 72);
         CAUtils.PlotPolynomialPredictCA(sb, 
-                polyDegree, doOriginal,
+                polyDegree, columnNameA, columnNameB , doOriginal,
                 corColorDotsOpts, corColorLineOpts, doPlotConfInt,
                corPlotTitle, corPlotXlab, corPlotYlab,
                 sb.getNewImage("corr_poly_pred"), "png", 72);
