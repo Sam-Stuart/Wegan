@@ -241,7 +241,7 @@ function renderLinearBestFit(jsonName, id) {
             .attr("cy", function (d) {
                 return y(d.y);
             })
-            .attr("r", 3)
+            .attr("r", 4)
             .style("fill", (d) => d.color)
             .on("mouseover", function (d) {
                 tooltip
