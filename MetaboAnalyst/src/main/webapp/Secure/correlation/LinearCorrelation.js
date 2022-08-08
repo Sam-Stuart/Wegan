@@ -316,14 +316,19 @@ function renderLinearBestFit(jsonName, id) {
                 .attr("y", 30)
                 .attr("x", width / 2);
 
-        // function updateEquation() {
-        //     if (d3.select("#checkbox1").property("checked"))
-        //         RsquareLabel.transition(200).style("opacity", "1");
-        //     else RsquareLabel.transition(200).style("opacity", "0");
-        //     if (d3.select("#checkbox2").property("checked"))
-        //         RsquareAdjustedLabel.transition(200).style("opacity", "1");
-        //     else RsquareAdjustedLabel.transition(200).style("opacity", "0");
-        // }
+        const selectButton = d3
+            .select(`#${id}`)
+            .append("button")
+            .classed("reset-buttons", true)
+            .attr("type", "button")
+            .html("Reset")
+            .style("order", 2)
+            .on("click", function (event) {
+                scatter
+                    .transition()
+                    .duration(750)
+                    .call(zoom.transform, d3.zoomIdentity);
+            });
     });
 }
 
