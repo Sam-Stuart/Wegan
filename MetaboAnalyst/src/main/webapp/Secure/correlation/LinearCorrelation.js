@@ -316,18 +316,88 @@ function renderLinearBestFit(jsonName, id) {
                 .attr("y", 30)
                 .attr("x", width / 2);
 
-        const selectButton = d3
+        // Navigation using buttons: Supports zoom and pan
+        const navigationButtons = d3
             .select(`#${id}`)
+            .append("div")
+            .style("order", 2);
+
+        const resetButton = navigationButtons
             .append("button")
-            .classed("reset-buttons", true)
+            .classed("navigation-buttons", true)
             .attr("type", "button")
             .html("Reset")
-            .style("order", 2)
-            .on("click", function (event) {
+            .on("click", function () {
                 scatter
                     .transition()
                     .duration(750)
                     .call(zoom.transform, d3.zoomIdentity);
+            });
+
+        const panRightButton = navigationButtons
+            .append("button")
+            .classed("navigation-buttons", true)
+            .attr("type", "button")
+            .html("Pan Right")
+            .on("click", function () {
+                scatter
+                    .transition()
+                    .duration(500)
+                    .call(zoom.translateBy, 50, 0);
+            });
+
+        const panUpButton = navigationButtons
+            .append("button")
+            .classed("navigation-buttons", true)
+            .attr("type", "button")
+            .html("Pan Up")
+            .on("click", function () {
+                scatter
+                    .transition()
+                    .duration(500)
+                    .call(zoom.translateBy, 0, 50);
+            });
+
+        const panDownButton = navigationButtons
+            .append("button")
+            .classed("navigation-buttons", true)
+            .attr("type", "button")
+            .html("Pan Down")
+            .on("click", function () {
+                scatter
+                    .transition()
+                    .duration(500)
+                    .call(zoom.translateBy, 0, -50);
+            });
+
+        const panLeftButton = navigationButtons
+            .append("button")
+            .classed("navigation-buttons", true)
+            .attr("type", "button")
+            .html("Pan Left")
+            .on("click", function () {
+                scatter
+                    .transition()
+                    .duration(500)
+                    .call(zoom.translateBy, -50, 0);
+            });
+
+        const zoomInButton = navigationButtons
+            .append("button")
+            .classed("navigation-buttons", true)
+            .attr("type", "button")
+            .html("Zoom In")
+            .on("click", function () {
+                scatter.transition().duration(500).call(zoom.scaleBy, 2);
+            });
+
+        const zoomOutButton = navigationButtons
+            .append("button")
+            .classed("navigation-buttons", true)
+            .attr("type", "button")
+            .html("Zoom Out")
+            .on("click", function () {
+                scatter.transition().duration(500).call(zoom.scaleBy, 0.5);
             });
     });
 }
