@@ -223,10 +223,10 @@ plotBoxPlot <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA){
   
   json.obj <- RJSONIO::toJSON(box_plot_json, .na='null')
   sink(imgName)
-  #cat(json.obj)
+  cat(json.obj)
   sink()
   #print(json.obj)
-  #print("JSON Derulo")
+  print("JSON Derulo")
   if(!.on.public.web){
     return(.set.mSet(mSetObj))
   }
