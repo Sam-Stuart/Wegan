@@ -246,7 +246,7 @@ function renderLinearBestFit(jsonName, id) {
             .on("mouseover", function (d) {
                 tooltip
                     .style("opacity", 0.8)
-                    .html("(" + d.x + "," + d.y + ")")
+                    .html("(" + d.x + ", " + d.y + ")")
                     .style("left", event.pageX + 5 + "px")
                     .style("top", event.pageY + "px");
             })
@@ -320,7 +320,15 @@ function renderLinearBestFit(jsonName, id) {
         const navigationButtons = d3
             .select(`#${id}`)
             .append("div")
+            .style("margin-bottom", "10px")
             .style("order", 2);
+
+        const navigationHelp = navigationButtons
+            .append("p")
+            .classed("navigation-help", true)
+            .html(
+                "Use the navigation buttons to move around. If using mouse, click and drag, and scroll in or out"
+            );
 
         const resetButton = navigationButtons
             .append("button")
