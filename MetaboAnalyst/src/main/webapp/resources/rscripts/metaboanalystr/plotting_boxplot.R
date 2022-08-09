@@ -205,8 +205,35 @@ plotBoxPlot <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA){
     show(p0)
   }
 
- dev.off();
-   
+  dev.off();
+  
+  # JSON Making (As per format)
+  #install.packages("RJSONIO");
+  library("RJSONIO");
+  build <- ggplot_build(p0)
+  build_data <- mSetObj$analSet$boxPlot$data # The original or normalized data set used in creating the plot
+  build_info <- build$data[[1]] ### All the information needed for the build
+  box_plot_json <- list() #Create a new build list
+  box_plot_json$main <- mainTitle # Main Title of plot
+  box_plot_json$axis <- c(xlab, ylab) # x axis and y axis labels, respectively
+  box_plot_json$colors <- build_info['fill'][[1]] # List of Colours of boxes in order
+  box_plot_json$labels <- levels(facA_data) # List of the x axis labels for each box within the plot, in order.
+  box_plot_json$data <- build_data # The Dataset
+  box_plot_json$buildInfo <- build_info # All the build information
+  
+  json.obj <- RJSONIO::toJSON(box_plot_json, .na='null')
+  sink(imgName)
+  #cat(json.obj)
+  sink()
+  #print(json.obj)
+  #print("JSON Derulo")
+  if(!.on.public.web){
+    return(.set.mSet(mSetObj))
+  }
+    
+ 
+
+  
   return(.set.mSet(mSetObj));
 }
 
