@@ -121,9 +121,6 @@ public class LogisticCABean implements Serializable {
     
     
     
-    
-    
-    
   // CHECK BOX for using normalized data (default) or original data
     private boolean doOriginal = false;
 
@@ -177,14 +174,14 @@ public class LogisticCABean implements Serializable {
     }    
     
  //STATIC DROPDOWN    
-    private String logModelType = "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.logModType
+    private String corModelType = "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.logModType
 
-    public String getLogModelType() {
-        return logModelType;
+    public String getCorModelType() {
+        return corModelType;
     }
 
-    public void setLogModelType(String logModelType) {
-        this.logModelType = logModelType;
+    public void setCorModelType(String corModelType) {
+        this.corModelType = corModelType;
     }
     
     // CHECK BOX 
@@ -198,15 +195,15 @@ public class LogisticCABean implements Serializable {
         this.doLabelXtickRotate = doLabelXtickRotate;
     }
     
- //STATIC DROPDOWN for selecting colour:   replaced: corColorOpts
-    private String logPaletteOpts = "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.logColorPaletteOpts
+ //STATIC DROPDOWN for selecting colour:   replaced: corColorOpts : change name from logPaletteOpts to corPaletteOpts, and logColorPaletteOpts to corColorPaletteOpts
+    private String corPaletteOpts = "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corColorPaletteOpts
 
-    public String getLogPaletteOpts() {
-        return logPaletteOpts; 
+    public String getCorPaletteOpts() {
+        return corPaletteOpts; 
     }
 
-    public void setLogPaletteOpts(String logPaletteOpts) {
-        this.logPaletteOpts = logPaletteOpts;
+    public void setCorPaletteOpts(String corPaletteOpts) {
+        this.corPaletteOpts = corPaletteOpts;
     }
 
     // CHECK BOX 
@@ -221,14 +218,14 @@ public class LogisticCABean implements Serializable {
     }
     
  //STATIC DROPDOWN for selecting colour of line on plot
-    private String logPlotLegPosOpts = "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.logLegPosOpts
+    private String corPlotLegPosOpts = "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.logLegPosOpts
 
-    public String getLogPlotLegPosOpts() {
-        return logPlotLegPosOpts;
+    public String getCorPlotLegPosOpts() {
+        return corPlotLegPosOpts;
     }
 
-    public void setLogPlotLegPosOpts(String logPlotLegPosOpts) {
-        this.logPlotLegPosOpts = logPlotLegPosOpts;
+    public void setCorPlotLegPosOpts(String corPlotLegPosOpts) {
+        this.corPlotLegPosOpts = corPlotLegPosOpts;
     }
     
   
@@ -276,10 +273,10 @@ public class LogisticCABean implements Serializable {
     public void corrLogBtn1_action() {
         CAUtils.CreateLogisticModel(sb, 
                 responseLevelVar,indInput,
-                  logModelType, responseLevelVar, indInput);
-        CAUtils.PlotLogisticEffectCA(sb, logModelType, doPlotConfInt,
+                  corModelType, responseLevelVar, indInput);
+        CAUtils.PlotLogisticEffectCA(sb, corModelType, doPlotConfInt,
                  corPlotTitle, corPlotXlab, corPlotYlab,               
-                doLabelXtickRotate, logPaletteOpts, doPlotLegHoriz, logPlotLegPosOpts,
+                doLabelXtickRotate, corPaletteOpts, doPlotLegHoriz, corPlotLegPosOpts,
                 sb.getCurrentImage("corr_log_eff"), "png", 72);
     }
     
@@ -287,7 +284,7 @@ public class LogisticCABean implements Serializable {
     public void corrLogBtn2_action() {
         CAUtils.CreateLogisticModel(sb, 
                responseLevelVar,indInput,
-               logModelType, responseLevelVar, indInput);
+               corModelType, responseLevelVar, indInput);
 //                columnNameA, indInput);
         CAUtils.PlotLogisticROCCA(sb, 
                 corPlotTitle, corPlotXlab, corPlotYlab,
