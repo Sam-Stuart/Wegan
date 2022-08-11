@@ -32,6 +32,25 @@ public class LogisticCABean implements Serializable {
 
     private final SessionBean1 sb = (SessionBean1) DataUtils.findBean("sessionBean1");
 
+    //TABLES FOR DOWNLOAD
+    private User usr = sb.getCurrentUser();
+    private String usrName = usr.getName();
+    
+    
+    private String fileLogModVals = "corr_logistic_model_summary.txt";
+//            getSummaryLinDownload();
+    private String fileLogModValsPath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileLogModVals + "\">" + fileLogModVals + "</a>";
+ 
+    public String getFileLogModValsPath() {
+        return fileLogModValsPath;
+    }
+        
+    public void setFileLogModValsPath(String fileLogModValsPath) {
+        this.fileLogModValsPath = fileLogModValsPath;
+    } 
+    
+    
+    
     private String indInput = "";
 
     public String getIndInput() {
@@ -100,25 +119,7 @@ public class LogisticCABean implements Serializable {
         
         return corrPolyResults;
     }
-    
- 
-    //TABLES FOR DOWNLOAD
-    private User usr = sb.getCurrentUser();
-    private String usrName = usr.getName();
-    
-    
-    private String fileLogModVals = "corr_logistic_model_summary.txt";
-//            getSummaryLinDownload();
-    private String fileLogModValsPath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileLogModVals + "\">" + fileLogModVals + "</a>";
- 
-    public String getFileLogModValsPath() {
-        return fileLogModValsPath;
-    }
-        
-    public void setFileLogModValsPath(String fileLogModValsPath) {
-        this.fileLogModValsPath = fileLogModValsPath;
-    } 
-    
+   
     
     
   // CHECK BOX for using normalized data (default) or original data
