@@ -15,8 +15,8 @@
                 <p:panelGrid></p:panelGrid>
                 
                 <h:outputLabel style="font-weight: bold" value="Color Palette:"/>
-                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{logCABean.logPaletteOpts}">
-                    <f:selectItems value="#{applicationBean1.logColorPaletteOpts}" />
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{logCABean.corPaletteOpts}">
+                    <f:selectItems value="#{applicationBean1.corColorPaletteOpts}" />
                 </p:selectOneMenu>  
                                 
                 <h:outputLabel style="font-weight: bold" value="Show 95% Confidence Interval:"/>
@@ -26,17 +26,17 @@
                 <p:panelGrid></p:panelGrid>
                 
                 <h:outputLabel style="font-weight: bold" value="Legend Position"/>
-                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{logCABean.logPlotLegPosOpts}">
-                    <f:selectItems value="#{applicationBean1.logLegPosOpts}" />
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{logCABean.corPlotLegPosOpts}">
+                    <f:selectItems value="#{applicationBean1.corLegPosOpts}" />
                 </p:selectOneMenu> 
                 
-                <h:outputLabel style="font-weight: bold" value="Show Legend as Horizontal:"/>
+                <h:outputLabel style="font-weight: bold" value="Show Legend Horizontally:"/>
                 <p:selectBooleanCheckbox value ="#{logCABean.doPlotLegHoriz}"/> 
                 
                 <h:outputLabel style="font-weight: bold" value="Rotate x-tick labels:"/>
-                <p:selectBooleanCheckbox value ="#{logCABean.doPlotConfInt}"/>            
+                <p:selectBooleanCheckbox value ="#{logCABean.doLabelXtickRotate}"/>            
                 
-                <h3>Titles and Legend</h3>
+                <h3>Titles</h3>
                 <p:panelGrid></p:panelGrid>    
                 
                 <h:outputLabel style="font-weight: bold" value="Plot Title:"/>
