@@ -112,8 +112,8 @@ public class ApplicationBean1 implements Serializable {
     private final SelectItem[] ordStressDimensionOpts;
     private final SelectItem[] corLinColorDotsOpts;    
     private final SelectItem[] corLinColorLineOpts; 
-    private final SelectItem[] logModType;
-    private final SelectItem[] logLegPosOpts;  
+    private final SelectItem[] corModType;
+    private final SelectItem[] corLegPosOpts;  
     private final SelectItem[] corColorPaletteOpts;
     private final SelectItem[] ordColorPaletteOpts;
     private final SelectItem[] pcaPairsColorPaletteOpts;
@@ -303,16 +303,16 @@ public class ApplicationBean1 implements Serializable {
         corLinColorLineOpts[3] = new SelectItem("green", "Green");
         corLinColorLineOpts[4] = new SelectItem("grey", "Grey");
         
-        logModType = new SelectItem[3];
-        logModType[0] = new SelectItem("NULL", "Binomial");
-        logModType[1] = new SelectItem("multinomial", "Multinomial");
-        logModType[2] = new SelectItem("ordinal", "Ordinal");
+        corModType = new SelectItem[3];
+        corModType[0] = new SelectItem("NULL", "Binomial");
+        corModType[1] = new SelectItem("multinomial", "Multinomial");
+        corModType[2] = new SelectItem("ordinal", "Ordinal");
         
-        logLegPosOpts = new SelectItem[4];
-        logLegPosOpts[0] = new SelectItem("NULL", "Bottom");
-        logLegPosOpts[1] = new SelectItem("top", "Top");
-        logLegPosOpts[2] = new SelectItem("right", "Right");
-        logLegPosOpts[3] = new SelectItem("left", "Left");
+        corLegPosOpts = new SelectItem[4];
+        corLegPosOpts[0] = new SelectItem("NULL", "Bottom");
+        corLegPosOpts[1] = new SelectItem("top", "Top");
+        corLegPosOpts[2] = new SelectItem("right", "Right");
+        corLegPosOpts[3] = new SelectItem("left", "Left");
         
         corColorPaletteOpts = new SelectItem[8];
         corColorPaletteOpts[0] = new SelectItem("NULL", "Blambus");
@@ -969,16 +969,16 @@ public class ApplicationBean1 implements Serializable {
         return corLinColorLineOpts;
     }
     
-    public SelectItem[] getLogLegPosOpts() {
-        return logLegPosOpts;
+    public SelectItem[] getCorLegPosOpts() {
+        return corLegPosOpts;
     }
     
     public SelectItem[] getCorColorPaletteOpts(){
         return corColorPaletteOpts;
     }
     
-    public SelectItem[] getLogModType() {
-        return logModType;
+    public SelectItem[] getCorModType() {
+        return corModType;
     }
     
     public SelectItem[] getOrdColorPaletteOpts() {
