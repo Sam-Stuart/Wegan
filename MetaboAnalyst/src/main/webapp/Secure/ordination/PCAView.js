@@ -130,16 +130,12 @@ d3.json("/MetaboAnalyst" + URL + "/pca_score3d_0_.json", function (data) {
             .each(function (d) {
                 d.centroid = { x: d.rotated.x, y: d.rotated.y, z: d.rotated.z };
             })
-            .attr("x", function (d) {
-                return d.projected.x;
-            })
-            .attr("y", function (d) {
-                return d.projected.y;
-            })
+            .attr("x", posPointX)
+            .attr("y", posPointY)
             .text(function (d) {
                 return d[0].toFixed(2);
             })
-            .attr("transform", "translate(20,20)");
+            .style("transform", "translate(-50px, 0)");
 
         xText.exit().remove();
 
@@ -177,8 +173,7 @@ d3.json("/MetaboAnalyst" + URL + "/pca_score3d_0_.json", function (data) {
             })
             .text(function (d) {
                 return d[1].toFixed(2);
-            })
-            .attr("transform", "translate(20,20)");
+            });
 
         yText.exit().remove();
 
@@ -217,7 +212,7 @@ d3.json("/MetaboAnalyst" + URL + "/pca_score3d_0_.json", function (data) {
             .text(function (d) {
                 return d[2].toFixed(2);
             })
-            .attr("transform", "translate(20,20)");
+            .style("transform", "translate(0, -20px)");
 
         zText.exit().remove();
 
@@ -259,7 +254,7 @@ d3.json("/MetaboAnalyst" + URL + "/pca_score3d_0_.json", function (data) {
         const line = [];
         const minOnAxis = Math.floor(min);
         const maxOnAxis = Math.ceil(max);
-        const steps = (Math.abs(min) + Math.abs(max)) / 10;
+        const steps = (Math.abs(min) + Math.abs(max)) / 5;
         for (let i = minOnAxis; i <= maxOnAxis; i = i + steps) {
             if (order === 0) {
                 //X line
@@ -274,7 +269,7 @@ d3.json("/MetaboAnalyst" + URL + "/pca_score3d_0_.json", function (data) {
             // Z line
             line.push([minX, minY, i]);
         }
-        return line.reverse();
+        return line;
     };
 
     //X-axis
