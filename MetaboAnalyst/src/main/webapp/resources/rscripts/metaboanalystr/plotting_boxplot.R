@@ -182,7 +182,13 @@ plotBoxPlot <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA){
   }
   h <- w;
   #Name plot for download
+  imgName2 <- paste(gsub( "\\_\\d+\\_", "", imgName),
+                    ".json", sep="")
+
   imgName <- paste(imgName, "dpi", dpi, ".", format, sep="");
+
+
+
   mSetObj$imgSet$boxPlot <- imgName;
   #Generate plot
   Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white");
@@ -227,14 +233,17 @@ plotBoxPlot <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA){
  
   json.obj <- RJSONIO::toJSON(box_plot_json, .na='null')
   
-  #sink(imgName)
+  sink(imgName2)
   sink()
+  print("######### JSON OBJECT:" )
+  print(json.obj);
+  print("JSON Timberlake");
   
-  #if(!.on.public.web){
-  #   return(.set.mSet(mSetObj))
-  #}
+  if(!.on.public.web){
+     return(.set.mSet(mSetObj))
+  }
 
-  return(.set.mSet(mSetObj));
+  #return(.set.mSet(mSetObj));
 }
 
 
