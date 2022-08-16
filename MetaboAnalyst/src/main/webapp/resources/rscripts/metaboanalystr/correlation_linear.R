@@ -913,6 +913,10 @@ lin.qq.plot <- function(mSetObj=NA,
   width = NA
   ){
 
+## ADD CONFIDENCE INTERVALS:
+## https://www.tjmahr.com/quantile-quantile-plots-from-scratch/
+## QQPLOTS WITH FACETS: https://mgimond.github.io/ES218/Week06a.html
+
   library("ggplot2")
 # library("JSONIO")
   
