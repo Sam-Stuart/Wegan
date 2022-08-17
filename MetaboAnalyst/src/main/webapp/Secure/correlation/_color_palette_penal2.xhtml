@@ -7,7 +7,7 @@
                 xmlns:p="http://primefaces.org/ui">
 
 
-    <h:form id="penalGraph">
+    <h:form id="penalGraph2">
         <h:panelGrid columns="1" style="width:380px;">
             <h:panelGrid id="panelGrid1" columns="2" cellpadding="5" columnClasses="colBrayLong,colBrayShort">
                 
@@ -60,8 +60,8 @@
                                  style="box-shadow: none !important; text-shadow: none !important"
                                 onclick="PF('statusDialog').show()"
                                 oncomplete="PF('graphApperancePenal').hide(); PF('statusDialog').hide()"  
-                                update=":penalCA:form1:corrPenalPane1  :cmdPane"
-                                actionListener="#{penalCABean.penalizedUpdate_action()}"/>
+                                update=":pena2:corrPenalPane2  :cmdPane"
+                                actionListener="#{penalCABean.penalizedUpdate2_action()}"/>
             </h:panelGrid>
         </h:panelGrid>
     </h:form>
