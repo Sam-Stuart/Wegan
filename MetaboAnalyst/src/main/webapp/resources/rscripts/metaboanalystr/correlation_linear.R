@@ -1046,6 +1046,12 @@ lin.qq.plot <- function(mSetObj=NA,
   slope_val <- diff(y_val)/diff(x_val)
   int_val <- y_val[1L] - slope_val * x_val[1L]
   
+q1_q3 <- data.frame( ## https://www.tjmahr.com/quantile-quantile-plots-from-scratch/
+  x = qnorm(c(.25, .75)),
+  y = quantile(stats::rstandard(model), c(.25, .75)),
+  quantile = c(1,3)
+)
+
 a0 <- ggplot() +
   geom_qq(aes(sample = stats::rstandard(model) ),  shape = 16, color = col_dots1) +
   geom_abline(color = col_line1, slope = slope_val, intercept = int_val) +
@@ -1061,7 +1067,7 @@ a0 <- ggplot() +
         axis.title = element_text(size = 12),
         # legend.title=element_text(12), legend.text=element_text(size=12), 
         plot.title = element_text(face = 'bold', hjust = 0.5)
-  )
+  ) #+ geom_point(aes(x = x, y = y), data = q1_q3,  shape = 3, size = 5,   stroke = 1.1, color = "green" )
 
 
 #STORE IN mset
@@ -1087,7 +1093,7 @@ linear_plot_json$points$coords <- build_points[,c("x","y")] #[,1:2]
 linear_plot_json$points$cols <- build_points[,grepl("col",colnames(build_points))] #[,6] #colours
 linear_plot_json$points$shape <- build_points[,c("group")]#[,5]
 linear_plot_json$points$size <- build_points[,c("size")]#[,7]
-# linear_plot_json$lines$coords <- build_line[,c("x","y")]
+linear_plot_json$lines$coords_q1q3 <- q1_q3
 linear_plot_json$lines$cols <- build_line[,grepl("col",colnames(build_line))]
 linear_plot_json$lines$size <- build_line[,c("size")]
  ## linear_plot_json$label <- build$data[[3]][,c("label")]
