@@ -47,9 +47,11 @@ function extractData(data) {
         point_coords: data.points.coords,
         line_coords: data.lines.coords,
         CI: data.lines.ci,
-        equation,
-        Rsquare: data.r_sq,
-        RsquareAdjusted: data.r_sq_adj,
+        equationInfo: {
+            equation,
+            Rsquare: data.r_sq,
+            RsquareAdjusted: data.r_sq_adj,
+        },
         showLabel: {
             CI: data.bool_ci,
             equation: data.bool_eq,
@@ -123,7 +125,6 @@ function createNavigationButtons(id, scatter, zoom) {
     }
 
     const zoomInButton = createZoomButton("Zoom In", 2);
-
     const zoomOutButton = createZoomButton("Zoom Out", 0.5);
 
     return [
@@ -147,8 +148,7 @@ function createNavigationButtons(id, scatter, zoom) {
  */
 function makeGraphZoomable(svg, id, updateChart) {
     // Add a clipPath: everything out of this area won't be drawn.
-    var clip = svg
-        .append("defs")
+    svg.append("defs")
         .append("SVG:clipPath")
         .attr("id", "clip" + id)
         .append("SVG:rect")
@@ -187,6 +187,115 @@ function makeGraphZoomable(svg, id, updateChart) {
 
 /**
  *
+ * @param {*} id id of the div we want to plot in
+ * @param {*} title title of the th graph
+ */
+function createTitle(id, title) {
+    d3.select(`#${id}`)
+        .append("div")
+        .html(title)
+        .style("text-align", "center")
+        .style("order", 1)
+        .style("font-size", "18px")
+        .style("margin-bottom", "1rem");
+}
+
+/** */
+function plotPoints(scatter, values, tooltip, xScale, yScale) {
+    return scatter
+        .selectAll("circle")
+        .data(values)
+        .enter()
+        .append("circle")
+        .attr("id", "mypoint")
+        .attr("x-value", function (d) {
+            return d.x;
+        })
+        .attr("y-value", function (d) {
+            return d.y;
+        })
+        .attr("cx", function (d) {
+            return xScale(d.x);
+        })
+        .attr("cy", function (d) {
+            return yScale(d.y);
+        })
+        .attr("r", 4)
+        .style("fill", (d) => d.color)
+        .on("mouseover", function (d) {
+            tooltip
+                .style("opacity", 0.8)
+                .html("(" + d.x + "," + d.y + ")")
+                .style("left", event.pageX + 5 + "px")
+                .style("top", event.pageY + "px");
+        })
+        .on("mouseout", function (d) {
+            tooltip.transition(200).style("opacity", 0);
+        });
+}
+
+function addToolTip(id) {
+    return d3
+        .select("body")
+        .append("div")
+        .attr("id", "tooltip" + id)
+        .style("opacity", 0)
+        .style("position", "absolute")
+        .attr("class", "tooltip")
+        .style("background-color", "white")
+        .style("border", "solid")
+        .style("border-width", "1px")
+        .style("border-radius", "5px")
+        .style("padding", "10px");
+}
+
+function plotLine(scatter, line_values, line, strokeColor, tooltip) {
+    return scatter
+        .append("path")
+        .datum(line_values)
+        .attr("class", "line")
+        .attr("d", line)
+        .style("stroke", strokeColor)
+        .style("stroke-width", "3")
+        .style("fill", "none")
+        .on("mouseover", function (d) {
+            tooltip
+                .style("opacity", 0.8)
+                .html(equation)
+                .style("left", event.pageX + 5 + "px")
+                .style("top", event.pageY + "px");
+        })
+        .on("mouseout", function (d) {
+            tooltip.transition(200).style("opacity", 0);
+        });
+}
+
+function renderEquation(
+    svg,
+    showLabel,
+    { equation, Rsquare, RsquareAdjusted }
+) {
+    var equationGroup = svg.append("g").classed("equation", true);
+
+    if (showLabel.equation) equationGroup.append("text").text(equation);
+
+    if (showLabel.rSquare)
+        equationGroup
+            .append("text")
+            .text(`R Square = ${Rsquare}`)
+            .attr("y", 15)
+            .attr("x", width / 2);
+
+    if (showLabel.rSquareAdjusted)
+        equationGroup
+            .append("text")
+            .text(`R Square Adjusted = ${RsquareAdjusted}`)
+            .attr("y", 30)
+            .attr("x", width / 2);
+}
+
+/**
+ *
  * @param {*} jsonName Name of the json file
  * @param {*} id id of the div that we want to plot in
  */
@@ -203,51 +312,34 @@ function renderLinearBestFit(jsonName, id) {
             point_coords,
             line_coords,
             CI,
-            equation,
-            Rsquare,
-            RsquareAdjusted,
+            equationInfo,
             showLabel,
         } = extractData(data);
 
         //This will be used to draw the line and the confidence interval
-        const line_values = [];
-        line_coords.x.forEach((e, i) => {
-            const line_coord = {
-                x: e,
-                y: line_coords.y[i],
-                CI_down: CI.CI_down[i],
-                CI_up: CI.CI_up[i],
-            };
-            line_values.push(line_coord);
-        });
+        const line_values = line_coords.x.map((e, i) => ({
+            x: +e,
+            y: +line_coords.y[i],
+            CI_down: +CI.CI_down[i],
+            CI_up: +CI.CI_up[i],
+        }));
 
         //Create an array of objects of points
-        const values = [];
-        point_coords.x.forEach((e, i) => {
-            const point = {
-                x: e,
-                y: point_coords.y[i],
-                color: data.points.cols[i],
-            };
-            values.push(point);
-        });
-
-        //Convert to number type. Make sure that they are numbers
-        values.forEach((d) => {
-            d.x = +d.x;
-            d.y = +d.y;
-            d.yhat = +d.yhat;
-        });
+        const values = point_coords.x.map((e, i) => ({
+            x: +e,
+            y: +point_coords.y[i],
+            color: data.points.cols[i],
+        }));
 
         //Define Xaxis, add xAxis and xAxis label
-        var x = d3
+        const xScale = d3
             .scaleLinear()
             .domain(d3.extent(values, (d) => d.x))
             .range([0, width]);
         var xAxis = svg
             .append("g")
             .attr("transform", "translate(0," + height + ")")
-            .call(d3.axisBottom(x));
+            .call(d3.axisBottom(xScale));
 
         svg.append("text")
             .text(xLabel)
@@ -256,11 +348,11 @@ function renderLinearBestFit(jsonName, id) {
             .style("font-size", "15px");
 
         // Add Y axis, add yAxis and yAxis label
-        var y = d3
+        var yScale = d3
             .scaleLinear()
             .domain(d3.extent(values, (d) => d.y))
             .range([height, 0]);
-        var yAxis = svg.append("g").call(d3.axisLeft(y));
+        var yAxis = svg.append("g").call(d3.axisLeft(yScale));
 
         svg.append("text")
             .text(yLabel)
@@ -274,10 +366,10 @@ function renderLinearBestFit(jsonName, id) {
         var line = d3
             .line()
             .x(function (d) {
-                return x(d.x);
+                return xScale(d.x);
             })
             .y(function (d) {
-                return y(d.y);
+                return yScale(d.y);
             });
 
         //Set up zoom and scatter
@@ -286,8 +378,8 @@ function renderLinearBestFit(jsonName, id) {
         // A function that updates the chart when the user zoom and thus new boundaries are available
         function updateChart() {
             // recover the new scale
-            var newX = d3.event.transform.rescaleX(x);
-            var newY = d3.event.transform.rescaleY(y);
+            var newX = d3.event.transform.rescaleX(xScale);
+            var newY = d3.event.transform.rescaleY(yScale);
 
             // update axes with these new boundaries
             xAxis.call(d3.axisBottom(newX));
@@ -340,121 +432,33 @@ function renderLinearBestFit(jsonName, id) {
                     d3
                         .area()
                         .x(function (d) {
-                            return x(d.x);
+                            return xScale(d.x);
                         })
                         .y0(function (d) {
-                            return y(d.CI_up);
+                            return yScale(d.CI_up);
                         })
                         .y1(function (d) {
-                            return y(d.CI_down);
+                            return yScale(d.CI_down);
                         })
                 );
 
-        // Add dots
-        scatter
-            .selectAll("circle")
-            .data(values)
-            .enter()
-            .append("circle")
-            .attr("id", "mypoint")
-            .attr("x-value", function (d) {
-                return d.x;
-            })
-            .attr("y-value", function (d) {
-                return d.y;
-            })
-            .attr("cx", function (d) {
-                return x(d.x);
-            })
-            .attr("cy", function (d) {
-                return y(d.y);
-            })
-            .attr("r", 4)
-            .style("fill", (d) => d.color)
-            .on("mouseover", function (d) {
-                tooltip
-                    .style("opacity", 0.8)
-                    .html("(" + d.x + "," + d.y + ")")
-                    .style("left", event.pageX + 5 + "px")
-                    .style("top", event.pageY + "px");
-            })
-            .on("mouseout", function (d) {
-                tooltip.transition(200).style("opacity", 0);
-            });
-
         //Tool tip
-        var tooltip = d3
-            .select("body")
-            .append("div")
-            .attr("id", "tooltip" + id)
-            .style("opacity", 0)
-            .style("position", "absolute")
-            .attr("class", "tooltip")
-            .style("background-color", "white")
-            .style("border", "solid")
-            .style("border-width", "1px")
-            .style("border-radius", "5px")
-            .style("padding", "10px");
+        const tooltip = addToolTip(id);
+
+        // Add dots
+        plotPoints(scatter, values, tooltip, xScale, yScale);
 
         // Append line
-        scatter
-            .append("path")
-            .datum(line_values)
-            .attr("class", "line")
-            .attr("d", line)
-            .style("stroke", data.lines.cols[0])
-            .style("stroke-width", "3")
-            .style("fill", "none")
-            .on("mouseover", function (d) {
-                tooltip
-                    .style("opacity", 0.8)
-                    .html(equation)
-                    .style("left", event.pageX + 5 + "px")
-                    .style("top", event.pageY + "px");
-            })
-            .on("mouseout", function (d) {
-                tooltip.transition(200).style("opacity", 0);
-            });
+        plotLine(scatter, line_values, line, data.lines.cols[0], tooltip);
 
         // create title
-        d3.select(`#${id}`)
-            .append("div")
-            .html(title)
-            .style("text-align", "center")
-            .style("order", 1)
-            .style("font-size", "18px")
-            .style("margin-bottom", "1rem");
+        createTitle(id, title);
 
         // Equation;
-        var equationGroup = svg.append("g").classed("equation", true);
-
-        if (showLabel.equation) equationGroup.append("text").text(equation);
-
-        if (showLabel.rSquare)
-            equationGroup
-                .append("text")
-                .text(`R Square = ${Rsquare}`)
-                .attr("y", 15)
-                .attr("x", width / 2);
-
-        if (showLabel.rSquareAdjusted)
-            equationGroup
-                .append("text")
-                .text(`R Square Adjusted = ${RsquareAdjusted}`)
-                .attr("y", 30)
-                .attr("x", width / 2);
+        renderEquation(svg, showLabel, equationInfo);
 
         // Navigation using buttons: Supports zoom and pan
-        const [
-            navigationButtons,
-            zoomInButton,
-            zoomOutButton,
-            panUpButton,
-            panDownButton,
-            panLeftButton,
-            panRightButton,
-            resetButton,
-        ] = createNavigationButtons(id, scatter, zoom);
+        createNavigationButtons(id, scatter, zoom);
     });
 }
 
