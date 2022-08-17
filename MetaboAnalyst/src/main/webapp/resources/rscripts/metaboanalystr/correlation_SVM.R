@@ -9,7 +9,7 @@
 #'License: GNU GPL (>= 2)
 #'@export
 
-reg.svm.anal <- function(mSetObj=NA, facA=NULL, pred.text=NULL) {
+svm.reg.anal <- function(mSetObj=NA, facA=NULL, pred.text=NULL) {
 
   #install.packages(c("e1071", "Metrics"))
   library("e1071")
@@ -137,8 +137,8 @@ reg.svm.anal <- function(mSetObj=NA, facA=NULL, pred.text=NULL) {
 #'License: GNU GPL (>= 2)
 #'@export
 
-plot.pred.svmReg <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA){
-  
+svm.pred.plot <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA){
+  # plot.pred.svmReg
   #Extract necessary objects from mSetObj
   mSetObj <- .get.mSet(mSetObj)
 
