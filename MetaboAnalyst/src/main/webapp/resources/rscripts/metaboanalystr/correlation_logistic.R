@@ -3,7 +3,8 @@
 #'@param mSetObj Input the name of the created mSetObj
 #'@param facA Input the name of the response column (java uses factor.columns() to give user options)
 #'@param predtext Input predictor column names plus potential interactions between predictor variables (java uses text box to obtain string)
-#'@param type Type of logistic regression (ordinal, multinomial or binomial)
+#'@param data Boolean, whether to use original data; "false" (default) means normalized or "true" means original (checkbox)
+#'@param type Type of logistic regression (default "NULL" is for binomial; options are ordinal, multinomial or binomial)
 #'@param reference Response variable level to be used as reference (java uses log.ref.level() to give user options)
 #'@param ordertext Input order of dependent variable levels in ascending order, taken from text box by java, entered into R code as one character value (string)
 #'@param weights Set weight values, default is NULL
@@ -15,7 +16,8 @@
 log.reg.anal <- function(mSetObj=NA,
                          facA="NULL", # dropdown
                          predtext="NULL", # textbox
-                         type="multinomial",
+                         data = "false",
+                         type="NULL",
                          reference="NULL", # dropdown
                          ordertext="NULL" # textbox; order of response levels
                          # weights=weights
@@ -25,7 +27,7 @@ log.reg.anal <- function(mSetObj=NA,
   library("MASS") #For ordinal regression
   library("dplyr") #For data manipulation # `%>%` should be exported for piping 
   # library("tidyselect") # tidyselect helper 'where' is not exported to namespace, but workaround exists (so still need package) ; to replace deprecated select_ variant `select_if`
-# library("JSONIO")
+  # library("JSONIO")
 
   mSetObj <- .get.mSet(mSetObj)
 
@@ -42,9 +44,9 @@ log.reg.anal <- function(mSetObj=NA,
 
   #TEXT SHOULD BE VISIBLE TO USER 
   cat("One categorical dependent variable and one or more independent variables will be tested for correlation. Independent variables can be categorical or numeric." )
-  cat("By default, the first categorical variable is treated as the dependent variable. If the dataset has more than one categorical variable, you may change the dependent variable using the drop down menu.")
-  cat("Choose model type=binomial if there are only 2 dependent variable levels and they are unordered.(Levels are unique values for a variable). Choose type=multinomial if there are more than 2 dependent variable levels and they are unordered. Choose type=ordinal if there are more than 2 dependent variable levels and they are ordered." )
-  cat("For categorical variables, make sure to use characters for the levels and not numbers. For example, if you have levels 1, 2 and 3, change the labels to I, II and III.")
+  cat("By default, the 1st categorical (cat.) variable (var.) is treated as the dependent (depnt). var. If the dataset has more than 1 cat. var., you may change the depnt var. using the drop down menu.")
+  cat("Choose model type=binomial if there are 2 depnt var. levels (unordered); levels are unique values for a var.. Choose type=multinomial if there are more than 2 depnt var. levels (unordered). Choose type=ordinal if there are more than 2 depnt var. levels and they are ordered." )
+  cat("For cat. vars., make sure to use characters for the levels and not numbers. Eg., if you have levels 1, 2 and 3, change the labels to I, II and III.")
   
   #Text box instructions for selecting predictor variables. Text box should be interactive, meaning any change in text alters the result in real time. Default predtext is second column.
   cat("Indicate independent variables using the column names with commas in between. If interested in an interaction between particular variables, indicate it with a colon rather than a comma.")
@@ -96,7 +98,6 @@ if (is.null(facData)) {
   #cat(paste0("You have created this formula for model building: ", facA, " ~ ", predtext))
   #cat("The L hand side is the dependent variable. The R hand side is the independent variable(s). If there is >1 independent variable, the plus signs indicate the variables are evaluated on their own; colons indicate an interaction between the variables is evaluated.")
   #cat("If the formula is not what you intended, retype independent variable(s) in the text box and/or choose another dependent variable.")
-  
 
 ## CHECK: are all input predictors in data
  predictors <- unlist(strsplit(predtext, "+", fixed=TRUE), use.names = FALSE) ## use.names = FALSE speeds up unlist
@@ -133,13 +134,6 @@ if(!is.factor(model_data[,1])){
       reference <- reference
     }
 
-# ## CHECK IF REFERENCE INPUT IS VALID # how is reference level output?
-#  if(any(!levels(model_data[,1]) %in% reference)){
-#     stop(paste0("reference ('", reference, 
-#     "') not found in dependent variable levels ('",
-#     paste(levels(model_data[,1]), collapse = "', '"), 
-#     "')"))
-# }
 
 ## ordertext: (ONLY USED FOR ORDINAL)
  if (ordertext == "NULL") {
@@ -239,7 +233,7 @@ if(!is.factor(model_data[,1])){
     print(Hessian)
     sink()
     
-  } else if (type=="multinomial") {
+  } else if (type == "multinomial") {
 
  ## MULTINOMIAL
     #CHECK NUMBER OF LEVELS
@@ -404,8 +398,18 @@ response = facA, predictor = predictors)
 #'@description 
 #'@usage plot.effects.logReg(mSetObj, type="binomial", imgName, format="png", dpi=72, width=NA)
 #'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
+#'@param facA Input the name of the response column (java uses factor.columns() to give user options)
+#'@param predtext Input predictor column names plus potential interactions between predictor variables (java uses text box to obtain string)
+#'@param data Boolean, whether to use original data; "false" (default) means normalized or "true" means original (checkbox)
 #'@param type Type of logistic regression (ordinal, multinomial or binomial), binomial is default
-#'@param 
+#'@param plot_ci Boolean, "false" (default), omit 95% confidence interval around line, "true" add interval around line
+#'@param plot_title Input the name of the title (default: "Polynomial Regression Predicted vs Actual: (formula);, textbox)
+#'@param plot_xlab Input the name to use for x-axis label (default: facB, textbox)
+#'@param plot_ylab Input the name to use for y-axis label (default: facA, textbox)
+#'@param plot_xangle Whether x-axis tick labels should be pivoted vertically (default: "false", checkbox)
+#'@param plot_palette Static dropdown, select plot palette (default: "NULL" to palette 'metro')
+#'@param plot_leg_horiz Whether the legend should be displayed horizontally (default: "false", checkbox)
+#'@param plot_leg_pos Static dropdown, position of legend ('bottom', 'top', 'right', 'left') (default: "NULL" is the bottom)
 #'@param imgName Input the image name
 #'@param format Select the image format, "png" or "pdf", default is "png" 
 #'@param dpi Input the dpi. If the image format is "pdf", users need not define the dpi. For "png" images, 
@@ -418,7 +422,10 @@ response = facA, predictor = predictors)
 #'@export
 
 log.effects.plot <- function(mSetObj=NA,
-                             type="binomial",  # was multinomial before
+ facA = "NULL", 
+ predtext = "NULL", 
+data = "false",
+  type="NULL",  # was multinomial before
   plot_ci="false", #checkbox
   plot_title=" ",
   plot_ylab=" ",
@@ -436,31 +443,133 @@ log.effects.plot <- function(mSetObj=NA,
   #EXTRACT OBJECTS FROM MSET
   mSetObj <- .get.mSet(mSetObj)
   
- # GET VARIABLES  
-  if (type == "ordinal") { 
-    # main = "Ordinal Logistic Regression \nEffects Plot"
-    model <- mSetObj$analSet$logOrdReg$mod$model
-    predictors <- mSetObj$analSet$logOrdReg$res$predictor
-    facA <- mSetObj$analSet$logOrdReg$res$response
-    main = paste0("Predicted Probabilities of ", facA, " ( Ordinal Logistic Regression)")
-  } else if (type == "multinomial") {
-    # main = "Multinomial Logistic Regression \nEffects Plot"
-    model <- mSetObj$analSet$logMultinomReg$mod$model
-    predictors <- mSetObj$analSet$logMultinomReg$res$predictor
-    facA <- mSetObj$analSet$logMultinomReg$res$response
-    main = paste0("Predicted Probabilities of ", facA, " ( Multinomial Logistic Regression)")
-  } else { #Binomial
-    # main = "Binomial Logistic Regression \nEffects Plot"
-    model <- mSetObj$analSet$logBinomReg$mod$model
-    predictors <- mSetObj$analSet$logBinomReg$res$predictor
-    facA <- mSetObj$analSet$logBinomReg$res$response
-    main = paste0("Predicted Probabilities of ", facA, " ( Binomial Logistic Regression)")
+ ### SET DATA (whether to use original data or not)
+  if (data == "false") { 
+    input <- mSetObj$dataSet$norm #default use norm
+  } else {
+    input <- mSetObj$dataSet$orig
   }
-  
+
 ### TROUBLESHOOTING (Q&D)
- input <- iris; 
+ # input <- iris; 
  # plot_xangle1 <- 0; plot_palette1 <- "blambus"; plot_leg_pos1 <- "bottom"; plot_leg_horiz1 <- "horizontal"
  # plot_xlab1 <- predictors[1];  plot_title <- paste0("Predicted Probabilities of ", facA) ; plot_ylab1 <- facA
+
+### VARIABLES: STORE OUTPUT SOURCE BASED ON REGSN TYPE
+  if (type == "ordinal") { 
+    # main = "Ordinal Logistic Regression \nEffects Plot"
+    output <- mSetObj$analSet$logOrdReg
+    main_end <- " ( Ordinal Logistic Regression)" #  # main = "Ordinal Logistic Regression \nEffects Plot"
+  } else if (type == "multinomial") {
+    # main = "Multinomial Logistic Regression \nEffects Plot"
+    output <- mSetObj$analSet$logMultinomReg
+    main_end <- " ( Multinomial Logistic Regression)" #  # main = "Multinomial Logistic Regression \nEffects Plot"
+  } else { #Binomial
+    # main = "Binomial Logistic Regression \nEffects Plot"
+    output <- mSetObj$analSet$logBinomReg
+    main_end <- " ( Binomial Logistic Regression)" ## main = "Binomial Logistic Regression \nEffects Plot"
+  }
+  
+ 
+
+# ## GET VARIABLES  
+#   if (type == "ordinal") { 
+#     # main = "Ordinal Logistic Regression \nEffects Plot"
+#     model <- mSetObj$analSet$logOrdReg$mod$model
+#     predictors <- mSetObj$analSet$logOrdReg$res$predictor
+#     facA <- mSetObj$analSet$logOrdReg$res$response
+#     main = paste0("Predicted Probabilities of ", facA, " ( Ordinal Logistic Regression)")
+#   } else if (type == "multinomial") {
+#     # main = "Multinomial Logistic Regression \nEffects Plot"
+#     model <- mSetObj$analSet$logMultinomReg$mod$model
+#     predictors <- mSetObj$analSet$logMultinomReg$res$predictor
+#     facA <- mSetObj$analSet$logMultinomReg$res$response
+#     main = paste0("Predicted Probabilities of ", facA, " ( Multinomial Logistic Regression)")
+#   } else { #Binomial
+#     # main = "Binomial Logistic Regression \nEffects Plot"
+#     model <- mSetObj$analSet$logBinomReg$mod$model
+#     predictors <- mSetObj$analSet$logBinomReg$res$predictor
+#     facA <- mSetObj$analSet$logBinomReg$res$response
+#     main = paste0("Predicted Probabilities of ", facA, " ( Binomial Logistic Regression)")
+#   }
+  
+  ###### WITH facA and predtext options
+  ##### [CRUNCH]
+  #####
+  ##### iF VARIABLES ARE SET
+  #SET RESPONSE (DEPENDENT) VARIABLE
+  if (facA == "NULL") {
+    if( "res" %in% names(output) ){
+        facA <- output$res$response
+     } else {
+    for (i in seq_along(colnames(input)) ) {
+      if (is.factor(input[,i]) == FALSE) {
+        facA <- colnames(input)[i]# Default is to choose the first numeric column as response column
+        break
+      }
+    }
+ }
+} else {
+    facA <- facA #User selected, java uses function numeric.columns() to provide options in drop down menu (only numeric columns are available)
+  }
+
+  #Textbox instructions for selecting predictor variables.
+  cat("Indicate independent variables using the column names with commas in between. If interested in an interaction between particular variables, indicate it with a colon rather than a comma.")
+
+  #SET FORMULA RIGHT SIDE WITH PREDICTORS (Default = 2nd column)
+  if (predtext == "NULL") {
+    if( "res" %in% names(output) ){
+        predtext <- output$res$predictor
+     } else {
+    dat <- input[ , colnames(input) != facA]
+    num.data <- dplyr::select_if(dat, is.numeric)
+    predtext <- colnames(num.data)[1] #Default is the first potential predictor column
+ }
+    } else {
+    predtext <- predtext #taken from text box by java, fed as string into R code
+  }
+
+  #CURATE FORUMLA RIGHT SIDE, EXTRACT CHAR VEC OF PREDICTORS
+  predtext <- gsub("\n", "", predtext, fixed = TRUE)
+  predtext <- gsub(",", "+", predtext, fixed = TRUE)
+  predtext <- gsub(";", "+", predtext, fixed = TRUE)
+  predtext <- gsub(" ", "", predtext, fixed = TRUE)
+  predtext <- gsub(":", "+", predtext, fixed = TRUE)
+  predtext <- gsub("*", "+", predtext, fixed = TRUE)
+
+  #GENERATE FORMULA
+  formula <- as.formula(paste(facA, "~", predtext))
+  #Text should be visible to user
+  cat(paste0("You have created this formula for model building: ", facA, " ~ ", predtext))
+  cat("The L hand side is the dependent variable. The R hand side is the independent variable(s). If there is >1 independent variable, plus signs indicate the variables are evaluated on their own; colons indicate an interaction between the variables is evaluated.")
+  cat("If the formula is not what you intended, retype independent variable(s) in the text box and/or choose another dependent variable.")
+
+   ### CHECK: are all input predictor names in data
+  predictors1 <- unlist(strsplit(predtext, "+", fixed = TRUE), use.names = FALSE)
+  predictors2 <- unlist(strsplit(predictors1, ":", fixed = TRUE), use.names = FALSE)
+ if(any(!colnames(data) %in% predictors2)){
+   stop(paste0( "'", predictors[!predictors2 %in% colnames(data)],
+  "' not found in data variables ('",
+  paste(colnames(data), collapse = "', '"),
+  "'): check spelling of text box input."))
+}
+
+  #SUBSET DATA USING PREDICTOR COLUMN NAMES
+  pred_data <- as.data.frame(input[, colnames(input) %in% predictors2])
+ 
+  #DETERMINE IF ANY PREDICTORS ARE CATEGORICAL
+  for (i in seq_along(colnames(pred_data)) ){
+    if (is.factor(pred_data[,i]) || is.character(pred_data[,i]) ) {
+      stop("You have chosen a categorical independent variable! Please adjust your independent variables appropriately. You can also try other regression models such as logistic, SVM or random forest.")
+    }
+  }
+  
+  model_data <- data.frame(input[,facA], pred_data)
+  colnames(model_data) <- c(paste0(facA), predictors2)
+  model <- lm(formula = formula, data = model_data, weights = NULL)
+
+  #########
+  ######### [CRUNCH]
 
 
   # AXIS TICK LABELS SIDEWAYS
@@ -533,7 +642,6 @@ log.effects.plot <- function(mSetObj=NA,
   #  black purpley orangey redbrown light orange yellow
   # `warm` = c("#072835", "#664458", "#C45B46", "#F1B749", "#F8EB85"),
 
-   
   
   # CONFIDENCE INTERVAL (95%)
   if (plot_ci == "false") {
@@ -541,6 +649,8 @@ log.effects.plot <- function(mSetObj=NA,
     } else {
       plot_ci1 <- TRUE
     }
+
+main <- paste0("Predicted Probabilities of ", facA, main_end)
 
   # PLOT TITLE
   if(plot_title == " "){
@@ -616,8 +726,45 @@ log.effects.plot <- function(mSetObj=NA,
   # plot(effects::allEffects(mod=model), ylim=c(0,1), rescale.axis=FALSE, main=main)
   dev.off()
   
-  return(.set.mSet(mSetObj))
+build <- ggplot_build(a0)
+  linear_plot_json <- list()
   
+  build_points <- build$data[[1]]
+  build_line <- build$data[[2]]
+  
+  linear_plot_json$main <- plot_title1 #title
+  linear_plot_json$axis <- c(plot_xlab1, plot_ylab1) #axis titles
+  linear_plot_json$points$coords <- build_points[,c("x","y")] #[,1:2]
+  linear_plot_json$points$cols <- build$data[[1]][,grepl("col",colnames(build_points))] #[,6] #colours
+  linear_plot_json$points$shape <- build_points[,c("group")]#[,5]
+  linear_plot_json$points$size <- build_points[,c("size")]#[,7]
+  linear_plot_json$lines$cols <- build_line[,grepl("col",colnames(build_line))]
+  # linear_plot_json$label <- build$data[[3]][,c("label")]
+  # linear_plot_json$lines$ci <- build$data[[1]][,c("se")]
+  
+  ci<- build_line[,c("x","y", "ymin", "ymax")]
+  colnames(ci) <- c("x","y","CI_down", "CI_up")
+  linear_plot_json$lines$ci <- ci # build$data[[1]][,c("ymin", "ymax")]
+  
+  linear_plot_json$model$r_sq <-
+   summary(model)[["r.squared"]] #Extract R^2
+  linear_plot_json$model$r_sq_adj <-
+    summary(model)[["adj.r.squared"]] #Extract adjusted R^2 
+  linear_plot_json$model$slope <-
+    summary(model)[["coefficients"]][2] # beta
+  linear_plot_json$model$yint <-
+    summary(model)[["coefficients"]][1] # alpha
+
+  json.obj <- RJSONIO::toJSON(linear_plot_json, .na='null')
+  sink(imgName2)
+  cat(json.obj)
+  sink()
+  print(paste0("PLOT2 | facA: ", facA))
+
+   if(!.on.public.web){
+    return(.set.mSet(mSetObj))
+    }  
+
 }
 
 
@@ -626,7 +773,12 @@ log.effects.plot <- function(mSetObj=NA,
 #'@description Display ROC curve with area under the curve (AUC) value for logistic regression
 #'@usage plot.ROC.logReg(mSetObj, type="ordinal", imgName, format="png", dpi=72, width=NA)
 #'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
+#'@param facA Input the name of the response column (java uses factor.columns() to give user options)
+#'@param predtext Input predictor column names plus potential interactions between predictor variables (java uses text box to obtain string)
+#'@param data Boolean, whether to use original data; "false" (default) means normalized or "true" means original (checkbox)
 #'@param type Type of logistic regression (ordinal, multinomial or binomial), binomial is default
+#'@param plot_title Input name of title
+#'@param plot_palette 
 #'@param imgName Input the image name
 #'@param format Select the image format, "png" or "pdf", default is "png" 
 #'@param dpi Input the dpi. If the image format is "pdf", users need not define the dpi. For "png" images, 
@@ -639,7 +791,10 @@ log.effects.plot <- function(mSetObj=NA,
 #'@export
 
 log.ROC.plot <- function(mSetObj=NA, 
-type="multinomial", 
+facA = "NULL", 
+predtext = "NULL",
+data = "false",
+type="NULL", # was multinomial 
   plot_palette = "NULL", #dropdown  
         plot_title = " ",
 imgName, format="png", dpi=72, width=NA){
@@ -654,6 +809,120 @@ imgName, format="png", dpi=72, width=NA){
   #Extract necessary objects from mSetObj
   mSetObj <- .get.mSet(mSetObj)
   
+ ### SET DATA (whether to use original data or not)
+  if (data=="false") { 
+    input <- mSetObj$dataSet$norm #default use norm
+  } else {
+    input <- mSetObj$dataSet$orig
+  }
+
+
+if (type == "ordinal") {
+  output <- mSetObj$analSet$logOrdReg
+  nom <- names(mSetObj$analSet$logOrdReg)
+} else if (type == "multinomial") {
+  output <- mSetObj$analSet$logMultinomReg
+  nom <- names(mSetObj$analSet$logOrdReg)
+} else { #Binomial
+  output <- mSetObj$analSet$logBinomReg
+  nom <- names(mSetObj$analSet$logOrdReg)
+}
+
+  #SET RESPONSE (DEPENDENT) VARIABLE
+  if (facA == "NULL") {
+    if( "res" %in% nom ){
+        # facA <- output$res$response
+      if (type == "ordinal") {
+    facA <- mSetObj$analSet$logOrdReg$res$response
+   # main = paste0("Predicted Probabilities of ", facA, " ( Ordinal Logistic Regression)") #"Ordinal Logistic Regression \nEffects Plot"
+  } else if (type == "multinomial") {
+    facA <- mSetObj$analSet$logMultinomReg$res$response
+    #main = paste0("Predicted Probabilities of ", facA, " ( Multinomial Logistic Regression)") # "Multinomial Logistic Regression \nEffects Plot"
+  } else { #Binomial
+    facA <- mSetObj$analSet$logBinomReg$res$response
+    #main = paste0("Predicted Probabilities of ", facA, " ( Binomial Logistic Regression)") # "Binomial Logistic Regression \nEffects Plot"
+  }
+     } else {
+    for (i in seq_along(colnames(input)) ) {
+      if (is.factor(input[,i]) == FALSE) {
+        facA <- colnames(input)[i]# Default is to choose the first numeric column as response column
+        break
+      }
+    }
+ }
+} else {
+    facA <- facA #User selected, java uses function numeric.columns()
+  }
+
+  #SET FORMULA RIGHT SIDE WITH PREDICTORS (Default = 2nd column)
+  if (predtext == "NULL") {
+    if( "res" %in% nom ){
+        # predtext <- output$res$predictor
+
+       if (type == "ordinal") {
+    predtext <- mSetObj$analSet$logOrdReg$res$predictor
+  } else if (type == "multinomial") {
+    predtext <- mSetObj$analSet$logMultinomReg$res$predictor
+  } else { #Binomial
+    predtext <- mSetObj$analSet$logBinomReg$res$predictor
+  }
+
+     } else {
+    dat <- input[ , colnames(input) != facA]
+    num.data <- dplyr::select_if(dat, is.numeric)
+    predtext <- colnames(num.data)[1] #Default is the first potential predictor column
+ }
+    } else {
+    predtext <- predtext #taken from text box by java, fed as string into R code
+  }
+  
+# paste(.simcap(type), " Logistic Regression \nROC Curve", sep="")
+  # main <- paste0("Predicted Probabilities of ", facA, main_end)
+
+  #CURATE FORUMLA RIGHT SIDE, EXTRACT CHAR VEC OF PREDICTORS
+  predtext <- gsub("\n", "", predtext, fixed = TRUE)
+  predtext <- gsub(",", "+", predtext, fixed = TRUE)
+  predtext <- gsub(";", "+", predtext, fixed = TRUE)
+  predtext <- gsub(" ", "", predtext, fixed = TRUE)
+  predtext <- gsub(":", "+", predtext, fixed = TRUE)
+  predtext <- gsub("*", "+", predtext, fixed = TRUE)
+
+  #GENERATE FORMULA
+  formula <- as.formula(paste(facA, "~", predtext))
+  #Text should be visible to user
+  cat(paste0("You have created this formula for model building: ", facA, " ~ ", predtext))
+  cat("The L hand side is the dependent variable. The R hand side is the independent variable(s). If there is >1 independent variable, plus signs indicate the variables are evaluated on their own; colons indicate an interaction between the variables is evaluated.")
+  cat("If the formula is not what you intended, retype independent variable(s) in the text box and/or choose another dependent variable.")
+
+   ### CHECK: are all input predictor names in data
+  predictors1 <- unlist(strsplit(predtext, "+", fixed = TRUE), use.names = FALSE)
+  predictors2 <- unlist(strsplit(predictors1, ":", fixed = TRUE), use.names = FALSE)
+ if(any(!colnames(data) %in% predictors2)){
+   stop(paste0( "'", predictors[!predictors2 %in% colnames(data)],
+  "' not found in data variables ('",
+  paste(colnames(data), collapse = "', '"),
+  "'): check spelling of text box input."))
+}
+
+  #SUBSET DATA USING PREDICTOR COLUMN NAMES
+  pred_data <- as.data.frame(input[, colnames(input) %in% predictors2])
+ 
+  #DETERMINE IF ANY PREDICTORS ARE CATEGORICAL
+  for (i in seq_along(colnames(pred_data)) ){
+    if (is.factor(pred_data[,i]) || is.character(pred_data[,i]) ) {
+      stop("You have chosen a categorical independent variable! Please adjust your independent variables appropriately. You can also try other regression models such as logistic, SVM or random forest.")
+    }
+  }
+  
+  model_data <- data.frame(input[,facA], pred_data)
+  colnames(model_data) <- c(paste0(facA), predictors2)
+  model <- lm(formula = formula, data = model_data, weights = NULL)
+
+  #########
+  ######### [CRUNCH]
+
+
+
   #Set plot dimensions
   if(is.na(width)){
     w <- 10.5
@@ -700,9 +969,9 @@ imgName, format="png", dpi=72, width=NA){
   }
    
   if (type=="ordinal") {
-    model <- mSetObj$analSet$logOrdReg$mod$model
-    model_data <- mSetObj$analSet$logOrdReg$res$model.data
-    facA <- mSetObj$analSet$logOrdReg$res$response
+    #model <- mSetObj$analSet$logOrdReg$mod$model
+    #model_data <- mSetObj$analSet$logOrdReg$res$model.data
+    #facA <- mSetObj$analSet$logOrdReg$res$response
     predicted <- fitted(summary(model))
 # mSetObj$analSet$logOrdReg$res$linear.predicted.values
     prob <- predict(model, type="probs")
@@ -738,18 +1007,14 @@ legend.background = element_rect(fill=NULL, size=0.5,           linetype="solid"
 axis.title = element_text(face = "bold", size = 12)
 )
     
-    #Generate plot
-    Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
-    print(a0)
-  ## https://github.com/WandeRum/multiROC
-    # pROC::ggroc( pROC::multiclass.roc(model_data[,facA]~prob , plot=TRUE, print.auc = TRUE, xlab = "Specificity ( True Negative)", ylab = "Sensitivity (True Positive)", main = main, yaxt = "n" ) ); axis(2, las=2)
-    dev.off()
-    
+# pROC::ggroc( pROC::multiclass.roc(model_data[,facA]~prob , plot=TRUE, print.auc = TRUE, xlab = "Specificity ( True Negative)", ylab = "Sensitivity (True Positive)", main = main, yaxt = "n" ) ); axis(2, las=2)
+  
   } else if (type == "multinomial") {
 
-    model <- mSetObj$analSet$logMultinomReg$mod$model
-    model_data <- mSetObj$analSet$logMultinomReg$res$model.data
-    facA <- mSetObj$analSet$logMultinomReg$res$response
+##   ## https://github.com/WandeRum/multiROC
+    # model <- mSetObj$analSet$logMultinomReg$mod$model
+    #model_data <- mSetObj$analSet$logMultinomReg$res$model.data
+    #facA <- mSetObj$analSet$logMultinomReg$res$response
     predicted <- fitted(summary(model)) # mSetObj$analSet$logMultinomReg$res$linear.predicted.values
     prob <- predict(model, type="probs")
     
@@ -777,36 +1042,90 @@ a0 <- ggplot(plot_roc_df,
   theme(plot.title = element_text(hjust = 0.5, face = "bold"), 
   legend.justification=c(1, 0), legend.position=c(.95, .05),
  legend.title=element_blank(), 
-legend.background = element_rect(fill=NULL, size=0.5,           linetype="solid", colour ="black"), 
+legend.background = element_rect(fill=NULL, size=0.5, linetype="solid", colour ="black"), 
 axis.title = element_text(face = "bold", size = 12)
 )
-  a0  
-    #Generate plot
-    Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
-   print(a0)
-     # multiclass.roc(model_data[,facA]~prob, plot=TRUE, print.auc=TRUE, xlab="Specificity (True Negative)", ylab="Sensitivity (True Positive)", main=main, yaxt="n"); axis(2, las=2)
-    dev.off()
+   # multiclass.roc(model_data[,facA]~prob, plot=TRUE, print.auc=TRUE, xlab="Specificity (True Negative)", ylab="Sensitivity (True Positive)", main=main, yaxt="n"); axis(2, las=2)
     
   } else { #binomial
 
-    model <- mSetObj$analSet$logBinomReg$mod$model
-    model_data <- mSetObj$analSet$logBinomReg$res$model.data
-    facA <- mSetObj$analSet$logBinomReg$res$response
-    predicted <- mSetObj$analSet$logBinomReg$res$predicted.values #fitted(summary(model))
+    # model <- mSetObj$analSet$logBinomReg$mod$model
+    # model_data <- mSetObj$analSet$logBinomReg$res$model.data
+    # facA <- mSetObj$analSet$logBinomReg$res$response
+    predicted <- fitted(summary(model))
     prob <- predict(model, type="response")
     
-    #Generate plot
-    Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
-    
-  pROC::ggroc(  pROC::roc(model_data[,facA]~prob
-      # , plot=TRUE, print.auc=TRUE, xlab="Specificity (True Negative)", ylab="Sensitivity (True Positive)", main=main, yaxt="n"
-      ) )
-    # axis(2, las=2)
-    dev.off()
+a0 <- pROC::ggroc(  pROC::roc(model_data[,facA]~prob )) # , plot=TRUE, print.auc=TRUE, xlab="Specificity (True Negative)", ylab="Sensitivity (True Positive)", main=main, yaxt="n"
+
+#pROC::ggroc(  pROC::roc(model_data[,facA]~prob
+   #, plot=TRUE, print.auc=TRUE, xlab="Specificity (True Negative)", ylab="Sensitivity (True Positive)", main=main, yaxt="n"
+   #   ) )
+ 
     
   }
+
+  #Generate plot
+  Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
+   print(a0) 
+   dev.off()
+   
+   #if (type == "multinomial") { #logMultinomReg # "ordinal" logOrdReg "binomial" logBinomReg
   
-  return(.set.mSet(mSetObj))
+   # STORE IN mSET
+  if (type == "ordinal") { #mSetObj$analSet$logOrdReg$res
+  mSetObj$analSet$logOrdReg$plotRoc <- list(plot = a0, title = plot_title1, xlab = plot_xlab1, ylab = plot_ylab1)
+    } else if (type == "multinomial"){
+  mSetObj$analSet$logMultinomReg$plotRoc <- list(plot = a0, title = plot_title1, xlab = plot_xlab1, ylab = plot_ylab1)  
+  } else if (type == "binomial"){
+    mSetObj$analSet$logBinomReg$plotRoc <- list(plot = a0, title = plot_title1, xlab = plot_xlab1, ylab = plot_ylab1) 
+  }
+   
+   
+   #JSON OBJECT MAKING
+  build <- ggplot_build(a0)
+  build_line <- build$data[[1]]
+  build_line2 <- build$data[[2]] #3 dotted line 
+  linear_plot_json <- list()
+  
+  linear_plot_json$main <- plot_title1 #title
+  linear_plot_json$axis <- c(plot_xlab1, plot_ylab1) #axis titles
+  linear_plot_json$line$coords <- build_line[,c("x","y")] #[,1:2]
+  linear_plot_json$line$cols <- build_line[,grepl("col",colnames(build_line))] #[,6] #colours
+  linear_plot_json$line$group <- build_line[,c("group")]#[,5]
+  linear_plot_json$line$size <- build_line[,c("size")]#[,7]
+  linear_plot_json$line$linetype <- build_line[,c("linetype")]#[,7]
+  linear_plot_json$line2$coords <- build_line2[,c("x","xend","y","yend")] #[,1:2]
+  linear_plot_json$line2$cols <- build_line2[,grepl("col",colnames(build_line2))]
+  linear_plot_json$line2$group <- build_line2[,c("group")]#[,5]
+  linear_plot_json$line2$size <- build_line2[,c("size")]#[,7]
+  linear_plot_json$line2$linetype <- build_line2[,c("linetype")]#[,7]
+  
+  ## BOOLEANS
+  if(plot_ci1 == TRUE){
+    linear_plot_json$bool_ci <- TRUE
+    } else{
+      linear_plot_json$bool_ci <- FALSE
+   }
+
+  
+  linear_plot_json$model$r_sq <-
+   summary(model2)[["r.squared"]] #Extract R^2
+  linear_plot_json$model$r_sq_adj <-
+    summary(model2)[["adj.r.squared"]] #Extract adjusted R^2 
+  linear_plot_json$model$slope <-
+    summary(model2)[["coefficients"]][2] # beta
+  linear_plot_json$model$yint <-
+    summary(model2)[["coefficients"]][1] # alpha
+
+  json.obj <- RJSONIO::toJSON(linear_plot_json, .na='null')
+  sink(imgName2)
+  cat(json.obj)
+  print("take json me")
+  sink()
+  
+   if(!.on.public.web){
+    return(.set.mSet(mSetObj))
+    }
 
 }
 
