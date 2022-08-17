@@ -27,25 +27,30 @@
 
                         <h:panelGrid id="corrLogPane1" columns="3" cellpadding="3" columnClasses="colLeft,colRight,colLast">
                             <h:outputLabel style="font-weight: bold" value="Response variable:"/>
-                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{logisticCABean.responseVar}">
-                                <f:selectItems value="#{logisticCABean.columnOpts}" />
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{logCABean.responseVar}">
+                                <f:selectItems value="#{logCABean.columnOpts}" />
                             </p:selectOneMenu>
                             <spacer></spacer>
                             <h:outputLabel style="font-weight: bold" value="Reference level:"/>
-                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{logisticCABean.responseLevelVar}">
-                                <f:selectItems value="#{logisticCABean.columnLevelOpts}" />
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{logCABean.responseLevelVar}">
+                                <f:selectItems value="#{logCABean.columnLevelOpts}" />
                             </p:selectOneMenu>
                             <spacer></spacer>
                             <h:outputLabel style="font-weight: bold" value="Indicate independent variables using the column names with commas in between:"/>
-                            <p:inputText style="width:400px; height:40px" value="#{logisticCABean.indInput}"/> 
+                            <p:inputText style="width:400px; height:40px" value="#{logCABean.indInput}"/> 
                             
                             <h:outputLabel style="font-weight: bold" value="Indicate ascending order of dependent variable level names with commas in between:"/>
-                            <p:inputText style="width:400px; height:40px" value="#{logisticCABean.indInput}"/> 
+                            <p:inputText style="width:400px; height:40px" value="#{logCABean.indInput}"/> 
 
                             <h:outputLabel style="font-weight: bold" value="Logistic Model Type:"/>
-                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{logisticCABean.logModelType}">
-                                <f:selectItems value="#{applicationBean1.logModType}" />
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{logCABean.corModelType}">
+                                <f:selectItems value="#{applicationBean1.corModType}" />
                             </p:selectOneMenu>
+                            
+                            <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
+                            <p:selectBooleanCheckbox value ="#{linearCABean.doOriginal}"/>
+
+                            <p:panelGrid></p:panelGrid>
                             
                         </h:panelGrid>
                         <p:panelGrid></p:panelGrid>
@@ -63,7 +68,7 @@
                                             onclick="PF('statusDialog').show()"
                                             oncomplete="PF('statusDialog').hide()"  
                                             update=":logCA:form1:corrLogPane1  :cmdPane" 
-                                            actionListener="#{logisticCABean.corrLogBtn1_action()}"/> 
+                                            actionListener="#{logCABean.corrLogBtn1_action()}"/> 
                             
                         </h:panelGrid>
                         
@@ -87,7 +92,7 @@ The R &#xb2; value is the fraction of variance explained by the model and is a v
                           <h:panelGrid id="corrLogPane1_2" style="width: 100%;"> 
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
                                 <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
-                                    <h:outputText escape="false" value="#{logisticCABean.fileLogModValsPath}"/>
+                             <h:outputText escape="false" value="#{logCABean.fileLogModValsPath}"/>
                                 </i>
                             </h:panelGrid>
                             
@@ -106,7 +111,7 @@ The R &#xb2; value is the fraction of variance explained by the model and is a v
                         
                     </h:form>
                 </p:tab>
-                <p:tab title ="ROC Curve" titleStyleClass="p-tab-nav">
+                <p:tab title ="ROC Curve Plot" titleStyleClass="p-tab-nav">
                     <h:form id="form2">
                         <p style="font-size: 13px">
                             One dependent variable and one or more independent variables are tested for correlation. The dependent variable must be numeric. The independent variables can be numeric or categorical.
@@ -115,13 +120,32 @@ The R &#xb2; value is the fraction of variance explained by the model and is a v
                         </p>
 
                         <h:panelGrid id="corrLogPane2" columns="3" cellpadding="3" columnClasses="colLeft,colRight,colLast">
-                            <h:outputLabel style="font-weight: bold" value="Dependant Variable:"/>
-                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{logisticCABean.columnNameA}">
-                                <f:selectItems value="#{logisticCABean.columnOpts}" />
+                           <h:outputLabel style="font-weight: bold" value="Response variable:"/>
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{logCABean.responseVar}">
+                                <f:selectItems value="#{logCABean.columnOpts}" />
                             </p:selectOneMenu>
                             <spacer></spacer>
-                            <h:outputLabel style="font-weight: bold" value="Indicate independent variables using the column names with commas in between:"/>
-                            <p:inputText style="width:400px; height:40px" value="#{logisticCABean.indInput}"/> 
+                            
+                            <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
+                            <p:selectBooleanCheckbox value ="#{linearCABean.doOriginal}"/>
+
+                            <p:panelGrid></p:panelGrid>
+                            
+<!--                            <h:outputLabel style="font-weight: bold" value="Reference level:"/>
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="hash{logCABean.responseLevelVar}">
+                                <f:selectItems value="hash{logCABean.columnLevelOpts}" />
+                            </p:selectOneMenu>-->
+                            <spacer></spacer>
+                            <h:outputLabel style="font-weight: bold" value="Independent variable(s) (use the column names with commas in between):"/>
+                            <p:inputText style="width:400px; height:40px" value="#{logCABean.indInput}"/> 
+                            
+<!--                            <h:outputLabel style="font-weight: bold" value="Indicate ascending order of dependent variable level names with commas in between:"/>
+                            <p:inputText style="width:400px; height:40px" value="hash{logCABean.indInput}"/> -->
+
+                            <h:outputLabel style="font-weight: bold" value="Logistic Model Type:"/>
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{logCABean.corModelType}">
+                                <f:selectItems value="#{applicationBean1.corModType}" />
+                            </p:selectOneMenu>
                         </h:panelGrid>
 
                         <p:panelGrid></p:panelGrid>
@@ -139,7 +163,7 @@ The R &#xb2; value is the fraction of variance explained by the model and is a v
                                             onclick="PF('statusDialog').show()"
                                             oncomplete="PF('statusDialog').hide()"  
                                             update=":logCA:form2:corrLogPane2  :cmdPane" 
-                                            actionListener="#{logisticCABean.corrLogBtn2_action()}"/>     
+                                            actionListener="#{logCABean.corrLogBtn2_action()}"/>     
                               
                         </h:panelGrid>
                         
