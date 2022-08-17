@@ -107,7 +107,7 @@ function createNavigationButtons(id, scatter, zoom) {
     const panRightButton = createPanButton("Pan Right", 50, 0);
     const panUpButton = createPanButton("Pan Up", 0, 50);
     const panDownButton = createPanButton("Pan Down", 0, -50);
-    const panLeftButton = createPanButton("Pan Left Button", -50, 0);
+    const panLeftButton = createPanButton("Pan Left", -50, 0);
 
     // Zoom buttons
     function createZoomButton(html, fraction) {
@@ -249,7 +249,7 @@ function addToolTip(id) {
         .style("padding", "10px");
 }
 
-function plotLine(scatter, line_values, line, strokeColor, tooltip) {
+function plotLine(scatter, line_values, line, strokeColor) {
     return scatter
         .append("path")
         .datum(line_values)
@@ -257,17 +257,7 @@ function plotLine(scatter, line_values, line, strokeColor, tooltip) {
         .attr("d", line)
         .style("stroke", strokeColor)
         .style("stroke-width", "3")
-        .style("fill", "none")
-        .on("mouseover", function (d) {
-            tooltip
-                .style("opacity", 0.8)
-                .html(equation)
-                .style("left", event.pageX + 5 + "px")
-                .style("top", event.pageY + "px");
-        })
-        .on("mouseout", function (d) {
-            tooltip.transition(200).style("opacity", 0);
-        });
+        .style("fill", "none");
 }
 
 function renderEquation(
@@ -363,13 +353,6 @@ function renderLinearBestFit(jsonName, id) {
             .style("margin-bottom", "10px")
             .style("font-size", "15px");
 
-        const navigationHelp = navigationButtons
-            .append("p")
-            .classed("navigation-help", true)
-            .html(
-                "Use the navigation buttons to move around. If using mouse, click and drag, and scroll in or out"
-            );
-
         //Create line
         var line = d3
             .line()
@@ -457,7 +440,23 @@ function renderLinearBestFit(jsonName, id) {
         plotPoints(scatter, values, tooltip, xScale, yScale);
 
         // Append line
-        plotLine(scatter, line_values, line, data.lines.cols[0], tooltip);
+        const lineOnPlot = plotLine(
+            scatter,
+            line_values,
+            line,
+            data.lines.cols[0]
+        );
+        lineOnPlot
+            .on("mouseover", function (d) {
+                tooltip
+                    .style("opacity", 0.8)
+                    .html(equationInfo.equation)
+                    .style("left", event.pageX + 5 + "px")
+                    .style("top", event.pageY + "px");
+            })
+            .on("mouseout", function (d) {
+                tooltip.transition(200).style("opacity", 0);
+            });
 
         // create title
         createTitle(id, title);
@@ -466,7 +465,16 @@ function renderLinearBestFit(jsonName, id) {
         renderEquation(svg, showLabel, equationInfo);
 
         // Navigation using buttons: Supports zoom and pan
-        createNavigationButtons(id, scatter, zoom);
+        //Get only the first element in array: const [first] = [1,2,3];
+        const [navigationButtons] = createNavigationButtons(id, scatter, zoom);
+
+        //Help text
+        navigationButtons
+            .append("p")
+            .classed("navigation-help", true)
+            .html(
+                "Use the navigation buttons to move around. If using mouse, click and drag, and scroll in or out"
+            );
     });
 }
 
