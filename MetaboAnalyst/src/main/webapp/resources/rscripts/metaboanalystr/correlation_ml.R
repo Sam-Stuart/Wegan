@@ -8,7 +8,10 @@
 #'License: GNU GPL (>= 2)
 #'@export
 
-reg.machine.anal <- function(mSetObj=NA, method="random forest") {
+ml.reg.anal <- function(mSetObj=NA,
+                             method="random forest",
+                              data="false" 
+                             ) {
   
   #install.packages(c("e1071", "randomForest"))
   library("e1071")
@@ -17,6 +20,13 @@ reg.machine.anal <- function(mSetObj=NA, method="random forest") {
   
   mSetObj <- .get.mSet(mSetObj)
 
+  ### SET DATA (whether to use original data or not)
+  if (data == "false") {
+    input <- mSetObj$dataSet$norm #default use norm
+  } else {
+    input <- mSetObj$dataSet$orig
+  }
+  
   #Text should be visable to user
   AddErrMsg("The first column will be the response variable. The remaining columns will be the predictor variables.")
   AddErrMsg("Response variable must be numeric for machine regression analysis. Predictor variables can be numeric or categorical.") 
@@ -24,28 +34,28 @@ reg.machine.anal <- function(mSetObj=NA, method="random forest") {
   
   #Generate test and train data for model building
   set.seed(37)
-  index <- sample(1:nrow(mSetObj$dataSet$norm), 0.7*nrow(mSetObj$dataSet$norm))
-  train_data <- mSetObj$dataSet$norm[index,]
-  test_data <- mSetObj$dataSet$norm[-index,]
+  index <- sample(1:nrow(input), 0.7*nrow(input))
+  train_data <- input[index,]
+  test_data <- input[-index,]
   predictors_train <- model.matrix(train_data[,1] ~ ., train_data)[,-1] # Train predictor variables, creating dummy variables for categorical variables
   predictors_test <- model.matrix(test_data[,1] ~ ., test_data)[,-1] # Test predictor variables, creating dummy variables for categorical variables
-  response_train_name <- colnames(mSetObj$dataSet$norm)[1] #response_train variable name
+  response_train_name <- colnames(input)[1] #response_train variable name
   predictors_train_name <- colnames(predictors_train)[-1] #response_train variable name
   #Text should be visable to user
   cat("The train data for model building is 70% of the dataset, while the test data for model testing is 30% of the dataset.")
   
   #Generate formula
-  formula <- as.formula(paste(response_train_name, "~", paste(predictors_train_name, collapse="+")))
+  formula <- as.formula(paste(response_train_name, "~", paste(predictors_train_name, collapse = "+")))
   
   if (method == "SVM") {
     
     #Build model
-    model <- tune(svm, formula,  data=as.data.frame(predictors_train), ranges=list(epsilon=seq(0,1,0.1), cost=2^(seq(0.5,8,.5))))
-    tunedModel <-model$best.model
+    model <- e1071::tune(e1071::svm, formula,  data = as.data.frame(predictors_train), ranges = list(epsilon = seq(0,1,0.1), cost = 2^(seq(0.5,8,.5))))
+    tunedModel <- model$best.model
     model_name <- "SVM Regression"
     
     #Extract predicted values
-    prediction <- predict(tunedModel, newdata=as.matrix(predictors_test)) #Need to create loop for when family="multinomial"
+    prediction <- predict(tunedModel, newdata = as.matrix(predictors_test)) #Need to create loop for when family="multinomial"
     
     #Store results for plotting
     mSetObj$analSet$svmReg$meth <- model_name
@@ -57,13 +67,13 @@ reg.machine.anal <- function(mSetObj=NA, method="random forest") {
     residuals <- residuals(tunedModel)
     decision_values <- tunedModel[["decision.values"]]
     fitted <- predict(tunedModel)
-    svm_RMSE <- rmse(predictors_train[,1], fitted)
-    fileName <- "SVM_regression_summary.txt"
+    svm_RMSE <- Metrics::rmse(predictors_train[,1], fitted)
+    fileName <- "ML_regression_summary.txt"#"SVM_regression_summary.txt"
     
     #Store results
-    mSetObj$analSet$svmReg$res <- list(summary=summary, predicted.values=fitted, residuals=residuals, decision.values=decision_values, RSME=svm_RMSE, fileName=fileName)       
-    mSetObj$analSet$svmReg$mod <- list(model_name=model_name, model=model, response=response_train_name, predictor=predictors_train_name)
-    
+    mSetObj$analSet$svmReg$res <- list(summary = summary, predicted.values = fitted, residuals = residuals, decision.values = decision_values, RSME = svm_RMSE, fileName = fileName)       
+    mSetObj$analSet$svmReg$mod <- list(model_name = model_name, model = model, response = response_train_name, predictor = predictors_train_name)
+  
     #Download text document containing the results, called the fileName. Document goes into the working directory and should be accessible to the user as part of the report.
     sink(fileName) 
     cat("Formula:\n")
@@ -84,11 +94,11 @@ reg.machine.anal <- function(mSetObj=NA, method="random forest") {
   } else { #Method is random forest
     
     #Build model
-    model <- tuneRF(y=train_data[,1], x=predictors_train[,-1], ntreeTry=500, stepFactor=2, improve=0.05, trace=TRUE, doBest=TRUE, plot=FALSE, importance=TRUE)
+    model <- randomForest::tuneRF(y = train_data[,1], x = predictors_train[,-1], ntreeTry = 500, stepFactor = 2, improve = 0.05, trace = TRUE, doBest = TRUE, plot = FALSE, importance = TRUE)
     model_name <- "Random Forest Regression"
     
     #Extract predicted values
-    prediction <- predict(model, newdata=as.matrix(predictors_test)) #Need to create loop for when family="multinomial"
+    prediction <- predict(model, newdata = as.matrix(predictors_test)) #Need to create loop for when family="multinomial"
     
     #Store results for plotting
     mSetObj$analSet$rfReg$meth <- model_name
@@ -97,14 +107,14 @@ reg.machine.anal <- function(mSetObj=NA, method="random forest") {
     
     #Generate and download summary of parameter testing and write to txt document
     summary <- model 
-    predictor_importance <- importance(model)
+    predictor_importance <- randomForest::importance(model)
     fitted <- predict(model)
-    svm_RMSE <- rmse(predictors_train[,1], fitted)
-    fileName <- "random_forest_regression_summary.txt"
+    svm_RMSE <- Metrics::rmse(predictors_train[,1], fitted)
+    fileName <- "ml_regression_summary.txt"#"random_forest_regression_summary.txt"
     
     #Store results
-    mSetObj$analSet$rfReg$res <- list(summary=summary, predicted.values=fitted, RSME=svm_RMSE, predictor.importance=predictor_importance, fileName=fileName)       
-    mSetObj$analSet$rfReg$mod <- list(model_name=model_name, model=model, response=response_train_name, predictor=predictors_train_name)
+  mSetObj$analSet$rfReg$res <- list(summary = summary, predicted.values = fitted, RSME = svm_RMSE, predictor.importance = predictor_importance, fileName = fileName)   
+   mSetObj$analSet$rfReg$mod <- list(model_name = model_name, model = model, response = response_train_name, predictor = predictors_train_name)
     
     #Download text document containing the results, called the fileName. Document goes into the working directory and should be accessible to the user as part of the report.
     sink(fileName) 
@@ -143,17 +153,87 @@ reg.machine.anal <- function(mSetObj=NA, method="random forest") {
 #'License: GNU GPL (>= 2)
 #'@export
 
-plot.pred.MLReg <- function(mSetObj=NA, method="random forest", imgName, format="png", dpi=72, width=NA){
+ml.pred.plot <- function(mSetObj=NA,
+                         method="random forest",
+  facA = "NULL",
+  data="false",
   
+  col_dots="NULL",
+  col_line="NULL", 
+  plot_ci="false",
+  plot_title=" ",
+  plot_ylab=" ",
+  plot_xlab=" ",
+                         imgName, format="png", dpi=72, width=NA){
+  
+  ## used to be called: plot,pred.MLReg
+  ## 
   #Extract necessary objects from mSetObj
   mSetObj <- .get.mSet(mSetObj)
   
-  if (method=="SVM") {
-    method <- mSetObj$analSet$svmReg$meth
-    prediction <- mSetObj$analSet$svmReg$pred
-    test_data <- mSetObj$analSet$svmReg$test
-    
-    #Set plot dimensions
+  ### TROUBLESHOOTING:
+  ##   col_dots1<-"blue"
+  ##   col_line1<-"red"
+  ##   plot_ci1<-TRUE
+  ##   plot_title1 <- paste0("Predicted vs Actual\n(", as.expression(formula), ")")
+  ##   plot_ylab1 <- "Actual"
+  ##   plot_xlab1<- "Predicted"
+  
+  
+    #SET POINT COLOR
+  col_dots1 <- 
+				switch(
+					col_dots,
+					"NULL" = "black",
+					"blue" = "blue",
+					"red" = "red",
+					"green" = "green",
+					"grey" = "grey",
+					NULL
+				)
+  #SET LINE COLOR
+   col_line1 <- 
+				switch(
+					col_line,
+					"NULL" = "black",
+					"blue" = "blue",
+					"red" = "red",
+					"green" = "green",
+					"grey" = "grey",
+					NULL
+				)
+
+  #SET WHETHER TO ADD 95% CONF INT
+  if (plot_ci == "false") {
+      plot_ci1 <- FALSE # default
+    } else {
+      plot_ci1 <- TRUE
+    }
+  
+  # PLOT TITLE
+  if(plot_title == " "){ 
+    plot_title1 <- paste0("Predicted vs Actual\n(", as.expression(formula), ")")
+  } else {
+    plot_title1 <- plot_title
+  }
+  
+  ## y actual input[,facA] fA
+  ## x prediction fpred
+  # PLOT YAXIS
+  if(plot_ylab == " "){
+  plot_ylab1 <- "Actual"
+  } else { # facA, response
+    plot_ylab1 <- plot_ylab
+  }
+
+  # PLOT XAXIS
+  if(plot_xlab == " "){
+   plot_xlab1 <- "Predicted"
+  } else { #prediction
+    plot_xlab1 <- plot_xlab
+  }
+ 
+  #Set plot dimensions
     if(is.na(width)){
       w <- 10.5
     } else if(width == 0){
@@ -162,48 +242,126 @@ plot.pred.MLReg <- function(mSetObj=NA, method="random forest", imgName, format=
       w <- width
     }
     h <- w
+  # plot(x=prediction, y=model_data[,facA], xlab=paste0("Predicted ", facA), ylab=paste0("Actual ", facA), main=model_name, yaxt="n"); axis(2, las=2); abline(a=0,b=1)
+  
+  
+  if (method=="SVM") {
+    facA <- mSetObj$analSet$svmReg$mod$response
+    method <- mSetObj$analSet$svmReg$meth
+    prediction <- mSetObj$analSet$svmReg$predicted.values
+    test_data <- mSetObj$analSet$svmReg$test
+    input <- test_data
     
-    #Name plot for download
-    imgName <- paste(imgName, "dpi", dpi, ".", format, sep="")
-    mSetObj$imgSet$plot.pred.svmReg <- imgName
+  dfpred <- data.frame(fpred = prediction, fA = input[,facA])
+  formula2 <- as.formula("fA ~ fpred")
+  model2 <- lm(formula = formula2, data = dfpred)
     
-    #Generate plot
-    Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
-    plot(prediction, test_data[,1], xlab="Predicted", ylab="Actual", main=method, yaxt="n")
-    axis(2, las=2)
-    abline(a=0,b=1)
-    dev.off()
+  #NAME PLOT FOR DOWNLOAD
+  ### must put imgName2 first, re-writing imgName var in next line
+  imgName2 <- paste(gsub( "\\_\\d+\\_", "", imgName),
+ ".json", sep="") 
+  imgName <- paste(imgName, "dpi", dpi, ".", format, sep="")
+  mSetObj$imgSet$plot.pred.svmReg <- imgName
     
-    return(.set.mSet(mSetObj))
   
   } else { #random forest is default
     
+    facA <- mSetObj$analSet$rfReg$mod$response
     method <- mSetObj$analSet$rfReg$meth
-    prediction <- mSetObj$analSet$rfReg$pred
+    prediction <- mSetObj$analSet$rfReg$predicted.values
     test_data <- mSetObj$analSet$rfReg$test
+    input <- test_data
     
-    #Set plot dimensions
-    if(is.na(width)){
-      w <- 10.5
-    } else if(width == 0){
-      w <- 7.2
-    } else{
-      w <- width
-    }
-    h <- w
+  dfpred <- data.frame(fpred = prediction, fA = input[,facA])
+  formula2 <- as.formula("fA ~ fpred")
+  model2 <- lm(formula = formula2, data = dfpred)
     
-    #Name plot for download
-    imgName <- paste(imgName, "dpi", dpi, ".", format, sep="")
-    mSetObj$imgSet$plot.pred.rfReg <- imgName
-    
-    #Generate plot
-    Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
-    plot(prediction, test_data[,1], xlab="Predicted", ylab="Actual", main=method, yaxt="n")
-    axis(2, las=2)
-    abline(a=0,b=1)
-    dev.off()
-    
-    return(.set.mSet(mSetObj))
+  #NAME PLOT FOR DOWNLOAD
+  ### must put imgName2 first, re-writing imgName var in next line
+  imgName2 <- paste(gsub( "\\_\\d+\\_", "", imgName),
+ ".json", sep="") 
+  imgName <- paste(imgName, "dpi", dpi, ".", format, sep="")
+  mSetObj$imgSet$plot.pred.rfReg <- imgName
+  
   }
+  
+  ## MAKE PLOT  
+   a0 <- ggplot(data =  dfpred, aes(x = fpred, y = fA)) +
+    labs(title = plot_title1) +
+     ylab(plot_ylab1)+ xlab(plot_xlab1) +
+     geom_smooth(se = plot_ci1, color = col_line1, fullrange = TRUE) +#, formula = formula2) +
+     geom_point(shape = 16, color = col_dots1) +
+     theme_bw() + 
+  theme(panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        axis.text = element_text(size = 12, colour = "black"), 
+        axis.title = element_text(size = 12),
+        # legend.title=element_text(12), legend.text=element_text(size=12), 
+        plot.title = element_text(face = 'bold', hjust = 0.5)
+  )
+  
+  #GENERATE PLOT
+    Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
+    print(a0)
+    # plot(prediction, test_data[,1], xlab="Predicted", ylab="Actual", main=method, yaxt="n"); axis(2, las=2); abline(a=0,b=1)
+    dev.off()
+      
+    # STORE IN mSET
+  if (method == "SVM") { 
+  mSetObj$analSet$svmReg$plotpred <- list(plot = a0, title = plot_title1, xlab = plot_xlab1, ylab = plot_ylab1)
+    } else {
+  mSetObj$analSet$rfReg$plotpred <- list(plot = a0, title = plot_title1, xlab = plot_xlab1, ylab = plot_ylab1)  
+  } 
+    
+  #JSON OBJECT MAKING
+  build <- ggplot_build(a0)
+  build_line <- build$data[[1]]
+  build_points <- build$data[[2]]
+  linear_plot_json <- list()
+  
+  linear_plot_json$main <- plot_title1 #title
+  linear_plot_json$axis <- c(plot_xlab1, plot_ylab1) #axis titles
+  linear_plot_json$points$coords <- build_points[,c("x","y")] #[,1:2]
+  linear_plot_json$points$cols <- build$data[[1]][,grepl("col",colnames(build_points))] #[,6] #colours
+  linear_plot_json$points$shape <- build_points[,c("group")]#[,5]
+  linear_plot_json$points$size <- build_points[,c("size")]#[,7]
+  linear_plot_json$lines$cols <- build_line[,grepl("col",colnames(build_line))]
+  # linear_plot_json$label <- build$data[[3]][,c("label")]
+  # linear_plot_json$lines$ci <- build$data[[1]][,c("se")]
+  
+  if(any(grepl("ymin", colnames(build_line))) && any(grepl("ymax", colnames(build_line))) ){
+   ci<- build_line[,c("x","y", "ymin", "ymax")] 
+   colnames(ci) <- c("x","y","CI_down", "CI_up")
+   linear_plot_json$lines$ci <- ci # build$data[[1]][,c("ymin", "ymax")]
+ } else{
+    linear_plot_json$lines$ci <- data.frame(x = build_line[,c("x")], y = build_line[,c("y")], CI_down = 0, CI_up = 0)
+ }   
+  
+  ## BOOLEANS
+  if(plot_ci1 == TRUE){
+    linear_plot_json$bool_ci <- TRUE
+   } else{
+    linear_plot_json$bool_ci <- FALSE
+   }
+
+  
+  linear_plot_json$model$r_sq <-
+   summary(model2)[["r.squared"]] #Extract R^2
+  linear_plot_json$model$r_sq_adj <-
+    summary(model2)[["adj.r.squared"]] #Extract adjusted R^2 
+  linear_plot_json$model$slope <-
+    summary(model2)[["coefficients"]][2] # beta
+  linear_plot_json$model$yint <-
+    summary(model2)[["coefficients"]][1] # alpha
+
+  json.obj <- RJSONIO::toJSON(linear_plot_json, .na='null')
+  sink(imgName2)
+  cat(json.obj)
+  sink()
+  
+   if(!.on.public.web){
+    return(.set.mSet(mSetObj))
+    }
+  
 }
 
