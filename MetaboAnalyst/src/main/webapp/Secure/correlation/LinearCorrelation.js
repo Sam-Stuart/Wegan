@@ -16,15 +16,9 @@ var margin = { top: 30, right: 30, bottom: 50, left: 60 },
 function createSVG(id) {
     return d3
         .select(`#${id}`)
-        .style("margin", "auto")
-        .style("display", "flex")
-        .style("flex-direction", "column")
-        .style("align-items", "center")
-        .style("justify-content", "center")
+        .classed("plot_container", true)
         .append("svg")
-        .style("order", 3)
-        .style("border", "solid")
-        .style("border-width", "1px")
+        .classed("svg", true)
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
@@ -73,7 +67,7 @@ function createNavigationButtons(id, scatter, zoom) {
     const navigationButtons = d3
         .select(`#${id}`)
         .append("div")
-        .style("order", 2);
+        .classed("navigation_buttons_container", true);
 
     const resetButton = navigationButtons
         .append("button")
@@ -104,10 +98,10 @@ function createNavigationButtons(id, scatter, zoom) {
             });
     }
 
-    const panRightButton = createPanButton("Pan Right", 50, 0);
-    const panUpButton = createPanButton("Pan Up", 0, 50);
-    const panDownButton = createPanButton("Pan Down", 0, -50);
-    const panLeftButton = createPanButton("Pan Left", -50, 0);
+    const panRightButton = createPanButton("Move Right", 50, 0);
+    const panUpButton = createPanButton("Move Up", 0, 50);
+    const panDownButton = createPanButton("Move Down", 0, -50);
+    const panLeftButton = createPanButton("Move Left", -50, 0);
 
     // Zoom buttons
     function createZoomButton(html, fraction) {
@@ -191,13 +185,7 @@ function makeGraphZoomable(svg, id, updateChart) {
  * @param {*} title title of the th graph
  */
 function createTitle(id, title) {
-    d3.select(`#${id}`)
-        .append("div")
-        .html(title)
-        .style("text-align", "center")
-        .style("order", 1)
-        .style("font-size", "18px")
-        .style("margin-bottom", "1rem");
+    d3.select(`#${id}_title`).classed("plot_title", true).html(title);
 }
 
 /** */
@@ -239,14 +227,9 @@ function addToolTip(id) {
         .select("body")
         .append("div")
         .attr("id", "tooltip" + id)
+        .attr("class", "tooltip_viz")
         .style("opacity", 0)
-        .style("position", "absolute")
-        .attr("class", "tooltip")
-        .style("background-color", "white")
-        .style("border", "solid")
-        .style("border-width", "1px")
-        .style("border-radius", "5px")
-        .style("padding", "10px");
+        .style("position", "absolute");
 }
 
 function plotLine(scatter, line_values, line, strokeColor) {
@@ -255,9 +238,7 @@ function plotLine(scatter, line_values, line, strokeColor) {
         .datum(line_values)
         .attr("class", "line")
         .attr("d", line)
-        .style("stroke", strokeColor)
-        .style("stroke-width", "3")
-        .style("fill", "none");
+        .style("stroke", strokeColor);
 }
 
 function renderEquation(
@@ -466,15 +447,7 @@ function renderLinearBestFit(jsonName, id) {
 
         // Navigation using buttons: Supports zoom and pan
         //Get only the first element in array: const [first] = [1,2,3];
-        const [navigationButtons] = createNavigationButtons(id, scatter, zoom);
-
-        //Help text
-        navigationButtons
-            .append("p")
-            .classed("navigation-help", true)
-            .html(
-                "Use the navigation buttons to move around. If using mouse, click and drag, and scroll in or out"
-            );
+        createNavigationButtons(id, scatter, zoom);
     });
 }
 
