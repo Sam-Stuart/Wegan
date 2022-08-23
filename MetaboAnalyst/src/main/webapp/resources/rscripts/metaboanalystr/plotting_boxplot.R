@@ -233,9 +233,8 @@ plotBoxPlot <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA){
  
   json.obj <- RJSONIO::toJSON(box_plot_json, .na='null')
   
-  #print(json.obj)
+  
   sink(imgName2)
-  print("######### JSON OBJECT:" )
   cat(json.obj);
   sink()
   print("###################################################");
