@@ -2,9 +2,9 @@
 #'@description Build a penalized regression model for one user selected predictor variable
 #'@usage pen.reg.anal(mSetObj=NA, method="ridge", facA=NULL, weights=NULL)
 #'@param mSetObj Input the name of the created mSetObj
-#'@param method Set penalized regression method, default is ridge
 #'@param facA Input the name of the response column (java uses Columns() to give user options)
 #'@param data Boolean, whether to use original data; "false" (default) means normalized or "true" means original (checkbox)
+#'@param method Set penalized regression method, default is ridge
 #'@author Louisa Normington\email{normingt@ualberta.ca}
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2)
@@ -17,8 +17,8 @@ library("Metrics")
 library("dplyr")
 
 pen.reg.anal <- function(mSetObj=NA,
-                         method="ridge",
                          facA="NULL",
+                         method="ridge",
                          data="false"
                          ){
   
@@ -32,6 +32,8 @@ pen.reg.anal <- function(mSetObj=NA,
     input <- mSetObj$dataSet$orig
   }
   
+  #File name for summary download
+  fileName <- "penalized_regression_summary.txt"
 
   #Text will be visible to user. 
   cat("One dependent variable and two or more independent variables will be tested for correlation. Only numeric variables will be used.")
@@ -40,20 +42,23 @@ pen.reg.anal <- function(mSetObj=NA,
   
   #Subset data to select only numeric variables
   data <- dplyr::select_if(input, is.numeric)
-  
-  #Data check
-  if (ncol(data)<3) {
+
+    # data <- input[,sapply(input, is.numeric), drop = FALSE]
+    # data <- input %>% dplyr::select_if(function(col) {is.numeric(col) | is.integer(col)}) 
+
+  #DATA CHECK
+  if (ncol(data) < 3) {
       stop("Your data set only has 2 variables! Try using linear, polynomial or SVM regression.")
   }
   
-  #Set response variable name
+  #SET RESPONSE VARIABLE NAME
   if (facA=="NULL"){
     facA <- colnames(input)[1] #facA is the name of the response variable name. Default is first column.
   } else {
     facA <- facA #Determined using numeric.columns() function below (java will present options in drop down menu)
   }
   
-  #Generate test and train data for model building
+  #GENERATE TEST/TRAIN DATA FOR MODEL BUILDING
   set.seed(37) #Ensures same selction of data for test and train each time
   index <- sample(1:nrow(data), 0.7*nrow(data)) #Select 70% of dataset
   train_data <- data[index,] #70% of dataset
@@ -65,7 +70,10 @@ pen.reg.anal <- function(mSetObj=NA,
   cat("The train data for model building is 70% of the dataset, while the test data for model testing is 30% of the dataset.") #Text will be visible to user.
   
   # if (is.null(weights)==TRUE) { #No weights for model building
-    
+  
+## METHOD TYPE LOOP
+  
+  ### ELASTIC NET
     if (method == "elastic net") {
       
       #Build model
@@ -77,14 +85,15 @@ pen.reg.anal <- function(mSetObj=NA,
       bestAlpha <- params$bestTune$alpha
       method <- "Elastic Net Regression"
       
-      #File name for summary download
-      fileName <- "elastic_net_regression_summary.txt"
+      ##File name for summary download
+      ##fileName <- "elastic_net_regression_summary.txt"
       
       #Cross validation results for plotting
-      cv <- cv.glmnet(x = as.matrix(predictors_train), y = as.matrix(response_train), alpha=bestAlpha)
+      cv <- glmnet::cv.glmnet(x = as.matrix(predictors_train), y = as.matrix(response_train), alpha=bestAlpha)
       
     } else if (method == "lasso") {
       
+## LASSO
       #Build model
       lambda <- 10^seq(-3, 3, length = 100)
       params <- caret::train(predictors_train, response_train, weights = NULL, method = "glmnet", 
@@ -96,14 +105,15 @@ pen.reg.anal <- function(mSetObj=NA,
       bestLambda <- params$bestTune$lambda #Extract best parameter
       method <- "Lasso Regression"
       
-      #File name for summary download
-      fileName <- "lasso_regression_summary.txt"
-      
+      ##File name for summary download
+      ##fileName <- "lasso_regression_summary.txt"
+ 
       #Cross validation results for plotting
-      cv <- cv.glmnet(x = as.matrix(predictors_train), y = as.matrix(response_train), alpha=bestAlpha)
+      cv <- glmnet::cv.glmnet(x = as.matrix(predictors_train), y = as.matrix(response_train), alpha=bestAlpha)
       
     } else {
       
+ ## RIDGE
       #Build model for ridge regression
       lambda <- 10^seq(-3, 3, length = 100)
       params <- caret::train(predictors_train, response_train, weights = NULL, method = "glmnet", 
@@ -115,8 +125,8 @@ pen.reg.anal <- function(mSetObj=NA,
       bestLambda <- params$bestTune$lambda #Extract best parameter
       method <- "Ridge Regression"
       
-      #File name for summary download
-      fileName <- "ridge_regression_summary.txt" 
+      ##File name for summary download
+      ##fileName <- "ridge_regression_summary.txt" 
       
       #Cross validation results for plotting
       cv <- glmnet::cv.glmnet(x = as.matrix(predictors_train), y = as.matrix(response_train), alpha=bestAlpha)
@@ -192,12 +202,18 @@ pen.reg.anal <- function(mSetObj=NA,
   
   #Extract results
   summary <- params 
-  resp.col.num <- which(colnames(data) == facA)
-  fitted <- predict(model, newx = as.matrix(data[,-resp.col.num]))
+  #resp.col.num <- which(colnames(data) == facA)
+  fitted <- predict(model, newx = as.matrix(data[,colnames(data) != facA]))
   colnames(fitted) <- "Predicted values"
   call <- model[["call"]]
   formula <- as.formula(paste(facA, "~", paste(colnames(predictors_train), collapse = "+", sep = "")))
-  coef <- as.data.frame(summary(coef(model)))
+  # coef <- as.data.frame(summary(coef(model)))
+  coef <- as.data.frame(
+    as.matrix(
+    # summary(
+      coef(model)
+            # ) 
+            ))
   coef$variable <- "variable"
   x <- 1
   for (col.num in coef[,"i"]) {
@@ -207,15 +223,15 @@ pen.reg.anal <- function(mSetObj=NA,
   coef$variable[1] <- "intercept"
   coef <- data.frame(coef$variable, coef$x)
   colnames(coef) <- c("Variables", "Coefficients")
-  overall.rsme <- rmse(data[,facA], fitted)
+  overall.rsme <- Metrics::rmse(data[,facA], fitted)
 
   #Obtain test RMSE for plotting
   test_prediction <- predict(model, newx = as.matrix(predictors_test))
-  test_rmse <- rmse(test_data[,facA], test_prediction)
+  test_rmse <- Metrics::rmse(test_data[,facA], test_prediction)
  
   #Store results in mSetObj$analSet$penReg
-  mSetObj$analSet$penReg$mod <- list(model_name=method, model=model, response=facA, predictors=colnames(predictors_train), alpha=bestAlpha, lambda=bestLambda)
-  mSetObj$analSet$penReg$res <- list(response=facA, predictors=colnames(predictors_train), predictors.test.data=predictors_test, predictors.train.data=predictors_train, summary=summary, coefficients=coef, predicted.values=fitted, overall.rmse=overall.rsme, train_data=train_data, test_data=test_data, test.rmse=test_rmse, cross.validation=cv, method=method, fileName=fileName) 
+  mSetObj$analSet$penReg$mod <- list(model_name = method, model = model, response = facA, predictors = colnames(predictors_train), alpha = bestAlpha, lambda = bestLambda)
+  mSetObj$analSet$penReg$res <- list(response = facA, predictors = colnames(predictors_train), predictors.test.data = predictors_test, predictors.train.data = predictors_train, summary = summary, coefficients = coef, predicted.values = fitted, overall.rmse = overall.rsme, train_data = train_data, test_data = test_data, test.rmse = test_rmse, cross.validation = cv, method = method, fileName = fileName) 
 
   #Download text document containing the summary, called the fileName. Document goes into the working directory and should be accessible to the user as part of the report
   sink(fileName) 
@@ -243,7 +259,9 @@ pen.reg.anal <- function(mSetObj=NA,
 #'@description Scatter plot, where actual variables are y and predicted values are x
 #'@usage plot.pred.penReg(mSetObj, imgName, format="png", dpi=72, width=NA)
 #'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
+#'@param facA Input the name of the response column (java uses Columns() to give user options)
 #'@param data Boolean, whether to use original data; "false" (default) means normalized or "true" means original (checkbox)
+#'@param method Set penalized regression method, default is ridge
 #'@param col_dots Set color for scatterplot dots (default "NULL" is black); (static dropdown)
 #'@param col_line Set color for line (default "NULL" is black); (static dropdown)
 ###@param weights Set weight values, default is NULL
@@ -263,7 +281,9 @@ pen.reg.anal <- function(mSetObj=NA,
 #'@export
 
 pen.pred.plot <- function(mSetObj=NA,
+                         facA = "NULL",
   data="false",
+  method = "NULL",
   col_dots="NULL",
   col_line="NULL", 
   plot_ci="false",
@@ -283,14 +303,85 @@ pen.pred.plot <- function(mSetObj=NA,
   #Extract necessary objects from mSetObj
   mSetObj <- .get.mSet(mSetObj)
   
-  model <- mSetObj$analSet$penReg$mod$model
-  method <- mSetObj$analSet$penReg$res$method
-  predictors_test <- mSetObj$analSet$penReg$res$predictors.test.data
-  test_prediction <- predict(model, newx = as.matrix(predictors_test))
-  facA <- mSetObj$analSet$penReg$res$response
-  test_data <- mSetObj$analSet$penReg$res$test_data
-  predictors_train <- mSetObj$analSet$penReg$res$predictors.train.data
-  formula <- paste(facA, "~", paste(colnames(predictors_train), collapse = "+", sep = ""))
+  
+  ### SET DATA (whether to use original data or not)
+  if (data=="false") { 
+    input <- mSetObj$dataSet$norm #default use norm
+  } else {
+    input <- mSetObj$dataSet$orig
+  }
+  
+  #SET RESPONSE VARIABLE NAME
+  if (facA=="NULL"){
+     if( !"res" %in% names(mSetObj$analSet$penReg) ){
+        facA <- mSetObj$analSet$penReg$res$response
+     } else {
+    facA <- colnames(input)[1] #facA is response variable name. Default is 1st column
+  } 
+    } else {
+    facA <- facA #Determined using numeric.columns() (java will present options in drop down menu)
+  }
+  
+  
+  
+  # model <- mSetObj$analSet$penReg$mod$model
+  # method <- mSetObj$analSet$penReg$res$method
+  # predictors_test <- mSetObj$analSet$penReg$res$predictors.test.data
+  # test_prediction <- predict(model, newx = as.matrix(predictors_test))
+  # # facA <- mSetObj$analSet$penReg$res$response
+  # test_data <- mSetObj$analSet$penReg$res$test_data
+  # predictors_train <- mSetObj$analSet$penReg$res$predictors.train.data
+  # formula <- paste(facA, "~", paste(colnames(predictors_train), collapse = "+", sep = ""))
+
+   #Generate test and train data for model building
+  set.seed(37) #Ensures same selction of data for test and train each time
+  index <- sample(1:nrow(data), 0.7*nrow(data)) #Select 70% of dataset
+  train_data <- data[index,] #70% of dataset
+  test_data <- data[-index,] #30% of dataset
+  #resp.col.num <- colnames(data)==facA
+  predictors_train <- train_data[,colnames(data)!=facA]
+  predictors_test <- test_data[,colnames(data)!=facA]
+  response_train <- train_data[,facA] # response data for train dataset
+  cat("The train data for model building is 70% of the dataset, while the test data for model testing is 30% of the dataset.") #Text will be visible to user.
+
+    if (method == "elastic net") {
+      params <- caret::train(x = predictors_train, y = response_train, weights = NULL, method = "glmnet", 
+                      trControl = caret::trainControl("cv", number = 10), tuneLength = 5) #test params
+      model <- glmnet::glmnet(as.matrix(predictors_train), as.matrix(response_train), alpha = params$bestTune$alpha, lambda = params$bestTune$lambda, 
+                      weights = NULL, family = "gaussian") #Build model with "best" parameters
+      bestLambda <- params$bestTune$lambda #Extract best parameters
+      bestAlpha <- params$bestTune$alpha
+      method <- "Elastic Net Regression"
+      cv <- glmnet::cv.glmnet(x = as.matrix(predictors_train), y = as.matrix(response_train), alpha=bestAlpha)
+    } else if (method == "lasso") {
+      lambda <- 10^seq(-3, 3, length = 100)
+      params <- caret::train(predictors_train, response_train, weights = NULL, method = "glmnet", 
+                      trControl = caret::trainControl("cv", number = 10),
+                      tuneGrid = expand.grid(alpha = 1, lambda=lambda)) #testing variour parameters
+      model <- glmnet::glmnet(as.matrix(predictors_train), as.matrix(response_train), alpha=params$bestTune$alpha, lambda = params$bestTune$lambda, 
+                      weights = NULL, family = "gaussian") #Build model with "best" parameters
+      bestAlpha <- 1
+      bestLambda <- params$bestTune$lambda #Extract best parameter
+      method <- "Lasso Regression"
+      cv <- glmnet::cv.glmnet(x = as.matrix(predictors_train), y = as.matrix(response_train), alpha=bestAlpha)
+    } else {
+      lambda <- 10^seq(-3, 3, length = 100)
+      params <- caret::train(predictors_train, response_train, weights = NULL, method = "glmnet", 
+                      trControl = caret::trainControl("cv", number = 10),
+                      tuneGrid = expand.grid(alpha = 0, lambda = lambda)) #testing variour parameters
+      model <- glmnet::glmnet(as.matrix(predictors_train), as.matrix(response_train), alpha=params$bestTune$alpha, lambda = params$bestTune$lambda, 
+                      weights = NULL, family = "gaussian")#Build model with "best" parameters
+      bestAlpha <- 0
+      bestLambda <- params$bestTune$lambda #Extract best parameter
+      method <- "Ridge Regression"
+      cv <- glmnet::cv.glmnet(x = as.matrix(predictors_train), y = as.matrix(response_train), alpha=bestAlpha)
+    }
+  
+    formula <- paste(facA, "~", paste(colnames(predictors_train), collapse = "+", sep = ""))
+  dfpred <- data.frame(fpred = as.vector(test_prediction), fA = test_data[,facA])
+   formula2 <- as.formula("fA~fpred")
+   model2 <- lm(formula = formula, data = dfpred, weights = NULL)
+ 
 
   #Set plot dimensions
   if(is.na(width)){
@@ -302,37 +393,39 @@ pen.pred.plot <- function(mSetObj=NA,
   }
   h <- w
   
-  #Name plot for download
+ #NAME PLOT FOR DOWNLOAD
+  # must put imgName2 first, re-writing imgName var in next line
+  imgName2 <- paste(gsub( "\\_\\d+\\_", "", imgName),
+ ".json", sep="") 
   imgName <- paste(imgName, "dpi", dpi, ".", format, sep="")
   mSetObj$imgSet$plot.pred.penReg <- imgName
   
-   #SET POINT COLOR
-  if (col_dots == "NULL") {
-      col_dots1 <- "black" # default
-    } else if (col_dots == "blue") {
-      col_dots1 <- "blue"
-    } else if (col_dots == "red") {
-      col_dots1 <- "red"
-    } else if(col_dots == "green"){
-      col_dots1 <- "green"
-    } else if(col_dots == "grey"){
-      col_dots1 <- "grey"
-    }
-  
+ #SET POINT COLOR
+  col_dots1 <- 
+				switch(
+					col_dots,
+					"NULL" = "black",
+					"black" = "black",
+					"blue" = "blue",
+					"red" = "red",
+					"green" = "green",
+					"grey" = "grey",
+					NULL
+				)
   #SET LINE COLOR
-  if (col_line == "NULL") {
-      col_line1 <- "black" # default
-    } else if (col_line == "blue") {
-      col_line1 <- "blue"
-    } else if (col_line == "red") {
-      col_line1 <- "red"
-    } else if(col_line == "green"){
-      col_line1 <- "green"
-    } else if(col_line == "grey"){
-      col_line1 <- "grey"
-    }
+   col_line1 <- 
+				switch(
+					col_line,
+					"NULL" = "black",
+					"black" = "black",
+					"blue" = "blue",
+					"red" = "red",
+					"green" = "green",
+					"grey" = "grey",
+					NULL
+				)
 
-  #SET WHETHER TO ADD 95% CONF INT
+  #95% CONF INT
   if (plot_ci == "false") {
       plot_ci1 <- FALSE # default
     } else {
@@ -369,7 +462,7 @@ pen.pred.plot <- function(mSetObj=NA,
   aes(x = fpred, y = fA)) +
     labs(title = plot_title1) +
      ylab(plot_ylab1)+ xlab(plot_xlab1) +
-     geom_smooth(se = plot_ci1, color = col_line1, fullrange = TRUE) +
+     geom_smooth(se = plot_ci1, color = col_line1, fullrange = TRUE, method = "lm") +
      geom_point(shape = 16, color = col_dots1) +
      theme_bw() + 
   theme(panel.grid.major = element_blank(), 
@@ -389,8 +482,64 @@ pen.pred.plot <- function(mSetObj=NA,
   print(a0)
   # a0
   dev.off()
+
+# GENERATE JSON
+build <- ggplot_build(a0)
+linear_plot_json <- list()
+
+build_line <- build$data[[1]] ### line is 1
+build_points <- build$data[[2]] # points is 2
+linear_plot_json <- list()
+
+linear_plot_json$main <- plot_title1 #title
+linear_plot_json$axis <- c(plot_xlab1, plot_ylab1) #axis titles
+linear_plot_json$points$coords <- build_points[,c("x","y")] #[,1:2]
+linear_plot_json$points$cols <- build_points[,grepl("col",colnames(build_points))] #[,6] #colours
+linear_plot_json$points$shape <- build_points[,c("group")]#[,5]
+linear_plot_json$points$size <- build_points[,c("size")]#[,7]
+linear_plot_json$lines$coords <- build_line[,c("x","y")]
+linear_plot_json$lines$cols <- build_line[,grepl("col",colnames(build_line))]
+linear_plot_json$lines$size <- build_line[,c("size")]
+ ## linear_plot_json$label <- build$data[[3]][,c("label")]
+ ## linear_plot_json$lines$ci <- build$data[[1]][,c("se")]
+  if(any(grepl("ymin", colnames(build_line))) && any(grepl("ymax", colnames(build_line))) ){
+   ci<- build_line[,c("x","y", "ymin", "ymax")] 
+   colnames(ci) <- c("x","y","CI_down", "CI_up")
+   linear_plot_json$lines$ci <- ci # build$data[[1]][,c("ymin", "ymax")]
+ } else{
+    linear_plot_json$lines$ci <- data.frame(x = build_line[,c("x")], y = build_line[,c("y")], CI_down = 0, CI_up = 0)
+ }   
   
+## BOOLEANS
+if(plot_ci1 == TRUE){
+ linear_plot_json$bool_ci <- TRUE
+ } else{
+linear_plot_json$bool_ci <- FALSE
+}
+
+#### MODEL VARS FOR LINE
+  linear_plot_json$r_sq <-
+    summary(model2)[["r.squared"]] #Extract R^2
+  linear_plot_json$r_sq_adj <-
+    summary(model2)[["adj.r.squared"]] #Extract adjusted R^2 
+  linear_plot_json$slope <-
+    summary(model2)[["coefficients"]][2] # beta
+  linear_plot_json$yint <-
+    summary(model2)[["coefficients"]][1] # alpha
+
+ 
+ json.obj <- RJSONIO::toJSON(linear_plot_json, .na='null')
+ sink(imgName2)
+ cat(json.obj)
+ sink()
+print(json.obj)
+print(paste("PLOT1 | facA: ", facA, " | method: ", method, sep = ""))
+print"")
+
+if(!.on.public.web){
   return(.set.mSet(mSetObj))
+    }  
+
 }
 
 #'Produce cross validation plot for penalized regression
@@ -416,13 +565,11 @@ pen.pred.plot <- function(mSetObj=NA,
 #'@export
 
 pen.cv.plot <- function(mSetObj=NA,
+facA = "NULL",
   data="false",
   col_dots="NULL",
   col_line="NULL", 
   # plot_ci="false",
-  # plot_eq="false", 
-  # plot_rsq="false", 
-  # plot_rsq_adj="false",
   plot_title=" ",
   plot_ylab=" ",
   plot_xlab=" ",
@@ -432,12 +579,89 @@ pen.cv.plot <- function(mSetObj=NA,
 
   library("ggplot2")
   library("broom")
+  # library("JSONIO")
   
   #Extract necessary objects from mSetObj
   mSetObj <- .get.mSet(mSetObj)
   
-  cv <- mSetObj$analSet$penReg$res$cross.validation
-  method <- mSetObj$analSet$penReg$res$method
+ 
+  ### SET DATA (whether to use original data or not)
+  if (data=="false") { 
+    input <- mSetObj$dataSet$norm #default use norm
+  } else {
+    input <- mSetObj$dataSet$orig
+  }
+  
+  #SET RESPONSE VARIABLE NAME
+  if (facA=="NULL"){
+     if( !"res" %in% names(mSetObj$analSet$penReg) ){
+        facA <- mSetObj$analSet$penReg$res$response
+     } else {
+    facA <- colnames(input)[1] #facA is response variable name. Default is 1st column
+  } 
+    } else {
+    facA <- facA #Determined using numeric.columns() (java will present options in drop down menu)
+  }
+  
+  
+  
+  # model <- mSetObj$analSet$penReg$mod$model
+  # method <- mSetObj$analSet$penReg$res$method
+  # predictors_test <- mSetObj$analSet$penReg$res$predictors.test.data
+  # test_prediction <- predict(model, newx = as.matrix(predictors_test))
+  # # facA <- mSetObj$analSet$penReg$res$response
+  # test_data <- mSetObj$analSet$penReg$res$test_data
+  # predictors_train <- mSetObj$analSet$penReg$res$predictors.train.data
+  # formula <- paste(facA, "~", paste(colnames(predictors_train), collapse = "+", sep = ""))
+
+   #Generate test and train data for model building
+  set.seed(37) #Ensures same selction of data for test and train each time
+  index <- sample(1:nrow(data), 0.7*nrow(data)) #Select 70% of dataset
+  train_data <- data[index,] #70% of dataset
+  test_data <- data[-index,] #30% of dataset
+  #resp.col.num <- colnames(data)==facA
+  predictors_train <- train_data[,colnames(data)!=facA]
+  predictors_test <- test_data[,colnames(data)!=facA]
+  response_train <- train_data[,facA] # response data for train dataset
+  cat("The train data for model building is 70% of the dataset, while the test data for model testing is 30% of the dataset.") #Text will be visible to user.
+
+    if (method == "elastic net") {
+      params <- caret::train(x = predictors_train, y = response_train, weights = NULL, method = "glmnet", 
+                      trControl = caret::trainControl("cv", number = 10), tuneLength = 5) #test params
+      model <- glmnet::glmnet(as.matrix(predictors_train), as.matrix(response_train), alpha = params$bestTune$alpha, lambda = params$bestTune$lambda, 
+                      weights = NULL, family = "gaussian") #Build model with "best" parameters
+      bestLambda <- params$bestTune$lambda #Extract best parameters
+      bestAlpha <- params$bestTune$alpha
+      method <- "Elastic Net Regression"
+      cv <- glmnet::cv.glmnet(x = as.matrix(predictors_train), y = as.matrix(response_train), alpha=bestAlpha)
+    } else if (method == "lasso") {
+      lambda <- 10^seq(-3, 3, length = 100)
+      params <- caret::train(predictors_train, response_train, weights = NULL, method = "glmnet", 
+                      trControl = caret::trainControl("cv", number = 10),
+                      tuneGrid = expand.grid(alpha = 1, lambda=lambda)) #testing variour parameters
+      model <- glmnet::glmnet(as.matrix(predictors_train), as.matrix(response_train), alpha=params$bestTune$alpha, lambda = params$bestTune$lambda, 
+                      weights = NULL, family = "gaussian") #Build model with "best" parameters
+      bestAlpha <- 1
+      bestLambda <- params$bestTune$lambda #Extract best parameter
+      method <- "Lasso Regression"
+      cv <- glmnet::cv.glmnet(x = as.matrix(predictors_train), y = as.matrix(response_train), alpha=bestAlpha)
+    } else {
+      lambda <- 10^seq(-3, 3, length = 100)
+      params <- caret::train(predictors_train, response_train, weights = NULL, method = "glmnet", 
+                      trControl = caret::trainControl("cv", number = 10),
+                      tuneGrid = expand.grid(alpha = 0, lambda = lambda)) #testing variour parameters
+      model <- glmnet::glmnet(as.matrix(predictors_train), as.matrix(response_train), alpha=params$bestTune$alpha, lambda = params$bestTune$lambda, 
+                      weights = NULL, family = "gaussian")#Build model with "best" parameters
+      bestAlpha <- 0
+      bestLambda <- params$bestTune$lambda #Extract best parameter
+      method <- "Ridge Regression"
+      cv <- glmnet::cv.glmnet(x = as.matrix(predictors_train), y = as.matrix(response_train), alpha=bestAlpha)
+    }
+
+ formula <- paste(facA, "~", paste(colnames(predictors_train), collapse = "+", sep = ""))
+
+#  cv <- mSetObj$analSet$penReg$res$cross.validation
+#  method <- mSetObj$analSet$penReg$res$method
   
   #Set plot dimensions
   if(is.na(width)){
@@ -449,35 +673,37 @@ pen.cv.plot <- function(mSetObj=NA,
   }
   h <- w
   
-  #Name plot for download
+  #NAME PLOT FOR DOWNLOAD
+  # must put imgName2 first, re-writing imgName var in next line
+  imgName2 <- paste(gsub( "\\_\\d+\\_", "", imgName),
+ ".json", sep="") 
   imgName <- paste(imgName, "dpi", dpi, ".", format, sep="")
   mSetObj$imgSet$plot.cv.penReg <- imgName
 
  #SET POINT COLOR
-  if (col_dots == "NULL") {
-      col_dots1 <- "black" # default
-    } else if (col_dots == "blue") {
-      col_dots1 <- "blue"
-    } else if (col_dots == "red") {
-      col_dots1 <- "red"
-    } else if(col_dots == "green"){
-      col_dots1 <- "green"
-    } else if(col_dots == "grey"){
-      col_dots1 <- "grey"
-    }
-  
+  col_dots1 <- 
+				switch(
+					col_dots,
+					"NULL" = "black",
+					"black" = "black",
+					"blue" = "blue",
+					"red" = "red",
+					"green" = "green",
+					"grey" = "grey",
+					NULL
+				)
   #SET LINE COLOR
-  if (col_line == "NULL") {
-      col_line1 <- "black" # default
-    } else if (col_line == "blue") {
-      col_line1 <- "blue"
-    } else if (col_line == "red") {
-      col_line1 <- "red"
-    } else if(col_line == "green"){
-      col_line1 <- "green"
-    } else if(col_line == "grey"){
-      col_line1 <- "grey"
-    }
+   col_line1 <- 
+				switch(
+					col_line,
+					"NULL" = "black",
+					"black" = "black",
+					"blue" = "blue",
+					"red" = "red",
+					"green" = "green",
+					"grey" = "grey",
+					NULL
+				)
   
   # PLOT TITLE
   if(plot_title == " "){ 
@@ -496,6 +722,7 @@ pen.cv.plot <- function(mSetObj=NA,
   # PLOT XAXIS
   if(plot_xlab == " "){
    plot_xlab1 <- "Log(Lambda)"
+  plot_xlab1 <- expression(paste("Log ", lambda))
   } else { #prediction
     plot_xlab1 <- plot_xlab
   }
@@ -530,7 +757,61 @@ a0 <- ggplot(broom::tidy(cv), aes(lambda, estimate)) +
   # a0
   dev.off()
   
+# GENERATE JSON
+build <- ggplot_build(a0)
+linear_plot_json <- list()
+
+build_line <- build$data[[3]] ### line is 1
+build_points <- build$data[[1]] # points is 1 or 2
+## or 2
+build_points2 <- build$data[[2]] # points is 1 or 2
+build_line2 <- build$data[[4]] ### xint -3.2, linetype = 1
+build_line3 <- build$data[[5]] ### xint -1.78, linetype = 2
+
+linear_plot_json <- list()
+
+linear_plot_json$main <- plot_title1 #title
+linear_plot_json$axis <- c(plot_xlab1, plot_ylab1) #axis titles
+linear_plot_json$points$coords <- build_points[,c("x","y")] #[,1:2]
+linear_plot_json$points$cols <- build_points[,grepl("col",colnames(build_points))] #[,6] #colours
+linear_plot_json$points$shape <- build_points[,c("group")]#[,5]
+linear_plot_json$points$size <- build_points[,c("size")]#[,7]
+linear_plot_json$lines$coords <- build_line[,c("x","y")]
+linear_plot_json$lines$cols <- build_line[,grepl("col",colnames(build_line))]
+linear_plot_json$lines$size <- build_line[,c("size")]
+ ## linear_plot_json$label <- build$data[[3]][,c("label")]
+ ## linear_plot_json$lines$ci <- build$data[[1]][,c("se")]
+  if(any(grepl("ymin", colnames(build_line))) && any(grepl("ymax", colnames(build_line))) ){
+   ci<- build_line[,c("x","y", "ymin", "ymax")] 
+   colnames(ci) <- c("x","y","CI_down", "CI_up")
+   linear_plot_json$lines$ci <- ci # build$data[[1]][,c("ymin", "ymax")]
+ } else{
+    linear_plot_json$lines$ci <- data.frame(x = build_line[,c("x")], y = build_line[,c("y")], CI_down = 0, CI_up = 0)
+ }   
+  
+#### MODEL VARS FOR LINE
+  linear_plot_json$r_sq <-
+    summary(model)[["r.squared"]] #Extract R^2
+  linear_plot_json$r_sq_adj <-
+    summary(model)[["adj.r.squared"]] #Extract adjusted R^2 
+  linear_plot_json$slope <-
+    summary(model)[["coefficients"]][2] # beta
+  linear_plot_json$yint <-
+    summary(model)[["coefficients"]][1] # alpha
+
+ 
+ json.obj <- RJSONIO::toJSON(linear_plot_json, .na='null')
+ sink(imgName2)
+ cat(json.obj)
+ sink()
+print(json.obj)
+print(paste("PLOT2 | facA: ", facA, " | method: ", method, sep = ""))
+print"")
+
+if(!.on.public.web){
   return(.set.mSet(mSetObj))
+    }
+
 }
 
 
@@ -557,7 +838,7 @@ pen.numeric.columns <- function(mSetObj=NA){
   #install.packages("dplyr")
   library("dplyr")
   
-  data <- select_if(mSetObj$dataSet$norm, is.numeric)
+  data <- dplyr::select_if(mSetObj$dataSet$norm, is.numeric)
   count.all.numeric.cols <- ncol(data)
   name.all.numeric.cols <- colnames(data)
   

@@ -9,24 +9,27 @@
 #'License: GNU GPL (>= 2)
 #'@export
 
-reg.svm.anal <- function(mSetObj=NA, facA=NULL, pred.text=NULL) {
+svm.reg.anal <- function(mSetObj=NA, facA=NULL, pred.text=NULL) {
 
   #install.packages(c("e1071", "Metrics"))
   library("e1071")
   library("Metrics")
+
   mSetObj <- .get.mSet(mSetObj)
   
-  mSetObj$dataSet$norm <- mSetObj$dataSet$norm[order(as.numeric(rownames(mSetObj$dataSet$norm))),,drop=FALSE]
-  print(mSetObj$dataSet$norm)
+ input <-  mSetObj$dataSet$norm
+
+  input <- input[order(as.numeric(rownames(input)),,drop=FALSE]
+  print(input)
   #Text should be visable to user
   cat("One dependent variable and one or more independent variables will be tested for correlation. The dependent variable must be numeric. The independent variables can be numeric or categorical.")
   cat("For categorical independent variables, make sure to use characters for the levels and not numbers. For example, if you have levels 1, 2 and 3, change the level labels to I, II and III prior to upload.")
   
   #Set dependent (response) variable name
-  if (facA=="NULL") {
-    for (i in 1:ncol(mSetObj$dataSet$norm)) {
-      if (is.factor(mSetObj$dataSet$norm[,i])==FALSE) {
-        facA <- colnames(mSetObj$dataSet$norm)[i]# Default is to choose the first numeric column as response column
+  if (facA == "NULL") {
+    for (i in 1:ncol(input)) {
+      if (is.factor(input[,i])==FALSE) {
+        facA <- colnames(input)[i]# Default is to choose the first numeric column as response column
         break
       }
     }
@@ -38,9 +41,9 @@ reg.svm.anal <- function(mSetObj=NA, facA=NULL, pred.text=NULL) {
   cat("Indicate independent variables using the column names with commas in between.")
   
   #Set right side of formula with predictor variables
-  if (pred.text=="NULL") {
-    resp.col.num <- which(colnames(mSetObj$dataSet$norm)==facA)
-    data <- mSetObj$dataSet$norm[,-resp.col.num]
+  if (pred.text == "NULL") {
+    resp.col.num <- which(colnames(input) == facA); data <- input[,-resp.col.num]
+    data <- input[,colnames(input) != facA]
     pred.text <- colnames(data)[1] #Default is the first potential predictor column
   } else {
     pred.text <- pred.text #taken from text box by java, fed as string into R code
@@ -134,8 +137,8 @@ reg.svm.anal <- function(mSetObj=NA, facA=NULL, pred.text=NULL) {
 #'License: GNU GPL (>= 2)
 #'@export
 
-plot.pred.svmReg <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA){
-  
+svm.pred.plot <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA){
+  # plot.pred.svmReg
   #Extract necessary objects from mSetObj
   mSetObj <- .get.mSet(mSetObj)
 

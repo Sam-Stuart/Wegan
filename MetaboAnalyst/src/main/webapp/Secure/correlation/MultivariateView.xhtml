@@ -13,7 +13,7 @@
         <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
             <h1>Multivariate Regression:</h1>
             <p:tabView id="multiCA">    
-                <p:tab title ="Line of Best Fit" titleStyleClass="p-tab-nav">
+                <p:tab title ="Line of Best Fit Plot" titleStyleClass="p-tab-nav">
                     <h:form id="form1">
                         <p style='font-size: 13px'>
                             One dependent variable and multiple independent variables are tested for correlation. Only numeric variables are used for the dependent variable. Numeric and categorical variables can be independent variables. 
@@ -29,6 +29,9 @@
                             <h:outputLabel style="font-weight: bold" value="Indicate independent variables using the column names with commas in between:"/>
                             <p:inputText style="width:400px; height:40px" value="#{rfCABean.indInput}"/> 
 
+                            <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
+                            <p:selectBooleanCheckbox value ="#{rfCABean.doOriginal}"/>
+                            
                             <p:panelGrid></p:panelGrid>
                             <h:panelGrid columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
                             <p:commandButton value="Update" 
@@ -76,6 +79,9 @@
                             <h:outputLabel style="font-weight: bold" value="Indicate independent variables using the column names with commas in between:"/>
                             <p:inputText style="width:400px; height:40px" value="#{rfCABean.indInput}"/> 
 
+                            <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
+                            <p:selectBooleanCheckbox value ="#{rfCABean.doOriginal}"/>
+                            
                             <p:panelGrid></p:panelGrid>
                             <h:panelGrid columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
                             <p:commandButton value="Update" 
@@ -123,6 +129,9 @@
                             <h:outputLabel style="font-weight: bold" value="Indicate independent variables using the column names with commas in between:"/>
                             <p:inputText style="width:400px; height:40px" value="#{rfCABean.indInput}"/> 
 
+                            <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
+                            <p:selectBooleanCheckbox value ="#{rfCABean.doOriginal}"/>
+                            
                             <p:panelGrid></p:panelGrid>
                             <h:panelGrid columns="2" cellpadding="3" style="float: right; text-shadow: none !important;">                             
                             <p:commandButton value="Update" 
@@ -154,7 +163,7 @@
                         </h:panelGrid>
                     </h:form>
                 </p:tab>
-                <p:tab title ="Relative Importance" titleStyleClass="p-tab-nav">
+                <p:tab title ="Relative Importance Plot" titleStyleClass="p-tab-nav">
                     <h:form id="form4">
                         <p style='font-size: 13px'>
                             One dependent variable and multiple independent variables are tested for correlation. Only numeric variables are used for building the model. 
@@ -166,6 +175,9 @@
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{rfCABean.columnNameA}">
                                 <f:selectItems value="#{rfCABean.columnOpts}" />
                             </p:selectOneMenu>
+                            
+                            <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
+                            <p:selectBooleanCheckbox value ="#{rfCABean.doOriginal}"/>
 
                             <h:outputLabel style="font-weight: bold" value="Indicate independent variables using the column names with commas in between:"/>
                             <p:inputText style="width:400px; height:40px" value="#{rfCABean.indInput}"/> 

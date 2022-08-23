@@ -18,7 +18,7 @@
         <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
             <h1>Linear Regression:</h1>
             <p:tabView id="linCA" style="border-bottom-color: #8cbd48 !important">
-                <p:tab title ="Line of Best Fit" titleStyleClass="p-tab-nav">
+                <p:tab title ="Line of Best Fit Plot" titleStyleClass="p-tab-nav">
                     <h:form id="form1">
                         <p style="font-size: 13px">
                             <!--add a hyperlink: from CaUploadView: /home/gina/Desktop/Wegan/MetaboAnalyst/src/main/webapp/upload/CaUploadView.xhtml : Iris setosa, Iris versicolor, and Iris virginica. Variables are labeled, but samples are not. (<a href="">view data set</a>) (<a href="https:/www.rdocumentation.org/packages/datasets/versions/3.6.2/topics/iris">Becker, R. <i>et al. The New S Language</i>. 1988. </a>)--> 
@@ -73,7 +73,7 @@
 
 The model makes several assumptions, namely linearity, normality, homoscedasticity, independence, and that the model is not disproportionately influenced by outliers. Tests for these assumptions include the RESET for linearity(J.B. Ramsey (1969), Tests for Specification Errors in Classical Linear Least-Squares Regression Analysis. Journal of the Royal Statistical Society, Series B 31, 350--371); Kruskal-Wallis for normality(); Breusch-Pagan for homoscedasticity (T.S. Breusch and A.R. Pagan (1979), A Simple Test for Heteroscedasticity and Random Coefficient Variation. Econometrica 47, 1287--1294); and Durbin-Watson for autocorrelation (J. Durbin and G.S. Watson (1950), Testing for Serial Correlation in Least Squares Regression I. Biometrika 37, 409--428) 
 
-The R &#xb2; value is the fraction of variance explained by the model; the adjusted R &#xb2; value is the R &#xb2; value adjusted for the number of predictors in a regression model. The confidence interval represents the level of certainty about the predicted values; if the same procedure was repeatedly used to make new estimates, the confidence interval would contain the average of all the estimates 95% of the time. https://www.census.gov/programs-surveys/saipe/guidance/confidence-intervals.html "></i>
+The R &#xb2; value is the fraction of variance explained by the model and is a value from 0 to 1. The adjusted R &#xb2; value is the R &#xb2; value adjusted for the number of predictors in the model. R &#xb2; is used to assess how well a model fits the data, with a higher R &#xb2; value indicating a better model fit. The confidence interval represents the level of certainty about the predicted values; if the same procedure was repeatedly used to make new estimates, the confidence interval would contain the average of all the estimates 95% of the time. https://www.census.gov/programs-surveys/saipe/guidance/confidence-intervals.html "></i>
                                 </h:panelGrid>
                             </h:panelGroup>   
                         </h:panelGrid>
@@ -152,7 +152,7 @@ The R &#xb2; value is the fraction of variance explained by the model; the adjus
                                     <i id="question" class="fa fa-question-circle" title="Based on the linear model generated, the predicted response variable is plotted against the actual variable. The linear model can be written in the form (y = x * &#946; + &#949;), where y = dependent variable; x = independent variable; &beta; = regression parameter coefficients; and &epsilon; = error values.                          
 The model makes several assumptions about the error term, namely linearity, normality, homoscedasticity, independence, and that the model is not disproportionately influenced by outliers. 
 
-The R &#xb2;  value is the fraction of variance explained by the model; the adjusted R &#xb2; value is the R &#xb2; value adjusted for the number of predictors in a regression model. The confidence interval represents the level of certainty about the predicted values; if the same procedure was repeatedly used to make new estimates, the confidence interval would contain the average of all the estimates 95% of the time. https://www.census.gov/programs-surveys/saipe/guidance/confidence-intervals.html "></i>
+The R &#xb2; value is the fraction of variance explained by the model and is a value from 0 to 1. The adjusted R &#xb2; value is the R &#xb2; value adjusted for the number of predictors in the model. R &#xb2; is used to assess how well a model fits the data, with a higher R &#xb2; value indicating a better model fit. The confidence interval represents the level of certainty about the predicted values; if the same procedure was repeatedly used to make new estimates, the confidence interval would contain the average of all the estimates 95% of the time. https://www.census.gov/programs-surveys/saipe/guidance/confidence-intervals.html "></i>
                                 </h:panelGrid>
                             </h:panelGroup>
                           </h:panelGrid>
@@ -234,7 +234,7 @@ The R &#xb2;  value is the fraction of variance explained by the model; the adju
                                 <h:panelGrid columns="3" class="resultsImages">
                                     <i id="question" class="fa fa-question-circle" title="Based on the linear model generated, the standardized residuals are plotted against the theoretical normal distribution to test for normality of residuals. The linear model model makes several assumptions namely linearity, normality, homoscedasticity of residuals, independence of error terms, and that the model is not disproportionately influenced by outliers. 
 
-The R &#xb2; value is the fraction of variance explained by the model; the adjusted R &#xb2; value is the R &#xb2; value adjusted for the number of predictors in a regression model. The confidence interval represents the level of certainty about the predicted values; if the same procedure was repeatedly used to make new estimates, the confidence interval would contain the average of all the estimates 95% of the time. https://www.census.gov/programs-surveys/saipe/guidance/confidence-intervals.html "></i>
+The R &#xb2; value is the fraction of variance explained by the model and is a value from 0 to 1. The adjusted R &#xb2; value is the R &#xb2; value adjusted for the number of predictors in the model. R &#xb2; is used to assess how well a model fits the data, with a higher R &#xb2; value indicating a better model fit. The confidence interval represents the level of certainty about the predicted values; if the same procedure was repeatedly used to make new estimates, the confidence interval would contain the average of all the estimates 95% of the time. https://www.census.gov/programs-surveys/saipe/guidance/confidence-intervals.html "></i>
                                 </h:panelGrid>
                             </h:panelGroup>
                           </h:panelGrid>
@@ -306,7 +306,7 @@ The R &#xb2; value is the fraction of variance explained by the model; the adjus
                                     <i id="question" class="fa fa-question-circle" title="The linear model can be written in the form (y = x * &#946; + &#949;), where y = dependent variable; x = independent variable; &beta; = regression parameter coefficients; and &epsilon; = error values. 
 The linear model model makes several assumptions namely linearity, normality, homoscedasticity of residuals, independence of error terms, and that the model is not disproportionately influenced by outliers.
 
-The R &#xb2; value is the fraction of variance explained by the model; the adjusted R &#xb2; value is the R &#xb2; value adjusted for the number of predictors in a regression model. The confidence interval represents the level of certainty about the predicted values; if the same procedure was repeatedly used to make new estimates, the confidence interval would contain the average of all the estimates 95% of the time. https://www.census.gov/programs-surveys/saipe/guidance/confidence-intervals.html "></i>
+The R &#xb2; value is the fraction of variance explained by the model and is a value from 0 to 1. The adjusted R &#xb2; value is the R &#xb2; value adjusted for the number of predictors in the model. R &#xb2; is used to assess how well a model fits the data, with a higher R &#xb2; value indicating a better model fit. The confidence interval represents the level of certainty about the predicted values; if the same procedure was repeatedly used to make new estimates, the confidence interval would contain the average of all the estimates 95% of the time. https://www.census.gov/programs-surveys/saipe/guidance/confidence-intervals.html "></i>
                                 </h:panelGrid>
                             </h:panelGroup>
                           </h:panelGrid>

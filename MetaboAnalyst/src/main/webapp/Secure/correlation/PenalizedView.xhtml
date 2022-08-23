@@ -18,11 +18,10 @@
                         <p>
                             One dependent variable and one or more independent variables will be tested for correlation. The variables can be numeric or categorical. 
                             Note that all variables other than the dependent variable will be treated as independent variables. The penalized regression models will constrain the contribution of the independent variables on the dependent variable accordingly.
-                            The train data for model building is 70% of the dataset, while the test data for model testing is 30% of the dataset.
-                            The penalized regression model was optimized using alpha = #{penalCABean.corrPenalResults.get(0)} and lambda = #{penalCABean.corrPenalResults.get(1)}. 
+                            The train data for model building is 70% of the dataset, while the test data for model testing is 30% of the dataset. 
                         </p>
                         <h:panelGrid id="panelGrid" columns="5" cellpadding="3" columnClasses="colLeft,colRight,colLeft,colRight, colLast">
-                            
+                            <!--The penalized regression model was optimized using alpha = hash{penalizedCABean.corrPenalResults.get(0)} and lambda = hash{penalizedCABean.corrPenalResults.get(1)}.-->
                             <h:outputLabel style="font-weight: bold" value="Regression Methods:"/>
                                 <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{penalCABean.corrFunctionMethods}">
                                     <f:selectItems value="#{applicationBean1.corrMethodsOpts}" />
@@ -64,21 +63,20 @@
                                 </h:panelGrid>
                             </h:panelGroup>
                          <h:panelGroup>
+                             <!--ERROR WHEN TRYING TO INCLUDE LESS THAN SIGN IN TITLE ATTRIBUTE BELOW: Error Parsing /Secure/correlation/PenalizedView.xhtml: Error Traced[line: 69] The value of attribute "title" associated with an element type "i" must not contain the '<' character.--> 
                                 <h:panelGrid columns="3" class="resultsImages">
-                                    <i id="question" class="fa fa-question-circle" title="Only numeric variables are used in linear correlation. The linear model can be written in the form (Y = X * Beta + epsilon), where:
-Y = dependent variable; 
-X = independent variable;
-Beta = regression parameter coefficients (including the intercept);
-Epsilon = error values (the sum of all other influences on Y after accounting for X)
-
-The R-squared value is the fraction of variance explained by the model; the adjusted R-squared value is the R-squared value adjusted for the number of predictors in a regression model. The confidence interval represents the level of certainty about the predicted values; if the same procedure was repeatedly used to make new estimates, the confidence interval would contain the average of all the estimates 95% of the time. https://www.census.gov/programs-surveys/saipe/guidance/confidence-intervals.html "></i>
+                                    <i id="question" class="fa fa-question-circle" title="
+                                       Note that ridge (alpha = 0), lasso (alpha = 1), and elastic net (alpha between 0 and 1). 
+                                       Note that Since regularized methods apply a penalty to the coefficients, we need to ensure our coefficients are on a common scale. If not, then predictors with naturally larger values (e.g., total square footage) will be penalized more than predictors with naturally smaller values (e.g., total number of rooms). By default, glmnet automatically standardizes your features. https://bradleyboehmke.github.io/HOML/regularized-regression.html#why
+                                       
+                                       Only numeric variables are used in linear correlation. The R &#xb2; value is the fraction of variance explained by the model and is a value from 0 to 1. The adjusted R &#xb2; value is the R &#xb2; value adjusted for the number of predictors in the model. R &#xb2; is used to assess how well a model fits the data, with a higher R &#xb2; value indicating a better model fit.  The confidence interval represents the level of certainty about the predicted values; if the same procedure was repeatedly used to make new estimates, the confidence interval would contain the average of all the estimates 95% of the time. https://www.census.gov/programs-surveys/saipe/guidance/confidence-intervals.html "></i>
                                 </h:panelGrid>
                             </h:panelGroup>   
                         </h:panelGrid>  
                         
                         <h:panelGrid id="corrPenalPane1" style="width: 100%;">
 <!--                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
-                               <h:outputLabel style="font-weight: bold" value="Root-Mean-Square Error : hash{penalCABean.corrPenalResults.get(2)}"/>
+                               <h:outputLabel style="font-weight: bold" value="Root-Mean-Square Error : hash{penalCABean.filePenModValsPath}"/>
                             </h:panelGrid>                         -->
                             
                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
@@ -96,17 +94,17 @@ The R-squared value is the fraction of variance explained by the model; the adju
 
                     </h:form>    
                 </p:tab>
-                <p:tab title ="Mean Squared Error-log(lambda) Plots" titleStyleClass="p-tab-nav">
+                <p:tab title ="Mean Squared Error-log(Lambda) Plot" titleStyleClass="p-tab-nav">
                     <h:form id="form2">
                         <p>
                             One dependent variable and one or more independent variables will be tested for correlation. The variables can be numeric or categorical. 
                             Note that all variables other than the dependent variable will be treated as independent variables. The penalized regression models will constrain the contribution of the independent variables on the dependent variable accordingly.
                             The train data for model building is 70% of the dataset, while the test data for model testing is 30% of the dataset.
-                            The penalized regression model was optimized using alpha = #{penalCABean.corrPenalResults.get(0)} and lambda = #{penalCABean.corrPenalResults.get(1)}. 
+                            The penalized regression model was optimized using alpha (&alpha;)= #{penalCABean.corrPenalResults.get(0)} and lambda (&lambda;) = #{penalCABean.corrPenalResults.get(1)}. 
                         </p>
                         <h:panelGrid id="panelGrid" columns="5" cellpadding="3" columnClasses="colLeft,colRight,colLeft,colRight, colLast">
                             
-                            <h:outputLabel style="font-weight: bold" value="Regression Methods:"/>
+                            <h:outputLabel style="font-weight: bold" value="Regression Method:"/>
                                 <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{penalCABean.corrFunctionMethods}">
                                     <f:selectItems value="#{applicationBean1.corrMethodsOpts}" />
                                 </p:selectOneMenu> 
@@ -127,7 +125,7 @@ The R-squared value is the fraction of variance explained by the model; the adju
                             <p:commandButton value="Customize Graph"
                                              styleClass="graphicsButton"
                                              style="box-shadow: none !important; text-shadow: none !important;"
-                                             actionListener="#{sessionBean1.graphicsLnk_action('corr_penalized2')}" 
+                                             actionListener="#{sessionBean1.graphicsLnk_action('corr_penalized2')}"
                                             oncomplete="PF('graphApperancePenal2').show()"/>  
                                            
                             <p:commandButton value="Update" 
@@ -148,10 +146,9 @@ The R-squared value is the fraction of variance explained by the model; the adju
                             </h:panelGroup> 
                            <h:panelGroup>
                                 <h:panelGrid columns="3" class="resultsImages">
-                                    <i id="question" class="fa fa-question-circle" title="Only numeric variables are used in linear correlation. The linear model can be written in the form (Y = X * Beta + epsilon), where:
-Y = dependent variable; X = independent variable; Beta = regression parameter coefficients (including the intercept); Epsilon = error values.
+                                    <i id="question" class="fa fa-question-circle" title="Only numeric variables are used in linear correlation. 
 
-The R-squared value is the fraction of variance explained by the model; the adjusted R-squared value is the R-squared value adjusted for the number of predictors in a regression model. The confidence interval represents the level of certainty about the predicted values; if the same procedure was repeatedly used to make new estimates, the confidence interval would contain the average of all the estimates 95% of the time. https://www.census.gov/programs-surveys/saipe/guidance/confidence-intervals.html "></i>
+The R &#xb2; value is the fraction of variance explained by the model and is a value from 0 to 1. The adjusted R &#xb2; value is the R &#xb2; value adjusted for the number of predictors in the model. R &#xb2; is used to assess how well a model fits the data, with a higher R &#xb2; value indicating a better model fit. The confidence interval represents the level of certainty about the predicted values; if the same procedure was repeatedly used to make new estimates, the confidence interval would contain the average of all the estimates 95% of the time. https://www.census.gov/programs-surveys/saipe/guidance/confidence-intervals.html "></i>
                                 </h:panelGrid>
                             </h:panelGroup>                           
                         </h:panelGrid> 
@@ -180,12 +177,12 @@ The R-squared value is the fraction of variance explained by the model; the adju
             draggable="false" closable="true" resizable="false"> 
             <ui:include src="_color_palette_penal.xhtml" />
         </p:dialog>
-<!--         <p:dialog modal="true" widgetVar="graphApperancePenal2" 
+         <p:dialog modal="true" widgetVar="graphApperancePenal2" 
             style="width: 400px; height:400px;" 
             appendTo="@(body)" header="Graphics Center"
             draggable="false" closable="true" resizable="false"> 
             <ui:include src="_color_palette_penal2.xhtml" />
-        </p:dialog>-->
+        </p:dialog>
         
     </ui:define>
 </ui:composition>

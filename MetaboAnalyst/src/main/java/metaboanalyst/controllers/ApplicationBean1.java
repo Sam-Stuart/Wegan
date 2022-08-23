@@ -111,7 +111,10 @@ public class ApplicationBean1 implements Serializable {
     private final SelectItem[] scaleNormOpts;
     private final SelectItem[] ordStressDimensionOpts;
     private final SelectItem[] corLinColorDotsOpts;    
-    private final SelectItem[] corLinColorLineOpts;    
+    private final SelectItem[] corLinColorLineOpts; 
+    private final SelectItem[] corModType;
+    private final SelectItem[] corLegPosOpts;  
+    private final SelectItem[] corColorPaletteOpts;
     private final SelectItem[] ordColorPaletteOpts;
     private final SelectItem[] pcaPairsColorPaletteOpts;
     private final SelectItem[] pairAnalOpts;
@@ -299,6 +302,27 @@ public class ApplicationBean1 implements Serializable {
         corLinColorLineOpts[2] = new SelectItem("red", "Red");
         corLinColorLineOpts[3] = new SelectItem("green", "Green");
         corLinColorLineOpts[4] = new SelectItem("grey", "Grey");
+        
+        corModType = new SelectItem[3];
+        corModType[0] = new SelectItem("NULL", "Binomial");
+        corModType[1] = new SelectItem("multinomial", "Multinomial");
+        corModType[2] = new SelectItem("ordinal", "Ordinal");
+        
+        corLegPosOpts = new SelectItem[4];
+        corLegPosOpts[0] = new SelectItem("NULL", "Bottom");
+        corLegPosOpts[1] = new SelectItem("top", "Top");
+        corLegPosOpts[2] = new SelectItem("right", "Right");
+        corLegPosOpts[3] = new SelectItem("left", "Left");
+        
+        corColorPaletteOpts = new SelectItem[8];
+        corColorPaletteOpts[0] = new SelectItem("NULL", "Blambus");
+        corColorPaletteOpts[1] = new SelectItem("metro", "Metro");
+        corColorPaletteOpts[2] = new SelectItem("hero", "Hero");
+        corColorPaletteOpts[3] = new SelectItem("ipsum", "Ipsum");
+        corColorPaletteOpts[4] = new SelectItem("circus", "Circus");
+        corColorPaletteOpts[5] = new SelectItem("viridis", "Virdis");
+        corColorPaletteOpts[6] = new SelectItem("breakfast.club", "Breakfast Club");
+        corColorPaletteOpts[7] = new SelectItem("aqua", "Aqua");
         
         ordColorPaletteOpts = new SelectItem[4];
         ordColorPaletteOpts[0] = new SelectItem("NULL", "Viridis");
@@ -943,6 +967,18 @@ public class ApplicationBean1 implements Serializable {
     
     public SelectItem[] getCorLinColorLineOpts() {
         return corLinColorLineOpts;
+    }
+    
+    public SelectItem[] getCorLegPosOpts() {
+        return corLegPosOpts;
+    }
+    
+    public SelectItem[] getCorColorPaletteOpts(){
+        return corColorPaletteOpts;
+    }
+    
+    public SelectItem[] getCorModType() {
+        return corModType;
     }
     
     public SelectItem[] getOrdColorPaletteOpts() {
