@@ -19,7 +19,7 @@ svm.reg.anal <- function(mSetObj=NA, facA=NULL, pred.text=NULL) {
   
  input <-  mSetObj$dataSet$norm
 
-  input <- input[order(as.numeric(rownames(input)),,drop=FALSE]
+ # input <- input[order(as.numeric(rownames(input)),,drop=FALSE),]
   print(input)
   #Text should be visable to user
   cat("One dependent variable and one or more independent variables will be tested for correlation. The dependent variable must be numeric. The independent variables can be numeric or categorical.")
