@@ -534,7 +534,7 @@ linear_plot_json$bool_ci <- FALSE
  sink()
 print(json.obj)
 print(paste("PLOT1 | facA: ", facA, " | method: ", method, sep = ""))
-print"")
+print("JSON and the argonauts")
 
 if(!.on.public.web){
   return(.set.mSet(mSetObj))
@@ -806,7 +806,7 @@ linear_plot_json$lines$size <- build_line[,c("size")]
  sink()
 print(json.obj)
 print(paste("PLOT2 | facA: ", facA, " | method: ", method, sep = ""))
-print"")
+print("Bourne. JSON Bourne.")
 
 if(!.on.public.web){
   return(.set.mSet(mSetObj))
