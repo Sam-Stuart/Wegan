@@ -52,6 +52,8 @@ function extractData(data) {
             rSquare: data.bool_rsq,
             rSquareAdjusted: data.bool_rsq_adj,
         },
+        slope: data.slope,
+        yint: data.yint,
     };
 }
 
@@ -455,8 +457,22 @@ function renderNormalityPlot(jsonName, id) {
     d3.json("/MetaboAnalyst" + URL + "/" + jsonName, function (data) {
         //Create and styling SVG
         var svg = createSVG(id);
+
         //Extract data
-        const { title, xLabel, yLabel, point_coords } = extractData(data);
+        const {
+            title,
+            xLabel,
+            yLabel,
+            point_coords,
+            slope,
+            yint,
+            equationInfo,
+        } = extractData(data);
+
+        //Generate y from x using euqation
+        function calculateYfromEquation(m, yint, x) {
+            return m * x + yint;
+        }
 
         //Create an array of objects of points
         const values = point_coords.x.map((e, i) => ({
@@ -464,6 +480,22 @@ function renderNormalityPlot(jsonName, id) {
             y: +point_coords.y[i],
             color: data.points.cols[i],
         }));
+
+        //Create an array of objects of line's coordinates
+        const line_values = point_coords.x.map((e) => ({
+            x: +e,
+            y: +calculateYfromEquation(slope, yint, e),
+        }));
+
+        //Create line
+        const line = d3
+            .line()
+            .x(function (d) {
+                return xScale(d.x);
+            })
+            .y(function (d) {
+                return yScale(d.y);
+            });
 
         //Define Xaxis, add xAxis and xAxis label
         const xScale = d3
@@ -519,6 +551,15 @@ function renderNormalityPlot(jsonName, id) {
                 .attr("cy", function (d) {
                     return newY(d.y);
                 });
+
+            //Update line
+            scatter.select(".line").attr(
+                "d",
+                d3
+                    .line()
+                    .x((d) => newX(d.x))
+                    .y((d) => newY(d.y))
+            );
         }
 
         //Tool tip
@@ -526,6 +567,25 @@ function renderNormalityPlot(jsonName, id) {
 
         // Add dots
         plotPoints(scatter, values, tooltip, xScale, yScale);
+
+        // Append line
+        const lineOnPlot = plotLine(
+            scatter,
+            line_values,
+            line,
+            data.lines.cols
+        );
+        lineOnPlot
+            .on("mouseover", function (d) {
+                tooltip
+                    .style("opacity", 0.8)
+                    .html(equationInfo.equation)
+                    .style("left", event.pageX + 5 + "px")
+                    .style("top", event.pageY + "px");
+            })
+            .on("mouseout", function (d) {
+                tooltip.transition(200).style("opacity", 0);
+            });
 
         // create title
         createTitle(id, title);
