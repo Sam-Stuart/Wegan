@@ -44,8 +44,7 @@
                                  styleClass="updateButton"
                                  style="box-shadow: none !important; text-shadow: none !important"
                                 onclick="PF('statusDialog').show()"
-                                oncomplete="PF('graphApperanceLinear3').hide(); PF('statusDialog').hide()"  
-                                update=":linCA:form3:corrLinPane3  :cmdPane"
+                                oncomplete="PF('graphApperanceLinear3').hide(); setTimeout(function() {renderNormalityPlot('corr_linear_normres.json', 'my_dataviz2'); PF('statusDialog').hide()}, 2000)"                                update=":linCA:form3:corrLinPane3  :cmdPane"
                                 actionListener="#{linearCABean.corrLin3Btn_action()}"/>
             </h:panelGrid>
         </h:panelGrid>
