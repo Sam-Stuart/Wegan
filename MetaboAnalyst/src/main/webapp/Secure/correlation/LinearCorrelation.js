@@ -596,6 +596,154 @@ function renderNormalityPlot(jsonName, id) {
     });
 }
 
+function renderResFitPlot(jsonName, id) {
+    d3.json("/MetaboAnalyst" + URL + "/" + jsonName, function (data) {
+        //Create and styling SVG
+        var svg = createSVG(id);
+        //Extract data
+        const {
+            title,
+            xLabel,
+            yLabel,
+            point_coords,
+            line_coords,
+            equationInfo,
+            showLabel,
+        } = extractData(data);
+
+        //This will be used to draw the line and the confidence interval
+        const line_values = line_coords.x.map((e, i) => ({
+            x: +e,
+            y: +line_coords.y[i],
+        }));
+
+        //Create an array of objects of points
+        const values = point_coords.x.map((e, i) => ({
+            x: +e,
+            y: +point_coords.y[i],
+            color: data.points.cols[i],
+        }));
+
+        //Define Xaxis, add xAxis and xAxis label
+        const xScale = d3
+            .scaleLinear()
+            .domain(d3.extent(values, (d) => d.x))
+            .range([0, width]);
+        var xAxis = svg
+            .append("g")
+            .attr("transform", "translate(0," + height + ")")
+            .call(d3.axisBottom(xScale));
+
+        svg.append("text")
+            .text(xLabel)
+            .attr("x", width / 3)
+            .attr("y", height + 30)
+            .style("font-size", "15px");
+
+        // Add Y axis, add yAxis and yAxis label
+        var yScale = d3
+            .scaleLinear()
+            .domain(d3.extent(values, (d) => d.y))
+            .range([height, 0]);
+        var yAxis = svg.append("g").call(d3.axisLeft(yScale));
+
+        svg.append("text")
+            .text(yLabel)
+            .attr("y", -30)
+            .attr("x", -(height / 3))
+            .style("text-anchor", "end")
+            .attr("transform", "rotate(-90)")
+            .style("margin-bottom", "10px")
+            .style("font-size", "15px");
+
+        //Create line
+        var line = d3
+            .line()
+            .x(function (d) {
+                return xScale(d.x);
+            })
+            .y(function (d) {
+                return yScale(d.y);
+            });
+
+        //Set up zoom and scatter
+        const { scatter, zoom } = makeGraphZoomable(svg, id, updateChart);
+
+        // A function that updates the chart when the user zoom and thus new boundaries are available
+        function updateChart() {
+            // recover the new scale
+            var newX = d3.event.transform.rescaleX(xScale);
+            var newY = d3.event.transform.rescaleY(yScale);
+
+            // update axes with these new boundaries
+            xAxis.call(d3.axisBottom(newX));
+            yAxis.call(d3.axisLeft(newY));
+
+            // update circle position
+            scatter
+                .selectAll("circle")
+                .attr("cx", function (d) {
+                    return newX(d.x);
+                })
+                .attr("cy", function (d) {
+                    return newY(d.y);
+                });
+
+            scatter.selectAll(".line").attr(
+                "d",
+                d3
+                    .line()
+                    .x((d) => newX(d.x))
+                    .y((d) => newY(d.y))
+            );
+        }
+
+        //Tool tip
+        const tooltip = addToolTip(id);
+
+        // Add dots
+        plotPoints(scatter, values, tooltip, xScale, yScale);
+
+        // Append line
+        const lineOnPlot = plotLine(
+            scatter,
+            line_values,
+            line,
+            data.lines.cols[0]
+        );
+        lineOnPlot
+            .on("mouseover", function (d) {
+                tooltip
+                    .style("opacity", 0.8)
+                    .html(equationInfo.equation)
+                    .style("left", event.pageX + 5 + "px")
+                    .style("top", event.pageY + "px");
+            })
+            .on("mouseout", function (d) {
+                tooltip.transition(200).style("opacity", 0);
+            });
+        //Create horizontal line
+        const line2OnPlot = plotLine(
+            scatter,
+            [
+                { x: line_values[0].x, y: 0 },
+                { x: line_values[line_values.length - 1].x, y: 0 },
+            ],
+            line,
+            data.lines2.cols
+        );
+
+        line2OnPlot.style("stroke-width", "1.5");
+        // create title
+        createTitle(id, title);
+
+        // Navigation using buttons: Supports zoom and pan
+        //Get only the first element in array: const [first] = [1,2,3];
+        createNavigationButtons(id, scatter, zoom);
+    });
+}
+
 renderLinearBestFit("corr_linear.json", "my_dataviz");
 renderLinearBestFit("corr_linear_pred.json", "my_dataviz1");
 renderNormalityPlot("corr_linear_normres.json", "my_dataviz2");
+renderResFitPlot("corr_linear_resfit.json", "my_dataviz3");
