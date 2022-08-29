@@ -384,11 +384,16 @@ public static boolean PlotLinearResidFitCA(SessionBean1 sb,
         }
     }    
  
-//    MULTIVARIATE
-    public static void CreateMultivariateModel(SessionBean1 sb) {
+//    MULTIVARIATE  lin.reg.anal.multi plot.pred.linRegMulti  plot.relaimpo.linRegMulti plot.pred.linRegMulti
+    //    multi.reg.anal mSetObj=NA, facA="NULL",predtext="NULL", data="false" 
+    public static void CreateMultivariateModel(SessionBean1 sb, 
+            String facA, String predtext, Boolean data) {
         try {
             RConnection RC = sb.getRConnection();
-            String rCommand = "lin.reg.anal.multi(NA)";
+            String rCommand = "multi.reg.anal(NA" + ", \"" 
+             + facA + "\", \"" 
+                    + predtext + "\", \"" 
+                    + data + "\" )"; 
             RCenter.recordRCommand(RC, rCommand);
             //sb.addGraphicsCMD("corr_penalized", rCommand);
             RC.voidEval(rCommand); // Need to change this to return R string 
@@ -397,10 +402,27 @@ public static boolean PlotLinearResidFitCA(SessionBean1 sb,
         }
     }
         
-    public static void PlotMultivariateCA(SessionBean1 sb, String imgName, String format, int dpi) {
+    
+    public static void PlotMultivariateCA(SessionBean1 sb, 
+            String facA, String predtext, Boolean data,
+             String col_dots, String col_line, Boolean plot_ci, 
+                String plot_title, String plot_xlab, String plot_ylab,
+            String imgName, String format, int dpi) {
         try {
             RConnection RC = sb.getRConnection();
-            String rCommand = "plot.pred.linRegMulti(NA" + ", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
+            String rCommand = "multi.pred.plot(NA" + ", \"" 
+                    + facA + "\", \"" 
+                    + predtext + "\", \"" 
+                    + data + "\", \"" 
+                    + col_dots + "\", \"" 
+                    + col_line + "\", \"" 
+                    + plot_ci + "\", \"" 
+                    + plot_title + "\", \"" 
+                    + plot_xlab + "\", \"" 
+                    + plot_ylab + "\", \"" 
+                    + imgName + "\", \"" 
+                    + format + "\", " 
+                    + dpi + ", width=NA)";
             RCenter.recordRCommand(RC, rCommand);
             sb.addGraphicsCMD(imgName, rCommand);
             RC.voidEval(rCommand);
@@ -409,10 +431,23 @@ public static boolean PlotLinearResidFitCA(SessionBean1 sb,
         }
     }
 
-    public static void PlotMultivariateCoeffCA(SessionBean1 sb, String imgName, String format, int dpi) {
+    public static void PlotMultivariateCoeffCA(SessionBean1 sb,
+            String facA, String predtext, Boolean data,
+             String plot_palette, Boolean plot_label, 
+                String plot_title, String plot_xlab, String plot_ylab,
+            String imgName, String format, int dpi) {
         try {
             RConnection RC = sb.getRConnection();
-            String rCommand = "plot.relaimpo.linRegMulti(NA" + ", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
+            String rCommand = "multi.relaimpo.plot(NA" + ", \"" 
+                    + facA + "\", \"" 
+                    + predtext + "\", \"" 
+                    + data + "\", \"" 
+                    + plot_palette + "\", \"" 
+                    + plot_label + "\", \"" 
+                    + plot_title + "\", \"" 
+                    + plot_xlab + "\", \"" 
+                    + plot_ylab + "\", \"" 
+                    + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
             RCenter.recordRCommand(RC, rCommand);
             sb.addGraphicsCMD(imgName, rCommand);
             RC.voidEval(rCommand);
@@ -421,10 +456,23 @@ public static boolean PlotLinearResidFitCA(SessionBean1 sb,
         }
     }
 
-    public static void PlotMultivariateRelativeCA(SessionBean1 sb, String imgName, String format, int dpi) {
+    public static void PlotMultivariateRelativeCA(SessionBean1 sb, 
+             String facA, String predtext, Boolean data,
+             String plot_palette, Boolean plot_label, 
+                String plot_title, String plot_xlab, String plot_ylab,
+            String imgName, String format, int dpi) {
         try {
             RConnection RC = sb.getRConnection();
-            String rCommand = "plot.pred.linRegMulti(NA" + ", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
+            String rCommand = "multi.relaimpo.plot(NA" + ", \"" 
+                    + facA + "\", \"" 
+                    + predtext + "\", \"" 
+                    + data + "\", \"" 
+                    + plot_palette + "\", \"" 
+                    + plot_label + "\", \"" 
+                    + plot_title + "\", \"" 
+                    + plot_xlab + "\", \"" 
+                    + plot_ylab + "\", \"" 
+                    + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
             RCenter.recordRCommand(RC, rCommand);
             sb.addGraphicsCMD(imgName, rCommand);
             RC.voidEval(rCommand);
