@@ -7,49 +7,37 @@
                 xmlns:p="http://primefaces.org/ui">
 
 
-    <h:form id="linGraph2">
+    <h:form id="MultiGraph2">
         <h:panelGrid columns="1" style="width:380px;">
             <h:panelGrid id="panelGrid1" columns="2" cellpadding="5" columnClasses="colBrayLong,colBrayShort">
-                
-                <h3>On-Plot Display Options</h3>
-                <p:panelGrid></p:panelGrid>                
-                
-                <h:outputLabel style="font-weight: bold" value="Show Equation on Plot:"/>
-                <p:selectBooleanCheckbox value ="#{linearCABean.doPlotEq}"/> 
-                
-                <h:outputLabel style="font-weight: bold" value="Show R-squared on Plot:"/>
-                <p:selectBooleanCheckbox value ="#{linearCABean.doPlotRsq}"/> 
-                                
-                <h:outputLabel style="font-weight: bold" value="Show Adjusted R-squared on Plot:"/>
-                <p:selectBooleanCheckbox value ="#{linearCABean.doPlotRsqAdj}"/> 
-                
+
                 <h3>Line and Point Options</h3>
                 <p:panelGrid></p:panelGrid>
 
                 <h:outputLabel style="font-weight: bold" value="Point Color:"/>
-                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linearCABean.corColorDotsOpts}">
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{rfCABean.corColorDotsOpts}">
                     <f:selectItems value="#{applicationBean1.corLinColorDotsOpts}" />
                 </p:selectOneMenu> 
                 
                 <h:outputLabel style="font-weight: bold" value="Line Color:"/>
-                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linearCABean.corColorLineOpts}">
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{rfCABean.corColorLineOpts}">
                     <f:selectItems value="#{applicationBean1.corLinColorLineOpts}" />
                 </p:selectOneMenu>  
                                 
                 <h:outputLabel style="font-weight: bold" value="Show 95% Confidence Interval:"/>
-                <p:selectBooleanCheckbox value ="#{linearCABean.doPlotConfInt}"/> 
+                <p:selectBooleanCheckbox value ="#{rfCABean.doPlotConfInt}"/> 
                 
                 <h3>Titles</h3>
                 <p:panelGrid></p:panelGrid>                 
                 
                 <h:outputLabel style="font-weight: bold" value="Plot Title:"/>
-                <p:inputText value = "#{linearCABean.corPlotTitle}"/> 
+                <p:inputText value = "#{rfCABean.corPlotTitle}"/> 
                 
                 <h:outputLabel style="font-weight: bold" value="X-Axis Label"/>
-                <p:inputText value = "#{linearCABean.corPlotXlab}"/> 
+                <p:inputText value = "#{rfCABean.corPlotXlab}"/> 
                 
                  <h:outputLabel style="font-weight: bold" value="Y-Axis Label"/>
-                <p:inputText value = "#{linearCABean.corPlotYlab}"/> 
+                <p:inputText value = "#{rfCABean.corPlotYlab}"/> 
                 
                 <!--<p:panelGrid></p:panelGrid>-->
 
@@ -59,9 +47,9 @@
                                  styleClass="updateButton"
                                  style="box-shadow: none !important; text-shadow: none !important"
                                 onclick="PF('statusDialog').show()"
-                                oncomplete="PF('graphApperanceLinear2').hide(); PF('statusDialog').hide()"  
-                                update=":linCA:form2:corrLinPane2  :cmdPane"
-                                actionListener="#{linearCABean.corrLin2Btn_action()}"/>
+                                oncomplete="PF('graphApperanceMulti2').hide(); PF('statusDialog').hide()"  
+                                update=":multiCA:form2:multiPane2  :cmdPane"
+                                actionListener="#{rfCABean.corrMultiRelBtn_action()}"/>
             </h:panelGrid>
         </h:panelGrid>
     </h:form>
