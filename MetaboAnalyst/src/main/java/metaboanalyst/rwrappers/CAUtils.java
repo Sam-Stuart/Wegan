@@ -424,7 +424,7 @@ public static boolean PlotLinearResidFitCA(SessionBean1 sb,
                     + format + "\", " 
                     + dpi + ", width=NA)";
             RCenter.recordRCommand(RC, rCommand);
-            sb.addGraphicsCMD("corr_multivariate", rCommand);
+            sb.addGraphicsCMD("corr_multi_pred", rCommand);
             RC.voidEval(rCommand);
         } catch (RserveException rse) {
             System.out.println(rse);
