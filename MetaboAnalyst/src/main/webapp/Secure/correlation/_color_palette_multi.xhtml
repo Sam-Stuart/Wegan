@@ -7,7 +7,7 @@
                 xmlns:p="http://primefaces.org/ui">
 
 
-    <h:form id="logGraph">
+    <h:form id="multiGraph">
         <h:panelGrid columns="1" style="width:380px;">
             <h:panelGrid id="panelGrid1" columns="2" cellpadding="5" columnClasses="colBrayLong,colBrayShort">
                 
@@ -15,38 +15,28 @@
                 <p:panelGrid></p:panelGrid>
                 
                 <h:outputLabel style="font-weight: bold" value="Color Palette:"/>
-                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{logCABean.corPaletteOpts}">
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{rfCABean.corPaletteOpts}">
                     <f:selectItems value="#{applicationBean1.corColorPaletteOpts}" />
                 </p:selectOneMenu>  
                                 
                 <h:outputLabel style="font-weight: bold" value="Show 95% Confidence Interval:"/>
-                <p:selectBooleanCheckbox value ="#{logCABean.doPlotConfInt}"/> 
-                
-                <h3>Legend and Axis</h3>
-                <p:panelGrid></p:panelGrid>
-                
-                <h:outputLabel style="font-weight: bold" value="Legend Position"/>
-                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{logCABean.corPlotLegPosOpts}">
-                    <f:selectItems value="#{applicationBean1.corLegPosOpts}" />
-                </p:selectOneMenu> 
-                
-                <h:outputLabel style="font-weight: bold" value="Show Legend Horizontally:"/>
-                <p:selectBooleanCheckbox value ="#{logCABean.doPlotLegHoriz}"/> 
-                
-                <h:outputLabel style="font-weight: bold" value="Rotate x-tick labels:"/>
-                <p:selectBooleanCheckbox value ="#{logCABean.doLabelXtickRotate}"/>            
+                <p:selectBooleanCheckbox value ="#{rfCABean.doPlotConfInt}"/> 
+
+                <h:outputLabel style="font-weight: bold" value="Show Label on Plot"/>
+                <p:selectBooleanCheckbox value ="#{rfCABean.doLabelPlot}"/> 
+                        
                 
                 <h3>Titles</h3>
                 <p:panelGrid></p:panelGrid>    
                 
                 <h:outputLabel style="font-weight: bold" value="Plot Title:"/>
-                <p:inputText value = "#{logCABean.corPlotTitle}"/> 
+                <p:inputText value = "#{rfCABean.corPlotTitle}"/> 
                 
                 <h:outputLabel style="font-weight: bold" value="X-Axis Label"/>
-                <p:inputText value = "#{logCABean.corPlotXlab}"/> 
+                <p:inputText value = "#{rfCABean.corPlotXlab}"/> 
                 
                  <h:outputLabel style="font-weight: bold" value="Y-Axis Label"/>
-                <p:inputText value = "#{logCABean.corPlotYlab}"/> 
+                <p:inputText value = "#{rfCABean.corPlotYlab}"/> 
                 
                 <!--<p:panelGrid></p:panelGrid>-->
 
@@ -56,9 +46,9 @@
                                  styleClass="updateButton"
                                  style="box-shadow: none !important; text-shadow: none !important"
                                 onclick="PF('statusDialog').show()"
-                                oncomplete="PF('graphApperanceLog').hide(); PF('statusDialog').hide()"  
-                                update=":logCA:form1:corrLogPane1  :cmdPane"
-                                actionListener="#{logCABean.corrLogBtn1_action()}"/>
+                                oncomplete="PF('graphApperanceMulti').hide(); PF('statusDialog').hide()"  
+                                update=":multiCA:form1:multiPane1  :cmdPane"
+                                actionListener="#{rfCABean.corrMultiBtn_action()}"/>
             </h:panelGrid>
         </h:panelGrid>
     </h:form>
