@@ -141,17 +141,17 @@ public class CABean implements Serializable {
                 "NULL", "NULL", false, 
                 "NULL","NULL",  false,
                  " ", " "," ",
-                sb.getCurrentImage("corr_multivariate"), "png", 72);
+                sb.getCurrentImage("corr_multi_pred"), "png", 72);
         CAUtils.PlotMultivariateCoeffCA(sb, 
                  "NULL", "NULL", false, 
                 "NULL",  false,
                  " ", " "," ",
-                sb.getCurrentImage("corr_multivariate_coeff"), "png", 72);
+                sb.getCurrentImage("corr_multi_relaimpo"), "png", 72);
         CAUtils.PlotMultivariateRelativeCA(sb, 
                  "NULL", "NULL", false, 
                 "NULL",  false,
                  " ", " "," ",
-                sb.getCurrentImage("corr_multivariate_relative"), "png", 72);
+                sb.getCurrentImage("corr_multi_relaimpo"), "png", 72);
     }
 
 
