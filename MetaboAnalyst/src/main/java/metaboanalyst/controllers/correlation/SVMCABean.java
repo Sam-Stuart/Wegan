@@ -37,7 +37,7 @@ public class SVMCABean implements Serializable {
     
 
 //    private String filePolySummary = getSummaryPolyDownload();
-    private String fileSVMSummary = "svm_regession_summary.txt";
+    private String fileSVMSummary = "svm_regression_summary.txt";
     private String fileSVMSummaryPath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileSVMSummary + "\">" + fileSVMSummary + "</a>";
     
     public String getFileSVMSummaryPath() {
@@ -93,36 +93,7 @@ public class SVMCABean implements Serializable {
     public void setdoOriginal(boolean doOriginal) {
         this.doOriginal = doOriginal;
     }
-  // CHECK BOX 
-     private boolean doPlotEq = false;
-
-    public boolean isdoPlotEq() {
-        return doPlotEq;
-    }
-
-    public void setdoPlotEq(boolean doPlotEq) {
-        this.doPlotEq = doPlotEq;
-    } 
-  // CHECK BOX 
-     private boolean doPlotRsq = false;
-
-    public boolean isdoPlotRsq() {
-        return doPlotRsq;
-    }
-
-    public void setdoPlotRsq(boolean doPlotRsq) {
-        this.doPlotRsq = doPlotRsq;
-    }     
-  // CHECK BOX
-     private boolean doPlotRsqAdj = false;
-
-    public boolean isdoPlotRsqAdj() {
-        return doPlotRsqAdj;
-    }
-
-    public void setdoPlotRsqAdj(boolean doPlotRsqAdj) {
-        this.doPlotRsqAdj = doPlotRsqAdj;
-    }  
+  
   // CHECK BOX 
      private boolean doPlotConfInt = false;
 
@@ -204,9 +175,14 @@ public class SVMCABean implements Serializable {
     
         // ACTION BUTTONS //
     public void corrSVMBtn_action() {
-        CAUtils.CreateSVMModel(sb, columnNameA, indInput);
-        CAUtils.PlotSVMCA(sb, sb.getNewImage("corr_svm"), "png", 72);
+        CAUtils.CreateSVMModel(sb, columnNameA, indInput, doOriginal);
+        CAUtils.PlotSVMCA(sb, columnNameA, indInput, doOriginal,
+                corColorDotsOpts, corColorLineOpts, doPlotConfInt,
+               corPlotTitle, corPlotXlab, corPlotYlab,
+                sb.getNewImage("corr_svm_pred"), "png", 72);
     }
+    
+    
 //    // ACTION BUTTONS //
 //    public void corrPolyPredBtn_action() {
 //        System.out.println("Inside poly");
