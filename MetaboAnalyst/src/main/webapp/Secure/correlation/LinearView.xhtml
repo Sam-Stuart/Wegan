@@ -99,8 +99,7 @@ The R &#xb2; value is the fraction of variance explained by the model and is a v
                         <p style="font-size: 13px">
                             A dependent variable and an independent variable are correlated using a linear model. Predicted values are plotted against actual data, representing a measure of correlation.
                         </p>
-                        <h:panelGrid id="panelGrid2" columns="5" cellpadding="3" columnClasses="colLeftLong,colRight,colLeftLong,colRight, colLast">
-                       <!--"colLeft,colRightShort,colLeft,colRightShort, colLast"-->
+                    <h:panelGrid id="panelGrid2" columns="5" cellpadding="3" columnClasses="colLeftLong,colRight,colLeftLong,colRight, colLast"> <!--"colLeft,colRightShort,colLeft,colRightShort, colLast"-->
                             <h:outputLabel style="font-weight: bold" value="Dependant Variable:"/>
                                 <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linearCABean.corrColumnNameA}">
                                     <f:selectItems value="#{linearCABean.corrColumnOpts}" />
@@ -115,7 +114,7 @@ The R &#xb2; value is the fraction of variance explained by the model and is a v
                                 <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linearCABean.corrColumnNameB}">
                                     <f:selectItems value="#{linearCABean.corrColumnOpts}" />
                                 </p:selectOneMenu>
-                        </h:panelGrid>
+                    </h:panelGrid>
                         
                          <h:panelGrid></h:panelGrid>    
                         <h:panelGrid id="panelGrid1" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;">                   
