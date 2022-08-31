@@ -156,15 +156,31 @@ public class CABean implements Serializable {
 
 
     private void doDefaultSVM() {
-        CAUtils.CreateSVMModel(sb, "NULL", "NULL");
-        CAUtils.PlotSVMCA(sb, sb.getCurrentImage("corr_svm"), "png", 72);
+        CAUtils.CreateSVMModel(sb, "NULL", "NULL", false);
+        CAUtils.PlotSVMCA(sb,
+                "NULL", "NULL", false,
+                "NULL","NULL",  false,
+                 " ", " "," ",
+                sb.getCurrentImage("corr_svm_pred"), "png", 72);
     }    
 
     private void doDefaultRF() {
-        CAUtils.CreateRFModel(sb, "NULL", "NULL");
-        CAUtils.PlotRFCA(sb, sb.getCurrentImage("corr_rf"), "png", 72);
-        CAUtils.PlotRFRelativeCA(sb, sb.getCurrentImage("corr_rf_relative"), "png", 72);
-        CAUtils.PlotRFErrorCA(sb, sb.getCurrentImage("corr_rf_error"), "png", 72);
+        CAUtils.CreateRFModel(sb, "NULL", "NULL", false);
+        CAUtils.PlotRFCA(sb,
+                 "NULL", "NULL", false,
+                "NULL","NULL",  false,
+                 " ", " "," ",
+                sb.getCurrentImage("corr_rf_pred"), "png", 72);
+        CAUtils.PlotRFRelativeCA(sb, 
+                "NULL", "NULL", false, 
+                "NULL",  false,
+                 " ", " "," ",
+                sb.getCurrentImage("corr_rf_relaimpo"), "png", 72);
+        CAUtils.PlotRFErrorCA(sb, 
+                "NULL", "NULL", false, 
+                "NULL",  false,
+                 " ", " "," ",
+                sb.getCurrentImage("corr_rf_error"), "png", 72);
     }  
     
     
