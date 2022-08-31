@@ -13,7 +13,7 @@
         <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
             <h1>Multivariate Regression:</h1>
             <p:tabView id="multiCA">    
-                <p:tab title ="Line of Best Fit Plot" titleStyleClass="p-tab-nav">
+                <p:tab title ="Predicted vs Actual Plot" titleStyleClass="p-tab-nav">
                     <h:form id="form1">
                         <p style='font-size: 13px'>
                             One dependent variable and multiple independent variables are tested for correlation. Only numeric variables are used for the dependent variable. Numeric and categorical variables can be independent variables. 
@@ -33,43 +33,70 @@
                             <p:selectBooleanCheckbox value ="#{rfCABean.doOriginal}"/>
                             
                             <p:panelGrid></p:panelGrid>
-                            <h:panelGrid columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
+                        </h:panelGrid>
+                            
+                            <h:panelGrid id="panelGrid1" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
+                            
+                            <p:commandButton value="Customize Graph"
+                                             styleClass="graphicsButton"
+                                             style="box-shadow: none !important; text-shadow: none !important;"
+                                             actionListener="#{sessionBean1.graphicsLnk_action('corr_multi_pred')}" 
+                                            oncomplete="PF('graphApperanceMulti').show()"/>  
+                                           
                             <p:commandButton value="Update" 
                                              styleClass="updateButton"
                                              style="box-shadow: none !important; text-shadow: none !important"
                                             onclick="PF('statusDialog').show()"
                                             oncomplete="PF('statusDialog').hide()"  
-                                            update=":multiCA:form1:rfPane1  :cmdPane" 
-                                            actionListener="#{rfCABean.corrRFBtn_action()}"/> 
+                                            update=":multiCA:form1:corrMultiPane1  :cmdPane" 
+                                            actionListener="#{RFCABean.corrMultiBtn_action()}"/> 
+                            
                             </h:panelGrid>
 
-                        </h:panelGrid>
-                        <h:panelGrid class="resultsBar" columns="2">
+                        
+                     <h:panelGrid class="resultsBar" columns="2">
                             <h:panelGroup>
                                 <h:panelGrid columns="1" style="text-align : left;">
                                     Results
                                 </h:panelGrid>
-                            </h:panelGroup> 
-                            <h:panelGroup>
+                            </h:panelGroup>
+                         <h:panelGroup>
                                 <h:panelGrid columns="3" class="resultsImages">
-                                    <i class="fas fa-palette"></i>
-                                    <i class="fa fa-question-circle"></i>
+                                    <i id="question" class="fa fa-question-circle" title="
+                                      Only numeric variables are used in linear correlation. The R &#xb2; value is the fraction of variance explained by the model and is a value from 0 to 1. The adjusted R &#xb2; value is the R &#xb2; value adjusted for the number of predictors in the model. R &#xb2; is used to assess how well a model fits the data, with a higher R &#xb2; value indicating a better model fit.  The confidence interval represents the level of certainty about the predicted values; if the same procedure was repeatedly used to make new estimates, the confidence interval would contain the average of all the estimates 95% of the time. https://www.census.gov/programs-surveys/saipe/guidance/confidence-intervals.html "></i>
                                 </h:panelGrid>
-
-                            </h:panelGroup>                            
+                            </h:panelGroup>   
                         </h:panelGrid> 
-                        <h:panelGrid id="rfPane1" style="text-align: center; width: 100%;">
-                            <!--<img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_rf')}" alt="Multivariateimage"/>-->
+                        
+                         <h:panelGrid id="corrMultiPane1" style="width: 100%;">   
+                             
+                              <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
+                                    <h:outputText escape="false" value="#{rfCABean.fileMultiSummaryPath}"/>
+                                </i>
+                            </h:panelGrid>
+                             
+                        <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <p:commandButton value="Export"
+                                    styleClass="exportButton"
+                                    style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                    actionListener="#{sessionBean1.graphicsLnk_action('corr_multi_pred')}"
+                                    oncomplete="PF('graphDialog').show()"/>
+                            </h:panelGrid>    
+                        <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                            <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_multi_pred')}" alt="MultiPlot"/>
                         </h:panelGrid>
+                      </h:panelGrid>
+                        
                     </h:form>
                 </p:tab>
-                <p:tab title ="Predicted vs Actual Plot" titleStyleClass="p-tab-nav">
+                <p:tab title ="Relative Importance Plot" titleStyleClass="p-tab-nav">
                     <h:form id="form2">
                         <p style='font-size: 13px'>
                             One dependent variable and multiple independent variables are tested for correlation. Only numeric variables are used for building the model. 
                             Use the text box to select the the independent variables. Use commas between variables, however if you are interested in the interaction between two or more variables, separate them by a colon.
                         </p>
-                        <h:panelGrid id="panelGrid" columns="2" cellpadding="3" columnClasses="width: 10%, width: 40%">
+                        <h:panelGrid id="panelGrid1" columns="2" cellpadding="3" columnClasses="width: 10%, width: 40%">
                             <h:outputLabel style="font-weight: bold" value="Dependant Variable:"/>
 
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{rfCABean.columnNameA}">
@@ -81,139 +108,73 @@
 
                             <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
                             <p:selectBooleanCheckbox value ="#{rfCABean.doOriginal}"/>
-                            
+                         </h:panelGrid>     
                             <p:panelGrid></p:panelGrid>
-                            <h:panelGrid columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
+                                
+                                
+                          <h:panelGrid id="panelGrid2" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
+                         
+                              <p:commandButton value="Customize Graph"
+                                             styleClass="graphicsButton"
+                                             style="box-shadow: none !important; text-shadow: none !important;"
+                                             actionListener="#{sessionBean1.graphicsLnk_action('corr_multi_relaimpo')}" 
+                                            oncomplete="PF('graphApperanceMulti2').show()"/>  
+                                           
                             <p:commandButton value="Update" 
                                              styleClass="updateButton"
                                              style="box-shadow: none !important; text-shadow: none !important"
                                             onclick="PF('statusDialog').show()"
                                             oncomplete="PF('statusDialog').hide()"  
-                                            update=":multiCA:form2:rfPane2  :cmdPane" 
-                                            actionListener="#{rfCABean.corrRFBtn_action()}"/> 
+                                            update=":multiCA:form2:corrMultiPane2  :cmdPane" 
+                                            actionListener="#{RFCABean.corrMultiRelBtn_action()}"/> 
+                            
                             </h:panelGrid>
-
-                        </h:panelGrid>
-                        <h:panelGrid class="resultsBar" columns="2">
+                        <!--</h:panelGrid>-->
+                            
+                          <h:panelGrid class="resultsBar" columns="2">
                             <h:panelGroup>
                                 <h:panelGrid columns="1" style="text-align : left;">
                                     Results
                                 </h:panelGrid>
-                            </h:panelGroup> 
-                            <h:panelGroup>
+                            </h:panelGroup>
+                         <h:panelGroup>
                                 <h:panelGrid columns="3" class="resultsImages">
-                                    <i class="fas fa-palette"></i>
-                                    <i class="fa fa-question-circle"></i>
+                                    <i id="question" class="fa fa-question-circle" title="
+                                      Only numeric variables are used in linear correlation. The R &#xb2; value is the fraction of variance explained by the model and is a value from 0 to 1. The adjusted R &#xb2; value is the R &#xb2; value adjusted for the number of predictors in the model. R &#xb2; is used to assess how well a model fits the data, with a higher R &#xb2; value indicating a better model fit.  The confidence interval represents the level of certainty about the predicted values; if the same procedure was repeatedly used to make new estimates, the confidence interval would contain the average of all the estimates 95% of the time. https://www.census.gov/programs-surveys/saipe/guidance/confidence-intervals.html "></i>
                                 </h:panelGrid>
-
-                            </h:panelGroup>                            
+                            </h:panelGroup>   
                         </h:panelGrid> 
-                        <h:panelGrid id="rfPane2" style="text-align: center; width: 100%;">
-                            <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_multivariate')}" alt="RFimage"/>
+                            
+                       <h:panelGrid id="corrMultiPane2" style="width: 100%;">     
+                        <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <p:commandButton value="Export"
+                                    styleClass="exportButton"
+                                    style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                    actionListener="#{sessionBean1.graphicsLnk_action('corr_multi_relaimpo')}"
+                                    oncomplete="PF('graphDialog').show()"/>
+                            </h:panelGrid>    
+                        <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                            <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_multi_relaimpo')}" alt="RelaimpoPlot"/>
                         </h:panelGrid>
+                      </h:panelGrid>     
+                            
                     </h:form>
                 </p:tab>
-                <p:tab title ="Coefficient Plot" titleStyleClass="p-tab-nav">
-                    <h:form id="form3">
-                        <p style='font-size: 13px'>
-                            One dependent variable and multiple independent variables are tested for correlation. Only numeric variables are used for building the model. 
-                            Use the text box to select the the independent variables. Use commas between variables, however if you are interested in the interaction between two or more variables, separate them by a colon.
-                        </p>
-                        <h:panelGrid id="panelGrid" columns="2" cellpadding="3" columnClasses="width: 10%, width: 40%">
-                            <h:outputLabel style="font-weight: bold" value="Dependant Variable:"/>
-
-                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{rfCABean.columnNameA}">
-                                <f:selectItems value="#{rfCABean.columnOpts}" />
-                            </p:selectOneMenu>
-
-                            <h:outputLabel style="font-weight: bold" value="Indicate independent variables using the column names with commas in between:"/>
-                            <p:inputText style="width:400px; height:40px" value="#{rfCABean.indInput}"/> 
-
-                            <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
-                            <p:selectBooleanCheckbox value ="#{rfCABean.doOriginal}"/>
-                            
-                            <p:panelGrid></p:panelGrid>
-                            <h:panelGrid columns="2" cellpadding="3" style="float: right; text-shadow: none !important;">                             
-                            <p:commandButton value="Update" 
-                                             styleClass="updateButton"
-                                             style="box-shadow: none !important; text-shadow: none !important"
-                                            onclick="PF('statusDialog').show()"
-                                            oncomplete="PF('statusDialog').hide()"  
-                                            update=":multiCA:form3:rfPane3  :cmdPane" 
-                                            actionListener="#{rfCABean.corrRFBtn_action()}"/> 
-                            </h:panelGrid>
-
-                        </h:panelGrid>
-                        <h:panelGrid class="resultsBar" columns="2">
-                            <h:panelGroup>
-                                <h:panelGrid columns="1" style="text-align : left;">
-                                    Results
-                                </h:panelGrid>
-                            </h:panelGroup> 
-                            <h:panelGroup>
-                                <h:panelGrid columns="3" class="resultsImages">
-                                    <i class="fas fa-palette"></i>
-                                    <i class="fa fa-question-circle"></i>
-                                </h:panelGrid>
-
-                            </h:panelGroup>                            
-                        </h:panelGrid> 
-                        <h:panelGrid id="rfPane3" style="text-align: center; width: 100%;">
-                            <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_multivariate_coeff')}" alt="RFimage"/>
-                        </h:panelGrid>
-                    </h:form>
-                </p:tab>
-                <p:tab title ="Relative Importance Plot" titleStyleClass="p-tab-nav">
-                    <h:form id="form4">
-                        <p style='font-size: 13px'>
-                            One dependent variable and multiple independent variables are tested for correlation. Only numeric variables are used for building the model. 
-                            Use the text box to select the the independent variables. Use commas between variables, however if you are interested in the interaction between two or more variables, separate them by a colon.
-                        </p>
-                        <h:panelGrid id="panelGrid" columns="2" cellpadding="3" columnClasses="width: 10%, width: 40%">
-                            <h:outputLabel style="font-weight: bold" value="Dependant Variable:"/>
-
-                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{rfCABean.columnNameA}">
-                                <f:selectItems value="#{rfCABean.columnOpts}" />
-                            </p:selectOneMenu>
-                            
-                            <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
-                            <p:selectBooleanCheckbox value ="#{rfCABean.doOriginal}"/>
-
-                            <h:outputLabel style="font-weight: bold" value="Indicate independent variables using the column names with commas in between:"/>
-                            <p:inputText style="width:400px; height:40px" value="#{rfCABean.indInput}"/> 
-
-                            <p:panelGrid></p:panelGrid>
-                            <h:panelGrid columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
-                            <p:commandButton value="Update" 
-                                             styleClass="updateButton"
-                                             style="box-shadow: none !important; text-shadow: none !important"
-                                            onclick="PF('statusDialog').show()"
-                                            oncomplete="PF('statusDialog').hide()"  
-                                            update=":multiCA:form4:rfPane3  :cmdPane" 
-                                            actionListener="#{rfCABean.corrRFBtn_action()}"/> 
-                            </h:panelGrid>
-
-                        </h:panelGrid>
-                        <h:panelGrid class="resultsBar" columns="2">
-                            <h:panelGroup>
-                                <h:panelGrid columns="1" style="text-align : left;">
-                                    Results
-                                </h:panelGrid>
-                            </h:panelGroup> 
-                            <h:panelGroup>
-                                <h:panelGrid columns="3" class="resultsImages">
-                                    <i class="fas fa-palette"></i>
-                                    <i class="fa fa-question-circle"></i>
-                                </h:panelGrid>
-
-                            </h:panelGroup>                            
-                        </h:panelGrid> 
-                        <h:panelGrid id="rfPane3" style="text-align: center; width: 100%;">
-                            <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_rf_error')}" alt="RFimage"/>
-                        </h:panelGrid>
-                    </h:form>
-                </p:tab>            
             </p:tabView>
         </h:panelGrid> 
+                                   
+        <p:dialog modal="true" widgetVar="graphApperanceMulti" 
+            style="width: 400px; height:400px;" 
+            appendTo="@(body)" header="Graphics Center"
+            draggable="false" closable="true" resizable="false"> 
+            <ui:include src="_color_palette_multi.xhtml" />
+        </p:dialog>
+         <p:dialog modal="true" widgetVar="graphApperanceMulti2" 
+            style="width: 400px; height:400px;" 
+            appendTo="@(body)" header="Graphics Center"
+            draggable="false" closable="true" resizable="false"> 
+            <ui:include src="_color_palette_multi2.xhtml" />
+        </p:dialog>
+                        
     </ui:define>
 </ui:composition>
