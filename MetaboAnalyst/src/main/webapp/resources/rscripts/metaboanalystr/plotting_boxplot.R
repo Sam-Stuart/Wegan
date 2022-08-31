@@ -228,9 +228,23 @@ plotBoxPlot <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA){
   box_plot_json$axis <- c(xlab, ylab) # x axis and y axis labels, respectively
   box_plot_json$colors <- build_info['fill'][[1]] # List of Colours of boxes in order
   box_plot_json$labels <- unique(facA_data) # List of the x axis labels for each box within the plot, in order.
+  
+  box_plot_json$quantiles$ymin <- build_info$ymin
+  box_plot_json$quantiles$lower <- build_info$lower
+  box_plot_json$quantiles$middle <- build_info$middle
+  box_plot_json$quantiles$upper <- build_info$upper
+  box_plot_json$quantiles$ymax <- build_info$ymax
+  
+  for (i in 1:length(build_info$outliers)){  ## This For and if statement was built to catch the NULL errors we were getting from no outliers existing.
+    if (length(build_info$outliers[[i]]) == 0 ){  ## Query: If the outlier is "0" will a dot appear at the "zero" mark on the boxplot, or not show up at all?
+      build_info$outliers[[i]] = 0
+    }
+  }
+  box_plot_json$quantiles$outliers <- unlist(build_info$outliers)
+  box_plot_json$quantiles$notchupper <- build_info$notchupper
+  box_plot_json$quantiles$notchlower <- build_info$notchlower
   box_plot_json$data <- build_data # The Dataset
-  box_plot_json$buildInfo <- build_info # All the build information
- 
+  
   json.obj <- RJSONIO::toJSON(box_plot_json, .na='null')
   
   
