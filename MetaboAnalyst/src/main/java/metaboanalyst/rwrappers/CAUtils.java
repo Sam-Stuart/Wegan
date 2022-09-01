@@ -590,7 +590,7 @@ public static boolean PlotLinearResidFitCA(SessionBean1 sb,
     
     public static void PlotRFErrorCA(SessionBean1 sb, 
              String facA, String predtext, Boolean data,
-             String plot_palette, Boolean plot_label, 
+             String col_line, 
                 String plot_title, String plot_xlab, String plot_ylab,
             String imgName, String format, int dpi) {
         try {
@@ -599,8 +599,7 @@ public static boolean PlotLinearResidFitCA(SessionBean1 sb,
                     + facA + "\", \"" 
                     + predtext + "\", \"" 
                     + data + "\", \"" 
-                    + plot_palette + "\", \"" 
-                    + plot_label + "\", \"" 
+                    + col_line + "\", \"" 
                     + plot_title + "\", \"" 
                     + plot_xlab + "\", \"" 
                     + plot_ylab + "\", \""
