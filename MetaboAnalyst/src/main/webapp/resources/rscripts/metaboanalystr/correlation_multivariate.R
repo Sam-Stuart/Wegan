@@ -546,7 +546,7 @@ multi.relaimpo.plot <- function(mSetObj=NA,
   library("relaimpo")
   # library("JSONIO")
   
-  ## name was: plot.pred.linRegMulti
+  ## name was: plot.relimpo.linRegMulti
   mSetObj <- .get.mSet(mSetObj)
   
    ### SET DATA (whether to use original data or not)
