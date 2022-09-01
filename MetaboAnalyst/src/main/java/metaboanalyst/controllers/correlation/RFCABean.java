@@ -221,6 +221,14 @@ public class RFCABean implements Serializable {
                 sb.getNewImage("corr_rf_relaimpo"), "png", 72);
     }
     
+    public void corrRFBtn3_action() {
+        CAUtils.CreateRFModel(sb, columnNameA, indInput, doOriginal);
+        CAUtils.PlotRFErrorCA(sb, columnNameA, indInput, doOriginal,
+                 corColorLineOpts, 
+               corPlotTitle, corPlotXlab, corPlotYlab,
+                sb.getNewImage("corr_rf_error"), "png", 72);
+    }
+    
     
  
       public void corrMultiBtn_action() {
