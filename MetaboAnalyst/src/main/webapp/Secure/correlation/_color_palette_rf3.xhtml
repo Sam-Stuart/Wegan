@@ -7,26 +7,18 @@
                 xmlns:p="http://primefaces.org/ui">
 
 
-    <h:form id="MultiGraph2">
+    <h:form id="RFGraph">
         <h:panelGrid columns="1" style="width:380px;">
             <h:panelGrid id="panelGrid1" columns="2" cellpadding="5" columnClasses="colBrayLong,colBrayShort">
-
-                <h3>Line and Point Options</h3>
+               <!--Error rate vs Forest Size Line Plot-->
+                <h3>Line Options</h3>
                 <p:panelGrid></p:panelGrid>
 
-                <h:outputLabel style="font-weight: bold" value="Point Color:"/>
-                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{rfCABean.corColorDotsOpts}">
-                    <f:selectItems value="#{applicationBean1.corLinColorDotsOpts}" />
-                </p:selectOneMenu> 
-                
                 <h:outputLabel style="font-weight: bold" value="Line Color:"/>
                 <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{rfCABean.corColorLineOpts}">
                     <f:selectItems value="#{applicationBean1.corLinColorLineOpts}" />
                 </p:selectOneMenu>  
-                                
-                <h:outputLabel style="font-weight: bold" value="Show 95% Confidence Interval:"/>
-                <p:selectBooleanCheckbox value ="#{rfCABean.doPlotConfInt}"/> 
-                
+
                 <h3>Titles</h3>
                 <p:panelGrid></p:panelGrid>                 
                 
@@ -47,9 +39,9 @@
                                  styleClass="updateButton"
                                  style="box-shadow: none !important; text-shadow: none !important"
                                 onclick="PF('statusDialog').show()"
-                                oncomplete="PF('graphApperanceMulti2').hide(); PF('statusDialog').hide()"  
-                                update=":multiCA:form2:corrMultiPane2  :cmdPane"
-                                actionListener="#{rfCABean.corrMultiRelBtn_action()}"/>
+                                oncomplete="PF('graphApperanceRF3').hide(); PF('statusDialog').hide()"  
+                                update=":RFCA:form3:rfPane3  :cmdPane"
+                                actionListener="#{rfCABean.corrRFBtn3_action()}"/>
             </h:panelGrid>
         </h:panelGrid>
     </h:form>
