@@ -795,8 +795,8 @@ facA = "NULL",
 predtext = "NULL",
 data = "false",
 type="NULL", # was multinomial 
-  plot_palette = "NULL", #dropdown  
-        plot_title = " ",
+plot_palette = "NULL", #dropdown  
+plot_title = " ",
 imgName, format="png", dpi=72, width=NA){
   
 ## named: plot.ROC.logReg

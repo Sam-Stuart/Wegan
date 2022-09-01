@@ -21,7 +21,6 @@
                             The train data for model building is 70% of the dataset, while the test data for model testing is 30% of the dataset. 
                         </p>
                         <h:panelGrid id="panelGrid" columns="5" cellpadding="3" columnClasses="colLeft,colRight,colLeft,colRight, colLast">
-                            <!--The penalized regression model was optimized using alpha = hash{penalizedCABean.corrPenalResults.get(0)} and lambda = hash{penalizedCABean.corrPenalResults.get(1)}.-->
                             <h:outputLabel style="font-weight: bold" value="Regression Methods:"/>
                                 <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{penalCABean.corrFunctionMethods}">
                                     <f:selectItems value="#{applicationBean1.corrMethodsOpts}" />
@@ -63,7 +62,7 @@
                                 </h:panelGrid>
                             </h:panelGroup>
                          <h:panelGroup>
-                             <!--ERROR WHEN TRYING TO INCLUDE LESS THAN SIGN IN TITLE ATTRIBUTE BELOW: Error Parsing /Secure/correlation/PenalizedView.xhtml: Error Traced[line: 69] The value of attribute "title" associated with an element type "i" must not contain the '<' character.--> 
+                             <!--ERROR WHEN TRYING TO INCLUDE LESS THAN SIGN IN TITLE ATTRIBUTE BELOW: Error Parsing /Secure/correlation/PenalizedView.xhtml: Error Traced[line: 69] The value of attribute "title" associated with an element type "i" must not contain the '<' character.-->   <!--The penalized regression model was optimized using alpha = hash{penalizedCABean.corrPenalResults.get(0)} and lambda = hash{penalizedCABean.corrPenalResults.get(1)}.-->
                                 <h:panelGrid columns="3" class="resultsImages">
                                     <i id="question" class="fa fa-question-circle" title="
                                        Note that ridge (alpha = 0), lasso (alpha = 1), and elastic net (alpha between 0 and 1). 

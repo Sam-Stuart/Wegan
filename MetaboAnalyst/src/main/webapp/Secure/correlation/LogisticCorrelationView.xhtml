@@ -39,16 +39,22 @@
                             <h:outputLabel style="font-weight: bold" value="Indicate independent variables using the column names with commas in between:"/>
                             <p:inputText style="width:400px; height:40px" value="#{logCABean.indInput}"/> 
                             
-                            <h:outputLabel style="font-weight: bold" value="Indicate ascending order of dependent variable level names with commas in between:"/>
+                            <p:panelGrid></p:panelGrid>
+                            
+                             <h:outputLabel style="font-weight: bold" value="Indicate ascending order of dependent variable level names with commas in between:"/>
                             <p:inputText style="width:400px; height:40px" value="#{logCABean.indInput}"/> 
 
+                            <p:panelGrid></p:panelGrid>
+                            
+                                 <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
+                            <p:selectBooleanCheckbox value ="#{linearCABean.doOriginal}"/>
+                            
+                            <p:panelGrid></p:panelGrid>
+                            
                             <h:outputLabel style="font-weight: bold" value="Logistic Model Type:"/>
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{logCABean.corModelType}">
                                 <f:selectItems value="#{applicationBean1.corModType}" />
                             </p:selectOneMenu>
-                            
-                            <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
-                            <p:selectBooleanCheckbox value ="#{linearCABean.doOriginal}"/>
 
                             <p:panelGrid></p:panelGrid>
                             
@@ -126,11 +132,6 @@ The R &#xb2; value is the fraction of variance explained by the model and is a v
                             </p:selectOneMenu>
                             <spacer></spacer>
                             
-                            <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
-                            <p:selectBooleanCheckbox value ="#{linearCABean.doOriginal}"/>
-
-                            <p:panelGrid></p:panelGrid>
-                            
 <!--                            <h:outputLabel style="font-weight: bold" value="Reference level:"/>
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="hash{logCABean.responseLevelVar}">
                                 <f:selectItems value="hash{logCABean.columnLevelOpts}" />
@@ -142,10 +143,16 @@ The R &#xb2; value is the fraction of variance explained by the model and is a v
 <!--                            <h:outputLabel style="font-weight: bold" value="Indicate ascending order of dependent variable level names with commas in between:"/>
                             <p:inputText style="width:400px; height:40px" value="hash{logCABean.indInput}"/> -->
 
+ <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
+                            <p:selectBooleanCheckbox value ="#{linearCABean.doOriginal}"/>
+                             <p:panelGrid></p:panelGrid>
+
                             <h:outputLabel style="font-weight: bold" value="Logistic Model Type:"/>
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{logCABean.corModelType}">
                                 <f:selectItems value="#{applicationBean1.corModType}" />
                             </p:selectOneMenu>
+
+                            <p:panelGrid></p:panelGrid>
                         </h:panelGrid>
 
                         <p:panelGrid></p:panelGrid>
