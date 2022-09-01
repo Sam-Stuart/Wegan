@@ -178,8 +178,7 @@ public class CABean implements Serializable {
                 sb.getCurrentImage("corr_rf_relaimpo"), "png", 72);
         CAUtils.PlotRFErrorCA(sb, 
                 "NULL", "NULL", false, 
-                "NULL",  false,
-                 " ", " "," ",
+                "NULL",  " ", " "," ",
                 sb.getCurrentImage("corr_rf_error"), "png", 72);
     }  
     
