@@ -13,8 +13,11 @@
     <ui:define name="myscript">
         <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/jscripts/canvasXpress.min.js"></script>
         <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/jscripts/graphics.js"></script>
+        <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/jscripts/d3.min.js"></script>
+        <script src="./BoxPlot.js"></script>
     </ui:define>
     <ui:define name="content">
+        <h:inputHidden id="mydir" value="#{sessionBean1.currentUser.relativeDir}" />
         <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
             <p:tabView id="ac" style="width:100%; border: #00ff00; background: none; font-size: 13px;">
                 <p:tab title ="Line Graph" titleStyleClass="p-tab-nav">

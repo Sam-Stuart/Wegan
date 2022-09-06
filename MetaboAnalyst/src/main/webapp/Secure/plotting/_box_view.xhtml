@@ -65,7 +65,8 @@
     </h:panelGrid>  
     <h:panelGrid id="boxPane" style="width: 100%;">
          <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
-            <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('plot_box_chart')}" alt="PieChartImage"/>
+            <div id="d3_boxplot_title"></div>
+            <div id="d3_boxplot"></div>
         </h:panelGrid>                           
 
     </h:panelGrid>
