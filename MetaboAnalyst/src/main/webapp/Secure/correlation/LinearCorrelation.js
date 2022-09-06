@@ -75,53 +75,64 @@ function createNavigationButtons(id, scatter, zoom) {
         .append("button")
         .classed("navigation-buttons", true)
         .attr("type", "button")
-        .html("Reset")
         .on("click", function () {
             scatter
                 .transition()
                 .duration(750)
                 .call(zoom.transform, d3.zoomIdentity);
         });
-
+    resetButton
+        .append("i")
+        .classed("fa fa-refresh", true)
+        .attr("aria-hidden", "true");
     //Pan Buttons
     const moveDuration = 500;
 
-    function createPanButton(html, translateX, translateY) {
-        return navigationButtons
+    function createPanButton(iconName, translateX, translateY) {
+        const button = navigationButtons
             .append("button")
             .classed("navigation-buttons", true)
             .attr("type", "button")
-            .html(html)
             .on("click", function () {
                 scatter
                     .transition()
                     .duration(moveDuration)
                     .call(zoom.translateBy, translateX, translateY);
             });
+        button
+            .append("i")
+            .classed(`fa ${iconName}`, true)
+            .attr("aria-hidden", "true");
+
+        return button;
     }
 
-    const panRightButton = createPanButton("Move Right", 50, 0);
-    const panUpButton = createPanButton("Move Up", 0, 50);
-    const panDownButton = createPanButton("Move Down", 0, -50);
-    const panLeftButton = createPanButton("Move Left", -50, 0);
+    const panRightButton = createPanButton("fa-arrow-left", 50, 0);
+    const panUpButton = createPanButton("fa-arrow-up", 0, 50);
+    const panDownButton = createPanButton("fa-arrow-down", 0, -50);
+    const panLeftButton = createPanButton("fa-arrow-right", -50, 0);
 
     // Zoom buttons
-    function createZoomButton(html, fraction) {
-        return navigationButtons
+    function createZoomButton(iconName, fraction) {
+        const button = navigationButtons
             .append("button")
             .classed("navigation-buttons", true)
             .attr("type", "button")
-            .html(html)
             .on("click", function () {
                 scatter
                     .transition()
                     .duration(moveDuration)
                     .call(zoom.scaleBy, fraction);
             });
+
+        button
+            .append("i")
+            .classed(`fa ${iconName}`, true)
+            .attr("aria-hidden", "true");
     }
 
-    const zoomInButton = createZoomButton("Zoom In", 2);
-    const zoomOutButton = createZoomButton("Zoom Out", 0.5);
+    const zoomInButton = createZoomButton("fa-search-plus", 2);
+    const zoomOutButton = createZoomButton("fa-search-minus", 0.5);
 
     return [
         navigationButtons,
