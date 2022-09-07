@@ -828,8 +828,8 @@ a.changeBlue:hover {
 
 .navigation_buttons_container {
     display: flex;
-    flex-direction: column;
-    flex-basis: min-content;
+    flex-wrap: wrap;
+    justify-content: space-around;
     margin-left: 1rem;
 }
 
@@ -840,6 +840,7 @@ a.changeBlue:hover {
     border: solid #172b68 2px;
     border-radius: 3px;
     padding: 2px 10px;
+    flex-basis: 30%;
 }
 
 .navigation_buttons_container .navigation-buttons:hover {

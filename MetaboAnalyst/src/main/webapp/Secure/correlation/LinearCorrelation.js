@@ -71,6 +71,24 @@ function createNavigationButtons(id, scatter, zoom) {
         .append("div")
         .classed("navigation_buttons_container", true);
 
+    /**Create dummy div
+    [dummy] [up] [zoom-in]
+    [left]  [reset] [right]
+    [dummy] [down] [zoom-out]  
+    **/
+    navigationButtons
+        .append("button")
+        .classed("navigation-buttons", true)
+        .attr("disabled", true)
+        .style("opacity", 0);
+    navigationButtons
+        .append("button")
+        .classed("navigation-buttons", true)
+        .style("opacity", 0)
+        .attr("disabled", true)
+        .style("order", 7);
+
+    //Reset button
     const resetButton = navigationButtons
         .append("button")
         .classed("navigation-buttons", true)
@@ -85,6 +103,7 @@ function createNavigationButtons(id, scatter, zoom) {
         .append("i")
         .classed("fa fa-refresh", true)
         .attr("aria-hidden", "true");
+
     //Pan Buttons
     const moveDuration = 500;
 
@@ -129,10 +148,21 @@ function createNavigationButtons(id, scatter, zoom) {
             .append("i")
             .classed(`fa ${iconName}`, true)
             .attr("aria-hidden", "true");
+
+        return button;
     }
 
     const zoomInButton = createZoomButton("fa-search-plus", 2);
     const zoomOutButton = createZoomButton("fa-search-minus", 0.5);
+
+    //Ordering buttons in flexbox
+    panUpButton.style("order", 2);
+    zoomInButton.style("order", 3);
+    panRightButton.style("order", 4);
+    resetButton.style("order", 5);
+    panLeftButton.style("order", 6);
+    panDownButton.style("order", 8);
+    zoomOutButton.style("order", 9);
 
     return [
         navigationButtons,
