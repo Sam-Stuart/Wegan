@@ -1,6 +1,6 @@
 #scatterPlot_plotting
 library(vegan)
-
+print("We are priting in Scatter plot, outside the functions")
 ##### SCATTER PLOT ####
 #'Scatter Plot'
 #'@description Produce scatter plot components based on user data and preferences
@@ -23,7 +23,7 @@ library(vegan)
 scatterPlot_setup <- function(mSetObj = NA, facA=NULL, facB=NULL, type = NULL, line_color = "red", xlab = NULL,
                               ylab = NULL, maintitle = 'Title'){
   mSetObj <- .get.mSet(mSetObj)
-  
+  print("inside scatterPlot_setup function");
   #Set independent variable name
   if (is.null(facA)){
     facA <- colnames(mSetObj$dataSet$norm)[1]; #Default is first column.

@@ -114,6 +114,7 @@ public class ApplicationBean1 implements Serializable {
     private final SelectItem[] ordStressDimensionOpts;
     private final SelectItem[] ordColorPaletteOpts;
     private final SelectItem[] pcaPairsColorPaletteOpts;
+    private final SelectItem[] boxPltColorPaletteOpts;
     private final SelectItem[] pairAnalOpts;
     private final SelectItem[] equalVarOpts;
     private final SelectItem[] posthocOpts;
@@ -308,6 +309,13 @@ public class ApplicationBean1 implements Serializable {
         pcaPairsColorPaletteOpts[3] = new SelectItem("blue", "Blue");
         pcaPairsColorPaletteOpts[4] = new SelectItem("none", "No Color");
                 
+        boxPltColorPaletteOpts = new SelectItem[5];
+        boxPltColorPaletteOpts[0] = new SelectItem("v", "Viridis");
+        boxPltColorPaletteOpts[1] = new SelectItem("p", "Plasma");
+        boxPltColorPaletteOpts[2] = new SelectItem("g", "Grayscale");
+        boxPltColorPaletteOpts[3] = new SelectItem("r", "Rainbow");
+        boxPltColorPaletteOpts[4] = new SelectItem("b", "Light Blue");
+        
         ordStressDimensionOpts = new SelectItem[5];
         ordStressDimensionOpts[0] = new SelectItem("NULL", "1");
         ordStressDimensionOpts[1] = new SelectItem("2", "2");
@@ -943,6 +951,11 @@ public class ApplicationBean1 implements Serializable {
     public SelectItem[] getOrdColorPaletteOpts() {
         return ordColorPaletteOpts;
     }
+    
+    public SelectItem[] getBoxPltColorPaletteOpts() {
+        return boxPltColorPaletteOpts;
+    }
+    
             
     public SelectItem[] getPcaPairsColorPaletteOpts() {
         return pcaPairsColorPaletteOpts;

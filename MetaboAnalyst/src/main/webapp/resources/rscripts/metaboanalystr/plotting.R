@@ -17,7 +17,6 @@ plotLinearFunction <- function(mSetObj=NA, imgName, format="png", dpi=72, width=
 
     #Dependent var default is first column. Independent var default is second column.
 
-
   #Set dependent (response) variable name
   if (facA == "NULL"){
     facA <- colnames(mSetObj$dataSet$norm)[1] #Default is first column.
@@ -33,6 +32,7 @@ plotLinearFunction <- function(mSetObj=NA, imgName, format="png", dpi=72, width=
   }
    
   #Variable type check
+   
   if (is.factor(mSetObj$dataSet$norm[,facA] || mSetObj$dataSet$norm[,facB])==TRUE){
     #AddErrMsg("You have chosen 1 or more categorical columns! Try selecting another independent and/or dependent variable. You can also try other regression models such as penalized, logistic, SVM or random forest.")
     stop("You have chosen 1 or more categorical columns! Try selecting another independent and/or dependent variable. You can also try other regression models such as penalized, logistic, SVM or random forest.") #Error msg
@@ -98,4 +98,21 @@ lin.reg.get.results <- function(mSetObj=NA){
 
 }
 
+plotting.reg.columns <- function(mSetObj=NA){
+  
+  mSetObj <- .get.mSet(mSetObj)
+  
+  data <- select_if(mSetObj$dataSet$orig, is.numeric)
+  count.all.numeric.cols <- ncol(data)
+  name.all.numeric.cols <- colnames(data)
+  
+  num.col.results <- list(
+    count=count.all.numeric.cols,
+    names=name.all.numeric.cols
+  )
+  return(name.all.numeric.cols)
+  
+}
+
     
+

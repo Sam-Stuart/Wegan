@@ -216,6 +216,72 @@ public class PlottingloadBean implements Serializable {
         this.testDataOpt = testDataOpt;
     }
 
+//<<<<<<< HEAD
+//    public String handleStatTestFileUpload() {
+//        String format = "";
+//        boolean paired = false;
+//        boolean isZip = false;
+//        String testFile = null;
+//
+//        
+//        
+//        if (testDataOpt == null) {
+//            //sb.updateMsg("Error", "No data set is selected!");
+//            return null;
+//        }
+//
+//        if (testDataOpt.equals("conccancer")) {
+//            dataType = "conc";
+//            testFile = ab.getTestConcHsaPath();
+//            format = "rowu";
+//        }
+//        
+//        //DUNE DATA SELECTED*********************************************************
+//        else if (testDataOpt.equals("Dune")) {
+//            dataType = "Dune";
+//            sb.updateMsg("Error", "Dune data selected");
+//
+//            testFile = ab.getTestamf();
+//            format = "rowu";
+//          
+//        } else if (testDataOpt.equals("BCI")) {
+//            testFile = ab.getTestBCI();
+//            format = "rowu";
+//            
+//        } else if (testDataOpt.equals("Iris")) {
+//            dataType = "Dune";
+//            testFile = ab.getTestIris();
+//            format = "rowu";            
+//        }
+//
+//        if (!sb.doLogin(dataType, "DCA", false, paired)) {
+//            //sb.updateMsg("Error", "No login return null?");
+//            return null;
+//        }
+//
+//        RConnection RC = sb.getRConnection();
+//        if (isZip) {
+//            if (!RDataUtils.readZipData(RC, testFile, dataType, "F")) {
+//                sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
+//                return null;
+//            }
+//        } else {
+//            
+//            //Tested cahnging Disc to cont
+//            if (!RDataUtils.readTextData(RC, testFile, format, "disc")) {
+//                sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
+//                return null;
+//            }
+//        }
+//        sb.setDataUploaded(true);
+//        if (dataType.equals("conc") || dataType.equals("pktable") || dataType.equals("specbin")) {
+//            return "Data check";
+//        }
+//        return dataType;
+//    }
+//=======
+    
+//>>>>>>> 6d2a238d3aaa5638d6a34c5d8864a89f961edc0f
    
     //----------------------------------------------------------------- Test loader 
     public String handlePlottingTestFileUpload() {
@@ -233,6 +299,12 @@ public class PlottingloadBean implements Serializable {
             dataFormat = "rowu";
             dataNames = "colOnly";
         } 
+        else if (testDataOpt.equals("Iris")) {
+            dataType = "main";
+            testFile = ab.getTestIris();
+            dataFormat = "rowu";       
+            dataNames = "colOnly";
+        }
         
         else if (testDataOpt.equals("Dune")) {
             dataType = "main";
@@ -244,6 +316,23 @@ public class PlottingloadBean implements Serializable {
         else if (testDataOpt.equals("BCI")) {
             dataType = "main";
             testFile = ab.getTestBCI();
+//<<<<<<< HEAD
+//            format = "rowu";
+//        } else if (testDataOpt.equals("Iris")) {
+//            dataType = "Dune";
+//            testFile = ab.getTestIris();
+//            format = "rowu";            
+//        
+//        } else if (testDataOpt.equals("Linear")) {
+//            //System.out.print(" Linear Data selected");
+//            dataType = "Linear";
+//            //sb.updateMsg("Error", "Dune data selected");
+//
+//            testFile = ab.getTestLinear();
+//            format = "rowu";
+//            
+//        }else {
+//=======
             dataFormat = "rowu";
             dataNames = "colOnly";
         }
@@ -256,6 +345,7 @@ public class PlottingloadBean implements Serializable {
         } 
         
         else {
+//>>>>>>> 6d2a238d3aaa5638d6a34c5d8864a89f961edc0f
             sb.updateMsg("Error", "Unknown data selected?");
             return null;
         }
@@ -266,6 +356,13 @@ public class PlottingloadBean implements Serializable {
         }
         
         sb.setDataUploaded(true);
+//<<<<<<< HEAD
+////        return "Data check";  // Change back to 'Data check'    
+////    }
+////    
+////    public boolean runDCaR(String inputData,String ext){
+//=======
+//>>>>>>> 6d2a238d3aaa5638d6a34c5d8864a89f961edc0f
         RConnection RC = sb.getRConnection();
         RDataUtils.readTextData(RC, testFile, dataFormat, "disc", dataNames);
         return "Data check";
