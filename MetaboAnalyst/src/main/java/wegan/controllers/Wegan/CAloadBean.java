@@ -60,7 +60,7 @@ public class CAloadBean implements Serializable {
         this.dataFile = dataFile;
     }
 
-        
+
     private String dataNames = "colOnly";
 
     public String getDataNames() {
@@ -71,6 +71,7 @@ public class CAloadBean implements Serializable {
         this.dataNames = dataNames;
     }
     
+
     /*
     Data upload for statistics module
      */

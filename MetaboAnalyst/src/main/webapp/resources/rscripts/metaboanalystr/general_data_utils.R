@@ -344,8 +344,10 @@ GetRCommandHistory <- function(mSetObj=NA){
 #}
 
 Read.TextData <- function(mSetObj=NA, filePath, dataFormat="rowu", lbl.type="disc", dataNames="colOnly"){
-load_dplyr()  
-mSetObj <- .get.mSet(mSetObj);
+
+  load_dplyr()  
+  mSetObj <- .get.mSet(mSetObj);
+
   mSetObj$dataSet$cls.type <- lbl.type;
   mSetObj$dataSet$format <- dataFormat;
 
@@ -374,14 +376,19 @@ mSetObj <- .get.mSet(mSetObj);
   if(substring(dataFormat,1,3)=="row"){ # sample in row
     msg<-c(msg, paste0("&emsp;&emsp;&emsp;&emsp;", "- Samples in rows and variables in columns."));
     smpl.nms <- rownames(dat);
+    print(smpl.nms)
     all.nms <- colnames(dat);
+    print(all.nms)
     cls.lbl <- smpl.nms;
     facA <- dat[,1];
+    print(facA)
     facA.lbl <- all.nms[1];
     facB <- dat[,2];
+    print(facB)
     facB.lbl <- all.nms[2];
     var.nms <- all.nms;
     dat1 <- dat;
+    print(dat1)
   }else{ # sample in col
     msg<-c(msg, paste0("<ul>", "- Samples in columns and variables in rows.", "</ul>"));
     all.nms <- rownames(dat);

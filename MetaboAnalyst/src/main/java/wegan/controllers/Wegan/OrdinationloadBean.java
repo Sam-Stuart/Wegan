@@ -91,6 +91,7 @@ public class OrdinationloadBean implements Serializable {
         this.dataFile = dataFile;
     }
 
+
     private UploadedFile dataFileMeta;
 
     public UploadedFile getDataFileMeta() {
@@ -121,6 +122,7 @@ public class OrdinationloadBean implements Serializable {
         this.dataFileEnv = dataFileEnv;
     }
     
+
     private String dataNames = "colOnly";
 
     public String getDataNames() {
@@ -131,6 +133,7 @@ public class OrdinationloadBean implements Serializable {
         this.dataNames = dataNames;
     }
     
+
     private String metaNames = "colOnly";
 
     public String getMetaNames() {
@@ -161,6 +164,7 @@ public class OrdinationloadBean implements Serializable {
         this.envNames = envNames;
     }
     
+
     
     /*
     Data upload for ordination module
@@ -183,6 +187,7 @@ public class OrdinationloadBean implements Serializable {
                 if (fileName == null) {
                     return null;
                 }
+
                 if (fileNameMeta != null){
                     RDataUtils.readTextDataMeta(RC, fileNameMeta, metaFormat, "disc", metaNames);
                 }
@@ -192,6 +197,7 @@ public class OrdinationloadBean implements Serializable {
                 if (fileNameEnv != null){
                     RDataUtils.readTextDataEnv(RC, fileNameEnv, envFormat, "disc", envNames);
                 }
+
                 if (RDataUtils.readTextData(RC, fileName, dataFormat, "disc", dataNames)) {
                     sb.setDataUploaded(true);
                     sb.updateMsg("Error", "Data Uploaded successfully");
@@ -306,6 +312,70 @@ public class OrdinationloadBean implements Serializable {
     public void setTestDataOpt(String testDataOpt) {
         this.testDataOpt = testDataOpt;
     }
+
+
+//    public String handleStatTestFileUpload() {
+//        System.out.print(" ------------------OVER HERE !!!! ------------------------------");
+//        String format = "";
+//        boolean paired = false;
+//        boolean isZip = false;
+//        String testFile = null;
+//
+//        
+//        
+//        if (testDataOpt == null) {
+//            //sb.updateMsg("Error", "No data set is selected!");
+//            return null;
+//        }
+//
+//        if (testDataOpt.equals("conccancer")) {
+//            dataType = "conc";
+//            testFile = ab.getTestConcHsaPath();
+//            format = "rowu";
+//        }
+//        
+//        //DUNE DATA SELECTED*********************************************************
+//        else if (testDataOpt.equals("Dune")) {
+//            dataType = "Dune";
+//            sb.updateMsg("Error", "Dune data selected");
+//
+//            testFile = ab.getTestamf();
+//            format = "rowu";
+//            
+//           
+//        } else if (testDataOpt.equals("BCI")) {
+//            testFile = ab.getTestBCI();
+//            format = "rowu";
+//        }
+//
+//        if (!sb.doLogin(dataType, "ord", false, paired)) {
+//            //sb.updateMsg("Error", "No login return null?");
+//            return null;
+//        }
+//
+//        RConnection RC = sb.getRConnection();
+//        if (isZip) {
+//            if (!RDataUtils.readZipData(RC, testFile, dataType, "F")) {
+//                sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
+//                return null;
+//            }
+//        } else {
+//            
+//            //Tested cahnging Disc to cont
+//            if (!RDataUtils.readTextData(RC, testFile, format, "disc", dataNames)) {
+//                sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
+//                return null;
+//            }
+//        }
+//        sb.setDataUploaded(true);
+//        if (dataType.equals("conc") || dataType.equals("pktable") || dataType.equals("specbin")) {
+//            return "Data check";
+//        }
+//        return dataType;
+//    }
+//    
+  
+
     
     //----------------------------------------------------------------- Test loader 
     public String handleOrdinationTestFileUpload() {
@@ -363,7 +433,23 @@ public class OrdinationloadBean implements Serializable {
             //sb.updateMsg("Error", "No login return null?");
             return null;
         }
-        
+
+
+//        RConnection RC = sb.getRConnection();
+//        if (isZip) {
+//            if (!RDataUtils.readZipData(RC, testFile, dataType, "F")) {
+//                sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
+//                return null;
+//            }
+//        } else {
+//            
+//            //Tested cahnging Disc to cont
+//            if (!RDataUtils.readTextData(RC, testFile, format, "disc", dataNames)) {
+//                sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
+//                return null;
+//            }
+//        }
+
         sb.setDataUploaded(true);
         RConnection RC = sb.getRConnection();
         RDataUtils.readTextData(RC, testFile, dataFormat, "disc", dataNames);
@@ -373,6 +459,7 @@ public class OrdinationloadBean implements Serializable {
         if (envTestFile != null) {
             RDataUtils.readTextDataEnv(RC, envTestFile, envFormat, "disc", envNames);
         }
+
         return "Data check";
     }
     
@@ -387,4 +474,59 @@ public class OrdinationloadBean implements Serializable {
         return this.checkboxValue;
     }
 
+
+//    /*
+//    ROC data upload
+//     */
+//    private String dataOpt = "data1";
+//
+//    public String getDataOpt() {
+//        return dataOpt;
+//    }
+//
+//    public void setDataOpt(String dataOpt) {
+//        this.dataOpt = dataOpt;
+//    }
+//
+//    public String uploadRocData() {
+//        //check if data is uploaded
+//        if (useExample) {
+//            return handleRocTestFileUpload();
+//        }
+//
+//        if (dataFile.getSize() == 0) {
+//            sb.updateMsg("Error", "File is empty");
+//            return null;
+//        }
+//
+//        if (sb.doLogin(dataType, "roc", false, false)) {
+//            RConnection RC = sb.getRConnection();
+//            String fileName = DataUtils.uploadFile(dataFile, sb, null, ab.isOnPublicServer());
+//            if (RDataUtils.readTextData(RC, fileName, dataFormat, "disc", dataNames)) {
+//                sb.setDataUploaded(true);
+//                return "Data check";
+//            } else {
+//                sb.updateMsg("Error:", RDataUtils.getErrMsg(RC));
+//                return null;
+//            }
+//        }
+//        return null;
+//    }
+//
+//    public String handleRocTestFileUpload() {
+//        if (!sb.doLogin("conc", "roc", false, false)) {
+//            return null;
+//        }
+//        RConnection RC = sb.getRConnection();
+//        if (dataOpt.equals("data1")) {
+//            RDataUtils.readTextData(RC, ab.getTestRocPath(), "rowu", "disc", dataNames);
+//        } else {
+//            RDataUtils.readTextData(RC, ab.getTestRocNewPath(), "rowu", "disc", dataNames);
+//        }
+//        sb.setDataUploaded(true);
+//        return "Data check";
+//    }
+//}
+
 }
+

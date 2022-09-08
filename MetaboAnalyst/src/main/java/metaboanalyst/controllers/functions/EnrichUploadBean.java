@@ -182,6 +182,16 @@ public class EnrichUploadBean implements Serializable {
         this.dataFormat = dataFormat;
     }
 
+    private String dataNames = "colOnly";
+
+    public String getDataNames() {
+        return dataNames;
+    }
+
+    public void setDataNames(String dataNames) {
+        this.dataNames = dataNames;
+    }
+    
     private String qeaTestDataOpt = "msetDis";
 
     public String getQeaTestDataOpt() {
@@ -192,16 +202,6 @@ public class EnrichUploadBean implements Serializable {
         this.qeaTestDataOpt = qeaTestDataOpt;
     }
 
-        
-    private String dataNames = "colOnly";
-
-    public String getDataNames() {
-        return dataNames;
-    }
-
-    public void setDataNames(String dataNames) {
-        this.dataNames = dataNames;
-    }
     
     public String handleQeaDataUpload() {
         try {

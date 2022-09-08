@@ -114,6 +114,16 @@ public class PathUploadBean implements Serializable {
         this.dataFormat = dataFormat;
     }
 
+    private String dataNames = "colOnly";
+
+    public String getDataNames() {
+        return dataNames;
+    }
+
+    public void setDataNames(String dataNames) {
+        this.dataNames = dataNames;
+    }
+    
     public void setClsOpt(String clsOpt) {
         this.clsOpt = clsOpt;
     }
@@ -136,17 +146,6 @@ public class PathUploadBean implements Serializable {
 
     public void setUsePathDataExample(boolean usePathDataExample) {
         this.usePathDataExample = usePathDataExample;
-    }
-
-        
-    private String dataNames = "colOnly";
-
-    public String getDataNames() {
-        return dataNames;
-    }
-
-    public void setDataNames(String dataNames) {
-        this.dataNames = dataNames;
     }
     
     public String pathQeaBn_action() {
@@ -189,7 +188,11 @@ public class PathUploadBean implements Serializable {
 
     private String processPathQeaData(String fileName, String cmpdType, String dataFormat, String lblType, String dataNames) {
         RConnection RC = sb.getRConnection();
+
+//        if (RDataUtils.readTextData(RC, fileName, dataFormat, lblType, dataNames)) { 
+
         if (RDataUtils.readTextData(RC, fileName, dataFormat, lblType, dataNames)) {
+
             if (RDataUtils.getGroupNumber(RC) > 2) {
                 sb.updateMsg("Error", "Enrichment analysis for multiple-group data is "
                                 + "not well-defined. Please subset your data to two groups to proceed!");

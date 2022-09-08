@@ -53,6 +53,30 @@ public class ApplicationBean1 implements Serializable {
     private static final String test_currency_data = "/data/currency.txt";
     private static final String test_pos_adduct_data = "/data/pos_add_list.txt";
     private static final String test_neg_adduct_data = "/data/neg_add_list.txt";
+
+    
+    //WEGAN TEST DATA PATHS ----------------------------------------------------
+    
+//    private static final String test_amf = "/data/WeganTestAMF.csv";
+//    private static final String test_dune = "/data/dune.txt";
+//    private static final String test_BCI = "/data/BCI.txt";
+//    private static final String test_varespec = "/data/varespec.txt";
+//    private static final String test_linear = "/data/linear_test_data4.txt"; // linear plot test data 
+//   
+//    
+//    private static final String test_iris = "/data/iris.txt";
+////    private static final String test_linear = "/data/linear.txt";
+//    private static final String test_dune_weights = "/data/dune_weights.txt";
+//    private static final String test_iris = "/data/iris.txt";
+    
+    
+    //**************************************************************************
+    
+    
+    
+    
+    
+
     private static final String qc_cmp_data = "/data/qc_compare.csv";
     private static final String path_lib = "/libs/smp_path.csv";
     private static final String mset_dir = "/libs/msets";
@@ -90,6 +114,7 @@ public class ApplicationBean1 implements Serializable {
     private final SelectItem[] cmpdIDOpts1;
     private final SelectItem[] zipOpts;
     private final SelectItem[] csvFormatOpts;
+
     private final SelectItem[] metaFormatOpts;
     private final SelectItem[] taxFormatOpts;
     private final SelectItem[] envFormatOpts;
@@ -97,6 +122,7 @@ public class ApplicationBean1 implements Serializable {
     private final SelectItem[] metaNamesOpts;
     private final SelectItem[] taxNamesOpts;
     private final SelectItem[] envNamesOpts;
+
     private final SelectItem[] rocFormatOpts;
     private final SelectItem[] tsFormatOpts;
     private final SelectItem[] testDataOpts;
@@ -187,6 +213,8 @@ public class ApplicationBean1 implements Serializable {
         cmpdIDOpts[5] = new SelectItem("metlin", "METLIN");
         cmpdIDOpts[6] = new SelectItem("hmdb_kegg", "HMDB and KEGG ID");
 
+
+
         csvFormatOpts = new SelectItem[2];
         csvFormatOpts[0] = new SelectItem("rowu", "Samples in rows, variables in columns");
         csvFormatOpts[1] = new SelectItem("colu", "Samples in columns, variables in rows");
@@ -271,6 +299,7 @@ public class ApplicationBean1 implements Serializable {
         betadisperDataOpts = new SelectItem[2];
         betadisperDataOpts[0] = new SelectItem("org","Original Data set");
         betadisperDataOpts[1] = new SelectItem("norm","Normalized Data set");
+
                 
         vegdistMeasureOpts = new SelectItem[14];
         vegdistMeasureOpts[0] = new SelectItem("NULL", "Bray-Curtis");
@@ -981,11 +1010,13 @@ public class ApplicationBean1 implements Serializable {
     public SelectItem[] getVegdistMeasureOpts() {
         return vegdistMeasureOpts;
     }
+
     
     public SelectItem[] getBetadisperDataOpts() {
         return betadisperDataOpts;
     }
       
+
     public SelectItem[] getCiaTypeOpts() {
         return ciaTypeOpts;
     }

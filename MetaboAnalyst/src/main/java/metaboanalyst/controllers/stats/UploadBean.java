@@ -57,7 +57,6 @@ public class UploadBean implements Serializable {
         this.dataFile = dataFile;
     }
 
-        
     private String dataNames = "colOnly";
 
     public String getDataNames() {
@@ -244,14 +243,14 @@ public class UploadBean implements Serializable {
         }
         
         //WEGAN DATA SELECTED*********************************************************
-        else if (testDataOpt.equals("Dune")) {
+        else if (testDataOpt.equals("dune")) {
             dataType = "main";
             //sb.updateMsg("Error", "Dune data selected");
             testFile = ab.getTestDune();
             dataFormat = "rowu";
             dataNames = "colOnly";
             
-        } else if (testDataOpt.equals("Iris")) {
+        } else if (testDataOpt.equals("iris")) {
             dataType = "main";
             testFile = ab.getTestIris();
             dataFormat = "rowu";
@@ -302,6 +301,21 @@ public class UploadBean implements Serializable {
         }
 
         RConnection RC = sb.getRConnection();
+
+//        if (isZip) {
+//            if (!RDataUtils.readZipData(RC, testFile, dataType, "F")) {
+//                sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
+//                return null;
+//            }
+//        } else {
+//            
+//            //Tested cahnging Disc to cont
+//            if (!RDataUtils.readTextData(RC, testFile, format, "cont", dataNames)) {
+//                sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
+//                return null;
+//            }
+//        }
+
 //        if (isZip) {
 //            if (!RDataUtils.readZipData(RC, testFile, dataType, "F")) {
 //                sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
@@ -315,6 +329,7 @@ public class UploadBean implements Serializable {
 //                return null;
 //            }
 //        }
+
         sb.setDataUploaded(true);
         if (dataType.equals("main")) {
             return "Data check";
@@ -373,7 +388,11 @@ public class UploadBean implements Serializable {
             return null;
         }
         RConnection RC = sb.getRConnection();
+
+//        RDataUtils.readTextData(RC, ab.getTestPowerPath(), "rowu", "disc", dataNames);
+
         RDataUtils.readTextData(RC, ab.getTestPowerPath(), "rowu", "disc", "colOnly");
+
         sb.setDataUploaded(true);
         return "Data check";
     }
@@ -422,9 +441,15 @@ public class UploadBean implements Serializable {
         }
         RConnection RC = sb.getRConnection();
         if (dataOpt.equals("data1")) {
+
+//            RDataUtils.readTextData(RC, ab.getTestRocPath(), "rowu", "disc", dataNames);
+//        } else {
+//            RDataUtils.readTextData(RC, ab.getTestRocNewPath(), "rowu", "disc", dataNames);
+
             RDataUtils.readTextData(RC, ab.getTestRocPath(), "rowu", "disc", "colOnly");
         } else {
             RDataUtils.readTextData(RC, ab.getTestRocNewPath(), "rowu", "disc", "colOnly");
+
         }
         sb.setDataUploaded(true);
         return "Data check";

@@ -18,6 +18,12 @@ import metaboanalyst.rwrappers.DiversityUtils;
 import metaboanalyst.rwrappers.RDataUtils;
 import metaboanalyst.utils.DataUtils;
 import org.primefaces.context.RequestContext;
+import java.util.Arrays;
+import java.util.List;
+import javax.faces.model.SelectItem;
+import metaboanalyst.controllers.DownloadBean;
+import metaboanalyst.models.User;
+import metaboanalyst.rwrappers.OAUtils;
 
 /**
  *
@@ -28,6 +34,9 @@ public class ClusterBean implements Serializable{
 
     private final ApplicationBean1 ab = (ApplicationBean1) DataUtils.findBean("applicationBean1");
     private final SessionBean1 sb = (SessionBean1) DataUtils.findBean("sessionBean1");
+    
+    private User usr = sb.getCurrentUser();
+    private String usrName = usr.getName();
 
     private String clustMethodOpt;
     private String clustDistOpt;
@@ -306,172 +315,346 @@ public class ClusterBean implements Serializable{
         return str;
     }
     
+
+    private boolean doOriginal = false; 
+    
+    public boolean isdoOriginal() {
+        return doOriginal;
+    }
+    
+    public void setdoOriginal(boolean doOriginal) {
+        this.doOriginal = doOriginal;
+    }
+     
+   // check box 
+    private boolean doEle = false;
+    
+    public boolean isdoEle() {
+        return doEle;
+    }
+
+    public void setdoEle(boolean doEle) {
+        this.doEle = doEle;
+    }
+    
+    private boolean doUni_point = false;
+    
+    public boolean isdoUni_point() {
+        return doUni_point;
+    }
+
+    public void setdoUni_point(boolean doUni_point) {
+        this.doUni_point = doUni_point;
+    }
     
     
-//    private boolean doOriginal = false; 
-//    
-//    public boolean isdoOriginal() {
-//        return doOriginal;
-//    }
-//    
-//    public void setdoOriginal(boolean doOriginal) {
-//        this.doOriginal = doOriginal;
-//    }
-//     
-//   // check box 
-//    private boolean doEle = false;
-//    
-//    public boolean isdoEle() {
-//        return doEle;
-//    }
-//
-//    public void setdoEle(boolean doEle) {
-//        this.doEle = doEle;
-//    }
-//    
-//    // textbox 
-//    private String zoom = "";
-//    
-//    public String getZoom() {
-//        return zoom;
-//    }
-//
-//    public void setZoom(String zoom) {
-//        this.zoom = zoom;
-//    }
-//    
-//    private String rangeA = "";
-//    
-//    public String getRangeA() {
-//        return rangeA;
-//    }
-//
-//    public void setRangeA(String rangeA) {
-//        this.rangeA = rangeA;
-//    }
-//    
-//        
-//    // static dropdown
-//    private SelectItem[] colorColOpts = null;
-//    
-//    public SelectItem[] getColorColOpts(){
-//        String[] columns = Clustering.colorColumn(sb);
-//        int columnsLen = columns.length;
-//        colorColOpts = new SelectItem[columnsLen];
-//        List<String> columnNames = Arrays.asList(columns);
-//        for (int i = 0; i < columnsLen; i++) {
-//            colorColOpts[i] = new SelectItem(columnNames.get(i), columnNames.get(i));
-//        }
-//        return colorColOpts;
-//    }
-//    
-//    private String colorColName = getColorColOpts()[0].getLabel();
-//    
-//    public String getColorColName() {
-//        return colorColName;
-//    }
-//
-//    public void setColorColName(String colorColName) {
-//        this.colorColName = colorColName;
-//    }
-//    
-//    
-//    private SelectItem[] varColOpts = null;
-//    
-//    public SelectItem[] getVarColOpts(){
-//        String[] columns = Clustering.colorColumn(sb);
-//        int columnsLen = columns.length;
-//        varColOpts = new SelectItem[columnsLen];
-//        List<String> columnNames = Arrays.asList(columns);
-//        for (int i = 0; i < columnsLen; i++) {
-//            varColOpts[i] = new SelectItem(columnNames.get(i), columnNames.get(i));
-//        }
-//        return varColOpts;
-//    }
-//    
-//    private String varColName = getVarColOpts()[0].getLabel();
-//    
-//    public String getVarColName() {
-//        return varColName;
-//    }
-//
-//    public void setVarColName(String varColName) {
-//        this.varColName = varColName;
-//    }
-//    
-//    
-//    private final SelectItem[] source;
-//    private String sourcechosen = "NULL";
-//    
-//    public SelectItem[] getSource() {
-//        return source;
-//    }
-//    
-//    public String getSourcechosen() {
-//        return sourcechosen;
-//    } 
-//
-//    public void setSourcechosen(String sourcechosen) {
-//        this.sourcechosen = sourcechosen;
-//    }
-//        
-//    
-//    private final SelectItem[] maptype;
-//    private String maptypechosen = "NULL";
-//    
-//    public SelectItem[] getMaptype() {
-//        return maptype;
-//    }
-//    
-//    public String getMaptypechosen() {
-//        return maptypechosen;
-//    } 
-//
-//    public void setMaptypechosen(String maptypechosen) {
-//        this.maptypechosen = maptypechosen;
-//    }
-//
-//    
-//    private String fileeleresult = "Elevation.csv";
-//    private String fileeleresultpath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + File.separator + fileeleresult + "\">" + fileeleresult + "</a>";
-//    //removed "usrname" cause it is not defined in clutering bean?
-//    public String getFileeleresultpath() {
-//        return fileeleresultpath;
-//    }
-//
-//    public void setFileeleresultpath(String fileeleresultpath) {
-//        this.fileeleresultpath = fileeleresultpath;
-//    }
-//    
-//    public ClusterBean() {
-//        source = new SelectItem[2];
-//        source[0] = new SelectItem("NULL", "Stamen");
-//        source[1] = new SelectItem("google", "Goole");
-//        
-//        maptype = new SelectItem[16];
-//        maptype[0] = new SelectItem("NULL", "Terrain");
-//        maptype[1] = new SelectItem("terrain-background", "Terrain-background");
-//        maptype[2] = new SelectItem("satellite", "Satellite");
-//        maptype[3] = new SelectItem("roadmap", "Roadmap");
-//        maptype[4] = new SelectItem("hybrid", "Hybrid");
-//        maptype[5] = new SelectItem("toner", "Toner");
-//        maptype[6] = new SelectItem("watercolor", "Watercolor");
-//        maptype[7] = new SelectItem("terrain-labels", "Terrain-labels");
-//        maptype[8] = new SelectItem("terrain-lines", "Terrain-lines");
-//        maptype[9] = new SelectItem("toner-2010", "Toner-2010");
-//        maptype[10] = new SelectItem("toner-2011", "Toner-2011");
-//        maptype[11] = new SelectItem("toner-background", "Toner-background");
-//        maptype[12] = new SelectItem("toner-hybrid", "Toner-hybrid");
-//        maptype[13] = new SelectItem("toner-labels", "Toner-labels");
-//        maptype[14] = new SelectItem("toner-lines", "Toner-lines");
-//        maptype[15] = new SelectItem("toner-lite", "Toner-lite");
-//
-//    }
-//    
-//    
-//    // ACTION BUTTON // 
-//    public void ggMapUpdate_action() {
-//        Clustering.CreateGGMap(sb, doOriginal, sourcechosen, maptypechosen, zoom, varColName, rangeA, colorColName, doEle, sb.getNewImage("ggmap"), "png", 72, "false");       
-//    }
+    // textbox 
+    private String zoom = "";
     
+    public String getZoom() {
+        return zoom;
+    }
+
+    public void setZoom(String zoom) {
+        this.zoom = zoom;
+    }
+    
+    private String rangeA = "";
+    
+    public String getRangeA() {
+        return rangeA;
+    }
+
+    public void setRangeA(String rangeA) {
+        this.rangeA = rangeA;
+    }
+     
+    private String crs_txt = "";
+    
+    public String getCrs_txt() {
+        return crs_txt;
+    }
+
+    public void setCrs_txt(String crs_txt) {
+        this.crs_txt = crs_txt;
+    }
+    
+    private String point_size = "";
+    
+    public String getPoint_size() {
+        return point_size;
+    }
+
+    public void setPoint_size(String point_size) {
+        this.point_size = point_size;
+    }
+    
+    private String path_size = "";
+    
+    public String getPath_size() {
+        return path_size;
+    }
+
+    public void setPath_size(String path_size) {
+        this.path_size = path_size;
+    }
+        
+    // static dropdown
+    private SelectItem[] pointColOpts = null;
+    
+    public SelectItem[] getPointColOpts(){
+        String[] columns = Clustering.colorColumn(sb);
+        int columnsLen = columns.length;
+        pointColOpts = new SelectItem[columnsLen];
+        List<String> columnNames = Arrays.asList(columns);
+        for (int i = 0; i < columnsLen; i++) {
+            pointColOpts[i] = new SelectItem(columnNames.get(i), columnNames.get(i));
+        }
+        return pointColOpts;
+    }
+    
+    private String pointColName = getPointColOpts()[0].getLabel();
+    
+    public String getPointColName() {
+        return pointColName;
+    }
+
+    public void setPointColName(String pointColName) {
+        this.pointColName = pointColName;
+    }
+    
+    
+    private SelectItem[] polygonColOpts = null;
+    
+    public SelectItem[] getPolygonColOpts(){
+        String[] columns = Clustering.varColumn(sb);
+        int columnsLen = columns.length;
+        polygonColOpts = new SelectItem[columnsLen];
+        List<String> columnNames = Arrays.asList(columns);
+        for (int i = 0; i < columnsLen; i++) {
+            polygonColOpts[i] = new SelectItem(columnNames.get(i), columnNames.get(i));
+        }
+        return polygonColOpts;
+    }
+    
+    private String polygonColName = getPolygonColOpts()[0].getLabel();
+    
+    public String getPolygonColName() {
+        return polygonColName;
+    }
+
+    public void setPolygonColName(String polygonColName) {
+        this.polygonColName = polygonColName;
+    }
+    
+    
+    private SelectItem[] pathColOpts = null;
+    
+    public SelectItem[] getPathColOpts(){
+        String[] columns = Clustering.lineColumn(sb);
+        int columnsLen = columns.length;
+        pathColOpts = new SelectItem[columnsLen];
+        List<String> columnNames = Arrays.asList(columns);
+        for (int i = 0; i < columnsLen; i++) {
+            pathColOpts[i] = new SelectItem(columnNames.get(i), columnNames.get(i));
+        }
+        return pathColOpts;
+    }
+    
+    private String pathColName = getPathColOpts()[0].getLabel();
+    
+    public String getPathColName() {
+        return pathColName;
+    }
+
+    public void setPathColName(String pathColName) {
+        this.pathColName = pathColName;
+    }
+    
+    
+    private final SelectItem[] source;
+    private String sourcechosen = "NULL";
+    
+    public SelectItem[] getSource() {
+        return source;
+    }
+    
+    public String getSourcechosen() {
+        return sourcechosen;
+    } 
+
+    public void setSourcechosen(String sourcechosen) {
+        this.sourcechosen = sourcechosen;
+    }
+        
+    
+    private final SelectItem[] maptype;
+    private String maptypechosen = "NULL";
+    
+    public SelectItem[] getMaptype() {
+        return maptype;
+    }
+    
+    public String getMaptypechosen() {
+        return maptypechosen;
+    } 
+
+    public void setMaptypechosen(String maptypechosen) {
+        this.maptypechosen = maptypechosen;
+    }
+    
+    
+    private final SelectItem[] crs_option;
+    private String crs_optionchosen = "NULL";
+    
+    public SelectItem[] getCrs_option() {
+        return crs_option;
+    }
+    
+    public String getCrs_optionchosen() {
+        return crs_optionchosen;
+    } 
+
+    public void setCrs_optionchosen(String crs_optionchosen) {
+        this.crs_optionchosen = crs_optionchosen;
+    }
+    
+    
+    private final SelectItem[] border_col;
+    private String border_colchosen = "NULL";
+    
+    public SelectItem[] getBorder_col() {
+        return border_col;
+    }
+    
+    public String getBorder_colchosen() {
+        return border_colchosen;
+    } 
+
+    public void setBorder_colchosen(String border_colchosen) {
+        this.border_colchosen = border_colchosen;
+    }
+    
+    
+    private final SelectItem[] color_point;
+    private String color_pointchosen = "NULL";
+    
+    public SelectItem[] getColor_point() {
+        return color_point;
+    }
+    
+    public String getColor_pointchosen() {
+        return color_pointchosen;
+    } 
+
+    public void setColor_pointchosen(String color_pointchosen) {
+        this.color_pointchosen = color_pointchosen;
+    }
+    
+    
+    private final SelectItem[] proj;
+    private String projchosen = "NULL";
+    
+    public SelectItem[] getProj() {
+        return proj;
+    }
+    
+    public String getProjchosen() {
+        return projchosen;
+    } 
+
+    public void setProjchosen(String projchosen) {
+        this.projchosen = projchosen;
+    }
+    
+    
+    private final SelectItem[] datum;
+    private String datumchosen = "NULL";
+    
+    public SelectItem[] getDatum() {
+        return datum;
+    }
+    
+    public String getDatumchosen() {
+        return datumchosen;
+    } 
+
+    public void setDatumchosen(String datumchosen) {
+        this.datumchosen = datumchosen;
+    }
+    
+    
+    private String fileeleresult = "Elevation.csv";
+    private String fileeleresultpath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileeleresult + "\">" + fileeleresult + "</a>";
+    //removed "usrname" cause it is not defined in clutering bean?
+    public String getFileeleresultpath() {
+        return fileeleresultpath;
+    }
+
+    public void setFileeleresultpath(String fileeleresultpath) {
+        this.fileeleresultpath = fileeleresultpath;
+    }
+    
+    public ClusterBean() {
+        proj = new SelectItem[2];
+        proj[0] = new SelectItem("NULL", "Coodinates");
+        proj[1] = new SelectItem("UTM", "UTM");
+        
+        datum = new SelectItem[2];
+        datum[0] = new SelectItem("NULL", "WGS84");
+        datum[1] = new SelectItem("NAD83", "NAD83");
+        
+        source = new SelectItem[2];
+        source[0] = new SelectItem("NULL", "Stamen");
+        source[1] = new SelectItem("google", "Google");
+        
+        crs_option = new SelectItem[3];
+        crs_option[0] = new SelectItem("NULL", "Not require conversion");
+        crs_option[1] = new SelectItem("10TM", "10TM");
+        crs_option[2] = new SelectItem("Manual", "Manually fill in CRS code");
+        
+        border_col = new SelectItem[6];
+        border_col[0] = new SelectItem("NULL", "Skyblue");
+        border_col[1] = new SelectItem("green", "Green");
+        border_col[2] = new SelectItem("turquoise", "Turquoise");
+        border_col[3] = new SelectItem("steelblue", "Steelblue");
+        border_col[4] = new SelectItem("peach", "Peach");
+        border_col[5] = new SelectItem("wheat", "Wheat");
+        
+        color_point = new SelectItem[6];
+        color_point[0] = new SelectItem("NULL", "Blue");
+        color_point[1] = new SelectItem("green", "Green");
+        color_point[2] = new SelectItem("turquoise", "Turquoise");
+        color_point[3] = new SelectItem("steelblue", "Steelblue");
+        color_point[4] = new SelectItem("peach", "Peach");
+        color_point[5] = new SelectItem("wheat", "Wheat");
+        
+        maptype = new SelectItem[16];
+        maptype[0] = new SelectItem("NULL", "Terrain");
+        maptype[1] = new SelectItem("terrain-background", "Terrain-background");
+        maptype[2] = new SelectItem("satellite", "Satellite");
+        maptype[3] = new SelectItem("roadmap", "Roadmap");
+        maptype[4] = new SelectItem("hybrid", "Hybrid");
+        maptype[5] = new SelectItem("toner", "Toner");
+        maptype[6] = new SelectItem("watercolor", "Watercolor");
+        maptype[7] = new SelectItem("terrain-labels", "Terrain-labels");
+        maptype[8] = new SelectItem("terrain-lines", "Terrain-lines");
+        maptype[9] = new SelectItem("toner-2010", "Toner-2010");
+        maptype[10] = new SelectItem("toner-2011", "Toner-2011");
+        maptype[11] = new SelectItem("toner-background", "Toner-background");
+        maptype[12] = new SelectItem("toner-hybrid", "Toner-hybrid");
+        maptype[13] = new SelectItem("toner-labels", "Toner-labels");
+        maptype[14] = new SelectItem("toner-lines", "Toner-lines");
+        maptype[15] = new SelectItem("toner-lite", "Toner-lite");
+
+    }
+    
+    
+    // ACTION BUTTON // 
+    public void spatialvisUpdate_action() {
+        Clustering.CreateSpatialvis(sb, doOriginal, projchosen, crs_txt, crs_optionchosen, datumchosen, zoom, maptypechosen, sourcechosen, 
+                rangeA, doEle, border_colchosen, color_pointchosen, point_size, path_size, pointColName, polygonColName, pathColName, doUni_point,  
+                sb.getNewImage("ggmap"), "png", 72, "false"); 
+    }
+
 }

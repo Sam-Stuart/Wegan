@@ -316,11 +316,7 @@
             <to-view-id>/Secure/diversity/UnseendivView.xhtml</to-view-id>
             <redirect/>
         </navigation-case>  
-        <navigation-case>
-            <from-outcome>Spatialvis</from-outcome>
-            <to-view-id>/Secure/diversity/SpatialvisView.xhtml</to-view-id>
-            <redirect/>
-        </navigation-case>                                                               
+                                                                     
                     
                                                                                                                                                                                                                     
                                                                                                                                                                                                                                                                                                                                                                                                                    
@@ -331,6 +327,11 @@
             <redirect/>
        </navigation-case>     
         <navigation-case>
+            <from-outcome>Geographical</from-outcome>
+            <to-view-id>/Secure/clustering/GeographicView.xhtml</to-view-id>
+            <redirect/>
+       </navigation-case>  
+       <navigation-case>
             <from-outcome>Plotting</from-outcome>
             <to-view-id>/Secure/plotting/PlottingMainView.xhtml</to-view-id>
             <redirect/>
@@ -519,22 +520,27 @@
         </navigation-case>
         <navigation-case>
             <from-outcome>Dendrogram</from-outcome>
-            <to-view-id>/Secure/analysis/TreeView.xhtml</to-view-id>
+            <to-view-id>/Secure/clustering/TreeView.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         <navigation-case>
             <from-outcome>Heatmap</from-outcome>
-            <to-view-id>/Secure/analysis/HeatmapView.xhtml</to-view-id>
+            <to-view-id>/Secure/clustering/HeatmapView.xhtml</to-view-id>
             <redirect/>
         </navigation-case>           
         <navigation-case>
             <from-outcome>K-means</from-outcome>
-            <to-view-id>/Secure/analysis/KMView.xhtml</to-view-id>
+            <to-view-id>/Secure/clustering/KMView.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         <navigation-case>
             <from-outcome>SOM</from-outcome>
-            <to-view-id>/Secure/analysis/SOMView.xhtml</to-view-id>
+            <to-view-id>/Secure/clustering/SOMView.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>Spatialvis</from-outcome>
+            <to-view-id>/Secure/clustering/SpatialvisView.xhtml</to-view-id>
             <redirect/>
         </navigation-case> 
         <navigation-case>

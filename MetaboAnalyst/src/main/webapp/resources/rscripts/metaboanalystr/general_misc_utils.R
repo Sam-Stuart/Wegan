@@ -180,9 +180,14 @@ RemoveDuplicates <- function(data, lvlOpt="mean", quiet=TRUE){
         colnames(dat1) <- paste0("V",1:ncol(dat1));
       } else if (dataNames=="bothNames") { #yes col names, yes row names
         dat <- try(read.csv(fileName, header=TRUE, comment.char = "", check.names=FALSE));
+<<<<<<< HEAD
         dat1 <- as.data.frame(dat[,-1]);
         rownames(dat1) <- as.character(dat[,1]);
         colnames(dat1) <- colnames(dat)[-1]
+=======
+        #rownames(dat) <- as.character(dat[,1]);
+        dat1 <- dat;
+>>>>>>> cluster-master
       } else { #no col names, no row names
         dat1 <- try(read.csv(fileName, header=FALSE, comment.char = "", check.names=FALSE));
         rownames(dat1) <- as.character(c(1:nrow(dat1)));
@@ -927,7 +932,11 @@ XSet2MSet <- function(xset, dataType, analType, paired=FALSE, format, lbl.type){
   rownames(data2) <- c("group", paste(round(groups(xset)[,"mzmed"], 3), round(groups(xset)[,"rtmed"]/60, 1), sep="/"));
   write.csv(data2, file="PeakTable.csv");
   mSet <- InitDataObjects("dataType", "analType", paired)
+
+  #mSet <- Read.TextData(mSet, "PeakTable.csv", "format", "lbl.type", "colOnly")
+
   mSet <- Read.TextData(mSet, "PeakTable.csv", "format", "lbl.type", "false", "false")
+
   print("mSet successfully created...")
   return(.set.mSet(mSetObj));
 }

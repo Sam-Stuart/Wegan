@@ -60,7 +60,16 @@ public class NMDSloadBean implements Serializable {
         this.dataFile = dataFile;
     }
 
+    private String dataNames = "colOnly";
 
+    public String getDataNames() {
+        return dataNames;
+    }
+
+    public void setDataNames(String dataNames) {
+        this.dataNames = dataNames;
+    }
+    
     /*
      * Handle zip file examples (containing csv or txt files)
      */
@@ -272,6 +281,21 @@ public class NMDSloadBean implements Serializable {
         }
 
         RConnection RC = sb.getRConnection();
+
+//        if (isZip) {
+//            if (!RDataUtils.readZipData(RC, testFile, dataType, "F")) {
+//                sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
+//                return null;
+//            }
+//        } else {
+//            
+//            //Tested cahnging Disc to cont
+//            if (!RDataUtils.readTextData(RC, testFile, dataFormat, "cont", dataNames)) {//fileName, dataFormat, "disc", dataNames
+//                sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
+//                return null;
+//            }
+//        }
+
 //        if (isZip) {
 //            if (!RDataUtils.readZipData(RC, testFile, dataType, "F")) {
 //                sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
@@ -286,6 +310,7 @@ public class NMDSloadBean implements Serializable {
 //            }
 //        }
         
+
         sb.setDataUploaded(true);
         //RC.Eval;
         try {
