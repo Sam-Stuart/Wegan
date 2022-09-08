@@ -5,154 +5,110 @@ library("stringr")
 library("vegan")
 
 
-
+#facB is y-axis, dependent variable and must be numeric data
+#facC is x-axis, independent variable and must be character (factor) data
 boxPlot_setup <- function(mSetObj = NA, 
-                          facA = "NULL", facB = "NULL", facC = "NULL",
+                          facA = "NULL", 
+                          facB = "NULL", facC = "NULL",
                           fillColor = "NULL",
                           xlab = "NULL", ylab = "NULL",
                           legendTitle = "Legend Title", mainTitle = "Main Title",
-                          data="NULL"){
+                          data="false"){
+                          
   mSetObj <- .get.mSet(mSetObj)
 
-  #AddErrMsg("This is an AddErrMsg message");
-    
+  #AddErrMsg("This is an AddErrMsg message");  
 
-  if (facA != "NULL"){
-      if (facA == facB){
-          AddErrMsg("Data selections cannot be the same");
-          stop("Cannot select same data columns for the boxplot.")
-      }
-  }
-  
-  
-
-  if (data=="NULL") {
-    input <- mSetObj$dataSet$orig
+  if (data=="false") {
+    input <- mSetObj$dataSet$norm
   } else {
     input <- mSetObj$dataSet$orig
   }
 
-
-
   #set up data
-  data_fac <- select_if(input, is.character) #factor columns for grouping (using 1 or 2)
-  data_num <- select_if(input, is.numeric) #numeric data for box plot (using 1)
+  data_fac <- select_if(input, is.character) #factor columns for grouping
+  data_num <- select_if(input, is.numeric) #numeric data for box plot
 
-  
   #Data check
   if (ncol(data_num)<1) {
-    print("Your data set has 0 numeric variables.")
-    
+    stop("Your data set has 0 numeric variables.")
+    #ADD ERROR HANDLING
   }
   
   if (ncol(data_fac)<1) {
-    print("Your data set has 0 grouping variables.")
-    
+    stop("Your data set has 0 grouping variables.")
+    #ADD ERROR HANDLING
   }
-  
-  #Set independent variable name
-  if (facA=="NULL") {
-    facA <- colnames(data_fac)[1]# Default is to choose the first factor column as response column. otherwise facB determined by function factor.columns() below
-  } 
   
   #Set dependent variable name
   if (facB=="NULL") {
-        facB <- colnames(data_num)[1]# Default is to choose the first numeric column as response column. otherwise facB determined by function numeric.columns() below
-  } 
+    facB <- colnames(data_num)[1]# Default is to choose the first numeric column as response column. otherwise facB determined by function numeric.columns() below
+  } else {
+    facB <- facB
+  }
   
   #Set grouping data variable name
   if (facC=="NULL") {
-    if (length(colnames(data_fac))>1) {
-      facC <- colnames(data_fac)[2]# Default is to choose the second factor column as grouping column. otherwise facB determined by function factor.columns() below
-    } 
+    if (length(colnames(data_fac))>=1) {
+      facC <- colnames(data_fac)[1]# Default is to choose the first factor column as grouping column. otherwise facC determined by function factor.columns() below
+    } else
+    facC <- facC
   } 
   
   # Set x axis label if null
   if (xlab == "NULL"){
-    if(facA == "NULL" ){
-      xlab <- "Independent Variable"
-    } else {
-      xlab <- facA
-    }
+    xlab <- facC
+  } else {
+    xlab <- xlab
   }
   
   # set y axis label if null
   if (ylab == "NULL"){
-    if(facB == "NULL"){
-      ylab <- "Dependent Variable"
-    } else {
-      ylab <- facB
-    }
+    ylab <- facB
+  } else {
+    ylab <- ylab
   }
   
   ###SET GROUPING LEGEND TITLE###
   if (legendTitle=="NULL"){
     legendTitle <- " "
+  } else {
+    legendTitle <- legendTitle
   }
   
   #Set variable data 
-  facA_data <- data_fac[,facA] #factor
+  facC_data <- data_fac[,facC] #factor
   facB_data <- data_num[,facB]  #numeric
   
-  # set grouping data - if exists 
-  if (facC=="NULL") { 
-    facC_data <- NULL
-  } else {
-    facC_data <- data_fac[,facC]  #factor   
-  } 
-  
-  facA_dim <- length(unique(facA_data)) # number of groups in facA
+  # set grouping data
+  facC_data <- data_fac[,facC]  #factor   
+
   facC_dim <- length(unique(facC_data)) # number of groups in facC
     
-  # select Color if no fill variable :
-  if (facC == "NULL"){ #default no 2nd factor var
+  # select Color if default fill variable :
     if (fillColor == "NULL"){ #default fill color
-      pallete <- viridis(facA_dim)
+      pallete <- viridis(facC_dim)
     } else if (fillColor != "NULL"){
       if (fillColor == 'r'){
-        pallete <- rainbow(facA_dim)
+        pallete <- rainbow(facC_dim)
       } else if (fillColor == 'v'){
-            pallete <- viridis(facA_dim)
+            pallete <- viridis(facC_dim)
       } else if (fillColor == 'p'){
-            pallete <- plasma(facA_dim) 
+            pallete <- plasma(facC_dim+1) 
       } else if (fillColor == 'g'){
-            pallete <- grey.colors(facA_dim)
+            pallete <- grey.colors(facC_dim)
       } else if (fillColor == 'b'){
             pallete <- 'lightblue'
       }
     }
 
-    if (length(pallete) >1 & length(pallete) != facA_dim){
-      pallete <- "NULL"
-      stop("dimensions of color must be 1 or eqaul to grouping dimensions (",facA_dim, ")" )
-    }
-  } else if(facC[1] != "NULL"){# option where fill variable is present (facC)
-    if (fillColor=="NULL") {
-      pallete <- viridis(facC_dim)
-    } 
-    if(fillColor != "NULL"){
-        if (fillColor == 'r'){
-          pallete <- rainbow(facC_dim)
-        } else if (fillColor == 'v'){
-          pallete <- viridis(facC_dim)
-        } else if (fillColor == 'p'){
-          pallete <- plasma(facC_dim+1) #Add 1 to remove light yellow
-        } else if (fillColor == 'g'){
-          pallete <- grey.colors(facC_dim)
-        } 
-      if (length(pallete) > 1 & length(pallete) != facC_dim){
-        pallete <- "NULL"
-        stop("dimensions of color must be eqaul to grouping dimensions (",facC_dim, ")" )
-      }
-    }
-  }
- 
   # save properties to object
-  mSetObj$analSet$boxPlot <- list(data = input, facA_data = facA_data, facB_data = facB_data, facC_data = facC_data,
-                                  pallete = pallete, xlab=xlab, ylab=ylab, legendTitle = legendTitle, mainTitle=mainTitle);
+  mSetObj$analSet$boxPlot <- list(data = input, facA_data = facC_data, facB_data = facB_data, facC_data = facC_data,
+                                  pallete = pallete, xlab=xlab, ylab=ylab, legendTitle = legendTitle, mainTitle=mainTitle, fillColor=fillColor);
   
   return(.set.mSet(mSetObj));
 }
+
 
 plotBoxPlot <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA){
   
@@ -160,10 +116,10 @@ plotBoxPlot <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA){
  
   # call upon graph parameters
   input <- mSetObj$analSet$boxPlot$data;
-  facA_data <- mSetObj$analSet$boxPlot$facA_data;
+
   facB_data <- mSetObj$analSet$boxPlot$facB_data;
   facC_data <- mSetObj$analSet$boxPlot$facC_data;
-
+  fillColor <- mSetObj$analSet$boxPlot$fillColor
   pallete <- mSetObj$analSet$boxPlot$pallete;
   xlab <- mSetObj$analSet$boxPlot$xlab;
   ylab <- mSetObj$analSet$boxPlot$ylab;
@@ -192,15 +148,7 @@ plotBoxPlot <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA){
   mSetObj$imgSet$boxPlot <- imgName;
   #Generate plot
   Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white");
-  if (is.null(facC_data)){ # No fill variable
-    p0 <- ggplot(input, aes(x=facA_data, y=facB_data)) +
-            geom_boxplot(fill = pallete) + labs(title = mainTitle, x = xlab, y = ylab) +
-            theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), axis.text.x=element_text(size=12, colour="black"), 
-            axis.text.y=element_text(size=12, colour="black"), legend.text=element_text(size=12), axis.title.x=element_text(size=12),
-            axis.title.y=element_text(size=12), legend.title=element_text(size=12), plot.title=element_text(hjust = 0.5))
-    show(p0)
-  } else { #yes fill variable
-    p0 <- ggplot(input, aes(x=facA_data, y=facB_data, fill = facC_data)) +
+    p0 <- ggplot(input, aes(x=facC_data, y=facB_data, fill = facC_data)) +
             geom_boxplot() + labs(title = mainTitle, x = xlab, y = ylab, fill = legendTitle) +
             theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), axis.text.x=element_text(size=12, colour="black"), 
             axis.text.y=element_text(size=12, colour="black"), legend.text=element_text(size=12), axis.title.x=element_text(size=12),
@@ -209,7 +157,6 @@ plotBoxPlot <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA){
       p0 <- p0 + scale_fill_manual(values = pallete)
     }
     show(p0)
-  }
 
   dev.off();
   
@@ -227,7 +174,7 @@ plotBoxPlot <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA){
   box_plot_json$main <- mainTitle # Main Title of plot
   box_plot_json$axis <- c(xlab, ylab) # x axis and y axis labels, respectively
   box_plot_json$colors <- build_info['fill'][[1]] # List of Colours of boxes in order
-  box_plot_json$labels <- unique(facA_data) # List of the x axis labels for each box within the plot, in order.
+  box_plot_json$labels <- unique(facC_data) # List of the x axis labels for each box within the plot, in order.
   
   box_plot_json$quantiles$ymin <- build_info$ymin
   box_plot_json$quantiles$lower <- build_info$lower
@@ -251,9 +198,6 @@ plotBoxPlot <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA){
   sink(imgName2)
   cat(json.obj);
   sink()
-  print("###################################################");
-  print(json.obj);
-  print("JSON Derulo");
   
   if(!.on.public.web){
      return(.set.mSet(mSetObj))

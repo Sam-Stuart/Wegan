@@ -38,11 +38,6 @@ public class BoxPlotBean implements Serializable {
     private final ApplicationBean1 ab = (ApplicationBean1) DataUtils.findBean("applicationBean1");
     private final SessionBean1 sb = (SessionBean1) DataUtils.findBean("sessionBean1");
 
-    public void boxBtn_action() {
-
-    
-    }
-    
     private String box_xAxis= "NULL";
     private String box_yAxis= "NULL";
     
@@ -127,25 +122,25 @@ public class BoxPlotBean implements Serializable {
     private String xLabel = " ";
     private String yLabel = " ";
     private String legendTitle = "NULL";
-    private String mainTitle = "NULL";
+    private String mainTitle = " ";
     private String boxLabels = "NULL";
     //private String facA = "NULL";
     //private String facB = "NULL";
-    private String facC = "NULL"; 
+    //private String facC = "NULL"; 
     private String color = "NULL";
-    private String type  = "NULL";
-    private String data = "NULL";
+//    private String type  = "NULL";
+    private boolean data = false;
     
-    private String facA = getFactorBoxColumnOpts()[0].getLabel();
+    private String facC = getFactorBoxColumnOpts()[0].getLabel();
     private String facB = getNumericBoxColumnOpts()[0].getLabel();
     
-    public String getFacA() {
-        return facA;
-    }
-
-    public void setFacA(String facA) {
-        this.facA = facA;
-    }
+    //public String getFacA() {
+    //    return facA;
+    //}
+    //
+    //public void setFacA(String facA) {
+    //    this.facA = facA;
+    //}
     
     
     
@@ -213,23 +208,24 @@ public class BoxPlotBean implements Serializable {
         return mainTitle;
     }
     
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-    public String getData() {
+//    public String getType() {
+//        return type;
+//    }
+//
+//    public void setType(String type) {
+//        this.type = type;
+//    }
+    
+    public boolean data() {
         return data;
     }
-
-    public void setData(String data) {
+    
+    public void setData(boolean data) {
         this.data = data;
     }
     
     public void boxplotBtn_action() {
-        if (!PlottingUtils.CreateBoxPlot(sb, box_xAxis, box_yAxis, facC, color, xLabel, yLabel, legendTitle, mainTitle, data)){
+        if (!PlottingUtils.CreateBoxPlot(sb, facC, facB, facC, color, xLabel, yLabel, legendTitle, mainTitle, data)){
             RConnection RC = sb.getRConnection();
             sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
         }else {
