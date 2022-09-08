@@ -72,7 +72,7 @@ public class PlottingMainBean implements Serializable {
     }
     
     private void doDefaultBoxChart(){  // sb, facA, facB, facC, fillColor, xlab, ylab, legendTitle, mainTitle, data
-        if (!PlottingUtils.CreateBoxPlot(sb, "NULL", "NULL", "NULL","NULL", "NULL", "NULL", "NULL", "Box Plot Title", "NULL")){    
+        if (!PlottingUtils.CreateBoxPlot(sb, "NULL", "NULL", "NULL","NULL", "NULL", "NULL", "NULL", "Box Plot Title", false)){    
             RConnection RC = sb.getRConnection();
             sb.updateMsg(" Error" , RDataUtils.getErrMsg(RC));
             

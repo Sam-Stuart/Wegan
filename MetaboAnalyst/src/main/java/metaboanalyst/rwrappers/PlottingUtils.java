@@ -108,7 +108,7 @@ public class PlottingUtils {
     
     
     public static boolean CreateBoxPlot(SessionBean1 sb, String facA, String facB, String facC, String fillColor ,
-                          String xlab, String ylab, String legendTitle, String mainTitle, String data) {
+                          String xlab, String ylab, String legendTitle, String mainTitle, Boolean data) {
         try {
             RConnection RC = sb.getRConnection();
             String rCommand = "boxPlot_setup(NA"

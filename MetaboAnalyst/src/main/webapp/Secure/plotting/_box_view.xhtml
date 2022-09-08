@@ -12,7 +12,7 @@
         into two parts. Half the scores are greater than or equal to this value and half are less. The middle "box" represents the middle 50% of scores for the group. 
     </p>
     <h:panelGrid id="panelGrid" columns="5" cellpadding="5" columnClasses="colLeft,colRight,colLeft,colRight, colLast"> 
-        <h:outputLabel  style="font-weight: bold" value="Factor Data:"/>
+        <h:outputLabel  style="font-weight: bold" value="Grouping Data:"/>
         <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{boxPlotBean.box_xAxis}">
             <f:selectItems value="#{boxPlotBean.factorBoxColumnOpts}" />
 
@@ -23,9 +23,9 @@
         </p:selectOneMenu>
         <spacer></spacer>
         
-        <h:outputLabel style="font-weight: bold; " value="X Axis Label: "/>
+        <h:outputLabel style="font-weight: bold; " value="X-Axis Label: "/>
         <p:inputText style="left: -220px;" value="#{boxPlotBean.xLabel}"></p:inputText>
-        <h:outputLabel style="font-weight: bold" value="Y Axis Label: "/>
+        <h:outputLabel style="font-weight: bold" value="Y-Axis Label: "/>
         <p:inputText value="#{boxPlotBean.yLabel}" style="  align-content: left"></p:inputText>  
         <spacer></spacer>
         
@@ -34,7 +34,7 @@
             <f:selectItems value="#{applicationBean1.boxPltColorPaletteOpts}" />
         </p:selectOneMenu>
         
-        <h:outputLabel style="font-weight: bold; " value="Main Title: "/>
+        <h:outputLabel style="font-weight: bold; " value="Plot Title: "/>
         <p:inputText style="left: -220px;" value="#{boxPlotBean.mainTitle}"></p:inputText>
         
  
