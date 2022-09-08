@@ -44,7 +44,7 @@
                          styleClass="updateButton"
                          style="box-shadow: none !important; text-shadow: none !important"
                         onclick="PF('statusDialog').show()"
-                        oncomplete="PF('statusDialog').hide()"  
+                        oncomplete="setTimeout(function () {buildBoxPlot('plot_box_chart.json', 'd3_boxplot'); PF('statusDialog').hide()}, 2000)"  
                         update=":ac:form2:boxPane  :cmdPane"
                         actionListener="#{boxPlotBean.boxplotBtn_action()}"/>
     </h:panelGrid>
