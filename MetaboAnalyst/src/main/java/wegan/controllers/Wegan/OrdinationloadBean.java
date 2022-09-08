@@ -61,6 +61,16 @@ public class OrdinationloadBean implements Serializable {
         this.metaFormat = metaFormat;
     }
     
+    private String taxFormat = "rowu";
+
+    public String getTaxFormat() {
+        return taxFormat;
+    }
+
+    public void setTaxFormat(String taxFormat) {
+        this.taxFormat = taxFormat;
+    }
+    
     private String envFormat = "rowu";
 
     public String getEnvFormat() {
@@ -89,6 +99,16 @@ public class OrdinationloadBean implements Serializable {
 
     public void setDataFileMeta(UploadedFile dataFileMeta) {
         this.dataFileMeta = dataFileMeta;
+    }
+    
+    private UploadedFile dataFileTax;
+
+    public UploadedFile getDataFileTax() {
+        return dataFileTax;
+    }
+
+    public void setDataFileTax(UploadedFile dataFileTax) {
+        this.dataFileTax = dataFileTax;
     }
     
     private UploadedFile dataFileEnv;
@@ -121,6 +141,16 @@ public class OrdinationloadBean implements Serializable {
         this.metaNames = metaNames;
     }
     
+    private String taxNames = "colOnly";
+
+    public String getTaxNames() {
+        return taxNames;
+    }
+
+    public void setTaxNames(String taxNames) {
+        this.taxNames = taxNames;
+    }
+    
     private String envNames = "colOnly";
 
     public String getEnvNames() {
@@ -148,12 +178,16 @@ public class OrdinationloadBean implements Serializable {
                 String fileName = DataUtils.uploadFile(dataFile, sb, null, ab.isOnPublicServer());
                 String fileNameMeta = DataUtils.uploadFile(dataFileMeta, sb, null, ab.isOnPublicServer());
                 String fileNameEnv = DataUtils.uploadFile(dataFileEnv, sb, null, ab.isOnPublicServer());
+                String fileNameTax = DataUtils.uploadFile(dataFileTax, sb, null, ab.isOnPublicServer());
 
                 if (fileName == null) {
                     return null;
                 }
                 if (fileNameMeta != null){
                     RDataUtils.readTextDataMeta(RC, fileNameMeta, metaFormat, "disc", metaNames);
+                }
+                if (fileNameTax != null){
+                    RDataUtils.readTextDataTax(RC, fileNameTax, taxFormat, "disc", taxNames);
                 }
                 if (fileNameEnv != null){
                     RDataUtils.readTextDataEnv(RC, fileNameEnv, envFormat, "disc", envNames);

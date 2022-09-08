@@ -75,7 +75,7 @@
                             </p:selectOneMenu>
                             <spacer></spacer>                 
                                                             
-                            <h:outputLabel style="font-weight: bold" value="Color Palette:"/>
+                            <h:outputLabel style="font-weight: bold" value="Color Pallet:"/>
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{pcaBean.pcaPairsColorOpts}">
                                 <f:selectItems value="#{applicationBean1.pcaPairsColorPaletteOpts}" />
                             </p:selectOneMenu> 
@@ -189,7 +189,20 @@
         
                             <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
                             <p:selectBooleanCheckbox value ="#{pcaBean.doOriginal}"/> 
-                             
+
+                            <h:outputLabel style="font-weight: bold" value="Grouping Variable:"/>
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{pcaBean.pcaMetaColumnName}">
+                                <f:selectItems value="#{pcaBean.pcaMetaColumnOpts}" />
+                            </p:selectOneMenu>  
+                                                         
+                            <h:outputLabel style="font-weight: bold" value="Use Sample Names for Points:"/>
+                            <p:selectBooleanCheckbox value ="#{pcaBean.sampleNamesOpts}"/> 
+                
+                            <h:outputLabel style="font-weight: bold" value="Color Pallet:"/>
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{pcaBean.ordColorOpts}">
+                                <f:selectItems value="#{applicationBean1.ordColorPaletteOpts}" />
+                            </p:selectOneMenu> 
+                            
                             <spacer></spacer>
                         </h:panelGrid>  
 
@@ -213,13 +226,13 @@
                                 </h:panelGrid>
                             </h:panelGroup>                            -->
                         </h:panelGrid>
-                        <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+<!--                        <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
                             <p:commandButton value="Export"
                                 styleClass="exportButton"
                                 style="box-shadow: none !important; float:right; text-shadow: none !important;"
-                                actionListener="#{sessionBean1.graphicsLnk_action('pca_score3d')}"
+                                actionListener="{sessionBean1.graphicsLnk_action('pca_score3d')}"
                                 oncomplete="PF('graphDialog').show()"/>
-                        </h:panelGrid>  
+                        </h:panelGrid>  -->
                         <h:panelGrid id="score3dPane" style="text-align: center; width: 100%;">
                             <canvas id='canvas1' width='670px' height='630px'/>
                         </h:panelGrid>

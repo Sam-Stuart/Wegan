@@ -95,14 +95,14 @@ public class ChemoMetrics {
         }
     }
 
-    public static void PlotPCA3DScore(SessionBean1 sb, String imgName, String format, int dpi, int pcInx1, int pcInx2, int pcInx3) {
+    public static void PlotPCA3DScore(SessionBean1 sb, String imgName, String format, String color, String meta_col_color) {
         try {
             RConnection RC = sb.getRConnection();
-            String rCommand = "PlotPCA3DScore(NA" + ", \"" + imgName + "\", \"" + format + "\", " + pcInx1 + "," + pcInx2 + "," + pcInx3 + ")";
-            String rCommand_png = "PlotPCA3DScoreImg(NA" + ", \"" + imgName + "\", \"png\", " + dpi + ", width=NA, " + pcInx1 + "," + pcInx2 + "," + pcInx3 + ", 40)";
-            sb.addGraphicsCMD("pca_score3d", rCommand_png);
+            String rCommand = "PlotPCA3DScore(NA" + ", \"" + imgName + "\", \"" + format + "\", \"" + color + "\", \"" + meta_col_color + "\")";
+//            String rCommand_png = "PlotPCA3DScoreImg(NA" + ", \"" + imgName + "\", \"png\", " + dpi + ", width=NA, " + pcInx1 + "," + pcInx2 + "," + pcInx3 + ", 40)";
+//            sb.addGraphicsCMD("pca_score3d", rCommand_png);
             //System.out.println("============pca_score3d: " + rCommand_png);
-            RCenter.recordRCommand(RC, rCommand_png);
+            RCenter.recordRCommand(RC, rCommand);
             RC.voidEval(rCommand);
         } catch (RserveException rse) {
             System.out.println(rse);

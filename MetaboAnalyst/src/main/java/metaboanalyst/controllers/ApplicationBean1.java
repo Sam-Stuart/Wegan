@@ -91,9 +91,11 @@ public class ApplicationBean1 implements Serializable {
     private final SelectItem[] zipOpts;
     private final SelectItem[] csvFormatOpts;
     private final SelectItem[] metaFormatOpts;
+    private final SelectItem[] taxFormatOpts;
     private final SelectItem[] envFormatOpts;
     private final SelectItem[] dataNamesOpts;
     private final SelectItem[] metaNamesOpts;
+    private final SelectItem[] taxNamesOpts;
     private final SelectItem[] envNamesOpts;
     private final SelectItem[] rocFormatOpts;
     private final SelectItem[] tsFormatOpts;
@@ -196,6 +198,10 @@ public class ApplicationBean1 implements Serializable {
 //        metaFormatOpts[2] = new SelectItem("rowp", "Samples in rows (paired)");
 //        metaFormatOpts[3] = new SelectItem("colp", "Samples in columns (paired)");
         
+        taxFormatOpts = new SelectItem[2];
+        taxFormatOpts[0] = new SelectItem("rowu", "Taxonomy data in row");
+        taxFormatOpts[1] = new SelectItem("colu", "Taxonomy data in column");
+        
         envFormatOpts = new SelectItem[2];
         envFormatOpts[0] = new SelectItem("rowu", "Samples in rows, variables in columns");
         envFormatOpts[1] = new SelectItem("colu", "Samples in columns, variables in rows");
@@ -213,6 +219,11 @@ public class ApplicationBean1 implements Serializable {
         metaNamesOpts[1] = new SelectItem("rowOnly", "Row labels only");
         metaNamesOpts[2] = new SelectItem("bothNames", "Both");
         metaNamesOpts[3] = new SelectItem("noNames", "Neither");
+        
+        taxNamesOpts = new SelectItem[3];
+        taxNamesOpts[0] = new SelectItem("colOnly", "Column labels");
+        taxNamesOpts[1] = new SelectItem("rowOnly", "Row labels");
+        taxNamesOpts[2] = new SelectItem("noNames", "No labels");
         
         envNamesOpts = new SelectItem[4];
         envNamesOpts[0] = new SelectItem("colOnly", "Column labels only");
@@ -818,11 +829,15 @@ public class ApplicationBean1 implements Serializable {
     }
     
     public SelectItem[] getMetaFormatOpts() {
-        return csvFormatOpts;
+        return metaFormatOpts;
+    }
+        
+    public SelectItem[] getTaxFormatOpts() {
+        return taxFormatOpts;
     }
         
     public SelectItem[] getEnvFormatOpts() {
-        return csvFormatOpts;
+        return envFormatOpts;
     }
     
     public SelectItem[] getDataNamesOpts() {
@@ -830,11 +845,15 @@ public class ApplicationBean1 implements Serializable {
     }
     
     public SelectItem[] getMetaNamesOpts() {
-        return dataNamesOpts;
+        return metaNamesOpts;
     }    
     
+    public SelectItem[] getTaxNamesOpts() {
+        return taxNamesOpts;
+    } 
+        
     public SelectItem[] getEnvNamesOpts() {
-        return dataNamesOpts;
+        return envNamesOpts;
     }
     
     public SelectItem[] getRocFormatOpts() {

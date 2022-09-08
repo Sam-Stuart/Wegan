@@ -53,6 +53,7 @@ public class OAPCOABean implements Serializable {
     } 
     
     
+    
     private String file2DColScores = "pcoa_2D_variable_scores.csv";
     private String file2DColScoresPath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + file2DColScores + "\">" + file2DColScores + "</a>";
  
