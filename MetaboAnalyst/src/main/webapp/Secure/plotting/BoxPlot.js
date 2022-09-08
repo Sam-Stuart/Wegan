@@ -58,6 +58,15 @@ function addToolTip(id) {
         .style("position", "absolute");
 }
 
+/**
+ *
+ * @param {*} id id of the div we want to plot in
+ * @param {*} title title of the th graph
+ */
+function createTitle(id, title) {
+    d3.select(`#${id}_title`).classed("plot_title", true).html(title);
+}
+
 function buildBoxPlot(jsonName, id) {
     d3.json("/MetaboAnalyst" + URL + "/" + jsonName, function (data) {
         //Create svg
@@ -95,12 +104,20 @@ function buildBoxPlot(jsonName, id) {
                 Math.ceil(d3.max(quantiles.ymax)),
             ])
             .range([height, 0]);
-        svg.append("g").call(
-            d3.axisLeft(y).tickFormat((e) => {
-                if (e % 1 == 0) return e;
-                return;
-            })
-        );
+        const yAxis = d3.axisLeft(y).tickFormat((e) => {
+            if (e % 1 == 0) return e;
+            return;
+        });
+        svg.append("g").call(yAxis);
+
+        svg.append("text")
+            .text(yLabel)
+            .attr("y", -30)
+            .attr("x", -(height / 3))
+            .style("text-anchor", "end")
+            .attr("transform", "rotate(-90)")
+            .style("margin-bottom", "10px")
+            .style("font-size", "15px");
         // Add tooltip
         const tooltip = addToolTip(id);
 
@@ -176,6 +193,9 @@ function buildBoxPlot(jsonName, id) {
             })
             .attr("stroke", "black")
             .style("width", 80);
+
+        // Create title
+        createTitle(id, title);
     });
 }
 buildBoxPlot("plot_box_chart.json", "d3_boxplot");
