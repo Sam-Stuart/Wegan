@@ -67,9 +67,7 @@ public class DiversityBean implements Serializable {
                     case "Unseendiv":
                          doDefaultUnseendiv();
                         break;
-                    case "Spatialvis":
-                        doDefaultSpatialvis();
-                    break;
+//                    
                 }
             }
 
@@ -139,10 +137,10 @@ public class DiversityBean implements Serializable {
     }
     
     
-    private void doDefaultSpatialvis(){
-        System.out.print("INSIDE Spatialvis"); 
-        DiversityUtils.CreateSpatialvis(sb, false, false, false, "", "NULL", "NULL", "NULL", "", "NULL", "", "NULL", false, "NULL", false, false, sb.getCurrentImage("ggmap"), "png", 72, "false");
-        System.out.print("AFTER FD");
-    }
+//    private void doDefaultSpatialvis(){
+//        System.out.print("INSIDE Spatialvis"); 
+//        DiversityUtils.CreateSpatialvis(sb, false, false, false, "", "NULL", "NULL", "NULL", "", "NULL", "", "NULL", false, "NULL", false, false, sb.getCurrentImage("ggmap"), "png", 72, "false");
+//        System.out.print("AFTER FD");
+//    }
     
 }

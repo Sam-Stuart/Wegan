@@ -1,4 +1,4 @@
-#'Plot Dendrogram
+#'Plot Dendrogram 
 #'@description Dendogram
 #'@param mSetObj Input name of the created mSet Object
 #'@param imgName Input a name for the plot
@@ -630,4 +630,401 @@ GetXYCluster<-function(total){
     nrow<-total;
   }
   c(nrow, ncol);
+}
+
+#'Visualization ggmap - cluster
+#'@description Plot spatial map using ggmap package based on users' provided data points
+#'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
+#'@param source Input the name of map source, options are stamen (default) and google
+#'@param maptype Input the type of map, options are "terrain" (default),"terrain-background", "satellite", "roadmap", "hybrid", "toner","watercolor", "terrain-labels", "terrain-lines", "toner-2010",
+#                "toner-2011", "toner-background", "toner-hybrid", "toner-labels","toner-lines", "toner-lite"
+#'@param zoom Input the map zoom, an integer from 3 (continent) to 21 (building), default is 3
+#'@param rangA 
+#'@param ele Return elevation for each spatial data point
+#'@param datum Return the longtitude and latitude of data points in to WGS84
+#'@param proj Boolean variable, if "false", spatial data is in longitude and latitude; if "true", spatial data is in UTM
+#'@param CRS_txt Input the CRS code to convert data collected in the particular UTM zone
+#'@param CRS_option Boolean variable, if "false", spatial data is in longitude and latitude; if "true", spatial data is collected in Alberta 10TM zone
+#'@param point.size Input the size of data point shown on map
+#'@param path.size Input the length of path shown on map
+#'@param point Return the variable name which shown as point on map
+#'@param polygon Return the variable name which shown as polygon on map
+#'@param path Return the variable name which shown as path on map
+#'@param border.col Return the color of the border of polygons shown on map
+#'@param color.point Return the color of the points shown on map
+#'@param uni.point Boolean variable, if "false", the color of the points shown on map gets darker while the value of the point increasing; 
+#                  if "true", the color of the point is fixed
+#'@author Shiyang Zhao{shiyang1@ualberta.ca}
+#'University of Alberta, Canada
+#'License: GNU GPL (>= 2)
+ColorCol <- function(mSetObj = NA) {
+  #load_plyr()
+  #load_dplyr()
+  
+  mSetObj <- .get.mSet(mSetObj)
+  
+  if(is.null(mSetObj$dataSet[["procr"]])){
+    data<-mSetObj$dataSet$preproc
+  }else if(is.null(mSetObj$dataSet[["prenorm"]])){
+    data<- mSetObj$dataSet$procr;
+  }else{
+    data<-mSetObj$dataSet$prenorm
+  }
+  
+  columnsData <- c("NULL",colnames(data))
+  
+  return(columnsData)
+  
+}
+
+
+VarCol <- function(mSetObj = NA) {
+  #load_plyr()
+  #load_dplyr()
+  
+  mSetObj <- .get.mSet(mSetObj)
+  
+  if(is.null(mSetObj$dataSet[["procr"]])){
+    data1<-mSetObj$dataSet$preproc
+  }else if(is.null(mSetObj$dataSet[["prenorm"]])){
+    data1<- mSetObj$dataSet$procr;
+  }else{
+    data1<-mSetObj$dataSet$prenorm
+  }
+  
+  varData1 <- c("NULL",colnames(data1))
+  
+  return(varData1)
+  
+}
+
+
+LineCol <- function(mSetObj = NA) {
+  #load_plyr()
+  #load_dplyr()
+  
+  mSetObj <- .get.mSet(mSetObj)
+  
+  if(is.null(mSetObj$dataSet[["procr"]])){
+    data3<-mSetObj$dataSet$preproc
+  }else if(is.null(mSetObj$dataSet[["prenorm"]])){
+    data3<- mSetObj$dataSet$procr;
+  }else{
+    data3<-mSetObj$dataSet$prenorm
+  }
+  
+  lineData3 <- c("NULL",colnames(data3))
+  
+  return(lineData3)
+  
+}
+
+
+Raster_data <- function(mSetObj = NA, data = "false", proj = "NULL", CRS_txt = "", CRS_option = "NULL", datum = "NULL", zoom = "", 
+                        maptype = "NULL", source = "NULL", rangeA = "", ele = "false", border.col = "NULL", color.point = "NULL", 
+                        point.size = "", path.size = "", point = "NULL", polygon = "NULL", path = "NULL", uni.point = "false", imgName, format = "png", dpi = 72, width = NA) {
+
+  library("sp")  
+  library("ggmap")
+  library("googleway")
+  library("rgdal")
+    
+  mSetObj <- .get.mSet(mSetObj)
+  
+  
+  # set default dataset as 'dune' for now
+  #Extract input from mSetObj
+  if (data == "false") { #normalized data as input
+    input <- mSetObj$dataSet$norm
+  } else { #original data as input
+    input <- mSetObj$dataSet$orig
+  }
+  print(head(input))  
+  
+  if (proj == "NULL" ){
+    colnames(input)[1:2] <- c("Latitude", "Longitude")
+  } else if (proj == "UTM") {
+    colnames(input)[1:2] <- c("Northing", "Easting")
+  }  
+  print(proj)
+  
+  if (CRS_txt == ""){
+    CRS_txt1 = ""
+  } else {
+    CRS_txt1 <- CRS(CRS_txt)
+  }
+  print(CRS_txt)
+
+
+  # CRS: coordinate reference system
+  if (CRS_option == "NULL"){
+    print(CRS_option)
+    data.tm <- input #input contains coordinates and is recorded in a datum that user wants
+    print(head(data.tm))
+  } else if (CRS_option == "10TM") { #only take northing and easting in utm. e,g,: nothing and eating in Alberta 10tm -- +init = espg:3402
+    #input_10tm <- input[input$Zone == "10TM", ]
+    utm.spatial.data.10tm <- sp::SpatialPointsDataFrame(coords = cbind(input$Easting, input$Northing), data = input, proj4string = CRS_txt1) 
+    latlong.tm10 <- sp::spTransform(x = utm.spatial.data, CRS("+init = espg:4326"))       
+    data.tm <- cbind(latlong.tm10@coords, input[-c(1,2)])
+    #data.tm <- input
+  } else if (CRS_option == "Manual") {
+    utm.spatial.data <- sp::SpatialPointsDataFrame(coords = cbind(input$Easting, input$Northing), data = input, proj4string = CRS(CRS_txt)) 
+    latlong.tm <- sp::spTransform(x = utm.spatial.data, CRS("+init = espg:4326"))       
+    data.tm <- cbind(latlong.tm@coords, input[-c(1,2)])
+  }
+  print(CRS_option)
+  
+  
+  # IFgeographic coordinate system has to be WGS84 (epsg:4326 in Canada) to fit Stamen and Google map (NAD83:espg:4269)
+  if (datum == "NULL"){
+    input1 <- data.tm
+  } else if (datum == "NAD83") {
+    utm.spatial.data.83 <- sp::SpatialPointsDataFrame(coords = cbind(input$Latitude, input$Longitude), data = input, proj4string = CRS("+init=espg:4269")) 
+    latlong.tm83 <- sp::spTransform(x = utm.spatial.data.83, CRS("+init = espg:4326"))
+    input1 <- cbind(latlong.tm83@coords, input[-c(1,2)])
+  }
+  print(datum)
+  
+  if (zoom == "") {
+    zoom1 <- 3
+  } else {
+    zoom1 <- as.numeric(zoom)
+  }
+  print(zoom1)
+  # if the map area is too large, use smaller zoom number, e.g.: 5
+  
+  if (maptype == "NULL") {
+    maptype1 <- "terrain"
+  } else {
+    maptype1 <- maptype
+  }
+  print(maptype1)
+  
+  if(source == "NULL") {
+    source1 <- "stamen"
+  } else if (source == "google") {
+    source1 <- "google"
+  } 
+  print(source1)
+  
+  if (rangeA == "") {
+    range1 <- 0.1
+  } else {
+    range1 <- as.numeric(rangeA)
+  }
+  print(range1)
+  
+  if (ele == "false") {
+    coord.data <- input[c(1:2)]
+    elevation <- "NA"
+    ele1 <- as.data.frame(cbind(coord.data, elevation))
+    write.csv(ele1, "Elevation.csv")
+  } else {
+    coord.data <- input1[c(1:2)]
+    ele1 <- google_elevation(df_locations = coord.data, simplify = TRUE)
+    write.csv(ele1, "Elevation.csv")
+  }
+  
+  bbox1 <- make_bbox(lon = input$Long, lat = input$Lat, f = range1)
+  print(bbox1)
+  
+  #if (source1 == "stamen") {
+    map <- get_map(location = bbox1, maptype = maptype1, zoom = zoom1, source = source1)
+  #} else if (source1 == "google") {
+  #  map <- get_googlemap(location = bbox1, maptype = maptype1, zoom = zoom1)
+  #}
+  
+  if(is.na(width)){
+    w <- 10.5
+  } else if(width==0){
+    w <- 7.2
+  } else{
+    w <- width
+  }
+  h <- w
+  
+  #Name plot for download
+  imgName <- paste(imgName, "dpi", dpi, ".", format, sep="")
+  mSetObj$imgSet$ggmap <- imgName
+  print(imgName)
+  
+  Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
+  par(xpd=FALSE, mar=c(5.1, 4.1, 4.1, 2.1))
+  
+  if(border.col=="NULL") { 
+    border.col1 = "skyblue" #default fill palette is grayscale
+  } else if (border.col == "green") {
+    border.col1 = "green"
+  } else if (border.col == "turquoise") {
+    border.col1 = "turquoise4"
+  } else if (border.col == "steelblue") {
+    border.col1 = "lightsteelblue4"
+  } else if (border.col1 == "peach") {
+    border.col1 = "tan2"  
+  } else if (border.col1 == "wheat") {
+    border.col1 <- "wheat3" 
+  }
+  print(border.col)
+  print(border.col1)
+  
+  if(color.point == "NULL") { 
+    color.point1 = "blue" #default fill palette is grayscale
+  } else if (color.point == "green") { #manual user entry. Selection of this option causes text box to appear
+    color.point1 = "palegreen"
+  } else if (color.point == "turquoise") {
+    color.point1 = "turquoise"
+  } else if (color.point == "steelblue") {
+    color.point1 = "lightsteelblue1"
+  } else if (color.point == "peach") {
+    color.point1 = "peachpuff"
+  } else if (color.point == "wheat") {
+    color.point1 = "wheat1"
+  } 
+  print(color.point)
+  print(color.point1)
+  
+  if (point.size == ""){
+    point.size1 = 2
+  } else {
+    point.size1 <- as.numeric(point.size)
+  }
+  
+  if (path.size == ""){
+    path.size1 = 2
+  } else {
+    path.size1 <- as.numeric(path.size)
+  }
+  
+  if (point == "NULL") {
+    point.idx = NA
+  } else {
+    for (i in 1:length(colnames(input))) {
+      if (point == colnames(input)[i]) {
+        point.idx <- i
+      }
+    }
+  }
+  
+  if (polygon == "NULL") {
+    polygon.idx = NA
+  } else {
+    for (j in 1:length(colnames(input))) {
+      if (polygon == colnames(input)[j]) {
+        polygon.idx <- j
+      }
+    }
+  }
+  
+  if (path == "NULL") {
+    path.idx = NA
+  } else {
+    for (k in 1:length(colnames(input))) {
+      if (path == colnames(input)[k]) {
+        path.idx <- k
+      }
+    }
+  }
+  
+  if (point == "NULL") {
+    if (path == "NULL") {
+      if (polygon == "NULL") {
+        gg <- ggmap(map) +
+          labs(x = "longitude", y = "latitude") 
+        print("point = Null; path = NULL; polygon = NULL")
+      } else {
+        gg <- ggmap(map) +
+          geom_polygon(data = input1, mapping = aes(x = Longitude, y = Latitude, group = input[,polygon.idx]), fill = NA, color = border.col1) +
+          labs(x = "longitude", y = "latitude") 
+        print("point = Null; path = NULL; polygon = polygon.idx")
+      }
+    } else {
+      if (polygon == "NULL") {
+        gg <- ggmap(map) +
+          geom_path(data = input1, aes(x = Longitude, y = Latitude, color = input[,path.idx]), size = path.size1, lineend = "round") + 
+          labs(x = "longitude", y = "latitude") 
+        print("point = Null; path = path.idx; polygon = NULL")
+      } else {
+        gg <- ggmap(map) +
+          geom_polygon(data = input1, mapping = aes(x = Longitude, y = Latitude, group = input[,polygon.idx]), fill = NA, color = border.col1) +
+          geom_path(data = input1, aes(x = Longitude, y = Latitude, color = input[,path.idx]), size = path.size1, lineend = "round") + 
+          labs(x = "longitude", y = "latitude") 
+        print("point = Null; path = path.idx; polygon = polygon.idx")
+      }
+    }
+  } else {
+    if (path == "NULL") {
+      if (polygon == "NULL") {
+        if (uni.point == "false") {
+          gg <- ggmap(map) +
+            labs(x = "longitude", y = "latitude") +
+            geom_point(mapping = aes(x = Longitude, y = Latitude, color = input[,point.idx]), size = point.size1, data = input1)  
+          print("uni.point = false; point = point.idx; path = NULL; polygon = NULL")
+        } else {
+          gg <- ggmap(map) +
+            labs(x = "longitude", y = "latitude") +
+            geom_point(mapping = aes(x = Longitude, y = Latitude), color = color.point1, size = point.size1, data = input1)   
+          print("uni.point = true; point = color.point1; path = NULL; polygon = NULL")
+          print(color.point1)
+        }
+      } else {
+       if (uni.point == "false") {
+          gg <- ggmap(map) +
+            geom_polygon(data = input1, mapping = aes(x = Longitude, y = Latitude, group = input[,polygon.idx]), fill = NA, color = border.col1) +
+            labs(x = "longitude", y = "latitude") +
+            geom_point(mapping = aes(x= Longitude, y = Latitude, color = input[,point.idx]), size = point.size1, data = input1) 
+          print("uni.point = false; point = point.idx; path = NULL; polygon = polygon.idx")
+        } else {
+          gg <- ggmap(map) +
+            geom_polygon(data = input1, mapping = aes(x = Longitude, y = Latitude, group = input[,polygon.idx]), fill = NA, color = border.col1) +
+            labs(x = "longitude", y = "latitude") +
+            geom_point(mapping = aes(x= Longitude, y = Latitude), color = color.point1, size = point.size1, data = input1) 
+          print("uni.point = true; point = color.point1; path = NULL; polygon = polygon.idx")
+          print(color.point1)
+        }
+      }
+    } else {
+      if (polygon == "NULL") {
+        if (uni.point == "false") {
+          gg <- ggmap(map) +
+            geom_path(data = input1, aes(x = Longitude, y = Latitude, color = input[,path.idx]), size = path.size1, lineend = "round") + 
+            labs(x = "longitude", y = "latitude") +
+            geom_point(mapping = aes(x= Longitude, y = Latitude, color = input[,point.idx]), size = point.size1, data = input1) +
+            theme(legend.title = element_blank())
+          print("uni.point = false; point = point.idx; path = path.idx; polygon = NULL")
+        } else {
+          gg <- ggmap(map) +
+            geom_path(data = input1, aes(x = Longitude, y = Latitude, color = input[,path.idx]), size = path.size1, lineend = "round") + 
+            geom_point(mapping = aes(x= Longitude, y = Latitude), color = color.point1, size = point.size1, data = input1) +
+            labs(x = "longitude", y = "latitude") 
+          print("uni.point = true; point = color.point1; path = path.idx; polygon = NULL")
+          print(color.point1)
+        }
+      } else {
+        if (uni.point == "false") {
+          gg <- ggmap(map) +
+            geom_polygon(data = input1, mapping = aes(x = Longitude, y = Latitude, group = input[,polygon.idx]), fill = NA, color = border.col1) +
+            geom_path(data = input1, aes(x = Longitude, y = Latitude, color = input[,path.idx]), size = path.size1, lineend = "round") + 
+            labs(x = "longitude", y = "latitude") +
+            geom_point(mapping = aes(x= Longitude, y = Latitude, color = input[,point.idx]), size = point.size1, data = input1) 
+          print("uni.point = false; point = point.idx; path = path.idx; polygon = polygon.idx")
+          
+        } else {
+          gg <- ggmap(map) +
+            geom_polygon(data = input1, mapping = aes(x = Longitude, y = Latitude, group = input[,polygon.idx]), fill = NA) +
+            geom_path(data = input1, aes(x = Longitude, y = Latitude, color = input[,path.idx]), size = path.size1, lineend = "round") + 
+            labs(x = "longitude", y = "latitude") +
+            geom_point(mapping = aes(x = Longitude, y = Latitude), color = color.point1, size = point.size1, data = input1)
+          print("uni.point = true; point = color.point1; path = path.idx; polygon = polygon.idx")
+          print(color.point1)
+          
+        }
+      }  
+    }
+  }
+  
+  print(gg + theme(legend.position='none')) 
+  
+  dev.off()
+  
+  return(.set.mSet(mSetObj))
 }

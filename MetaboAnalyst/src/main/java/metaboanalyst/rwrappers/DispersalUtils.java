@@ -65,7 +65,6 @@ public class DispersalUtils {
             
             RCenter.recordRCommand(RC, rCommand);
             sb.addGraphicsCMD("beals", rCommand);
-            
             RC.voidEval(rCommand);
         } catch (RserveException rse) {
             System.out.println(rse);
@@ -109,10 +108,8 @@ public class DispersalUtils {
         try {
             RConnection RC = sb.getRConnection();
             String rCommand = "PlotBetaDisper(NA" + ", \"" + imageName + "\", \"" + format + "\", " + dpi + ", width=NA, " + pcNum + ")";
-            System.out.print(rCommand);
             RCenter.recordRCommand(RC, rCommand);
             sb.addGraphicsCMD("betadisper", rCommand);
-            System.out.print(imageName);
             RC.voidEval(rCommand);
         } catch (RserveException rse) {
             System.out.println(rse);

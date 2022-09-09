@@ -12,6 +12,8 @@
     <ui:define name="myscript">
         <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/jscripts/canvasXpress.min.js"></script>
         <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/jscripts/graphics.js"></script>
+        <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/jscripts/d3.min.js"></script>
+        <script type="text/javascript" src="./PCOAScatterplot.js"></script>
     </ui:define>
     <ui:define name="content">
         <h:inputHidden id="mydir" value="#{sessionBean1.getJsonDir('pcoa_score3d')}" />
@@ -136,9 +138,9 @@
                                     actionListener="#{sessionBean1.graphicsLnk_action('ord_pcoa_2D')}"
                                     oncomplete="PF('graphDialog').show()"/>
                             </h:panelGrid> 
-                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
-                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('ord_pcoa_2D')}" alt="pcoa2D"/>
-                            </h:panelGrid>                            
+
+                                 <div id="my_dataviz" style="margin:auto; width:auto"></div>
+                         
                         </h:panelGrid> 
                     </h:form>
                 </p:tab>
@@ -347,6 +349,7 @@
                                 </h:panelGrid>
                             </h:panelGroup> -->
                         </h:panelGrid>
+                        
                         <h:panelGrid id="pcoaPane4" style="width: 100%;">
                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
                                 <p:commandButton value="Export"
@@ -358,7 +361,6 @@
                              <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
                                 <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('ord_pcoa_stress')}" alt="pcoastress"/>
                             </h:panelGrid>                           
-                            
                         </h:panelGrid>  
                        
                     </h:form>

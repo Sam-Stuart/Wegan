@@ -361,6 +361,12 @@ public class NormBean implements Serializable {
         }            
     }
  
+    public void getBestNormalization() {
+        RConnection RC = sb.getRConnection();
+        String res = RDataUtils.extractBestNormName(RC);      
+        rowNormOpt = res;
+    }
+    
     
 //    /LOUISA ADDED THIS!!!!!!!!!!!!!!
     public void leveneUpdate_action() {

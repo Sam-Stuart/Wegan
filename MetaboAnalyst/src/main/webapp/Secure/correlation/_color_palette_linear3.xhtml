@@ -1,0 +1,53 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+
+    <h:form id="linGraph3">
+        <h:panelGrid columns="1" style="width:380px;">
+            <h:panelGrid id="panelGrid1" columns="2" cellpadding="5" columnClasses="colBrayLong,colBrayShort">
+                
+                <h3>Line and Point Options</h3>
+                <p:panelGrid></p:panelGrid>
+
+                <h:outputLabel style="font-weight: bold" value="Point Color:"/>
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linearCABean.corColorDotsOpts}">
+                    <f:selectItems value="#{applicationBean1.corLinColorDotsOpts}" />
+                </p:selectOneMenu> 
+                
+                <h:outputLabel style="font-weight: bold" value="Line Color:"/>
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linearCABean.corColorLineOpts}">
+                    <f:selectItems value="#{applicationBean1.corLinColorLineOpts}" />
+                </p:selectOneMenu>  
+                 
+                <h3>Titles</h3>
+                <p:panelGrid></p:panelGrid>                 
+                
+                <h:outputLabel style="font-weight: bold" value="Plot Title:"/>
+                <p:inputText value = "#{linearCABean.corPlotTitle}"/> 
+                
+                <h:outputLabel style="font-weight: bold" value="X-Axis Label"/>
+                <p:inputText value = "#{linearCABean.corPlotXlab}"/> 
+                
+                 <h:outputLabel style="font-weight: bold" value="Y-Axis Label"/>
+                <p:inputText value = "#{linearCABean.corPlotYlab}"/> 
+                
+                <!--<p:panelGrid></p:panelGrid>-->
+
+            </h:panelGrid>
+            <h:panelGrid id="panelGrid3" columns="1" cellpadding="5" style="float: right">
+                <p:commandButton value="Update" 
+                                 styleClass="updateButton"
+                                 style="box-shadow: none !important; text-shadow: none !important"
+                                onclick="PF('statusDialog').show()"
+                                oncomplete="PF('graphApperanceLinear3').hide(); PF('statusDialog').hide()"  
+                                update=":linCA:form3:corrLinPane3  :cmdPane"
+                                actionListener="#{linearCABean.corrLin3Btn_action()}"/>
+            </h:panelGrid>
+        </h:panelGrid>
+    </h:form>
+</ui:composition>

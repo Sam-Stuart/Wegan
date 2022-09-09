@@ -130,6 +130,17 @@ public class TimeBean implements Serializable{
     public void setViewOpt(String viewOpt) {
         this.viewOpt = viewOpt;
     }
+    
+    
+    private String dataNames = "colOnly";
+
+    public String getDataNames() {
+        return dataNames;
+    }
+
+    public void setDataNames(String dataNames) {
+        this.dataNames = dataNames;
+    }
 
     private boolean drawBorders = false;
 
@@ -141,16 +152,7 @@ public class TimeBean implements Serializable{
         this.drawBorders = drawBorders;
     }
 
-        
-    private String dataNames = "colOnly";
-
-    public String getDataNames() {
-        return dataNames;
-    }
-
-    public void setDataNames(String dataNames) {
-        this.dataNames = dataNames;
-    }
+       
     
     public String handleTsDataUpload() {
 

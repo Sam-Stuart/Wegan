@@ -24,7 +24,8 @@
                     <h:panelGrid columns="2" style="padding: 10px">
                         <p:outputLabel style="font-size:14px; font-weight: bold" value="Data File:"/>
                         <p:fileUpload value="#{Ordinationload.dataFile}" mode="simple"/>
-                    </h:panelGrid>                   
+                    </h:panelGrid>  
+
                     <h:panelGrid columns="3" style="padding: 10px; margin-left: 40px">
                         <p:outputLabel style="font-size:12px; font-weight: bold" value="Format:"/>
                         <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:210px" value="#{Ordinationload.dataFormat}">
@@ -36,7 +37,17 @@
                         <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:210px" value="#{Ordinationload.dataNames}">
                             <f:selectItems value="#{applicationBean1.dataNamesOpts}" />
                         </p:selectOneMenu> 
-                    </h:panelGrid>
+                    </h:panelGrid>                                        
+                    <h:panelGrid columns="3" style="padding: 10px; margin-left: 40px">
+                        <h:outputLabel style="font-size:12px; font-weight: bold" value="Variables are taxonomy labels:"/>
+                        <p:selectBooleanCheckbox value ="#"/> 
+                    </h:panelGrid> 
+                    <h:panelGrid columns="3" style="padding: 10px; margin-left: 40px">
+                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Taxonomy lable format:"/>
+                        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:210px" value="#">
+                            <f:selectItems value="#" />
+                        </p:selectOneMenu> 
+                    </h:panelGrid>                      
                     <h:panelGrid></h:panelGrid>
                     <h:panelGrid columns="2">
                         <p:selectBooleanCheckbox value="#{Ordinationload.checkboxValue}">
@@ -88,6 +99,48 @@
                         </h:panelGroup>
                     </h:panelGroup>
                     
+                    <h:panelGrid columns="2">
+                        <p:selectBooleanCheckbox value="#{Ordinationload.checkboxValue}">
+                            <f:ajax event="change" render="suppPanel2"/>
+                        </p:selectBooleanCheckbox>
+                        <h:outputLabel style="font-size:16px; font-weight: bold" value="Taxonomy data table (optional): Plain text file (.csv or .txt)"/>
+                    </h:panelGrid>
+
+                    <h:panelGroup id="suppPanel2">
+                        <h:panelGroup rendered="#{Ordinationload.checkboxValue}">
+                        <h:panelGrid>
+                            Should you have community data where organisms are variables, 
+                            uploading a taxonomy data table will enable identification of higher order taxon levels and NCBI taxonomy database information. 
+                            Including a taxonomy table also enables plotting with organism silhouettes.
+                            Data should be formatted with a single column or row. Data can be with or without a label. 
+                            The number and order of taxa should match the number and order of variables in the main data set.
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" style="padding: 10px">
+                            <p:outputLabel style="font-size:14px; font-weight: bold" value="Taxonomy Data File:"/>
+                            <p:fileUpload value="#{Ordinationload.dataFileTax}" mode="simple"/>
+                        </h:panelGrid>   
+                        <h:panelGrid columns="2" style="padding: 10px; margin-left: 40px">
+                            <p:outputLabel style="font-size:12px; font-weight: bold" value="Format:"/>
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:210px" value="#{Ordinationload.taxFormat}">
+                                <f:selectItems value="#{applicationBean1.taxFormatOpts}" />
+                            </p:selectOneMenu> 
+                        </h:panelGrid> 
+                        <h:panelGrid columns="2" style="padding: 10px; margin-left: 40px">
+                            <p:outputLabel style="font-size:12px; font-weight: bold" value="Labels:"/>
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:210px" value="#{Ordinationload.taxNames}">
+                                <f:selectItems value="#{applicationBean1.taxNamesOpts}" />
+                            </p:selectOneMenu> 
+                        </h:panelGrid>
+                    <h:panelGrid columns="3" style="padding: 10px; margin-left: 40px">
+                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Taxonomy lable format:"/>
+                        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:210px" value="#">
+                            <f:selectItems value="#" />
+                        </p:selectOneMenu> 
+                        </h:panelGrid>                      
+                        </h:panelGroup>
+                        </h:panelGroup>
+                        </h:panelGrid>
+
                     <h:panelGrid style="padding: 10px; float:right">
                         <p:commandButton value="Submit" 
                                          styleClass="updateButton"
@@ -98,9 +151,7 @@
                                          action="#{Ordinationload.handleFileUpload()}"/>   
                         
                     </h:panelGrid>
-                    
-                </h:panelGrid>
-                
+                                    
                 <p:spacer style="width: 30px"/>
                 
                 <h:panelGrid style="border: none; width: 100%; padding: 15px 20px 10px 25px; background-color: #8cbd4830; font-size: 14px;">
