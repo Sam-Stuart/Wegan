@@ -241,7 +241,14 @@ ord.pcoa <- function(mSetObj=NA, data="false", distance="NULL", binary="false", 
   cat("Site=Samples and Species=Variables\n")
   sink()  
   
-  return(.set.mSet(mSetObj))
+jsonString <- RJSONIO::toJSON(mSetObj$analSet$scatterPlot);
+jsonData <- RJSONIO::toJSON(mSetObj$dataSet)
+
+sink("Scatterplot.json");
+cat(jsonData);
+sink();
+
+return(.set.mSet(mSetObj))
   
 }
 
