@@ -27,7 +27,8 @@ pen.reg.anal <- function(mSetObj=NA, method="ridge", facA=NULL, weights=NULL){
   
   #Subset data to select only numeric variables
   data <- select_if(mSetObj$dataSet$norm, is.numeric)
-  
+  weights <- mSetObj$dataSet$origWeight
+  print(weights)
   #Data check
   if (ncol(data)<3) {
       stop("Your data set only has 2 variables! Try using linear, polynomial or SVM regression.")
@@ -112,8 +113,9 @@ pen.reg.anal <- function(mSetObj=NA, method="ridge", facA=NULL, weights=NULL){
     
   } else {
     weights <- weights #Java upload weights as a vector of numeric values
-    
-    if (length(weights) == nrow(data)) { #There must be one weight for every row in the data set
+    print(nrow(weights))
+    print(nrow(data))
+    if (nrow(weights) == nrow(data)) { #There must be one weight for every row in the data set
       if (method == "elastic net") {
         
         #Build model
@@ -151,14 +153,16 @@ pen.reg.anal <- function(mSetObj=NA, method="ridge", facA=NULL, weights=NULL){
         cv <- cv.glmnet(x=as.matrix(predictors_train), y=as.matrix(response_train), alpha=bestAlpha)
         
       } else {
-        
+        print("ridge")
         #Build model for ridge regression
         lambda <- 10^seq(-3, 3, length = 100)
         params <- train(predictors_train, response_train, weights=weights, method="glmnet", 
                         trControl=trainControl("cv", number=10),
                         tuneGrid = expand.grid(alpha=0, lambda=lambda)) #testing variour parameters
+        print("after param")
         model <- glmnet(as.matrix(predictors_train), as.matrix(response_train), alpha=params$bestTune$alpha, lambda=params$bestTune$lambda, 
                         weights=weights, family="gaussian")#Build model with "best" parameters
+        print("after model")
         bestAlpha <- 0
         bestLambda <- params$bestTune$lambda #Extract best parameter
         method <- "Ridge Regression"

@@ -38,6 +38,21 @@
                             <f:selectItems value="#{applicationBean1.dataNamesOpts}" />
                         </p:selectOneMenu> 
                     </h:panelGrid>                  
+                    </h:panelGrid>
+                    <h:panelGrid columns="2" style="padding: 10px">
+                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Data File:"/>
+                        <p:fileUpload value="#{Caload.dataFile}" mode="simple"/>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2" style="padding: 10px">
+                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Weights File (optional):"/>
+                        
+                    </h:panelGrid>
+                    <h:panelGrid columns="4" columnClasses="colLeft,colRight" style="padding: 10px">
+                        <h:outputLabel style="font-weight: bold" value="Row Names:"/>
+                            <p:selectBooleanCheckbox value ="NULL"/> 
+                        <h:outputLabel style="font-weight: bold" value="Column Names:"/>
+                            <p:selectBooleanCheckbox value ="NULL"/> 
+                    </h:panelGrid>
 
                     <h:panelGrid style="padding: 10px; float:right">
                         <p:commandButton value="Submit" 
@@ -48,7 +63,6 @@
                                          oncomplete="PF('statusDialog').hide()"
                                          action="#{Caload.handleFileUpload()}"/>   
                     </h:panelGrid>
-                </h:panelGrid>
                 
                 <p:spacer style="width: 30px"/>
                 

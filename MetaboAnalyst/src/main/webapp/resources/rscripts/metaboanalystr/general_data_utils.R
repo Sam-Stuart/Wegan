@@ -611,6 +611,14 @@ Read.TextDataEnv <- function(mSetObj=NA, filePath, envFormat="rowu", lbl.type="d
   return(.set.mSet(mSetObj));
 }
 
+Read.TextDataWeight <- function(mSetObj=NA, filePath, format="colu", lbl.type="disc"){
+  
+  mSetObj <- .get.mSet(mSetObj);
+  dat <- .readDataTable(filePath);
+  mSetObj$dataSet$origWeight <- dat; # copy to be processed in the downstream
+  dat <- NULL;
+  return(.set.mSet(mSetObj));
+}
 
 #'Read peak list files
 #'@description This function reads peak list files and fills the data into a dataSet object.  
