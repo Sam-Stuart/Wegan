@@ -12,8 +12,13 @@
     <ui:define name="myscript">
         <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/jscripts/canvasXpress.min.js"></script>
         <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/jscripts/graphics.js"></script>
+        <script src="https://unpkg.com/d3-3d/build/d3-3d.min.js"></script>
+        <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/jscripts/d3.min.js"></script>
+        <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/jscripts/plotly-myScatters.min.js"></script>
+        <script src="PCAView.js"></script>
     </ui:define>
     <ui:define name="content">
+        <h:inputHidden id="mydir" value="#{sessionBean1.currentUser.relativeDir}" />
 <!--        <h:inputHidden id="mydir" value="#{sessionBean1.getJsonDir('pca_score3d')}" />
         <script type="text/javascript">
             // for scatter plot
@@ -234,7 +239,7 @@
                                 oncomplete="PF('graphDialog').show()"/>
                         </h:panelGrid>  -->
                         <h:panelGrid id="score3dPane" style="text-align: center; width: 100%;">
-                            <canvas id='canvas1' width='670px' height='630px'/>
+                            <div id="my_dataviz"></div>
                         </h:panelGrid>
                     </h:form>
                 </p:tab>
