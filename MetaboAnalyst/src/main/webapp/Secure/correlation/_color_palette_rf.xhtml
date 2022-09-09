@@ -7,49 +7,37 @@
                 xmlns:p="http://primefaces.org/ui">
 
 
-    <h:form id="penalGraph2">
+    <h:form id="RFGraph">
         <h:panelGrid columns="1" style="width:380px;">
             <h:panelGrid id="panelGrid1" columns="2" cellpadding="5" columnClasses="colBrayLong,colBrayShort">
-                
-<!--                <h3>On-Plot Display Options</h3>
-                <p:panelGrid></p:panelGrid>                
-                
-                <h:outputLabel style="font-weight: bold" value="Show Equation on Plot:"/>
-                <p:selectBooleanCheckbox value ="hash{penalCABean.doPlotEq}"/> 
-                
-                <h:outputLabel style="font-weight: bold" value="Show R-squared on Plot:"/>
-                <p:selectBooleanCheckbox value ="hash{penalCABean.doPlotRsq}"/> 
-                                
-                <h:outputLabel style="font-weight: bold" value="Show Adjusted R-squared on Plot:"/>
-                <p:selectBooleanCheckbox value ="hash{penalCABean.doPlotRsqAdj}"/> -->
-                
+               <!--Predicted vs Actual point/line Plot-->
                 <h3>Line and Point Options</h3>
                 <p:panelGrid></p:panelGrid>
 
                 <h:outputLabel style="font-weight: bold" value="Point Color:"/>
-                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{penalCABean.corColorDotsOpts}">
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{rfCABean.corColorDotsOpts}">
                     <f:selectItems value="#{applicationBean1.corLinColorDotsOpts}" />
                 </p:selectOneMenu> 
                 
                 <h:outputLabel style="font-weight: bold" value="Line Color:"/>
-                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{penalCABean.corColorLineOpts}">
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{rfCABean.corColorLineOpts}">
                     <f:selectItems value="#{applicationBean1.corLinColorLineOpts}" />
                 </p:selectOneMenu>  
                                 
                 <h:outputLabel style="font-weight: bold" value="Show 95% Confidence Interval:"/>
-                <p:selectBooleanCheckbox value ="#{penalCABean.doPlotConfInt}"/> 
+                <p:selectBooleanCheckbox value ="#{rfCABean.doPlotConfInt}"/> 
                 
                 <h3>Titles</h3>
                 <p:panelGrid></p:panelGrid>                 
                 
                 <h:outputLabel style="font-weight: bold" value="Plot Title:"/>
-                <p:inputText value = "#{penalCABean.corPlotTitle}"/> 
+                <p:inputText value = "#{rfCABean.corPlotTitle}"/> 
                 
                 <h:outputLabel style="font-weight: bold" value="X-Axis Label"/>
-                <p:inputText value = "#{penalCABean.corPlotXlab}"/> 
+                <p:inputText value = "#{rfCABean.corPlotXlab}"/> 
                 
                  <h:outputLabel style="font-weight: bold" value="Y-Axis Label"/>
-                <p:inputText value = "#{penalCABean.corPlotYlab}"/> 
+                <p:inputText value = "#{rfCABean.corPlotYlab}"/> 
                 
                 <!--<p:panelGrid></p:panelGrid>-->
 
@@ -59,9 +47,9 @@
                                  styleClass="updateButton"
                                  style="box-shadow: none !important; text-shadow: none !important"
                                 onclick="PF('statusDialog').show()"
-                                oncomplete="PF('graphApperancePenal').hide(); PF('statusDialog').hide()"  
-                                update=":penalCA:form2:corrPenalPane2  :cmdPane"
-                                actionListener="#{penalCABean.penalizedUpdate2_action()}"/>
+                                oncomplete="PF('graphApperanceRF').hide(); PF('statusDialog').hide()"  
+                                update=":RFCA:form1:rfPane1  :cmdPane"
+                                actionListener="#{rfCABean.corrRFBtn_action()}"/>
             </h:panelGrid>
         </h:panelGrid>
     </h:form>

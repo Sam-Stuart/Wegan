@@ -47,14 +47,14 @@ multi.reg.anal <- function(mSetObj=NA,
   }
   
   #Textbox instructions for selecting predictor variables. Textbox should be interactive, ie changes in text alter results in real time. Default predtext = 2nd col
-  cat("Indicate independent variables using the column names with commas in between. If interested in an interaction between particular variables, indicate it with a colon rather than a comma.")
+  cat("Indicate independent variables withcomma-separated column names. If interested in an interaction, indicate it between particular variables with a colon.")
   
   #SET FORMULA RIGHT SIDE WITH PREDICTORS (Default = 2nd column)
   if (predtext == "NULL") {
     #resp.col.num <- which(colnames(input) == facA); data <- input[,-resp.col.num]
     dat <- input[ , colnames(input) != facA]
     num.data <- dplyr::select_if(dat, is.numeric)
-    predtext <- colnames(num.data)[1] #Default is the first potential predictor column
+    predtext <- colnames(num.data)[1] #Default is the 1st potential predictor column
   } else {
     predtext <- predtext #taken from text box by java, fed as string into R code
   }
@@ -70,12 +70,11 @@ multi.reg.anal <- function(mSetObj=NA,
   #GENERATE FORMULA
   formula <- as.formula(paste(facA, "~", predtext))
   #Text should be visible to user
-  cat(paste0("You have created this formula for model building: ", facA, " ~ ", predtext))
-  cat("The L hand side is the dependent variable. The R hand side is the independent variable(s). If there is >1 independent variable, plus signs indicate the variables are evaluated on their own; colons indicate an interaction between the variables is evaluated.")
-  cat("If the formula is not what you intended, retype independent variable(s) in the text box and/or choose another dependent variable.")
+  cat(paste0("You have created this formula for model building: ", facA, " ~ ", predtext, " ."))
+  # cat("The L hand side is the dependent variable. The R hand side is the independent variable(s). If there is >1 independent variable, plus signs indicate the variables are evaluated on their own; colons indicate an interaction between the variables is evaluated.")
+   cat("If the formula is not what you intended, retype independent variable(s) in the text box and/or choose another dependent variable.")
   
    ### CHECK: are all input predictor names in data
-   ##  use.names = FALSE speeds up unlist
   predictors1 <- unlist(strsplit(predtext, "+", fixed = TRUE), use.names = FALSE)
   predictors2 <- unlist(strsplit(predictors1, ":", fixed = TRUE), use.names = FALSE)
   
@@ -199,16 +198,16 @@ multi.reg.anal <- function(mSetObj=NA,
 
 #'Produce predicted/actual plot for multivariate regression
 #'@description Scatter plot, where actual variables are y and predicted values are x
-#'@usage plot.pred.linRegMulti(mSetObj, imgName, format="png", dpi=72, width=NA)
+#'@usage multi.pred.plot (mSetObj, facA='NULL', predtext='NULL', data='false', col_dots='NULL', col_line='NULL', plot_ci='false', plot_title=' ', plot_ylab=' ', plot_xlab=' ', imgName, format='png', dpi=72, width=NA)
 #'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
 #'@param facA Input the name of the response column (java uses numeric.columns() to give user options)
 #'@param predtext Input predictor column names plus potential interactions between predictor variables (java uses text box to obtain string)
 #'@param data Boolean, whether to use original data; "false" (default) means normalized or "true" means original (checkbox)
 #'@param col_dots Set color for scatterplot dots (default "NULL" is black); (static dropdown)
 #'@param col_line Set color for line (default "NULL" is black); (static dropdown)
-###@param weights Set weight values, default is NULL
+###param weights Set weight values, default is NULL
 #' @param plot_ci Boolean, "false" (default), omit 95% confidence interval around line, "true" add interval around line
-#'@param plot_title Input the name of the title (default: "Polynomial Regression Predicted vs Actual: (formula);, textbox)
+#'@param plot_title Input the name of the title (default: "Predicted vs Actual: (formula);, textbox)
 #'@param plot_xlab Input the name to use for x-axis label (default: facB, textbox)
 #'@param plot_ylab Input the name to use for y-axis label (default: facA, textbox)
 #'@param imgName Input the image name
@@ -268,32 +267,32 @@ multi.pred.plot <- function(mSetObj=NA,
   ##### 
   ##### iF VARIABLES ARE SET
   #SET RESPONSE (DEPENDENT) VARIABLE
-  if (facA == "NULL") {
-    if( !"res" %in% names(mSetObj$analSet$linRegMulti) ){
+  if (facA == "NULL") { 
+    if("res" %in% names(mSetObj$analSet$linRegMulti) ){ #if there is a results made already, take that response
         facA <- mSetObj$analSet$linRegMulti$res$response
      } else {
     for (i in seq_along(colnames(input)) ) {
       if (is.factor(input[,i]) == FALSE) {
-        facA <- colnames(input)[i]# Default is to choose the first numeric column as response column
+        facA <- colnames(input)[i]# Default is to choose the 1st numeric column as response column
         break
       }
     }
  }
 } else {
-    facA <- facA #User selected, java uses function numeric.columns() to provide options in drop down menu (only numeric columns are available)
+    facA <- facA #User selected, java uses function numeric.columns() to provide options in drop down menu
   }
   
-  #Textbox instructions for selecting predictor variables. 
-  cat("Indicate independent variables using the column names with commas in between. If interested in an interaction between particular variables, indicate it with a colon rather than a comma.")
+  #Textbox instructions for selecting predictor variables COMMENTED OUT FOR NOW
+  # cat("Indicate independent variables using the column names with commas in between. If interested in an interaction between particular variables, indicate it with a colon rather than a comma.")
   
   #SET FORMULA RIGHT SIDE WITH PREDICTORS (Default = 2nd column)
   if (predtext == "NULL") {
-    if( !"res" %in% names(mSetObj$analSet$linRegMulti) ){
+    if("res" %in% names(mSetObj$analSet$linRegMulti) ){#if there is a results made already, take that predictor
         predtext <- mSetObj$analSet$linRegMulti$res$predictor
      } else {
-    dat <- input[ , colnames(input) != facA]
+    dat <- input[ , colnames(input) != facA] #drop=FALSE means it will be a df
     num.data <- dplyr::select_if(dat, is.numeric)
-    predtext <- colnames(num.data)[1] #Default is the first potential predictor column
+    predtext <- colnames(num.data)[1] #Default is the 1st potential predictor column
  } 
     } else {
     predtext <- predtext #taken from text box by java, fed as string into R code
@@ -309,10 +308,10 @@ multi.pred.plot <- function(mSetObj=NA,
    
   #GENERATE FORMULA
   formula <- as.formula(paste(facA, "~", predtext))
-  #Text should be visible to user
-  cat(paste0("You have created this formula for model building: ", facA, " ~ ", predtext))
-  cat("The L hand side is the dependent variable. The R hand side is the independent variable(s). If there is >1 independent variable, plus signs indicate the variables are evaluated on their own; colons indicate an interaction between the variables is evaluated.")
-  cat("If the formula is not what you intended, retype independent variable(s) in the text box and/or choose another dependent variable.")
+  #Text should be visible to user # SOME COMMENTED OUT FOR NOW
+  cat(paste0("You have created this formula for prediction plot: ", facA, " ~ ", predtext))
+  # cat("The L hand side is the dependent variable. The R hand side is the independent variable(s). If there is >1 independent variable, plus signs indicate the variables are evaluated on their own; colons indicate an interaction between the variables is evaluated.")
+  # cat("If the formula is not what you intended, retype independent variable(s) in the text box and/or choose another dependent variable.")
   
    ### CHECK: are all input predictor names in data
   predictors1 <- unlist(strsplit(predtext, "+", fixed = TRUE), use.names = FALSE)
@@ -336,11 +335,13 @@ multi.pred.plot <- function(mSetObj=NA,
     }
   }
   
+# MAKE MODEL
     model <- lm(formula = formula, data = model_data, weights = NULL)
   
   #########
   ######### [CRUNCH]
 
+# MAKE DF WITH PREDICTED VALUES
   dfpred <- data.frame(fpred = fitted(model), fA = input[,facA])
   formula2 <- as.formula("fA ~ fpred")
   model2 <- lm(formula = formula2, data = dfpred)
@@ -356,7 +357,7 @@ multi.pred.plot <- function(mSetObj=NA,
   h <- w
   
   #NAME PLOT FOR DOWNLOAD
-  ### must put imgName2 first, re-writing imgName var in next line
+  ### must put imgName2 1st, bc overwriting imgName var in next line
 imgName2 <- paste(gsub( "\\_\\d+\\_", "", imgName),
  ".json", sep="") 
   imgName <- paste(imgName, "dpi", dpi, ".", format, sep="")
@@ -434,7 +435,7 @@ imgName2 <- paste(gsub( "\\_\\d+\\_", "", imgName),
   #GENERATE PLOT
   Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
   print(a0)
-  # plot(x=prediction, y=model_data[,facA], xlab=paste0("Predicted ", facA), ylab=paste0("Actual ", facA), main=model_name, yaxt="n"); axis(2, las=2); abline(a=0,b=1)
+  # plot(x=prediction, y=model_data[,facA], xlab=paste0("Predicted ", facA), ylab=paste0("Actual ", facA), main=model_name, yaxt="n"); axis(2, las=2); abline(a=0,b=1) #Old Base R
   dev.off()
   
   #JSON OBJECT MAKING
@@ -445,22 +446,37 @@ imgName2 <- paste(gsub( "\\_\\d+\\_", "", imgName),
   
   linear_plot_json$main <- plot_title1 #title
   linear_plot_json$axis <- c(plot_xlab1, plot_ylab1) #axis titles
+
+### WITH DROP=FALSE
+ #linear_plot_json$points$coords <- build_points[,c("x","y"), drop=FALSE] #[,1:2]
+ #linear_plot_json$points$cols <- build_points[,grepl("col",colnames(build_points)),drop=TRUE] #[,6] #colours
+ #linear_plot_json$points$shape <- build_points[,c("group"),drop=TRUE] #[,5]
+ #linear_plot_json$points$size <- build_points[,c("size"),drop=TRUE] #[,7]
+ #linear_plot_json$lines$cols <- build_line[,grepl("col",colnames(build_line)),drop=TRUE]
+ #
+ #if(any(grepl("ymin", colnames(build_line))) && any(grepl("ymax", colnames(build_line))) ){
+ # ci<- build_line[,c("x","y", "ymin", "ymax"),drop=FALSE] 
+ # colnames(ci) <- c("x","y","CI_down", "CI_up")
+ # linear_plot_json$lines$ci <- ci # build_line[,c("ymin", "ymax"),drop=FALSE]
+ #} else{
+ #   linear_plot_json$lines$ci <- data.frame(x = build_line[,c("x"),drop=TRUE], y = build_line[,c("y"),drop=TRUE], CI_down = 0, CI_up = 0)
+ #}   
+  
   linear_plot_json$points$coords <- build_points[,c("x","y")] #[,1:2]
-  linear_plot_json$points$cols <- build$data[[1]][,grepl("col",colnames(build_points))] #[,6] #colours
-  linear_plot_json$points$shape <- build_points[,c("group")]#[,5]
-  linear_plot_json$points$size <- build_points[,c("size")]#[,7]
+  linear_plot_json$points$cols <- build_points[,grepl("col",colnames(build_points))] #[,6] #colours
+  linear_plot_json$points$shape <- build_points[,c("group")] #[,5]
+  linear_plot_json$points$size <- build_points[,c("size")] #[,7]
   linear_plot_json$lines$cols <- build_line[,grepl("col",colnames(build_line))]
-  # linear_plot_json$label <- build$data[[3]][,c("label")]
-  # linear_plot_json$lines$ci <- build$data[[1]][,c("se")]
   
   if(any(grepl("ymin", colnames(build_line))) && any(grepl("ymax", colnames(build_line))) ){
    ci<- build_line[,c("x","y", "ymin", "ymax")] 
    colnames(ci) <- c("x","y","CI_down", "CI_up")
-   linear_plot_json$lines$ci <- ci # build$data[[1]][,c("ymin", "ymax")]
+   linear_plot_json$lines$ci <- ci # build_line[,c("ymin", "ymax")]
  } else{
     linear_plot_json$lines$ci <- data.frame(x = build_line[,c("x")], y = build_line[,c("y")], CI_down = 0, CI_up = 0)
  }   
-  
+
+
   ## BOOLEANS
   if(plot_ci1 == TRUE){
     linear_plot_json$bool_ci <- TRUE
@@ -491,15 +507,15 @@ imgName2 <- paste(gsub( "\\_\\d+\\_", "", imgName),
 
 #'Produce relative importance of predictors bar plot for multivariate regression
 #'@description 
-#'@usage plot.relaimpo.linRegMulti(mSetObj, imgName, format="png", dpi=72, width=NA)
+#'@usage multi.relaimpo.plot(mSetObj, facA='NULL', predtext='NULL', data='false', plot_palette='NULL', plot_label='false', plot_title=' ', plot_ylab=' ', plot_xlab=' ', imgName, format='png', dpi=72, width=NA)
 #'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
 #'@param facA Input the name of the response column (java uses numeric.columns() to give user options)
 #'@param predtext Input predictor column names plus potential interactions between predictor variables (java uses text box to obtain string)
 #'@param data Boolean, whether to use original data; "false" (default) means normalized or "true" means original (checkbox)
 #'@param plot_palette Set color palette from RColorBrewer paelettes (default "NULL" is Set2); (static dropdown)
-#'@param plot_label Add label over bar with relimpo value (rounded 3 dig) (default "NULL" is no loabel); (checkbox)
+#'@param plot_label Add label over bar with relimpo value (rounded 3 dig) (default "NULL" is no label); (checkbox)
 ###@param weights Set weight values, default is NULL
-#'@param plot_title Input the name of the title (default: "Polynomial Regression Predicted vs Actual: (formula);, textbox)
+#'@param plot_title Input the name of the title (default: "Relative Importance of Predictors for  (facA);, textbox)
 #'@param plot_xlab Input the name to use for x-axis label (default: facB, textbox)
 #'@param plot_ylab Input the name to use for y-axis label (default: facA, textbox)
 #'@param imgName Input the image name
@@ -508,7 +524,7 @@ imgName2 <- paste(gsub( "\\_\\d+\\_", "", imgName),
 #'the default dpi is 72. It is suggested that for high-resolution images, select a dpi of 300.  
 #'@param width Input the width, there are 2 default widths. The first, width=NULL, is 10.5.
 #'The second default is width=0, where the width is 7.2. Otherwise users can input their own width.   
-#'@author Louisa Normington\email{normingt@ualberta.ca}
+#'@author Gina Sykes\email{gsykes@ualberta.ca}
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2)
 #'@export
@@ -530,7 +546,7 @@ multi.relaimpo.plot <- function(mSetObj=NA,
   library("relaimpo")
   # library("JSONIO")
   
-  ## name was: plot.pred.linRegMulti
+  ## name was: plot.relimpo.linRegMulti
   mSetObj <- .get.mSet(mSetObj)
   
    ### SET DATA (whether to use original data or not)
@@ -540,38 +556,48 @@ multi.relaimpo.plot <- function(mSetObj=NA,
     input <- mSetObj$dataSet$orig
   }
   
+#SET PLOT DIMENSIONS
+  if(is.na(width)){
+    w <- 10.5
+  } else if(width == 0){
+    w <- 7.2
+  } else{
+    w <- width
+  }
+  h <- w
+
   ##### WITH facA and predtext options
   ##### [CRUNCH]
   ##### 
   ##### iF VARIABLES ARE SET
   #SET RESPONSE (DEPENDENT) VARIABLE
   if (facA == "NULL") {
-    if( !"res" %in% names(mSetObj$analSet$linRegMulti) ){
+    if("res" %in% names(mSetObj$analSet$linRegMulti) ){ #if there is a results made already, take that response
         facA <- mSetObj$analSet$linRegMulti$res$response
      } else {
     for (i in seq_along(colnames(input)) ) {
       if (is.factor(input[,i]) == FALSE) {
-        facA <- colnames(input)[i]# Default is to choose the first numeric column as response column
+        facA <- colnames(input)[i]# Default is to choose the 1st numeric column as response column
         break
       }
     }
  }
 } else {
-    facA <- facA #User selected, java uses function numeric.columns() to provide options in drop down menu (only numeric columns are available)
+    facA <- facA #User selected, java uses function numeric.columns() to provide options in drop down menu
   }
   
-  #Textbox instructions for selecting predictor variables. 
-  cat("Indicate independent variables using the column names with commas in between. If interested in an interaction between particular variables, indicate it with a colon rather than a comma.")
+  #Textbox instructions for selecting predictor variables SOME COMMENTED OUT FOR NOW
+  # cat("Indicate independent variables using comma-separated column names. If interested in an interaction between particular variables, use a colon rather than a comma.")
   
   #SET FORMULA RIGHT SIDE WITH PREDICTORS (Default = 2nd column)
   if (predtext == "NULL") {
-    if( !"res" %in% names(mSetObj$analSet$linRegMulti) ){
-        predtext <- mSetObj$analSet$linRegMulti$res$predictor
+    if("res" %in% names(mSetObj$analSet$linRegMulti) ){
+        predtext <- mSetObj$analSet$linRegMulti$res$predictor #if a results is made already, take that predictor
      } else {
     dat <- input[ , colnames(input) != facA]
     num.data <- dplyr::select_if(dat, is.numeric)
     predtext <- colnames(num.data)[1]
-    predtext <- paste(colnames(num.data)[c(1,2)], collapse="+") #Default is the first potential predictor column
+    #predtext <- paste(colnames(num.data)[c(1,2)], collapse="+") #Default is the 1st potential predictor column
  } 
     } else {
     predtext <- predtext #taken from text box by java, fed as string into R code
@@ -587,18 +613,18 @@ multi.relaimpo.plot <- function(mSetObj=NA,
    
   #GENERATE FORMULA
   formula <- as.formula(paste(facA, "~", predtext))
-  #Text should be visible to user
-  cat(paste0("You have created this formula for model building: ", facA, " ~ ", predtext))
-  cat("The L hand side is the dependent variable. The R hand side is the independent variable(s). If there is >1 independent variable, plus signs indicate the variables are evaluated on their own; colons indicate an interaction between the variables is evaluated.")
-  cat("If the formula is not what you intended, retype independent variable(s) in the text box and/or choose another dependent variable.")
+  #Text should be visible to user COMMENTED OUT FOR NOW
+  cat(paste0("For the relative importance plot, you created this formula: ", facA, " ~ ", predtext))
+  #cat("The L hand side is the dependent variable. The R hand side is the independent variable(s). If there is >1 independent variable, plus signs indicate the variables are evaluated on their own; colons indicate an interaction between the variables is evaluated.")
+  #cat("If the formula is not what you intended, retype independent variable(s) in the text box and/or choose another dependent variable.")
   
    ### CHECK: are all input predictor names in data
   predictors1 <- unlist(strsplit(predtext, "+", fixed = TRUE), use.names = FALSE)
   predictors2 <- unlist(strsplit(predictors1, ":", fixed = TRUE), use.names = FALSE)
- if(any(!colnames(data) %in% predictors2)){
-   stop(paste0( "'", predictors[!predictors2 %in% colnames(data)],
+ if(any(!colnames(data) %in% predictors2)){ # if any of the input predictors2 are not in colnames of data
+   stop(paste0( "'", predictors[!predictors2 %in% colnames(data)], #predictors2 not in data
   "' not found in data variables ('",
-  paste(colnames(data), collapse = "', '"),
+  paste(colnames(data), collapse = "', '"), #list data variables, so user can see what the actual names are
   "'): check spelling of text box input."))
 }
 
@@ -613,21 +639,25 @@ multi.relaimpo.plot <- function(mSetObj=NA,
       stop("You have chosen a categorical independent variable! Please adjust your independent variables appropriately. You can also try other regression models such as logistic, SVM or random forest.") 
     }
   }
-  
+ 
+# MAKE MODEL 
     model <- lm(formula = formula, data = model_data, weights = NULL)
   
-      #PREDICTOR RELATIVE IMPORTANCE (for plotting)
+#PREDICTOR RELATIVE IMPORTANCE (MAKE DF for plotting)
   if (ncol(model_data) == 2) {
-      ## if there is only 1 predictor, it comports 100% importance
+      ## if there is only 1 predictor, comports 100% importance
     importance <- data.frame(V1=1.00)
     colnames(importance) <- colnames(model_data)[2]
-    dfrel <- data.frame(predictors = colnames(importance), relimp = importance[,1])
+    dfrel <- data.frame(predictors = colnames(importance), relaimp = importance[,1])
     
   } else {
     importance <- relaimpo::calc.relimp(model, type = "lmg", rela = TRUE)
-    dfrel <- data.frame(predictors = names(importance@lmg), relimp = importance@lmg)
+    dfrel <- data.frame(predictors = names(importance@lmg), relaimp = importance@lmg)
   }
   
+# TROUBLESHOOTING
+# print(dfrel)
+
   #########
   ######### [CRUNCH]
   
@@ -648,21 +678,8 @@ multi.relaimpo.plot <- function(mSetObj=NA,
   imgName <- paste(imgName, "dpi", dpi, ".", format, sep="")
   mSetObj$imgSet$plot.relaimpo.linRegMulti <- imgName
   
-  
-  #SET LINE COLOR
-   col_line1 <- 
-				switch(
-					col_line,
-					"NULL" = "black",
-					"blue" = "blue",
-					"red" = "red",
-					"green" = "green",
-					"grey" = "grey",
-					NULL
-				)
-   
      
-   # scale_fill_brewer(palette = plot_palette1)
+ # scale_fill_brewer(palette = plot_palette1)
 #c("BrBG", "PiYG", "PRGn", "PuOr", "RdBu", "RdYlBu", "Dark2", "Paired", "Set2")
    
    # plot_palette1 <- "Dark2"
@@ -712,14 +729,14 @@ multi.relaimpo.plot <- function(mSetObj=NA,
   }
  
    
-   
-# dfrel <- mtcars %>% dplyr::mutate(predictors = as.character(carb)) %>%  dplyr::mutate(relimp = gear/10) 
+# TROUBLESHOOTING   
+# dfrel <- mtcars %>% dplyr::mutate(predictors = as.character(carb)) %>%  dplyr::mutate(relaimp = gear/10) 
+# barplot(as.matrix(importance) #    barplot(importance@lmg,
 
-     # barplot(as.matrix(importance) #    barplot(importance@lmg,
   #GENERATE PLOT
-  a0 <- ggplot(data = dfrel, aes(x = predictors, y = relimp)) +
+  a0 <- ggplot(data = dfrel, aes(x = predictors, y = relaimp)) +
     labs(title = plot_title1) + ylab(plot_ylab1)+ xlab(plot_xlab1) +
-    geom_col(aes(fill = predictors), alpha = 0.5, show.legend = F) +
+    geom_col(aes(fill = predictors), alpha = 0.5, show.legend = FALSE) +
     scale_y_continuous(limits = c(0,1)) +
     scale_fill_brewer(palette = plot_palette1) +
   theme_bw() + 
@@ -731,11 +748,15 @@ multi.relaimpo.plot <- function(mSetObj=NA,
         plot.title = element_text(face = 'bold', hjust = 0.5)
   )
   
-  #ADD RELIMP VALUE LABEL
-  if (plot_label1 == "false") {
+  #ADD RELAIMP VALUE LABEL
+  if (plot_label == "false") {
      a0 <- a0
     } else {
-      a0 <- a0 +  geom_label(aes(label = round(relimp, digits = 3)) )
+    #  a0 <- a0 +  geom_label(aes(label = round(relaimp, digits = 3)) )
+ a0 <- a0 +  geom_label(aes(label = paste0( 
+                                   round(relaimp*100, digits = 3), '%'
+                                 )
+                             ))
     }
   
   
@@ -748,16 +769,20 @@ multi.relaimpo.plot <- function(mSetObj=NA,
   linear_plot_json$axis <- c(plot_xlab1, plot_ylab1) #axis titles
 
  if(any(grepl("ymin", colnames(build_bar))) && any(grepl("ymax", colnames(build_bar))) ){
-   ys<- build_bar[,c("ymin", "ymax")] 
+   ys<- build_bar[,c("ymin", "ymax")] # ys<- build_bar[,c("ymin", "ymax"), drop=FALSE] 
  } else{
     ys <- data.frame(ymin = build_bar[,"y"], ymax = build_bar[,"y"] )
+   #  ys <- data.frame(ymin = build_bar[,"y",drop=TRUE], ymax = build_bar[,"y",drop=TRUE] )
  }
   if(any(grepl("xmin", colnames(build_bar))) && any(grepl("xmax", colnames(build_bar))) ){
    xs<- build_bar[,c("xmin", "xmax")] 
+   # xs<- build_bar[,c("xmin", "xmax"), drop=FALSE] 
  } else{
     xs <- data.frame(xmin = build_bar[,"x"], xmax = build_bar[,"x"] )
  }
+
   linear_plot_json$bar$coords <- cbind(build_bar[, c("x","y")], xs, ys )
+ # linear_plot_json$bar$coords <- cbind(build_bar[, c("x","y"),drop=FALSE], xs, ys )
   linear_plot_json$bar$cols <- build_bar[,"fill"] #[,6] #colours
   
   ## BOOLEANS
@@ -806,7 +831,7 @@ numeric.columns <- function(mSetObj=NA){
   #install.packages("dplyr")
   library("dplyr")
   
-  data <- select_if(mSetObj$dataSet$norm, is.numeric)
+  data <- dplyr::select_if(mSetObj$dataSet$norm, is.numeric)
   count.all.numeric.cols <- ncol(data)
   name.all.numeric.cols <- colnames(data)
   

@@ -134,25 +134,52 @@ public class CABean implements Serializable {
                 " "," "," ",
                 sb.getCurrentImage("corr_poly_pred"), "png", 72);
     }
-
+    
     private void doDefaultMultivariate() {
-        CAUtils.CreateMultivariateModel(sb);
-        CAUtils.PlotMultivariateCA(sb, sb.getCurrentImage("corr_multivariate"), "png", 72);
-        CAUtils.PlotMultivariateCoeffCA(sb, sb.getCurrentImage("corr_multivariate_coeff"), "png", 72);
-        CAUtils.PlotMultivariateRelativeCA(sb, sb.getCurrentImage("corr_multivariate_relative"), "png", 72);
+        CAUtils.CreateMultivariateModel(sb, "NULL", "NULL", false);
+        CAUtils.PlotMultivariateCA(sb, 
+                "NULL", "NULL", false, 
+                "NULL","NULL",  false,
+                 " ", " "," ",
+                sb.getCurrentImage("corr_multi_pred"), "png", 72);
+        CAUtils.PlotMultivariateCoeffCA(sb, 
+                 "NULL", "NULL", false, 
+                "NULL",  false,
+                 " ", " "," ",
+                sb.getCurrentImage("corr_multi_relaimpo"), "png", 72);
+        CAUtils.PlotMultivariateRelativeCA(sb, 
+                 "NULL", "NULL", false, 
+                "NULL",  false,
+                 " ", " "," ",
+                sb.getCurrentImage("corr_multi_relaimpo"), "png", 72);
     }
 
 
     private void doDefaultSVM() {
-        CAUtils.CreateSVMModel(sb, "NULL", "NULL");
-        CAUtils.PlotSVMCA(sb, sb.getCurrentImage("corr_svm"), "png", 72);
+        CAUtils.CreateSVMModel(sb, "NULL", "NULL", false);
+        CAUtils.PlotSVMCA(sb,
+                "NULL", "NULL", false,
+                "NULL","NULL",  false,
+                 " ", " "," ",
+                sb.getCurrentImage("corr_svm_pred"), "png", 72);
     }    
 
     private void doDefaultRF() {
-        CAUtils.CreateRFModel(sb, "NULL", "NULL");
-        CAUtils.PlotRFCA(sb, sb.getCurrentImage("corr_rf"), "png", 72);
-        CAUtils.PlotRFRelativeCA(sb, sb.getCurrentImage("corr_rf_relative"), "png", 72);
-        CAUtils.PlotRFErrorCA(sb, sb.getCurrentImage("corr_rf_error"), "png", 72);
+        CAUtils.CreateRFModel(sb, "NULL", "NULL", false);
+        CAUtils.PlotRFCA(sb,
+                 "NULL", "NULL", false,
+                "NULL","NULL",  false,
+                 " ", " "," ",
+                sb.getCurrentImage("corr_rf_pred"), "png", 72);
+        CAUtils.PlotRFRelativeCA(sb, 
+                "NULL", "NULL", false, 
+                "NULL",  false,
+                 " ", " "," ",
+                sb.getCurrentImage("corr_rf_relaimpo"), "png", 72);
+        CAUtils.PlotRFErrorCA(sb, 
+                "NULL", "NULL", false, 
+                "NULL",  " ", " "," ",
+                sb.getCurrentImage("corr_rf_error"), "png", 72);
     }  
     
     

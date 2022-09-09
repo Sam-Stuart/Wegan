@@ -47,6 +47,18 @@ public class RFCABean implements Serializable {
         this.fileRFSummaryPath = fileRFSummaryPath;
     }
     
+    private String fileMultiSummary = "multivariate_regression_summary.txt";
+    private String fileMultiSummaryPath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileMultiSummary + "\">" + fileMultiSummary + "</a>";
+    
+    public String getFileMultiSummaryPath() {
+        return fileMultiSummaryPath;
+    }
+
+    public void setFileMultiSummaryPath(String fileMultiSummaryPath) {
+        this.fileMultiSummaryPath = fileMultiSummaryPath;
+    }
+    
+    
     private String indInput = "";
 
     public String getIndInput() {
@@ -91,36 +103,7 @@ public class RFCABean implements Serializable {
     public void setdoOriginal(boolean doOriginal) {
         this.doOriginal = doOriginal;
     }
-  // CHECK BOX 
-     private boolean doPlotEq = false;
-
-    public boolean isdoPlotEq() {
-        return doPlotEq;
-    }
-
-    public void setdoPlotEq(boolean doPlotEq) {
-        this.doPlotEq = doPlotEq;
-    } 
-  // CHECK BOX 
-     private boolean doPlotRsq = false;
-
-    public boolean isdoPlotRsq() {
-        return doPlotRsq;
-    }
-
-    public void setdoPlotRsq(boolean doPlotRsq) {
-        this.doPlotRsq = doPlotRsq;
-    }     
-  // CHECK BOX
-     private boolean doPlotRsqAdj = false;
-
-    public boolean isdoPlotRsqAdj() {
-        return doPlotRsqAdj;
-    }
-
-    public void setdoPlotRsqAdj(boolean doPlotRsqAdj) {
-        this.doPlotRsqAdj = doPlotRsqAdj;
-    }  
+  
   // CHECK BOX 
      private boolean doPlotConfInt = false;
 
@@ -155,6 +138,27 @@ public class RFCABean implements Serializable {
         this.corColorLineOpts = corColorLineOpts;
     }
     
+    // CHECK BOX 
+     private boolean doLabelPlot = false;
+
+    public boolean isdoLabelPlot() {
+        return doLabelPlot;
+    }
+
+    public void setdoLabelPlot(boolean doLabelPlot) {
+        this.doLabelPlot = doLabelPlot;
+    }
+    
+ //STATIC DROPDOWN for selecting colour:   replaced: corColorOpts : change name from logPaletteOpts to corPaletteOpts, and logColorPaletteOpts to corColorPaletteOpts
+    private String corPaletteOpts = "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corColorPaletteOpts
+
+    public String getCorPaletteOpts() {
+        return corPaletteOpts; 
+    }
+
+    public void setCorPaletteOpts(String corPaletteOpts) {
+        this.corPaletteOpts = corPaletteOpts;
+    }
   
   // TEXT BOX 
     private String corPlotTitle = " ";
@@ -200,10 +204,58 @@ public class RFCABean implements Serializable {
 //    }
     
         // ACTION BUTTONS //
+    
     public void corrRFBtn_action() {
-        CAUtils.CreateSVMModel(sb, columnNameA, indInput);
-        CAUtils.PlotSVMCA(sb, sb.getNewImage("corr_svm"), "png", 72);
+        CAUtils.CreateRFModel(sb, columnNameA, indInput, doOriginal);
+        CAUtils.PlotRFCA(sb, columnNameA, indInput, doOriginal,
+                  corColorDotsOpts, corColorLineOpts, doPlotConfInt,
+               corPlotTitle, corPlotXlab, corPlotYlab,
+                sb.getNewImage("corr_rf_pred"), "png", 72);
     }
+    
+    public void corrRFBtn2_action() {
+        CAUtils.CreateRFModel(sb, columnNameA, indInput, doOriginal);
+        CAUtils.PlotRFRelativeCA(sb, columnNameA, indInput, doOriginal,
+                  corPaletteOpts, doLabelPlot,
+               corPlotTitle, corPlotXlab, corPlotYlab,
+                sb.getNewImage("corr_rf_relaimpo"), "png", 72);
+    }
+    
+    public void corrRFBtn3_action() {
+        CAUtils.CreateRFModel(sb, columnNameA, indInput, doOriginal);
+        CAUtils.PlotRFErrorCA(sb, columnNameA, indInput, doOriginal,
+                 corColorLineOpts, 
+               corPlotTitle, corPlotXlab, corPlotYlab,
+                sb.getNewImage("corr_rf_error"), "png", 72);
+    }
+    
+    
+ 
+      public void corrMultiBtn_action() {
+        CAUtils.CreateMultivariateModel(sb, columnNameA, indInput, doOriginal);
+//         String facA, String predtext, Boolean data,
+//             String col_dots, String col_line, Boolean plot_ci, 
+//                String plot_title, String plot_xlab, String plot_ylab,
+        CAUtils.PlotMultivariateCA(sb,
+                columnNameA, indInput, doOriginal,
+                corColorDotsOpts, corColorLineOpts, doPlotConfInt,
+               corPlotTitle, corPlotXlab, corPlotYlab,
+                sb.getNewImage("corr_multi_pred"), "png", 72);
+    }
+      
+         public void corrMultiRelBtn_action() {
+        CAUtils.CreateMultivariateModel(sb, columnNameA, indInput, doOriginal);
+        CAUtils.PlotMultivariateRelativeCA(sb, 
+                columnNameA, indInput, doOriginal,
+              corPaletteOpts, doLabelPlot,
+               corPlotTitle, corPlotXlab, corPlotYlab,
+                sb.getNewImage("corr_multi_relaimpo"), "png", 72);
+    }
+   
+//         corColorDotsOpts, corColorLineOpts, doPlotConfInt,
+//                doPlotEq, doPlotRsq, doPlotRsqAdj,
+//               corPlotTitle, corPlotXlab, corPlotYlab,
+         
 //    // ACTION BUTTONS //
 //    public void corrPolyPredBtn_action() {
 //        System.out.println("Inside poly");
