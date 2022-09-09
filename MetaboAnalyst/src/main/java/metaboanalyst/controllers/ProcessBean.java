@@ -93,7 +93,7 @@ public class ProcessBean implements Serializable {
         msgVec.addAll(Arrays.asList(msgArray));
 
         String msg = "<table face=\"times\" size = \"3\">";
-        msg = msg + "<tr><th> Data processing information: " + "</th></tr>";
+        msg = msg + "<tr><th> Data Processing Information: " + "</th></tr>";
         for (int i = 0; i < msgVec.size(); i++) {
             msg = msg + "<tr><td align=\"left\">" + msgVec.get(i) + "</td></tr>";
         }
@@ -129,12 +129,14 @@ public class ProcessBean implements Serializable {
             return "Normalization";
         } else if (!sb.getDataType().equalsIgnoreCase("conc")) {
             return "Data filter";
+        } else if (!sb.getDataType().equalsIgnoreCase("main")) {
+            return "Data filter";
         } else {
             return "Normalization";
         }
     }
 
-    private String filterOpt = "iqr";
+    private String filterOpt = "none";
 
     public String getFilterOpt() {
         return filterOpt;
@@ -144,7 +146,7 @@ public class ProcessBean implements Serializable {
         this.filterOpt = filterOpt;
     }
 
-    public void filterButton_action() {
+    public String filterButton_action() {
         RConnection RC = sb.getRConnection();
         String doQC = "F";
         if (doQCFiltering) {
@@ -157,6 +159,7 @@ public class ProcessBean implements Serializable {
         } else {
             sb.updateMsg("OK", msg);
         }
+        return "Normalization";
     }
 
     private String nmrAlignText = "";
@@ -358,7 +361,7 @@ public class ProcessBean implements Serializable {
         this.missingPercent = missingPercent;
     }
 
-    private String missingImputeOpt = "min";
+    private String missingImputeOpt = "none";
 
     public String getMissingImputeOpt() {
         return missingImputeOpt;
@@ -410,10 +413,10 @@ public class ProcessBean implements Serializable {
         //sb.setupDataOpts();
         if (RDataUtils.getProcFeatureNumber(RC) > 250) {
             return "Data filter";
-        } else if (!sb.getDataType().equalsIgnoreCase("conc")) {
+        } else if (!sb.getDataType().equalsIgnoreCase("main")) {
             return "Data filter";
         } else {
-            return "Normalization";
+            return "Data filter";
         }
     }
 

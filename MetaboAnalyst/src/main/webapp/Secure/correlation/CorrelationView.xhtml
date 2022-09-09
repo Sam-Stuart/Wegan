@@ -11,20 +11,21 @@
     </ui:define>
     <ui:define name="content">
         <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
+            <h1>Correlation Heatmap:</h1>
             <h:form id="form1">
                 <p>
-                    Note, the heatmap will only show correlations for a maximum of 1000 features. For larger datasets, 
-                    only the top 1000 features will be selected based on their interquantile range (IQR). When the 
-                    color distribution is fixed, you can potentially compare the correlation patterns among different data sets. 
-                    In this case, you can choose "do not perform clustering" for the entire data set,  or only to perform clustering on a 
+                    Correlation metrics can be applied to detect similarities between variables or samples. The heatmap function will only show correlations for a maximum of 1000 variables. For larger datasets, 
+                    only the top 1000 variables will be selected based on their interquantile range (IQR). <b>For the sample view, greater than 4 variables are required to perform the analysis.</b> 
+                    When the color distribution is fixed, you can potentially compare the correlation patterns among different data sets. 
+<!--                    In this case, you can choose "do not perform clustering" for the entire data set,  or only to perform clustering on a 
                     single reference data set, then manually re-arrange other data sets according to the clustering pattern of the 
-                    reference data set.                  
+                    reference data set.                  -->
                 </p>
                 <h:panelGrid id="panelGrid" columns="5" cellpadding="3" columnClasses="colLeftLong,colRightShort,colLeftLong,colRightShort, colLast">
                             
                     <h:outputLabel style="font-weight: bold" value="Choose a dimension:"/>
                     <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{univBean.corDirection}">
-                        <f:selectItem itemLabel="Features" itemValue="col" /> 
+                        <f:selectItem itemLabel="Variables" itemValue="col" /> 
                         <f:selectItem itemLabel="Samples" itemValue="row" /> 
                     </p:selectOneMenu>
 
@@ -35,7 +36,7 @@
                     
                     <p:panelGrid></p:panelGrid>
 
-                    <h:outputLabel style="font-weight: bold" value="Distance measure:"/>
+                    <h:outputLabel style="font-weight: bold" value="Correlation measure:"/>
                         <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{univBean.hmDistMeasure}">
                             <f:selectItems value="#{applicationBean1.distMeasureOpts}" />
                         </p:selectOneMenu>
@@ -50,11 +51,11 @@
                     <p:selectBooleanCheckbox value ="#{univBean.noClust}"/>
 
                     
-                    <h:outputLabel style="font-weight: bold" value="View Mode :"/>
+<!--                    <h:outputLabel style="font-weight: bold" value="View Mode :"/>
                     <p:selectOneRadio value="#{univBean.viewOpt}" layout="pageDirection">
                         <f:selectItem itemLabel="Overview" itemValue="overview" /> 
                         <f:selectItem itemLabel="Detail View" itemValue="detail" /> 
-                    </p:selectOneRadio>
+                    </p:selectOneRadio>-->
                     
                 </h:panelGrid>
                 <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
@@ -75,7 +76,6 @@
                             <h:panelGroup>
                                 <h:panelGrid columns="3" class="resultsImages">
                                     <i class="fas fa-palette"></i>
-                                    <i class="fa fa-table"></i>
                                     <i class="fa fa-question-circle"></i>
                                 </h:panelGrid>
                             

@@ -1,0 +1,323 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_anal_template.xhtml">
+    <ui:define name="metaInfo">
+        <f:event type="preRenderView" listener="#{diversityBean.performDefaultAnalysis('Indices')}"/> 
+        <f:event type="preRenderView" listener="#{downloader.setupDownloadTable()}"/>
+    </ui:define>
+    <ui:define name="content">
+        <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
+            <p:tabView id="indices">
+                <p:tab title ="Alpha Diveristy Graph" titleStyleClass="p-tab-nav">
+                    <h:form id="form1">
+                        <p>
+                            Species diversity includes the measure of species richness in a community, and the measure of individual species abundance, which are usually described by an Index, such as Shannon (H'), Simpson (Λ) and inverse Simpson diversity index (1/Λ). 
+                        </p>
+                        <p>
+                            Species richness: the number of species in a community or interested environment.
+                        </p>
+                        <p>
+                            Species evenness: relative abundance of the different species in a community (High species evenness = similar relative abundance across species; low species evenness = varied relative abundance across species).   
+                        </p>    
+                        <p>
+                            Alpha diversity: the mean species diversity in sites or habitats at a local scale.
+                        </p>
+                        <p>
+                            Beta diversity: the ratio between regional and local species diversity or the ratio between two sites or habitats.
+                        </p>
+                        <p>
+                            Gamma diversity: the total species diversity in a landscape.
+               
+                        </p>
+                        <h:panelGrid id="panelGrid" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
+                                <p:commandButton value="Help"
+                                             styleClass="helpButton"
+                                             style="box-shadow: none !important; text-shadow: none !important;"
+                                             actionListener="#{sessionBean1.graphicsLnk_action('pca_pair')}" 
+                                            oncomplete="PF('graphApperanceIndicesHelp').show()"/> 
+                        </h:panelGrid>
+                        
+                        <h:panelGrid id="panelGrid5" columns="4" cellpadding="3" columnClasses="colFront, colLeft, colRight">
+                            <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
+                            <p:selectBooleanCheckbox value ="#{indicesBean.doOriginal}"/> 
+                            
+                            <h:outputLabel style="font-weight: bold" value="Grouping variable:"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{indicesBean.groupColName}">
+                                    <f:selectItems value="#{indicesBean.groupColOpts}" />
+                                </p:selectOneMenu>
+                            <h:outputLabel style="font-weight: bold" value="Method:"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{indicesBean.methodchosen}">
+                                    <f:selectItems value="#{indicesBean.method}"/>
+                                </p:selectOneMenu>
+                        </h:panelGrid>  
+                        <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
+                            <p:commandButton value="Update" 
+                                             styleClass="updateButton"
+                                             style="box-shadow: none !important; text-shadow: none !important"
+                                            onclick="PF('statusDialog').show()"
+                                            oncomplete="PF('statusDialog').hide()"  
+                                            update=":indices:form1:indicesPane1  :cmdPane" 
+                                            actionListener="#{indicesBean.indicesAlphaUpdate_action()}"/>                          
+                            <p:commandButton value="Customize Graph"
+                                             styleClass="graphicsButton"
+                                             style="box-shadow: none !important; text-shadow: none !important;"
+                                             actionListener="#{sessionBean1.graphicsLnk_action('pca_pair')}" 
+                                            oncomplete="PF('graphApperanceIndices').show()"/> 
+                        </h:panelGrid>
+                        <h:panelGrid class="resultsBar" columns="2">
+                            <h:panelGroup>
+                                <h:panelGrid columns="1" style="text-align : left;">
+                                    Results
+                                </h:panelGrid>
+                            </h:panelGroup> 
+                            <h:panelGroup>
+                                <h:panelGrid columns="3" class="resultsImages">
+                                    <i id="question" class="fa fa-question-circle" title="Help with plot"></i>
+                                </h:panelGrid>
+                            </h:panelGroup>                            
+                        </h:panelGrid>                         
+                        <h:panelGrid id="indicesPane1" style="width: 100%;">
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 2px">
+                                    <h:outputText escape="false" value="#{indicesBean.fileshannonresultpath}"/>
+                                </i>
+                            </h:panelGrid> 
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 2px">
+                                    <h:outputText escape="false" value="#{indicesBean.filesimpsonresultpath}"/>
+                                </i>
+                            </h:panelGrid> 
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 2.5px">
+                                    <h:outputText escape="false" value="#{indicesBean.fileinvsimpsonresultpath}"/>
+                                </i>
+                            </h:panelGrid> 
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 2.5px">
+                                    <h:outputText escape="false" value="#{indicesBean.filefisherresultpath}"/>
+                                </i>
+                            </h:panelGrid> 
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 3.5px">
+                                    <h:outputText escape="false" value="#{indicesBean.filerichallresultpath}"/>
+                                </i>
+                            </h:panelGrid> 
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 4px">
+                                    <h:outputText escape="false" value="#{indicesBean.filerichresultpath}"/>
+                                </i>
+                            </h:panelGrid> 
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 4px">
+                                    <h:outputText escape="false" value="#{indicesBean.fileevsharesultpath}"/>
+                                </i>
+                            </h:panelGrid> 
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 4px">
+                                    <h:outputText escape="false" value="#{indicesBean.fileevsimresultpath}"/>
+                                </i>
+                            </h:panelGrid> 
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 4px">
+                                    <h:outputText escape="false" value="#{indicesBean.fileevinvresultpath}"/>
+                                </i>
+                            </h:panelGrid> 
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 0.5px">
+                                    <h:outputText escape="false" value="#{indicesBean.filealpharesultpath}"/>
+                                </i>
+                            </h:panelGrid> 
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 0.3px">
+                                    <h:outputText escape="false" value="#{indicesBean.filebetaresultpath}"/>
+                                </i>
+                            </h:panelGrid> 
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
+                                    <h:outputText escape="false" value="#{indicesBean.filegammaresultpath}"/>
+                                </i>
+                            </h:panelGrid> 
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
+                                    <h:outputText escape="false" value="#{indicesBean.filerelativeresultpath}"/>
+                                </i>
+                            </h:panelGrid> 
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <p:commandButton value="Export"
+                                    styleClass="exportButton"
+                                    style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                    actionListener="#{sessionBean1.graphicsLnk_action('Alpha_Plot')}"
+                                    oncomplete="PF('graphDialog').show()"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('Alpha_Plot')}" alt="TestPlot"/>
+                            </h:panelGrid>  
+                            <p>
+                                A box graph with alpha diversity as y axis and the selected variable as x axis.
+                            </p>
+                        </h:panelGrid> 
+                    </h:form>
+                </p:tab>
+                
+                <p:tab title ="Beta Diversity Graph" titleStyleClass="p-tab-nav">
+                    <h:form id="form2">
+                        <p>
+                            Species diversity includes the measure of species richness in a community, and the measure of individual species abundance, which are usually described by an Index, such as Shannon (H'), Simpson (Λ) and inverse Simpson diversity index (1/Λ). 
+                        </p>
+                        <p>
+                            Species richness: the number of species in a community or interested environment.
+                        </p>
+                        <p>
+                            Species evenness: relative abundance of the different species in a community (High species evenness = similar relative abundance across species; low species evenness = varied relative abundance across species).   
+                        </p>    
+                        <p>
+                            Alpha diversity: the mean species diversity in sites or habitats at a local scale.
+                        </p>
+                        <p>
+                            Beta diversity: the ratio between regional and local species diversity or the ratio between two sites or habitats.
+                        </p>
+                        <p>
+                            Gamma diversity: the total species diversity in a landscape.
+                        </p>
+                        <h:panelGrid id="panelGrid" columns="4" cellpadding="3" columnClasses="colFront, colLeft, colRight">
+                            <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
+                            <p:selectBooleanCheckbox value ="#{indicesBean.doOriginal}"/> 
+                            <h:outputLabel style="font-weight: bold" value="Select grouping variable (x-axis):"/>
+                                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{indicesBean.groupColName}">
+                                        <f:selectItems value="#{indicesBean.groupColOpts}" />
+                                    </p:selectOneMenu>
+                        </h:panelGrid>  
+                        <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
+                            <p:commandButton value="Update" 
+                                             styleClass="updateButton"
+                                             style="box-shadow: none !important; text-shadow: none !important"
+                                            onclick="PF('statusDialog').show()"
+                                            oncomplete="PF('statusDialog').hide()"  
+                                            update=":indices:form2:indicesPane2  :cmdPane" 
+                                            actionListener="#{indicesBean.indicesBetaUpdate_action()}"/>                          
+                            <p:commandButton value="Customize Graph"
+                                             styleClass="graphicsButton"
+                                             style="box-shadow: none !important; text-shadow: none !important;"
+                                             actionListener="#{sessionBean1.graphicsLnk_action('pca_pair')}" 
+                                            oncomplete="PF('graphApperanceIndices2').show()"/> 
+                        </h:panelGrid>
+                        <h:panelGrid class="resultsBar" columns="2">
+                            <h:panelGroup>
+                                <h:panelGrid columns="1" style="text-align : left;">
+                                    Results
+                                </h:panelGrid>
+                            </h:panelGroup> 
+                            <h:panelGroup>
+                                <h:panelGrid columns="3" class="resultsImages">
+                                    <i class="fa fa-question-circle"></i>
+                                </h:panelGrid>
+                            </h:panelGroup>                            
+                        </h:panelGrid>                         
+                        <h:panelGrid id="indicesPane2" style="width: 100%;">
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 2px">
+                                    <h:outputText escape="false" value="#{indicesBean.fileshannonresultpath}"/>
+                                </i>
+                            </h:panelGrid> 
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 2px">
+                                    <h:outputText escape="false" value="#{indicesBean.filesimpsonresultpath}"/>
+                                </i>
+                            </h:panelGrid> 
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 2.5px">
+                                    <h:outputText escape="false" value="#{indicesBean.fileinvsimpsonresultpath}"/>
+                                </i>
+                            </h:panelGrid> 
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 2.5px">
+                                    <h:outputText escape="false" value="#{indicesBean.filefisherresultpath}"/>
+                                </i>
+                            </h:panelGrid> 
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 3.5px">
+                                    <h:outputText escape="false" value="#{indicesBean.filerichallresultpath}"/>
+                                </i>
+                            </h:panelGrid> 
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 4px">
+                                    <h:outputText escape="false" value="#{indicesBean.filerichresultpath}"/>
+                                </i>
+                            </h:panelGrid> 
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 4px">
+                                    <h:outputText escape="false" value="#{indicesBean.fileevsharesultpath}"/>
+                                </i>
+                            </h:panelGrid> 
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 4px">
+                                    <h:outputText escape="false" value="#{indicesBean.fileevsimresultpath}"/>
+                                </i>
+                            </h:panelGrid> 
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 4px">
+                                    <h:outputText escape="false" value="#{indicesBean.fileevinvresultpath}"/>
+                                </i>
+                            </h:panelGrid> 
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 0.5px">
+                                    <h:outputText escape="false" value="#{indicesBean.filealpharesultpath}"/>
+                                </i>
+                            </h:panelGrid> 
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 0.3px">
+                                    <h:outputText escape="false" value="#{indicesBean.filebetaresultpath}"/>
+                                </i>
+                            </h:panelGrid> 
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
+                                    <h:outputText escape="false" value="#{indicesBean.filegammaresultpath}"/>
+                                </i>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
+                                    <h:outputText escape="false" value="#{indicesBean.filerelativeresultpath}"/>
+                                </i>
+                            </h:panelGrid> 
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <p:commandButton value="Export"
+                                    styleClass="exportButton"
+                                    style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                    actionListener="#{sessionBean1.graphicsLnk_action('Beta_Plot')}"
+                                    oncomplete="PF('graphDialog').show()"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('Beta_Plot')}" alt="TestPlot"/>
+                            </h:panelGrid>                            
+                        </h:panelGrid> 
+                    </h:form>
+                </p:tab>
+            </p:tabView>
+            <p:dialog modal="true" widgetVar="graphApperanceIndicesHelp" 
+                style="width: 400px; height:400px;" 
+                appendTo="@(body)" header="Help Center"
+                draggable="false" closable="true" resizable="false"> 
+                <ui:include src="_color_palette_indicesHelp.xhtml" />
+            </p:dialog>
+            <p:dialog modal="true" widgetVar="graphApperanceIndices" 
+                style="width: 400px; height:400px;" 
+                appendTo="@(body)" header="Graphics Center"
+                draggable="false" closable="true" resizable="false"> 
+                <ui:include src="_color_palette_indices.xhtml" />
+            </p:dialog>
+            <p:dialog modal="true" widgetVar="graphApperanceIndices2" 
+                style="width: 400px; height:400px;" 
+                appendTo="@(body)" header="Graphics Center"
+                draggable="false" closable="true" resizable="false"> 
+                <ui:include src="_color_palette_indicesTab2.xhtml" />
+            </p:dialog>
+ 
+        </h:panelGrid>
+        
+    </ui:define>
+</ui:composition>

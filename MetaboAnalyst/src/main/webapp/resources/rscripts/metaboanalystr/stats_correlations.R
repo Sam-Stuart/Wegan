@@ -148,10 +148,12 @@ PlotCorr <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA){
 #'
 PlotCorrHeatMap<-function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, target, cor.method, 
                           colors, viewOpt, fix.col, no.clst, top, topNum){
-  
+  load_dplyr()
   mSetObj <- .get.mSet(mSetObj);
   main <- xlab <- ylab <- NULL;
   data <- mSetObj$dataSet$norm;
+  data <- select_if(data, is.numeric)
+
   if(target == 'row'){
     data <- t(data);
   }
@@ -166,7 +168,7 @@ PlotCorrHeatMap<-function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, t
   
   colnames(data) <- substr(colnames(data), 1, 18);
   corr.mat <- cor(data, method=cor.method);
-  
+
   pval.mat <- Hmisc::rcorr(as.matrix(data), type=cor.method)$P;
   
   # use total abs(correlation) to select

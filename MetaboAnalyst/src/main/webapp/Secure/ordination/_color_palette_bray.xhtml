@@ -8,26 +8,29 @@
 
     <h:form id="brayGraph">
         <h:panelGrid columns="1" style="width:380px;">
-            <h:panelGrid id="panelGrid2" columns="2" cellpadding="5" columnClasses="colBrayLong,colBrayShort">
-                <h:outputLabel style="font-weight: bold" value="Variable Arrows:"/>
-                <p:selectBooleanCheckbox value ="#{brayBean.varArrows}"/> 
-                <h:outputLabel style="font-weight: bold" value="Use Sample Names:"/>
-                <p:selectBooleanCheckbox value ="#{brayBean.sampleNames}"/> 
-
-
-                <h:outputLabel style="font-weight: bold" value="Ellipse:"/>
-                    <p:selectBooleanCheckbox value ="#{brayBean.addEllipse}"/> 
-                    
-                <h:outputLabel style="font-weight: bold" value="Color Pallet:"/>
-                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ brayBean.color}">
-                        <f:selectItems value="#{applicationBean1.ordColorPaletteOpts}" />
-                    </p:selectOneMenu>
+            <h:panelGrid id="panelGrid1" columns="2" cellpadding="5" columnClasses="colBrayLong,colBrayShort">
                 
-                <h:outputLabel style="font-weight: bold" value="Color Grouping Column:"/>
+                <h:outputLabel style="font-weight: bold" value="Use Sample Names for Points:"/>
+                <p:selectBooleanCheckbox value ="#{brayBean.sampleNames}"/>  
+                
+                <h:outputLabel style="font-weight: bold" value="Add Variable Arrows:"/>
+                <p:selectBooleanCheckbox value ="#{brayBean.varArrows}"/> 
+
+                <h3>Grouping Data Options</h3>
+                <h:panelGrid></h:panelGrid>
+                <h:outputLabel style="font-weight: bold" value="Grouping Variable"/>
                     <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ brayBean.groupCol}">
                         <f:selectItems value="#{applicationBean1.vegdistMeasureOpts}" />
                     </p:selectOneMenu> 
-
+                
+                <h:outputLabel style="font-weight: bold" value="Color Palette:"/>
+                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ brayBean.color}">
+                        <f:selectItems value="#{applicationBean1.ordColorPaletteOpts}" />
+                    </p:selectOneMenu> 
+                                
+                <h:outputLabel style="font-weight: bold" value="Add Ellipses:"/>
+                    <p:selectBooleanCheckbox value ="#{brayBean.addEllipse}"/> 
+      
                 <p:panelGrid></p:panelGrid>  
 
 

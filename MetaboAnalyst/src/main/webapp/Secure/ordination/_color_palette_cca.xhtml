@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="ccaGraph">
+        <h:panelGrid columns="1" style="width:380px;">
+            <h:panelGrid id="panelGrid2" columns="2" cellpadding="5" columnClasses="colBrayLong,colBrayShort">
+                
+                <h:outputLabel style="font-weight: bold" value="Use Sample Names for Points:"/>
+                <p:selectBooleanCheckbox value ="#{ccaBean.sampleNames}"/>                 
+                
+                <h:outputLabel style="font-weight: bold" value="Add Variable Arrows:"/>
+                <p:selectBooleanCheckbox value ="#{ccaBean.varArrows}"/> 
+
+                <h3>Grouping Data Options</h3>
+                <p:panelGrid></p:panelGrid>
+
+                <h:outputLabel style="font-weight: bold" value="Grouping Variable:"/>
+                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ ccaBean.groupCol}">
+                        <f:selectItems value="#{applicationBean1.vegdistMeasureOpts}" />
+                    </p:selectOneMenu> 
+                <h:outputLabel style="font-weight: bold" value="Color Palette:"/>
+                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ ccaBean.color}">
+                        <f:selectItems value="#{applicationBean1.ordColorPaletteOpts}" />
+                    </p:selectOneMenu>
+                <h:outputLabel style="font-weight: bold" value="Add Ellipses:"/>
+                    <p:selectBooleanCheckbox value ="#{ccaBean.addEllipse}"/> 
+                    
+                <h3>Constraining Data Options</h3>
+                <p:panelGrid></p:panelGrid>
+                
+                <h:outputLabel style="font-weight: bold" value="Add Arrows for Constraining Variables:"/>
+                <p:selectBooleanCheckbox value ="#{ccaBean.envArrows}"/> 
+                
+                <h:outputLabel style="font-weight: bold" value="Add Centroids for Constraining Variables:"/>
+                <p:selectBooleanCheckbox value ="#{ccaBean.envCentroid}"/>                     
+                <p:panelGrid></p:panelGrid>  
+
+
+            </h:panelGrid>
+            <h:panelGrid id="panelGrid4" columns="1" cellpadding="5" style="float: right">
+                <p:commandButton value="Update" 
+                                 styleClass="updateButton"
+                                 style="box-shadow: none !important; text-shadow: none !important"
+                                onclick="PF('statusDialog').show()"
+                                oncomplete="PF('graphApperanceCca').hide(); PF('statusDialog').hide()"  
+                                update=":overviewcca:form1:ccaPane1  :cmdPane" 
+                                actionListener="#{ccaBean.ccaUpdate_action()}"/>
+            </h:panelGrid>
+        </h:panelGrid>
+    </h:form>
+</ui:composition>
+

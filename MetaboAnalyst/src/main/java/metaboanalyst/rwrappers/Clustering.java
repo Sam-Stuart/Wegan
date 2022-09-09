@@ -4,7 +4,10 @@
  */
 package metaboanalyst.rwrappers;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import metaboanalyst.controllers.SessionBean1;
+import org.rosuda.REngine.REXPMismatchException;
 import org.rosuda.REngine.Rserve.RConnection;
 import org.rosuda.REngine.Rserve.RserveException;
 
@@ -139,4 +142,58 @@ public class Clustering {
         }
         return null;
     }
+    
+//    public static String[] varColumn(SessionBean1 sb){
+//        try {
+//            RConnection RC = sb.getRConnection();
+//            String rCommand = "VarCol(NA)";
+//            RCenter.recordRCommand(RC, rCommand);
+//            return RC.eval(rCommand).asStrings();
+//        } catch (RserveException rse) {
+//            System.out.println(rse);
+//        } catch (REXPMismatchException ex) {
+//            Logger.getLogger(Clustering.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        return null;
+//    }
+//    
+//    public static String[] colorColumn(SessionBean1 sb){
+//        try {
+//            RConnection RC = sb.getRConnection();
+//            String rCommand = "ColorCol(NA)";
+//            RCenter.recordRCommand(RC, rCommand);
+//            return RC.eval(rCommand).asStrings();
+//        } catch (RserveException rse) {
+//            System.out.println(rse);
+//        } catch (REXPMismatchException ex) {
+//            Logger.getLogger(Clustering.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        return null;
+//    }
+    
+    
+//    public static void CreateGGMap(SessionBean1 sb, boolean data, String source, String maptype, String zoom, String varColName, 
+//            String rangeA, String colorColName, boolean ele, String imgName, String format, int dpi, String width) {
+//        try {
+//            RConnection RC = sb.getRConnection();
+//            String rCommand = "Raster(NA"
+//                                                 + ", \"" + data
+//                                                 + "\", \"" + source
+//                                                 + "\", \"" + maptype
+//                                                 + "\", \"" + zoom
+//                                                 + "\", \"" + varColName
+//                                                 + "\", \"" + rangeA
+//                                                 + "\", \"" + colorColName
+//                                                 + "\", \"" + ele
+//                                                 + "\", \"" + imgName 
+//                                                 + "\", \"" + format 
+//                                                 + "\", " + dpi 
+//                                                 + ", width=NA)";
+//            RCenter.recordRCommand(RC, rCommand);
+//            sb.addGraphicsCMD("boxplot_richness", rCommand);
+//            RC.voidEval(rCommand);
+//        } catch (RserveException rse) {
+//            System.out.println(rse);
+//        }
+//    }
 }

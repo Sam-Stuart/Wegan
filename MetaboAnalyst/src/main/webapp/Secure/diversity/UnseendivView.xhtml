@@ -1,0 +1,225 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_anal_template.xhtml">
+    <ui:define name="metaInfo">
+        <f:event type="preRenderView" listener="#{diversityBean.performDefaultAnalysis('Unseendiv')}"/> 
+        <f:event type="preRenderView" listener="#{downloader.setupDownloadTable()}"/>
+    </ui:define>
+    <ui:define name="content">
+        <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
+            <p:tabView id="unseendiv">
+                <p:tab title ="Boxplot" titleStyleClass="p-tab-nav">
+                    <h:form id="form1">
+                        <p>
+                            This analysis estimate the number of these unseen species and adding them to the observed species richness.
+                        </p>
+                 <!--DiversityUtils.CreateFdDiv(sb, doOriginal, corrchosen, doW_abun, doStand_x, m, doCalc_FDiv, doCalc_FRic, doStand_FRic, doCalc_CWM, doPrint_pco, doMessages, asym_bin, ordchosen);-->       
+               
+<!--                        <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> -->
+                            <h:panelGrid id="panelGrid" columns="4" cellpadding="4" columnClasses="colFront, colLeft, colRight">
+                                <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
+                                <p:selectBooleanCheckbox value ="#{unseendivBean.doOriginal}"/> 
+                                <h:outputLabel style="font-weight: bold" value="Use small sample correction (N − 1)/N?"/>
+                                <p:selectBooleanCheckbox value ="#{unseendivBean.doSmallsample}"/> 
+                                <h:outputLabel style="font-weight: bold" value="Select grouping variable (x-axis):"/>
+                                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{unseendivBean.poolColName}">
+                                        <f:selectItems value="#{unseendivBean.poolColOpts}" />
+                                    </p:selectOneMenu>
+                                <h:outputLabel style="font-weight: bold" value="Fill in an integer giving the number permutations:"/>
+                                <p:inputText value = "#{unseendivBean.permutations}"/>  
+                                <h:outputLabel style="font-weight: bold" value="Select index of extrapolated richness:"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{unseendivBean.indexchosen}">
+                                    <f:selectItems value="#{unseendivBean.index}"/>
+                                </p:selectOneMenu> 
+                                <h:outputLabel style="font-weight: bold" value="Number of parallel processes or a predefined socket cluster:"/>
+                                <p:inputText value = "#{unseendivBean.parallel}"/>  
+<!--                                <h:outputLabel style="font-weight: bold" value="Select the index of extrapolated species richness for boxplot (y-axis):"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{unseendivBean.plotdatachosen}">
+                                    <f:selectItems value="#{unseendivBean.plotdata}"/>
+                                </p:selectOneMenu>
+                                <h:outputLabel style="font-weight: bold" value="Select box colors:"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{unseendivBean.box_colorchosen}">
+                                    <f:selectItems value="#{unseendivBean.box_color}"/>
+                                </p:selectOneMenu>
+                                <h:outputLabel style="font-weight: bold" value="Select the outline colors of boxplot:"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{unseendivBean.border_colchosen}">
+                                      <f:selectItems value="#{unseendivBean.border_col}"/>
+                                </p:selectOneMenu> -->
+                                
+                            </h:panelGrid>  
+                            <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
+                            <p:commandButton value="Update" 
+                                             styleClass="updateButton"
+                                             style="box-shadow: none !important; text-shadow: none !important"
+                                            onclick="PF('statusDialog').show()"
+                                            oncomplete="PF('statusDialog').hide()"  
+                                            update=":unseendiv:form1:unseendivPane1  :cmdPane" 
+                                            actionListener="#{unseendivBean.unseendivUpdateBox_action()}"/>                          
+                            <p:commandButton value="Customize Graph"
+                                             styleClass="graphicsButton"
+                                             style="box-shadow: none !important; text-shadow: none !important;"
+                                             actionListener="#{sessionBean1.graphicsLnk_action('pca_pair')}" 
+                                            oncomplete="PF('graphApperanceUnseendiv').show()"/>  
+                         </h:panelGrid>             
+                        <h:panelGrid class="resultsBar" columns="2">
+                            <h:panelGroup>
+                                <h:panelGrid columns="1" style="text-align : left;">
+                                    Results
+                                </h:panelGrid>
+                            </h:panelGroup> 
+                            <h:panelGroup>
+                                <h:panelGrid columns="3" class="resultsImages">
+                                    <i class="fa fa-question-circle"></i>
+                                </h:panelGrid>
+                            </h:panelGroup>                            
+                        </h:panelGrid>                         
+                        
+                        <h:panelGrid id="unseendivPane1" style="width: 100%;">
+<!--                        // <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                            //    
+                            // </h:panelGrid>-->
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 4px">
+                                    <h:outputText escape="false" value="#{unseendivBean.fileunfreqresultpath}"/>
+                                </i>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 4.7px">
+                                    <h:outputText escape="false" value="#{unseendivBean.fileunfreqinresultpath}"/>
+                                </i>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5.5px">
+                                    <h:outputText escape="false" value="#{unseendivBean.fileunfreqinsresultpath}"/>
+                                </i>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 3px">
+                                    <h:outputText escape="false" value="#{unseendivBean.fileuncountresultpath}"/>
+                                </i>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 0px">
+                                    <h:outputText escape="false" value="#{unseendivBean.fileunpoolresultpath}"/>
+                                </i>
+                            </h:panelGrid>
+<!--                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 2px">                             
+                                    <h:outputText escape="false" value="#{unseendivBean.fileunextresultpath}"/>
+                                </i>
+                            </h:panelGrid>-->
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 5.5px">                             
+                                    <h:outputText escape="false" value="#{unseendivBean.fileunnumresultpath}"/>
+                                </i>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 4.5px">                             
+                                    <h:outputText escape="false" value="#{unseendivBean.fileunquaresultpath}"/>
+                                </i>
+                            </h:panelGrid> 
+                            <p>
+                                Species: extrapolated richness
+                            </p>
+                            <p>
+                                Chao: extrapolated richness with chao index
+                            </p>
+                            <p>
+                                Jack1: extrapolated richness with first order jackknife index
+                            </p>
+                            <p>
+                                Jack2: extrapolated richness with second order jackknife index
+                            </p>
+                            
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <p:commandButton value="Export"
+                                    styleClass="exportButton"
+                                    style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                    actionListener="#{sessionBean1.graphicsLnk_action('boxplot_richness')}"
+                                    oncomplete="PF('graphDialog').show()"/>
+                            </h:panelGrid> 
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('boxplot_richness')}" alt="TestPlot"/>
+                            </h:panelGrid>                            
+                        </h:panelGrid> 
+                    </h:form>
+                </p:tab>
+                
+                <p:tab title ="Line Graph" titleStyleClass="p-tab-nav">
+                    <h:form id="form2">
+                        <p>
+                            This analysis estimate the number of these unseen species and adding them to the observed species richness.
+                        </p>
+                            <h:panelGrid id="panelGrid" columns="4" cellpadding="2" >
+                                <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
+                                <p:selectBooleanCheckbox value ="#{unseendivBean.doOriginal}"/> 
+                                <h:outputLabel style="font-weight: bold" value="Fill in an integer giving the number permutations:"/>
+                                <p:inputText value = "#{unseendivBean.permutations}"/>  
+                                <h:outputLabel style="font-weight: bold" value="Fill in a smallest number of sampling units reported:"/>
+                                <p:inputText value = "#{unseendivBean.minsize}"/>  
+                            </h:panelGrid>  
+                            <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
+                            <p:commandButton value="Update" 
+                                             styleClass="updateButton"
+                                             style="box-shadow: none !important; text-shadow: none !important"
+                                            onclick="PF('statusDialog').show()"
+                                            oncomplete="PF('statusDialog').hide()"  
+                                            update=":unseendiv:form2:unseendivPane2  :cmdPane" 
+                                            actionListener="#{unseendivBean.unseendivUpdateLine_action()}"/>                          
+<!--                            <p:commandButton value="Customize Graph"
+                                             styleClass="graphicsButton"
+                                             style="box-shadow: none !important; text-shadow: none !important;"
+                                             actionListener="#{sessionBean1.graphicsLnk_action('pca_pair')}" 
+                                            oncomplete="PF('graphApperanceUnseendiv2').show()"/>  -->
+                            </h:panelGrid>             
+                        <h:panelGrid class="resultsBar" columns="2">
+                            <h:panelGroup>
+                                <h:panelGrid columns="1" style="text-align : left;">
+                                    Results
+                                </h:panelGrid>
+                            </h:panelGroup> 
+                            <h:panelGroup>
+                                <h:panelGrid columns="3" class="resultsImages">
+                                    <i class="fa fa-question-circle"></i>
+                                </h:panelGrid>
+                            </h:panelGroup>                            
+                        </h:panelGrid>                         
+                        
+                        <h:panelGrid id="unseendivPane2" style="width: 100%;">
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 2px">                             
+                                    <h:outputText escape="false" value="#{unseendivBean.fileunextresultpath}"/>
+                                </i>
+                            </h:panelGrid>
+                            <p>
+                                Species richness according to different estimators in relation to the number of plots (samping effort units) sampled and averaged after plot sequences randomized by the permutation number. 
+                            </p>
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <p:commandButton value="Export"
+                                    styleClass="exportButton"
+                                    style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                    actionListener="#{sessionBean1.graphicsLnk_action('plot_matrices')}"
+                                    oncomplete="PF('graphDialog').show()"/>
+                            </h:panelGrid> 
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('plot_matrices')}" alt="TestPlot"/>
+                            </h:panelGrid>                            
+                        </h:panelGrid> 
+                    </h:form>
+                </p:tab>
+            </p:tabView>
+            <p:dialog modal="true" widgetVar="graphApperanceUnseendiv" 
+                style="width: 400px; height:400px;" 
+                appendTo="@(body)" header="Graphics Center"
+                draggable="false" closable="true" resizable="false"> 
+                <ui:include src="_color_palette_unseen1.xhtml" />
+           </p:dialog>
+        </h:panelGrid>
+        
+    </ui:define>
+</ui:composition>

@@ -172,11 +172,13 @@ public class DownloadBean implements Serializable {
             if (showAll) {
                 return name.endsWith(".csv")
                         || name.endsWith(".png")
+                        || name.endsWith(".txt")
                         || name.endsWith(".R") //return R history
                         || name.endsWith(".pdf");
             } else {
                 return name.endsWith(".csv")
                         || name.endsWith(".png")
+                        || name.endsWith(".txt")
                         || name.endsWith(".R")
                         || name.endsWith("Report.pdf");
             }

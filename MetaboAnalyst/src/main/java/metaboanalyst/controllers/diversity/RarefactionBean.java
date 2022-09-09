@@ -24,10 +24,14 @@ import metaboanalyst.utils.DataUtils;
  *
  * @author violet
  */
+@ManagedBean(name="rarefactionBean") //
 public class RarefactionBean implements Serializable {
     
    private final SessionBean1 sb = (SessionBean1) DataUtils.findBean("sessionBean1");
    private final ApplicationBean1 ab = (ApplicationBean1) DataUtils.findBean("applicationBean1");
+   
+   private User usr = sb.getCurrentUser();
+   private String usrName = usr.getName();
    
    //public static final String PROP_SAMPLE_PROPERTY = "sampleProperty";
   // check box
@@ -37,91 +41,165 @@ public class RarefactionBean implements Serializable {
         return doOriginal;
     }
     
-    public void setDoOriginal(boolean doOriginal) {
+    public void setdoOriginal(boolean doOriginal) {
         this.doOriginal = doOriginal;
     }
      
    // check box 
-    private Boolean doSe = false;
+    private boolean doSe = false;
     
-    public Boolean isdoSe() {
+    public boolean isdoSe() {
         return doSe;
     }
 
-    public void setDoSe(Boolean doSe) {
+    public void setdoSe(boolean doSe) {
         this.doSe = doSe;
     }
     
     // textbox 
-    private String Sample = " ";
+    private String sample = "";
     
-    public String setSample() {
-        return Sample;
+    public String getSample() {
+        return sample;
     }
 
-    public void setSample(String Sample) {
-        this.Sample = Sample;
+    public void setSample(String sample) {
+        this.sample = sample;
     }
     
+        
     // static dropdown
-    private String Type = "NULL"; // in the view, need to present the options //application bean 
-    
-    public String getType() {
-        return Type;
+    private final SelectItem[] type; // in the view, need to present the options //application bean 
+    private String typechosen = "NULL";
+            
+    public SelectItem[] getType() {
+        return type;
     }
+    
+    public String getTypechosen() {
+        return typechosen;
+    } 
 
-    public void setType(String Type) {
-        this.Type = Type;
+    public void setTypechosen(String typechosen) {
+        this.typechosen = typechosen;
     }
     
-    
-    private String margin = "NULL";
-    
-    public String getMargin() {
-        return margin;
-    }
-
-    public void setMargin(String margin) {
-        this.margin = margin;
-    }
-    
-    private String Step = " ";
+//    private final SelectItem[] margin;
+//    private String marginchosen = "NULL";
+//    
+//    public SelectItem[] getMargin() {
+//        return margin;
+//    }
+//    
+//    public String getMarginchosen() {
+//        return marginchosen;
+//    } 
+//
+//    public void setMarginchosen(String marginchosen) {
+//        this.marginchosen = marginchosen;
+//    }
+        
+    private String step = "";
     
     public String getStep() {
-        return Step;
+        return step;
     }
 
-    public void setStep(String Step) {
-        this.Step = Step;
+    public void setStep(String step) {
+        this.step = step;
     }
     
     
-    private String Color = "NULL";
+    private final SelectItem[] color;
+    private String colorchosen = "NULL";
     
-    public String getColor() {
-        return Color;
+    public SelectItem[] getColor() {
+        return color;
+    }
+    
+    public String getColorchosen() {
+        return colorchosen;
+    } 
+
+    public void setColorchosen(String colorchosen) {
+        this.colorchosen = colorchosen;
+    }
+        
+    
+    private final SelectItem[] colorb;
+    private String colorbchosen = "NULL";
+    
+    public SelectItem[] getColorb() {
+        return colorb;
+    }
+    
+    public String getColorbchosen() {
+        return colorbchosen;
+    } 
+
+    public void setColorbchosen(String colorbchosen) {
+        this.colorbchosen = colorbchosen;
     }
 
-    public void setColor(String Color) {
-        this.Color = Color;
-    }
     
+    private String filerareresult = "Rarefaction.csv";
+    private String filerareresultpath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + filerareresult + "\">" + filerareresult + "</a>";
     
-    private String ColorText = " ";
-    
-    public String getColorText() {
-        return ColorText;
+    public String getFilerareresultpath() {
+        return filerareresultpath;
     }
 
-    public void setColorText(String ColorText) {
-        this.ColorText = ColorText;
+    public void setFilerareresultpath(String filerareresultpath) {
+        this.filerareresultpath = filerareresultpath;
     }
     
+    public RarefactionBean() {
+        type = new SelectItem[3];
+        type[0] = new SelectItem("NULL", "Species richness");
+        type[1] = new SelectItem("Random rarefaction", "Random rarefaction");
+        type[2] = new SelectItem("Probability", "Probability");
+        
+        color = new SelectItem[4];
+        color[0] = new SelectItem("NULL", "Default");
+        color[1] = new SelectItem("rainbow", "Rainbow");
+        color[2] = new SelectItem("heat", "Heat");
+        color[3] = new SelectItem("cm", "Cm");
+        
+//        margin = new SelectItem[2];
+//        margin[0] = new SelectItem("NULL", "1");
+//        margin[1] = new SelectItem("2", "2");
+        
+        colorb = new SelectItem[4];
+        colorb[0] = new SelectItem("NULL", "Black");
+        colorb[1] = new SelectItem("gray", "Gray");
+        colorb[2] = new SelectItem("blue", "Blue");
+        colorb[3] = new SelectItem("red", "Red");
+    }
+    
+//    public RarefactionBean() {
+//        color = new SelectItem[4];
+//        color[0] = new SelectItem("NULL", "Rainbow");
+//        color[1] = new SelectItem("Viridis", "Viridis");
+//        color[2] = new SelectItem("Plasma", "Plasma");
+//        color[3] = new SelectItem("manul", colortext);
+//    }
+    
+//    public RarefactionBean() {
+//        margin = new SelectItem[2];
+//        margin[0] = new SelectItem("NULL", "1");
+//        margin[1] = new SelectItem("2", "2");
+//    }
     
     // ACTION BUTTON // 
-    public void rareUpdate_action() {
-        DiversityUtils.CreateRarefactionDiv(sb, doOriginal, Type, Sample, doSe, margin);       
-        DiversityUtils.PlotRarefactionCurveDiversity(sb, Step, Color, ColorText, sb.getNewImage("Rarefaction_Curve"), "png", 72, "false");
+    public void rareCurveUpdate_action() {
+        DiversityUtils.CreateRarefactionDiv(sb, doOriginal, typechosen, sample, doSe);       
+        DiversityUtils.PlotRarefactionCurveDiversity(sb, step, colorchosen, sb.getNewImage("Rarefaction_Curve_Plot"), "png", 72, "false");
     }
+    
+    public void rareScatterUpdate_action() {
+        DiversityUtils.CreateRarefactionDiv(sb, doOriginal, typechosen, sample, doSe);       
+        DiversityUtils.PlotRarefactionPlotDiversity(sb, colorbchosen, sb.getNewImage("Rarefaction_Linear_Plot"), "png", 72, "false");
+    }
+    
     
 }

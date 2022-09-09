@@ -28,10 +28,10 @@ public class TestTutorialBean implements Serializable {
     
     
     // ACTION BUTTONS //
-    public void testTutorialUpdate_action() {
-        DiversityUtils.PlotSpecies(sb); 
-    }
-    
+//    public void testTutorialUpdate_action() {
+//        DiversityUtils.PlotSpecies(sb); 
+//    }
+//    
     
     
     

@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="nmdsGraph">
+        <h:panelGrid columns="1" style="width:380px;">
+            <h:panelGrid id="panelGrid1" columns="2" cellpadding="5" columnClasses="colBrayLong,colBrayShort">
+                
+                <h:outputLabel style="font-weight: bold" value="Use Sample Names for Points:"/>
+                <p:selectBooleanCheckbox value ="#{ordNMDSBean.sampleNamesOpts}"/> 
+                
+                <h:outputLabel style="font-weight: bold" value="Add Variable Arrows:"/>
+                <p:selectBooleanCheckbox value ="#{ordNMDSBean.var_arrowsOpts}"/> 
+                
+                <h3>Grouping Data Options</h3>
+                <p:panelGrid></p:panelGrid>                
+                <h:outputLabel style="font-weight: bold" value="Grouping Variable:"/>
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordNMDSBean.nmdsMetaColumnName}">
+                    <f:selectItems value="#{ordNMDSBean.nmdsMetaColumnOpts}" />
+                </p:selectOneMenu> 
+                
+                <h:outputLabel style="font-weight: bold" value="Color Palette:"/>
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordNMDSBean.ordColorOpts}">
+                    <f:selectItems value="#{applicationBean1.ordColorPaletteOpts}" />
+                </p:selectOneMenu> 
+
+                <h:outputLabel style="font-weight: bold" value="Add Ellipses:"/>
+                <p:selectBooleanCheckbox value ="#{ordNMDSBean.ellipseOpts}"/> 
+                
+                
+                <h3>Constraining Data Options</h3>
+                <p:panelGrid></p:panelGrid>
+                <h:outputLabel style="font-weight: bold" value="Add Arrows for Constraining Variables:"/>
+                <p:selectBooleanCheckbox value ="#{ordNMDSBean.env_arrowsOpts}"/> 
+
+                <h:outputLabel style="font-weight: bold" value="Add Centroids for Constraining Variables:"/>
+                <p:selectBooleanCheckbox value ="#{ordNMDSBean.env_centOpts}"/> 
+                
+                <p:panelGrid></p:panelGrid>  
+
+                <p:panelGrid></p:panelGrid>
+
+            </h:panelGrid>
+            <h:panelGrid id="panelGrid2" columns="1" cellpadding="5" style="float: right">
+                <p:commandButton value="Update" 
+                                 styleClass="updateButton"
+                                 style="box-shadow: none !important; text-shadow: none !important"
+                                onclick="PF('statusDialog').show()"
+                                oncomplete="PF('graphApperanceNMDS').hide(); PF('statusDialog').hide()"  
+                                update=":NMDS:form1:nmdsPane1  :cmdPane" 
+                                actionListener="#{ordNMDSBean.nmdsUpdate_action2D()}"/>
+            </h:panelGrid>
+        </h:panelGrid>
+    </h:form>
+</ui:composition>
+

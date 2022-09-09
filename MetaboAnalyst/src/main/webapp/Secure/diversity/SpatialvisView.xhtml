@@ -1,0 +1,119 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_anal_template.xhtml">
+    <ui:define name="metaInfo">
+        <f:event type="preRenderView" listener="#{diversityBean.performDefaultAnalysis('Spatialvis')}"/> 
+        <f:event type="preRenderView" listener="#{downloader.setupDownloadTable()}"/>
+    </ui:define>
+    <ui:define name="content">
+        <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
+            <p:tabView id="spatialvis">
+                <p:tab title ="Spatial Visualization" titleStyleClass="p-tab-nav">
+                    <h:form id="form1">
+                        <p>
+                            Input has to be in coordinate system
+                        </p>                        
+                        <h:panelGrid id="panelGrid" columns="4" cellpadding="3" columnClasses="colFront, colLeft, colRight">
+                            <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
+                            <p:selectBooleanCheckbox value ="#{spatialvisBean.doOriginal}"/>
+                            <h:outputLabel style="font-weight: bold" value="Is your data recorded as longtitude and latitude?"/>
+                            <p:selectBooleanCheckbox value ="#{spatialvisBean.doProj}"/>
+                            <h:outputLabel style="font-weight: bold" value="Is your data recorded in WGS84?"/>
+                            <p:selectBooleanCheckbox value ="#{spatialvisBean.doDatum}"/>
+                            <h:outputLabel style="font-weight: bold" value="Is your data recorded in Alberta 10TM:"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{spatialvisBean.crs_optionchosen}">
+                                    <f:selectItems value="#{spatialvisBean.crs_option}"/>
+                                </p:selectOneMenu> 
+                            <h:outputLabel style="font-weight: bold" value="Fill in UTM espg code to convert data:"/>
+                            <p:inputText value = "#{spatialvisBean.crs_txt}"/>
+                            <h:outputLabel style="font-weight: bold" value="Return elevation:"/>
+                            <p:selectBooleanCheckbox value ="#{spatialvisBean.doEle}"/>
+                            <h:outputLabel style="font-weight: bold" value="Draw polygon on map:"/>
+                            <p:selectBooleanCheckbox value ="#{spatialvisBean.doPolygon}"/>
+                            <h:outputLabel style="font-weight: bold" value="Draw path on map:"/>
+                            <p:selectBooleanCheckbox value ="#{spatialvisBean.doPath}"/>
+                            <h:outputLabel style="font-weight: bold" value="Fill in zoom scale:"/>
+                            <p:inputText value = "#{spatialvisBean.zoom}"/>
+                            <h:outputLabel style="font-weight: bold" value="Fill in mapping range scale:"/>
+                            <p:inputText value = "#{spatialvisBean.rangeA}"/>
+                            <h:outputLabel style="font-weight: bold" value="Select map source:"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{spatialvisBean.sourcechosen}">
+                                    <f:selectItems value="#{spatialvisBean.source}"/>
+                                </p:selectOneMenu> 
+                            <h:outputLabel style="font-weight: bold" value="Select map type:"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{spatialvisBean.maptypechosen}">
+                                    <f:selectItems value="#{spatialvisBean.maptype}"/>
+                                </p:selectOneMenu>                            
+                            <h:outputLabel style="font-weight: bold" value="Select a particular variable to be presented as point on map:"/>
+                                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{spatialvisBean.colorColName}">
+                                        <f:selectItems value="#{spatialvisBean.colorColOpts}" />
+                                    </p:selectOneMenu>
+                            <h:outputLabel style="font-weight: bold" value="Select a particular variable to be presented as polygon on map:"/>
+                                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{spatialvisBean.varColName}">
+                                        <f:selectItems value="#{spatialvisBean.varColOpts}" />
+                                    </p:selectOneMenu>
+                            <h:outputLabel style="font-weight: bold" value="Select a particular variable to be presented as path on map:"/>
+                                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{spatialvisBean.lineColName}">
+                                        <f:selectItems value="#{spatialvisBean.lineColOpts}" />
+                                    </p:selectOneMenu>
+                            
+                        </h:panelGrid>  
+                        <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
+                            <p:commandButton value="Update" 
+                                             styleClass="updateButton"
+                                             style="box-shadow: none !important; text-shadow: none !important"
+                                            onclick="PF('statusDialog').show()"
+                                            oncomplete="PF('statusDialog').hide()"  
+                                            update=":spatialvis:form1:spatialvisPane1  :cmdPane" 
+                                            actionListener="#{spatialvisBean.spatialvisUpdate_action()}"/>                          
+<!--                            <p:commandButton value="Customize Graph"
+                                             styleClass="graphicsButton"
+                                             style="box-shadow: none !important; text-shadow: none !important;"
+                                             actionListener="#{sessionBean1.graphicsLnk_action('pca_pair')}" 
+                                             oncomplete="PF('graphApperanceRare1').show()"/> -->
+                        </h:panelGrid>
+                        <h:panelGrid class="resultsBar" columns="2">
+                            <h:panelGroup>
+                                <h:panelGrid columns="1" style="text-align : left;">
+                                    Results
+                                </h:panelGrid>
+                            </h:panelGroup> 
+                            <h:panelGroup>
+                                <h:panelGrid columns="3" class="resultsImages">
+                                    <i class="fa fa-question-circle"></i>
+                                </h:panelGrid>
+                            </h:panelGroup>                            
+                        </h:panelGrid>
+                        <h:panelGrid id="spatialvisPane1" style="width: 100%;">
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
+                                    <h:outputText escape="false" value="#{spatialvisBean.fileeleresultpath}"/>
+                                </i>
+<!--                                // padding  -->
+                            </h:panelGrid>
+                            <p>
+                            </p>
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <p:commandButton value="Export"
+                                    styleClass="exportButton"
+                                    style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                    actionListener="#{sessionBean1.graphicsLnk_action('ggmap')}"
+                                    oncomplete="PF('graphDialog').show()"/>
+                            </h:panelGrid> 
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('ggmap')}" alt="TestPlot"/>
+                            </h:panelGrid>                            
+                        </h:panelGrid> 
+                    </h:form>
+                </p:tab>
+            </p:tabView>
+ 
+        </h:panelGrid>
+        
+    </ui:define>
+</ui:composition>

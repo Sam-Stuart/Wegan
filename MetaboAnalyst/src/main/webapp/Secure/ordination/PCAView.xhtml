@@ -1,0 +1,314 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_anal_template.xhtml">
+    <ui:define name="metaInfo">
+        <f:event type="preRenderView" listener="#{oaBean.performDefaultAnalysis('PCA')}"/> 
+    </ui:define>
+    <ui:define name="myscript">
+        <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/jscripts/canvasXpress.min.js"></script>
+        <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/jscripts/graphics.js"></script>
+    </ui:define>
+    <ui:define name="content">
+<!--        <h:inputHidden id="mydir" value="#{sessionBean1.getJsonDir('pca_score3d')}" />
+        <script type="text/javascript">
+            // for scatter plot
+            function addBind() {
+                mychart = $("[id='ac:chart']");
+                mychart.unbind('jqplotDataClick');
+                mychart.bind('jqplotDataClick',
+                        function (ev, seriesIndex, pointIndex, data) {
+                            //note, we use the internal index, not point index 
+                            remoteCall([{name: 'cmpdIndex', value: data[0]}]);
+                        });
+            }
+
+            function ext() {
+                this.cfg.seriesDefaults = {
+                    lineWidth: 1.0,
+                    linePattern: 'dashed',
+                    showMarker: false,
+                    markerOptions: {
+                        color: 'rgba(128, 0, 128, 0.5)'
+                    },
+                    shadow: false
+                };
+                this.cfg.axes = {
+                    yaxis: {
+                        showLabel: true,
+                        tickOptions: {
+                            formatString: "%#.2f"
+                        }
+                    },
+                    xaxis: {
+                        showLabel: true,
+                        tickOptions: {
+                            formatString: "%#.2f"
+                        }
+                    }
+                };
+            }
+        </script>-->
+        <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
+            <h1>Principal Component Analysis:</h1>            
+            <p:tabView id="ac" style="width:100%; border: none; background: none; font-size: 13px;">
+                <p:tab title ="Pairs Plot" titleStyleClass="p-tab-nav">
+                    <h:form id="form1">
+                        <p style="font-size: 13px">
+                            Pair principal components (PCs) for data visualization on a two dimensional plane. Pairwise dissimilarity between data points is measured using Euclidean distance. Only numeric variables are used for PCA, with a minimum requirement of 2 numeric variables. 
+                            <a href=" " style="color:#0000FF" title="Use Oringinal Data: Click checkbox if you would like to perform analysis on data before normalization." >
+                                help?
+                            </a> 
+                        </p>
+                        <h:panelGrid id="panelGrid1" columns="5" cellpadding="3" columnClasses="colNMDSLong,colNMDSShort,colNMDSLong,colNMDSShort, colLast">
+        
+                            <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
+                            <p:selectBooleanCheckbox value ="#{pcaBean.doOriginal}"/> 
+                             
+                            <h:outputLabel style="font-weight: bold" value="Number of Principal Components:"/>
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:50px" value="#{pcaBean.pcaPairNum}">
+                                <f:selectItems value="#{pcaBean.pcaPCs}" />
+                            </p:selectOneMenu>
+                            <spacer></spacer>                 
+                                                            
+                            <h:outputLabel style="font-weight: bold" value="Color Palette:"/>
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{pcaBean.pcaPairsColorOpts}">
+                                <f:selectItems value="#{applicationBean1.pcaPairsColorPaletteOpts}" />
+                            </p:selectOneMenu> 
+                            <spacer></spacer>
+                            <spacer></spacer>
+                            <spacer></spacer>
+                
+                        </h:panelGrid>
+                        <h:panelGrid></h:panelGrid>
+
+                        <h:panelGrid columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
+                            <p:commandButton value="Update" 
+                                             styleClass="updateButton"
+                                             style="box-shadow: none !important; text-shadow: none !important"
+                                             onclick="PF('statusDialog').show()"
+                                            oncomplete="PF('statusDialog').hide()" 
+                                             update=":ac:form1:pairPane  :cmdPane" 
+                                             actionListener="#{pcaBean.pcaPairBtn_action()}"/> 
+                        </h:panelGrid>
+                        <h:panelGrid class="resultsBar" columns="2">
+                            <h:panelGroup>
+                                <h:panelGrid columns="1" style="text-align : left;">
+                                    Results
+                                </h:panelGrid>
+                            </h:panelGroup> 
+<!--                            <h:panelGroup>
+                                <h:panelGrid columns="3" class="resultsImages">
+                                    <i class="fa fa-question-circle"></i>
+                                </h:panelGrid>
+                            </h:panelGroup>                            -->
+                        </h:panelGrid>
+                        <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                            <p:commandButton value="Export"
+                                styleClass="exportButton"
+                                style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                actionListener="#{sessionBean1.graphicsLnk_action('pca_pair')}"
+                                oncomplete="PF('graphDialog').show()"/>
+                        </h:panelGrid>                          
+                        <h:panelGrid id="pairPane" style="text-align: center; width: 100%;">
+                            <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('pca_pair')}" alt="PCAPairImage"/>
+                        </h:panelGrid>        
+                    </h:form>
+                </p:tab>
+                
+                <p:tab title ="2D Ordination Plot" titleStyleClass="p-tab-nav">
+                    <h:form id="form3">
+                        <p style="font-size: 13px">
+                            Observe variation in the data using the first two principal components (PCs). Pairwise dissimilarity between data points is measured using Euclidean distance. Only numeric variables are used for PCA, with a minimum requirement of 2 numeric variables.
+                            <a href=" " style="color:#0000FF" title="Use Oringinal Data: Click checkbox if you would like to perform analysis on data before normalization." >
+                                help?
+                            </a> 
+                        </p>
+                        <h:panelGrid id="panelGrid3" columns="4" cellpadding="3" columnClasses="colNMDSLong, colNMDSShort, colNMDSLong, colNMDSShort" >
+                                    
+                                <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
+                                <p:selectBooleanCheckbox value ="#{pcaBean.doOriginal}"/> 
+                                <spacer></spacer>
+                                <spacer></spacer>
+                        </h:panelGrid>
+
+                        <h:panelGrid></h:panelGrid>
+                        <h:panelGrid id="panelGrid1_2" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
+                            
+                            <p:commandButton value="Customize Graph"
+                                             styleClass="graphicsButton"
+                                             style="box-shadow: none !important; text-shadow: none !important;"
+                                             actionListener="#{sessionBean1.graphicsLnk_action('pca_score2d')}" 
+                                            oncomplete="PF('graphApperancePCA').show()"/>  
+                            <p:commandButton value="Update" 
+                                             styleClass="updateButton"
+                                             style="box-shadow: none !important; text-shadow: none !important"
+                                             onclick="PF('statusDialog').show()"
+                                            oncomplete="PF('statusDialog').hide()" 
+                                             update=":ac:form3:score2dPane  :cmdPane" 
+                                             partialSubmit="true"
+                                             actionListener="#{pcaBean.pcaScore2dBtn_action()}"/> 
+                        </h:panelGrid>
+                        <h:panelGrid class="resultsBar" columns="2">
+                            <h:panelGroup>
+                                <h:panelGrid columns="1" style="text-align : left;">
+                                    Results
+                                </h:panelGrid>
+                            </h:panelGroup> 
+                            <h:panelGroup>
+                                <h:panelGrid columns="3" class="resultsImages">
+                                    <i class="fa fa-question-circle" title="The use of data groupings will create more interesting plots. Load grouping data separately, where each row aligns with the rows in your main data set."></i>
+                                </h:panelGrid>
+                            </h:panelGroup>                            
+                        </h:panelGrid>  
+                        <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                            <p:commandButton value="Export"
+                                styleClass="exportButton"
+                                style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                actionListener="#{sessionBean1.graphicsLnk_action('pca_score2d')}"
+                                oncomplete="PF('graphDialog').show()"/>
+                        </h:panelGrid>                          
+                        <h:panelGrid id="score2dPane" style="text-align: center; width: 100%;">
+                            <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('pca_score2d')}" alt="PCAScore2DImage"/>
+                        </h:panelGrid>  
+                    </h:form>
+                </p:tab>
+                <p:tab title ="3D Scores Plot" titleStyleClass="p-tab-nav">
+                    <h:form id="form4">
+                        <p style="font-size: 13px">
+                            Represent the pairwise dissimilarity between data points using Euclidean distance, and view results in a 3D plot. Only numeric variables are used for PCA. For 3D plotting, there is a minimum requirement of 3 numeric variables.
+                            <a href=" " style="color:#0000FF" title="Use Oringinal Data: Click checkbox if you would like to perform analysis on data before normalization." >
+                                help?
+                            </a> 
+                        </p>
+                        <h:panelGrid id="panelGrid4" columns="4" cellpadding="3" columnClasses="colNMDSLong,colNMDSShort,colNMDSLong,colNMDSShort">
+        
+                            <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
+                            <p:selectBooleanCheckbox value ="#{pcaBean.doOriginal}"/> 
+                             
+                            <spacer></spacer>
+                        </h:panelGrid>  
+
+                        <h:panelGrid columns="2" cellpadding="3" style="float: right; text-shadow: none !important;">  
+                            <p:commandButton value="Update" 
+                                             styleClass="updateButton"
+                                             style="box-shadow: none !important; text-shadow: none !important"
+                                            onclick="PF('statusDialog').show()"
+                                            oncomplete="PF('statusDialog').hide()"  
+                                            actionListener="#{pcaBean.pcaScore3dBtn_action()}"/>
+                        </h:panelGrid>
+                        <h:panelGrid class="resultsBar" columns="2">
+                            <h:panelGroup>
+                                <h:panelGrid columns="1" style="text-align : left;">
+                                    Results
+                                </h:panelGrid>
+                            </h:panelGroup> 
+<!--                            <h:panelGroup>
+                                <h:panelGrid columns="3" class="resultsImages">
+                                    <i class="fa fa-question-circle"></i>
+                                </h:panelGrid>
+                            </h:panelGroup>                            -->
+                        </h:panelGrid>
+                        <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                            <p:commandButton value="Export"
+                                styleClass="exportButton"
+                                style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                actionListener="#{sessionBean1.graphicsLnk_action('pca_score3d')}"
+                                oncomplete="PF('graphDialog').show()"/>
+                        </h:panelGrid>  
+                        <h:panelGrid id="score3dPane" style="text-align: center; width: 100%;">
+                            <canvas id='canvas1' width='670px' height='630px'/>
+                        </h:panelGrid>
+                    </h:form>
+                </p:tab>
+                <p:tab title ="Scree Plot" titleStyleClass="p-tab-nav">
+                    <h:form id="form5">
+                        <p style="font-size: 13px">
+                            Calculate the proportion of variance explained by each dimension. The green line on top shows the accumulated variance explained; the blue line underneath shows the variance explained by individual PC.
+                            <a href=" " style="color:#0000FF" title="Use Oringinal Data: Click checkbox if you would like to perform analysis on data before normalization." >
+                                help?
+                            </a> 
+                        </p>
+                        <h:panelGrid></h:panelGrid>
+                        <h:panelGrid id="panelGrid2" columns="5" cellpadding="3" columnClasses="colNMDSLong,colNMDSShort,colNMDSLong,colNMDSShort, colLast">
+        
+                            <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
+                            <p:selectBooleanCheckbox value ="#{pcaBean.doOriginal}"/> 
+                             
+                            <h:outputLabel style="font-weight: bold" value="Number of Principal Components:"/>
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:50px" value="#{pcaBean.pcaScreeNum}">
+                                <f:selectItems value="#{pcaBean.pcaPCs}" />
+                            </p:selectOneMenu>
+                        </h:panelGrid>
+                        <h:panelGrid></h:panelGrid>
+
+                        <h:panelGrid columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
+                            <p:commandButton value="Update" 
+                                             styleClass="updateButton"
+                                             style="box-shadow: none !important; text-shadow: none !important"
+                                             onclick="PF('statusDialog').show()"
+                                             oncomplete="PF('statusDialog').hide()" 
+                                             update=":ac:form5:screePane  :cmdPane" 
+                                             actionListener="#{pcaBean.pcaScreeBtn_action()}"/> 
+                        </h:panelGrid>
+                        <h:panelGrid class="resultsBar" columns="2">
+                            <h:panelGroup>
+                                <h:panelGrid columns="1" style="text-align : left;">
+                                    Results
+                                </h:panelGrid>
+                            </h:panelGroup> 
+<!--                            <h:panelGroup>
+                                <h:panelGrid columns="3" class="resultsImages">
+                                    <i class="fa fa-question-circle"></i>
+                                </h:panelGrid>
+                            </h:panelGroup>                            -->
+                        </h:panelGrid> 
+                        <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                            <p:commandButton value="Export"
+                                styleClass="exportButton"
+                                style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                actionListener="#{sessionBean1.graphicsLnk_action('pca_scree')}"
+                                oncomplete="PF('graphDialog').show()"/>
+                        </h:panelGrid>   
+                        <h:panelGrid id="screePane" style="text-align: center; width: 100%;">
+                            <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('pca_scree')}" alt="PCAScreeImage"/>
+                        </h:panelGrid>     
+                    </h:form>
+                </p:tab>
+
+            </p:tabView> 
+        </h:panelGrid> 
+        <p:dialog modal="true" widgetVar="exportDialog" style="width:600px; height: 580px" appendTo="@(body)">  
+            <h:outputLabel style="font-size: 13px; font-weight: bold" value="Right click the PNG image to save as your preferred name:"/><br/>
+            <image id="downloadimage"></image>  
+        </p:dialog>  
+        <h:form>
+            <p:remoteCommand name="remoteCall"  
+                             process="@this"
+                             partialSubmit="true"
+                             update=":ac:form5:screePane  :cmdPane"
+                             actionListener="#{sessionBean1.setCurrentCmpdIndex}" 
+                             />
+        </h:form>
+        
+        <p:dialog modal="true" widgetVar="graphApperancePCA" 
+            style="width: 400px; height:400px;" 
+            appendTo="@(body)" header="Graphics Center"
+            draggable="false" closable="true" resizable="false"> 
+            <ui:include src="_color_palette_pca.xhtml" />
+        </p:dialog>
+        
+<!--        <script type="text/javascript">
+            showPCA3D();
+            $("[id='ac:chart']").bind('jqplotDataClick',
+                    function (ev, seriesIndex, pointIndex, data) {
+                        //note, we use the internal index, not point index 
+                        remoteCall([{name: 'cmpdIndex', value: data[0]}]);
+                    });
+        </script>-->
+    </ui:define>
+</ui:composition>

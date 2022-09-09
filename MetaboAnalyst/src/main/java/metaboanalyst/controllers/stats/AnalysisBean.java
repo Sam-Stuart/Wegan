@@ -18,7 +18,8 @@ import metaboanalyst.rwrappers.RDataUtils;
 import metaboanalyst.rwrappers.SigVarSelect;
 import metaboanalyst.rwrappers.UniVarTests;
 import metaboanalyst.rwrappers.Ordiantion;
-import metaboanalyst.rwrappers.Dispersal;
+import metaboanalyst.rwrappers.DispersalUtils;
+import metaboanalyst.rwrappers.DiversityUtils;
 import metaboanalyst.utils.DataUtils;
 
 /**
@@ -35,9 +36,6 @@ public class AnalysisBean implements Serializable {
             if (!FacesContext.getCurrentInstance().isPostback()) {
                 //sb.registerPage(pageID);
                 switch (pageID) {
-                    case "PCA":
-                        doDefaultPCA();
-                        break;
                     case "ANOVA":
                         doDefaultANOVA();
                         break;
@@ -91,7 +89,10 @@ public class AnalysisBean implements Serializable {
                         break; 
                     case "Diversity":
                         doDefaultDiversity();
-                    break; 
+                        break; 
+//                    case "Ggmap":
+//                        doDefaultGgmap();
+//                        break;
                 }
             }
         }
@@ -135,12 +136,12 @@ public class AnalysisBean implements Serializable {
     
     //-----------------------------------------------------------------------------------------------
     private void doDefaultPCA() {
-        ChemoMetrics.InitPCA(sb);
-        ChemoMetrics.PlotPCAPairSummary(sb, sb.getCurrentImage("pca_pair"), "png", 72, 5);
-        ChemoMetrics.PlotPCAScree(sb, sb.getCurrentImage("pca_scree"), "png", 72, 5);
-        ChemoMetrics.PlotPCA2DScore(sb, sb.getCurrentImage("pca_score2d"), "png", 72, 1, 2, 0.95, 1, 0);
-        ChemoMetrics.PlotPCALoading(sb, sb.getCurrentImage("pca_loading"), "png", 72, 1, 2, "scatter", 1);  // setLoadingTable(pcImpInx);
-        ChemoMetrics.PlotPCABiplot(sb, sb.getCurrentImage("pca_biplot"), "png", 72, 1, 2);
+        ChemoMetrics.InitPCA(sb, false);
+        ChemoMetrics.PlotPCAPairSummary(sb, "NULL", sb.getCurrentImage("pca_pair"), "png", 72, 2);
+        ChemoMetrics.PlotPCAScree(sb, sb.getCurrentImage("pca_scree"), "png", 72, 2);
+        ChemoMetrics.PlotPCA2DScore(sb, false, false, false, false, false, "NULL", "NULL", false, sb.getCurrentImage("pca_score2d"), "png", 72);
+//        ChemoMetrics.PlotPCALoading(sb, sb.getCurrentImage("pca_loading"), "png", 72, 1, 2, "scatter", 1);  // setLoadingTable(pcImpInx);
+//        ChemoMetrics.PlotPCABiplot(sb, sb.getCurrentImage("pca_biplot"), "png", 72, 1, 2);
         // ChemoMetrics.PlotPCA3DScore(sb, sb.getCurrentImage("pca_score3d"), "png", 72, 1, 2, 3, 40);
         ChemoMetrics.PlotPCA3DScore(sb, sb.getCurrentImage("pca_score3d"), "json", 72, 1, 2, 3);
     }
@@ -250,5 +251,15 @@ public class AnalysisBean implements Serializable {
     }
     
     
+    
+//    private void doDefaultGgmap(){
+////        if (!DiversityUtils.CreateRarefactionDiv(sb, false, "test", "test", false, "test")){
+////            RConnection RC = sb.getRConnection();
+////            sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
+////        }
+//        System.out.print("INSIDE FD"); 
+//        Clustering.CreateGGMap(sb, false, "NULL", "NULL", "", "NULL", "", "NULL", false, sb.getCurrentImage("ggmap"), "png", 72, "false");
+//        System.out.print("AFTER FD");
+//    }
     
 }

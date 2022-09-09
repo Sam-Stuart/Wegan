@@ -28,7 +28,7 @@ import org.rosuda.REngine.Rserve.RConnection;
  * @author Louisa Normington
  */
 @ManagedBean(name = "ordCIABean")
-public class OrdinationCIABean implements Serializable {
+public class OACIABean implements Serializable {
 
     private final SessionBean1 sb = (SessionBean1) DataUtils.findBean("sessionBean1");
         
@@ -57,7 +57,7 @@ public class OrdinationCIABean implements Serializable {
     
     
     //TEXT BOX
-    private String envInput = "";
+    private String envInput = " ";
 
     public String getEnvInput() {
         return envInput;
@@ -69,7 +69,7 @@ public class OrdinationCIABean implements Serializable {
     
     
     //STATIC DROPDOWN
-    private String coiaDataSetOpts = "main";
+    private String coiaDataSetOpts = "NULL";
     
     public String getCoiaDataSetOpts() {
         return coiaDataSetOpts;
@@ -81,7 +81,7 @@ public class OrdinationCIABean implements Serializable {
 
     
 
-    private String ordColorOpts = "viridis";
+    private String ordColorOpts = "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.ordColorPaletteOpts
     
     public String getOrdColorOpts() {
         return ordColorOpts;
@@ -93,7 +93,7 @@ public class OrdinationCIABean implements Serializable {
     
     
 
-    private String coiaTypeOpts = "numeric";
+    private String coiaTypeOpts = "NULL";
     
     public String getCoiaTypeOpts() {
         return coiaTypeOpts;
@@ -133,7 +133,7 @@ public class OrdinationCIABean implements Serializable {
     
 // ACTION BUTTON // 
     public void ciaUpdate_action() {
-        OAUtils.CreateCIAOrdination(sb, coiaTypeOpts, envInput, doOriginal); 
+        OAUtils.CreateCIAOrdination(sb, doOriginal, coiaTypeOpts, envInput); 
         OAUtils.PlotCIAscatterOrdination(sb, doMetaGroup, ciaMetaColumnName, ordColorOpts, sb.getNewImage("ord_cia_scatter"), "png", 72); //ordMetaColnameOpts is a dynamic dropdown
         OAUtils.PlotCIAloadingOrdination(sb, coiaDataSetOpts, sb.getNewImage("ord_cia_loading"), "png", 72);
         OAUtils.PlotCIAscreeOrdination(sb, sb.getNewImage("ord_cia_scree"), "png", 72);    

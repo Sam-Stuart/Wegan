@@ -6,25 +6,176 @@
 #'License: GNU GPL (>= 2)
 #'@export
 #'
-PCA.Anal <- function(mSetObj=NA){
-  
+PCA.Anal <- function(mSetObj=NA, origData="false"){
+  load_dplyr()
+  load_vegan()
+
+  options(error=traceback)
   mSetObj <- .get.mSet(mSetObj);
-  
-  pca <- prcomp(mSetObj$dataSet$norm, center=TRUE, scale=F);
+  if (origData=="false") {
+    data <- mSetObj$dataSet$norm
+  } else {
+    data <- mSetObj$dataSet$orig
+  }
+
+  metaData <- mSetObj$dataSet$origMeta
+  envData <- mSetObj$dataSet$origEnv
+
+  #Obtain categorical data for making dummy variables
+  num_data <- select_if(data, is.numeric)
+  colNamesNum <- colnames(num_data)
+  rowNamesNum <- rownames(num_data)
+
+  #Obtain all data
+  all_data <- num_data
+  if (ncol(all_data)<2) {
+    #AddErrMsg("Ordination requires at least 2 variables!")
+    stop("Ordination requires at least 2 variables!")
+  } 
+
+  #meta data, used to group samples using colors
+  if (is.data.frame(metaData)==FALSE) { #No user uploaded meta data
+    metaData1 <- "NA" #If species data had no categorical columns, meta data is NULL
+    print("No grouping variables were uploaded!")  
+  } else {  #User uploaded meta data
+    metaData1 <- metaData #User uploaded like weights in correlation module
+    if (nrow(metaData1)!=nrow(data)) {
+      #AddErrMsg("Your grouping data does not have the same number of rows as your numerical data! Please check that you grouping data is correct.")
+      stop("Your grouping data does not have the same number of rows as your numerical data! Please check that you grouping data is correct.")
+    }
+    for(i in 1:ncol(metaData1)) {
+      metaData1[,i] <- as.factor(metaData1[,i]) #Make sure all columns are read as factors
+    }
+  }
+
+  #environmental data, used to correlate with rows in main data set
+  if (is.data.frame(envData)==FALSE) { #No user uplaoded environmental data
+    envData1 <- "NA"
+  } else {  #User uplaoded environmental data
+    envData1 <- envData #User uploaded (like weights in correlation module)
+    if (nrow(envData1)!=nrow(data)) {
+      #AddErrMsg("Your environmental data does not have the same number of rows as your data set! Please check that you environmental data is correct.")
+      stop("Your environmental data does not have the same number of rows as your data set! Please check that you environmental data is correct.")
+    }
+  }
+
+  #Perform PCA
+  res.pca <- prcomp(all_data, center=TRUE, scale=F);
+
+  #Fit environmental data to ordination plots for plotting arrows
+  #if (is.data.frame(envData1)==FALSE) { #If environmental data not uploaded
+  #  env.fit <- "NA"
+  #  env.fit.char <- "NA"
+  #  env.fit.num <- "NA"
+  #} else { #If environmental data uploaded
+  #  env_data_numeric <- select_if(envData1, is.numeric)
+  #  env_data_character <- select_if(envData1, is.character)
+  #  env.fit <- envfit(res.pca, envData1, permutations=999, p.max=NULL)
+  #  if (ncol(env_data_character)>0) { #If categorical variables present
+  #    env.fit.char <- envfit(res.pca, env_data_character, permutations=999, p.max=NULL) #Fit env data to species data
+  #  } else{
+  #    env.fit.char <- "NA"
+  #  }
+  #  if (ncol(env_data_numeric)>0) { #If numeric variables present
+  #    env.fit.num <- envfit(res.pca, env_data_numeric, permutations=999, p.max=NULL) #Fit env data to species data
+  #  } else{
+  #    env.fit.num <- "NA"
+  # }
+  #}
+#
+#  #Extract environment scores
+#  if (is.data.frame(envData1)==FALSE) { #If environmental data not uploaded
+#    env.scores <- "NA"
+#  } else { #If environmental data uploaded
+#    if (length(env_data_numeric)>0) { 
+#      env.scores.num <- signif(scores(env.fit.num, display="vectors"), 5)
+#    } else {
+#      env.scores.num <- "NA"
+#    }
+#    
+#    if (length(env_data_character)>0) {
+#      env.scores.char <- signif(scores(env.fit.char, display="factors"), 5)
+#    } else {
+#     env.scores.char <- "NA"
+#    }
+#    
+#    if (is.matrix(env.scores.num)==TRUE) { #Numeric constraining variables
+#      if (is.matrix(env.scores.char)==TRUE) { #Categorical constraining variables
+#        env.scores <- rbind(env.scores.num, env.scores.char)
+#      } else {  #No categorical constraining variables
+#        env.scores <- env.scores.num
+#      }
+#    } else { #No numeric constraining variables
+#      if (is.matrix(env.scores.char)==TRUE) { #Categorical constraining variables
+#        env.scores <- env.scores.char
+#      } else {
+#        env.scores <- "NA"
+#      }
+#    }
+#  }
+#  
+  #Fit variables to ordination plots for plotting arrows
+  var.fit <- envfit(res.pca, data, permutations=999, p.max=NULL)
   
   # obtain variance explained
-  sum.pca <- summary(pca);
+  sum.pca <- summary(res.pca);
   imp.pca <- sum.pca$importance;
   std.pca <- imp.pca[1,]; # standard devietation
   var.pca <- imp.pca[2,]; # variance explained by each PC
   cum.pca <- imp.pca[3,]; # cummulated variance explained
+  scree_data <- cbind(1:length(var.pca), var.pca, cum.pca)
+  colnames(scree_data) <- c("PC", "Variance Explained", "Cumulative Variance Explained")
   
   # store the item to the pca object
-  mSetObj$analSet$pca<-append(pca, list(std=std.pca, variance=var.pca, cum.var=cum.pca));
-  write.csv(signif(mSetObj$analSet$pca$x,5), file="pca_score.csv");
-  write.csv(signif(mSetObj$analSet$pca$rotation,5), file="pca_loadings.csv");
+  mSetObj$analSet$pca$res.pca <- res.pca
+  mSetObj$analSet$pca$std <- std.pca
+  mSetObj$analSet$pca$variance <- var.pca
+  mSetObj$analSet$pca$cum.var <- cum.pca
+  mSetObj$analSet$pca$input <- data
+  mSetObj$analSet$pca$var.fit <- var.fit
+  #mSetObj$analSet$pca$env.fit <- env.fit
+  #mSetObj$analSet$pca$env.fit.char <- env.fit.char
+  #mSetObj$analSet$pca$env.fit.num <- env.fit.num
+  #mSetObj$analSet$pca$env.scores.char <- env.scores.char
+  #mSetObj$analSet$pca$env.scores.num <- env.scores.num
+  mSetObj$analSet$pca$metaData <- metaData1
+  mSetObj$analSet$pca$envData <- envData1
+  write.csv(scree_data, file="pca_scree_data.csv", row.names=FALSE)
+  write.csv(signif(mSetObj$analSet$pca$res.pca$x,5), file="pca_sample_scores.csv", row.names=row.names(data))
+  write.csv(signif(mSetObj$analSet$pca$res.pca$rotation,5), file="pca_variable_scores.csv", row.names=TRUE)
+  #if (is.data.frame(envData1)==TRUE) {
+  #  write.csv(env.scores, file="pca_constraining_variable_scores.csv", row.names=TRUE)
+  #} else {
+  #  write.csv(NULL, file="pca_constraining_variable_scores.csv", row.names=FALSE)
+  #}
+
+  sink("pca_variable_impact.txt") 
+  cat("Variables may significantly impact PCA\n")
+  print(var.fit)
+  sink() 
+  
+  #if (is.data.frame(envData1)==TRUE) {
+  #  sink("pca_constraining_variable_impact.txt") 
+  #  cat("Constraining variables may significantly impact PCOA\n")
+  #  print(env.fit)
+  #  sink() 
+  #}
+                
+  sink("pca_summary.txt")
+  cat("Principal Component Analysis\n")
+  cat("\nSamples Scores:\n")
+  print(as.data.frame(res.pca[["x"]]))
+  cat("\nVariables Scores:\n")
+  print(var.fit$vectors$arrow)
+  #cat("\nConstraining Variables Scores:\n")
+  #print(env.scores)
+  cat("\nVariance Explained:")
+  print(summary(res.pca))
+  sink()  
+  
   return(.set.mSet(mSetObj));
 }
+
 
 #'Rotate PCA analysis
 #'@description Rotate PCA analysis
@@ -36,10 +187,10 @@ PCA.Anal <- function(mSetObj=NA){
 #'@export
 
 PCA.Flip <- function(mSetObj=NA, axisOpt){
-  
+  options(error=traceback)
   mSetObj <- .get.mSet(mSetObj);
   
-  pca<-mSetObj$analSet$pca;
+  pca<-mSetObj$analSet$pca$res.pca;
   # store the item to the pca object
   if(axisOpt == "x"){
     pca$x[,1] <- -pca$x[,1];
@@ -51,9 +202,9 @@ PCA.Flip <- function(mSetObj=NA, axisOpt){
     pca$x <- -pca$x;
     pca$rotation <- -pca$rotation;
   }
-  write.csv(signif(pca$x,5), file="pca_score.csv");
-  write.csv(signif(pca$rotation,5), file="pca_loadings.csv");
-  mSetObj$analSet$pca <- pca;
+  #write.csv(signif(pca$x,5), file="pca_score.csv");
+  #write.csv(signif(pca$rotation,5), file="pca_loadings.csv");
+  mSetObj$analSet$pca$res.pca <- pca;
   return(.set.mSet(mSetObj));
 }
 
@@ -73,8 +224,9 @@ PCA.Flip <- function(mSetObj=NA, axisOpt){
 #'@param pc.num Numeric, input a number to indicate the number of principal components to display in the pairwise score plot.
 #'@export
 #'
-PlotPCAPairSummary <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, pc.num){
-  
+PlotPCAPairSummary <- function(mSetObj=NA, color="NULL", imgName, format="png", dpi=72, width=NA, pc.num){
+  library(viridis)
+
   mSetObj <- .get.mSet(mSetObj);
   pclabels <- paste("PC", 1:pc.num, "\n", round(100*mSetObj$analSet$pca$variance[1:pc.num],1), "%");
   imgName = paste(imgName, "dpi", dpi, ".", format, sep="");
@@ -89,12 +241,22 @@ PlotPCAPairSummary <- function(mSetObj=NA, imgName, format="png", dpi=72, width=
   mSetObj$imgSet$pca.pair <- imgName;
   
   h <- w;
+
   Cairo::Cairo(file = imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white");
-  if(mSetObj$dataSet$cls.type == "disc"){
-    pairs(mSetObj$analSet$pca$x[,1:pc.num], col=GetColorSchema(mSetObj), pch=as.numeric(mSetObj$dataSet$cls)+1, labels=pclabels);
-  }else{
-    pairs(mSetObj$analSet$pca$x[,1:pc.num], labels=pclabels);
+  n <- nlevels(as.factor(mSetObj$dataSet$cls))
+  if (color=="NULL") {
+    colors <- viridis(n)#Assign a color to each level using the viridis pallete (viridis package)
+  } else if (color=="plasma") {
+    colors <- plasma(n+1)#Assign a color to each level using the plasma pallete (viridis package)
+  } else if (color=="grey") {
+    colors <- grey.colors(n, start=0.1, end=0.75) #Assign a grey color to each level (grDevices package- automatically installed)
+  } else if (color=="blue") {
+    colors <- rep("blue", times=n)
+  } else if (color=="none") {
+    colors <- rep("black", times=n)
   }
+    
+  pairs(mSetObj$analSet$pca$res.pca$x[,1:pc.num], col=colors, pch=19, labels=pclabels);
   dev.off();
   return(.set.mSet(mSetObj));
 }
@@ -116,17 +278,13 @@ PlotPCAPairSummary <- function(mSetObj=NA, imgName, format="png", dpi=72, width=
 #'@export
 #'
 PlotPCAScree <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, scree.num){
-  
+  options(error=traceback)
   mSetObj <- .get.mSet(mSetObj);
-  
   stds <-mSetObj$analSet$pca$std[1:scree.num];
   pcvars<-mSetObj$analSet$pca$variance[1:scree.num];
   cumvars<-mSetObj$analSet$pca$cum.var[1:scree.num];
-  
-  ylims <- range(c(pcvars,cumvars));
-  extd<-(ylims[2]-ylims[1])/10
-  miny<- ifelse(ylims[1]-extd>0, ylims[1]-extd, 0);
-  maxy<- ifelse(ylims[2]+extd>1, 1.0, ylims[2]+extd);
+  miny<- 0
+  maxy<- min(max(cumvars)+0.2, 1);
   
   imgName = paste(imgName, "dpi", dpi, ".", format, sep="");
   if(is.na(width)){
@@ -152,7 +310,7 @@ PlotPCAScree <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, sc
   
   abline(v=1:scree.num, lty=3);
   axis(2);
-  axis(1, 1:length(pcvars), 1:length(pcvars));
+  axis(1, 1:scree.num, 1:scree.num);
   dev.off();
   return(.set.mSet(mSetObj));
 }
@@ -177,116 +335,181 @@ PlotPCAScree <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, sc
 #'License: GNU GPL (>= 2)
 #'@export
 #'
-PlotPCA2DScore <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, pcx, pcy, reg = 0.95, show=1, grey.scale = 0){
-  
+PlotPCA2DScore <- function(mSetObj=NA, ellipse="false", var_arrows="false", env_arrows="false", env_cent="false", sampleNames="false", color="NULL", meta_col_color="NULL", noPoints="false", imgName, format="png", dpi=72, width=NA) { #6 check boxes, 2 drop downs
+  library("viridis") 
+  library("dplyr") 
+  library("factoextra")
+
   mSetObj <- .get.mSet(mSetObj);
-  
-  xlabel = paste("PC",pcx, "(", round(100*mSetObj$analSet$pca$variance[pcx],1), "%)");
-  ylabel = paste("PC",pcy, "(", round(100*mSetObj$analSet$pca$variance[pcy],1), "%)");
-  pc1 = mSetObj$analSet$pca$x[, pcx];
-  pc2 = mSetObj$analSet$pca$x[, pcy];
-  text.lbls<-substr(names(pc1),1,14) # some names may be too long
-  
+  pca <- mSetObj$analSet$pca$res.pca 
+  metaData <- mSetObj$analSet$pca$metaData
+  envData <- mSetObj$analSet$pca$envData
+  input <- mSetObj$analSet$pca$input
+  var.fit <- mSetObj$analSet$pca$var.fit
+  #env.scores.char <- mSetObj$analSet$pca$env.scores.char
+  #env.scores.num <- mSetObj$analSet$pca$env.scores.num
+  env_data <- mSetObj$analSet$pca$envData
+
+  xlabel = paste("PC1 (", round(100*mSetObj$analSet$pca$variance[1],1), "%)");
+  ylabel = paste("PC2 (", round(100*mSetObj$analSet$pca$variance[2],1), "%)");
+    
   imgName = paste(imgName, "dpi", dpi, ".", format, sep="");
+
   if(is.na(width)){
     w <- 9;
-  }else if(width == 0){
+  }
+  else if(width == 0){
     w <- 7.2;
-  }else{
+  }
+  else{
     w <- width;
   }
   h <- w;
   
   mSetObj$imgSet$pca.score2d <- imgName;
-  
   Cairo::Cairo(file = imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white");
-  op<-par(mar=c(5,5,3,3));
+  par(xpd=FALSE, mar=c(5.1, 4.1, 4.1, 2.1))
   
-  if(mSetObj$dataSet$cls.type == "disc"){
-    # obtain ellipse points to the scatter plot for each category
-    
-    if(mSetObj$dataSet$type.cls.lbl=="integer"){
-      cls <- as.factor(as.numeric(levels(mSetObj$dataSet$cls))[mSetObj$dataSet$cls]);
-    }else{
-      cls <- mSetObj$dataSet$cls;
+    if (var_arrows=="true" && sampleNames=="false") {
+      label="var"
     }
-    
-    lvs <- levels(cls);
-    pts.array <- array(0, dim=c(100,2,length(lvs)));
-    for(i in 1:length(lvs)){
-      inx <-mSetObj$dataSet$cls == lvs[i];
-      groupVar<-var(cbind(pc1[inx],pc2[inx]), na.rm=T);
-      groupMean<-cbind(mean(pc1[inx], na.rm=T),mean(pc2[inx], na.rm=T));
-      pts.array[,,i] <- ellipse::ellipse(groupVar, centre = groupMean, level = reg, npoints=100);
+    if (sampleNames=="true" && var_arrows=="false") {
+      label="ind"
     }
-    
-    xrg <- range(pc1, pts.array[,1,]);
-    yrg <- range(pc2, pts.array[,2,]);
-    x.ext<-(xrg[2]-xrg[1])/12;
-    y.ext<-(yrg[2]-yrg[1])/12;
-    xlims<-c(xrg[1]-x.ext, xrg[2]+x.ext);
-    ylims<-c(yrg[1]-y.ext, yrg[2]+y.ext);
-    
-    cols <- GetColorSchema(mSetObj, grey.scale==1);
-    uniq.cols <- unique(cols);
-    
-    plot(pc1, pc2, xlab=xlabel, xlim=xlims, ylim=ylims, ylab=ylabel, type='n', main="Scores Plot",
-         col=cols, pch=as.numeric(mSetObj$dataSet$cls)+1); ## added
-    grid(col = "lightgray", lty = "dotted", lwd = 1);
-    
-    # make sure name and number of the same order DO NOT USE levels, which may be different
-    legend.nm <- unique(as.character(sort(cls)));
-    ## uniq.cols <- unique(cols);
-    
-    ## BHAN: when same color is choosen; it makes an error
-    if ( length(uniq.cols) > 1 ) {
-      names(uniq.cols) <- legend.nm;
+    if (sampleNames=="true" && var_arrows=="true") {
+      label="all"
+    } 
+    if (sampleNames=="false" && var_arrows=="false") {
+      label="none"
     }
+  
+  if (is.data.frame(metaData)==FALSE || meta_col_color=="No groupings" || color=="none") { #no metaData or no metaData groupings
     
-    # draw ellipse
-    for(i in 1:length(lvs)){
-      if (length(uniq.cols) > 1) {
-        polygon(pts.array[,,i], col=adjustcolor(uniq.cols[lvs[i]], alpha=0.25), border=NA);
+    if (label=="var") { #var_arrows=="true" && sampleNames=="false"
+      if (noPoints=="true"){
+        ggp <- fviz_pca_biplot(pca, label="var", repel=FALSE,  col.var="darkred", xlab=xlabel, ylab=ylabel, invisible = "ind") + ggtitle("Prinicipal Component Analysis")
       } else {
-        polygon(pts.array[,,i], col=adjustcolor(uniq.cols, alpha=0.25), border=NA);
+        ggp <- fviz_pca_biplot(pca, label="var", repel=FALSE,  col.var="darkred", xlab=xlabel, ylab=ylabel, pointsize=2, labelsize=1.5) + ggtitle("Prinicipal Component Analysis")+
+                theme(plot.title = element_text(size=16, face="bold", hjust = 0.5), axis.text = element_text(size = 14, colour="black"), axis.title=element_text(size=14), panel.grid.major = element_blank(), panel.grid.minor = element_blank(), panel.background = element_rect(colour = "black", size=1))
       }
-      if(grey.scale) {
-        lines(pts.array[,,i], col=adjustcolor("black", alpha=0.5), lty=2);
+    } else if (label=="ind")  { #sampleNames=="true" && var_arrows=="false"
+      if (noPoints=="true"){
+        ggp <- fviz_pca_biplot(pca, label="none", repel=FALSE,  xlab=xlabel, ylab=ylabel, invisible = c("var", "ind")) + ggtitle("Prinicipal Component Analysis")
+      } else {
+        ggp <- fviz_pca_biplot(pca, label="ind", repel=FALSE,  col.var="darkred", xlab=xlabel, ylab=ylabel, invisible = "var", geom="text") + ggtitle("Prinicipal Component Analysis")+
+                theme(plot.title = element_text(size=16, face="bold", hjust = 0.5), axis.text = element_text(size = 14, colour="black"), axis.title=element_text(size=14), panel.grid.major = element_blank(), panel.grid.minor = element_blank(), panel.background = element_rect(colour = "black", size=1))
+      }
+    } else if (label=="all") { #sampleNames=="true" && var_arrows=="true"
+      if (noPoints=="true"){
+        ggp <- fviz_pca_biplot(pca, label="all", repel=FALSE,  col.var="darkred", invisible = "ind",  xlab=xlabel, ylab=ylabel) + ggtitle("Prinicipal Component Analysis")
+      } else {
+        ggp <- fviz_pca_biplot(pca, label="all", repel=FALSE,  col.var="darkred", xlab=xlabel, ylab=ylabel, geom="text") + ggtitle("Prinicipal Component Analysis")+
+                theme(plot.title = element_text(size=16, face="bold", hjust = 0.5), axis.text = element_text(size = 14, colour="black"), axis.title=element_text(size=14), panel.grid.major = element_blank(), panel.grid.minor = element_blank(), panel.background = element_rect(colour = "black", size=1))
+      }    
+    } else { #sampleNames=="false" && var_arrows=="false"
+      if (noPoints=="true"){
+        ggp <- fviz_pca_biplot(pca, label="none", repel=FALSE,  xlab=xlabel, ylab=ylabel, invisible = c("var", "ind")) + ggtitle("Prinicipal Component Analysis")
+      } else {
+        ggp <- fviz_pca_biplot(pca, label="none", repel=FALSE,  xlab=xlabel, ylab=ylabel, invisible = "var", pointsize=2, title ="Prinicipal Component Analysis")+ 
+                theme(plot.title = element_text(size=16, face="bold", hjust = 0.5), axis.text = element_text(size = 14, colour="black"), axis.title=element_text(size=14), panel.grid.major = element_blank(), panel.grid.minor = element_blank(), panel.background = element_rect(colour = "black", size=1))
       }
     }
     
-    pchs <- GetShapeSchema(mSetObj, show, grey.scale);
-    if(grey.scale) {
-      cols <- rep("black", length(cols));
+  } else { #metaData
+    
+    if (ellipse=="false") {
+      addEllipses=FALSE
+    } else {
+      addEllipses=TRUE
     }
-    if(show == 1){
-      text(pc1, pc2, label=text.lbls, pos=4, xpd=T, cex=0.75);
-      points(pc1, pc2, pch=pchs, col=cols);
-    }else{
-      if(length(uniq.cols) == 1){
-        points(pc1, pc2, pch=pchs, col=cols, cex=1.0);
-      }else{
-        if(grey.scale == 1 | (exists("shapeVec") && all(shapeVec>0))){
-          points(pc1, pc2, pch=pchs, col=cols, cex=1.8);
-        }else{
-          points(pc1, pc2, pch=21, bg=cols, cex=2);
-        }
+    
+    #Set up meta data column to use for colors
+    if (meta_col_color=="NULL") { 
+      meta_col_color_data <- as.factor(metaData[,1]) #Default meta data column for labeling with color is the first
+      meta_col_color_name <- colnames(metaData)[1]
+    } else {
+      meta_col_color_data <- as.factor(metaData[,meta_col_color]) #User inputted meta data column for labeling with colors, options given to java using function meta.columns() below
+      meta_col_color_name <- meta_col_color
+    }
+    
+    #Color options
+    n <- length(levels(meta_col_color_data)) #Determine how many different colors are needed based on the levels of the meta data
+    if (color=="NULL") {
+      colors <- viridis(n)#Assign a color to each level using the viridis pallete (viridis package)
+    } else if (color=="plasma") {
+      colors <- plasma(n+1)#Assign a color to each level using the plasma pallete (viridis package)
+    } else if (color=="grey") {
+      colors <- grey.colors(n, start=0.1, end=0.75) #Assign a grey color to each level (grDevices package- automatically installed)
+    } 
+    
+    if (label=="var") { #var_arrows=="true" && sampleNames=="false"
+      if (noPoints=="true"){
+        ggp <- fviz_pca_biplot(pca, label="var", repel=FALSE,  col.var="darkred", xlab=xlabel, ylab=ylabel, invisible = "ind")+ ggtitle("Prinicipal Component Analysis")
+      } else {
+        ggp <- fviz_pca_biplot(pca, label="var", repel=FALSE,  col.var="darkred", xlab=xlabel, ylab=ylabel, col.ind=metaData[,meta_col_color_name], addEllipses=addEllipses, legend.title=meta_col_color_name, palette=colors)+ 
+                ggtitle("Prinicipal Component Analysis") + theme(plot.title = element_text(size=16, face="bold", hjust = 0.5), axis.text = element_text(size = 14, colour="black"), axis.title=element_text(size=14), legend.text=element_text(size=12), panel.grid.major = element_blank(), panel.grid.minor = element_blank(), panel.background = element_rect(colour = "black", size=1), legend.title=element_text(size=12))
+      }
+    } else if (label=="ind")  { #sampleNames=="true" && var_arrows=="false"
+      if (noPoints=="true"){
+        ggp <- fviz_pca_biplot(pca, label="none", repel=FALSE,  xlab=xlabel, ylab=ylabel, invisible = c("var", "ind")) + ggtitle("Prinicipal Component Analysis")
+      } else {
+        ggp <- fviz_pca_biplot(pca, label="ind", repel=FALSE,  col.var="darkred", xlab=xlabel, ylab=ylabel, invisible = "var", col.ind=metaData[,meta_col_color_name], addEllipses=addEllipses, ellipse.level=0.95, legend.title=meta_col_color_name, palette=colors, geom="text") + 
+                ggtitle("Prinicipal Component Analysis") + theme(plot.title = element_text(size=16, face="bold", hjust = 0.5), axis.text = element_text(size = 14, colour="black"), axis.title=element_text(size=14), legend.text=element_text(size=12), panel.grid.major = element_blank(), panel.grid.minor = element_blank(), panel.background = element_rect(colour = "black", size=1), legend.title=element_text(size=12))
+      }
+    } else if (label=="all") { #sampleNames=="true" && var_arrows=="true"
+      if (noPoints=="true"){
+        ggp <- fviz_pca_biplot(pca, label="all", repel=FALSE,  col.var="darkred", invisible = "ind",  xlab=xlabel, ylab=ylabel)+ ggtitle("Prinicipal Component Analysis")
+      } else {
+        ggp <- fviz_pca_biplot(pca, label="all", repel=FALSE,  col.var="darkred", xlab=xlabel, ylab=ylabel, col.ind=metaData[,meta_col_color_name], addEllipses=addEllipses, ellipse.level=0.95, legend.title=meta_col_color_name, palette=colors, geom="text")+ 
+                ggtitle("Prinicipal Component Analysis") + theme(plot.title = element_text(size=16, face="bold", hjust = 0.5), axis.text = element_text(size = 14, colour="black"), axis.title=element_text(size=14), legend.text=element_text(size=12), panel.grid.major = element_blank(), panel.grid.minor = element_blank(), panel.background = element_rect(colour = "black", size=1), legend.title=element_text(size=12))
+        }    
+    } else { #sampleNames=="false" && var_arrows=="false"
+      if (noPoints=="true"){
+        ggp <- fviz_pca_biplot(pca, label="none", repel=FALSE,  xlab=xlabel, ylab=ylabel, invisible = c("var", "ind"))+ ggtitle("Prinicipal Component Analysis")
+      } else {
+        ggp <- fviz_pca_biplot(pca, label="none", repel=FALSE,  xlab=xlabel, ylab=ylabel, invisible = "var", col.ind=metaData[,meta_col_color_name], addEllipses=addEllipses, ellipse.level=0.95, legend.title=meta_col_color_name, palette=colors, pointsize=2.5)+ 
+                ggtitle("Prinicipal Component Analysis") + theme(plot.title = element_text(size=16, face="bold", hjust = 0.5), axis.text = element_text(size = 14, colour="black"), axis.title=element_text(size=14), legend.text=element_text(size=12), panel.grid.major = element_blank(), panel.grid.minor = element_blank(), panel.background = element_rect(colour = "black", size=1), legend.title=element_text(size=12))
       }
     }
-    uniq.pchs <- unique(pchs);
-    if(grey.scale) {
-      uniq.cols <- "black";
-    }
-    legend("topright", legend = legend.nm, pch=uniq.pchs, col=uniq.cols);
-  }else{
-    plot(pc1, pc2, xlab=xlabel, ylab=ylabel, type='n', main="Scores Plot");
-    points(pc1, pc2, pch=15, col="magenta");
-    text(pc1, pc2, label=text.lbls, pos=4, col ="blue", xpd=T, cex=0.8);
   }
-  par(op);
-  dev.off();
+  print(ggp)
+# if (is.data.frame(envData)==TRUE) {
+#
+#    if (is.data.frame(env.scores.char)==TRUE && is.data.frame(env.scores.num)==FALSE) {
+#      if (env_cent=="true") { #With env centroids
+#        print(ggp)
+#        print(fviz_add(ggp, env.scores.char, geom = "point", color = "blue", addlabel = TRUE, repel = FALSE))
+#      } else {
+#        print(ggp)
+#      }
+#    }
+#    
+#    if (is.data.frame(env.scores.num)==TRUE && is.data.frame(env.scores.char)==FALSE) {
+#      if (env_arrows=="true") { #with env arrows
+#        print(ggp)
+#        print(fviz_add(ggp, env.scores.num, geom = "arrow", color = "blue", addlabel = TRUE, repel = FALSE))
+#      } else {
+#        print(ggp)
+#      }
+#    }
+#    
+#    if (is.data.frame(env.scores.num)==TRUE && is.data.frame(env.scores.char)==TRUE) {
+#      if (env_cent=="true" && env_arrows=="true") { #with both
+#        print(ggp + fviz_add(ggp, env.scores.num, geom = "arrow", color = "blue", addlabel = TRUE, repel = FALSE) + fviz_add(ggp, env.scores.char, geom = "point", color = "blue", addlabel = TRUE, repel = FALSE))
+#      } else {
+#        print(ggp)
+#      }
+#    }
+#  } else { #no env data
+#    print(ggp)
+#  }
+  
+  dev.off()
+
   return(.set.mSet(mSetObj));
 }
+
+
 
 #'Create 3D PCA score plot
 #'@description Rotate PCA analysis
@@ -303,10 +526,12 @@ PlotPCA2DScore <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, 
 #'@export
 #'
 PlotPCA3DScore <- function(mSetObj=NA, imgName, format="json", inx1, inx2, inx3){
-  
+  options(error=traceback)
+  print("INSIDE")
+  library("RJSONIO")
   mSetObj <- .get.mSet(mSetObj);
   
-  pca <-  mSetObj$analSet$pca;
+  pca <-  mSetObj$analSet$pca$res.pca;
   pca3d <- list();
   pca3d$score$axis <- paste("PC", c(inx1, inx2, inx3), " (", 100*round( mSetObj$analSet$pca$variance[c(inx1, inx2, inx3)], 3), "%)", sep="");
   coords <- data.frame(t(signif(pca$x[,c(inx1, inx2, inx3)], 5)));
@@ -325,17 +550,22 @@ PlotPCA3DScore <- function(mSetObj=NA, imgName, format="json", inx1, inx2, inx3)
   }
   
   pca3d$score$facA <- cls;
-  
+  #print(pca3d$score$facA)
   # now set color for each group
   cols <- unique(GetColorSchema(mSetObj));
+  #print(cols)
   rgbcols <- col2rgb(cols);
   cols <- apply(rgbcols, 2, function(x){paste("rgb(", paste(x, collapse=","), ")", sep="")})
   pca3d$score$colors <- cols;
+  #print(pca3d$score$colors)
   imgName = paste(imgName, ".", format, sep="");
+  print("BEFORE JSON")
   json.obj <- RJSONIO::toJSON(pca3d, .na='null');
   sink(imgName);
   cat(json.obj);
   sink();
+
+  print("AFTER JSON OBJECT")
   
   if(!.on.public.web){
     return(.set.mSet(mSetObj));
@@ -366,7 +596,7 @@ PlotPCA3DScore <- function(mSetObj=NA, imgName, format="json", inx1, inx2, inx3)
 #'@importFrom plotly plot_ly add_markers layout
 
 PlotPCA3DScoreImg <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, inx1, inx2, inx3, angl){
-  
+  options(error=traceback)
   mSetObj <- .get.mSet(mSetObj);
   
   xlabel = paste("PC",inx1, "(", round(100*mSetObj$analSet$pca$variance[inx1],1), "%)");
@@ -396,7 +626,7 @@ PlotPCA3DScoreImg <- function(mSetObj=NA, imgName, format="png", dpi=72, width=N
     cols <- GetColorSchema(mSetObj);
     legend.nm <- unique(as.character(mSetObj$dataSet$cls));
     uniq.cols <- unique(cols);
-    Plot3D(mSetObj$analSet$pca$x[, inx1], mSetObj$analSet$pca$x[, inx2], mSetObj$analSet$pca$x[, inx3], xlab= xlabel, ylab=ylabel,
+    Plot3D(mSetObj$analSet$pca$res.pca$x[, inx1], mSetObj$analSet$pca$res.pca$x[, inx2], mSetObj$analSet$pca$res.pca$x[, inx3], xlab= xlabel, ylab=ylabel,
            zlab=zlabel, angle =angl, color=cols, pch=pchs, box=F);
     legend("topleft", legend =legend.nm, pch=uniq.pchs, col=uniq.cols);
     dev.off();
@@ -409,7 +639,7 @@ PlotPCA3DScoreImg <- function(mSetObj=NA, imgName, format="png", dpi=72, width=N
         col <- c("#1972A4", "#FF7070")
       }
       
-      p <- plotly::plot_ly(x = mSetObj$analSet$pca$x[, inx1], y = mSetObj$analSet$pca$x[, inx2], z = mSetObj$analSet$pca$x[, inx3],
+      p <- plotly::plot_ly(x = mSetObj$analSet$pca$res.pca$x[, inx1], y = mSetObj$analSet$pca$res.pca$x[, inx2], z = mSetObj$analSet$pca$res.pca$x[, inx3],
                  color = mSetObj$dataSet$cls, colors = col) 
       p <- plotly::add_markers(p, sizes = 5)
       p <- plotly::layout(p, scene = list(xaxis = list(title = xlabel),
@@ -421,14 +651,14 @@ PlotPCA3DScoreImg <- function(mSetObj=NA, imgName, format="png", dpi=72, width=N
     
   }else{
     
-    Plot3D(mSetObj$analSet$pca$x[, inx1], mSetObj$analSet$pca$x[, inx2], mSetObj$analSet$pca$x[, inx3], xlab= xlabel, ylab=ylabel,
+    Plot3D(mSetObj$analSet$pca$res.pca$x[, inx1], mSetObj$analSet$pca$res.pca$x[, inx2], mSetObj$analSet$pca$res.pca$x[, inx3], xlab= xlabel, ylab=ylabel,
            zlab=zlabel, angle =angl, pch=pchs, box=F);
     dev.off();
     
     if(!.on.public.web){
       # 3D View using plotly
       col <- c("#C61951", "#1972A4")
-      p <- plotly::plot_ly(x = mSetObj$analSet$pca$x[, inx1], y = mSetObj$analSet$pca$x[, inx2], z = mSetObj$analSet$pca$x[, inx3],
+      p <- plotly::plot_ly(x = mSetObj$analSet$pca$res.pca$x[, inx1], y = mSetObj$analSet$pca$res.pca$x[, inx2], z = mSetObj$analSet$pca$res.pca$x[, inx3],
                            color = pchs, colors = col, marker = list(colorbar = list(len = 1, tickmode = array, tickvals = range(unique(pchs)),
                                                                                      ticktext = levels(mSetObj$dataSet$cls)))); 
       p <- plotly::add_markers(p, sizes = 1000);
@@ -464,10 +694,10 @@ PlotPCA3DScoreImg <- function(mSetObj=NA, imgName, format="png", dpi=72, width=N
 #'@export
 #'
 PlotPCALoading <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, inx1, inx2, plotType, lbl.feat=1){
-  
+  options(error=traceback)
   mSetObj <- .get.mSet(mSetObj);
   
-  loadings<-signif(as.matrix(cbind(mSetObj$analSet$pca$rotation[,inx1],mSetObj$analSet$pca$rotation[,inx2])),5);
+  loadings<-signif(as.matrix(cbind(mSetObj$analSet$pca$res.pca$rotation[,inx1],mSetObj$analSet$pca$res.pca$rotation[,inx2])),5);
   ldName1<-paste("Loadings", inx1);
   ldName2<-paste("Loadings", inx2);
   colnames(loadings)<-c(ldName1, ldName2);
@@ -533,11 +763,11 @@ PlotPCALoading <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, 
 #'@export
 #'
 PlotPCABiplot <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, inx1, inx2){
-  
+  options(error=traceback)
   mSetObj <- .get.mSet(mSetObj);
   choices = c(inx1, inx2);
-  scores <- mSetObj$analSet$pca$x;
-  lam <- mSetObj$analSet$pca$sdev[choices]
+  scores <- mSetObj$analSet$pca$res.pca$x;
+  lam <- mSetObj$analSet$pca$res.pca$sdev[choices]
   n <- NROW(scores)
   lam <- lam * sqrt(n);
   imgName = paste(imgName, "dpi", dpi, ".", format, sep="");
@@ -553,7 +783,7 @@ PlotPCABiplot <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, i
   mSetObj$imgSet$pca.biplot<-imgName;
   
   Cairo::Cairo(file = imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white");
-  biplot(t(t(scores[, choices]) / lam), t(t(mSetObj$analSet$pca$rotation[, choices]) * lam), xpd =T, cex=0.9);
+  biplot(t(t(scores[, choices]) / lam), t(t(mSetObj$analSet$pca$res.pca$rotation[, choices]) * lam), xpd =T, cex=0.9);
   dev.off();
   return(.set.mSet(mSetObj));
 }
@@ -569,7 +799,6 @@ PlotPCABiplot <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, i
 #'McGill University, Canada
 #'License: GNU GPL (>= 2)
 #'@export
-
 PLSR.Anal <- function(mSetObj=NA, reg=FALSE){
   
   mSetObj <- .get.mSet(mSetObj);
@@ -675,24 +904,24 @@ PlotPLS2DScore <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, 
   h <- w;
   
   mSetObj$imgSet$pls.score2d <- imgName;
-  
+  print("1")
   lv1 <- mSetObj$analSet$plsr$scores[,inx1];
   lv2 <- mSetObj$analSet$plsr$scores[,inx2];
   xlabel <- paste("Component", inx1, "(", round(100*mSetObj$analSet$plsr$Xvar[inx1]/mSetObj$analSet$plsr$Xtotvar,1), "%)");
   ylabel <- paste("Component", inx2, "(", round(100*mSetObj$analSet$plsr$Xvar[inx2]/mSetObj$analSet$plsr$Xtotvar,1), "%)");
-  
+  print("2")
   Cairo::Cairo(file = imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white");
   par(mar=c(5,5,3,3));
   text.lbls <- substr(rownames(mSetObj$dataSet$norm),1,12) # some names may be too long
   
   # obtain ellipse points to the scatter plot for each category
-  
+  print("3")
   if(mSetObj$dataSet$type.cls.lbl=="integer"){
     cls <- as.factor(as.numeric(levels(mSetObj$dataSet$cls))[mSetObj$dataSet$cls]);
   }else{
     cls <- mSetObj$dataSet$cls;
   }
-  
+  print("4")
   lvs <- levels(cls);
   pts.array <- array(0, dim=c(100,2,length(lvs)));
   for(i in 1:length(lvs)){
@@ -701,7 +930,7 @@ PlotPLS2DScore <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, 
     groupMean <- cbind(mean(lv1[inx], na.rm=T),mean(lv2[inx], na.rm=T));
     pts.array[,,i] <- ellipse::ellipse(groupVar, centre = groupMean, level = reg, npoints=100);
   }
-  
+  print("5")
   xrg <- range(lv1, pts.array[,1,]);
   yrg <- range(lv2, pts.array[,2,]);
   x.ext<-(xrg[2]-xrg[1])/12;
@@ -710,22 +939,24 @@ PlotPLS2DScore <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, 
   ylims<-c(yrg[1]-y.ext, yrg[2]+y.ext);
   
   ## cols = as.numeric(dataSet$cls)+1;
+  print("6")
   cols <- GetColorSchema(mSetObj, grey.scale==1);
   uniq.cols <- unique(cols);
-  
+  print("7")
   plot(lv1, lv2, xlab=xlabel, xlim=xlims, ylim=ylims, ylab=ylabel, type='n', main="Scores Plot");
   grid(col = "lightgray", lty = "dotted", lwd = 1);
   
   # make sure name and number of the same order DO NOT USE levels, which may be different
   legend.nm <- unique(as.character(sort(cls)));
   ## uniq.cols <- unique(cols);
-  
+  print("8")
   ## BHAN: when same color is choosen for black/white; it makes an error
   # names(uniq.cols) <- legend.nm;
   if (length(uniq.cols) > 1) {
     names(uniq.cols) <- legend.nm;
   }
   # draw ellipse
+  print("9")
   for(i in 1:length(lvs)){
     if ( length(uniq.cols) > 1) {
       polygon(pts.array[,,i], col=adjustcolor(uniq.cols[lvs[i]], alpha=0.25), border=NA);
@@ -736,11 +967,12 @@ PlotPLS2DScore <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, 
       lines(pts.array[,,i], col=adjustcolor("black", alpha=0.5), lty=2);
     }
   }
-  
+  print("10")
   pchs <- GetShapeSchema(mSetObj, show, grey.scale);
   if(grey.scale) {
     cols <- rep("black", length(cols));
   }
+  print("11")
   if(show==1){ # display sample name set on
     text(lv1, lv2, label=text.lbls, pos=4, xpd=T, cex=0.75);
     points(lv1, lv2, pch=pchs, col=cols);
@@ -755,13 +987,13 @@ PlotPLS2DScore <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, 
       }
     }
   }
-  
+  print("12")
   uniq.pchs <- unique(pchs);
   if(grey.scale) {
     uniq.cols <- "black";
   }
   legend("topright", legend = legend.nm, pch=uniq.pchs, col=uniq.cols);
-  
+  print("13")
   dev.off();
   return(.set.mSet(mSetObj));
 }
@@ -780,7 +1012,7 @@ PlotPLS2DScore <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, 
 #'@export
 #'
 PlotPLS3DScore <- function(mSetObj=NA, imgName, format="json", inx1, inx2, inx3){
-  
+  library("RJSONIO")
   mSetObj <- .get.mSet(mSetObj);
   
   pls3d <- list();
@@ -810,6 +1042,7 @@ PlotPLS3DScore <- function(mSetObj=NA, imgName, format="json", inx1, inx2, inx3)
   
   imgName = paste(imgName, ".", format, sep="");
   json.obj <- RJSONIO::toJSON(pls3d, .na='null');
+  print("after json")
   sink(imgName);
   cat(json.obj);
   sink();
@@ -2389,7 +2622,9 @@ GetPCALoadMat <- function(mSetObj=NA){
 #'
 GetMaxPCAComp <- function(mSetObj=NA){
   mSetObj <- .get.mSet(mSetObj);
-  return(min(9, dim(mSetObj$dataSet$norm)[1]-1, dim(mSetObj$dataSet$norm)[2]));
+  return(min(9, dim(mSetObj$analSet$pca$res.pca$x)[2]-1));
+  #return(min(9, dim(mSetObj$dataSet$norm)[1] - 1, dim(mSetObj$dataSet$norm)[2]));
+
 }
 
 ResetCustomCmpds <- function(mSetObj=NA){
@@ -2842,4 +3077,31 @@ var.na <- function(x){
     res <- var(x[tmp])
   }
   res
+}
+
+##############################################
+##############################################
+########## Utilities for web-server ##########
+##############################################
+##############################################
+
+#'Determine number and names of meta data columns for ordination plotting'
+#'@description Java will use the meta data columns to enable user options for selecting meta data for ordination plotting
+#'@param mSetObj Input name of the created mSetObject 
+#'@author Louisa Normington\email{normingt@ualberta.ca}
+#'University of Alberta, Canada
+#'License: GNU GPL (>= 2)
+#'@export
+pca.meta.columns <- function(mSetObj=NA) {
+  
+  mSetObj <- .get.mSet(mSetObj)
+  
+  metaData <- mSetObj$analSet$pca$metaData
+  if (is.data.frame(metaData)==FALSE) {
+    name.all.meta.cols <- "No groupings"
+  } else {
+    name.all.meta.cols <- c(colnames(metaData), "No groupings")
+  }
+  return(name.all.meta.cols)
+  
 }

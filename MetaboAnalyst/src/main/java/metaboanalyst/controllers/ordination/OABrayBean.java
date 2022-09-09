@@ -28,13 +28,13 @@ public class OABrayBean implements Serializable {
     private String usrName = usr.getName();
     
 
-    private String fileSampleScores = "bray_curtis_row_scores.csv";
+    private String fileSampleScores = "bray_curtis_sample_scores.csv";
     private String fileSampleScorePath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileSampleScores + "\">" + fileSampleScores + "</a>";
     
-    private String fileColScores = "bray_curtis_column_scores.csv";
+    private String fileColScores = "bray_curtis_variable_scores.csv";
     private String fileColScorePath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileColScores + "\">" + fileColScores + "</a>";
     
-    private String fileMat = "bray_curtis_DISTANCE_dissimilarity_matrix.csv";
+    private String fileMat = "bray_curtis_dissimilarity_matrix.csv";
     private String fileMatPath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileMat + "\">" + fileMat + "</a>";
     private String fileScree = "bray_curtis_scree_data.csv";
     private String fileScreePath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileScree + "\">" + fileScree + "</a>";
@@ -50,7 +50,7 @@ public class OABrayBean implements Serializable {
     
     private boolean pointStyle = false; 
     
-    private String distOpts = "bray";
+    private String distOpts = "euclidean";
     private String groupCol = "null";
     private String groupPoint = "null";
     private String color = "null";
@@ -112,7 +112,7 @@ public class OABrayBean implements Serializable {
     }
     
     public boolean isSampleNames() {
-        return doAbundance;
+        return sampleNames;
     }
     
     public void setSampleNames(boolean sampleNames) {
@@ -163,7 +163,7 @@ public class OABrayBean implements Serializable {
         return fileColScorePath;
     }
 
-    public void setFileSampeScorePath(String fileColScorePath) {
+    public void setFileColScorePath(String fileColScorePath) {
         this.fileColScorePath = fileColScorePath;
     }  
     
@@ -175,15 +175,12 @@ public class OABrayBean implements Serializable {
         this.fileMatPath = fileMatPath;
     }  
     
-    
 
     
-
-    
-// ACTION BUTTONS //
+    // ACTION BUTTONS //
     public void brayUpdate_action() {
-//        OAUtils.CreateBray(sb, "NULL", "NULL", "NULL", "NULL");
-//        OAUtils.PlotBray2D(sb, color, addEllipse, varArrows, sampleNames, "NULL", "NULL", "NULL", sb.getNewImage("ord_bray_2D"), "png", 72, "NULL"); 
+        OAUtils.CreateBray(sb, doAbundance, distOpts, doOriginal, dataAbsence);
+        OAUtils.PlotBray2D(sb, color, addEllipse, varArrows, sampleNames, "NULL", "NULL", "NULL", sb.getNewImage("ord_bray_2D"), "png", 72); 
     }
     
     

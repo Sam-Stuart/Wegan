@@ -28,9 +28,9 @@ public class SpeciesBean implements Serializable {
     
     
     // ACTION BUTTONS //
-    public void speciesUpdate_action() {
-        DiversityUtils.PlotSpecies(sb); 
-    }
+//    public void speciesUpdate_action() {
+//        DiversityUtils.PlotSpecies(sb); 
+//    }
     
     
     

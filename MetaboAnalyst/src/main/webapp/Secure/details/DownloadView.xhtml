@@ -16,9 +16,9 @@
                 <h2>Result Download</h2>    
                 <p>
                     Please download the results (tables and images) below. The <b>Download.zip</b> contains all the files in your home 
-                    directory. You can also generate a <b>PDF analysis report</b> using the button below. 
+                    directory. 
                 </p>
-                <h:panelGrid style="width:100%">
+<!--                <h:panelGrid style="width:100%">
                     <h:panelGrid columns="2" style="width:100%">
                         <p:commandButton style="width:160px; height:30px; font-size: 14px; font-weight: bold"  
                                          process="@this"
@@ -29,7 +29,7 @@
                                          value="Generate Report"/>
                         <h:outputLabel style="font-size: 15px; font-weight: bold" id="reportURL" escape="false" value="#{downloader.reportURL}"/>
                     </h:panelGrid>
-                </h:panelGrid>
+                </h:panelGrid>-->
                 <p:dataTable style="padding-top: 8px; width:90%;" styleClass="hide-column-names" var="dnld" value="#{downloader.downloads}">  
                     <p:column>
                         <h:outputText escape="false" value="#{dnld.fileNameA}"/>
