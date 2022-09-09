@@ -58,30 +58,28 @@ public class CAUtils {
     }
     
 
-public static boolean PlotLinearCA(SessionBean1 sb,Boolean data,
+public static boolean PlotLinearCA(SessionBean1 sb,
+        String facA, String facB, Boolean data,
         String col_dots, String col_line, Boolean plot_ci, 
         Boolean plot_eq, Boolean plot_rsq, Boolean plot_rsq_adj, 
                 String plot_title, String plot_xlab, String plot_ylab, 
                 String imgName, String format, int dpi) {
     try {
             RConnection RC = sb.getRConnection();
-//            String rCommand = "lin.reg.plot(NA" + ", \"" 
-//                    + data + "\", \""                    
-//                    + col_dots + "\", \""
-//                    + col_line + "\", \""
-//                    + plot_ci + "\", \""
-//                    + plot_eq + "\", \""
-//                    + plot_rsq + "\", \""
-//                    + plot_rsq_adj + "\", \""
-//                    + plot_title + "\", \""
-//                    + plot_xaxis + "\", \""
-//                    + plot_yaxis + "\", \""
-////                  + "\", imgName)";
-//                    + imgName + "\", \"" 
-//                    + format + "\", "
-//                    + dpi 
-//                    + ", width=NA)";
-            String rCommand = "lin.reg.plot(NA" + ", \"" + data + "\", \"" + col_dots + "\", \"" + col_line + "\", \"" + plot_ci + "\", \"" + plot_eq + "\", \"" + plot_rsq + "\", \"" + plot_rsq_adj + "\", \"" + plot_title + "\", \"" + plot_xlab + "\", \"" + plot_ylab + "\", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
+            String rCommand = "lin.reg.plot(NA" + ", \"" 
+                    + facA + "\", \""
+                    + facB + "\", \""
+                    + data + "\", \""
+                    + col_dots + "\", \""
+                    + col_line + "\", \"" 
+                    + plot_ci + "\", \"" 
+                    + plot_eq + "\", \"" 
+                    + plot_rsq + "\", \"" 
+                    + plot_rsq_adj + "\", \"" 
+                    + plot_title + "\", \"" 
+                    + plot_xlab + "\", \"" 
+                    + plot_ylab + "\", \"" 
+                    + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
             RCenter.recordRCommand(RC, rCommand);
             sb.addGraphicsCMD("corr_linear", rCommand);
             RC.voidEval(rCommand);
@@ -94,6 +92,7 @@ public static boolean PlotLinearCA(SessionBean1 sb,Boolean data,
     }    
     
 public static boolean PlotLinearPredictCA(SessionBean1 sb,
+        String facA, String facB,
         Boolean data, 
         String col_dots, String col_line, Boolean plot_ci, 
         Boolean plot_eq, Boolean plot_rsq, Boolean plot_rsq_adj,
@@ -102,6 +101,8 @@ public static boolean PlotLinearPredictCA(SessionBean1 sb,
     try {
             RConnection RC = sb.getRConnection();
             String rCommand = "lin.pred.plot(NA" + ", \"" 
+                    + facA + "\", \""
+                    + facB + "\", \""
                     + data + "\", \"" 
                     + col_dots + "\", \"" 
                     + col_line + "\", \"" 
@@ -320,7 +321,7 @@ public static boolean PlotLinearResidFitCA(SessionBean1 sb,
     }   
     
     public static boolean PlotPolynomialCA(SessionBean1 sb, String degree, 
-            Boolean data,
+           String facA, String facB, Boolean data,
         String col_dots, String col_line, Boolean plot_ci, 
         Boolean plot_eq, Boolean plot_rsq, Boolean plot_rsq_adj, 
                 String plot_title, String plot_xlab, String plot_ylab,
@@ -328,7 +329,9 @@ public static boolean PlotLinearResidFitCA(SessionBean1 sb,
         try {
             RConnection RC = sb.getRConnection();
 //            String rCommand = "poly.reg.plot(NA, degree=NULL" + ", \"" 
-            String rCommand = "poly.reg.plot(NA" + ", \"" + degree + "\", \""   
+            String rCommand = "poly.reg.plot(NA" + ", \"" + degree + "\", \""
+                    + facA + "\", \"" 
+                    + facB + "\", \"" 
                     + data + "\", \"" 
                     + col_dots + "\", \"" 
                     + col_line + "\", \"" 
@@ -349,15 +352,20 @@ public static boolean PlotLinearResidFitCA(SessionBean1 sb,
             return false;
         }
     }
-
-    public static boolean PlotPolynomialPredictCA(SessionBean1 sb, String degree, Boolean data,
+    
+    
+    public static boolean PlotPolynomialPredictCA(SessionBean1 sb, String degree, 
+        String facA, String facB, Boolean data,
              String col_dots, String col_line, Boolean plot_ci, 
                 String plot_title, String plot_xlab, String plot_ylab,
             String imgName, String format, int dpi) {
         try {
             RConnection RC = sb.getRConnection();
 //            String rCommand = "poly.pred.plot(NA, degree=NULL" + ", \"" 
-            String rCommand = "poly.pred.plot(NA" + ", \"" + degree + "\", \"" 
+            String rCommand = "poly.pred.plot(NA" + ", \"" 
+                    + degree + "\", \"" 
+                    + facA + "\", \"" 
+                    + facB + "\", \"" 
                     + data + "\", \"" 
                     + col_dots + "\", \"" 
                     + col_line + "\", \"" 
@@ -497,22 +505,49 @@ public static boolean PlotLinearResidFitCA(SessionBean1 sb,
     }
  
 // LOGISTIC   
-        public static void CreateLogisticModel(SessionBean1 sb, String facA, String facB) {
+    
+        public static void CreateLogisticModel(SessionBean1 sb,
+                String facA, String predtext, String type,
+                String preference, String ordertext) {
         try {
             RConnection RC = sb.getRConnection();
-            String rCommand = "log.reg.anal(NA)";
-//            String rCommand = "log.reg.anal(NA" + ", \"" + facA + "\", \"" + facB + "\" )";
+//            String rCommand = "log.reg.anal(NA)";
+            String rCommand = "log.reg.anal(NA" + ", \"" 
+                    + facA + "\", \"" 
+                    + predtext + "\", \"" 
+                    + type + "\", \"" 
+                    + preference + "\", \"" 
+                    + ordertext + "\" )";
             RCenter.recordRCommand(RC, rCommand);
             RC.voidEval(rCommand);
         } catch (RserveException rse) {
             System.out.println(rse);
         }
     }
-    
-    public static void PlotLogisticEffectCA(SessionBean1 sb, String type, String imgName, String format, int dpi) {
+        
+    public static void PlotLogisticEffectCA(SessionBean1 sb,
+            String type, 
+//            String facA, Boolean data,
+             Boolean plot_ci, 
+             String plot_title, String plot_xlab, String plot_ylab,
+             Boolean plot_xangle, String plot_palette, Boolean plot_leg_horiz, String plot_leg_pos,
+            String imgName, String format, int dpi) {
         try {
             RConnection RC = sb.getRConnection();
-            String rCommand = "plot.effects.logReg(NA" + ", \"" + type + "\", \""  + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
+            String rCommand = "log.effects.plot(NA" + ", \"" 
+                    + type + "\", \""  
+//                    + facA + "\", \"" 
+//                    + data + "\", \"" 
+                    + plot_ci + "\", \"" 
+                    + plot_title + "\", \"" 
+                    + plot_xlab + "\", \"" 
+                    + plot_ylab + "\", \"" 
+                    
+                    + plot_xangle + "\", \"" 
+                    + plot_palette + "\", \"" 
+                    + plot_leg_horiz + "\", \"" 
+                    + plot_leg_pos + "\", \"" 
+                    + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
             RCenter.recordRCommand(RC, rCommand);
             sb.addGraphicsCMD(imgName, rCommand);
             RC.voidEval(rCommand);
@@ -521,10 +556,16 @@ public static boolean PlotLinearResidFitCA(SessionBean1 sb,
         }
     }
 
-    public static void PlotLogisticROCCA(SessionBean1 sb, String type, String imgName, String format, int dpi) {
+    public static void PlotLogisticROCCA(SessionBean1 sb,
+            String type, String plot_palette, String plot_title,
+            String imgName, String format, int dpi) {
         try {
             RConnection RC = sb.getRConnection();
-            String rCommand = "plot.ROC.logReg(NA" + ", \"" + type + "\", \""  + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
+            String rCommand = "log.ROC.plot(NA" + ", \"" + type + "\", \""  
+                    + type + "\", \"" 
+                    + plot_palette + "\", \"" 
+                    + plot_title + "\", \"" 
+                    + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
             RCenter.recordRCommand(RC, rCommand);
             sb.addGraphicsCMD(imgName, rCommand);
             RC.voidEval(rCommand);

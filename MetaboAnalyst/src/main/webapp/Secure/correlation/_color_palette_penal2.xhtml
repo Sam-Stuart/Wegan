@@ -7,45 +7,61 @@
                 xmlns:p="http://primefaces.org/ui">
 
 
-    <h:form id="linGraph3">
+    <h:form id="penalGraph2">
         <h:panelGrid columns="1" style="width:380px;">
             <h:panelGrid id="panelGrid1" columns="2" cellpadding="5" columnClasses="colBrayLong,colBrayShort">
+                
+<!--                <h3>On-Plot Display Options</h3>
+                <p:panelGrid></p:panelGrid>                
+                
+                <h:outputLabel style="font-weight: bold" value="Show Equation on Plot:"/>
+                <p:selectBooleanCheckbox value ="hash{penalCABean.doPlotEq}"/> 
+                
+                <h:outputLabel style="font-weight: bold" value="Show R-squared on Plot:"/>
+                <p:selectBooleanCheckbox value ="hash{penalCABean.doPlotRsq}"/> 
+                                
+                <h:outputLabel style="font-weight: bold" value="Show Adjusted R-squared on Plot:"/>
+                <p:selectBooleanCheckbox value ="hash{penalCABean.doPlotRsqAdj}"/> -->
                 
                 <h3>Line and Point Options</h3>
                 <p:panelGrid></p:panelGrid>
 
                 <h:outputLabel style="font-weight: bold" value="Point Color:"/>
-                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linearCABean.corColorDotsOpts}">
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{penalCABean.corColorDotsOpts}">
                     <f:selectItems value="#{applicationBean1.corLinColorDotsOpts}" />
                 </p:selectOneMenu> 
                 
                 <h:outputLabel style="font-weight: bold" value="Line Color:"/>
-                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linearCABean.corColorLineOpts}">
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{penalCABean.corColorLineOpts}">
                     <f:selectItems value="#{applicationBean1.corLinColorLineOpts}" />
                 </p:selectOneMenu>  
-                 
+                                
+                <h:outputLabel style="font-weight: bold" value="Show 95% Confidence Interval:"/>
+                <p:selectBooleanCheckbox value ="#{penalCABean.doPlotConfInt}"/> 
+                
                 <h3>Titles</h3>
                 <p:panelGrid></p:panelGrid>                 
                 
                 <h:outputLabel style="font-weight: bold" value="Plot Title:"/>
-                <p:inputText value = "#{linearCABean.corPlotTitle}"/> 
+                <p:inputText value = "#{penalCABean.corPlotTitle}"/> 
                 
                 <h:outputLabel style="font-weight: bold" value="X-Axis Label"/>
-                <p:inputText value = "#{linearCABean.corPlotXlab}"/> 
+                <p:inputText value = "#{penalCABean.corPlotXlab}"/> 
                 
                  <h:outputLabel style="font-weight: bold" value="Y-Axis Label"/>
-                <p:inputText value = "#{linearCABean.corPlotYlab}"/> 
+                <p:inputText value = "#{penalCABean.corPlotYlab}"/> 
                 
                 <!--<p:panelGrid></p:panelGrid>-->
 
             </h:panelGrid>
-            <h:panelGrid id="panelGrid3" columns="1" cellpadding="5" style="float: right">
+            <h:panelGrid id="panelGrid2" columns="1" cellpadding="5" style="float: right">
                 <p:commandButton value="Update" 
                                  styleClass="updateButton"
                                  style="box-shadow: none !important; text-shadow: none !important"
                                 onclick="PF('statusDialog').show()"
-                                oncomplete="PF('graphApperanceLinear3').hide(); setTimeout(function() {renderNormalityPlot('corr_linear_normres.json', 'my_dataviz2'); PF('statusDialog').hide()}, 2000)"                                update=":linCA:form3:corrLinPane3  :cmdPane"
-                                actionListener="#{linearCABean.corrLin3Btn_action()}"/>
+                                oncomplete="PF('graphApperancePenal').hide(); PF('statusDialog').hide()"  
+                                update=":pena2:corrPenalPane2  :cmdPane"
+                                actionListener="#{penalCABean.penalizedUpdate2_action()}"/>
             </h:panelGrid>
         </h:panelGrid>
     </h:form>

@@ -5,6 +5,7 @@
  */
 package metaboanalyst.controllers.correlation;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,6 +13,7 @@ import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.model.SelectItem;
 import metaboanalyst.controllers.SessionBean1;
+import metaboanalyst.models.User;
 import metaboanalyst.rwrappers.UniVarTests;
 import metaboanalyst.rwrappers.CAUtils;
 import metaboanalyst.rwrappers.RDataUtils;
@@ -30,6 +32,25 @@ public class PenalizedCABean implements Serializable {
 
     private final SessionBean1 sb = (SessionBean1) DataUtils.findBean("sessionBean1");
 
+      //TABLES FOR DOWNLOAD
+    private User usr = sb.getCurrentUser();
+    private String usrName = usr.getName();
+    
+    
+    private String filePenModVals = "penalized_regression_summary.txt";
+//            getSummaryLinDownload();
+    private String filePenModValsPath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + filePenModVals + "\">" + filePenModVals + "</a>";
+ 
+    public String getFilePenModValsPath() {
+        return filePenModValsPath;
+    }
+        
+    public void setFilePenModValsPath(String filePenModValsPath) {
+        this.filePenModValsPath = filePenModValsPath;
+    } 
+
+    
+    
     private boolean addWeights = false;
     
     public boolean isaddWeights() {
@@ -75,6 +96,7 @@ public class PenalizedCABean implements Serializable {
         this.columnNameB = columnNameB;
     }
     
+    
        // CHECK BOX for using normalized data (default) or original data
     private boolean doOriginal = false;
 
@@ -85,40 +107,7 @@ public class PenalizedCABean implements Serializable {
     public void setdoOriginal(boolean doOriginal) {
         this.doOriginal = doOriginal;
     }
-    
-    // CHECK BOX for adding (default) or omitting equation to plot (at top), see correlation_linear.R 
-  // when >1 of rsq, eq, & rsqadj are checked, values are seperated by " | " 
-     private boolean doPlotEq = false;
-
-    public boolean isdoPlotEq() {
-        return doPlotEq;
-    }
-
-    public void setdoPlotEq(boolean doPlotEq) {
-        this.doPlotEq = doPlotEq;
-    } 
-  // CHECK BOX for adding (default) or omitting rsq to plot (at top), see correlation_linear.R 
-  // when >1 of rsq, eq, & rsqadj are checked, values are seperated by " | " 
-     private boolean doPlotRsq = false;
-
-    public boolean isdoPlotRsq() {
-        return doPlotRsq;
-    }
-
-    public void setdoPlotRsq(boolean doPlotRsq) {
-        this.doPlotRsq = doPlotRsq;
-    }     
-  // CHECK BOX for omitting (default) or adding rsq-adj to plot (at top), see correlation_linear.R 
-  // when >1 of rsq, eq, & rsqadj are checked, values are seperated by " | " 
-     private boolean doPlotRsqAdj = false;
-
-    public boolean isdoPlotRsqAdj() {
-        return doPlotRsqAdj;
-    }
-
-    public void setdoPlotRsqAdj(boolean doPlotRsqAdj) {
-        this.doPlotRsqAdj = doPlotRsqAdj;
-    }  
+   
   // CHECK BOX for omitting (default) or adding confidence interval to line, see correlation_linear.R 
      private boolean doPlotConfInt = false;
 

@@ -44,7 +44,7 @@
                                  styleClass="updateButton"
                                  style="box-shadow: none !important; text-shadow: none !important"
                                 onclick="PF('statusDialog').show()"
-                                oncomplete="PF('graphApperanceLinear4').hide(); PF('statusDialog').hide()"  
+                                oncomplete="PF('graphApperanceLinear4').hide(); setTimeout(function() {renderResFitPlot('corr_linear_resfit.json', 'my_dataviz3'); PF('statusDialog').hide()}, 2000)"  
                                 update=":linCA:form4:corrLinPane4  :cmdPane"
                                 actionListener="#{linearCABean.corrLin4Btn_action()}"/>
             </h:panelGrid>

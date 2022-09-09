@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+
+    <h:form id="logGraph2">
+        <h:panelGrid columns="1" style="width:380px;">
+            <h:panelGrid id="panelGrid1" columns="2" cellpadding="5" columnClasses="colBrayLong,colBrayShort">
+                
+                <h3>Plot and Color</h3>
+                <p:panelGrid></p:panelGrid>
+                
+                <h:outputLabel style="font-weight: bold" value="Color Palette:"/>
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{logCABean.corPaletteOpts}">
+                    <f:selectItems value="#{applicationBean1.corColorPaletteOpts}" />
+                </p:selectOneMenu>  
+                                
+                <h:outputLabel style="font-weight: bold" value="Show 95% Confidence Interval:"/>
+                <p:selectBooleanCheckbox value ="#{logCABean.doPlotConfInt}"/> 
+                
+                <h3>Legend and Axis</h3>
+                <p:panelGrid></p:panelGrid>
+                
+                <h:outputLabel style="font-weight: bold" value="Legend Position"/>
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{logCABean.corPlotLegPosOpts}">
+                    <f:selectItems value="#{applicationBean1.corLegPosOpts}" />
+                </p:selectOneMenu> 
+                
+                <h:outputLabel style="font-weight: bold" value="Show Legend Horizontally:"/>
+                <p:selectBooleanCheckbox value ="#{logCABean.doPlotLegHoriz}"/> 
+                
+                <h:outputLabel style="font-weight: bold" value="Rotate x-tick labels:"/>
+                <p:selectBooleanCheckbox value ="#{logCABean.doLabelXtickRotate}"/>     
+                
+                <h3>Titles and Legend</h3>
+                <p:panelGrid></p:panelGrid>    
+                
+                <h:outputLabel style="font-weight: bold" value="Plot Title:"/>
+                <p:inputText value = "#{logCABean.corPlotTitle}"/> 
+                
+                <h:outputLabel style="font-weight: bold" value="X-Axis Label"/>
+                <p:inputText value = "#{logCABean.corPlotXlab}"/> 
+                
+                 <h:outputLabel style="font-weight: bold" value="Y-Axis Label"/>
+                <p:inputText value = "#{logCABean.corPlotYlab}"/> 
+                
+                <!--<p:panelGrid></p:panelGrid>-->
+
+            </h:panelGrid>
+            <h:panelGrid id="panelGrid2" columns="1" cellpadding="5" style="float: right">
+                <p:commandButton value="Update" 
+                                 styleClass="updateButton"
+                                 style="box-shadow: none !important; text-shadow: none !important"
+                                onclick="PF('statusDialog').show()"
+                                oncomplete="PF('graphApperanceLog').hide(); PF('statusDialog').hide()"  
+                                update=":logCA:form1:corrLogPane1  :cmdPane"
+                                actionListener="#{logCABean.corrLogBtn2_action()}"/>
+            </h:panelGrid>
+        </h:panelGrid>
+    </h:form>
+</ui:composition>

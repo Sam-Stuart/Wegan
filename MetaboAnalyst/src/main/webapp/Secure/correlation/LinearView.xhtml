@@ -18,15 +18,15 @@
         <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
             <h1>Linear Regression:</h1>
             <p:tabView id="linCA" style="border-bottom-color: #8cbd48 !important">
-                <p:tab title ="Line of Best Fit" titleStyleClass="p-tab-nav">
+                <p:tab title ="Line of Best Fit Plot" titleStyleClass="p-tab-nav">
                     <h:form id="form1">
                         <p style="font-size: 13px">
                             <!--add a hyperlink: from CaUploadView: /home/gina/Desktop/Wegan/MetaboAnalyst/src/main/webapp/upload/CaUploadView.xhtml : Iris setosa, Iris versicolor, and Iris virginica. Variables are labeled, but samples are not. (<a href="">view data set</a>) (<a href="https:/www.rdocumentation.org/packages/datasets/versions/3.6.2/topics/iris">Becker, R. <i>et al. The New S Language</i>. 1988. </a>)--> 
                             A dependent variable (x-axis) and an independent variable (y-axis) are correlated using a linear model. Along with Pearson R statistics, the line of best fit indicates how closely correlated the two variables are. (<a href="https:/www.rdocumentation.org/packages/stats/versions/3.6.2/topics/lm">Chambers, R. M. <i> Linear models. Chapter 4 of Statistical Models in S</i>. 1992. </a>)
                         </p>
                       <!--colLeftLong25 colRightShort30 colRight35 colLeft20 colBrayLong40 colBrayShort15-->
-                      <h:panelGrid id="panelGrid" columns="5" cellpadding="3" columnClasses="colLeft,colRightShort,colLeft,colRightShort, colLast">
-                    <!--<h:panelGrid id="panelGrid" columns="5" cellpadding="3" columnClasses="colLeft,colRight,colLeft,colRight, colLast">-->
+                      <!--<h:panelGrid id="panelGrid" columns="5" cellpadding="3" columnClasses="colLeft,colRightShort,colLeft,colRightShort, colLast">-->
+                    <h:panelGrid id="panelGrid" columns="5" cellpadding="3" columnClasses="colLeftLong,colRight,colLeftLong,colRight, colLast">
                             <h:outputLabel style="font-weight: bold" value="Dependant Variable:"/>
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linearCABean.corrColumnNameA}">
                                 <f:selectItems value="#{linearCABean.corrColumnOpts}" />
@@ -55,7 +55,7 @@
                                              styleClass="updateButton"
                                              style="box-shadow: none !important; text-shadow: none !important"
                                             onclick="PF('statusDialog').show()"
-                                            oncomplete="PF('statusDialog').hide();"  
+                                            oncomplete="setTimeout(function () {renderLinearBestFit('corr_linear.json', 'my_dataviz'); PF('statusDialog').hide()}, 2000)" 
                                             update=":linCA:form1:corrLinPane1  :cmdPane" 
                                             actionListener="#{linearCABean.corrLin1Btn_action()}"/> 
                             
@@ -69,11 +69,11 @@
                             </h:panelGroup>
                          <h:panelGroup>
                                 <h:panelGrid columns="3" class="resultsImages">
-                                    <i id="question" class="fa fa-question-circle" title="Only numeric variables are used in linear correlation. The linear model can be written in the form (Y = X * Beta + epsilon), where: y = dependent variable; x = independent variable; Beta = regression parameter coefficients (including the intercept); Epsilon = error values (the sum of all other influences on Y after accounting for X).
+                                    <i id="question" class="fa fa-question-circle" title="Only numeric variables are used in linear correlation. The linear model can be written in the form (y = x * &#946; + &#949;), where y = dependent variable; x = independent variable; &beta; = regression parameter coefficients; and &epsilon; = error values.
 
-The model makes several assumptions about the error term, namely linearity, normality, homoscedasticity, independence, and that the model is not disproportionately influenced by outliers. 
+The model makes several assumptions, namely linearity, normality, homoscedasticity, independence, and that the model is not disproportionately influenced by outliers. Tests for these assumptions include the RESET for linearity(J.B. Ramsey (1969), Tests for Specification Errors in Classical Linear Least-Squares Regression Analysis. Journal of the Royal Statistical Society, Series B 31, 350--371); Kruskal-Wallis for normality(); Breusch-Pagan for homoscedasticity (T.S. Breusch and A.R. Pagan (1979), A Simple Test for Heteroscedasticity and Random Coefficient Variation. Econometrica 47, 1287--1294); and Durbin-Watson for autocorrelation (J. Durbin and G.S. Watson (1950), Testing for Serial Correlation in Least Squares Regression I. Biometrika 37, 409--428) 
 
-The R-squared value is the fraction of variance explained by the model; the adjusted R-squared value is the R-squared value adjusted for the number of predictors in a regression model. The confidence interval represents the level of certainty about the predicted values; if the same procedure was repeatedly used to make new estimates, the confidence interval would contain the average of all the estimates 95% of the time. https://www.census.gov/programs-surveys/saipe/guidance/confidence-intervals.html "></i>
+The R &#xb2; value is the fraction of variance explained by the model and is a value from 0 to 1. The adjusted R &#xb2; value is the R &#xb2; value adjusted for the number of predictors in the model. R &#xb2; is used to assess how well a model fits the data, with a higher R &#xb2; value indicating a better model fit. The confidence interval represents the level of certainty about the predicted values; if the same procedure was repeatedly used to make new estimates, the confidence interval would contain the average of all the estimates 95% of the time. https://www.census.gov/programs-surveys/saipe/guidance/confidence-intervals.html "></i>
                                 </h:panelGrid>
                             </h:panelGroup>   
                         </h:panelGrid>
@@ -93,6 +93,7 @@ The R-squared value is the fraction of variance explained by the model; the adju
                                     oncomplete="PF('graphDialog').show()"/>
                             </h:panelGrid> 
                              <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <div id="my_dataviz_title"></div>
                                  <div id="my_dataviz"></div>
                             </h:panelGrid>  
                             
@@ -101,10 +102,10 @@ The R-squared value is the fraction of variance explained by the model; the adju
                 </p:tab>
                 <p:tab title ="Predicted vs Actual Plot" titleStyleClass="p-tab-nav">
                     <h:form id="form2">
-                        <p>
+                        <p style="font-size: 13px">
                             A dependent variable and an independent variable are correlated using a linear model. Predicted values are plotted against actual data, representing a measure of correlation.
                         </p>
-                        <h:panelGrid id="panelGrid2" columns="5" cellpadding="3" columnClasses="colLeft,colRightShort,colLeft,colRightShort, colLast">
+                        <h:panelGrid id="panelGrid2" columns="5" cellpadding="3" columnClasses="colLeftLong,colRight,colLeftLong,colRight, colLast">
                        <!--"colLeft,colRightShort,colLeft,colRightShort, colLast"-->
                             <h:outputLabel style="font-weight: bold" value="Dependant Variable:"/>
                                 <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linearCABean.corrColumnNameA}">
@@ -113,6 +114,7 @@ The R-squared value is the fraction of variance explained by the model; the adju
                             
                             <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
                                 <p:selectBooleanCheckbox value ="#{linearCABean.doOriginal}"/> 
+                                
                             <p:panelGrid></p:panelGrid>
                             
                             <h:outputLabel style="font-weight: bold" value="Independant Variable:"/>
@@ -121,19 +123,20 @@ The R-squared value is the fraction of variance explained by the model; the adju
                                 </p:selectOneMenu>
                         </h:panelGrid>
                         
+                         <h:panelGrid></h:panelGrid>    
                         <h:panelGrid id="panelGrid1" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;">                   
-                              <p:commandButton value="Customize Graph"
+                            <p:commandButton value="Customize Graph"
                                              styleClass="graphicsButton"
                                              style="box-shadow: none !important; text-shadow: none !important;"
                                              actionListener="#{sessionBean1.graphicsLnk_action('corr_linear_pred')}" 
                                             oncomplete="PF('graphApperanceLinear2').show()"/>  
                               
-                              <p:commandButton value="Update" 
+                            <p:commandButton value="Update" 
                                              styleClass="updateButton"
                                              style="box-shadow: none !important; text-shadow: none !important"
                                             onclick="PF('statusDialog').show()"
-                                            oncomplete="PF('statusDialog').hide()"  
-                                            update=":linCA:form2:panelGrid2  :cmdPane" 
+                                            oncomplete="setTimeout(function() {renderLinearBestFit('corr_linear_pred.json', 'my_dataviz1'); PF('statusDialog').hide()}, 2000)"  
+                                            update=":linCA:form2:corrLinPane2 :cmdPane" 
                                             actionListener="#{linearCABean.corrLin2Btn_action()}"/>     
                               
                         </h:panelGrid>
@@ -146,15 +149,10 @@ The R-squared value is the fraction of variance explained by the model; the adju
                             </h:panelGroup> 
                             <h:panelGroup>
                                 <h:panelGrid columns="3" class="resultsImages">
-                                    <i id="question" class="fa fa-question-circle" title="Based on the linear model generated, the predicted response variable is plotted against the actual variable. The linear model can be written in the form (Y = X * Beta + epsilon), where:
-Y = dependent variable; 
-X = independent variable;
-Beta = regression parameter coefficients (including the intercept);
-Epsilon = error values (the sum of all other influences on Y after accounting for X)
-
+                                    <i id="question" class="fa fa-question-circle" title="Based on the linear model generated, the predicted response variable is plotted against the actual variable. The linear model can be written in the form (y = x * &#946; + &#949;), where y = dependent variable; x = independent variable; &beta; = regression parameter coefficients; and &epsilon; = error values.                          
 The model makes several assumptions about the error term, namely linearity, normality, homoscedasticity, independence, and that the model is not disproportionately influenced by outliers. 
 
-The R-squared value is the fraction of variance explained by the model; the adjusted R-squared value is the R-squared value adjusted for the number of predictors in a regression model. The confidence interval represents the level of certainty about the predicted values; if the same procedure was repeatedly used to make new estimates, the confidence interval would contain the average of all the estimates 95% of the time. https://www.census.gov/programs-surveys/saipe/guidance/confidence-intervals.html "></i>
+The R &#xb2; value is the fraction of variance explained by the model and is a value from 0 to 1. The adjusted R &#xb2; value is the R &#xb2; value adjusted for the number of predictors in the model. R &#xb2; is used to assess how well a model fits the data, with a higher R &#xb2; value indicating a better model fit. The confidence interval represents the level of certainty about the predicted values; if the same procedure was repeatedly used to make new estimates, the confidence interval would contain the average of all the estimates 95% of the time. https://www.census.gov/programs-surveys/saipe/guidance/confidence-intervals.html "></i>
                                 </h:panelGrid>
                             </h:panelGroup>
                           </h:panelGrid>
@@ -169,7 +167,8 @@ The R-squared value is the fraction of variance explained by the model; the adju
                             </h:panelGrid>                               
                              
                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
-                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_linear_pred')}" alt="CorrelationLinearPredictimage"/>
+                                <div id="my_dataviz1_title"></div>
+                                <div id="my_dataviz1"></div>
                             </h:panelGrid>                                                   
 <!--                            <h:panelGroup>
                                 <h:panelGrid columns="3" class="resultsImages">
@@ -191,7 +190,7 @@ The R-squared value is the fraction of variance explained by the model; the adju
                         <p>
                             Normality of residuals is one of the assumptions for a linear model. This plot (also called a 'Q-Q' plot) checks this assumption by comparing the distribution of standardized model residuals (empirical) and the theoretical normal distribution. In interpreting the plot, the closer the points are to the diagonal line, the better the evidence that the residuals are normally distributed. (<a href="https://sscc.wisc.edu/sscc/pubs/RegDiag-R/normality.html">UMadison, Statistics Dept. <i> Normality. Regression Diagnostics with R</i>. 2021. </a>)
                         </p>
-                        <h:panelGrid id="panelGrid3" columns="5" cellpadding="3" columnClasses="colLeft,colRightShort,colLeft,colRightShort, colLast">
+                        <h:panelGrid id="panelGrid3" columns="5" cellpadding="3" columnClasses="colLeftLong,colRight,colLeftLong,colRight, colLast">
                        <!--"colLeft,colRightShort,colLeft,colRightShort, colLast"-->
                             <h:outputLabel style="font-weight: bold" value="Dependant Variable:"/>
                                 <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linearCABean.corrColumnNameA}">
@@ -207,20 +206,19 @@ The R-squared value is the fraction of variance explained by the model; the adju
                                     <f:selectItems value="#{linearCABean.corrColumnOpts}" />
                                 </p:selectOneMenu>
                         </h:panelGrid>
-                        
+                         <h:panelGrid></h:panelGrid>    
                         <h:panelGrid id="panelGrid1" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;">                   
-                              <p:commandButton value="Customize Graph"
+                            <p:commandButton value="Customize Graph"
                                              styleClass="graphicsButton"
                                              style="box-shadow: none !important; text-shadow: none !important;"
                                              actionListener="#{sessionBean1.graphicsLnk_action('corr_linear_normres')}" 
                                             oncomplete="PF('graphApperanceLinear3').show()"/>  
                               
-                              <p:commandButton value="Update" 
+                            <p:commandButton value="Update" 
                                              styleClass="updateButton"
                                              style="box-shadow: none !important; text-shadow: none !important"
                                             onclick="PF('statusDialog').show()"
-                                            oncomplete="PF('statusDialog').hide()"  
-                                            update=":linCA:form3:panelGrid3  :cmdPane" 
+                                            oncomplete="setTimeout(function() {renderNormalityPlot('corr_linear_normres.json', 'my_dataviz2'); PF('statusDialog').hide()}, 2000)"                                              update=":linCA:form3:corrLinPane3  :cmdPane" 
                                             actionListener="#{linearCABean.corrLin3Btn_action()}"/>     
                               
                         </h:panelGrid>
@@ -235,7 +233,7 @@ The R-squared value is the fraction of variance explained by the model; the adju
                                 <h:panelGrid columns="3" class="resultsImages">
                                     <i id="question" class="fa fa-question-circle" title="Based on the linear model generated, the standardized residuals are plotted against the theoretical normal distribution to test for normality of residuals. The linear model model makes several assumptions namely linearity, normality, homoscedasticity of residuals, independence of error terms, and that the model is not disproportionately influenced by outliers. 
 
-The R-squared value is the fraction of variance explained by the model; the adjusted R-squared value is the R-squared value adjusted for the number of predictors in a regression model. The confidence interval represents the level of certainty about the predicted values; if the same procedure was repeatedly used to make new estimates, the confidence interval would contain the average of all the estimates 95% of the time. https://www.census.gov/programs-surveys/saipe/guidance/confidence-intervals.html "></i>
+The R &#xb2; value is the fraction of variance explained by the model and is a value from 0 to 1. The adjusted R &#xb2; value is the R &#xb2; value adjusted for the number of predictors in the model. R &#xb2; is used to assess how well a model fits the data, with a higher R &#xb2; value indicating a better model fit. The confidence interval represents the level of certainty about the predicted values; if the same procedure was repeatedly used to make new estimates, the confidence interval would contain the average of all the estimates 95% of the time. https://www.census.gov/programs-surveys/saipe/guidance/confidence-intervals.html "></i>
                                 </h:panelGrid>
                             </h:panelGroup>
                           </h:panelGrid>
@@ -250,7 +248,8 @@ The R-squared value is the fraction of variance explained by the model; the adju
                             </h:panelGrid>                               
                              
                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
-                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_linear_normres')}" alt="CorrelationLinearNormResimage"/>
+                                <div id="my_dataviz2_title"></div>
+                                <div id="my_dataviz2"></div>
                             </h:panelGrid>                                                   
                       </h:panelGrid>
                     </h:form>
@@ -259,9 +258,9 @@ The R-squared value is the fraction of variance explained by the model; the adju
                 <p:tab title ="Residuals vs Fitted Plot" titleStyleClass="p-tab-nav">
                     <h:form id="form4">
                         <p>
-                            Linearity is one of the assumptions for a linear model. This plot checks this assumption by comparing the model residuals and predicted values ('Fitted'). In interpreting the plot, if the mean of residuals does not deviate from zero this can be taken as evidence that the assumption of linearity holds.
+                            Linearity is one of the assumptions for a linear model. This plot checks this assumption by comparing the model residuals and predicted values ('fitted' or &#375; values). In interpreting the plot, if the mean of residuals does not deviate from zero this can be taken as evidence that the assumption of linearity holds.
                         </p>
-                        <h:panelGrid id="panelGrid4" columns="5" cellpadding="3" columnClasses="colLeft,colRightShort,colLeft,colRightShort, colLast">
+                        <h:panelGrid id="panelGrid4" columns="5" cellpadding="3" columnClasses="colLeftLong,colRight,colLeftLong,colRight, colLast">
                         <!-- how to word the linearity assumption https:/sscc.wisc.edu/sscc/pubs/RegDiag-R/linearity.html-->
                        <!--"colLeft,colRightShort,colLeft,colRightShort, colLast"-->
                             <h:outputLabel style="font-weight: bold" value="Dependant Variable:"/>
@@ -278,7 +277,7 @@ The R-squared value is the fraction of variance explained by the model; the adju
                                     <f:selectItems value="#{linearCABean.corrColumnOpts}" />
                                 </p:selectOneMenu>
                         </h:panelGrid>
-                        
+                         <h:panelGrid></h:panelGrid>    
                         <h:panelGrid id="panelGrid1" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;">                   
                               <p:commandButton value="Customize Graph"
                                              styleClass="graphicsButton"
@@ -290,8 +289,8 @@ The R-squared value is the fraction of variance explained by the model; the adju
                                              styleClass="updateButton"
                                              style="box-shadow: none !important; text-shadow: none !important"
                                             onclick="PF('statusDialog').show()"
-                                            oncomplete="PF('statusDialog').hide()"  
-                                            update=":linCA:form4:panelGrid4  :cmdPane" 
+                                            oncomplete="setTimeout(function() {renderResFitPlot('corr_linear_resfit.json', 'my_dataviz3'); PF('statusDialog').hide()}, 2000)"                                            
+                                            update=":linCA:form4:corrLinPane4  :cmdPane" 
                                             actionListener="#{linearCABean.corrLin4Btn_action()}"/>     
                               
                         </h:panelGrid>
@@ -304,14 +303,14 @@ The R-squared value is the fraction of variance explained by the model; the adju
                             </h:panelGroup> 
                             <h:panelGroup>
                                 <h:panelGrid columns="3" class="resultsImages">
-                                    <i id="question" class="fa fa-question-circle" title="The linear model can be written in the form (Y = X * Beta + epsilon), where y = dependent variable; x = independent variable; Beta = regression parameter coefficients; and Epsilon = error values. 
+                                    <i id="question" class="fa fa-question-circle" title="The linear model can be written in the form (y = x * &#946; + &#949;), where y = dependent variable; x = independent variable; &beta; = regression parameter coefficients; and &epsilon; = error values. 
 The linear model model makes several assumptions namely linearity, normality, homoscedasticity of residuals, independence of error terms, and that the model is not disproportionately influenced by outliers.
 
-The R-squared value is the fraction of variance explained by the model; the adjusted R-squared value is the R-squared value adjusted for the number of predictors in a regression model. The confidence interval represents the level of certainty about the predicted values; if the same procedure was repeatedly used to make new estimates, the confidence interval would contain the average of all the estimates 95% of the time. https://www.census.gov/programs-surveys/saipe/guidance/confidence-intervals.html "></i>
+The R &#xb2; value is the fraction of variance explained by the model and is a value from 0 to 1. The adjusted R &#xb2; value is the R &#xb2; value adjusted for the number of predictors in the model. R &#xb2; is used to assess how well a model fits the data, with a higher R &#xb2; value indicating a better model fit. The confidence interval represents the level of certainty about the predicted values; if the same procedure was repeatedly used to make new estimates, the confidence interval would contain the average of all the estimates 95% of the time. https://www.census.gov/programs-surveys/saipe/guidance/confidence-intervals.html "></i>
                                 </h:panelGrid>
                             </h:panelGroup>
                           </h:panelGrid>
-                           
+                           <!--<var>R<sup>2</sup></var>--> 
                         <h:panelGrid id="corrLinPane4" style="width: 100%;">
                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
                                 <p:commandButton value="Export"
@@ -322,7 +321,8 @@ The R-squared value is the fraction of variance explained by the model; the adju
                             </h:panelGrid>                               
                              
                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
-                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_linear_resfit')}" alt="CorrelationLinearResfitimage"/>
+                                <div id="my_dataviz3_title"></div>
+                                <div id="my_dataviz3"></div>
                             </h:panelGrid>                                                   
                       </h:panelGrid>
                     </h:form>
