@@ -307,6 +307,7 @@ public class PlottingloadBean implements Serializable {
         }
         
         else if (testDataOpt.equals("Dune")) {
+
             dataType = "main";
             testFile = ab.getTestDune();
             dataFormat = "rowu";       
