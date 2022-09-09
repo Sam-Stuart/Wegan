@@ -7,7 +7,7 @@
                 xmlns:p="http://primefaces.org/ui">
 
 
-    <h:form id="linGraph">
+    <h:form id="linGraph2">
         <h:panelGrid columns="1" style="width:380px;">
             <h:panelGrid id="panelGrid1" columns="2" cellpadding="5" columnClasses="colBrayLong,colBrayShort">
                 
@@ -59,9 +59,9 @@
                                  styleClass="updateButton"
                                  style="box-shadow: none !important; text-shadow: none !important"
                                 onclick="PF('statusDialog').show()"
-                                oncomplete="PF('graphApperanceLinear').hide(); PF('statusDialog').hide(); setTimeout(render, 2000)"  
-                                update=":linCA:form1:corrLinPane1  :cmdPane"
-                                actionListener="#{linearCABean.corrLin1Btn_action()}"/>
+                                oncomplete="PF('graphApperanceLinear2').hide(); PF('statusDialog').hide()"  
+                                update=":linCA:form2:corrLinPane2  :cmdPane"
+                                actionListener="#{linearCABean.corrLin2Btn_action()}"/>
             </h:panelGrid>
         </h:panelGrid>
     </h:form>

@@ -138,6 +138,8 @@ public class ApplicationBean1 implements Serializable {
     private final SelectItem[] transNormOpts;
     private final SelectItem[] scaleNormOpts;
     private final SelectItem[] ordStressDimensionOpts;
+    private final SelectItem[] corLinColorDotsOpts;    
+    private final SelectItem[] corLinColorLineOpts;    
     private final SelectItem[] ordColorPaletteOpts;
     private final SelectItem[] pcaPairsColorPaletteOpts;
     private final SelectItem[] boxPltColorPaletteOpts;
@@ -325,6 +327,20 @@ public class ApplicationBean1 implements Serializable {
         ciaDataSetOpts[0] = new SelectItem("NULL", "Main Data Set");
         ciaDataSetOpts[1] = new SelectItem("env", "Constraining Data Set");
                 
+        corLinColorDotsOpts = new SelectItem[5];
+        corLinColorDotsOpts[0] = new SelectItem("NULL", "black");
+        corLinColorDotsOpts[1] = new SelectItem("blue", "Blue");
+        corLinColorDotsOpts[2] = new SelectItem("red", "Red");
+        corLinColorDotsOpts[3] = new SelectItem("green", "Green");
+        corLinColorDotsOpts[4] = new SelectItem("grey", "Grey");
+
+        corLinColorLineOpts = new SelectItem[5];
+        corLinColorLineOpts[0] = new SelectItem("NULL", "black");
+        corLinColorLineOpts[1] = new SelectItem("blue", "Blue");
+        corLinColorLineOpts[2] = new SelectItem("red", "Red");
+        corLinColorLineOpts[3] = new SelectItem("green", "Green");
+        corLinColorLineOpts[4] = new SelectItem("grey", "Grey");
+        
         ordColorPaletteOpts = new SelectItem[4];
         ordColorPaletteOpts[0] = new SelectItem("NULL", "Viridis");
         ordColorPaletteOpts[1] = new SelectItem("plasma", "Plasma");
@@ -976,7 +992,15 @@ public class ApplicationBean1 implements Serializable {
     public SelectItem[] getOrdStressDimensionOpts() {
         return ordStressDimensionOpts;
     }
-        
+
+    public SelectItem[] getCorLinColorDotsOpts() {
+        return corLinColorDotsOpts;
+    }
+    
+    public SelectItem[] getCorLinColorLineOpts() {
+        return corLinColorLineOpts;
+    }
+    
     public SelectItem[] getOrdColorPaletteOpts() {
         return ordColorPaletteOpts;
     }

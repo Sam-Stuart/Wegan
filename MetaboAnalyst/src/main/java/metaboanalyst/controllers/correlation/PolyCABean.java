@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
+// added:
+import javax.faces.context.FacesContext; 
 import javax.faces.model.SelectItem;
 import metaboanalyst.controllers.SessionBean1;
 import metaboanalyst.models.User;
@@ -34,16 +36,26 @@ public class PolyCABean implements Serializable {
     private String usrName = usr.getName();
     
 
-    private String fileDownload = getSummaryDownload();
-    private String fileDownloadPath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileDownload + "\">" + fileDownload + "</a>";
+    private String filePolySummary = getSummaryPolyDownload();
+//    private String filePolySummary = "polynomial_regession_summary_degree.txt";
+    private String filePolySummaryPath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + filePolySummary + "\">" + filePolySummary + "</a>";
     
-    public String getFileDownloadPath() {
-        return fileDownloadPath;
+    public String getFilePolySummaryPath() {
+        return filePolySummaryPath;
     }
 
-    public void setFileDownloadPath(String fileDownloadPath) {
-        this.fileDownloadPath = fileDownloadPath;
+    public void setFilePolySummaryPath(String filePolySummaryPath) {
+        this.filePolySummaryPath = filePolySummaryPath;
     }
+    
+    private String getSummaryPolyDownload(){
+        String degree = getPolyDegree(); 
+        String facA = getColumnNameA();
+        String facB = getColumnNameB();
+        return "polynomial_regession_summary_degree_" + degree + "_" + facA + "~" + facB + ".txt";
+    }
+
+    
     
     public boolean isaddWeights() {
         return addWeights;
@@ -88,6 +100,120 @@ public class PolyCABean implements Serializable {
         this.columnNameB = columnNameB;
     }
     
+    
+    
+      // CHECK BOX for using normalized data (default) or original data
+    private boolean doOriginal = false;
+
+    public boolean isdoOriginal() {
+        return doOriginal;
+    }
+
+    public void setdoOriginal(boolean doOriginal) {
+        this.doOriginal = doOriginal;
+    }
+  // CHECK BOX for adding (default) or omitting equation to plot (at top), see correlation_linear.R 
+  // when >1 of rsq, eq, & rsqadj are checked, values are seperated by " | " 
+     private boolean doPlotEq = false;
+
+    public boolean isdoPlotEq() {
+        return doPlotEq;
+    }
+
+    public void setdoPlotEq(boolean doPlotEq) {
+        this.doPlotEq = doPlotEq;
+    } 
+  // CHECK BOX for adding (default) or omitting rsq to plot (at top), see correlation_linear.R 
+  // when >1 of rsq, eq, & rsqadj are checked, values are seperated by " | " 
+     private boolean doPlotRsq = false;
+
+    public boolean isdoPlotRsq() {
+        return doPlotRsq;
+    }
+
+    public void setdoPlotRsq(boolean doPlotRsq) {
+        this.doPlotRsq = doPlotRsq;
+    }     
+  // CHECK BOX for omitting (default) or adding rsq-adj to plot (at top), see correlation_linear.R 
+  // when >1 of rsq, eq, & rsqadj are checked, values are seperated by " | " 
+     private boolean doPlotRsqAdj = false;
+
+    public boolean isdoPlotRsqAdj() {
+        return doPlotRsqAdj;
+    }
+
+    public void setdoPlotRsqAdj(boolean doPlotRsqAdj) {
+        this.doPlotRsqAdj = doPlotRsqAdj;
+    }  
+  // CHECK BOX for omitting (default) or adding confidence interval to line, see correlation_linear.R 
+     private boolean doPlotConfInt = false;
+
+    public boolean isdoPlotConfInt() {
+        return doPlotConfInt;
+    }
+
+    public void setdoPlotConfInt(boolean doPlotConfInt) {
+        this.doPlotConfInt = doPlotConfInt;
+    }    
+    
+ //STATIC DROPDOWN for selecting colour of dots on plot
+//    replaced: corColorOpts
+    private String corColorDotsOpts = "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corColorOpts
+
+    public String getCorColorDotsOpts() {
+        return corColorDotsOpts;
+    }
+
+    public void setCorColorDotsOpts(String corColorDotsOpts) {
+        this.corColorDotsOpts = corColorDotsOpts;
+    }
+
+ //STATIC DROPDOWN for selecting colour of line on plot
+    private String corColorLineOpts = "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corColorOpts
+
+    public String getCorColorLineOpts() {
+        return corColorLineOpts;
+    }
+
+    public void setCorColorLineOpts(String corColorLineOpts) {
+        this.corColorLineOpts = corColorLineOpts;
+    }
+    
+  
+  // TEXT BOX 
+    private String corPlotTitle = " ";
+    
+    public String getCorPlotTitle() {
+        return corPlotTitle;
+    }
+
+    public void setCorPlotTitle(String corPlotTitle) {
+        this.corPlotTitle = corPlotTitle;
+    }
+ 
+  // TEXT BOX 
+    private String corPlotXlab = " ";
+    
+    public String getCorPlotXlab() {
+        return corPlotXlab;
+    }
+
+    public void setCorPlotXlab(String corPlotXlab) {
+        this.corPlotXlab = corPlotXlab;
+    }       
+    
+ // TEXT BOX 
+    private String corPlotYlab = " ";
+    
+    public String getCorPlotYlab() {
+        return corPlotYlab;
+    }
+
+    public void setCorPlotYlab(String corPlotYlab) {
+        this.corPlotYlab = corPlotYlab;
+    }   
+    
+    
     private SelectItem[] degreeOpts = null;
     
     public SelectItem[] getDegreeOpts(){
@@ -124,21 +250,28 @@ public class PolyCABean implements Serializable {
     
         // ACTION BUTTONS //
     public void corrPoly1Btn_action() {
-        CAUtils.CreatePolynomialModel(sb, columnNameA, columnNameB);
-        CAUtils.PlotPolynomialCA(sb, polyDegree, sb.getNewImage("corr_poly"), "png", 72);
+        CAUtils.CreatePolynomialModel(sb, columnNameA, columnNameB, doOriginal);
+        
+        CAUtils.PlotPolynomialCA(sb, polyDegree, doOriginal,
+                corColorDotsOpts, corColorLineOpts, doPlotConfInt,
+                doPlotEq, doPlotRsq, doPlotRsqAdj,
+               corPlotTitle, corPlotXlab, corPlotYlab,
+                 sb.getNewImage("corr_poly"), "png", 72);
     }
     // ACTION BUTTONS //
     public void corrPolyPredBtn_action() {
-        CAUtils.CreatePolynomialModel(sb, columnNameA, columnNameB);
-        CAUtils.PlotPolynomialCA(sb, polyDegree, sb.getNewImage("corr_poly"), "png", 72);
-        CAUtils.PlotPolynomialPredictCA(sb, 2, sb.getNewImage("corr_poly_pred"), "png", 72);
+        CAUtils.CreatePolynomialModel(sb, columnNameA, columnNameB, doOriginal);
+        CAUtils.PlotPolynomialCA(sb, polyDegree, doOriginal,
+                corColorDotsOpts, corColorLineOpts, doPlotConfInt,
+                doPlotEq, doPlotRsq, doPlotRsqAdj,
+               corPlotTitle, corPlotXlab, corPlotYlab,
+                sb.getNewImage("corr_poly"), "png", 72);
+        CAUtils.PlotPolynomialPredictCA(sb, 
+                polyDegree, doOriginal,
+                corColorDotsOpts, corColorLineOpts, doPlotConfInt,
+               corPlotTitle, corPlotXlab, corPlotYlab,
+                sb.getNewImage("corr_poly_pred"), "png", 72);
     }  
     
     
-    private String getSummaryDownload(){
-        String degree = getPolyDegree(); 
-        String facA = getColumnNameA();
-        String facB = getColumnNameB();
-        return "polynomial_regession_summary_degree_" + degree + "_" + facA + "~" + facB + ".txt";
-    }
 }

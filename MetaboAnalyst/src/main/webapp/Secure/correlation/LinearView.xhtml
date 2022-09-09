@@ -9,93 +9,135 @@
     <ui:define name="metaInfo">
         <f:event type="preRenderView" listener="#{caBean.performDefaultAnalysis('Linear')}"/> 
     </ui:define>
+    <ui:define name="myscript">
+        <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/jscripts/d3.min.js"></script>
+        <script type="text/javascript" src="./LinearCorrelation.js"></script>
+    </ui:define>
     <ui:define name="content">
+                 <h:inputHidden id="mydir" value="#{sessionBean1.currentUser.relativeDir}" />
         <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
             <h1>Linear Regression:</h1>
             <p:tabView id="linCA" style="border-bottom-color: #8cbd48 !important">
                 <p:tab title ="Line of Best Fit" titleStyleClass="p-tab-nav">
                     <h:form id="form1">
                         <p style="font-size: 13px">
-                            A dependent variable (x-axis) and an independent variable (y-axis) are correlated using a linear model. Along with Pearson R statistics, the line of best fit indicates how closely correlated the two variables are. Only numeric variables are used to build the model.               
+                            <!--add a hyperlink: from CaUploadView: /home/gina/Desktop/Wegan/MetaboAnalyst/src/main/webapp/upload/CaUploadView.xhtml : Iris setosa, Iris versicolor, and Iris virginica. Variables are labeled, but samples are not. (<a href="">view data set</a>) (<a href="https:/www.rdocumentation.org/packages/datasets/versions/3.6.2/topics/iris">Becker, R. <i>et al. The New S Language</i>. 1988. </a>)--> 
+                            A dependent variable (x-axis) and an independent variable (y-axis) are correlated using a linear model. Along with Pearson R statistics, the line of best fit indicates how closely correlated the two variables are. (<a href="https:/www.rdocumentation.org/packages/stats/versions/3.6.2/topics/lm">Chambers, R. M. <i> Linear models. Chapter 4 of Statistical Models in S</i>. 1992. </a>)
                         </p>
-                        <h:panelGrid id="panelGrid" columns="5" cellpadding="3" columnClasses="colLeft,colRight,colLeft,colRight, colLast">
-                            
+                      <!--colLeftLong25 colRightShort30 colRight35 colLeft20 colBrayLong40 colBrayShort15-->
+                      <h:panelGrid id="panelGrid" columns="5" cellpadding="3" columnClasses="colLeft,colRightShort,colLeft,colRightShort, colLast">
+                    <!--<h:panelGrid id="panelGrid" columns="5" cellpadding="3" columnClasses="colLeft,colRight,colLeft,colRight, colLast">-->
                             <h:outputLabel style="font-weight: bold" value="Dependant Variable:"/>
-                            
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linearCABean.corrColumnNameA}">
                                 <f:selectItems value="#{linearCABean.corrColumnOpts}" />
                             </p:selectOneMenu>
 
-                            <h:outputLabel style="font-weight: bold" value="Include Weights:"/>
-                            <p:selectBooleanCheckbox value ="#{linearCABean.addWeights}"/> 
+                            <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
+                            <p:selectBooleanCheckbox value ="#{linearCABean.doOriginal}"/>
 
                             <p:panelGrid></p:panelGrid>
-                            
+
                             <h:outputLabel style="font-weight: bold" value="Independant Variable:"/>
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linearCABean.corrColumnNameB}">
                                 <f:selectItems value="#{linearCABean.corrColumnOpts}" />
                             </p:selectOneMenu>
-                        </h:panelGrid> 
-                        <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
-                            <p:commandButton value="Update" 
-                                            styleClass="updateButton"
-                                            style="box-shadow: none !important; text-shadow: none !important"
-                                            onclick="PF('statusDialog').show()"
-                                            oncomplete="PF('statusDialog').hide()"  
-                                            update=":linCA:form1:corrLinPane1  :cmdPane" 
-                                            actionListener="#{linearCABean.corrLin1Btn_action()}"/>  
-                        
-                        </h:panelGrid>
-                        <ui:include src="_results_bar_linear.xhtml" />
-                                  
-                        <h:panelGrid id="corrLinPane1" style="width: 100%;">
-                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px;">
-                                <h:outputLabel style="font-size: 13px; font-weight: bold" value="Formula: #{linearCABean.corrLinearResults.get(0)}"/>
-                            </h:panelGrid>
-                            <!--<h:panelGrid class="subResultsBar"></h:panelGrid>--> 
-                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px;">
-                                <h:outputLabel style="font-size: 13px; font-weight: bold" value="#{linearCABean.corrLinearResults.get(1)}"/>
-                            </h:panelGrid>
-                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px;">
-                                <h:outputLabel style="font-size: 13px; font-weight: bold" value="#{linearCABean.corrLinearResults.get(2)}"/>
-                            </h:panelGrid>
-                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
-                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_linear')}" alt="CorrerlationLinearimage"/>
-                            </h:panelGrid>                           
                             
-                        </h:panelGrid>         
+                    </h:panelGrid>                            
+                        <h:panelGrid></h:panelGrid>     
+                        <h:panelGrid id="panelGrid1" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
+                            <p:commandButton value="Customize Graph"
+                                             styleClass="graphicsButton"
+                                             style="box-shadow: none !important; text-shadow: none !important;"
+                                             actionListener="#{sessionBean1.graphicsLnk_action('corr_linear')}" 
+                                            oncomplete="PF('graphApperanceLinear').show();"/>  
+                                           
+                            <p:commandButton value="Update" 
+                                             styleClass="updateButton"
+                                             style="box-shadow: none !important; text-shadow: none !important"
+                                            onclick="PF('statusDialog').show()"
+                                            oncomplete="PF('statusDialog').hide();"  
+                                            update=":linCA:form1:corrLinPane1  :cmdPane" 
+                                            actionListener="#{linearCABean.corrLin1Btn_action()}"/> 
+                            
+                        </h:panelGrid>
+                        <!--<ui:include src="_results_bar_linear.xhtml" />-->
+                        <h:panelGrid class="resultsBar" columns="2">
+                            <h:panelGroup>
+                                <h:panelGrid columns="1" style="text-align : left;">
+                                    Results
+                                </h:panelGrid>
+                            </h:panelGroup>
+                         <h:panelGroup>
+                                <h:panelGrid columns="3" class="resultsImages">
+                                    <i id="question" class="fa fa-question-circle" title="Only numeric variables are used in linear correlation. The linear model can be written in the form (Y = X * Beta + epsilon), where: y = dependent variable; x = independent variable; Beta = regression parameter coefficients (including the intercept); Epsilon = error values (the sum of all other influences on Y after accounting for X).
+
+The model makes several assumptions about the error term, namely linearity, normality, homoscedasticity, independence, and that the model is not disproportionately influenced by outliers. 
+
+The R-squared value is the fraction of variance explained by the model; the adjusted R-squared value is the R-squared value adjusted for the number of predictors in a regression model. The confidence interval represents the level of certainty about the predicted values; if the same procedure was repeatedly used to make new estimates, the confidence interval would contain the average of all the estimates 95% of the time. https://www.census.gov/programs-surveys/saipe/guidance/confidence-intervals.html "></i>
+                                </h:panelGrid>
+                            </h:panelGroup>   
+                        </h:panelGrid>
+                        
+                        <h:panelGrid id="corrLinPane1" style="width: 100%;"> 
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
+                                    <h:outputText escape="false" value="#{linearCABean.fileLinModValsPath}"/>
+                                </i>
+                            </h:panelGrid>
+                            
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <p:commandButton value="Export"
+                                    styleClass="exportButton"
+                                    style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                    actionListener="#{sessionBean1.graphicsLnk_action('corr_linear')}"
+                                    oncomplete="PF('graphDialog').show()"/>
+                            </h:panelGrid> 
+                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                 <div id="my_dataviz"></div>
+                            </h:panelGrid>  
+                            
+                       </h:panelGrid>  
                     </h:form>
                 </p:tab>
                 <p:tab title ="Predicted vs Actual Plot" titleStyleClass="p-tab-nav">
                     <h:form id="form2">
                         <p>
-                            A dependent variable and an independent variable are correlated using a linear model. Predicted values are plotted against actual data, representing a measure of correlation....
+                            A dependent variable and an independent variable are correlated using a linear model. Predicted values are plotted against actual data, representing a measure of correlation.
                         </p>
-                        <h:panelGrid id="panelGrid2" columns="5" cellpadding="3" columnClasses="colLeft,colRight,colLeft,colRight, colLast">
-                            
+                        <h:panelGrid id="panelGrid2" columns="5" cellpadding="3" columnClasses="colLeft,colRightShort,colLeft,colRightShort, colLast">
+                       <!--"colLeft,colRightShort,colLeft,colRightShort, colLast"-->
                             <h:outputLabel style="font-weight: bold" value="Dependant Variable:"/>
-                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{polyCABean.columnNameA}">
-                                    <f:selectItems value="#{polyCABean.columnOpts}" />
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linearCABean.corrColumnNameA}">
+                                    <f:selectItems value="#{linearCABean.corrColumnOpts}" />
                                 </p:selectOneMenu>
                             
-                            <h:outputLabel style="font-weight: bold" value="Include Weights:"/>
-                                <p:selectBooleanCheckbox value ="#{polyCABean.addWeights}"/> 
+                            <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
+                                <p:selectBooleanCheckbox value ="#{linearCABean.doOriginal}"/> 
                             <p:panelGrid></p:panelGrid>
                             
                             <h:outputLabel style="font-weight: bold" value="Independant Variable:"/>
-                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{polyCABean.columnNameB}">
-                                    <f:selectItems value="#{polyCABean.columnOpts}" />
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linearCABean.corrColumnNameB}">
+                                    <f:selectItems value="#{linearCABean.corrColumnOpts}" />
                                 </p:selectOneMenu>
                         </h:panelGrid>
-                        <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
-                            <p:commandButton value="Update" 
+                        
+                        <h:panelGrid id="panelGrid1" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;">                   
+                              <p:commandButton value="Customize Graph"
+                                             styleClass="graphicsButton"
+                                             style="box-shadow: none !important; text-shadow: none !important;"
+                                             actionListener="#{sessionBean1.graphicsLnk_action('corr_linear_pred')}" 
+                                            oncomplete="PF('graphApperanceLinear2').show()"/>  
+                              
+                              <p:commandButton value="Update" 
                                              styleClass="updateButton"
                                              style="box-shadow: none !important; text-shadow: none !important"
                                             onclick="PF('statusDialog').show()"
                                             oncomplete="PF('statusDialog').hide()"  
                                             update=":linCA:form2:panelGrid2  :cmdPane" 
-                                            actionListener="#{polyCABean.corrPolyPredBtn_action()}"/>                       
+                                            actionListener="#{linearCABean.corrLin2Btn_action()}"/>     
+                              
                         </h:panelGrid>
+                        
                         <h:panelGrid class="resultsBar" columns="2">
                             <h:panelGroup>
                                 <h:panelGrid columns="1" style="text-align : left;">
@@ -104,21 +146,228 @@
                             </h:panelGroup> 
                             <h:panelGroup>
                                 <h:panelGrid columns="3" class="resultsImages">
-                                    <i class="fas fa-palette"></i>
-<!--                                                                       <i class="fas fa-table"></i>
-                                   <i class="fas fa-palette"></i>
-                                   <i class="far fa-question-circle"></i>-->
+                                    <i id="question" class="fa fa-question-circle" title="Based on the linear model generated, the predicted response variable is plotted against the actual variable. The linear model can be written in the form (Y = X * Beta + epsilon), where:
+Y = dependent variable; 
+X = independent variable;
+Beta = regression parameter coefficients (including the intercept);
+Epsilon = error values (the sum of all other influences on Y after accounting for X)
+
+The model makes several assumptions about the error term, namely linearity, normality, homoscedasticity, independence, and that the model is not disproportionately influenced by outliers. 
+
+The R-squared value is the fraction of variance explained by the model; the adjusted R-squared value is the R-squared value adjusted for the number of predictors in a regression model. The confidence interval represents the level of certainty about the predicted values; if the same procedure was repeatedly used to make new estimates, the confidence interval would contain the average of all the estimates 95% of the time. https://www.census.gov/programs-surveys/saipe/guidance/confidence-intervals.html "></i>
                                 </h:panelGrid>
-                            
-                            </h:panelGroup>                            
-                        </h:panelGrid>
-                        <h:panelGrid id="corrPolyPane2" style="text-align: center; width: 100%;">
-                            <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_poly_pred')}" alt="CorrelationPolyPredictimage"/>
-                        </h:panelGrid>        
+                            </h:panelGroup>
+                          </h:panelGrid>
+                           
+                        <h:panelGrid id="corrLinPane2" style="width: 100%;">
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <p:commandButton value="Export"
+                                    styleClass="exportButton"
+                                    style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                    actionListener="#{sessionBean1.graphicsLnk_action('corr_linear_pred')}"
+                                    oncomplete="PF('graphDialog').show()"/>
+                            </h:panelGrid>                               
+                             
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_linear_pred')}" alt="CorrelationLinearPredictimage"/>
+                            </h:panelGrid>                                                   
+<!--                            <h:panelGroup>
+                                <h:panelGrid columns="3" class="resultsImages">
+                                    <i class="fas fa-palette"></i>
+                                                                       <i class="fas fa-table"></i>
+                                   <i class="fas fa-palette"></i>
+                                   <i class="far fa-question-circle"></i>
+                                </h:panelGrid>
+                            </h:panelGroup>                            -->
+<!--                        <h:panelGrid id="corrPolyPane2" style="text-align: center; width: 100%;">
+                            <img onerror='this.style.display="none"' src="hash{sessionBean1.getCurrentImageURL('corr_poly_pred')}" alt="CorrelationPolyPredictimage"/>
+                        </h:panelGrid> -->
+                      </h:panelGrid>
                     </h:form>
                 </p:tab>
+                
+                <p:tab title ="Normality of Residuals Plot" titleStyleClass="p-tab-nav">
+                    <h:form id="form3">
+                        <p>
+                            Normality of residuals is one of the assumptions for a linear model. This plot (also called a 'Q-Q' plot) checks this assumption by comparing the distribution of standardized model residuals (empirical) and the theoretical normal distribution. In interpreting the plot, the closer the points are to the diagonal line, the better the evidence that the residuals are normally distributed. (<a href="https://sscc.wisc.edu/sscc/pubs/RegDiag-R/normality.html">UMadison, Statistics Dept. <i> Normality. Regression Diagnostics with R</i>. 2021. </a>)
+                        </p>
+                        <h:panelGrid id="panelGrid3" columns="5" cellpadding="3" columnClasses="colLeft,colRightShort,colLeft,colRightShort, colLast">
+                       <!--"colLeft,colRightShort,colLeft,colRightShort, colLast"-->
+                            <h:outputLabel style="font-weight: bold" value="Dependant Variable:"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linearCABean.corrColumnNameA}">
+                                    <f:selectItems value="#{linearCABean.corrColumnOpts}" />
+                                </p:selectOneMenu>
+                            
+                            <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
+                                <p:selectBooleanCheckbox value ="#{linearCABean.doOriginal}"/> 
+                            <p:panelGrid></p:panelGrid>
+                            
+                            <h:outputLabel style="font-weight: bold" value="Independant Variable:"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linearCABean.corrColumnNameB}">
+                                    <f:selectItems value="#{linearCABean.corrColumnOpts}" />
+                                </p:selectOneMenu>
+                        </h:panelGrid>
+                        
+                        <h:panelGrid id="panelGrid1" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;">                   
+                              <p:commandButton value="Customize Graph"
+                                             styleClass="graphicsButton"
+                                             style="box-shadow: none !important; text-shadow: none !important;"
+                                             actionListener="#{sessionBean1.graphicsLnk_action('corr_linear_normres')}" 
+                                            oncomplete="PF('graphApperanceLinear3').show()"/>  
+                              
+                              <p:commandButton value="Update" 
+                                             styleClass="updateButton"
+                                             style="box-shadow: none !important; text-shadow: none !important"
+                                            onclick="PF('statusDialog').show()"
+                                            oncomplete="PF('statusDialog').hide()"  
+                                            update=":linCA:form3:panelGrid3  :cmdPane" 
+                                            actionListener="#{linearCABean.corrLin3Btn_action()}"/>     
+                              
+                        </h:panelGrid>
+                        
+                        <h:panelGrid class="resultsBar" columns="2">
+                            <h:panelGroup>
+                                <h:panelGrid columns="1" style="text-align : left;">
+                                    Results
+                                </h:panelGrid>
+                            </h:panelGroup> 
+                            <h:panelGroup>
+                                <h:panelGrid columns="3" class="resultsImages">
+                                    <i id="question" class="fa fa-question-circle" title="Based on the linear model generated, the standardized residuals are plotted against the theoretical normal distribution to test for normality of residuals. The linear model model makes several assumptions namely linearity, normality, homoscedasticity of residuals, independence of error terms, and that the model is not disproportionately influenced by outliers. 
+
+The R-squared value is the fraction of variance explained by the model; the adjusted R-squared value is the R-squared value adjusted for the number of predictors in a regression model. The confidence interval represents the level of certainty about the predicted values; if the same procedure was repeatedly used to make new estimates, the confidence interval would contain the average of all the estimates 95% of the time. https://www.census.gov/programs-surveys/saipe/guidance/confidence-intervals.html "></i>
+                                </h:panelGrid>
+                            </h:panelGroup>
+                          </h:panelGrid>
+                           
+                        <h:panelGrid id="corrLinPane3" style="width: 100%;">
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <p:commandButton value="Export"
+                                    styleClass="exportButton"
+                                    style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                    actionListener="#{sessionBean1.graphicsLnk_action('corr_linear_normres')}"
+                                    oncomplete="PF('graphDialog').show()"/>
+                            </h:panelGrid>                               
+                             
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_linear_normres')}" alt="CorrelationLinearNormResimage"/>
+                            </h:panelGrid>                                                   
+                      </h:panelGrid>
+                    </h:form>
+                </p:tab>
+                
+                <p:tab title ="Residuals vs Fitted Plot" titleStyleClass="p-tab-nav">
+                    <h:form id="form4">
+                        <p>
+                            Linearity is one of the assumptions for a linear model. This plot checks this assumption by comparing the model residuals and predicted values ('Fitted'). In interpreting the plot, if the mean of residuals does not deviate from zero this can be taken as evidence that the assumption of linearity holds.
+                        </p>
+                        <h:panelGrid id="panelGrid4" columns="5" cellpadding="3" columnClasses="colLeft,colRightShort,colLeft,colRightShort, colLast">
+                        <!-- how to word the linearity assumption https:/sscc.wisc.edu/sscc/pubs/RegDiag-R/linearity.html-->
+                       <!--"colLeft,colRightShort,colLeft,colRightShort, colLast"-->
+                            <h:outputLabel style="font-weight: bold" value="Dependant Variable:"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linearCABean.corrColumnNameA}">
+                                    <f:selectItems value="#{linearCABean.corrColumnOpts}" />
+                                </p:selectOneMenu>
+                            
+                            <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
+                                <p:selectBooleanCheckbox value ="#{linearCABean.doOriginal}"/> 
+                            <p:panelGrid></p:panelGrid>
+                            
+                            <h:outputLabel style="font-weight: bold" value="Independant Variable:"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linearCABean.corrColumnNameB}">
+                                    <f:selectItems value="#{linearCABean.corrColumnOpts}" />
+                                </p:selectOneMenu>
+                        </h:panelGrid>
+                        
+                        <h:panelGrid id="panelGrid1" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;">                   
+                              <p:commandButton value="Customize Graph"
+                                             styleClass="graphicsButton"
+                                             style="box-shadow: none !important; text-shadow: none !important;"
+                                             actionListener="#{sessionBean1.graphicsLnk_action('corr_linear_resfit')}" 
+                                            oncomplete="PF('graphApperanceLinear4').show()"/>  
+                              
+                              <p:commandButton value="Update" 
+                                             styleClass="updateButton"
+                                             style="box-shadow: none !important; text-shadow: none !important"
+                                            onclick="PF('statusDialog').show()"
+                                            oncomplete="PF('statusDialog').hide()"  
+                                            update=":linCA:form4:panelGrid4  :cmdPane" 
+                                            actionListener="#{linearCABean.corrLin4Btn_action()}"/>     
+                              
+                        </h:panelGrid>
+                        
+                        <h:panelGrid class="resultsBar" columns="2">
+                            <h:panelGroup>
+                                <h:panelGrid columns="1" style="text-align : left;">
+                                    Results
+                                </h:panelGrid>
+                            </h:panelGroup> 
+                            <h:panelGroup>
+                                <h:panelGrid columns="3" class="resultsImages">
+                                    <i id="question" class="fa fa-question-circle" title="The linear model can be written in the form (Y = X * Beta + epsilon), where y = dependent variable; x = independent variable; Beta = regression parameter coefficients; and Epsilon = error values. 
+The linear model model makes several assumptions namely linearity, normality, homoscedasticity of residuals, independence of error terms, and that the model is not disproportionately influenced by outliers.
+
+The R-squared value is the fraction of variance explained by the model; the adjusted R-squared value is the R-squared value adjusted for the number of predictors in a regression model. The confidence interval represents the level of certainty about the predicted values; if the same procedure was repeatedly used to make new estimates, the confidence interval would contain the average of all the estimates 95% of the time. https://www.census.gov/programs-surveys/saipe/guidance/confidence-intervals.html "></i>
+                                </h:panelGrid>
+                            </h:panelGroup>
+                          </h:panelGrid>
+                           
+                        <h:panelGrid id="corrLinPane4" style="width: 100%;">
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <p:commandButton value="Export"
+                                    styleClass="exportButton"
+                                    style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                    actionListener="#{sessionBean1.graphicsLnk_action('corr_linear_resfit')}"
+                                    oncomplete="PF('graphDialog').show()"/>
+                            </h:panelGrid>                               
+                             
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_linear_resfit')}" alt="CorrelationLinearResfitimage"/>
+                            </h:panelGrid>                                                   
+                      </h:panelGrid>
+                    </h:form>
+                </p:tab>
+                
             </p:tabView> 
-        </h:panelGrid> 
+        </h:panelGrid>
+<!--        <p:dialog modal="true" widgetVar="exportDialog" style="width:600px; height: 580px" appendTo="@(body)">  
+            <h:outputLabel style="font-size: 13px; font-weight: bold" value="Right click the PNG image to save as your preferred name:"/><br/>
+            <image id="downloadimage"></image>  
+        </p:dialog>  
+        <h:form>
+            <p:remoteCommand name="remoteCall"  
+                             process="@this"
+                             partialSubmit="true"
+                             update=":linCA:form1:corrLinPane1  :cmdPane"
+                             actionListener="HASHTAG{sessionBean1.setCurrentCmpdIndex}" 
+                             />
+        </h:form>-->
+        <p:dialog modal="true" widgetVar="graphApperanceLinear" 
+            style="width: 400px; height:400px;" 
+            appendTo="@(body)" header="Graphics Center"
+            draggable="false" closable="true" resizable="false"> 
+            <ui:include src="_color_palette_linear.xhtml" />
+        </p:dialog>
+         <p:dialog modal="true" widgetVar="graphApperanceLinear2" 
+            style="width: 400px; height:400px;" 
+            appendTo="@(body)" header="Graphics Center"
+            draggable="false" closable="true" resizable="false"> 
+            <ui:include src="_color_palette_linear2.xhtml" />
+        </p:dialog>
+        <p:dialog modal="true" widgetVar="graphApperanceLinear3" 
+            style="width: 400px; height:400px;" 
+            appendTo="@(body)" header="Graphics Center"
+            draggable="false" closable="true" resizable="false"> 
+            <ui:include src="_color_palette_linear3.xhtml" />
+        </p:dialog>
+        <p:dialog modal="true" widgetVar="graphApperanceLinear4" 
+            style="width: 400px; height:400px;" 
+            appendTo="@(body)" header="Graphics Center"
+            draggable="false" closable="true" resizable="false"> 
+            <ui:include src="_color_palette_linear4.xhtml" />
+        </p:dialog>
+
+        
     </ui:define>
 </ui:composition>
 
