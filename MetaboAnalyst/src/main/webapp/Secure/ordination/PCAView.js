@@ -10,7 +10,7 @@ d3.json("/MetaboAnalyst" + URL + "/pca_score3d_0_.json", function (data) {
     const categories = data.points.categories;
     //Prepare hover text
     const text = names.map(
-        (e, i) => `Name: ${e}<br>Category: ${categories[i]}`
+        (e, i) => `[Name: ${e}, Category: ${categories[i]}]`
     );
 
     //Center everything inside div
@@ -35,16 +35,12 @@ d3.json("/MetaboAnalyst" + URL + "/pca_score3d_0_.json", function (data) {
 
     //3D plot using plotly
     //Prepare data
-    var trace = {
+    const trace = {
         x: coords.PC1,
         y: coords.PC2,
         z: coords.PC3,
         mode: "markers",
-        hovertemplate:
-            "X: %{x:.2f}" +
-            "<br>Y: %{y:.2f}<br>" +
-            "Z: %{z:.2f}<br>" +
-            "%{text}",
+        hovertemplate: "%{text} (%{x:.2f}, %{y:.2f}, %{z:.2f}) <extra></extra>",
         text,
         marker: {
             size: 5,
@@ -58,9 +54,9 @@ d3.json("/MetaboAnalyst" + URL + "/pca_score3d_0_.json", function (data) {
         type: "scatter3d",
     };
 
-    var data = [trace];
+    const dataForPlotting = [trace];
     //Customize graph
-    var layout = {
+    const layout = {
         scene: {
             xaxis: { title: axesName[0] },
             yaxis: { title: axesName[1] },
@@ -75,5 +71,5 @@ d3.json("/MetaboAnalyst" + URL + "/pca_score3d_0_.json", function (data) {
         },
     };
 
-    Plotly.newPlot("my_dataviz", data, layout);
+    Plotly.newPlot("my_dataviz", dataForPlotting, layout);
 });
