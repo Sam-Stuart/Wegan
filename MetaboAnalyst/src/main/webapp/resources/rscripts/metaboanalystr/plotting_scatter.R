@@ -9,7 +9,7 @@ print("We are priting in Scatter plot, outside the functions")
 #'@param mSetObj Input the name of the created mSetObj
 #'@param facA list of independent variables
 #'@param facB list of dependent variables
-#'@param type type of (if any) trend line to be used. NULL = no trendline; 'lbf' = line of best fit ; 'lowess' = locally weighted trend line
+#'@param type type of (if any) trend line to be used. Options are "lm", "glm", "gam", "loess", "rlm"!!!!!!!!!!!!!!
 #'@param line_color color of line of best fit.
 #'@param xlab x axis title. NULL will choose column name
 #'@param ylab y axis title, NULL will choose column name
@@ -20,45 +20,58 @@ print("We are priting in Scatter plot, outside the functions")
 #'@export
 #'
 
-scatterPlot_setup <- function(mSetObj = NA, facA=NULL, facB=NULL, type = NULL, line_color = "red", xlab = NULL,
-                              ylab = NULL, maintitle = 'Title'){
+scatterPlot_setup <- function(mSetObj = NA, facA="NULL", facB="NULL", type = "NULL", line_color = "red", xlab = "NULL",
+                              ylab = "NULL", maintitle = 'Title', data="false"){
+
+#Obtain mSet dataset
   mSetObj <- .get.mSet(mSetObj)
+  if (data=="false") {
+    input <- mSetObj$dataSet$norm
+  } else {
+    input <- mSetObj$dataSet$orig
+  }
+
+
+#ADD FILTER FOR NUMERIC DATA USING select_if function from dplyr package!!!!!!!!!!
+
+
   print("inside scatterPlot_setup function");
   #Set independent variable name
-  if (is.null(facA)){
+  if (facA=="NULL"){
     facA <- colnames(mSetObj$dataSet$norm)[1]; #Default is first column.
   } 
   #Set dependent  variable name
-  if (is.null(facB)){
+  if (facB=="NULL"){
     facB <- colnames(mSetObj$dataSet$norm)[2];#Default is second column.
   } 
   
-  #Variable type check
-  if (is.factor(mSetObj$dataSet$norm[,facA] || mSetObj$dataSet$norm[,facB])==TRUE){
-    #AddErrMsg("You have chosen 1 or more categorical columns! Try selecting another independent and/or dependent variable. You can also try other regression models such as penalized, logistic, SVM or random forest.")
-    stop("You have chosen 1 or more categorical columns! Try selecting another independent and/or dependent variable. You can also try other regression models such as penalized, logistic, SVM or random forest.") #Error msg
-  }
+  ##Variable type check
+  #if (is.factor(mSetObj$dataSet$norm[,facA] || mSetObj$dataSet$norm[,facB])==TRUE){
+  #  #AddErrMsg("You have chosen 1 or more categorical columns! Try selecting another independent and/or dependent variable. You can also try other regression models such as penalized, logistic, SVM or random forest.")
+  #  stop("You have chosen 1 or more categorical columns! Try selecting another independent and/or dependent variable. You can also try other regression models such as penalized, logistic, SVM or random forest.") #Error msg
+  #}
   
   #Define formula
   formula <- as.formula(paste0(facB, "~", facA)) ;
   # x axis label
-  if (is.null(xlab) & is.character(facA)){
+  if (xlab=="NULL"){
     xlab <- facA
   }
   # y axis label
-  if (is.null(ylab) & is.character(facB)){
+  if (ylab=="NULL"){
     ylab <- facB
   }
-  # set up data
-  if (is.numeric(rownames(mSetObj$dataSet$norm))){
-    data <- mSetObj$dataSet$norm[order(as.numeric(rownames(mSetObj$dataSet$norm))),drop=FALSE];
-  }  else if (is.character(rownames(mSetObj$dataSet$norm))){
-    data <- mSetObj$dataSet$norm
-  }
+  
+## set up data
+#  if (is.numeric(rownames(mSetObj$dataSet$norm))){
+#    data <- mSetObj$dataSet$norm[order(as.numeric(rownames(mSetObj$dataSet$norm))),drop=FALSE];
+#  }  else if (is.character(rownames(mSetObj$dataSet$norm))){
+#    data <- mSetObj$dataSet$norm
+#  }
   
   
   # save properties to object 
-  mSetObj$analSet$scatterPlot <- list(data = data, facA = facA, facB = facB,
+  mSetObj$analSet$scatterPlot <- list(data = input, facA = facA, facB = facB,
                                       formula = formula, type=type, line_color = line_color,
                                       xlab=xlab, ylab=ylab, maintitle=maintitle);
   return(.set.mSet(mSetObj));
@@ -118,19 +131,7 @@ plotScatterPlot <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA)
   #Generate plot
   Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white");
   
-  plot <- plot(formula = formula, data = data,pch = 19, xlab = xlab, ylab = ylab, main = maintitle);
-  
-  # Add line of best fit if requested
-  if(!is.null(type)){
-    attach(data)
-    if(type == 'lbf'){# Line of best fit
-      abline(lm(formula, data = data), col = line_color);
-    } else if (type == 'lowess'){ # Locally Weighted Scatterplot Smoothing
-      lines(loess(formula, data = data)$fitted , col = line_color);
-      
-    }
-    detach(data)
-  }
+  plot <- plot(formula = formula, data = data,pch = 19, xlab = xlab, ylab = ylab, main = maintitle); #USE GGPLOT INSTEAD OF BASE R!!!!!!!!
   
   dev.off();
   return(.set.mSet(mSetObj));
