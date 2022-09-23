@@ -112,12 +112,13 @@ public class CABean implements Serializable {
                        
     private void doDefaultPenalized() {
         CAUtils.CreatePenalizedModel(sb, "NULL", "NULL", false);
-        CAUtils.PlotPenalizedCA(sb, 
-                false,"NULL", "NULL",
-                false," "," "," ",
+        CAUtils.PlotPenalizedCA(sb, "NULL",
+                false, "NULL", "NULL","NULL",
+                false, " "," "," ",
                 sb.getCurrentImage("corr_penalized"), "png", 72);
-        CAUtils.PlotPenalizedCVCA(sb,
-                false, "NULL", "NULL"," "," "," ",
+        CAUtils.PlotPenalizedCVCA(sb,"NULL", 
+                false, "NULL", "NULL", "NULL",
+                " "," "," ",
                 sb.getCurrentImage("corr_penalized2"), "png", 72);
     }
 
