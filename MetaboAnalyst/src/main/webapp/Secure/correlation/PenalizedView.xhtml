@@ -19,6 +19,7 @@
                             One dependent variable and one or more independent variables will be tested for correlation. The variables can be numeric or categorical. 
                             Note that all variables other than the dependent variable will be treated as independent variables. The penalized regression models will constrain the contribution of the independent variables on the dependent variable accordingly.
                             The train data for model building is 70% of the dataset, while the test data for model testing is 30% of the dataset. 
+                            Note that because the same penalty lambda (&lambda;) will be applied equally to all coefficients, if you do not standardize your variables before running the regression the results may be influenced by differences in variable scale.
                         </p>
                         <h:panelGrid id="panelGrid" columns="5" cellpadding="3" columnClasses="colLeft,colRight,colLeft,colRight, colLast">
                             <h:outputLabel style="font-weight: bold" value="Regression Methods:"/>
@@ -99,7 +100,8 @@
                             One dependent variable and one or more independent variables will be tested for correlation. The variables can be numeric or categorical. 
                             Note that all variables other than the dependent variable will be treated as independent variables. The penalized regression models will constrain the contribution of the independent variables on the dependent variable accordingly.
                             The train data for model building is 70% of the dataset, while the test data for model testing is 30% of the dataset.
-                            The penalized regression model was optimized using alpha (&alpha;)= #{penalCABean.corrPenalResults.get(0)} and lambda (&lambda;) = #{penalCABean.corrPenalResults.get(1)}. 
+                             Note that because the same penalty lamda (&lambda;) will be applied equally to all coefficients, if you do not standardize your variables before running the regression the results may be influenced by differences in variable scale.
+                            <!--The penalized regression model was optimized using alpha (&alpha;)= hash{penalCABean.corrPenalResults.get(0)} and lambda (&lambda;) = hash{penalCABean.corrPenalResults.get(1)}.--> 
                         </p>
                         <h:panelGrid id="panelGrid" columns="5" cellpadding="3" columnClasses="colLeft,colRight,colLeft,colRight, colLast">
                             
