@@ -263,14 +263,17 @@ public static boolean PlotLinearResidFitCA(SessionBean1 sb,
     }
  
     
-    public static void PlotPenalizedCA(SessionBean1 sb, Boolean data, 
-             String col_dots, String col_line, Boolean plot_ci, 
+    public static void PlotPenalizedCA(SessionBean1 sb, 
+            String facA, Boolean data, String method,
+            String col_dots, String col_line, Boolean plot_ci, 
                 String plot_title, String plot_xlab, String plot_ylab,
             String imgName, String format, int dpi) {
         try {
             RConnection RC = sb.getRConnection();
             String rCommand = "pen.pred.plot(NA" + ", \"" 
-                    + data + "\", \""                    
+                    + facA + "\", \"" 
+                    + data + "\", \""     
+                    + method + "\", \"" 
                     + col_dots + "\", \""
                     + col_line + "\", \""
                     + plot_ci + "\", \""
@@ -286,14 +289,17 @@ public static boolean PlotLinearResidFitCA(SessionBean1 sb,
         }
     }
  
-    public static void PlotPenalizedCVCA(SessionBean1 sb, Boolean data,
-             String col_dots, String col_line, 
-                String plot_title, String plot_xlab, String plot_ylab,
+    public static void PlotPenalizedCVCA(SessionBean1 sb, 
+            String facA, Boolean data, String method, 
+            String col_dots, String col_line, 
+             String plot_title, String plot_xlab, String plot_ylab,
             String imgName, String format, int dpi) {
         try {
             RConnection RC = sb.getRConnection();
             String rCommand = "pen.cv.plot(NA" + ", \"" 
-                    + data + "\", \""                    
+                    + facA + "\", \"" 
+                    + data + "\", \""     
+                    + method + "\", \"" 
                     + col_dots + "\", \""
                     + col_line + "\", \""
                     + plot_title + "\", \""
