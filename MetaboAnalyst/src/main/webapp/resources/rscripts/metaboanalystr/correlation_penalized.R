@@ -1,6 +1,6 @@
-#'Perform Penalized Linear Regression'
+#'Perform Penalized Linear Regression
 #'@description Build a penalized regression model for one user selected predictor variable
-#'@usage pen.reg.anal(mSetObj=NA, method="ridge", facA=NULL, weights=NULL)
+#'@usage pen.reg.anal(mSetObj=NA, method="ridge", facA=NULL, data='false')
 #'@param mSetObj Input the name of the created mSetObj
 #'@param facA Input the name of the response column (java uses Columns() to give user options)
 #'@param data Boolean, whether to use original data; "false" (default) means normalized or "true" means original (checkbox)
@@ -18,18 +18,29 @@ library("dplyr")
 
 pen.reg.anal <- function(mSetObj=NA,
                          facA="NULL",
-                         method="ridge",
+                         method="NULL",
                          data="false"
                          ){
   
   mSetObj <- .get.mSet(mSetObj)
   
+
+### penalized regression: Important to standardize
+### compared to least-squares, where it is not necessary to stdz the predictors or outcomes prior to fitting model
+### for penalized IT IS important to stdz BECAUSE the same penalty factor lambda is applied to all coefficients Bj equally - to interpret Bj coeffeicients in the original units, invert the sdzn after estimation
+## https://jwmi.github.io/SL/11-Penalized-regression.pdf
+
+### TO avoid being penalized for differences in scale between variables, it a good idea to standardize each variable (subtract mean, divide by sd) before running penReg
+## https://lost-stats.github.io/Machine_Learning/penalized_regresstion.html
+
+
   ### SET DATA (whether to use original data or not)
   if (data=="false") { 
       mSetObj$dataSet$norm <- mSetObj$dataSet$norm[order(as.numeric(rownames(mSetObj$dataSet$norm))),,drop=FALSE]
     input <- mSetObj$dataSet$norm #default use norm
   } else {
     input <- mSetObj$dataSet$orig
+cat("NOT USING STANDARDIZED DATA IN PENALIZED REGRESSION? BE CAREFUL - you may be penalized for differences in scale between variables (remember the same penalty factor lambda will be applied to all variables equally!)")
   }
   
   #File name for summary download
@@ -69,6 +80,11 @@ pen.reg.anal <- function(mSetObj=NA,
   response_train <- train_data[,facA] # response data for train dataset
   cat("The train data for model building is 70% of the dataset, while the test data for model testing is 30% of the dataset.") #Text will be visible to user.
   
+
+if(method == "NULL"|method == "ridge"){
+method <- "ridge"
+}
+
   # if (is.null(weights)==TRUE) { #No weights for model building
   
 ## METHOD TYPE LOOP
@@ -198,7 +214,7 @@ pen.reg.anal <- function(mSetObj=NA,
   #   }
   # }
   
-  cat("The penalized regression model was optimized using alpha = ", bestAlpha, " and lambda = ", bestLambda, ".", sep="") #Text will be visible to user.
+  cat("The", method, " model was optimized using alpha = ", bestAlpha, " and lambda = ", bestLambda, ".", sep="") #Text will be visible to user.
   
   #Extract results
   summary <- params 
@@ -257,14 +273,13 @@ pen.reg.anal <- function(mSetObj=NA,
 
 #'Produce predicted/actual plot for penalized regression
 #'@description Scatter plot, where actual variables are y and predicted values are x
-#'@usage plot.pred.penReg(mSetObj, imgName, format="png", dpi=72, width=NA)
+#'@usage plot.pred.penReg(mSetObj, facA="NULL", data="false", method="NULL", col_dots="NULL", col_line="NULL", plot_ci="false", plot_title=" ", plot_ylab=" ", plot_xlab = " "imgName, format="png", dpi=72, width=NA)
 #'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
 #'@param facA Input the name of the response column (java uses Columns() to give user options)
 #'@param data Boolean, whether to use original data; "false" (default) means normalized or "true" means original (checkbox)
 #'@param method Set penalized regression method, default is ridge
 #'@param col_dots Set color for scatterplot dots (default "NULL" is black); (static dropdown)
 #'@param col_line Set color for line (default "NULL" is black); (static dropdown)
-###@param weights Set weight values, default is NULL
 #' @param plot_ci Boolean, "false" (default), omit 95% confidence interval around line, "true" add interval around line
 #'@param plot_title Input the name of the title (default: "Polynomial Regression Predicted vs Actual: (formula);, textbox)
 #'@param plot_xlab Input the name to use for x-axis label (default: facB, textbox)
@@ -275,30 +290,35 @@ pen.reg.anal <- function(mSetObj=NA,
 #'the default dpi is 72. It is suggested that for high-resolution images, select a dpi of 300.  
 #'@param width Input the width, there are 2 default widths. The first, width=NULL, is 10.5.
 #'The second default is width=0, where the width is 7.2. Otherwise users can input their own width.   
+###@param weights Set weight values, default is NULL
 #'@author Louisa Normington\email{normingt@ualberta.ca}
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2)
 #'@export
 
 pen.pred.plot <- function(mSetObj=NA,
-                         facA = "NULL",
+  facA = "NULL",
   data="false",
   method = "NULL",
+
   col_dots="NULL",
   col_line="NULL", 
   plot_ci="false",
-  # plot_eq="false", 
-  # plot_rsq="false", 
-  # plot_rsq_adj="false",
+  # plot_eq="false",  # plot_rsq="false", # plot_rsq_adj="false",
+
   plot_title=" ",
   plot_ylab=" ",
   plot_xlab=" ",
+
   imgName, format="png", dpi=72, width=NA){
   
   ## name used to be: plot.pred.penReg
-  #install.packages("Metrics")
+  
+library("glmnet")
+library("dplyr")
   library("Metrics")
   library("ggplot2")
+library("JSONIO")
   
   #Extract necessary objects from mSetObj
   mSetObj <- .get.mSet(mSetObj)
@@ -309,17 +329,31 @@ pen.pred.plot <- function(mSetObj=NA,
     input <- mSetObj$dataSet$norm #default use norm
   } else {
     input <- mSetObj$dataSet$orig
+cat("NOT USING STANDARDIZED DATA IN PENALIZED REGRESSION? BE CAREFUL - you may be penalized for differences in scale between variables (remember the same penalty factor lambda will be applied to all variables equally!)")
   }
   
+data <- dplyr::select_if(input, is.numeric)
+
   #SET RESPONSE VARIABLE NAME
   if (facA=="NULL"){
-     if( !"res" %in% names(mSetObj$analSet$penReg) ){
+     if( "res" %in% names(mSetObj$analSet$penReg) ){
         facA <- mSetObj$analSet$penReg$res$response
      } else {
-    facA <- colnames(input)[1] #facA is response variable name. Default is 1st column
+    facA <- colnames(input)[1] #facA is response variable name, default 1st column  #use input not data, want 1st col in all of table of uploaded set
   } 
     } else {
     facA <- facA #Determined using numeric.columns() (java will present options in drop down menu)
+  }
+
+#SET METHOD
+  if (method=="NULL"){
+     if( "res" %in% names(mSetObj$analSet$penReg) ){
+        method <- mSetObj$analSet$penReg$res$method
+     } else {
+    method <- "ridge" Default is ridge
+  } 
+    } else {
+    method <- method # (java will present options in drop down menu)
   }
   
   
@@ -547,6 +581,7 @@ if(!.on.public.web){
 #'@usage plot.cv.penReg(mSetObj, imgName, format="png", dpi=72, width=NA)
 #'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
 #'@param data Boolean, whether to use original data; "false" (default) means normalized or "true" means original (checkbox)
+#'@param method Set penalized regression method, default is ridge
 #'@param col_dots Set color for scatterplot dots (default "NULL" is black); (static dropdown)
 #'@param col_line Set color for line (default "NULL" is black); (static dropdown)
 ###@param weights Set weight values, default is NULL
@@ -567,6 +602,7 @@ if(!.on.public.web){
 pen.cv.plot <- function(mSetObj=NA,
 facA = "NULL",
   data="false",
+  method = "NULL",
   col_dots="NULL",
   col_line="NULL", 
   # plot_ci="false",
@@ -577,8 +613,10 @@ facA = "NULL",
 
   ## name was: plot.cv.penReg
 
+library("glmnet")
   library("ggplot2")
   library("broom")
+  library("dplyr")
   # library("JSONIO")
   
   #Extract necessary objects from mSetObj
@@ -590,11 +628,14 @@ facA = "NULL",
     input <- mSetObj$dataSet$norm #default use norm
   } else {
     input <- mSetObj$dataSet$orig
+cat("NOT USING STANDARDIZED DATA IN PENALIZED REGRESSION? BE CAREFUL - you may be penalized for differences in scale between variables (remember the same penalty factor lambda will be applied to all variables equally!)")
   }
   
+data <- dplyr::select_if(input, is.numeric)
+
   #SET RESPONSE VARIABLE NAME
   if (facA=="NULL"){
-     if( !"res" %in% names(mSetObj$analSet$penReg) ){
+     if( "res" %in% names(mSetObj$analSet$penReg) ){
         facA <- mSetObj$analSet$penReg$res$response
      } else {
     facA <- colnames(input)[1] #facA is response variable name. Default is 1st column
@@ -603,10 +644,20 @@ facA = "NULL",
     facA <- facA #Determined using numeric.columns() (java will present options in drop down menu)
   }
   
-  
+#SET METHOD
+  if (method=="NULL"){
+     if( "res" %in% names(mSetObj$analSet$penReg) ){
+        method <- mSetObj$analSet$penReg$res$method
+     } else {
+    method <- "ridge" Default is ridge
+  } 
+    } else {
+    method <- method # (java will present options in drop down menu)
+  }  
+
   
   # model <- mSetObj$analSet$penReg$mod$model
-  # method <- mSetObj$analSet$penReg$res$method
+ # method <- mSetObj$analSet$penReg$res$method
   # predictors_test <- mSetObj$analSet$penReg$res$predictors.test.data
   # test_prediction <- predict(model, newx = as.matrix(predictors_test))
   # # facA <- mSetObj$analSet$penReg$res$response
@@ -750,12 +801,13 @@ a0 <- ggplot(broom::tidy(cv), aes(lambda, estimate)) +
      #GENERATE PLOT
   Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
    
-#STORE IN mset
-  mSetObj$analSet$penReg$plotcv <- list(plot= a0, title = plot_title1, xlab = plot_xlab1, ylab = plot_ylab1)
-
   print(a0)
   # a0
   dev.off()
+
+#STORE IN mset
+  mSetObj$analSet$penReg$plotcv <- list(plot= a0, title = plot_title1, xlab = plot_xlab1, ylab = plot_ylab1)
+
   
 # GENERATE JSON
 build <- ggplot_build(a0)
