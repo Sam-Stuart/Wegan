@@ -2,8 +2,8 @@
 #'@description Build a penalized regression model for one user selected predictor variable
 #'@usage pen.reg.anal(mSetObj=NA, method="ridge", facA=NULL, data='false')
 #'@param mSetObj Input the name of the created mSetObj
-#'@param facA Input the name of the response column (java uses Columns() to give user options)
-#'@param data Boolean, whether to use original data; "false" (default) means normalized or "true" means original (checkbox)
+#'@param facA Input the name of the response column (java uses Columns() to give user options in dynamic dropdown)
+#'@param data Boolean, whether to use original data; "false" (default) means use normalized or "true" means use original (checkbox)
 #'@param method Set penalized regression method, default is ridge
 #'@author Louisa Normington\email{normingt@ualberta.ca}
 #'University of Alberta, Canada
@@ -40,6 +40,7 @@ pen.reg.anal <- function(mSetObj=NA,
     input <- mSetObj$dataSet$norm #default use norm
   } else {
     input <- mSetObj$dataSet$orig
+warning("NOT USING STANDARDIZED DATA IN PENALIZED REGRESSION? BE CAREFUL - you may be penalized for differences in scale between variables (remember the same penalty factor lambda will be applied to all variables equally!)")
 cat("NOT USING STANDARDIZED DATA IN PENALIZED REGRESSION? BE CAREFUL - you may be penalized for differences in scale between variables (remember the same penalty factor lambda will be applied to all variables equally!)")
   }
   
@@ -48,7 +49,7 @@ cat("NOT USING STANDARDIZED DATA IN PENALIZED REGRESSION? BE CAREFUL - you may b
 
   #Text will be visible to user. 
   cat("One dependent variable and two or more independent variables will be tested for correlation. Only numeric variables will be used.")
-  cat("Note that all variables other than the dependent variable will be treated as independent variables.") 
+  cat("All variables other than the dependent variable will be treated as independent variables.") 
   #"The penalized regression models will constrain the contribution of the independent variables on the dependent variable, in some cases removing a variable from the model all together, so as to maximize the fit of the model."
   
   #Subset data to select only numeric variables
@@ -81,9 +82,9 @@ cat("NOT USING STANDARDIZED DATA IN PENALIZED REGRESSION? BE CAREFUL - you may b
   cat("The train data for model building is 70% of the dataset, while the test data for model testing is 30% of the dataset.") #Text will be visible to user.
   
 
-if(method == "NULL"|method == "ridge"){
-method <- "ridge"
-}
+# if(method == "NULL"|method == "ridge"){
+# method <- "ridge"
+# }
 
   # if (is.null(weights)==TRUE) { #No weights for model building
   
@@ -95,7 +96,8 @@ method <- "ridge"
       #Build model
       params <- caret::train(x = predictors_train, y = response_train, weights = NULL, method = "glmnet", 
                       trControl = caret::trainControl("cv", number = 10), tuneLength = 5) #testing variour parameters
-      model <- glmnet(as.matrix(predictors_train), as.matrix(response_train), alpha = params$bestTune$alpha, lambda = params$bestTune$lambda, 
+      model <- glmnet(as.matrix(predictors_train), as.matrix(response_train), 
+                      alpha = params$bestTune$alpha, lambda = params$bestTune$lambda, 
                       weights = NULL, family = "gaussian") #Build model with "best" parameters
       bestLambda <- params$bestTune$lambda #Extract best parameters
       bestAlpha <- params$bestTune$alpha
@@ -115,7 +117,8 @@ method <- "ridge"
       params <- caret::train(predictors_train, response_train, weights = NULL, method = "glmnet", 
                       trControl = caret::trainControl("cv", number = 10),
                       tuneGrid = expand.grid(alpha = 1, lambda=lambda)) #testing variour parameters
-      model <- glmnet(as.matrix(predictors_train), as.matrix(response_train), alpha=params$bestTune$alpha, lambda = params$bestTune$lambda, 
+      model <- glmnet(as.matrix(predictors_train), as.matrix(response_train), 
+                      alpha=params$bestTune$alpha, lambda = params$bestTune$lambda, 
                       weights = NULL, family = "gaussian") #Build model with "best" parameters
       bestAlpha <- 1
       bestLambda <- params$bestTune$lambda #Extract best parameter
@@ -135,7 +138,8 @@ method <- "ridge"
       params <- caret::train(predictors_train, response_train, weights = NULL, method = "glmnet", 
                       trControl = caret::trainControl("cv", number = 10),
                       tuneGrid = expand.grid(alpha = 0, lambda = lambda)) #testing variour parameters
-      model <- glmnet::glmnet(as.matrix(predictors_train), as.matrix(response_train), alpha=params$bestTune$alpha, lambda = params$bestTune$lambda, 
+      model <- glmnet::glmnet(as.matrix(predictors_train), as.matrix(response_train), 
+                      alpha=params$bestTune$alpha, lambda = params$bestTune$lambda, 
                       weights = NULL, family = "gaussian")#Build model with "best" parameters
       bestAlpha <- 0
       bestLambda <- params$bestTune$lambda #Extract best parameter
@@ -350,7 +354,7 @@ data <- dplyr::select_if(input, is.numeric)
      if( "res" %in% names(mSetObj$analSet$penReg) ){
         method <- mSetObj$analSet$penReg$res$method
      } else {
-    method <- "ridge" Default is ridge
+    method <- "ridge" #Default is ridge
   } 
     } else {
     method <- method # (java will present options in drop down menu)
@@ -367,8 +371,8 @@ data <- dplyr::select_if(input, is.numeric)
   # predictors_train <- mSetObj$analSet$penReg$res$predictors.train.data
   # formula <- paste(facA, "~", paste(colnames(predictors_train), collapse = "+", sep = ""))
 
-   #Generate test and train data for model building
-  set.seed(37) #Ensures same selction of data for test and train each time
+  #TEST AND TRAIN DATA FOR MODEL BUILDING
+  set.seed(37) #Ensures same selection of data for test and train each time
   index <- sample(1:nrow(data), 0.7*nrow(data)) #Select 70% of dataset
   train_data <- data[index,] #70% of dataset
   test_data <- data[-index,] #30% of dataset
@@ -392,7 +396,8 @@ data <- dplyr::select_if(input, is.numeric)
       params <- caret::train(predictors_train, response_train, weights = NULL, method = "glmnet", 
                       trControl = caret::trainControl("cv", number = 10),
                       tuneGrid = expand.grid(alpha = 1, lambda=lambda)) #testing variour parameters
-      model <- glmnet::glmnet(as.matrix(predictors_train), as.matrix(response_train), alpha=params$bestTune$alpha, lambda = params$bestTune$lambda, 
+      model <- glmnet::glmnet(as.matrix(predictors_train), as.matrix(response_train),
+                      alpha=params$bestTune$alpha, lambda = params$bestTune$lambda, 
                       weights = NULL, family = "gaussian") #Build model with "best" parameters
       bestAlpha <- 1
       bestLambda <- params$bestTune$lambda #Extract best parameter
@@ -403,7 +408,8 @@ data <- dplyr::select_if(input, is.numeric)
       params <- caret::train(predictors_train, response_train, weights = NULL, method = "glmnet", 
                       trControl = caret::trainControl("cv", number = 10),
                       tuneGrid = expand.grid(alpha = 0, lambda = lambda)) #testing variour parameters
-      model <- glmnet::glmnet(as.matrix(predictors_train), as.matrix(response_train), alpha=params$bestTune$alpha, lambda = params$bestTune$lambda, 
+      model <- glmnet::glmnet(as.matrix(predictors_train), as.matrix(response_train),
+                      alpha=params$bestTune$alpha, lambda = params$bestTune$lambda, 
                       weights = NULL, family = "gaussian")#Build model with "best" parameters
       bestAlpha <- 0
       bestLambda <- params$bestTune$lambda #Extract best parameter
@@ -412,7 +418,7 @@ data <- dplyr::select_if(input, is.numeric)
     }
   
     formula <- paste(facA, "~", paste(colnames(predictors_train), collapse = "+", sep = ""))
-  dfpred <- data.frame(fpred = as.vector(test_prediction), fA = test_data[,facA])
+   dfpred <- data.frame(fpred = as.vector(test_prediction), fA = test_data[,facA])
    formula2 <- as.formula("fA~fpred")
    model2 <- lm(formula = formula, data = dfpred, weights = NULL)
  
@@ -507,12 +513,13 @@ data <- dplyr::select_if(input, is.numeric)
         plot.title = element_text(face = 'bold', hjust = 0.5)
   )
 
-     #GENERATE PLOT
-  Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
-   
+  
 #STORE IN mset
   mSetObj$analSet$penReg$plotpred <- list(plot= a0, title = plot_title1, xlab = plot_xlab1, ylab = plot_ylab1)
 
+#GENERATE PLOT
+  Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
+ 
   print(a0)
   # a0
   dev.off()
@@ -578,7 +585,7 @@ if(!.on.public.web){
 
 #'Produce cross validation plot for penalized regression
 #'@description
-#'@usage plot.cv.penReg(mSetObj, imgName, format="png", dpi=72, width=NA)
+#'@usage plot.cv.penReg(mSetObj, facA="NULL",data="false", method="NULL", col_dots="NULL",col_line="NULL", plot_title=" ",plot_xlab=" ",plot_ylab=" ",imgName, format="png", dpi=72, width=NA)
 #'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
 #'@param data Boolean, whether to use original data; "false" (default) means normalized or "true" means original (checkbox)
 #'@param method Set penalized regression method, default is ridge
@@ -600,7 +607,7 @@ if(!.on.public.web){
 #'@export
 
 pen.cv.plot <- function(mSetObj=NA,
-facA = "NULL",
+  facA = "NULL",
   data="false",
   method = "NULL",
   col_dots="NULL",
@@ -649,7 +656,7 @@ data <- dplyr::select_if(input, is.numeric)
      if( "res" %in% names(mSetObj$analSet$penReg) ){
         method <- mSetObj$analSet$penReg$res$method
      } else {
-    method <- "ridge" Default is ridge
+    method <- "ridge" #Default is ridge
   } 
     } else {
     method <- method # (java will present options in drop down menu)
@@ -657,7 +664,7 @@ data <- dplyr::select_if(input, is.numeric)
 
   
   # model <- mSetObj$analSet$penReg$mod$model
- # method <- mSetObj$analSet$penReg$res$method
+  # method <- mSetObj$analSet$penReg$res$method
   # predictors_test <- mSetObj$analSet$penReg$res$predictors.test.data
   # test_prediction <- predict(model, newx = as.matrix(predictors_test))
   # # facA <- mSetObj$analSet$penReg$res$response
@@ -665,8 +672,8 @@ data <- dplyr::select_if(input, is.numeric)
   # predictors_train <- mSetObj$analSet$penReg$res$predictors.train.data
   # formula <- paste(facA, "~", paste(colnames(predictors_train), collapse = "+", sep = ""))
 
-   #Generate test and train data for model building
-  set.seed(37) #Ensures same selction of data for test and train each time
+   #TEST AND TRAIN DATA FOR MODEL BUILDING
+  set.seed(37) #Ensures same selection of data for test and train each time
   index <- sample(1:nrow(data), 0.7*nrow(data)) #Select 70% of dataset
   train_data <- data[index,] #70% of dataset
   test_data <- data[-index,] #30% of dataset
@@ -679,7 +686,8 @@ data <- dplyr::select_if(input, is.numeric)
     if (method == "elastic net") {
       params <- caret::train(x = predictors_train, y = response_train, weights = NULL, method = "glmnet", 
                       trControl = caret::trainControl("cv", number = 10), tuneLength = 5) #test params
-      model <- glmnet::glmnet(as.matrix(predictors_train), as.matrix(response_train), alpha = params$bestTune$alpha, lambda = params$bestTune$lambda, 
+      model <- glmnet::glmnet(as.matrix(predictors_train), as.matrix(response_train),
+                      alpha = params$bestTune$alpha, lambda = params$bestTune$lambda, 
                       weights = NULL, family = "gaussian") #Build model with "best" parameters
       bestLambda <- params$bestTune$lambda #Extract best parameters
       bestAlpha <- params$bestTune$alpha
@@ -689,8 +697,9 @@ data <- dplyr::select_if(input, is.numeric)
       lambda <- 10^seq(-3, 3, length = 100)
       params <- caret::train(predictors_train, response_train, weights = NULL, method = "glmnet", 
                       trControl = caret::trainControl("cv", number = 10),
-                      tuneGrid = expand.grid(alpha = 1, lambda=lambda)) #testing variour parameters
-      model <- glmnet::glmnet(as.matrix(predictors_train), as.matrix(response_train), alpha=params$bestTune$alpha, lambda = params$bestTune$lambda, 
+                      tuneGrid = expand.grid(alpha = 1, lambda=lambda)) #testing various parameters
+      model <- glmnet::glmnet(as.matrix(predictors_train), as.matrix(response_train),
+                      alpha=params$bestTune$alpha, lambda = params$bestTune$lambda, 
                       weights = NULL, family = "gaussian") #Build model with "best" parameters
       bestAlpha <- 1
       bestLambda <- params$bestTune$lambda #Extract best parameter
@@ -701,7 +710,8 @@ data <- dplyr::select_if(input, is.numeric)
       params <- caret::train(predictors_train, response_train, weights = NULL, method = "glmnet", 
                       trControl = caret::trainControl("cv", number = 10),
                       tuneGrid = expand.grid(alpha = 0, lambda = lambda)) #testing variour parameters
-      model <- glmnet::glmnet(as.matrix(predictors_train), as.matrix(response_train), alpha=params$bestTune$alpha, lambda = params$bestTune$lambda, 
+      model <- glmnet::glmnet(as.matrix(predictors_train), as.matrix(response_train), 
+                      alpha=params$bestTune$alpha, lambda = params$bestTune$lambda, 
                       weights = NULL, family = "gaussian")#Build model with "best" parameters
       bestAlpha <- 0
       bestLambda <- params$bestTune$lambda #Extract best parameter
@@ -773,13 +783,14 @@ data <- dplyr::select_if(input, is.numeric)
   # PLOT XAXIS
   if(plot_xlab == " "){
    plot_xlab1 <- "Log(Lambda)"
-  plot_xlab1 <- expression(paste("Log ", lambda))
+   plot_xlab1 <- expression(paste("Log ", lambda))
   } else { #prediction
     plot_xlab1 <- plot_xlab
   }
  
   # plot(cv, yaxt="n", xlab="Log(Lambda)", main=paste0(method, " Cross Validation Plot", "\n")); axis(2, las=2)
-# plot of MSE as a function of lambda
+  # plot of MSE as a function of lambda
+
 a0 <- ggplot(broom::tidy(cv), aes(lambda, estimate)) +
    labs(title = plot_title1) +
      ylab(plot_ylab1)+ xlab(plot_xlab1) +
@@ -798,17 +809,18 @@ a0 <- ggplot(broom::tidy(cv), aes(lambda, estimate)) +
         plot.title = element_text(face = 'bold', hjust = 0.5)
   )
 
-     #GENERATE PLOT
+
+#STORE IN mset
+  mSetObj$analSet$penReg$plotcv <- list(plot= a0, title = plot_title1, xlab = plot_xlab1, ylab = plot_ylab1) 
+
+#GENERATE PLOT
   Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
    
   print(a0)
   # a0
   dev.off()
 
-#STORE IN mset
-  mSetObj$analSet$penReg$plotcv <- list(plot= a0, title = plot_title1, xlab = plot_xlab1, ylab = plot_ylab1)
 
-  
 # GENERATE JSON
 build <- ggplot_build(a0)
 linear_plot_json <- list()
