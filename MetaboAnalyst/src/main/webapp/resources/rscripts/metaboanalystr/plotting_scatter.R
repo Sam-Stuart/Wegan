@@ -1,10 +1,12 @@
 #scatterPlot_plotting
 library(vegan)
-print("We are priting in Scatter plot, outside the functions")
+library(dplyr)
+library(ggplot2)
+
 ##### SCATTER PLOT ####
 #'Scatter Plot'
 #'@description Produce scatter plot components based on user data and preferences
-#'@usage scatterPlot_setup(mSetObj = NA, facA=NULL, facB=NULL, type = NULL, 
+#'@usage scatterPlot_setup(mSetObj = NA, facA=NULL, facB=NULL, type = NULL,
 #'# line_color = "red", xlab = 'x axis',ylab = 'y axis', maintitle = 'Title')
 #'@param mSetObj Input the name of the created mSetObj
 #'@param facA list of independent variables
@@ -13,70 +15,87 @@ print("We are priting in Scatter plot, outside the functions")
 #'@param line_color color of line of best fit.
 #'@param xlab x axis title. NULL will choose column name
 #'@param ylab y axis title, NULL will choose column name
-#'@param maintitle graph title 
+#'@param maintitle graph title
 #'@author Leif Wilm\email{lwilm@ualberta.ca}
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2)
 #'@export
 #'
 
-scatterPlot_setup <- function(mSetObj = NA, facA="NULL", facB="NULL", type = "NULL", line_color = "red", xlab = "NULL",
-                              ylab = "NULL", maintitle = 'Title', data="false"){
-
-#Obtain mSet dataset
-  mSetObj <- .get.mSet(mSetObj)
-  if (data=="false") {
-    input <- mSetObj$dataSet$norm
-  } else {
-    input <- mSetObj$dataSet$orig
+scatterPlot_setup <-
+  function(mSetObj = NA,
+           facA = "NULL",
+           facB = "NULL",
+           type = "NULL",
+           line_color = "red",
+           point_color = "black",
+           xlab = "NULL",
+           ylab = "NULL",
+           maintitle = 'Title',
+           data = "false") {
+    #Obtain mSet dataset
+    mSetObj <- .get.mSet(mSetObj)
+    if (data == "false") {
+      input <- mSetObj$dataSet$norm
+    } else {
+      input <- mSetObj$dataSet$orig
+    }
+    
+    
+    #ADD FILTER FOR NUMERIC DATA USING select_if function from dplyr package!!!!!!!!!!
+    input <- select_if(input, is.numeric)
+    
+    #Set independent variable name
+    if (facA == "NULL") {
+      facA <- colnames(mSetObj$dataSet$norm)[1]
+      #Default is first column.
+    }
+    #Set dependent  variable name
+    if (facB == "NULL") {
+      facB <- colnames(mSetObj$dataSet$norm)[2]
+      #Default is second column.
+    }
+    
+    ##Variable type check
+    #if (is.factor(mSetObj$dataSet$norm[,facA] || mSetObj$dataSet$norm[,facB])==TRUE){
+    #  #AddErrMsg("You have chosen 1 or more categorical columns! Try selecting another independent and/or dependent variable. You can also try other regression models such as penalized, logistic, SVM or random forest.")
+    #  stop("You have chosen 1 or more categorical columns! Try selecting another independent and/or dependent variable. You can also try other regression models such as penalized, logistic, SVM or random forest.") #Error msg
+    #}
+    
+    #Define formula
+    formula <- as.formula(paste0(facB, "~", facA))
+    
+    # x axis label
+    if (xlab == "NULL") {
+      xlab <- facA
+    }
+    # y axis label
+    if (ylab == "NULL") {
+      ylab <- facB
+    }
+    
+    #Define line type
+    if (type == "NULL") {
+      type <- "lm"
+    }
+    
+    # save properties to object
+    mSetObj$analSet$scatterPlot <-
+      list(
+        data = input,
+        facA = facA,
+        facB = facB,
+        formula = formula,
+        type = type,
+        line_color = line_color,
+        point_color = point_color,
+        xlab = xlab,
+        ylab = ylab,
+        maintitle = maintitle
+      )
+    
+    return(.set.mSet(mSetObj))
   }
-
-
-#ADD FILTER FOR NUMERIC DATA USING select_if function from dplyr package!!!!!!!!!!
-
-
-  print("inside scatterPlot_setup function");
-  #Set independent variable name
-  if (facA=="NULL"){
-    facA <- colnames(mSetObj$dataSet$norm)[1]; #Default is first column.
-  } 
-  #Set dependent  variable name
-  if (facB=="NULL"){
-    facB <- colnames(mSetObj$dataSet$norm)[2];#Default is second column.
-  } 
-  
-  ##Variable type check
-  #if (is.factor(mSetObj$dataSet$norm[,facA] || mSetObj$dataSet$norm[,facB])==TRUE){
-  #  #AddErrMsg("You have chosen 1 or more categorical columns! Try selecting another independent and/or dependent variable. You can also try other regression models such as penalized, logistic, SVM or random forest.")
-  #  stop("You have chosen 1 or more categorical columns! Try selecting another independent and/or dependent variable. You can also try other regression models such as penalized, logistic, SVM or random forest.") #Error msg
-  #}
-  
-  #Define formula
-  formula <- as.formula(paste0(facB, "~", facA)) ;
-  # x axis label
-  if (xlab=="NULL"){
-    xlab <- facA
-  }
-  # y axis label
-  if (ylab=="NULL"){
-    ylab <- facB
-  }
-  
-## set up data
-#  if (is.numeric(rownames(mSetObj$dataSet$norm))){
-#    data <- mSetObj$dataSet$norm[order(as.numeric(rownames(mSetObj$dataSet$norm))),drop=FALSE];
-#  }  else if (is.character(rownames(mSetObj$dataSet$norm))){
-#    data <- mSetObj$dataSet$norm
-#  }
-  
-  
-  # save properties to object 
-  mSetObj$analSet$scatterPlot <- list(data = input, facA = facA, facB = facB,
-                                      formula = formula, type=type, line_color = line_color,
-                                      xlab=xlab, ylab=ylab, maintitle=maintitle);
-  return(.set.mSet(mSetObj));
-  
-}
 
 #'Produce a Scatter plot'
 
@@ -84,60 +103,88 @@ scatterPlot_setup <- function(mSetObj = NA, facA="NULL", facB="NULL", type = "NU
 #'@usage plotScatterPlot(mSetObj, imgName, format="png", dpi=72, width=NA)
 #'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
 #'@param imgName Input the image name
-#'@param format Select the image format, "png" or "pdf", default is "png" 
-#'@param dpi Input the dpi. If the image format is "pdf", users need not define the dpi. For "png" images, 
-#'the default dpi is 72. It is suggested that for high-resolution images, select a dpi of 300.  
+#'@param format Select the image format, "png" or "pdf", default is "png"
+#'@param dpi Input the dpi. If the image format is "pdf", users need not define the dpi. For "png" images,
+#'the default dpi is 72. It is suggested that for high-resolution images, select a dpi of 300.
 #'@param width Input the width, there are 2 default widths. The first, width=NULL, is 10.5.
-#'The second default is width=0, where the width is 7.2. Otherwise users can input their own width.   
-#'@author  Leif Wilm\email{lwilm@ualberta.ca} 
+#'The second default is width=0, where the width is 7.2. Otherwise users can input their own width.
+#'@author  Leif Wilm\email{lwilm@ualberta.ca}
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2)
-#'@export  
+#'@export
 # PlotPieChart function calls upon the pieChart data set up by the pieChart_setUp function
 
-
-
-plotScatterPlot <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA){
-  
-  mSetObj <- .get.mSet(mSetObj)
-
-  # call upon graph parameters
-  data <- mSetObj$analSet$scatterPlot$data;
-  facA <- mSetObj$analSet$scatterPlot$facA;
-  facB <- mSetObj$analSet$scatterPlot$facB;
-  formula <- mSetObj$analSet$scatterPlot$formula;
-  type <- mSetObj$analSet$scatterPlot$type;
-  line_color <- mSetObj$analSet$scatterPlot$line_color;
-  xlab <- mSetObj$analSet$scatterPlot$xlab;
-  ylab <- mSetObj$analSet$scatterPlot$ylab;
-  maintitle <- mSetObj$analSet$scatterPlot$maintitle;
-  
-  
-  #Set plot dimensions 
-  if(is.na(width)){
-    w <- 10;
-  }else if(width == 0){
-    w <- 8;
-  }else{
-    w <- width;
+plotScatterPlot <-
+  function(mSetObj = NA,
+           imgName,
+           format = "png",
+           dpi = 72,
+           width = NA) {
+    mSetObj <- .get.mSet(mSetObj)
+    
+    # call upon graph parameters
+    input <- mSetObj$analSet$scatterPlot$data
+    facA <- mSetObj$analSet$scatterPlot$facA
+    facB <- mSetObj$analSet$scatterPlot$facB
+    formula <- mSetObj$analSet$scatterPlot$formula
+    type <- mSetObj$analSet$scatterPlot$type
+    line_color <- mSetObj$analSet$scatterPlot$line_color
+    point_color <- mSetObj$analSet$scatterPlot$point_color
+    xlab <- mSetObj$analSet$scatterPlot$xlab
+    ylab <- mSetObj$analSet$scatterPlot$ylab
+    maintitle <- mSetObj$analSet$scatterPlot$maintitle
+    
+    # Convert to sym to use with aes
+    facA <- sym(facA)
+    facB <- sym(facB)
+    
+    #Set plot dimensions
+    if (is.na(width)) {
+      w <- 10
+    } else if (width == 0) {
+      w <- 8
+    } else{
+      w <- width
+    }
+    h <- w
+    
+    
+    #Name plot for download
+    imgName <- "test"
+    imgName <- paste(imgName, "dpi", dpi, ".", format, sep = "")
+    
+    #Set that to mSetObj
+    mSetObj$imgSet$scatterPlot <- imgName
+    
+    #Generate plot
+    Cairo::Cairo(
+      file = imgName,
+      unit = "in",
+      dpi = dpi,
+      width = w,
+      height = h,
+      type = format,
+      bg = "white"
+    )
+    
+    #Start plotting with ggplot2
+    plot <- ggplot(input, aes(x = !!facA, y = !!facB)) +
+      geom_point(color = point_color) +
+      labs(title = maintitle, x = xlab, y = ylab) +
+      geom_smooth(
+        method = type,
+        color = line_color,
+        se = FALSE,
+        fullrange = TRUE
+      ) +
+      theme_bw() +
+      theme(
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.text = element_text(size = 12, colour = "black"),
+        axis.title = element_text(size = 12),
+        plot.title = element_text(face = 'bold', hjust = 0.5)
+      )
+    dev.off()
+    return(.set.mSet(mSetObj))
   }
-  h <- w;
-  
-  #Name plot for download
-  imgName <- "test"
-  imgName <- paste(imgName, "dpi", dpi, ".", format, sep="");
-  mSetObj$imgSet$scatterPlot <- imgName;
-  
-  #Generate plot
-  Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white");
-  
-  plot <- plot(formula = formula, data = data,pch = 19, xlab = xlab, ylab = ylab, main = maintitle); #USE GGPLOT INSTEAD OF BASE R!!!!!!!!
-  
-  dev.off();
-  return(.set.mSet(mSetObj));
-  
-}
-
-
-
-
