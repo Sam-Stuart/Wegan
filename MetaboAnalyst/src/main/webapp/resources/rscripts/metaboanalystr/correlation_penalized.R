@@ -375,12 +375,13 @@ data <- dplyr::select_if(input, is.numeric)
   #TEST AND TRAIN DATA FOR MODEL BUILDING
   set.seed(37) #Ensures same selection of data for test and train each time
   index <- sample(1:nrow(data), 0.7*nrow(data)) #Select 70% of dataset
-  train_data <- data[index,] #70% of dataset
-  test_data <- data[-index,] #30% of dataset
-  #resp.col.num <- colnames(data)==facA
-  predictors_train <- train_data[,colnames(data)!=facA]
-  predictors_test <- test_data[,colnames(data)!=facA]
-  response_train <- train_data[,facA] # response data for train dataset
+  train_data <- data[index,,drop = FALSE] #70% of dataset
+  test_data <- data[-index,, drop = FALSE] #30% of dataset
+  resp.col.num <- which(colnames(data)==facA)
+  predictors_train <- train_data[,-resp.col.num, drop = TRUE]
+  predictors_test <- test_data[,-resp.col.num, drop = TRUE]
+  response_train <- train_data[,facA, drop = TRUE] # response data for train dataset
+# response_test <- test_data[,facA, drop = TRUE]
   cat("The train data for model building is 70% of the dataset, while the test data for model testing is 30% of the dataset.") #Text will be visible to user.
 
     if (method == "elastic net") {
@@ -417,8 +418,11 @@ data <- dplyr::select_if(input, is.numeric)
       method <- "Ridge Regression"
       cv <- glmnet::cv.glmnet(x = as.matrix(predictors_train), y = as.matrix(response_train), alpha=bestAlpha)
     }
-  
-    formula <- paste(facA, "~", paste(colnames(predictors_train), collapse = "+", sep = ""))
+
+   test_prediction <- predict(model, newx = as.matrix(predictors_test))
+  # test_rmse <- Metrics::rmse(test_data[,facA], test_prediction)  
+
+   formula <- paste(facA, "~", paste(colnames(predictors_train), collapse = "+", sep = ""))
    dfpred <- data.frame(fpred = as.vector(test_prediction), fA = test_data[,facA])
    formula2 <- as.formula("fA~fpred")
    model2 <- lm(formula = formula, data = dfpred, weights = NULL)
@@ -494,10 +498,38 @@ data <- dplyr::select_if(input, is.numeric)
     plot_xlab1 <- plot_xlab
   }
  
+### TROUBLESHOOTING
+#input <- iris
+#data <- dplyr::select_if(input, is.numeric)
+#facA <- colnames(input)[1]
+#set.seed(37) #Ensures same selction of data for test and train each time
+#index <- sample(1:nrow(data), 0.7*nrow(data)) #Select 70% of dataset
+#train_data <- data[index,,drop = FALSE] #70% of dataset
+#test_data <- data[-index,, drop = FALSE] #30% of dataset
+#resp.col.num <- which(colnames(data)==facA)
+#predictors_train <- train_data[,-resp.col.num, drop = TRUE]
+#predictors_test <- test_data[,-resp.col.num, drop = TRUE]
+#response_train <- train_data[,facA, drop = TRUE]
+#lambda <- 10^seq(-3, 3, length = 100)
+#params <- caret::train(predictors_train, response_train, weights = NULL, method = "glmnet",  trControl = caret::trainControl("cv", number = 10), tuneGrid = expand.grid(alpha = 0, lambda = lambda))
+#model <- glmnet::glmnet(as.matrix(predictors_train), as.matrix(response_train), alpha=params$bestTune$alpha, lambda = params$bestTune$lambda, weights = NULL, family = "gaussian")
+#bestAlpha <- 0
+#bestLambda <- params$bestTune$lambda #Extract best parameter
+#method <- "Ridge Regression"
+#cv <- glmnet::cv.glmnet(x = as.matrix(predictors_train), y = as.matrix(response_train), alpha=bestAlpha)
+#test_prediction <- predict(model, newx = as.matrix(predictors_test))
+#plot_ci1 <- true
+#col_dots1 <- "blue"
+#col_line1 <- "red"
+#plot_title1 <- paste0(method,"\n",formula) #paste0(method, " Cross Validation Plot", "\n")
+#plot_ylab1 <- "Actual"
+#plot_xlab1 <- "Predicted"
+#### TROUBLESHOOTING OVER
+
   # plot(x=test_prediction, y=test_data[,facA], xlab="Predicted", ylab="Actual", main=method, yaxt="n"); axis(2, las=2); abline(a=0,b=1)
 
   a0 <- ggplot(data =  data.frame(
-    fpred = as.vector(test_prediction), fA = test_data[,facA]),
+    fpred = as.vector(test_prediction), fA = test_data[,facA, drop = TRUE]),
    # aes(x = .data[[facA]], y = .data[[facB]]) ) +
    # aes_(x = as.name(facA), y = as.name(facB)) )+
   aes(x = fpred, y = fA)) +
@@ -560,14 +592,14 @@ linear_plot_json$bool_ci <- FALSE
 }
 
 #### MODEL VARS FOR LINE
-  linear_plot_json$r_sq <-
-    summary(model2)[["r.squared"]] #Extract R^2
-  linear_plot_json$r_sq_adj <-
-    summary(model2)[["adj.r.squared"]] #Extract adjusted R^2 
-  linear_plot_json$slope <-
-    summary(model2)[["coefficients"]][2] # beta
-  linear_plot_json$yint <-
-    summary(model2)[["coefficients"]][1] # alpha
+#  linear_plot_json$r_sq <-
+#    summary(model2)[["r.squared"]] #Extract R^2
+#  linear_plot_json$r_sq_adj <-
+#    summary(model2)[["adj.r.squared"]] #Extract adjusted R^2 
+#  linear_plot_json$slope <-
+#    summary(model2)[["coefficients"]][2] # beta
+#  linear_plot_json$yint <-
+#    summary(model2)[["coefficients"]][1] # alpha
 
  
  json.obj <- RJSONIO::toJSON(linear_plot_json, .na='null')
@@ -676,13 +708,14 @@ data <- dplyr::select_if(input, is.numeric)
    #TEST AND TRAIN DATA FOR MODEL BUILDING
   set.seed(37) #Ensures same selection of data for test and train each time
   index <- sample(1:nrow(data), 0.7*nrow(data)) #Select 70% of dataset
-  train_data <- data[index,] #70% of dataset
-  test_data <- data[-index,] #30% of dataset
-  #resp.col.num <- colnames(data)==facA
-  predictors_train <- train_data[,colnames(data)!=facA]
-  predictors_test <- test_data[,colnames(data)!=facA]
-  response_train <- train_data[,facA] # response data for train dataset
-  cat("The train data for model building is 70% of the dataset, while the test data for model testing is 30% of the dataset.") #Text will be visible to user.
+  train_data <- data[index,,drop = FALSE] #70% of dataset
+  test_data <- data[-index,, drop = FALSE] #30% of dataset
+  resp.col.num <- which(colnames(data)==facA)
+  predictors_train <- train_data[,-resp.col.num, drop = TRUE]
+  predictors_test <- test_data[,-resp.col.num, drop = TRUE]
+  response_train <- train_data[,facA, drop = TRUE] # response data for train dataset
+  # response_test <- test_data[,facA, drop = TRUE]  
+cat("The train data for model building is 70% of the dataset, while the test data for model testing is 30% of the dataset.") #Text will be visible to user.
 
     if (method == "elastic net") {
       params <- caret::train(x = predictors_train, y = response_train, weights = NULL, method = "glmnet", 
@@ -721,6 +754,8 @@ data <- dplyr::select_if(input, is.numeric)
     }
 
  formula <- paste(facA, "~", paste(colnames(predictors_train), collapse = "+", sep = ""))
+ test_prediction <- predict(model, newx = as.matrix(predictors_test))
+  # test_rmse <- Metrics::rmse(test_data[,facA], test_prediction)
 
 #  cv <- mSetObj$analSet$penReg$res$cross.validation
 #  method <- mSetObj$analSet$penReg$res$method
@@ -855,14 +890,14 @@ linear_plot_json$lines$size <- build_line[,c("size")]
  }   
   
 #### MODEL VARS FOR LINE
-  linear_plot_json$r_sq <-
-    summary(model)[["r.squared"]] #Extract R^2
-  linear_plot_json$r_sq_adj <-
-    summary(model)[["adj.r.squared"]] #Extract adjusted R^2 
-  linear_plot_json$slope <-
-    summary(model)[["coefficients"]][2] # beta
-  linear_plot_json$yint <-
-    summary(model)[["coefficients"]][1] # alpha
+#  linear_plot_json$r_sq <-
+#    summary(model)[["r.squared"]] #Extract R^2
+#  linear_plot_json$r_sq_adj <-
+#    summary(model)[["adj.r.squared"]] #Extract adjusted R^2 
+#  linear_plot_json$slope <-
+#    summary(model)[["coefficients"]][2] # beta
+#  linear_plot_json$yint <-
+#    summary(model)[["coefficients"]][1] # alpha
 
  
  json.obj <- RJSONIO::toJSON(linear_plot_json, .na='null')
