@@ -3,8 +3,8 @@
 #'@usage pen.reg.anal(mSetObj=NA, method="ridge", facA=NULL, data='false')
 #'@param mSetObj Input the name of the created mSetObj
 #'@param facA Input the name of the response column (java uses Columns() to give user options in dynamic dropdown)
-#'@param data Boolean, whether to use original data; "false" (default) means use normalized or "true" means use original (checkbox)
 #'@param method Set penalized regression method, default is ridge
+#'@param data Boolean, whether to use original data; "false" (default) means use normalized or "true" means use original (checkbox)
 #'@author Louisa Normington\email{normingt@ualberta.ca}
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2)
@@ -73,12 +73,13 @@ cat("NOT USING STANDARDIZED DATA IN PENALIZED REGRESSION? BE CAREFUL - you may b
   #GENERATE TEST/TRAIN DATA FOR MODEL BUILDING
   set.seed(37) #Ensures same selction of data for test and train each time
   index <- sample(1:nrow(data), 0.7*nrow(data)) #Select 70% of dataset
-  train_data <- data[index,] #70% of dataset
-  test_data <- data[-index,] #30% of dataset
+  train_data <- data[index,,drop = FALSE] #70% of dataset
+  test_data <- data[-index,, drop = FALSE] #30% of dataset
   resp.col.num <- which(colnames(data)==facA)
-  predictors_train <- train_data[,-resp.col.num]
-  predictors_test <- test_data[,-resp.col.num]
-  response_train <- train_data[,facA] # response data for train dataset
+  predictors_train <- train_data[,-resp.col.num, drop = TRUE]
+  predictors_test <- test_data[,-resp.col.num, drop = TRUE]
+  response_train <- train_data[,facA, drop = TRUE] # response data for train dataset
+  # response_test <- test_data[,facA, drop = TRUE]
   cat("The train data for model building is 70% of the dataset, while the test data for model testing is 30% of the dataset.") #Text will be visible to user.
   
 
@@ -322,7 +323,7 @@ library("glmnet")
 library("dplyr")
   library("Metrics")
   library("ggplot2")
-library("JSONIO")
+library("RJSONIO")
   
   #Extract necessary objects from mSetObj
   mSetObj <- .get.mSet(mSetObj)
@@ -624,7 +625,7 @@ library("glmnet")
   library("ggplot2")
   library("broom")
   library("dplyr")
-  # library("JSONIO")
+  # library("RJSONIO")
   
   #Extract necessary objects from mSetObj
   mSetObj <- .get.mSet(mSetObj)
