@@ -49,10 +49,10 @@ cat("NOT USING STANDARDIZED DATA IN PENALIZED REGRESSION? BE CAREFUL - you may b
 
   #Text will be visible to user. 
   cat("One dependent variable and two or more independent variables will be tested for correlation. Only numeric variables will be used.")
-  cat("All variables other than the dependent variable will be treated as independent variables.") 
+  # cat("All variables other than the dependent variable will be treated as independent variables.") 
   #"The penalized regression models will constrain the contribution of the independent variables on the dependent variable, in some cases removing a variable from the model all together, so as to maximize the fit of the model."
   
-  #Subset data to select only numeric variables
+  #SUBSET DATA FOR ONLY NUMERIC VARIABLES
   data <- dplyr::select_if(input, is.numeric)
 
     # data <- input[,sapply(input, is.numeric), drop = FALSE]
@@ -71,7 +71,7 @@ cat("NOT USING STANDARDIZED DATA IN PENALIZED REGRESSION? BE CAREFUL - you may b
   }
   
   #GENERATE TEST/TRAIN DATA FOR MODEL BUILDING
-  set.seed(37) #Ensures same selction of data for test and train each time
+  set.seed(37) #Ensures same selection of data for test and train each time
   index <- sample(1:nrow(data), 0.7*nrow(data)) #Select 70% of dataset
   train_data <- data[index,,drop = FALSE] #70% of dataset
   test_data <- data[-index,, drop = FALSE] #30% of dataset
@@ -82,10 +82,6 @@ cat("NOT USING STANDARDIZED DATA IN PENALIZED REGRESSION? BE CAREFUL - you may b
   # response_test <- test_data[,facA, drop = TRUE]
   cat("The train data for model building is 70% of the dataset, while the test data for model testing is 30% of the dataset.") #Text will be visible to user.
   
-
-# if(method == "NULL"|method == "ridge"){
-# method <- "ridge"
-# }
 
   # if (is.null(weights)==TRUE) { #No weights for model building
   
@@ -224,31 +220,34 @@ cat("NOT USING STANDARDIZED DATA IN PENALIZED REGRESSION? BE CAREFUL - you may b
   #Extract results
   summary <- params 
   #resp.col.num <- which(colnames(data) == facA)
-  fitted <- predict(model, newx = as.matrix(data[,colnames(data) != facA]))
+  fitted <- predict(model, newx = as.matrix(data[,colnames(data) != facA, drop = FALSE]))
   colnames(fitted) <- "Predicted values"
   call <- model[["call"]]
   formula <- as.formula(paste(facA, "~", paste(colnames(predictors_train), collapse = "+", sep = "")))
   # coef <- as.data.frame(summary(coef(model)))
-  coef <- as.data.frame(
-    as.matrix(
+  coef <- as.data.frame(as.matrix(
     # summary(
       coef(model)
             # ) 
             ))
-  coef$variable <- "variable"
-  x <- 1
-  for (col.num in coef[,"i"]) {
-    coef$variable[x] <- colnames(data)[col.num]
-    x <- x+1
-  }
-  coef$variable[1] <- "intercept"
-  coef <- data.frame(coef$variable, coef$x)
-  colnames(coef) <- c("Variables", "Coefficients")
-  overall.rsme <- Metrics::rmse(data[,facA], fitted)
+### uncomment
+  #coef$variable <- "variable"
+  #x <- 1
+  #i_index <- c(1:nrow(coef))
+  #for (col.num in i_index #coef[,"i"] 
+  #     ) {
+  #  coef$variable[x] <- colnames(data)[col.num]
+  #  x <- x+1
+  #}
+  #coef$variable[1] <- "intercept"
+  #coef <- data.frame(coef$variable, coef$x)
+  #colnames(coef) <- c("Variables", "Coefficients")
+### uncomment done
+  overall.rsme <- Metrics::rmse(data[,facA, drop = TRUE], fitted)
 
   #Obtain test RMSE for plotting
   test_prediction <- predict(model, newx = as.matrix(predictors_test))
-  test_rmse <- Metrics::rmse(test_data[,facA], test_prediction)
+  test_rmse <- Metrics::rmse(test_data[,facA, drop = TRUE], test_prediction)
  
   #Store results in mSetObj$analSet$penReg
   mSetObj$analSet$penReg$mod <- list(model_name = method, model = model, response = facA, predictors = colnames(predictors_train), alpha = bestAlpha, lambda = bestLambda)
@@ -321,8 +320,8 @@ pen.pred.plot <- function(mSetObj=NA,
   
 library("glmnet")
 library("dplyr")
-  library("Metrics")
-  library("ggplot2")
+library("Metrics")
+library("ggplot2")
 library("RJSONIO")
   
   #Extract necessary objects from mSetObj
@@ -423,7 +422,7 @@ data <- dplyr::select_if(input, is.numeric)
   # test_rmse <- Metrics::rmse(test_data[,facA], test_prediction)  
 
    formula <- paste(facA, "~", paste(colnames(predictors_train), collapse = "+", sep = ""))
-   dfpred <- data.frame(fpred = as.vector(test_prediction), fA = test_data[,facA])
+   dfpred <- data.frame(fpred = as.vector(test_prediction), fA = test_data[,facA, drop = TRUE])
    formula2 <- as.formula("fA~fpred")
    model2 <- lm(formula = formula, data = dfpred, weights = NULL)
  
@@ -518,7 +517,7 @@ data <- dplyr::select_if(input, is.numeric)
 #method <- "Ridge Regression"
 #cv <- glmnet::cv.glmnet(x = as.matrix(predictors_train), y = as.matrix(response_train), alpha=bestAlpha)
 #test_prediction <- predict(model, newx = as.matrix(predictors_test))
-#plot_ci1 <- true
+#plot_ci1 <- TRUE
 #col_dots1 <- "blue"
 #col_line1 <- "red"
 #plot_title1 <- paste0(method,"\n",formula) #paste0(method, " Cross Validation Plot", "\n")
@@ -528,8 +527,8 @@ data <- dplyr::select_if(input, is.numeric)
 
   # plot(x=test_prediction, y=test_data[,facA], xlab="Predicted", ylab="Actual", main=method, yaxt="n"); axis(2, las=2); abline(a=0,b=1)
 
-  a0 <- ggplot(data =  data.frame(
-    fpred = as.vector(test_prediction), fA = test_data[,facA, drop = TRUE]),
+  a0 <- ggplot(data = dfpred, #data.frame(
+   #fpred = as.vector(test_prediction), fA = test_data[,facA, drop = TRUE]),
    # aes(x = .data[[facA]], y = .data[[facB]]) ) +
    # aes_(x = as.name(facA), y = as.name(facB)) )+
   aes(x = fpred, y = fA)) +
@@ -592,14 +591,14 @@ linear_plot_json$bool_ci <- FALSE
 }
 
 #### MODEL VARS FOR LINE
-#  linear_plot_json$r_sq <-
-#    summary(model2)[["r.squared"]] #Extract R^2
-#  linear_plot_json$r_sq_adj <-
-#    summary(model2)[["adj.r.squared"]] #Extract adjusted R^2 
-#  linear_plot_json$slope <-
-#    summary(model2)[["coefficients"]][2] # beta
-#  linear_plot_json$yint <-
-#    summary(model2)[["coefficients"]][1] # alpha
+  linear_plot_json$r_sq <-
+    summary(model2)[["r.squared"]] #Extract R^2
+  linear_plot_json$r_sq_adj <-
+    summary(model2)[["adj.r.squared"]] #Extract adjusted R^2 
+  linear_plot_json$slope <-
+    summary(model2)[["coefficients"]][2] # beta
+  linear_plot_json$yint <-
+    summary(model2)[["coefficients"]][1] # alpha
 
  
  json.obj <- RJSONIO::toJSON(linear_plot_json, .na='null')
@@ -654,10 +653,10 @@ pen.cv.plot <- function(mSetObj=NA,
   ## name was: plot.cv.penReg
 
 library("glmnet")
-  library("ggplot2")
-  library("broom")
-  library("dplyr")
-  # library("RJSONIO")
+library("ggplot2")
+library("broom")
+library("dplyr")
+library("RJSONIO")
   
   #Extract necessary objects from mSetObj
   mSetObj <- .get.mSet(mSetObj)
