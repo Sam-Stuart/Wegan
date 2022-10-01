@@ -4,19 +4,12 @@
  */
 package metaboanalyst.rwrappers;
 
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import metaboanalyst.controllers.SessionBean1;
 import org.rosuda.REngine.Rserve.RConnection;
 import org.rosuda.REngine.Rserve.RserveException;
 
-import javax.faces.model.SelectItem;
-import metaboanalyst.rwrappers.RDataUtils;
-import org.primefaces.model.chart.Axis;
-import org.primefaces.model.chart.AxisType;
-import org.primefaces.model.chart.LineChartModel;
-import org.primefaces.model.chart.LineChartSeries;
 import org.rosuda.REngine.REXPMismatchException;
 
 
@@ -144,14 +137,27 @@ public class PlottingUtils {
         }
     }
     
-     public static void CreateScatterChart(SessionBean1 sb) {
+     public static boolean CreateScatterChart(SessionBean1 sb, String facA, String facB, String type, String lineColor,
+             String fillColor, String xLabel, String yLabel, String mainTitle, boolean data) {
         try {
             RConnection RC = sb.getRConnection();
-            String rCommand = "scatterPlot_setup(NA)";
+            String rCommand = "scatterPlot_setup(NA"
+                                                + ", \"" + facA
+                                                + "\", \"" + facB
+                                                + "\", \"" + type
+                                                + "\", \"" + lineColor
+                                                + "\", \"" + "blue"
+                                                + "\", \"" + "NULL"
+                                                + "\", \"" + "NULL"
+                                                + "\", \"" + "NULL"
+                                                + "\", \"" + data + "\")";
+            System.out.println(rCommand);
             RCenter.recordRCommand(RC, rCommand);
-            RC.voidEval(rCommand);
+            RC.eval(rCommand);
+            return true;
         } catch (RserveException rse) {
             System.out.println(rse);
+            return false;
         }
     }   
     
@@ -165,8 +171,6 @@ public class PlottingUtils {
             System.out.println(rse);
         }
     }   
-    
-    
     
     // linear get data colums n
     public static String[] GetDataColumns(SessionBean1 sb){

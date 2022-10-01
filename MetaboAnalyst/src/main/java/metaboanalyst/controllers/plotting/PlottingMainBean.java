@@ -40,7 +40,7 @@ public class PlottingMainBean implements Serializable {
                         //doDefaultPieChart();
                         // doDefaultBarChart();
                         doDefaultBoxChart();
-                        //doDefaultScatterChart();
+                        doDefaultScatterChart();
                         break;  
                     case "linear":
                         doDefaultLinear();
@@ -83,7 +83,10 @@ public class PlottingMainBean implements Serializable {
     } 
     
     private void doDefaultScatterChart(){  
-        PlottingUtils.CreateScatterChart(sb);
+        if (!PlottingUtils.CreateScatterChart(sb, "NULL", "NULL", "NULL", "NULL", "NULL", "NULL", "NULL", "NULL", false)){
+            RConnection RC = sb.getRConnection();
+            sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
+        };
         PlottingUtils.PlotScatterChart(sb, sb.getCurrentImage("plot_scatter_chart"), "png", 72);     
     }  
     
