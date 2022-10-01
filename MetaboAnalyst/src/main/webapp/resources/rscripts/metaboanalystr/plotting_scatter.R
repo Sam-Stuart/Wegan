@@ -2,6 +2,19 @@
 library(vegan)
 library(dplyr)
 library(ggplot2)
+# mSetObj = list()
+# input <- iris
+# mSetObj$dataSet$orig = input
+# mSetObj$dataSet$norm = input
+# facA = "NULL"
+# facB = "NULL"
+# type = "NULL"
+# line_color = "red"
+# point_color = "black"
+# xlab = "NULL"
+# ylab = "NULL"
+# maintitle = 'Title'
+# data = "false"
 
 ##### SCATTER PLOT ####
 #'Scatter Plot'
@@ -78,7 +91,6 @@ scatterPlot_setup <-
     if (type == "NULL") {
       type <- "lm"
     }
-    
     # save properties to object
     mSetObj$analSet$scatterPlot <-
       list(
@@ -93,7 +105,6 @@ scatterPlot_setup <-
         ylab = ylab,
         maintitle = maintitle
       )
-    
     return(.set.mSet(mSetObj))
   }
 
@@ -113,7 +124,10 @@ scatterPlot_setup <-
 #'License: GNU GPL (>= 2)
 #'@export
 # PlotPieChart function calls upon the pieChart data set up by the pieChart_setUp function
-
+# imgName = "test"
+# format = "png"
+# dpi = 72
+# width = NA
 plotScatterPlot <-
   function(mSetObj = NA,
            imgName,
@@ -137,7 +151,7 @@ plotScatterPlot <-
     # Convert to sym to use with aes
     facA <- sym(facA)
     facB <- sym(facB)
-    
+
     #Set plot dimensions
     if (is.na(width)) {
       w <- 10
@@ -150,12 +164,13 @@ plotScatterPlot <-
     
     
     #Name plot for download
-    imgName <- "test"
-    imgName <- paste(imgName, "dpi", dpi, ".", format, sep = "")
+    imgName <- paste(imgName, "dpi", dpi, ".", format, sep="");
+    print(input)
+    print(facA)
+    print(facB)
     
     #Set that to mSetObj
     mSetObj$imgSet$scatterPlot <- imgName
-    
     #Generate plot
     Cairo::Cairo(
       file = imgName,
@@ -167,6 +182,7 @@ plotScatterPlot <-
       bg = "white"
     )
     
+
     #Start plotting with ggplot2
     plot <- ggplot(input, aes(x = !!facA, y = !!facB)) +
       geom_point(color = point_color) +
@@ -185,6 +201,9 @@ plotScatterPlot <-
         axis.title = element_text(size = 12),
         plot.title = element_text(face = 'bold', hjust = 0.5)
       )
+    show(plot)
     dev.off()
-    return(.set.mSet(mSetObj))
+    if(!.on.public.web){
+      return(.set.mSet(mSetObj))
+    }
   }
