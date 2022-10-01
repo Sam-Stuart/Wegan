@@ -6,7 +6,7 @@ general_stat_files <- c("general_norm_utils","general_proc_utils", "general_data
 stats_files <- c("stats_chemometrics","stats_classification","stats_clustering", "stats_correlations", "stats_sigfeatures","stats_univariates");
 correlation_files <- c("correlation_linear", "correlation_penalized", "correlation_polynomial", "correlation_ml", "correlation_multivariate", "correlation_SVM", "correlation_RF", "correlation_logistic");
 dispersal_files <- c("dispersal");
-plotting_files <- c("plotting", "plotting_pie", "plotting_bargraph", "plotting_boxplot");
+plotting_files <- c("plotting", "plotting_pie", "plotting_bargraph", "plotting_boxplot", "plotting_scatter");
 ordination_files <- c("ord_nmds", "ord_pcoa", "ord_cia", "ord_dca", "ord_anosim", "ord_rda", "ord_bray", "ord_cca", "ord_ca", "ord_dca");
 
 diversity_files <- c("div_divindices","div_rarefaction", "div_abundance_dist", "div_accumulation_model", "div_taxonomic", "div_fd", "div_unseen");
