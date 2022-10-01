@@ -9,7 +9,45 @@
     <p>
         THIS IS THE SCATTER VIEW
     </p>
+    <h:panelGrid id="panelGrid" columns="5" cellpadding="5" columnClasses="colLeft,colRight,colLeft,colRight, colLast"> 
+        <h:outputLabel  style="font-weight: bold" value="Dependant Data:"/>
+        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{scatterBean.facA}">
+            <f:selectItems value="#{scatterBean.numericBoxColumnOpts}" />
+        </p:selectOneMenu>
         
+        <h:outputLabel  style="font-weight: bold" value="Independant Data:"/>
+        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{scatterBean.facB}">
+            <f:selectItems value="#{scatterBean.numericBoxColumnOpts}" />
+        </p:selectOneMenu>
+        
+        <spacer></spacer>
+        
+        <h:outputLabel style="font-weight: bold; " value="X-Axis Label: "/>
+        <p:inputText style="left: -220px;" value="#{scatterBean.xLabel}"></p:inputText>
+        
+        <h:outputLabel style="font-weight: bold" value="Y-Axis Label: "/>
+            <p:inputText value="#{scatterBean.yLabel}" style="  align-content: left"></p:inputText>  
+        <spacer></spacer>
+        
+        <h:outputLabel style="font-weight: bold" value="Color Pallete:"/>
+        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{scatterBean.color}">
+            <f:selectItems value="#{applicationBean1.boxPltColorPaletteOpts}" />
+        </p:selectOneMenu>
+        
+        <h:outputLabel style="font-weight: bold; " value="Plot Title: "/>
+        <p:inputText style="left: -220px;" value="#{scatterBean.mainTitle}"></p:inputText>
+        
+ 
+    </h:panelGrid> 
+    <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
+        <p:commandButton value="Update" 
+                         styleClass="updateButton"
+                         style="box-shadow: none !important; text-shadow: none !important"
+                        onclick="PF('statusDialog').show()"
+                        oncomplete="setTimeout(function () {buildBoxPlot('plot_box_chart.json', 'd3_boxplot'); PF('statusDialog').hide()}, 2000)"  
+                        update=":ac:form2:boxPane  :cmdPane"
+                        actionListener="#{scatterBean.scatterBtn_action()}"/>
+    </h:panelGrid>    
     <h:panelGrid class="resultsBar" columns="2">
         <h:panelGroup>
             <h:panelGrid columns="1" style="text-align : left;">
