@@ -9,8 +9,8 @@ library(ggplot2)
 # facA = "NULL"
 # facB = "NULL"
 # type = "NULL"
-# line_color = "red"
-# point_color = "black"
+# line_color = "NULL"
+# point_color = "NULL"
 # xlab = "NULL"
 # ylab = "NULL"
 # maintitle = 'Title'
@@ -40,8 +40,8 @@ scatterPlot_setup <-
            facA = "NULL",
            facB = "NULL",
            type = "NULL",
-           line_color = "red",
-           point_color = "black",
+           line_color = "NULL",
+           point_color = "NULL",
            xlab = "NULL",
            ylab = "NULL",
            maintitle = 'Title',
@@ -55,18 +55,18 @@ scatterPlot_setup <-
     }
     
     
-    #ADD FILTER FOR NUMERIC DATA USING select_if function from dplyr package!!!!!!!!!!
+    #ADD FILTER FOR NUMERIC DATA USING select_if function from dplyr package!
     input <- select_if(input, is.numeric)
     
     #Set independent variable name
     if (facA == "NULL") {
-      facA <- colnames(mSetObj$dataSet$norm)[1]
       #Default is first column.
+      facA <- colnames(mSetObj$dataSet$norm)[1]
     }
     #Set dependent  variable name
     if (facB == "NULL") {
-      facB <- colnames(mSetObj$dataSet$norm)[2]
       #Default is second column.
+      facB <- colnames(mSetObj$dataSet$norm)[2]
     }
     
     ##Variable type check
@@ -78,19 +78,27 @@ scatterPlot_setup <-
     #Define formula
     formula <- as.formula(paste0(facB, "~", facA))
     
-    # x axis label
+    #Default will pass null to almost every parameter
     if (xlab == "NULL") {
       xlab <- facA
     }
-    # y axis label
+    
     if (ylab == "NULL") {
       ylab <- facB
     }
     
-    #Define line type
     if (type == "NULL") {
       type <- "lm"
     }
+    
+    if (line_color == "NULL") {
+      line_color <- "black"
+    }
+    
+    if (point_color == "NULL") {
+      point_color <- "black"
+    }
+    
     # save properties to object
     mSetObj$analSet$scatterPlot <-
       list(
@@ -165,12 +173,10 @@ plotScatterPlot <-
     
     #Name plot for download
     imgName <- paste(imgName, "dpi", dpi, ".", format, sep="");
-    print(input)
-    print(facA)
-    print(facB)
     
     #Set that to mSetObj
     mSetObj$imgSet$scatterPlot <- imgName
+    
     #Generate plot
     Cairo::Cairo(
       file = imgName,
