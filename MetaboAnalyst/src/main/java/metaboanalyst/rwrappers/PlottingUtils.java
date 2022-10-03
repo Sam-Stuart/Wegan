@@ -146,7 +146,7 @@ public class PlottingUtils {
                                                 + "\", \"" + facB
                                                 + "\", \"" + type
                                                 + "\", \"" + lineColor
-                                                + "\", \"" + "blue"
+                                                + "\", \"" + "black"
                                                 + "\", \"" + "NULL"
                                                 + "\", \"" + "NULL"
                                                 + "\", \"" + "NULL"
