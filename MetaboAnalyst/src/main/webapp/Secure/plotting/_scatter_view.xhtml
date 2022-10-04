@@ -7,7 +7,7 @@
                 xmlns:p="http://primefaces.org/ui">
     
     <p>
-        THIS IS THE SCATTER VIEW
+        A scatter plot (also called a scatterplot, scatter graph, scatter chart, scattergram, or scatter diagram) is a type of plot or mathematical diagram using Cartesian coordinates to display values for typically two variables for a set of data.
     </p>
     <h:panelGrid id="panelGrid" columns="5" cellpadding="5" columnClasses="colLeft,colRight,colLeft,colRight, colLast"> 
         <h:outputLabel  style="font-weight: bold" value="Dependant Data:"/>
@@ -21,25 +21,15 @@
         </p:selectOneMenu>
         
         <spacer></spacer>
-        
-        <h:outputLabel style="font-weight: bold; " value="X-Axis Label: "/>
-        <p:inputText style="left: -220px;" value="#{scatterBean.xLabel}"></p:inputText>
-        
-        <h:outputLabel style="font-weight: bold" value="Y-Axis Label: "/>
-            <p:inputText value="#{scatterBean.yLabel}" style="  align-content: left"></p:inputText>  
         <spacer></spacer>
-        
-        <h:outputLabel style="font-weight: bold" value="Color Pallete:"/>
-        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{scatterBean.color}">
-            <f:selectItems value="#{applicationBean1.boxPltColorPaletteOpts}" />
-        </p:selectOneMenu>
-        
-        <h:outputLabel style="font-weight: bold; " value="Plot Title: "/>
-        <p:inputText style="left: -220px;" value="#{scatterBean.mainTitle}"></p:inputText>
-        
- 
     </h:panelGrid> 
-    <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
+    <h:panelGrid id="panelGrid1" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
+       <p:commandButton value="Customize Graph"
+                                             styleClass="graphicsButton"
+                                             style="box-shadow: none !important; text-shadow: none !important;"
+                                             actionListener="#{sessionBean1.graphicsLnk_action('plot_scatter_chart')}" 
+                                            oncomplete="PF('graphApperanceLinear').show();"/>  
+       
         <p:commandButton value="Update" 
                          styleClass="updateButton"
                          style="box-shadow: none !important; text-shadow: none !important"
@@ -48,6 +38,7 @@
                         update=":ac:form2:boxPane  :cmdPane"
                         actionListener="#{scatterBean.scatterBtn_action()}"/>
     </h:panelGrid>    
+    
     <h:panelGrid class="resultsBar" columns="2">
         <h:panelGroup>
             <h:panelGrid columns="1" style="text-align : left;">
@@ -67,7 +58,13 @@
          <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
             <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('plot_scatter_chart')}" alt="ScatterChartImage"/>
         </h:panelGrid>                           
-
     </h:panelGrid>
+    
+     <p:dialog modal="true" widgetVar="graphApperanceLinear" 
+        style="width: 400px; height:400px;" 
+        appendTo="@(body)" header="Graphics Center"
+        draggable="false" closable="true" resizable="false"> 
+        <ui:include src="_color_palette_linear1.xhtml" />
+    </p:dialog>
 </ui:composition>
                

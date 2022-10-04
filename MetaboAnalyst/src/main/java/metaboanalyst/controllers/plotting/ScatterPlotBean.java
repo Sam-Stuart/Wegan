@@ -38,6 +38,7 @@ public class ScatterPlotBean implements Serializable {
     private String legendTitle = "NULL";
     private String mainTitle = " ";
     private String boxLabels = "NULL";
+    private String lineColor = "NULL";
     private String color = "NULL";
     private boolean data = false;
     private String facA = getNumericBoxColumnOpts()[0].getLabel();
@@ -164,8 +165,17 @@ public class ScatterPlotBean implements Serializable {
     public void setData(boolean data) {
         this.data = data;
     }
+    
+    public void setLineColor(String lineColor) {
+        this.lineColor = color;
+    }
+    
+    public String getLineColor() {
+        return this.lineColor;
+    }
+    
     public void scatterBtn_action() {
-        if (!PlottingUtils.CreateScatterChart(sb, facA, facB, "lm", "red", color, xLabel, yLabel, mainTitle, data)){
+        if (!PlottingUtils.CreateScatterChart(sb, facA, facB, "lm", lineColor, color, xLabel, yLabel, mainTitle, data)){
             RConnection RC = sb.getRConnection();
             sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
         } else {
