@@ -175,9 +175,9 @@ public class SVMCABean implements Serializable {
     
         // ACTION BUTTONS //
     public void corrSVMBtn_action() {
-        CAUtils.CreateSVMModel(sb, columnNameA, indInput, doOriginal);
-        CAUtils.PlotSVMCA(sb, columnNameA, indInput, doOriginal,
-                corColorDotsOpts, corColorLineOpts, doPlotConfInt,
+        CAUtils.CreateSVMModel(sb, columnNameA, indInput);
+        CAUtils.PlotSVMCA(sb, columnNameA, indInput,
+                corColorDotsOpts, corColorLineOpts,
                corPlotTitle, corPlotXlab, corPlotYlab,
                 sb.getNewImage("corr_svm_pred"), "png", 72);
     }
