@@ -1,6 +1,6 @@
 #'Perform Random Forest Regression'
 #'@description Use random forest for regression analysis
-#'@usage reg.rf.anal(mSetObj=NA, facA=NULL, pred.text=NULL)
+#'@usage reg.rf.anal(mSetObj=NA, facA=NULL, predtext=NULL)
 #'@param mSetObj Input the name of the created mSetObj
 #'@param facA Input the name of the response column (java uses numeric.columns() to give user options)
 #'@param predtext Input predictor column names (java uses text box to obtain string)
@@ -13,6 +13,8 @@
 reg.rf.anal <- function(mSetObj=NA, facA=NULL, predtext=NULL, data="false") {
   
   #install.packages(c("randomForest", "Metrics"))
+# urlPackage <- "https://cran.r-project.org/src/contrib/Archive/randomForest/randomForest_4.6-12.tar.gz"
+# install.packages(urlPackage, repos=NULL, type="source")
   library("randomForest")
   library("Metrics")
   
@@ -42,7 +44,7 @@ reg.rf.anal <- function(mSetObj=NA, facA=NULL, predtext=NULL, data="false") {
   #Set dependent (response) variable name
   if (facA=="NULL") {
     for (i in seq_along(colnames(input)) ) {
-      if (is.factor(input[,i])==FALSE) {
+      if (is.factor(input[,i])==FALSE || is.character(input[,i]) == FALSE) {
         facA <- colnames(input)[i]# Default is to choose the first numeric column as response column
         break
       }
@@ -51,12 +53,12 @@ reg.rf.anal <- function(mSetObj=NA, facA=NULL, predtext=NULL, data="false") {
     facA <- facA #User selected, java uses function numeric.columns() to provide options in drop down menu (only numeric columns are available)
   }
   
-  #Text box instructions for selecting predictor variables. Text box should be interactive, meaning any change in text alters the result in real time. Default pred.text is second column.
+  #Text box instructions for selecting predictor variables. Text box should be interactive, meaning any change in text alters the result in real time. Default predtext is second column.
   cat("Indicate independent variables using the column names with commas in between.")
   
   #Set right side of formula with predictor variables
   if (predtext=="NULL") {
-    data <- input[,colnames(input)!=facA]  # resp.col.num <- which(colnames(input)==facA)
+    data <- input[,colnames(input)!=facA, drop=FALSE]  # resp.col.num <- which(colnames(input)==facA)
     predtext <- paste0(colnames(data)[1], ",", colnames(data)[2]) #Default is the first 2 potential predictor columns
   } else {
     predtext <- predtext #taken from text box by java, fed as string into R code
@@ -73,12 +75,12 @@ reg.rf.anal <- function(mSetObj=NA, facA=NULL, predtext=NULL, data="false") {
   #Generate formula
   formula <- as.formula(paste(facA, "~", predtext))
   #Text should be visible to user
-  cat(paste0("You have created this formula for model building: ", facA, " ~ ", pred.text))
+  cat(paste0("You have created this formula for model building: ", facA, " ~ ", predtext))
   #cat("The L hand side is the dependent variable. The R hand side is the independent variable(s). If there is >1 independent variable, plus signs indicate the variables are evaluated on their own; colons indicate an interaction between the variables is evaluated.")
   #cat("If the formula is not what you intended, retype independent variable(s) in the text box and/or choose another dependent variable.")
   
   #Subset data using predictor column names
-  predictors <- unlist(strsplit(pred.text, "+", fixed=TRUE))
+  predictors <- unlist(strsplit(predtext, "+", fixed=TRUE))
 
  if(any(!colnames(input) %in% predictors)){
    stop(paste0( "'", predictors[!predictors %in% colnames(input)],
@@ -88,15 +90,15 @@ reg.rf.anal <- function(mSetObj=NA, facA=NULL, predtext=NULL, data="false") {
 }
 
 
-  pred_data <- input[,colnames(input) %in% predictors]
+  pred_data <- input[,colnames(input) %in% predictors, drop=FALSE]
   model_data <- data.frame(input[,facA], pred_data)
   colnames(model_data) <- c(paste0(facA), predictors)
   
   #Generate test and train data for model building
   set.seed(37) #Insures same selction of data for test and train each time
   index <- sample(1:nrow(model_data), 0.7*nrow(model_data)) #Select 70% of dataset
-  train_data <- model_data[index,] #70% of dataset
-  test_data <- model_data[-index,] #30% of dataset
+  train_data <- model_data[index,,drop = FALSE] #70% of dataset
+  test_data <- model_data[-index,, drop = FALSE] #30% of dataset
 
   predictors_test <- model.matrix(test_data[,facA]~., test_data)[,-1] # Predictor variables in test dataset, creating dummy vars for categorical predictors # [,-1] removes intercept column of all 1's
   predictors_test <- predictors_test[,-1] # predictor data for test dataset # [,-1] removes facA from df
@@ -134,7 +136,7 @@ reg.rf.anal <- function(mSetObj=NA, facA=NULL, predtext=NULL, data="false") {
   #mSetObj$analSet$rfReg$mod <- list(model_name = model_name, model = model, response = response_train_name, predictor = predictors_train_name)
 
   #STORE RESULTS
-  mSetObj$analSet$rfReg$res <- list(summary=summary, response=facA, predictors=colnames(predictors_train), pred.text=pred.text, predicted.values=fitted, train.RMSE=train_rmse, test.prediction=test_prediction, test.RMSE=test_rmse, predictor.importance=predictor_importance, train_data=train_data, test_data=test_data, predictors.test.data=predictors_test, predictors.train.data=predictors_train, method=model_name, fileName=fileName)       
+  mSetObj$analSet$rfReg$res <- list(summary=summary, response=facA, predictors=colnames(predictors_train), predtext=predtext, predicted.values=fitted, train.RMSE=train_rmse, test.prediction=test_prediction, test.RMSE=test_rmse, predictor.importance=predictor_importance, train_data=train_data, test_data=test_data, predictors.test.data=predictors_test, predictors.train.data=predictors_train, method=model_name, fileName=fileName)       
   mSetObj$analSet$rfReg$mod <- list(model_name=model_name, model=model, response=facA, predictors=colnames(predictors_train))
 
   #Download text document containing the results, called the fileName. Document goes into the working directory and should be accessible to the user as part of the report.
@@ -211,7 +213,7 @@ imgName, format="png", dpi=72, width=NA){
         facA <- mSetObj$analSet$rfReg$res$response
      } else {
     for (i in seq_along(colnames(input)) ) {
-      if (is.factor(input[,i]) == FALSE) {
+      if (is.factor(input[,i]) == FALSE || is.character(input[,i]) == FALSE) {
         facA <- colnames(input)[i]# Default is to choose the 1st numeric column as response column
         break
       }
@@ -226,7 +228,7 @@ imgName, format="png", dpi=72, width=NA){
     if("res" %in% names(mSetObj$analSet$rfReg) ){#if there is a results made already, take that predictor
         predtext <- mSetObj$analSet$rfReg$res$predictor
      } else {
-    data <- input[ , colnames(input) != facA] #drop=FALSE means it will be a df
+    data <- input[ , colnames(input) != facA, drop=FALSE] means it will be a df
  predtext <- paste0(colnames(data)[1], ",", colnames(data)[2]) #Default is the first 2 potential predictor col 
 #num.data <- dplyr::select_if(dat, is.numeric)
     #predtext <- colnames(num.data)[1] #Default is the 1st potential predictor column
@@ -248,22 +250,22 @@ imgName, format="png", dpi=72, width=NA){
   predictors1 <- unlist(strsplit(predtext, "+", fixed = TRUE), use.names = FALSE)
   predictors2 <- unlist(strsplit(predictors1, ":", fixed = TRUE), use.names = FALSE)
  if(any(!colnames(data) %in% predictors2)){
-   stop(paste0( "'", predictors[!predictors2 %in% colnames(data)],
+   stop(paste0( "'", predictors2[!predictors2 %in% colnames(data)],
   "' not found in data variables ('",
   paste(colnames(data), collapse = "', '"),
   "'): check spelling of text box input."))
 }
 
   #SUBSET DATA USING PREDICTOR COLUMN NAMES
-  pred_data <- as.data.frame(input[ ,colnames(input) %in% predictors2])
+  pred_data <- as.data.frame(input[ ,colnames(input) %in% predictors2, drop=FALSE])
   model_data <- data.frame(input[,facA], pred_data)
   colnames(model_data) <- c(paste0(facA), predictors2)
   
   #GENERATE TEST AND TRAIN
   set.seed(37) #Ensures same selection of data each time
   index <- sample(1:nrow(model_data), 0.7*nrow(model_data)) #Select 70% of dataset (this will be for train)
-  train_data <- model_data[index,] #70% of dataset
-  test_data <- model_data[-index,] #30% of dataset
+  train_data <- model_data[index,,drop = FALSE] #70% of dataset
+  test_data <- model_data[-index,,drop = FALSE] #30% of dataset
   predictors_test <- model.matrix(test_data[,facA]~., test_data)[,-1] # Predictor variables in test dataset, creating dummy vars for categorical predictors
   predictors_test <- predictors_test[,-1] # predictor data for test dataset
   predictors_train <- model.matrix(train_data[,facA]~., train_data)[,-1] # Predictor variables in train dataset, creating dummy vars for categorical predictors
@@ -502,7 +504,7 @@ imgName, format="png", dpi=72, width=NA){ #plot.rf.err
         facA <- mSetObj$analSet$rfReg$res$response
      } else {
     for (i in seq_along(colnames(input)) ) {
-      if (is.factor(input[,i]) == FALSE) {
+      if (is.factor(input[,i]) == FALSE || is.character(input[,i]) == FALSE) {
         facA <- colnames(input)[i]# Default is to choose the 1st numeric column as response column
         break
       }
@@ -517,7 +519,7 @@ imgName, format="png", dpi=72, width=NA){ #plot.rf.err
     if("res" %in% names(mSetObj$analSet$rfReg) ){#if there is a results made already, take that predictor
         predtext <- mSetObj$analSet$rfReg$res$predictor
      } else {
-    data <- input[ , colnames(input) != facA] #drop=FALSE means it will be a df
+    data <- input[ , colnames(input) != facA, drop = FALSE] means it will be a df
  predtext <- paste0(colnames(data)[1], ",", colnames(data)[2]) #Default is the first 2 potential predictor columns
 #num.data <- dplyr::select_if(dat, is.numeric)
     #predtext <- colnames(num.data)[1] #Default is the 1st potential predictor column
@@ -539,22 +541,22 @@ imgName, format="png", dpi=72, width=NA){ #plot.rf.err
   predictors1 <- unlist(strsplit(predtext, "+", fixed = TRUE), use.names = FALSE)
   predictors2 <- unlist(strsplit(predictors1, ":", fixed = TRUE), use.names = FALSE)
  if(any(!colnames(data) %in% predictors2)){
-   stop(paste0( "'", predictors[!predictors2 %in% colnames(data)],
+   stop(paste0( "'", predictors2[!predictors2 %in% colnames(data)],
   "' not found in data variables ('",
   paste(colnames(data), collapse = "', '"),
   "'): check spelling of text box input."))
 }
 
   #SUBSET DATA USING PREDICTOR COLUMN NAMES
-  pred_data <- as.data.frame(input[ ,colnames(input) %in% predictors2])
+  pred_data <- as.data.frame(input[ ,colnames(input) %in% predictors2, drop = FALSE])
   model_data <- data.frame(input[,facA], pred_data)
   colnames(model_data) <- c(paste0(facA), predictors2)
   
   #GENERATE TEST AND TRAIN
   set.seed(37) #Ensures same selection of data each time
   index <- sample(1:nrow(model_data), 0.7*nrow(model_data)) #Select 70% of dataset (this will be for train)
-  train_data <- model_data[index,] #70% of dataset
-  test_data <- model_data[-index,] #30% of dataset
+  train_data <- model_data[index,, drop = FALSE] #70% of dataset
+  test_data <- model_data[-index,, drop = FALSE] #30% of dataset
   # predictors_test <- model.matrix(test_data[,facA]~., test_data)[,-1] # Predictor variables in test dataset, creating dummy vars for categorical predictors
  # predictors_test <- predictors_test[,-1] # predictor data for test dataset
   predictors_train <- model.matrix(train_data[,facA]~., train_data)[,-1] # Predictor variables in train dataset, creating dummy vars for categorical predictors
@@ -757,7 +759,7 @@ imgName, format="png", dpi=72, width=NA){ #plot.rf.err
         facA <- mSetObj$analSet$rfReg$res$response
      } else {
     for (i in seq_along(colnames(input)) ) {
-      if (is.factor(input[,i]) == FALSE) {
+      if (is.factor(input[,i]) == FALSE || is.character(input[,i]) == FALSE) {
         facA <- colnames(input)[i]# Default is to choose the 1st numeric column as response column
         break
       }
@@ -772,7 +774,7 @@ imgName, format="png", dpi=72, width=NA){ #plot.rf.err
     if("res" %in% names(mSetObj$analSet$rfReg) ){#if there is a results made already, take that predictor
         predtext <- mSetObj$analSet$rfReg$res$predictor
      } else {
-    data <- input[ , colnames(input) != facA] #drop=FALSE means it will be a df
+    data <- input[ , colnames(input) != facA, drop = FALSE] means it will be a df
  predtext <- paste0(colnames(data)[1], ",", colnames(data)[2]) #Default is the first 2 potential predictor col   
     #num.data <- dplyr::select_if(data, is.numeric)
     #predtext <- colnames(num.data)[1] #Default is the 1st potential predictor column
@@ -794,22 +796,22 @@ imgName, format="png", dpi=72, width=NA){ #plot.rf.err
   predictors1 <- unlist(strsplit(predtext, "+", fixed = TRUE), use.names = FALSE)
   predictors2 <- unlist(strsplit(predictors1, ":", fixed = TRUE), use.names = FALSE)
  if(any(!colnames(data) %in% predictors2)){
-   stop(paste0( "'", predictors[!predictors2 %in% colnames(data)],
+   stop(paste0( "'", predictors2[!predictors2 %in% colnames(data)],
   "' not found in data variables ('",
   paste(colnames(data), collapse = "', '"),
   "'): check spelling of text box input."))
 }
 
   #SUBSET DATA USING PREDICTOR COLUMN NAMES
-  pred_data <- as.data.frame(input[ ,colnames(input) %in% predictors2])
+  pred_data <- as.data.frame(input[ ,colnames(input) %in% predictors2, drop = FALSE])
   model_data <- data.frame(input[,facA], pred_data)
   colnames(model_data) <- c(paste0(facA), predictors2)
   
   #GENERATE TEST AND TRAIN
   set.seed(37) #Ensures same selection of data each time
   index <- sample(1:nrow(model_data), 0.7*nrow(model_data)) #Select 70% of dataset (this will be for train)
-  train_data <- model_data[index,] #70% of dataset
-  #test_data <- model_data[-index,] #30% of dataset
+  train_data <- model_data[index,,drop = FALSE] #70% of dataset
+  #test_data <- model_data[-index,, drop = FALSE] #30% of dataset
   # predictors_test <- model.matrix(test_data[,facA]~., test_data)[,-1] # Predictor variables in test dataset, creating dummy vars for categorical predictors
  # predictors_test <- predictors_test[,-1] # predictor data for test dataset
   predictors_train <- model.matrix(train_data[,facA]~., train_data)[,-1] # Predictor variables in train dataset, creating dummy vars for categorical predictors
