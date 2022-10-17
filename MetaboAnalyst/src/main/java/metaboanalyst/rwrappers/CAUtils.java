@@ -539,7 +539,7 @@ public static boolean PlotLinearResidFitCA(SessionBean1 sb,
         public static void CreateRFModel(SessionBean1 sb, String facA, String predtext, Boolean data) {
         try {
             RConnection RC = sb.getRConnection();
-            String rCommand = "rf.reg.anal(NA" + ", \"" 
+            String rCommand = "reg.rf.anal(NA" + ", \"" 
                       + facA + "\", \"" 
                     + predtext + "\", \"" 
                     + data + "\" )"; 
