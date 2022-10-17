@@ -46,7 +46,7 @@
                                              style="box-shadow: none !important; text-shadow: none !important"
                                             onclick="PF('statusDialog').show()"
                                             oncomplete="PF('statusDialog').hide()"  
-                                            update=":RFCA:form1:rfPane1  :cmdPane" 
+                                            update=":RFCA:form1:corrRFPane1  :cmdPane" 
                                             actionListener="#{RFCABean.corrRFBtn_action()}"/> 
                             
                             </h:panelGrid>
@@ -75,7 +75,7 @@
                                     actionListener="#{sessionBean1.graphicsLnk_action('corr_rf_pred')}"
                                     oncomplete="PF('graphDialog').show()"/>
                             </h:panelGrid>    
-                        <h:panelGrid id="rfPane1" style="text-align: center; width: 100%;">
+                         <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
                             <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_rf_pred')}" alt="RFPlot"/>
                         </h:panelGrid>
                       </h:panelGrid>
@@ -117,7 +117,7 @@
                                              style="box-shadow: none !important; text-shadow: none !important"
                                             onclick="PF('statusDialog').show()"
                                             oncomplete="PF('statusDialog').hide()"  
-                                            update=":RFCA:form2:rfPane2  :cmdPane" 
+                                            update=":RFCA:form2:corrRFPane2  :cmdPane" 
                                             actionListener="#{RFCABean.corrRFBtn2_action()}"/> 
                             
                             </h:panelGrid>
@@ -145,7 +145,7 @@
                                     actionListener="#{sessionBean1.graphicsLnk_action('corr_rf_relaimpo')}"
                                     oncomplete="PF('graphDialog').show()"/>
                             </h:panelGrid>    
-                        <h:panelGrid id="rfPane2" style="text-align: center; width: 100%;">
+                         <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
                             <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_rf_relaimpo')}" alt="RFRelaimpoPlot"/>
                         </h:panelGrid>
                       </h:panelGrid>     
@@ -224,5 +224,25 @@ The R &#xb2; value is the fraction of variance explained by the model and is a v
                 
             </p:tabView> 
         </h:panelGrid> 
+ 
+        <p:dialog modal="true" widgetVar="graphApperanceRF" 
+            style="width: 400px; height:400px;" 
+            appendTo="@(body)" header="Graphics Center"
+            draggable="false" closable="true" resizable="false"> 
+            <ui:include src="_color_palette_rf.xhtml" />
+        </p:dialog>
+         <p:dialog modal="true" widgetVar="graphApperanceRF2" 
+            style="width: 400px; height:400px;" 
+            appendTo="@(body)" header="Graphics Center"
+            draggable="false" closable="true" resizable="false"> 
+            <ui:include src="_color_palette_rf2.xhtml" />
+        </p:dialog>
+         <p:dialog modal="true" widgetVar="graphApperanceRF3" 
+            style="width: 400px; height:400px;" 
+            appendTo="@(body)" header="Graphics Center"
+            draggable="false" closable="true" resizable="false"> 
+            <ui:include src="_color_palette_rf3.xhtml" />
+        </p:dialog>        
+        
     </ui:define>
 </ui:composition>
