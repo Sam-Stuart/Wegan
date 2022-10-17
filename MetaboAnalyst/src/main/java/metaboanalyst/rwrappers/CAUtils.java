@@ -249,11 +249,17 @@ public static boolean PlotLinearResidFitCA(SessionBean1 sb,
 //    }
     
 // PENALIZED
-    public static void CreatePenalizedModel(SessionBean1 sb, String method, String facA, Boolean data) {
+    public static void CreatePenalizedModel(SessionBean1 sb, String facA, String method
+            //, Boolean data
+    ) {
         System.out.println(method);
         try {
             RConnection RC = sb.getRConnection();
-            String rCommand = "pen.reg.anal(NA" + ", \"" + method + "\", \"" + facA + "\", \"" + data + "\" )";
+            String rCommand = "pen.reg.anal(NA" + ", \"" 
+                    + facA + "\", \"" 
+                    + method + "\" )";
+//                    + method + "\", \"" 
+//                    + data + "\" )";
             RCenter.recordRCommand(RC, rCommand);
             //sb.addGraphicsCMD("corr_penalized", rCommand);
             RC.voidEval(rCommand);
@@ -264,16 +270,17 @@ public static boolean PlotLinearResidFitCA(SessionBean1 sb,
  
     
     public static void PlotPenalizedCA(SessionBean1 sb, 
-            String facA, Boolean data, String method,
+            String facA, String method, 
+            //Boolean data, 
             String col_dots, String col_line, Boolean plot_ci, 
                 String plot_title, String plot_xlab, String plot_ylab,
             String imgName, String format, int dpi) {
         try {
             RConnection RC = sb.getRConnection();
             String rCommand = "pen.pred.plot(NA" + ", \"" 
-                    + facA + "\", \"" 
-                    + data + "\", \""     
+                    + facA + "\", \""    
                     + method + "\", \"" 
+//                    + data + "\", \""  
                     + col_dots + "\", \""
                     + col_line + "\", \""
                     + plot_ci + "\", \""
@@ -290,16 +297,17 @@ public static boolean PlotLinearResidFitCA(SessionBean1 sb,
     }
  
     public static void PlotPenalizedCVCA(SessionBean1 sb, 
-            String facA, Boolean data, String method, 
+            String facA, String method, 
+//            Boolean data, 
             String col_dots, String col_line, 
              String plot_title, String plot_xlab, String plot_ylab,
             String imgName, String format, int dpi) {
         try {
             RConnection RC = sb.getRConnection();
             String rCommand = "pen.cv.plot(NA" + ", \"" 
-                    + facA + "\", \"" 
-                    + data + "\", \""     
+                    + facA + "\", \""     
                     + method + "\", \"" 
+//                    + data + "\", \""                     
                     + col_dots + "\", \""
                     + col_line + "\", \""
                     + plot_title + "\", \""
@@ -488,13 +496,14 @@ public static boolean PlotLinearResidFitCA(SessionBean1 sb,
     }    
     
 //MACHINE LEARNING (ML)
-    public static void CreateSVMModel(SessionBean1 sb, String facA, String predtext, Boolean data) {
+    public static void CreateSVMModel(SessionBean1 sb, String facA, String predtext) {
         try {
             RConnection RC = sb.getRConnection();
             String rCommand = "svm.reg.anal(NA" + ", \""
                      + facA + "\", \"" 
-                    + predtext + "\", \"" 
-                    + data + "\" )"; 
+                    + predtext + "\" )";        
+//                    + predtext + "\", \"" 
+//                    + data + "\" )"; 
             RCenter.recordRCommand(RC, rCommand);
             RC.voidEval(rCommand);
         } catch (RserveException rse) {
@@ -504,8 +513,8 @@ public static boolean PlotLinearResidFitCA(SessionBean1 sb,
     
   
     public static void PlotSVMCA(SessionBean1 sb, 
-              String facA, String predtext, Boolean data,
-             String col_dots, String col_line, Boolean plot_ci, 
+              String facA, String predtext, 
+             String col_dots, String col_line, 
                 String plot_title, String plot_xlab, String plot_ylab,
             String imgName, String format, int dpi) {
         try {
@@ -513,10 +522,8 @@ public static boolean PlotLinearResidFitCA(SessionBean1 sb,
             String rCommand = "svm.pred.plot(NA" + ", \"" 
                      + facA + "\", \"" 
                     + predtext + "\", \"" 
-                    + data + "\", \"" 
                     + col_dots + "\", \"" 
                     + col_line + "\", \"" 
-                    + plot_ci + "\", \"" 
                     + plot_title + "\", \"" 
                     + plot_xlab + "\", \"" 
                     + plot_ylab + "\", \"" 
