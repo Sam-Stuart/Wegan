@@ -1,10 +1,10 @@
 #'Perform Penalized Linear Regression
 #'@description Build a penalized regression model for one user selected predictor variable
-#'@usage pen.reg.anal(mSetObj=NA, method="ridge", facA=NULL, data='false')
+#'@usage pen.reg.anal(mSetObj=NA, facA='NULL', method="NULL") # data='false'
 #'@param mSetObj Input the name of the created mSetObj
 #'@param facA Input the name of the response column (java uses Columns() to give user options in dynamic dropdown)
 #'@param method Set penalized regression method, default is ridge
-#'@param data Boolean, whether to use original data; "false" (default) means use normalized or "true" means use original (checkbox)
+## #@param data Boolean, whether to use original data; "false" (default) means use normalized or "true" means use original (checkbox) ## removed data param: 202209-30
 #'@author Louisa Normington\email{normingt@ualberta.ca}
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2)
@@ -18,31 +18,32 @@ library("dplyr")
 
 pen.reg.anal <- function(mSetObj=NA,
                          facA="NULL",
-                         method="NULL",
-                         data="false"
+                         method="NULL" #, data="false"
+## ## removed data param: 202209-30
                          ){
   
   mSetObj <- .get.mSet(mSetObj)
   
 
+## df[, subset, drop = FALSE] # drop = FALSE returns df; drop = TRUE returns a vector
+
 ### penalized regression: Important to standardize
 ### compared to least-squares, where it is not necessary to stdz the predictors or outcomes prior to fitting model
 ### for penalized IT IS important to stdz BECAUSE the same penalty factor lambda is applied to all coefficients Bj equally - to interpret Bj coeffeicients in the original units, invert the sdzn after estimation
 ## https://jwmi.github.io/SL/11-Penalized-regression.pdf
-
 ### TO avoid being penalized for differences in scale between variables, it a good idea to standardize each variable (subtract mean, divide by sd) before running penReg
 ## https://lost-stats.github.io/Machine_Learning/penalized_regresstion.html
 
-
-  ### SET DATA (whether to use original data or not)
-  if (data=="false") { 
-      mSetObj$dataSet$norm <- mSetObj$dataSet$norm[order(as.numeric(rownames(mSetObj$dataSet$norm))),,drop=FALSE]
+## removed data param: 202209-30
+#  ### SET DATA (whether to use original data or not)
+#  if (data=="false") { 
+    mSetObj$dataSet$norm <- mSetObj$dataSet$norm[order(as.numeric(rownames(mSetObj$dataSet$norm))),,drop=FALSE]
     input <- mSetObj$dataSet$norm #default use norm
-  } else {
-    input <- mSetObj$dataSet$orig
-warning("NOT USING STANDARDIZED DATA IN PENALIZED REGRESSION? BE CAREFUL - you may be penalized for differences in scale between variables (remember the same penalty factor lambda will be applied to all variables equally!)")
-cat("NOT USING STANDARDIZED DATA IN PENALIZED REGRESSION? BE CAREFUL - you may be penalized for differences in scale between variables (remember the same penalty factor lambda will be applied to all variables equally!)")
-  }
+ # } else {
+ #   input <- mSetObj$dataSet$orig
+#warning("NOT USING STANDARDIZED DATA IN PENALIZED REGRESSION? BE CAREFUL - you may be penalized for differences in scale between variables (remember the same penalty factor lambda will be applied to all variables equally!)")
+#cat("NOT USING STANDARDIZED DATA IN PENALIZED REGRESSION? BE CAREFUL - you may be penalized for differences in scale between variables (remember the same penalty factor lambda will be applied to all variables equally!)")
+#  }
   
   #File name for summary download
   fileName <- "penalized_regression_summary.txt"
@@ -63,9 +64,10 @@ cat("NOT USING STANDARDIZED DATA IN PENALIZED REGRESSION? BE CAREFUL - you may b
       stop("Your data set only has 2 variables! Try using linear, polynomial or SVM regression.")
   }
   
+### changed facA to 1st column of numeric data instead of just generic data 202209-30
   #SET RESPONSE VARIABLE NAME
   if (facA=="NULL"){
-    facA <- colnames(input)[1] #facA is the name of the response variable name. Default is first column.
+    facA <- colnames(data)[1] #facA is the name of the response variable name. Default is first column.
   } else {
     facA <- facA #Determined using numeric.columns() function below (java will present options in drop down menu)
   }
@@ -76,8 +78,8 @@ cat("NOT USING STANDARDIZED DATA IN PENALIZED REGRESSION? BE CAREFUL - you may b
   train_data <- data[index,,drop = FALSE] #70% of dataset
   test_data <- data[-index,, drop = FALSE] #30% of dataset
   resp.col.num <- which(colnames(data)==facA)
-  predictors_train <- train_data[,-resp.col.num, drop = TRUE]
-  predictors_test <- test_data[,-resp.col.num, drop = TRUE]
+  predictors_train <- train_data[,-resp.col.num, drop = FALSE]
+  predictors_test <- test_data[,-resp.col.num, drop = FALSE]
   response_train <- train_data[,facA, drop = TRUE] # response data for train dataset
   # response_test <- test_data[,facA, drop = TRUE]
   cat("The train data for model building is 70% of the dataset, while the test data for model testing is 30% of the dataset.") #Text will be visible to user.
@@ -245,8 +247,10 @@ cat("NOT USING STANDARDIZED DATA IN PENALIZED REGRESSION? BE CAREFUL - you may b
 ### uncomment done
   overall.rsme <- Metrics::rmse(data[,facA, drop = TRUE], fitted)
 
-  #Obtain test RMSE for plotting
-  test_prediction <- predict(model, newx = as.matrix(predictors_test))
+  #PREDICT ON TEST, OBTAIN RMSE
+  predictors_test2 <- as.matrix(predictors_test)
+  # predictors_test2 <- as.data.frame(predictors_test2)
+  test_prediction <- predict(model, newx =predictors_test2  )
   test_rmse <- Metrics::rmse(test_data[,facA, drop = TRUE], test_prediction)
  
   #Store results in mSetObj$analSet$penReg
@@ -277,10 +281,10 @@ cat("NOT USING STANDARDIZED DATA IN PENALIZED REGRESSION? BE CAREFUL - you may b
 
 #'Produce predicted/actual plot for penalized regression
 #'@description Scatter plot, where actual variables are y and predicted values are x
-#'@usage plot.pred.penReg(mSetObj, facA="NULL", data="false", method="NULL", col_dots="NULL", col_line="NULL", plot_ci="false", plot_title=" ", plot_ylab=" ", plot_xlab = " "imgName, format="png", dpi=72, width=NA)
+#'@usage plot.pred.penReg(mSetObj, facA="NULL", method="NULL", col_dots="NULL", col_line="NULL", plot_ci="false", plot_title=" ", plot_ylab=" ", plot_xlab = " "imgName, format="png", dpi=72, width=NA)
 #'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
 #'@param facA Input the name of the response column (java uses Columns() to give user options)
-#'@param data Boolean, whether to use original data; "false" (default) means normalized or "true" means original (checkbox)
+###@param data Boolean, whether to use original data; "false" (default) means normalized or "true" means original (checkbox) ## removed data param: 202209-30
 #'@param method Set penalized regression method, default is ridge
 #'@param col_dots Set color for scatterplot dots (default "NULL" is black); (static dropdown)
 #'@param col_line Set color for line (default "NULL" is black); (static dropdown)
@@ -301,9 +305,8 @@ cat("NOT USING STANDARDIZED DATA IN PENALIZED REGRESSION? BE CAREFUL - you may b
 #'@export
 
 pen.pred.plot <- function(mSetObj=NA,
-  facA = "NULL",
-  data="false",
-  method = "NULL",
+  facA = "NULL", 
+  method = "NULL", #data='false', ## removed data param: 202209-30
 
   col_dots="NULL",
   col_line="NULL", 
@@ -327,23 +330,24 @@ library("RJSONIO")
   #Extract necessary objects from mSetObj
   mSetObj <- .get.mSet(mSetObj)
   
-  
+## removed data param: 202209-30
   ### SET DATA (whether to use original data or not)
-  if (data=="false") { 
+#  if (data=="false") { 
     input <- mSetObj$dataSet$norm #default use norm
-  } else {
-    input <- mSetObj$dataSet$orig
-cat("NOT USING STANDARDIZED DATA IN PENALIZED REGRESSION? BE CAREFUL - you may be penalized for differences in scale between variables (remember the same penalty factor lambda will be applied to all variables equally!)")
-  }
+#  } else {
+#    input <- mSetObj$dataSet$orig
+#cat("NOT USING STANDARDIZED DATA IN PENALIZED REGRESSION? BE CAREFUL - you may be penalized for differences in scale between variables (remember the same penalty factor lambda will be applied to all variables equally!)")
+#  }
   
 data <- dplyr::select_if(input, is.numeric)
 
+### changed facA to 1st column of numeric data instead of just generic data 202209-30
   #SET RESPONSE VARIABLE NAME
   if (facA=="NULL"){
      if( "res" %in% names(mSetObj$analSet$penReg) ){
         facA <- mSetObj$analSet$penReg$res$response
      } else {
-    facA <- colnames(input)[1] #facA is response variable name, default 1st column  #use input not data, want 1st col in all of table of uploaded set
+    facA <- colnames(data)[1] #facA is response variable name, default 1st column  #use input not data, want 1st col in all of table of uploaded set
   } 
     } else {
     facA <- facA #Determined using numeric.columns() (java will present options in drop down menu)
@@ -377,8 +381,8 @@ data <- dplyr::select_if(input, is.numeric)
   train_data <- data[index,,drop = FALSE] #70% of dataset
   test_data <- data[-index,, drop = FALSE] #30% of dataset
   resp.col.num <- which(colnames(data)==facA)
-  predictors_train <- train_data[,-resp.col.num, drop = TRUE]
-  predictors_test <- test_data[,-resp.col.num, drop = TRUE]
+  predictors_train <- train_data[,-resp.col.num, drop = FALSE]
+  predictors_test <- test_data[,-resp.col.num, drop = FALSE]
   response_train <- train_data[,facA, drop = TRUE] # response data for train dataset
 # response_test <- test_data[,facA, drop = TRUE]
   cat("The train data for model building is 70% of the dataset, while the test data for model testing is 30% of the dataset.") #Text will be visible to user.
@@ -418,8 +422,9 @@ data <- dplyr::select_if(input, is.numeric)
       cv <- glmnet::cv.glmnet(x = as.matrix(predictors_train), y = as.matrix(response_train), alpha=bestAlpha)
     }
 
-   test_prediction <- predict(model, newx = as.matrix(predictors_test))
-  # test_rmse <- Metrics::rmse(test_data[,facA], test_prediction)  
+  
+   test_prediction <- predict(model, newx = as.matrix(predictors_test)) 
+  # test_rmse <- Metrics::rmse(test_data[,facA, drop = TRUE], test_prediction)  
 
    formula <- paste(facA, "~", paste(colnames(predictors_train), collapse = "+", sep = ""))
    dfpred <- data.frame(fpred = as.vector(test_prediction), fA = test_data[,facA, drop = TRUE])
@@ -619,7 +624,7 @@ if(!.on.public.web){
 #'@description
 #'@usage plot.cv.penReg(mSetObj, facA="NULL",data="false", method="NULL", col_dots="NULL",col_line="NULL", plot_title=" ",plot_xlab=" ",plot_ylab=" ",imgName, format="png", dpi=72, width=NA)
 #'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
-#'@param data Boolean, whether to use original data; "false" (default) means normalized or "true" means original (checkbox)
+###@param data Boolean, whether to use original data; "false" (default) means normalized or "true" means original (checkbox)   ## removed data param: 202209-30
 #'@param method Set penalized regression method, default is ridge
 #'@param col_dots Set color for scatterplot dots (default "NULL" is black); (static dropdown)
 #'@param col_line Set color for line (default "NULL" is black); (static dropdown)
@@ -640,8 +645,7 @@ if(!.on.public.web){
 
 pen.cv.plot <- function(mSetObj=NA,
   facA = "NULL",
-  data="false",
-  method = "NULL",
+  method = "NULL", # data = "false",  ## removed data param: 202209-30
   col_dots="NULL",
   col_line="NULL", 
   # plot_ci="false",
@@ -662,22 +666,24 @@ library("RJSONIO")
   mSetObj <- .get.mSet(mSetObj)
   
  
+## removed data param: 202209-30
   ### SET DATA (whether to use original data or not)
-  if (data=="false") { 
+#  if (data=="false") { 
     input <- mSetObj$dataSet$norm #default use norm
-  } else {
-    input <- mSetObj$dataSet$orig
-cat("NOT USING STANDARDIZED DATA IN PENALIZED REGRESSION? BE CAREFUL - you may be penalized for differences in scale between variables (remember the same penalty factor lambda will be applied to all variables equally!)")
-  }
+#  } else {
+#    input <- mSetObj$dataSet$orig
+#cat("NOT USING STANDARDIZED DATA IN PENALIZED REGRESSION? BE CAREFUL - you may be penalized for differences in scale between variables (remember the same penalty factor lambda will be applied to all variables equally!)")
+#  }
   
 data <- dplyr::select_if(input, is.numeric)
 
+### changed facA to 1st column of numeric data instead of just generic data 202209-30
   #SET RESPONSE VARIABLE NAME
   if (facA=="NULL"){
      if( "res" %in% names(mSetObj$analSet$penReg) ){
         facA <- mSetObj$analSet$penReg$res$response
      } else {
-    facA <- colnames(input)[1] #facA is response variable name. Default is 1st column
+    facA <- colnames(data)[1] #facA is response variable name. Default is 1st column
   } 
     } else {
     facA <- facA #Determined using numeric.columns() (java will present options in drop down menu)
@@ -710,8 +716,8 @@ data <- dplyr::select_if(input, is.numeric)
   train_data <- data[index,,drop = FALSE] #70% of dataset
   test_data <- data[-index,, drop = FALSE] #30% of dataset
   resp.col.num <- which(colnames(data)==facA)
-  predictors_train <- train_data[,-resp.col.num, drop = TRUE]
-  predictors_test <- test_data[,-resp.col.num, drop = TRUE]
+  predictors_train <- train_data[,-resp.col.num, drop = FALSE]
+  predictors_test <- test_data[,-resp.col.num, drop = FALSE]
   response_train <- train_data[,facA, drop = TRUE] # response data for train dataset
   # response_test <- test_data[,facA, drop = TRUE]  
 cat("The train data for model building is 70% of the dataset, while the test data for model testing is 30% of the dataset.") #Text will be visible to user.
@@ -753,8 +759,8 @@ cat("The train data for model building is 70% of the dataset, while the test dat
     }
 
  formula <- paste(facA, "~", paste(colnames(predictors_train), collapse = "+", sep = ""))
- test_prediction <- predict(model, newx = as.matrix(predictors_test))
-  # test_rmse <- Metrics::rmse(test_data[,facA], test_prediction)
+ test_prediction <- predict(model, newx = as.matrix(predictors_test)) 
+# test_rmse <- Metrics::rmse(test_data[,facA], test_prediction)
 
 #  cv <- mSetObj$analSet$penReg$res$cross.validation
 #  method <- mSetObj$analSet$penReg$res$method
