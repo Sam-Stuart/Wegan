@@ -7,29 +7,34 @@
                 xmlns:p="http://primefaces.org/ui">
 
 
-    <h:form id="RFGraph">
+    <h:form id="SVMGraph">
         <h:panelGrid columns="1" style="width:380px;">
             <h:panelGrid id="panelGrid1" columns="2" cellpadding="5" columnClasses="colBrayLong,colBrayShort">
-               <!--Error rate vs Forest Size Line Plot-->
-                <h3>Line Options</h3>
+               <!--Predicted vs Actual point/line Plot-->
+                <h3>Line and Point Options</h3>
                 <p:panelGrid></p:panelGrid>
 
+                <h:outputLabel style="font-weight: bold" value="Point Color:"/>
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{svmCABean.corColorDotsOpts}">
+                    <f:selectItems value="#{applicationBean1.corLinColorDotsOpts}" />
+                </p:selectOneMenu> 
+                
                 <h:outputLabel style="font-weight: bold" value="Line Color:"/>
-                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{rfCABean.corColorLineOpts}">
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{svmCABean.corColorLineOpts}">
                     <f:selectItems value="#{applicationBean1.corLinColorLineOpts}" />
-                </p:selectOneMenu>  
-
+                </p:selectOneMenu>   
+                
                 <h3>Titles</h3>
                 <p:panelGrid></p:panelGrid>                 
                 
                 <h:outputLabel style="font-weight: bold" value="Plot Title:"/>
-                <p:inputText value = "#{rfCABean.corPlotTitle}"/> 
+                <p:inputText value = "#{svmCABean.corPlotTitle}"/> 
                 
                 <h:outputLabel style="font-weight: bold" value="X-Axis Label"/>
-                <p:inputText value = "#{rfCABean.corPlotXlab}"/> 
+                <p:inputText value = "#{svmCABean.corPlotXlab}"/> 
                 
                  <h:outputLabel style="font-weight: bold" value="Y-Axis Label"/>
-                <p:inputText value = "#{rfCABean.corPlotYlab}"/> 
+                <p:inputText value = "#{svmCABean.corPlotYlab}"/> 
                 
                 <!--<p:panelGrid></p:panelGrid>-->
 
@@ -39,10 +44,18 @@
                                  styleClass="updateButton"
                                  style="box-shadow: none !important; text-shadow: none !important"
                                 onclick="PF('statusDialog').show()"
-                                oncomplete="PF('graphApperanceRF3').hide(); PF('statusDialog').hide()"  
-                                update=":RFCA:form3:rfPane3  :cmdPane"
-                                actionListener="#{rfCABean.corrRFBtn3_action()}"/>
+                                oncomplete="PF('graphApperanceSVM').hide(); PF('statusDialog').hide()"  
+                                update=":form1:corrSVMPane1  :cmdPane"
+                                actionListener="#{svmCABean.corrSVMBtn_action()}"/>
             </h:panelGrid>
         </h:panelGrid>
+        
+        <p:dialog modal="true" widgetVar="graphApperanceSVM" 
+            style="width: 400px; height:400px;" 
+            appendTo="@(body)" header="Graphics Center"
+            draggable="false" closable="true" resizable="false"> 
+            <ui:include src="_color_palette_svm.xhtml" />
+        </p:dialog>        
+        
     </h:form>
 </ui:composition>
