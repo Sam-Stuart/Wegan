@@ -111,13 +111,13 @@ public class CABean implements Serializable {
 //    }
                        
     private void doDefaultPenalized() {
-        CAUtils.CreatePenalizedModel(sb, "NULL", "NULL", false);
-        CAUtils.PlotPenalizedCA(sb, "NULL",
-                false, "NULL", "NULL","NULL",
+        CAUtils.CreatePenalizedModel(sb, "NULL", "NULL");
+        CAUtils.PlotPenalizedCA(sb, "NULL", "NULL",
+                "NULL","NULL",
                 false, " "," "," ",
                 sb.getCurrentImage("corr_penalized"), "png", 72);
-        CAUtils.PlotPenalizedCVCA(sb,"NULL", 
-                false, "NULL", "NULL", "NULL",
+        CAUtils.PlotPenalizedCVCA(sb,"NULL", "NULL",
+                "NULL", "NULL",
                 " "," "," ",
                 sb.getCurrentImage("corr_penalized2"), "png", 72);
     }
@@ -157,10 +157,10 @@ public class CABean implements Serializable {
 
 
     private void doDefaultSVM() {
-        CAUtils.CreateSVMModel(sb, "NULL", "NULL", false);
+        CAUtils.CreateSVMModel(sb, "NULL", "NULL");
         CAUtils.PlotSVMCA(sb,
-                "NULL", "NULL", false,
-                "NULL","NULL",  false,
+                "NULL", "NULL",
+                "NULL","NULL",
                  " ", " "," ",
                 sb.getCurrentImage("corr_svm_pred"), "png", 72);
     }    
