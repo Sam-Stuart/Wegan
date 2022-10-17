@@ -19,7 +19,7 @@
                             The train data for model building is 70% of the dataset, while the test data for model testing is 30% of the dataset.
                         </p>
                 
-                <h:panelGrid id="corrSVMPane1" columns="3" cellpadding="3" columnClasses="colLeft,colRight,colLast">
+                <h:panelGrid id="panelGrid1_1" columns="3" cellpadding="3" columnClasses="colLeft,colRight,colLast">
                     <h:outputLabel style="font-weight: bold" value="Dependant Variable:"/>
                             
                     <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{svmCABean.columnNameA}">
@@ -32,6 +32,12 @@
                     
                 <p:panelGrid></p:panelGrid>
                 <h:panelGrid id="panelGrid1_2" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
+                    <p:commandButton value="Customize Graph"
+                                     styleClass="graphicsButton"
+                                     style="box-shadow: none !important; text-shadow: none !important;"
+                                     actionListener="#{sessionBean1.graphicsLnk_action('corr_svm_pred')}"
+                                     oncomplete="PF('graphApperanceSVM').show()"/>  
+                    
                     <p:commandButton value="Update" 
                                     styleClass="updateButton"
                                     style="box-shadow: none !important; text-shadow: none !important"
@@ -40,47 +46,68 @@
                                     update=":form1:corrSVMPane1  :cmdPane" 
                                     actionListener="#{svmCABean.corrSVMBtn_action()}"/> 
                 </h:panelGrid>   
+                
                 <h:panelGrid class="resultsBar" columns="2">
-                    <h:panelGroup>
-                        <h:panelGrid columns="1" style="text-align : left;">
-                            Results
-                        </h:panelGrid>
-                    </h:panelGroup> 
-                    <h:panelGroup>
-                        <h:panelGrid columns="3" class="resultsImages">
-                            <i class="fas fa-palette"></i>
-                            <i class="fa fa-question-circle"></i>
-<!--                                                                       <i class="fas fa-table"></i>
-                           <i class="fas fa-palette"></i>
-                           <i class="far fa-question-circle"></i>-->
-                        </h:panelGrid>
+                            <h:panelGroup>
+                                <h:panelGrid columns="1" style="text-align : left;">
+                                    Results
+                                </h:panelGrid>
+                            </h:panelGroup> 
+                            <h:panelGroup>
+                                <h:panelGrid columns="3" class="resultsImages">
+                                    <i id="question" class="fa fa-question-circle" title="Based on the linear model generated, the predicted response variable is plotted against the actual response variable in the test data (30% of the input data). 
 
-                    </h:panelGroup>                            
-                </h:panelGrid> 
-                        <h:panelGrid id="corrSVMPane1_3" style="width: 100%;">
+The R &#xb2; value is the fraction of variance explained by the model and is a value from 0 to 1. The adjusted R &#xb2; value is the R &#xb2; value adjusted for the number of predictors in the model. R &#xb2; is used to assess how well a model fits the data, with a higher R &#xb2; value indicating a better model fit. The confidence interval represents the level of certainty about the predicted values; if the same procedure was repeatedly used to make new estimates, the confidence interval would contain the average of all the estimates 95% of the time. https://www.census.gov/programs-surveys/saipe/guidance/confidence-intervals.html "></i>
+                                </h:panelGrid>
+                            </h:panelGroup>
+                          </h:panelGrid>
+                
+<!--                        <h:panelGrid id="corrSVMPane1_3" style="width: 100%;">
                              <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
-                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_svm')}" alt="SVM image"/>
+                                <img onerror='this.style.display="none"' src="hash{sessionBean1.getCurrentImageURL('corr_svm_pred')}" alt="SVM image"/>
                             </h:panelGrid>                           
-                        </h:panelGrid>       
+                        </h:panelGrid>  -->
+                <h:panelGrid id="corrSVMPane1" style="width: 100%;">
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <p:commandButton value="Export"
+                                    styleClass="exportButton"
+                                    style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                    actionListener="#{sessionBean1.graphicsLnk_action('corr_svm_pred')}"
+                                    oncomplete="PF('graphDialog').show()"/>
+                            </h:panelGrid>                               
+                             
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_svm_pred')}" alt="CorrSVM"/>
+                            </h:panelGrid>                                                   
+                      </h:panelGrid>      
+                
             </h:form>
-            <!--<img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_svm')}" alt="penalizedimage"/>-->
+            <!--<img onerror='this.style.display="none"' src="hash{sessionBean1.getCurrentImageURL('corr_svm_pred')}" alt="penalizedimage"/>-->
 <!--            <p:tabView id="ac" style="width:100%; border: none; background: none; font-size: 13px;">
                 <p:tab title ="Overview">
                     <h:form id="form1">
 
                         <h:panelGrid id="corrPane" style="text-align: center; width: 100%;">
-                            <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_penalized')}" alt="penalizedimage"/>
+                            <img onerror='this.style.display="none"' src="hash{sessionBean1.getCurrentImageURL('corr_svm_pred')}" alt="penalizedimage"/>
                         </h:panelGrid>        
                     </h:form>
                 </p:tab>
                 <p:tab title ="Test 2">
                     <h:form id="form2">
                         <h:panelGrid columns="2" style="width: 70%">
-                            <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_penalized')}" alt="penalizedimage"/>
+                            <img onerror='this.style.display="none"' src="hash{sessionBean1.getCurrentImageURL('corr_svm_pred')}" alt="penalizedimage"/>
                         </h:panelGrid>        
                     </h:form>
                 </p:tab>
             </p:tabView> -->
         </h:panelGrid> 
+  
+        <p:dialog modal="true" widgetVar="graphApperanceSVM" 
+            style="width: 400px; height:400px;" 
+            appendTo="@(body)" header="Graphics Center"
+            draggable="false" closable="true" resizable="false"> 
+            <ui:include src="_color_palette_svm.xhtml" />
+        </p:dialog>       
+   
     </ui:define>
 </ui:composition>
