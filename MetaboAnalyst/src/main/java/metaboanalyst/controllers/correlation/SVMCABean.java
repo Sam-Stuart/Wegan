@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
+// added:
+import javax.faces.context.FacesContext; 
 import javax.faces.model.SelectItem;
 import metaboanalyst.controllers.SessionBean1;
 import metaboanalyst.models.User;
