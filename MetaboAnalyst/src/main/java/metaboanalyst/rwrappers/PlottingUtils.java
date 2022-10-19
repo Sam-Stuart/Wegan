@@ -147,9 +147,9 @@ public class PlottingUtils {
                                                 + "\", \"" + type
                                                 + "\", \"" + lineColor
                                                 + "\", \"" + "black"
-                                                + "\", \"" + "NULL"
-                                                + "\", \"" + "NULL"
-                                                + "\", \"" + "NULL"
+                                                + "\", \"" + xLabel
+                                                + "\", \"" + yLabel
+                                                + "\", \"" + mainTitle
                                                 + "\", \"" + data + "\")";
             System.out.println(rCommand);
             RCenter.recordRCommand(RC, rCommand);
