@@ -799,6 +799,22 @@ public static boolean PlotLinearResidFitCA(SessionBean1 sb,
         return null;
     }
     
+//    same as polynomial (numeric) columns: return numeric column names
+    public static String[] GetRFColumns(SessionBean1 sb){
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "rf.numeric.columns(NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            return RC.eval(rCommand).asStrings();
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        } catch (REXPMismatchException ex) {
+            Logger.getLogger(CAUtils.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+    
     public static String[] GetCatDataColumns(SessionBean1 sb){
         try {
             RConnection RC = sb.getRConnection();
