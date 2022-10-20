@@ -16,7 +16,7 @@
                 <h:outputLabel style="font-weight: bold" value="Add Variable Arrows:"/>
                 <p:selectBooleanCheckbox value ="#{ordPCOABean.var_arrowsOpts}"/> 
                 
-                <h3>Grouping Options</h3>
+                <h3>Grouping Data Options</h3>
                 <p:panelGrid></p:panelGrid>
 
                 <h:outputLabel style="font-weight: bold" value="Grouping Variable:"/>
@@ -34,10 +34,10 @@
                 
                 <h3>Constraining Data Options</h3>
                 <p:panelGrid></p:panelGrid>
-                <h:outputLabel style="font-weight: bold" value="Add Arrows for Continuous Constraining Variables:"/>
+                <h:outputLabel style="font-weight: bold" value="Add Arrows for Constraining Variables:"/>
                 <p:selectBooleanCheckbox value ="#{ordPCOABean.env_arrowsOpts}"/> 
 
-                <h:outputLabel style="font-weight: bold" value="Add Centroids for Categorical Constraining Variables:"/>
+                <h:outputLabel style="font-weight: bold" value="Add Centroids for Constraining Variables:"/>
                 <p:selectBooleanCheckbox value ="#{ordPCOABean.env_centOpts}"/> 
                 <p:panelGrid></p:panelGrid>  
 
@@ -51,7 +51,7 @@
                                 onclick="PF('statusDialog').show()"
                                 oncomplete="PF('graphApperancePCOA').hide(); PF('statusDialog').hide()"  
                                 update=":PCOA:form1:pcoaPane1  :cmdPane" 
-                                actionListener="#{ordPCOABean.pcoaUpdate_action()}"/>
+                                actionListener="#{ordPCOABean.pcoa_2D_Update_action()}"/>
             </h:panelGrid>
         </h:panelGrid>
     </h:form>

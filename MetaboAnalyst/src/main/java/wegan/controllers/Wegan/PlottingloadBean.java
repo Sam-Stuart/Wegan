@@ -243,11 +243,16 @@ public class PlottingloadBean implements Serializable {
 //
 //            testFile = ab.getTestamf();
 //            format = "rowu";
-//            
-//           
+//          
 //        } else if (testDataOpt.equals("BCI")) {
 //            testFile = ab.getTestBCI();
 //            format = "rowu";
+//            
+//        } else if (testDataOpt.equals("Iris")) {
+//            dataType = "Dune";
+//            testFile = ab.getTestIris();
+//            format = "rowu";            
+
 //        }
 //
 //        if (!sb.doLogin(dataType, "DCA", false, paired)) {
@@ -264,6 +269,7 @@ public class PlottingloadBean implements Serializable {
 //        } else {
 //            
 //            //Tested cahnging Disc to cont
+
 //            if (!RDataUtils.readTextData(RC, testFile, format, "disc", dataNames)) {
 //                sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
 //                return null;
@@ -293,8 +299,15 @@ public class PlottingloadBean implements Serializable {
             dataFormat = "rowu";
             dataNames = "colOnly";
         } 
+        else if (testDataOpt.equals("Iris")) {
+            dataType = "main";
+            testFile = ab.getTestIris();
+            dataFormat = "rowu";       
+            dataNames = "colOnly";
+        }
         
         else if (testDataOpt.equals("Dune")) {
+
             dataType = "main";
             testFile = ab.getTestDune();
             dataFormat = "rowu";       
@@ -307,6 +320,13 @@ public class PlottingloadBean implements Serializable {
             dataFormat = "rowu";
             dataNames = "colOnly";
         }
+                
+        else if (testDataOpt.equals("Iris")) {
+            dataType = "main";
+            testFile = ab.getTestIris();
+            dataFormat = "rowu";       
+            dataNames = "colOnly";
+        } 
         
         else {
             sb.updateMsg("Error", "Unknown data selected?");

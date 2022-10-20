@@ -27,17 +27,8 @@ ord.cia <- function(mSetObj=NA, data="false", type="NULL", env_text=" ") {
   }
  
   #input <- input[order(as.numeric(row.names(input))),] #Order rows
-  #metaData <- mSetObj$dataSet$origMeta
-  #envData <- mSetObj$dataSet$origEnv
-
-
-####TESTING####
-  input <- .readDataTable("/home/louisa/Wegan/MetaboAnalyst/src/main/webapp/resources/rscripts/metaboanalystr/test_data/iris_v2.csv")
-  input <- input[order(as.numeric(row.names(input))),] #Order rows
-  metaData <- .readDataTable("/home/louisa/Wegan/MetaboAnalyst/src/main/webapp/resources/rscripts/metaboanalystr/test_data/iris_meta.csv") 
-  envData <- .readDataTable("/home/louisa/Wegan/MetaboAnalyst/src/main/webapp/resources/rscripts/metaboanalystr/test_data/iris_env.csv")
-############
-
+  metaData <- mSetObj$dataSet$origMeta
+  envData <- mSetObj$dataSet$origEnv
 
   #constraining data, used to correlate with rows in main data set
   if (is.data.frame(envData)==FALSE) { #No user uplaoded constraining data
@@ -188,8 +179,8 @@ ord.cia <- function(mSetObj=NA, data="false", type="NULL", env_text=" ") {
   colnames(norm.row.1) <- c("Axis 1", "Axis 2")
   norm.row.2 <- cia$mY
   colnames(norm.row.2) <- c("Axis 1", "Axis 2")
-  write.csv(norm.row.1, file="coinertia_analysis_row_scores_main_data_set.csv", row.names=row.names(input))
-  write.csv(norm.row.2, file="coinertia_analysis_row_scores_env_data_set.csv", row.names=row.names(envData1))
+  write.csv(norm.row.1, file="cia_sample_scores_main_data_set.csv", row.names=row.names(input))
+  write.csv(norm.row.2, file="cia_sample_scores_constraining_data_set.csv", row.names=row.names(envData1))
   write.csv(eigenValues_data, file="cia_scree_data.csv", row.names=FALSE)
   
 return(.set.mSet(mSetObj))

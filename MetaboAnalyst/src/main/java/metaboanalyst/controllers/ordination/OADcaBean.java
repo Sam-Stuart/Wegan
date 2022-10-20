@@ -28,13 +28,13 @@ public class OADcaBean implements Serializable {
     private String usrName = usr.getName();
     
 
-    private String fileRowScores = "dca_row_scores.csv";
+    private String fileRowScores = "dca_samples_scores.csv";
     private String fileRowScorePath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileRowScores + "\">" + fileRowScores + "</a>";
     
-    private String fileColScores = "dca_column_scores.csv";
+    private String fileColScores = "dca_variable_scores.csv";
     private String fileColScorePath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileColScores + "\">" + fileColScores + "</a>";
     
-    private String fileEnv = "dca_environment_scores.csv";
+    private String fileEnv = "dca_constraining_data_scores.csv";
     private String fileEnvPath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileEnv + "\">" + fileEnv + "</a>";
     
     private String fileScree = "dca_scree_data.csv";

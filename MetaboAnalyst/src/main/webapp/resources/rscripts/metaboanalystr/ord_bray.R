@@ -104,9 +104,9 @@ ord.bray <- function(mSetObj=NA, abundance="false", distance="NULL", data="false
   eigenValues_data <- as.data.frame(cbind(eig_rownames, eigenValues_data))
   colnames(eigenValues_data) <- c("Dimension", "Eigen_Value", "Variance_Explained")
   write.csv(eigenValues_data, file="bray_curtis_scree_data.csv", row.names=FALSE)
-  write.csv(sample_scores, file="bray_curtis_row_scores.csv", row.names=row.names(input))
-  write.csv(var_scores, file="bray_curtis_column_scores.csv", row.names=TRUE)
-  write.csv(as.matrix(dist), file=paste0("bray_curtis_", distance1, "_dissimilarity_matrix.csv"), row.names=TRUE)
+  write.csv(sample_scores, file="bray_curtis_sample_scores.csv", row.names=row.names(input))
+  write.csv(var_scores, file="bray_curtis_variable_scores.csv", row.names=TRUE)
+  write.csv(as.matrix(dist), file="bray_curtis_dissimilarity_matrix.csv", row.names=TRUE)
   
   sink("column_impact_on_bray_curtis.txt") 
   cat("Data columns may significantly impact Bray-Curtis ordination\n")

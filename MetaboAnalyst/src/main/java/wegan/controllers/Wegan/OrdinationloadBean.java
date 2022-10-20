@@ -10,6 +10,7 @@ import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
 import metaboanalyst.controllers.ApplicationBean1;
 import metaboanalyst.controllers.SessionBean1;
+import metaboanalyst.rwrappers.OAUtils;
 import metaboanalyst.rwrappers.RCenter;
 import metaboanalyst.rwrappers.RDataUtils;
 import metaboanalyst.utils.DataUtils;
@@ -60,6 +61,16 @@ public class OrdinationloadBean implements Serializable {
         this.metaFormat = metaFormat;
     }
     
+    private String taxFormat = "rowu";
+
+    public String getTaxFormat() {
+        return taxFormat;
+    }
+
+    public void setTaxFormat(String taxFormat) {
+        this.taxFormat = taxFormat;
+    }
+    
     private String envFormat = "rowu";
 
     public String getEnvFormat() {
@@ -89,6 +100,16 @@ public class OrdinationloadBean implements Serializable {
 
     public void setDataFileMeta(UploadedFile dataFileMeta) {
         this.dataFileMeta = dataFileMeta;
+    }
+    
+    private UploadedFile dataFileTax;
+
+    public UploadedFile getDataFileTax() {
+        return dataFileTax;
+    }
+
+    public void setDataFileTax(UploadedFile dataFileTax) {
+        this.dataFileTax = dataFileTax;
     }
     
     private UploadedFile dataFileEnv;
@@ -123,6 +144,16 @@ public class OrdinationloadBean implements Serializable {
         this.metaNames = metaNames;
     }
     
+    private String taxNames = "colOnly";
+
+    public String getTaxNames() {
+        return taxNames;
+    }
+
+    public void setTaxNames(String taxNames) {
+        this.taxNames = taxNames;
+    }
+    
     private String envNames = "colOnly";
 
     public String getEnvNames() {
@@ -151,6 +182,7 @@ public class OrdinationloadBean implements Serializable {
                 String fileName = DataUtils.uploadFile(dataFile, sb, null, ab.isOnPublicServer());
                 String fileNameMeta = DataUtils.uploadFile(dataFileMeta, sb, null, ab.isOnPublicServer());
                 String fileNameEnv = DataUtils.uploadFile(dataFileEnv, sb, null, ab.isOnPublicServer());
+                String fileNameTax = DataUtils.uploadFile(dataFileTax, sb, null, ab.isOnPublicServer());
 
                 if (fileName == null) {
                     return null;
@@ -159,8 +191,11 @@ public class OrdinationloadBean implements Serializable {
                 if (fileNameMeta != null){
                     RDataUtils.readTextDataMeta(RC, fileNameMeta, metaFormat, "disc", metaNames);
                 }
+                if (fileNameTax != null){
+                    RDataUtils.readTextDataTax(RC, fileNameTax, taxFormat, "disc", taxNames);
+                }
                 if (fileNameEnv != null){
-                    RDataUtils.readTextDataMeta(RC, fileNameEnv, envFormat, "disc", envNames);
+                    RDataUtils.readTextDataEnv(RC, fileNameEnv, envFormat, "disc", envNames);
                 }
 
                 if (RDataUtils.readTextData(RC, fileName, dataFormat, "disc", dataNames)) {
@@ -359,9 +394,7 @@ public class OrdinationloadBean implements Serializable {
             testFile = ab.getTestDune();
             dataFormat = "rowu";
             dataNames = "colOnly";
-            metaTestFile = ab.getTestDuneMeta();
-            metaFormat = "rowu";
-            metaNames = "colOnly";
+            metaTestFile = null;
             envTestFile = ab.getTestDuneEnv();
             envFormat = "rowu";
             envNames = "colOnly";
@@ -369,15 +402,13 @@ public class OrdinationloadBean implements Serializable {
         
         else if (testDataOpt.equals("Iris")) {
             dataType = "main";
-            testFile = ab.getTestIris();
+            testFile = ab.getTestIrisOrd();
             dataFormat = "rowu";       
             dataNames = "colOnly";
-            metaTestFile = null;
-            metaFormat = null;
-            metaNames = null;
+            metaTestFile = ab.getTestIrisMeta();
+            metaFormat = "rowu";
+            metaNames = "bothNames";
             envTestFile = null;
-            envFormat = null;
-            envNames = null;
         } 
         
         else if (testDataOpt.equals("Pitlatrine")) {
@@ -425,37 +456,23 @@ public class OrdinationloadBean implements Serializable {
         if (metaTestFile != null) {
             RDataUtils.readTextDataMeta(RC, metaTestFile, metaFormat, "disc", metaNames);
         }
-
-//        if (sb.doLogin(dataType, "power", false, paired)) {
-//            RConnection RC = sb.getRConnection();
-//            String fileName = DataUtils.uploadFile(dataFile, sb, null, ab.isOnPublicServer());
-//            if (RDataUtils.readTextData(RC, fileName, dataFormat, "disc", dataNames)) {
-//                sb.setDataUploaded(true);
-//                return "Data check";
-//            } else {
-//                sb.updateMsg("Error:", RDataUtils.getErrMsg(RC));
-//                return null;
-//            }
-//        }
-//        return null;
-//    }
-//
-//    public String handlePowerTestFileUpload() {
-//        if (!sb.doLogin("conc", "power", false, false)) {
-//            return null;
-//        }
-//        RConnection RC = sb.getRConnection();
-//        RDataUtils.readTextData(RC, ab.getTestPowerPath(), "rowu", "disc", dataNames);
-//        sb.setDataUploaded(true);
-
-        if (metaTestFile != null) {
+        if (envTestFile != null) {
             RDataUtils.readTextDataEnv(RC, envTestFile, envFormat, "disc", envNames);
         }
 
         return "Data check";
     }
     
- 
+//    Checkbox for viewing supplemental data loader panel
+    public boolean checkboxValue;
+
+    public void setCheckboxValue(boolean checkboxValue) {
+        this.checkboxValue = checkboxValue;
+    }
+
+    public boolean getCheckboxValue() {
+        return this.checkboxValue;
+    }
 
 
 //    /*

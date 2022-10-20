@@ -11,6 +11,7 @@
     </ui:define>
     <ui:define name="content">
         <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
+            <h1>Co-Inertia Analysis:</h1>           
             <p:tabView id="ordCIA" style="width:100%; border: none; background: none; font-size: 13px;">
                 <p:tab title ="Variable Scores Plot" titleStyleClass="p-tab-nav">
                     <h:form id="form1">
@@ -18,30 +19,24 @@
                         CIA is performed on 2 data sets, a main data set (e.g. species data) and a constraining data set (e.g. environmental data). CIA works for numeric data or categorical data.               
                         </p>
                         <h:panelGrid id="panelGrid" columns="5" cellpadding="3" columnClasses="colLeft,colRight,colLeft,colRight, colLast">
-                            
-                            <p:panelGrid></p:panelGrid>
-                            
+                                                        
                             <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
                                 <p:selectBooleanCheckbox value ="#{ordCIABean.doMetaGroup}"/> 
-
-                            <p:panelGrid></p:panelGrid>
-                            <p:panelGrid></p:panelGrid>
             
                             <h:outputLabel style="font-weight: bold" value="Data Type for Analysis:"/>
                                 <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordCIABean.coiaTypeOpts}">
                                     <f:selectItems value="#{applicationBean1.ciaTypeOpts}" />
                                 </p:selectOneMenu> 
-  
-                            <p:panelGrid></p:panelGrid>
-                            <p:panelGrid></p:panelGrid>
+                            <spacer></spacer>
             
                             <h:outputLabel style="font-weight: bold" value="Indicate Constraining Data Variables Using the Column Names with Commas in Between:"/>
-                            <p:inputText style="width:400px; height:100px" value="#{ordCIABean.envInput}"/> 
-         
-                            <p:panelGrid></p:panelGrid>
-                            <p:panelGrid></p:panelGrid>
-                            <p:panelGrid></p:panelGrid>
-                            <p:panelGrid></p:panelGrid>
+                            <p:inputText style="width:400px; height:40px" value="#{ordCIABean.envInput}"/> 
+                            <spacer></spacer>
+                            <spacer></spacer>
+                            <spacer></spacer>
+
+                            </h:panelGrid>
+                        <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
                                                      
                             <p:commandButton value="Customize Graph"
                                              styleClass="graphicsButton"
@@ -56,7 +51,6 @@
                                             update=":ordCIA:form1:ciaPane1  :cmdPane" 
                                             actionListener="#{ordCIABean.ciaUpdate_action()}"/>  
                         
-<!--                                          -->
                         </h:panelGrid>
                         <h:panelGrid class="resultsBar" columns="2">
                             <h:panelGroup>
@@ -96,13 +90,8 @@
                         </p>
                         <h:panelGrid id="panelGrid" columns="5" cellpadding="3" columnClasses="colLeft,colRight,colLeft,colRight, colLast">
 
-                            <p:panelGrid></p:panelGrid>
-
                             <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
                                 <p:selectBooleanCheckbox value ="#{ordCIABean.doMetaGroup}"/> 
-
-                            <p:panelGrid></p:panelGrid>
-                            <p:panelGrid></p:panelGrid>
             
                             <h:outputLabel style="font-weight: bold" value="Data Type for Analysis:"/>
                                 <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordCIABean.coiaTypeOpts}">
@@ -110,15 +99,15 @@
                                 </p:selectOneMenu> 
   
                             <p:panelGrid></p:panelGrid>
-                            <p:panelGrid></p:panelGrid>
             
                             <h:outputLabel style="font-weight: bold" value="Indicate Constraining Data Variables Using the Column Names with Commas in Between:"/>
-                            <p:inputText style="width:400px; height:100px" value="#{ordCIABean.envInput}"/>
-
+                            <p:inputText style="width:400px; height:40px" value="#{ordCIABean.envInput}"/>
+                            <spacer></spacer>
+                            <spacer></spacer>
+                            <spacer></spacer>
                             <p:panelGrid></p:panelGrid>
-                            <p:panelGrid></p:panelGrid>
-                            <p:panelGrid></p:panelGrid>
-                            <p:panelGrid></p:panelGrid>
+                        </h:panelGrid>
+                        <h:panelGrid columns="1" cellpadding="3" style="float: right">    
 
                             <p:commandButton value="Update" 
                                              style="background: #75bafb; border: 5px #75bafb; color: black"
@@ -136,7 +125,6 @@
                             <h:panelGroup>
                                 <h:panelGrid columns="3" class="resultsImages">
                                     <i class="fas fa-palette"></i>
-                                    <i class="fa fa-table"></i>
                                     <i class="fa fa-question-circle"></i>
 <!--                                                                       <i class="fas fa-table"></i>
                                    <i class="fas fa-palette"></i>
@@ -164,37 +152,27 @@
                         </p>
                         <h:panelGrid id="panelGrid" columns="5" cellpadding="3" columnClasses="colLeft,colRight,colLeft,colRight, colLast">
 
-                            <p:panelGrid></p:panelGrid>
-
                             <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
                                 <p:selectBooleanCheckbox value ="#{ordCIABean.doMetaGroup}"/> 
-
-                            <p:panelGrid></p:panelGrid>
-                            <p:panelGrid></p:panelGrid>
             
                             <h:outputLabel style="font-weight: bold" value="Data Type for Analysis:"/>
                                 <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordCIABean.coiaTypeOpts}">
                                     <f:selectItems value="#{applicationBean1.ciaTypeOpts}" />
                                 </p:selectOneMenu> 
-  
-                            <p:panelGrid></p:panelGrid>
-                            <p:panelGrid></p:panelGrid>
+                            <spacer></spacer>
             
                             <h:outputLabel style="font-weight: bold" value="See Loadings Plot For:"/>
                                 <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordCIABean.coiaDataSetOpts}">
                                     <f:selectItems value="#{applicationBean1.ciaDataSetOpts}" />
                                 </p:selectOneMenu> 
-  
-                            <p:panelGrid></p:panelGrid>
-                            <p:panelGrid></p:panelGrid>
                             
                             <h:outputLabel style="font-weight: bold" value="Indicate Constraining Data Variables Using the Column Names with Commas in Between:"/>
-                            <p:inputText style="width:400px; height:100px" value="#{ordCIABean.envInput}"/>
+                            <p:inputText style="width:400px; height:40px" value="#{ordCIABean.envInput}"/>
+                            <spacer></spacer>
 
                             <p:panelGrid></p:panelGrid>
-                            <p:panelGrid></p:panelGrid>
-                            <p:panelGrid></p:panelGrid>
-                            <p:panelGrid></p:panelGrid>
+                        </h:panelGrid>
+                        <h:panelGrid columns="1" cellpadding="3" style="float: right">    
 
                             <p:commandButton value="Update" 
                                              style="background: #75bafb; border: 5px #75bafb; color: black"

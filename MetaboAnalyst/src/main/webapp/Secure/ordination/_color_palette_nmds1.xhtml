@@ -16,7 +16,7 @@
                 <h:outputLabel style="font-weight: bold" value="Add Variable Arrows:"/>
                 <p:selectBooleanCheckbox value ="#{ordNMDSBean.var_arrowsOpts}"/> 
                 
-                <h3>Grouping Options</h3>
+                <h3>Grouping Data Options</h3>
                 <p:panelGrid></p:panelGrid>                
                 <h:outputLabel style="font-weight: bold" value="Grouping Variable:"/>
                 <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordNMDSBean.nmdsMetaColumnName}">
@@ -34,10 +34,10 @@
                 
                 <h3>Constraining Data Options</h3>
                 <p:panelGrid></p:panelGrid>
-                <h:outputLabel style="font-weight: bold" value="Add Arrows for Continuous Constraining Variables:"/>
+                <h:outputLabel style="font-weight: bold" value="Add Arrows for Constraining Variables:"/>
                 <p:selectBooleanCheckbox value ="#{ordNMDSBean.env_arrowsOpts}"/> 
 
-                <h:outputLabel style="font-weight: bold" value="Add Centroids for Categorical Constraining Variables:"/>
+                <h:outputLabel style="font-weight: bold" value="Add Centroids for Constraining Variables:"/>
                 <p:selectBooleanCheckbox value ="#{ordNMDSBean.env_centOpts}"/> 
                 
                 <p:panelGrid></p:panelGrid>  
@@ -52,7 +52,7 @@
                                 onclick="PF('statusDialog').show()"
                                 oncomplete="PF('graphApperanceNMDS').hide(); PF('statusDialog').hide()"  
                                 update=":NMDS:form1:nmdsPane1  :cmdPane" 
-                                actionListener="#{ordNMDSBean.nmdsUpdate_action()}"/>
+                                actionListener="#{ordNMDSBean.nmdsUpdate_action2D()}"/>
             </h:panelGrid>
         </h:panelGrid>
     </h:form>

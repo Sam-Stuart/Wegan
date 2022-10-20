@@ -59,6 +59,7 @@ public class CAloadBean implements Serializable {
     public void setDataFile(UploadedFile dataFile) {
         this.dataFile = dataFile;
     }
+    private UploadedFile dataFileWeight;
 
 
     private String dataNames = "colOnly";
@@ -72,6 +73,13 @@ public class CAloadBean implements Serializable {
     }
     
 
+    public UploadedFile getDataFileWeight() {
+        return dataFileWeight;
+    }
+
+    public void setDataFileWeight(UploadedFile dataFileWeight) {
+        this.dataFileWeight = dataFileWeight;
+    }
     /*
     Data upload for statistics module
      */
@@ -211,11 +219,22 @@ public class CAloadBean implements Serializable {
         boolean paired = false;
         boolean isZip = false;
         String testFile = null;
-        String testWeightFile = null;
+        String testFileWeight = null;
         
         if (testDataOpt == null) {                   
             sb.updateMsg("Error", "No data set is selected!");
             return null;
+        }
+        else if (testDataOpt.equals("Dune")) {
+            
+            System.out.println("DUNE DATASET");
+            dataType = "Dune";
+            testFile = ab.getTestDune();
+            testFileWeight = ab.getTestWeightDune();
+            
+//            testWeightFile = ab.getTestWeightDune();
+            dataFormat = "rowu";
+            
         } else if (testDataOpt.equals("Iris")) {
             dataType = "Iris";
             testFile = ab.getTestIris();
@@ -246,10 +265,6 @@ public class CAloadBean implements Serializable {
                 sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
                 return null;
             }
-//            if (!RDataUtils.readTextData(RC, testWeightFile, format, "disc")) {
-//                sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
-//                return null;
-//            }
         }
         sb.setDataUploaded(true);
         return "Data check";

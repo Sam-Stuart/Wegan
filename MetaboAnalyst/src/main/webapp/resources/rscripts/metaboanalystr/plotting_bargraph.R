@@ -23,7 +23,7 @@
 barGraph_setup <- function(mSetObj = NA, byrow = "FALSE", colNum = "NULL", rowNum = "NULL",
                            colors = "NULL", xlab = "NULL", ylab = "NULL", barLabels = "NULL", mainTitle = "NULL"){
   
-  
+  #print("This comment is in plotting_bargraph.R");
   mSetObj <- .get.mSet(mSetObj)
   input <- mSetObj$dataSet$norm
   if (!is.vector(input)){
@@ -49,7 +49,6 @@ barGraph_setup <- function(mSetObj = NA, byrow = "FALSE", colNum = "NULL", rowNu
     
       if(colNum == "NULL"){
         input <- input[,1] # default is first column.
-        cat("firwt olumn")
         
       } else {
         input <- input[,colNum]

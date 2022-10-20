@@ -12,6 +12,7 @@
     </ui:define>
     <ui:define name="content">
         <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
+            <h1>Analysis of Similarities:</h1>
             <p:tabView id="ANOSIM">
                 <p:tab title ="ANOSIM Plot" titleStyleClass="p-tab-nav">
                     <h:form id="form1">
@@ -19,25 +20,22 @@
                             Text goes here
                         </p> 
                         
-                        <h3>Dataset Options:</h3>
                         <h:panelGrid id="panelGrid1" columns="4" cellpadding="3" columnClasses="colBrayLong,colBrayShort,colBrayLong,colBrayShort" >
                             
                             <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
-                            <p:selectBooleanCheckbox value ="#{ordANOSIMBean.doOriginal}"/> 
+                            <p:selectBooleanCheckbox value ="#{anosimBean.doOriginal}"/> 
                             
                             <h:outputLabel style="font-weight: bold" value="Data Is Presence/Absence:"/>
-                            <p:selectBooleanCheckbox value ="#{ordANOSIMBean.doBinary}"/> 
+                            <p:selectBooleanCheckbox value ="#{anosimBean.doBinary}"/> 
                             
-                            <p:panelGrid></p:panelGrid>
-
                             <h:outputLabel style="font-weight: bold" value="Distance Measure:"/>
-                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordANOSIMBean.vegdistOpts}">
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{anosimBean.vegdistOpts}">
                                 <f:selectItems value="#{applicationBean1.vegdistMeasureOpts}" />
                             </p:selectOneMenu> 
                             
                             <h:outputLabel style="font-weight: bold" value="Constraining Data Variable:"/>
-                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordANOSIMBean.anosimEnvColumnName}">
-                                <f:selectItems value="#{ordANOSIMBean.anosimEnvColumnOpts}" />
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{anosimBean.anosimEnvColumnName}">
+                                <f:selectItems value="#{anosimBean.anosimEnvColumnOpts}" />
                             </p:selectOneMenu> 
                         </h:panelGrid>                    
                         <h:panelGrid id="panelGrid1_2" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 

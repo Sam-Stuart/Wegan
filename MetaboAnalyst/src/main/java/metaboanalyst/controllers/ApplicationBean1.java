@@ -97,6 +97,8 @@ public class ApplicationBean1 implements Serializable {
     private static final String test_varespec = "/data/varespec.csv";
     private static final String test_linear = "/data/linear_test_data.csv"; // linear plot test data 
     private static final String test_iris = "/data/iris.csv";
+    private static final String test_irisOrd = "/data/iris_ord.csv";
+    private static final String test_irisMeta = "/data/iris_meta.csv";
     private static final String test_dune_weights = "/data/dune_weights.txt";
     private static final String test_pitlatrine = "/data/SPE_pitlatrine.csv";
     private static final String test_pitlatrineEnv = "/data/ENV_pitlatrine.csv";
@@ -114,9 +116,11 @@ public class ApplicationBean1 implements Serializable {
     private final SelectItem[] csvFormatOpts;
 
     private final SelectItem[] metaFormatOpts;
+    private final SelectItem[] taxFormatOpts;
     private final SelectItem[] envFormatOpts;
     private final SelectItem[] dataNamesOpts;
     private final SelectItem[] metaNamesOpts;
+    private final SelectItem[] taxNamesOpts;
     private final SelectItem[] envNamesOpts;
 
     private final SelectItem[] rocFormatOpts;
@@ -134,7 +138,11 @@ public class ApplicationBean1 implements Serializable {
     private final SelectItem[] transNormOpts;
     private final SelectItem[] scaleNormOpts;
     private final SelectItem[] ordStressDimensionOpts;
+    private final SelectItem[] corLinColorDotsOpts;    
+    private final SelectItem[] corLinColorLineOpts;    
     private final SelectItem[] ordColorPaletteOpts;
+    private final SelectItem[] pcaPairsColorPaletteOpts;
+    private final SelectItem[] boxPltColorPaletteOpts;
     private final SelectItem[] pairAnalOpts;
     private final SelectItem[] equalVarOpts;
     private final SelectItem[] posthocOpts;
@@ -211,35 +219,43 @@ public class ApplicationBean1 implements Serializable {
 
 
         csvFormatOpts = new SelectItem[2];
-        csvFormatOpts[0] = new SelectItem("rowu", "Samples in rows");
-        csvFormatOpts[1] = new SelectItem("colu", "Samples in columns");
+        csvFormatOpts[0] = new SelectItem("rowu", "Samples in rows, variables in columns");
+        csvFormatOpts[1] = new SelectItem("colu", "Samples in columns, variables in rows");
 //        csvFormatOpts[2] = new SelectItem("rowp", "Samples in rows (paired)");
 //        csvFormatOpts[3] = new SelectItem("colp", "Samples in columns (paired)");
 
         metaFormatOpts = new SelectItem[2];
-        metaFormatOpts[0] = new SelectItem("rowu", "Samples in rows");
-        metaFormatOpts[1] = new SelectItem("colu", "Samples in columns");
+        metaFormatOpts[0] = new SelectItem("rowu", "Samples in rows, variables in columns");
+        metaFormatOpts[1] = new SelectItem("colu", "Samples in columns, variables in rows");
 //        metaFormatOpts[2] = new SelectItem("rowp", "Samples in rows (paired)");
 //        metaFormatOpts[3] = new SelectItem("colp", "Samples in columns (paired)");
         
+        taxFormatOpts = new SelectItem[2];
+        taxFormatOpts[0] = new SelectItem("rowu", "Taxonomy data in row");
+        taxFormatOpts[1] = new SelectItem("colu", "Taxonomy data in column");
+        
         envFormatOpts = new SelectItem[2];
-        envFormatOpts[0] = new SelectItem("rowu", "Samples in rows");
-        envFormatOpts[1] = new SelectItem("colu", "Samples in columns");
+        envFormatOpts[0] = new SelectItem("rowu", "Samples in rows, variables in columns");
+        envFormatOpts[1] = new SelectItem("colu", "Samples in columns, variables in rows");
 //        envFormatOpts[2] = new SelectItem("rowp", "Samples in rows (paired)");
 //        envFormatOpts[3] = new SelectItem("colp", "Samples in columns (paired)");
         
         dataNamesOpts = new SelectItem[4];
         dataNamesOpts[0] = new SelectItem("colOnly", "Column labels only");
         dataNamesOpts[1] = new SelectItem("rowOnly", "Row labels only");
-        dataNamesOpts[2] = new SelectItem("bothNames", "Both");
-        dataNamesOpts[3] = new SelectItem("noNames", "Neither");
-
+        dataNamesOpts[2] = new SelectItem("bothNames", "Column and row labels");
+        dataNamesOpts[3] = new SelectItem("noNames", "No labels");
         
         metaNamesOpts = new SelectItem[4];
         metaNamesOpts[0] = new SelectItem("colOnly", "Column labels only");
         metaNamesOpts[1] = new SelectItem("rowOnly", "Row labels only");
         metaNamesOpts[2] = new SelectItem("bothNames", "Both");
         metaNamesOpts[3] = new SelectItem("noNames", "Neither");
+        
+        taxNamesOpts = new SelectItem[3];
+        taxNamesOpts[0] = new SelectItem("colOnly", "Column labels");
+        taxNamesOpts[1] = new SelectItem("rowOnly", "Row labels");
+        taxNamesOpts[2] = new SelectItem("noNames", "No labels");
         
         envNamesOpts = new SelectItem[4];
         envNamesOpts[0] = new SelectItem("colOnly", "Column labels only");
@@ -290,19 +306,19 @@ public class ApplicationBean1 implements Serializable {
                 
         vegdistMeasureOpts = new SelectItem[14];
         vegdistMeasureOpts[0] = new SelectItem("NULL", "Bray-Curtis");
-        vegdistMeasureOpts[1] = new SelectItem("euclidean", "Euclidean");
-        vegdistMeasureOpts[2] = new SelectItem("manhattan", "Manhattan");
-        vegdistMeasureOpts[3] = new SelectItem("canberra", "Canberra");
-        vegdistMeasureOpts[4] = new SelectItem("kulczynski", "Kulczynski");
-        vegdistMeasureOpts[5] = new SelectItem("jaccard", "Jaccard");
+        vegdistMeasureOpts[1] = new SelectItem("binomial", "Binomial");
+        vegdistMeasureOpts[2] = new SelectItem("canberra", "Canberra");
+        vegdistMeasureOpts[3] = new SelectItem("cao", "Cao");
+        vegdistMeasureOpts[4] = new SelectItem("chao", "Chao");
+        vegdistMeasureOpts[5] = new SelectItem("euclidean", "Euclidean");
         vegdistMeasureOpts[6] = new SelectItem("gower", "Gower");
         vegdistMeasureOpts[7] = new SelectItem("horn", "Horn-Morisita");
-        vegdistMeasureOpts[8] = new SelectItem("mountford", "Mountford");
-        vegdistMeasureOpts[9] = new SelectItem("raup" , "Raup-Crick");
-        vegdistMeasureOpts[10] = new SelectItem("binomial", "Binomial");
-        vegdistMeasureOpts[11] = new SelectItem("chao", "Chao");
-        vegdistMeasureOpts[12] = new SelectItem("cao", "Cao");
-        vegdistMeasureOpts[13] = new SelectItem("mahalanobis", "Mahalanobis");
+        vegdistMeasureOpts[8] = new SelectItem("jaccard", "Jaccard");
+        vegdistMeasureOpts[9] = new SelectItem("kulczynski", "Kulczynski");
+        vegdistMeasureOpts[10] = new SelectItem("mahalanobis", "Mahalanobis");
+        vegdistMeasureOpts[11] = new SelectItem("manhattan", "Manhattan");
+        vegdistMeasureOpts[12] = new SelectItem("mountford", "Mountford");
+        vegdistMeasureOpts[13] = new SelectItem("raup" , "Raup-Crick");
         
         dendroPalletteOpts = new SelectItem[4];
         dendroPalletteOpts[0] = new SelectItem("NULL", "Viridis");
@@ -318,11 +334,39 @@ public class ApplicationBean1 implements Serializable {
         ciaDataSetOpts[0] = new SelectItem("NULL", "Main Data Set");
         ciaDataSetOpts[1] = new SelectItem("env", "Constraining Data Set");
                 
+        corLinColorDotsOpts = new SelectItem[5];
+        corLinColorDotsOpts[0] = new SelectItem("NULL", "black");
+        corLinColorDotsOpts[1] = new SelectItem("blue", "Blue");
+        corLinColorDotsOpts[2] = new SelectItem("red", "Red");
+        corLinColorDotsOpts[3] = new SelectItem("green", "Green");
+        corLinColorDotsOpts[4] = new SelectItem("grey", "Grey");
+
+        corLinColorLineOpts = new SelectItem[5];
+        corLinColorLineOpts[0] = new SelectItem("NULL", "black");
+        corLinColorLineOpts[1] = new SelectItem("blue", "Blue");
+        corLinColorLineOpts[2] = new SelectItem("red", "Red");
+        corLinColorLineOpts[3] = new SelectItem("green", "Green");
+        corLinColorLineOpts[4] = new SelectItem("grey", "Grey");
+        
         ordColorPaletteOpts = new SelectItem[4];
         ordColorPaletteOpts[0] = new SelectItem("NULL", "Viridis");
         ordColorPaletteOpts[1] = new SelectItem("plasma", "Plasma");
         ordColorPaletteOpts[2] = new SelectItem("grey", "Grayscale");
         ordColorPaletteOpts[3] = new SelectItem("none", "No Color");
+        
+        pcaPairsColorPaletteOpts = new SelectItem[5];
+        pcaPairsColorPaletteOpts[0] = new SelectItem("NULL", "Viridis");
+        pcaPairsColorPaletteOpts[1] = new SelectItem("plasma", "Plasma");
+        pcaPairsColorPaletteOpts[2] = new SelectItem("grey", "Grayscale");
+        pcaPairsColorPaletteOpts[3] = new SelectItem("blue", "Blue");
+        pcaPairsColorPaletteOpts[4] = new SelectItem("none", "No Color");
+                
+        boxPltColorPaletteOpts = new SelectItem[5];
+        boxPltColorPaletteOpts[0] = new SelectItem("v", "Viridis");
+        boxPltColorPaletteOpts[1] = new SelectItem("p", "Plasma");
+        boxPltColorPaletteOpts[2] = new SelectItem("g", "Grayscale");
+        boxPltColorPaletteOpts[3] = new SelectItem("r", "Rainbow");
+        boxPltColorPaletteOpts[4] = new SelectItem("b", "Light Blue");
         
         ordStressDimensionOpts = new SelectItem[5];
         ordStressDimensionOpts[0] = new SelectItem("NULL", "1");
@@ -376,16 +420,19 @@ public class ApplicationBean1 implements Serializable {
         designOpts[1] = new SelectItem("time", "Time-series + one experimental factor");
         designOpts[2] = new SelectItem("g2", "Two-factor independent samples");
 
-        dataNormOpts = new SelectItem[9];
+        dataNormOpts = new SelectItem[8];
         dataNormOpts[0] = new SelectItem("NULL", "None");
-        dataNormOpts[1] = new SelectItem("SpecNorm", "Sample-specific normalization");
-        dataNormOpts[2] = new SelectItem("SumNorm", "Normalization by sum");
-        dataNormOpts[3] = new SelectItem("MedianNorm", "Normalization by median");
-        dataNormOpts[4] = new SelectItem("SamplePQN", "Specify a reference sample");
-        dataNormOpts[5] = new SelectItem("GroupPQN", "Create a pooled average sample from group");
-        dataNormOpts[6] = new SelectItem("CompNorm", "Normalization by reference feature");
-        dataNormOpts[7] = new SelectItem("QuantileNorm", "Quantile normalization");
-        dataNormOpts[8] = new SelectItem("BoxNorm", "Box-Cox normalization");
+//        dataNormOpts[1] = new SelectItem("SpecNorm", "Sample-specific normalization");
+        dataNormOpts[1] = new SelectItem("SumNorm", "Normalization by sum");
+        dataNormOpts[2] = new SelectItem("MedianNorm", "Normalization by median");
+//        dataNormOpts[4] = new SelectItem("SamplePQN", "Specify a reference sample");
+//        dataNormOpts[5] = new SelectItem("GroupPQN", "Create a pooled average sample from group");
+//        dataNormOpts[6] = new SelectItem("CompNorm", "Normalization by reference feature");
+        dataNormOpts[3] = new SelectItem("QuantileNorm", "Quantile normalization");
+        dataNormOpts[4] = new SelectItem("BoxNorm", "Box-Cox normalization");
+        dataNormOpts[5] = new SelectItem("LogNorm", "Log transformation");
+        dataNormOpts[6] = new SelectItem("CrNorm", "Cube root transformation");
+        dataNormOpts[7] = new SelectItem("SqNorm", "Square root transformation");
 
         probNormOpts = new SelectItem[2];
         probNormOpts[0] = new SelectItem("F", "Specify a reference sample");
@@ -417,7 +464,7 @@ public class ApplicationBean1 implements Serializable {
         posthocOpts[1] = new SelectItem("tukey", "Tukey\'s HSD");
 
         distMeasureOpts = new SelectItem[3];
-        distMeasureOpts[0] = new SelectItem("pearson", "Pearson R");
+        distMeasureOpts[0] = new SelectItem("pearson", "Pearson R correlation");
         distMeasureOpts[1] = new SelectItem("spearman", "Spearman rank correlation");
         distMeasureOpts[2] = new SelectItem("kendall", "Kendall rank correlation");
 
@@ -658,6 +705,14 @@ public class ApplicationBean1 implements Serializable {
         return realPath + test_iris;
     }
 
+    public String getTestIrisMeta() {
+        return realPath + test_irisMeta;
+    }
+    
+    public String getTestIrisOrd() {
+        return realPath + test_irisOrd;
+    }            
+            
     public String getTestWeightDune() {
         return realPath + test_dune_weights;
     }
@@ -834,11 +889,15 @@ public class ApplicationBean1 implements Serializable {
     }
     
     public SelectItem[] getMetaFormatOpts() {
-        return csvFormatOpts;
+        return metaFormatOpts;
+    }
+        
+    public SelectItem[] getTaxFormatOpts() {
+        return taxFormatOpts;
     }
         
     public SelectItem[] getEnvFormatOpts() {
-        return csvFormatOpts;
+        return envFormatOpts;
     }
     
     public SelectItem[] getDataNamesOpts() {
@@ -846,11 +905,15 @@ public class ApplicationBean1 implements Serializable {
     }
     
     public SelectItem[] getMetaNamesOpts() {
-        return dataNamesOpts;
+        return metaNamesOpts;
     }    
     
+    public SelectItem[] getTaxNamesOpts() {
+        return taxNamesOpts;
+    } 
+        
     public SelectItem[] getEnvNamesOpts() {
-        return dataNamesOpts;
+        return envNamesOpts;
     }
     
     public SelectItem[] getRocFormatOpts() {
@@ -936,10 +999,28 @@ public class ApplicationBean1 implements Serializable {
     public SelectItem[] getOrdStressDimensionOpts() {
         return ordStressDimensionOpts;
     }
-        
+
+    public SelectItem[] getCorLinColorDotsOpts() {
+        return corLinColorDotsOpts;
+    }
+    
+    public SelectItem[] getCorLinColorLineOpts() {
+        return corLinColorLineOpts;
+    }
+    
     public SelectItem[] getOrdColorPaletteOpts() {
         return ordColorPaletteOpts;
     }
+    
+    public SelectItem[] getBoxPltColorPaletteOpts() {
+        return boxPltColorPaletteOpts;
+    }
+    
+            
+    public SelectItem[] getPcaPairsColorPaletteOpts() {
+        return pcaPairsColorPaletteOpts;
+    }
+      
             
     public SelectItem[] getProbNormOpts() {
         return probNormOpts;

@@ -374,7 +374,7 @@ Read.TextData <- function(mSetObj=NA, filePath, dataFormat="rowu", lbl.type="dis
   msg <- NULL;
 
   if(substring(dataFormat,1,3)=="row"){ # sample in row
-    msg<-c(msg, "Samples in rows and variables in columns");
+    msg<-c(msg, paste0("&emsp;&emsp;&emsp;&emsp;", "- Samples in rows and variables in columns."));
     smpl.nms <- rownames(dat);
     print(smpl.nms)
     all.nms <- colnames(dat);
@@ -390,7 +390,7 @@ Read.TextData <- function(mSetObj=NA, filePath, dataFormat="rowu", lbl.type="dis
     dat1 <- dat;
     print(dat1)
   }else{ # sample in col
-    msg<-c(msg, "Samples in columns and variables in rows.");
+    msg<-c(msg, paste0("<ul>", "- Samples in columns and variables in rows.", "</ul>"));
     all.nms <- rownames(dat);
     smpl.nms <- colnames(dat);
     cls.lbl <- smpl.nms;
@@ -485,8 +485,8 @@ Read.TextData <- function(mSetObj=NA, filePath, dataFormat="rowu", lbl.type="dis
   mSetObj$dataSet$cmpd <- "NA";
   mSetObj$dataSet$type <- "main"
   mSetObj$dataSet$orig <- dat1; # copy to be processed in the downstream
-  mSetObj$msgSet$read.msg <- c(msg, paste("The uploaded data file contains a ", nrow(dat1),
-                                          " (samples) by ", ncol(dat1), " (variables) data matrix.", sep=""));
+  mSetObj$msgSet$read.msg <- c(msg, paste0("&emsp;&emsp;&emsp;&emsp;", "- The uploaded data file contains a ", nrow(dat1),
+                                          " (samples) by ", ncol(dat1), " (variables) data matrix."));
   return(.set.mSet(mSetObj));
 }
 
@@ -506,7 +506,7 @@ Read.TextDataMeta <- function(mSetObj=NA, filePath, metaFormat="rowu", lbl.type=
     dat <- .readMetaDataTable(filePath, metaNames="noNames");
   }
 
-  if(class(dat) == "try-error" || ncol(dat) == 1){
+  if(class(dat) == "try-error" || ncol(dat) == 0){
     AddErrMsg("Data format error. Failed to read in the data!
                 /nMake sure the data table is saved in tab separated values (.txt) or comma separated values (.csv) format.
                 /nPlease also check the following:
@@ -531,21 +531,62 @@ Read.TextDataMeta <- function(mSetObj=NA, filePath, metaFormat="rowu", lbl.type=
   return(.set.mSet(mSetObj));
 }
 
+
+#'
+Read.TextDataTax <- function(mSetObj=NA, filePath, taxFormat="rowu", lbl.type="disc", taxNames="colOnly"){
+  mSetObj <- .get.mSet(mSetObj);
+  
+  if (taxNames=="colOnly") { #yes column names, no row names
+    dat <- .readTaxDataTable(filePath, taxNames="colOnly");
+  } else if (taxNames=="rowOnly") { #no col names, yes row names
+    dat <- .readTaxDataTable(filePath, taxNames="rowOnly"); 
+  } else if (taxNames=="bothNames") { #yes col names, yes row names
+    dat <- .readTaxDataTable(filePath, taxNames="bothNames");
+  } else { #no col names, no row names
+    dat <- .readTaxDataTable(filePath, taxNames="noNames");
+  }
+
+  if(class(dat) == "try-error" || ncol(dat) == 0){
+    AddErrMsg("Data format error. Failed to read in the data!
+                /nMake sure the data table is saved in tab separated values (.txt) or comma separated values (.csv) format.
+                /nPlease also check the following:
+                /n/tBoth sample and variable names must in UTF-8 encoding.
+                /n/tMake sure sample names and variable names are unique.
+                /n/tMissing values should be blank or NA without quote.");
+    return(0);
+  }
+
+  if(substring(taxFormat,1,3)=="row"){ # sample in row
+    dat1 <- dat;
+  }else{ # sample in col
+    dat1<-as.data.frame(t(dat));
+  }
+  
+  mSetObj$dataSet$origTax <- dat1;
+  lbls.tax <- as.data.frame(c(1:nrow(mSetObj$dataSet$origTax)))
+  colnames(lbls.tax) <- c("Sample")
+  orig.tax<-cbind(lbls.tax, mSetObj$dataSet$origTax);
+  write.csv(orig.tax, file="data_grouping.csv", row.names=FALSE); 
+
+  return(.set.mSet(mSetObj));
+}
+
+
 #'
 Read.TextDataEnv <- function(mSetObj=NA, filePath, envFormat="rowu", lbl.type="disc", envNames="colOnly"){
   mSetObj <- .get.mSet(mSetObj);
 
-  if (dataNames=="colOnly") { #yes column names, no row names
+  if (envNames=="colOnly") { #yes column names, no row names
     dat <- .readEnvDataTable(filePath, envNames="colOnly");
-  } else if (dataNames=="rowOnly") { #no col names, yes row names
+  } else if (envNames=="rowOnly") { #no col names, yes row names
     dat <- .readEnvDataTable(filePath, envNames="rowOnly"); 
-  } else if (dataNames=="bothNames") { #yes col names, yes row names
+  } else if (envNames=="bothNames") { #yes col names, yes row names
     dat <- .readEnvDataTable(filePath, envNames="bothNames");
   } else { #no col names, no row names
     dat <- .readEnvDataTable(filePath, envNames="noNames");
   }
 
-  if(class(dat) == "try-error" || ncol(dat) == 1){
+  if(class(dat) == "try-error" || ncol(dat) == 0){
     AddErrMsg("Data format error. Failed to read in the data!
                 /nMake sure the data table is saved in tab separated values (.txt) or comma separated values (.csv) format.
                 /nPlease also check the following:
@@ -570,6 +611,14 @@ Read.TextDataEnv <- function(mSetObj=NA, filePath, envFormat="rowu", lbl.type="d
   return(.set.mSet(mSetObj));
 }
 
+Read.TextDataWeight <- function(mSetObj=NA, filePath, format="colu", lbl.type="disc"){
+  
+  mSetObj <- .get.mSet(mSetObj);
+  dat <- .readDataTable(filePath);
+  mSetObj$dataSet$origWeight <- dat; # copy to be processed in the downstream
+  dat <- NULL;
+  return(.set.mSet(mSetObj));
+}
 
 #'Read peak list files
 #'@description This function reads peak list files and fills the data into a dataSet object.  
@@ -691,7 +740,7 @@ Read.PeakList<-function(mSetObj=NA, foldername){
   all.peaks <- all.peaks[gd.inx,]
   
   if(sum(!gd.inx) > 0){
-    msg<-c(msg, paste("<font color='red'>A total of", sum(!gd.inx), "peaks were excluded due to non-numeric values. </font>" ));
+    msg<-c(msg, paste("<font color='red'> A total of", sum(!gd.inx), "peaks were excluded due to non-numeric values. </font> " ));
   }
   msg<-c(msg, paste("These samples contain a total of ", dim(all.peaks)[1], "peaks," ));
   msg<-c(msg, paste("with an average of ", round(dim(all.peaks)[1]/length(files), 1), "peaks per sample" ));
@@ -798,6 +847,7 @@ ReadPairFile <- function(filePath="pairs.txt"){
 #'
 SaveTransformedData <- function(mSetObj=NA){
   mSetObj <- .get.mSet(mSetObj);
+
   if(!is.null(mSetObj$dataSet[["orig"]])){
     lbls <- NULL;
     tsFormat <- substring(mSetObj$dataSet$format,4,5)=="ts";
@@ -812,20 +862,21 @@ SaveTransformedData <- function(mSetObj=NA){
     #  orig.data<-t(orig.data);
     #}
     write.csv(orig.data, file="data_original.csv", row.names=FALSE);
+  }
 
     if(!is.null(mSetObj$dataSet[["origMeta"]])){
         lbls.meta <- as.data.frame(c(1:nrow(mSetObj$dataSet$origMeta)))
         colnames(lbls.meta) <- c("Sample")
         orig.meta<-cbind(lbls.meta, mSetObj$dataSet$origMeta);
         write.csv(orig.meta, file="data_grouping.csv", row.names=FALSE); 
-     }
+    }
 
     if(!is.null(mSetObj$dataSet[["origEnv"]])){
         lbls.env <- as.data.frame(c(1:nrow(mSetObj$dataSet$origEnv)))
         colnames(lbls.env) <- c("Sample")
         orig.env<-cbind(lbls.env, mSetObj$dataSet$origEnv);
         write.csv(orig.env, file="data_constraining.csv", row.names=FALSE); 
-     }
+    }
 
     if(!is.null(mSetObj$dataSet[["procr"]])){
       if(tsFormat){
@@ -839,7 +890,8 @@ SaveTransformedData <- function(mSetObj=NA){
      #  proc.data<-t(proc.data);
      #}
       write.csv(proc.data, file="data_processed.csv", row.names=FALSE);
-      
+    }
+  
     if(!is.null(mSetObj$dataSet[["norm"]])){
         if(tsFormat){
           lbls <- cbind(as.character(mSetObj$dataSet$facA),as.character(mSetObj$dataSet$facB));
@@ -850,22 +902,21 @@ SaveTransformedData <- function(mSetObj=NA){
         
         # for ms peaks with rt and ms, insert two columns, without labels
         # note in memory, variables in columns
-        
-      #  if(!is.null(mSetObj$dataSet$three.col)){ 
+      #  if(!is.null(mSetObj$dataSet$three.col)){  #I REMOVED THIS
       #   ids <- matrix(unlist(strsplit(colnames(mSetObj$dataSet$norm), "/")),ncol=2, byrow=T);
       #   colnames(ids) <- c("mz", "rt");
       #   write.csv(new.data, file="peak_normalized_rt_mz.csv");
       #}
         
         norm.data<-cbind(lbls, mSetObj$dataSet$norm);
+
         #if(dim(norm.data)[2]>200){
         #  norm.data<-t(norm.data);
         #}
+
        write.csv(norm.data, file="data_normalized.csv", row.names=FALSE);
      }
-    }
   return(.set.mSet(mSetObj));
-  }
 }
 
 

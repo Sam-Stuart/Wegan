@@ -200,12 +200,12 @@ SanityCheckData <- function(mSetObj=NA){
   # check numeric and categorical variables
   numCount <- length(select_if(int.mat, is.numeric))
   catCount <- length(select_if(int.mat, is.character))
-  msg<-c(msg, paste0("A total of ", numCount, " numeric and ", catCount, " categorical variables were detected."));
+  msg<-c(msg, paste0("&emsp;&emsp;&emsp;&emsp;", "- A total of ", numCount, " numeric and ", catCount, " categorical variables were detected."));
 
   #Check for 0s and neg numbers
   zeroCount <- sum(int.mat==0);
   negCount <- sum(int.mat<0);
-  msg<-c(msg, paste0("A total of ", zeroCount, " zero values and ", negCount, " negative values were detected. Zero and negative values will impact which transformations are available."));
+  msg<-c(msg, paste0("&emsp;&emsp;&emsp;&emsp;", "- A total of ", zeroCount, " zero values and ", negCount, " negative values were detected."));
 
 
   # check NA values
@@ -213,11 +213,9 @@ SanityCheckData <- function(mSetObj=NA){
   naCount <- sum(is.na(int.mat));
   naPercent <- round(100*naCount/totalCount,1)
   
-  msg<-c(msg, paste0("<font color=\"red\">", "A total of ", naCount, " (", naPercent, "%) missing values were detected.</font>"));
-
-  msg<-c(msg, "<u>By default, missing values will be left as is, though certain functionalities may be unavailable.</u>",
-         "Click <b>Skip</b> button if you accept the default practice",
-         "Or click <b>Missing value estimation</b> to estimate values and filter data");
+  msg<-c(msg, paste0("&emsp;&emsp;&emsp;&emsp;", "- A total of ", naCount, " (", naPercent, "%) missing values were detected."));
+  msg<-c(msg, "By default, missing and constant values are left as is, though certain functionalities may be unavailable.")
+  msg<-c(msg, "Click <b>Skip</b> button if you accept the default practice. Click <b>Missing value estimation</b> to estimate missing values and filter data.");
   
   # obtain original half of minimal positive value (threshold) for numeric columns
   numVars <- select_if(int.mat, is.numeric) #I ADDED THIS FOR WEGAN WHICH ALLOWS CATEGORICAL VARS
@@ -248,8 +246,8 @@ SanityCheckData <- function(mSetObj=NA){
 #'@description This function will replace zero/missing values by half of the smallest
 #'positive value in the original dataset.  
 #'This method will be called after all missing value imputations are conducted.
-#'Also, it directly modifies the mSet$dataSet$procr if executed after normalization,
-#'or the mSet$dataSet$norm if before normalization.
+#'Also, it directly modifies the mSetObj$dataSet$procr if executed after normalization,
+#'or the mSetObj$dataSet$norm if before normalization.
 #'@usage ReplaceMin(mSetObj=NA) 
 #'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
 #'@author Jeff Xia \email{jeff.xia@mcgill.ca}
@@ -883,7 +881,7 @@ IsSpectraProcessingOK <- function(mSetObj=NA){
     .set.mSet(mSetObj)
     return(res);
   }
-  print(res);
+  #print(res);
   return(.set.mSet(mSetObj));
 }
 
@@ -898,6 +896,29 @@ GetGroupNumber<-function(mSetObj=NA){
   return(length(levels(mSetObj$dataSet$cls)));
 }
 
+GetCatNumber<-function(mSetObj=NA){
+  load_dplyr()
+  mSetObj <- .get.mSet(mSetObj);
+  catData <- select_if(mSetObj$dataSet$norm, is.character)
+  return(ncol(catData));
+}
+
+GetNumNumber<-function(mSetObj=NA){
+  load_dplyr()
+  mSetObj <- .get.mSet(mSetObj);
+  numData <- select_if(mSetObj$dataSet$norm, is.numeric)
+  return(ncol(numData));
+}
+
+GetEnvDataAvailable <-function(mSetObj=NA){
+  mSetObj <- .get.mSet(mSetObj);
+  if (is.data.frame(mSetObj$dataSet$origEnv)==FALSE) { #No constraining data uploaded
+    return("FALSE")
+  } else {
+    return("TRUE")
+  }
+}
+
 #'Check if the sample size is small
 #'@description Returns whether or not the sanity check found that there were too many
 #'groups in the dataset containing too few samples. It will return a 0 if the data passes the check,
@@ -908,7 +929,7 @@ GetGroupNumber<-function(mSetObj=NA){
 #'
 IsSmallSmplSize<-function(mSetObj=NA){
   mSetObj <- .get.mSet(mSetObj);
-  print(mSetObj$dataSet$small.smpl.size);
+  #print(mSetObj$dataSet$small.smpl.size);
   return(.set.mSet(mSetObj));
 }
 

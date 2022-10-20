@@ -12,16 +12,13 @@
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2)
 #'@export
-ord.pcoa <- function(mSetObj=NA, data="false", distance="NULL", binary="false", abundance="false", env_text="") { #4 user inputs, plus option to upload 2 supplementary data sets
+ord.pcoa <- function(mSetObj=NA, data="false", distance="NULL", binary="false", abundance="false", env_text=" ") { #4 user inputs, plus option to upload 2 supplementary data sets
   
   options(error=traceback)
 
   library("vegan") #For generating distance matrix
   library("dplyr") #For easy data manipulation
 
-  print("The use of data groupings will create more interesting plots. Load grouping data separately, where each row aligns with the rows in your data set, or include groupings as columns in your data set.")
-  print("The use of environmental data, if available, will also create more interesting plots. Load environmental data separately, where each row aligns with the rows in your data set.")
-  
   #Obtain mSet dataset
   mSetObj <- .get.mSet(mSetObj)
   if (data=="false") {
@@ -30,27 +27,13 @@ ord.pcoa <- function(mSetObj=NA, data="false", distance="NULL", binary="false", 
     input <- mSetObj$dataSet$orig
   }
   
-  input <- input[order(as.numeric(row.names(input))),] #Order rows
-  #metaData <- mSetObj$dataSet$origMeta
-  #envData <- mSetObj$dataSet$origEnv
+  metaData <- mSetObj$dataSet$origMeta
+  envData <- mSetObj$dataSet$origEnv
 
+  #Obtain categorical data for making dummy variables
+  num_data <- select_if(input, is.numeric)
 
-####TESTING####
-  input <- input[-1,] #Remove duplicate rows
-  metaData <- .readDataTable("/home/louisa/Wegan/MetaboAnalyst/src/main/webapp/resources/rscripts/metaboanalystr/test_data/dune_meta.csv") 
-  envData <- .readDataTable("/home/louisa/Wegan/MetaboAnalyst/src/main/webapp/resources/rscripts/metaboanalystr/test_data/dune_env.csv")
-############
-
-
-
-
-  #Obtain numeric data for ordination and catgroical data for grouping data
-  num_data <- select_if(input, is.numeric) #Numeric data only for PCOA
-  fac_data <- select_if(input, is.factor) #Any categorical data will be used for grouping
-  count.fac.cols <- ncol(fac_data) #number of categorical data columns
-  
   #Transform abundance data
-  print("Should you have community species data, you may want to investigate the relative abundance (divide all values by column totals) versus absolute abundance (no change to data).")
   if (abundance=="false") {
     abundance1 <- "absolute"
     num_data1 <- num_data #Default abundance is absolute and no change is made to data
@@ -59,36 +42,37 @@ ord.pcoa <- function(mSetObj=NA, data="false", distance="NULL", binary="false", 
     num_data1 <- decostand(num_data, method="total") #Alternative option is relative abundance, each value is divided by the column sum
   }
   
+  #Combine numeric data and dummy variables #I REMOVED DUMMIES SINCE WE CANNOT USE SAME DIST MEASURES FOR BOTH NUMERIC AND CATEGORICAL VARS
+  data <- num_data1
+  if (ncol(data)<2) {
+    #AddErrMsg("Ordination requires at least 2 variables!")
+    stop("Ordination requires at least 2 variables!")
+  } 
   #Set distance measure for creation of dissimilarity matrix
   if (distance=="NULL") {
     distance1 <- "bray" #Default distance
   } else {
     distance1 <- distance #USer selected from list "bray", "manhattan", "canberra", "kulczynski", "jaccard", "gower", "altGower", "morisita", "horn", "mountford", "raup" , "binomial", "chao", "cao", "mahalanobis"
   } 
-  
+
   #Generate dissimilarity matrix
   if (binary=="false") {
-    dist <- vegdist(num_data1, method=distance1, binary=FALSE) #Generate dissimilarity matrix
+    dist <- vegdist(data, method=distance1, binary=FALSE) #Generate dissimilarity matrix
   } else {
-    dist <- vegdist(num_data1, method=distance1, binary=TRUE) #Generate dissimilarity matrix for presence/absence data
+    dist <- vegdist(data, method=distance1, binary=TRUE) #Generate dissimilarity matrix for presence/absence data
   }
-  
-  #Run PCOA with and without weights
+
+  #Run PCOA 
   pcoa <- wcmdscale(dist, add="lingoes", eig=TRUE, x.ret=TRUE)
 
-  #meta data, used to group samples using colors or plotting symbols
-  if (is.data.frame(metaData)==FALSE) { #No user uplaoded meta data
-    if (count.fac.cols >= 1) { #If species data had at least one categorical column, call it meta data
-      metaData1 <- as.data.frame(fac_data)
-    } else {
-      metaData1 <- "NA" #If species data had no categorical columns, meta data is NULL
-      #AddErrMsg("No groupings columns were detected. If this is a mistake, make sure that groupings columns use characters and not numbers. For example, instead ofgrouping data using 1, 2, and 3, use I, II and III.")
-      print("No groupings columns were detected! If this is a mistake, make sure that groupings columns use characters and not numbers. For example, instead of grouping data using 1, 2, and 3, use I, II and III.")
-    }
+  #meta data, used to group samples using colors
+  if (is.data.frame(metaData)==FALSE) { #No user uploaded meta data
+    metaData1 <- "NA" #If species data had no categorical columns, meta data is NULL
+    print("No grouping variables were uploaded!")  
   } else {  #User uploaded meta data
     metaData1 <- metaData #User uploaded like weights in correlation module
     if (nrow(metaData1)!=nrow(input)) {
-      #AddErrMsg("Your meta data does not have the same number of rows as your numerical data! Please check that you meta data is correct.")
+      #AddErrMsg("Your grouping data does not have the same number of rows as your numerical data! Please check that you grouping data is correct.")
       stop("Your grouping data does not have the same number of rows as your numerical data! Please check that you grouping data is correct.")
     }
     for(i in 1:ncol(metaData1)) {
@@ -187,13 +171,12 @@ ord.pcoa <- function(mSetObj=NA, data="false", distance="NULL", binary="false", 
   }
   
   #Fit variables to ordination plots for plotting arrows
-  var.fit <- envfit(pcoa, num_data1, permutations=999, p.max=NULL)
+  var.fit <- envfit(pcoa, data, permutations=999, p.max=NULL)
   
   #Store results in mSetObj$analSet$pcoa
-  mSetObj$analSet$pcoa$name <- "PCOA"
   mSetObj$analSet$pcoa$pcoa <- pcoa
   mSetObj$analSet$pcoa$distance <- distance1
-  mSetObj$analSet$pcoa$input <- num_data
+  mSetObj$analSet$pcoa$input <- data
   mSetObj$analSet$pcoa$eigenvalues <- pcoa$eig
   mSetObj$analSet$pcoa$var.fit <- var.fit
   mSetObj$analSet$pcoa$env.fit <- env.fit
@@ -208,15 +191,17 @@ ord.pcoa <- function(mSetObj=NA, data="false", distance="NULL", binary="false", 
   eigenValues_data <- cbind(eig_rownames, eigenValues_data)
   colnames(eigenValues_data) <- c("Dimension", "Eigen_Value", "Variance_Explained")
   
-  write.csv(eigenValues_data, file="pcoa_eigen_values.csv", row.names=FALSE)
-  write.csv(pcoa$points, file="pcoa_row_scores.csv", row.names=row.names(input))
-  write.csv(var.fit$vectors$arrows, file="pcoa_column_scores.csv", row.names=TRUE)
-  write.csv(pcoa$x, file=paste0("pcoa_", distance1, "_dissimilarity_matrix.csv"), row.names=TRUE)
+  write.csv(eigenValues_data, file="pcoa_scree_data.csv", row.names=FALSE)
+  #write.csv(pcoa$points, file="pcoa_sample_scores.csv", row.names=row.names(input))!!!!!!!!!!!
+  write.csv(var.fit$vectors$arrows, file="pcoa_2D_variable_scores.csv", row.names=TRUE)
+  #write.csv(pcoa$x, file("pcoa_dissimilarity_matrix.csv", row.names=TRUE))!!!!!!!!!!!!
   if (is.data.frame(env_data)==TRUE) {
-    write.csv(env.scores, file="pcoa_environment_scores.csv", row.names=TRUE)
+    write.csv(env.scores, file="pcoa_2D_constraining_variable_scores.csv", row.names=TRUE)
+  } else {
+    write.csv(NULL, file="pcoa_2D_constraining_variable_scores.csv", row.names=FALSE)
   }
 
-  sink("column_impact_on_pcoa.txt") 
+  sink("variable_impact_on_pcoa.txt") 
   cat("Data columns may significantly impact PCOA\n")
   print(var.fit)
   sink() 
@@ -243,20 +228,27 @@ ord.pcoa <- function(mSetObj=NA, data="false", distance="NULL", binary="false", 
     abundance1 <- "true"
   }
   cat(paste0("\nPerform relative abundance transformation: "), abundance1, "\n")
-  cat("\nSites Scores:\n")
+  cat("\nSample Scores:\n")
   print(as.data.frame(pcoa$points))
-  cat("\nSpecies Scores:\n")
+  cat("\nVariable Scores:\n")
   print(var.fit$vectors$arrow)
-  cat("\nEnvironment Scores:\n")
+  cat("\nConstraining Scores:\n")
   print(env.scores)
   cat("\nEigen values:")
   print(eigenValues_t)
   cat(paste0("\nAdditive constant calculated using Lingoes procedure for negative eigen value correction: ", pcoa$ac, "\n"))
   cat("\nLengend:\n")
-  cat("Site=Rows and Species=Columns\n")
+  cat("Site=Samples and Species=Variables\n")
   sink()  
   
-  return(.set.mSet(mSetObj))
+jsonString <- RJSONIO::toJSON(mSetObj$analSet$scatterPlot);
+jsonData <- RJSONIO::toJSON(mSetObj$dataSet)
+
+sink("Scatterplot.json");
+cat(jsonData);
+sink();
+
+return(.set.mSet(mSetObj))
   
 }
 
@@ -290,7 +282,8 @@ Plot.PCOA.2D <- function(mSetObj=NA, ellipse="false", var_arrows="false", env_ar
 
   library("vegan")
   library("viridis") 
-  
+  library("dplyr") 
+
   #Extract necessary objects from mSetObj
   mSetObj <- .get.mSet(mSetObj)
   pcoa <- mSetObj$analSet$pcoa$pcoa
@@ -298,11 +291,8 @@ Plot.PCOA.2D <- function(mSetObj=NA, ellipse="false", var_arrows="false", env_ar
   input <- mSetObj$analSet$pcoa$input
   var.fit <- mSetObj$analSet$pcoa$var.fit
   env.fit.char <- mSetObj$analSet$pcoa$env.fit.char
-  print(env.fit.char)
   env.fit.num <- mSetObj$analSet$pcoa$env.fit.num
-  print(env.fit.num)
   env_data <- mSetObj$analSet$pcoa$env_data
-  print(env_data)
 
   #Set plot dimensions
   if(is.na(width)){
@@ -325,7 +315,7 @@ Plot.PCOA.2D <- function(mSetObj=NA, ellipse="false", var_arrows="false", env_ar
   axis(2, las=2)
   
   #Plot with and without ellipses/sample labels/metadata options/variable arrows/env data arrows
-  if (is.data.frame(metaData)==FALSE) { #If no meta data
+  if (is.data.frame(metaData)==FALSE || meta_col_color=="No groupings") { #If no meta data
 
     #point options
     if (sampleNames!="false") { #If display data as lables
@@ -336,20 +326,23 @@ Plot.PCOA.2D <- function(mSetObj=NA, ellipse="false", var_arrows="false", env_ar
     
     #variable arrow options
     if (var_arrows!="false") { #If variable arrows selected
-        if (color=="plasma") {
-            plot(var.fit2D, col="black")
-        } else {
-            plot(var.fit2D, col="darkred") 
-        }
+        plot(var.fit, col="darkred")        
     }
     
+    #Env data options
     if (is.data.frame(env_data)==TRUE) { #If environment data uploaded
       if (env_arrows!="false") { #If environment arrows selected
-        plot(env.fit.num, col="blue", lwd=2)
+        num_env_data <- select_if(env_data, is.numeric)
+        if (!is.null(num_env_data)){
+            plot(env.fit.num, col="blue", lwd=2)
+        }
       }
       
       if (env_cent!="false") { #If environment constraints selected
-        plot(env.fit.char, col="blue", lwd=2)
+        fac_env_data <- select_if(env_data, is.character)
+        if (!is.null(fac_env_data)){
+            plot(env.fit.char, col="blue", lwd=2)
+        }
       }
     }
     
@@ -360,10 +353,10 @@ Plot.PCOA.2D <- function(mSetObj=NA, ellipse="false", var_arrows="false", env_ar
       meta_col_color_data <- as.factor(metaData[,1]) #Default meta data column for labeling with color is the first
       meta_col_color_name <- colnames(metaData)[1]
     } else {
-      meta_col_color_data <- as.factor(metaData[,meta_col_color]) #User imputted meta data column for labeling with colors, options given to java using function meta.columns() below
+      meta_col_color_data <- as.factor(metaData[,meta_col_color]) #User inputted meta data column for labeling with colors, options given to java using function meta.columns() below
       meta_col_color_name <- meta_col_color
     }
-    
+
     #Color options
     n <- length(levels(meta_col_color_data)) #Determine how many different colors are needed based on the levels of the meta data
     if (color=="NULL") {
@@ -372,17 +365,10 @@ Plot.PCOA.2D <- function(mSetObj=NA, ellipse="false", var_arrows="false", env_ar
       colors <- plasma(n+1)#Assign a color to each level using the plasma pallete (viridis package)
     } else if (color=="grey") {
       colors <- grey.colors(n, start=0.1, end=0.75) #Assign a grey color to each level (grDevices package- automatically installed)
-    } else { 
-      color <- "none"
-    }
+    } 
     
-    #Assign colors to points
-    if (color=="none") {
-      cols <- "black" #color none means black points
-    } else {
-      cols <- colors[meta_col_color_data] #Color pallete applied for groupings of user's choice
-    }
-    
+    #Points options
+    cols <- colors[meta_col_color_data] #Color palette applied for groupings of user's choice
     if (sampleNames!="false") { #If display data as lables
       with(metaData, text(pcoa$points, col=cols, bg=cols)) # Text for samples
     } else { #display data as points
@@ -394,16 +380,6 @@ Plot.PCOA.2D <- function(mSetObj=NA, ellipse="false", var_arrows="false", env_ar
       plot(var.fit, col="darkred", lwd=2)
     }
     
-    if (is.data.frame(env_data)==TRUE) { #If environment data uploaded
-      if (env_arrows!="false") { #If environment arrows selected
-        plot(env.fit.num, col="blue", lwd=2)
-      }
-      
-      if (env_cent!="false") { #If environment constraints selected
-        plot(env.fit.char, col="blue", lwd=2)
-      }
-    }
-    
     #Ellipse option
     if (ellipse!="false") { #if ellipses selected
       with(metaData, ordiellipse(pcoa, meta_col_color_data, kind="sd", draw="polygon", border=colors, lwd=2)) # Include standard deviation ellipses that are the same color as the text.
@@ -411,6 +387,23 @@ Plot.PCOA.2D <- function(mSetObj=NA, ellipse="false", var_arrows="false", env_ar
     
     #Legend
     with(metaData, legend("topright", legend=levels(meta_col_color_data), col=colors, pch=19, title=meta_col_color_name)) # Include legend for colors in figure   
+    
+    #Env arrows and centroids
+    if (is.data.frame(env_data)==TRUE) { #If environment data uploaded
+      if (env_arrows!="false") { #If environment arrows selected
+        num_env_data <- select_if(env_data, is.numeric)
+        if (ncol(num_env_data)!=0){
+            plot(env.fit.num, col="blue", lwd=2)
+        } 
+      }
+      
+      if (env_cent!="false") { #If environment constraints selected
+        fac_env_data <- select_if(env_data, is.character)
+        if (ncol(fac_env_data)!=0){
+            plot(env.fit.char, col="blue", lwd=2)
+        }
+      }
+    }
   }
   
   dev.off()
@@ -554,18 +547,52 @@ Plot.PCOA.3D <- function(mSetObj=NA, color="NULL", var_arrows="false", meta_col_
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2)
 #'@export
-Plot.PCOA.scree <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA) {
+Plot.PCOA.scree <- function(mSetObj=NA, dim_numb="NULL", imgName, format="png", dpi=72, width=NA) {
     
   options(error=traceback)
 
   #Extract necessary objects from mSetObj
   mSetObj <- .get.mSet(mSetObj)
   eigenvalues <- mSetObj$analSet$pcoa$eigenvalues
-  
-  #Produce data set for plotting
-  eigenValues_data <- eigenvalues[1:6]
-  eigenvalues_data <- as.data.frame(cbind(1:6, eigenValues_data/sum(eigenvalues)))
-  maxVar <- eigenvalues_data[1,2]
+
+  if (dim_numb=="NULL") {
+   dim_numb <- 2
+   pcvars <- eigenvalues[1:dim_numb]/sum(eigenvalues)
+   cumvars <- c(pcvars[1], pcvars[1]+pcvars[2])
+  }
+  if (dim_numb=="3") {
+   dim_numb <- 3
+   pcvars <- eigenvalues[1:dim_numb]/sum(eigenvalues)
+   cumvars <- c(pcvars[1], pcvars[1]+pcvars[2], pcvars[1]+pcvars[2]+pcvars[3])
+  }
+  if (dim_numb=="4") {
+   dim_numb <- 4
+   pcvars <- eigenvalues[1:dim_numb]/sum(eigenvalues)
+   cumvars <- c(pcvars[1], pcvars[1]+pcvars[2], pcvars[1]+pcvars[2]+pcvars[3], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4])
+  }
+  if (dim_numb=="5") {
+   dim_numb <- 5
+   pcvars <- eigenvalues[1:dim_numb]/sum(eigenvalues)
+   cumvars <- c(pcvars[1], pcvars[1]+pcvars[2], pcvars[1]+pcvars[2]+pcvars[3], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4]+pcvars[5])
+  }
+  if (dim_numb=="6") {
+   dim_numb <- 6
+   pcvars <- eigenvalues[1:dim_numb]/sum(eigenvalues)
+   cumvars <- c(pcvars[1], pcvars[1]+pcvars[2], pcvars[1]+pcvars[2]+pcvars[3], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4]+pcvars[5], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4]+pcvars[5]+pcvars[6])
+  }
+  if (dim_numb=="7") {
+   dim_numb <- 7
+   pcvars <- eigenvalues[1:dim_numb]/sum(eigenvalues)
+   cumvars <- c(pcvars[1], pcvars[1]+pcvars[2], pcvars[1]+pcvars[2]+pcvars[3], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4]+pcvars[5], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4]+pcvars[5]+pcvars[6], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4]+pcvars[5]+pcvars[6]+pcvars[7])
+  }
+  if (dim_numb=="8") {
+   dim_numb <- 8
+   pcvars <- eigenvalues[1:dim_numb]/sum(eigenvalues)
+   cumvars <- c(pcvars[1], pcvars[1]+pcvars[2], pcvars[1]+pcvars[2]+pcvars[3], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4]+pcvars[5], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4]+pcvars[5]+pcvars[6], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4]+pcvars[5]+pcvars[6]+pcvars[7], pcvars[1]+pcvars[2]+pcvars[3]+pcvars[4]+pcvars[5]+pcvars[6]+pcvars[7]+pcvars[8])
+  }
+
+  miny<- 0
+  maxy<- min(max(cumvars)+0.2, 1);
   
   #Set plot dimensions
   if(is.na(width)){
@@ -583,11 +610,19 @@ Plot.PCOA.scree <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA)
   
   #Scree plot
   Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
-  par(xpd=FALSE, mar=c(5.1, 4.1, 4.1, 2.1)) 
-  plot(x=eigenvalues_data$V1, y=eigenvalues_data$V2, type="l", xlim=c(1, 6), ylim=c(0, maxVar+0.1), xlab="Dimension", ylab="Proportion of Variance Explained", main="Principal Coordinate Analysis Scree Plot", yaxt="n", xaxt="n", col="blue", lwd=2)
-  points(x=eigenvalues_data$V1, y=eigenvalues_data$V2, cex=1.1, pch=19, col="blue")
-  axis(2, las=2)
-  axis(1, at=1:6)
+  par(mar=c(5,5,6,3));
+  plot(pcvars, type='l', col='blue', main="Principal Coordinate Analysis \nScree Plot", xlab='Number of Dimensions', ylab='Variance Explained', ylim=c(miny,maxy), axes=F)
+  text(pcvars, labels =paste(100*round(pcvars,3),'%'), adj=c(-0.3, -0.5), srt=45, xpd=T)
+  points(pcvars, col='red');
+  
+  lines(cumvars, type='l', col='green')
+  text(cumvars, labels =paste(100*round(cumvars,3),'%'), adj=c(-0.3, -0.5), srt=45, xpd=T)
+  points(cumvars, col='red');
+  
+  abline(v=1:dim_numb, lty=3);
+  axis(1, 1:length(pcvars), 1:length(pcvars));
+  axis(2, las=2) #yaxis numbers upright for readability
+
   dev.off()
 }
 
@@ -633,7 +668,7 @@ Plot.PCOA.stress <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA
   #Stress plot
   Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
   par(xpd=FALSE, mar=c(5.1, 4.1, 4.1, 2.1)) #No plotting outside of plot limits, set margins to default
-  vegan::stressplot(pcoa, main="Principal Coordinate Analysis\nShepard Plot for Goodness of Fit", yaxt="n")
+  vegan::stressplot(pcoa, main="Principal Coordinate Analysis\nShepard Plot", yaxt="n")
   axis(2, las=2) #yaxis numbers upright for readability
   dev.off()
 }
@@ -658,12 +693,30 @@ pcoa.meta.columns <- function(mSetObj=NA) {
   mSetObj <- .get.mSet(mSetObj)
   
   metaData <- mSetObj$analSet$pcoa$metaData
-  name.all.meta.cols <- colnames(metaData)
-
+  if (is.data.frame(metaData)==FALSE) {
+    name.all.meta.cols <- "No groupings"
+  } else {
+    name.all.meta.cols <- c(colnames(metaData), "No groupings")
+  }
   return(name.all.meta.cols)
   
 }
 
+#'Determine number of possible dimensions for scree plot
+#'@description Java will use the dimension numbers to enable user options for scree plot
+#'@param mSetObj Input name of the created mSetObject 
+#'@author Louisa Normington\email{normingt@ualberta.ca}
+#'University of Alberta, Canada
+#'License: GNU GPL (>= 2)
+#'@export
+pcoa.scree.dim <- function(mSetObj=NA) {
+  mSetObj <- .get.mSet(mSetObj)
+  num_data <- mSetObj$analSet$pcoa$input
+  dim <- ncol(num_data)
+  max <- min(dim, 8)
+  pcoa.scree.dim.opts <- 2:max
+  return(pcoa.scree.dim.opts)
+}
 
 #'Obtain results'
 #'@description Java will use the stored results as needed for the results page

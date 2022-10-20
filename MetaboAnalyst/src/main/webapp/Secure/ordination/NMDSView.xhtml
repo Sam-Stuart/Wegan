@@ -14,7 +14,7 @@
         <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/jscripts/graphics.js"></script>
     </ui:define>
     <ui:define name="content">
-        <h:inputHidden id="mydir" value="#{sessionBean1.getJsonDir('nmds_score3d')}" />
+<!--        <h:inputHidden id="mydir" value="#{sessionBean1.getJsonDir('nmds_score3d')}" />
         <script type="text/javascript">
             // for scatter plot
             function addBind() {
@@ -52,34 +52,32 @@
                     }
                 };
             }
-        </script>
+        </script>-->
         <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
+            <h1>Non-metric Multidimensional Scaling Analysis:</h1>            
             <p:tabView id="NMDS">
-                <p:tab title ="2D Biplot" titleStyleClass="p-tab-nav">
+                <p:tab title ="2D Ordination Plot" titleStyleClass="p-tab-nav">
                     <h:form id="form1">
-                        <p>
-                            NMDS is performed on numeric data only. The use of data groupings will create more interesting plots. Load grouping data separately, where each row aligns with the rows in your data set, or include groupings as columns in your data set.
+                        <p style="font-size: 13px">
+                            The 2D ordination plot orients samples in two dimensions so that samples with more similar variable values are closer to one another. Results may differ slightly every time the analysis is performed.
+                            <a href=" " style="color:blue" title="Perform Relative Abundance Transformation: Click checkbox if 1. you have community data and 2. want to compare the relative abundance of each species (each count value is divded by the sum of the species variable)." >
+                                help?
+                            </a>                         
                         </p>
-                        <h3>Dataset Options:</h3>
-                        <h:panelGrid id="panelGrid1" columns="5" cellpadding="3" columnClasses="colBrayLong,colBrayShort,colBrayLong,colBrayShort, colLast">
-                                
+                        <h:panelGrid id="panelGrid1" columns="4" cellpadding="3" columnClasses="colNMDSLong, colNMDSShort, colNMDSLong, colNMDSShort">
                             <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
                             <p:selectBooleanCheckbox value ="#{ordNMDSBean.doOriginal}"/> 
-
-                            <h:outputLabel style="font-weight: bold" value="Perform Relative Abundance Transformation:"/>
-                            <p:selectBooleanCheckbox value ="#{ordNMDSBean.doAbundance}"/> 
-                            
-                            <p:panelGrid></p:panelGrid>
-
-                            <h:outputLabel style="font-weight: bold" value="Distance Measure:"/>
+                    
+                            <h:outputLabel style="font-weight: bold" value="Distance Metric for Measuring Dissimilarity:"/>
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordNMDSBean.vegdistOpts}">
                                 <f:selectItems value="#{applicationBean1.vegdistMeasureOpts}" />
                             </p:selectOneMenu> 
+                            
+                            <h:outputLabel style="font-weight: bold" value="Perform Relative Abundance Transformation:"/>
+                            <p:selectBooleanCheckbox value ="#{ordNMDSBean.doAbundance}"/> 
+                                    
+                            <spacer></spacer>
 
-                            <h:panelGrid columns="2" cellpadding="3">
-                            <h:outputLabel style="font-weight: bold" value="Constraining Data Column Selection:"/>
-                                <p:inputText style="width:400px; height:100px; line-height:5px;" value="#{ordNMDSBean.envDataCol}"/>
-                            </h:panelGrid>
                             <p:panelGrid></p:panelGrid>
                         </h:panelGrid>
                         <h:panelGrid id="panelGrid1_2" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
@@ -90,14 +88,13 @@
                                              actionListener="#{sessionBean1.graphicsLnk_action('ord_nmds_2D')}" 
                                             oncomplete="PF('graphApperanceNMDS1').show()"/>  
                 
-                           
                             <p:commandButton value="Update" 
                                              styleClass="updateButton"
                                              style="box-shadow: none !important; text-shadow: none !important"
                                             onclick="PF('statusDialog').show()"
                                             oncomplete="PF('statusDialog').hide()"  
                                             update=":NMDS:form1:nmdsPane1  :cmdPane" 
-                                            actionListener="#{ordNMDSBean.nmdsUpdate_action1()}"/>                          
+                                            actionListener="#{ordNMDSBean.nmdsUpdate_action2D()}"/>                          
                         </h:panelGrid>
                         
                         <h:panelGrid class="resultsBar" columns="2">
@@ -108,35 +105,34 @@
                             </h:panelGroup> 
                             <h:panelGroup>
                                 <h:panelGrid columns="3" class="resultsImages">
-                                    <i class="fa fa-question-circle"></i>
+                                    <i id="question" class="fa fa-question-circle" title="The use of data groupings and constraining data will create more interesting plots. Load grouping and constraining data separately, where each row aligns with the rows in your main data set. The position of variable arrows and constraining variables indicate which factors have the greatest impact on the relative position of the samples."></i>
                                 </h:panelGrid>
                             </h:panelGroup>                            
                         </h:panelGrid>
                         <h:panelGrid id="nmdsPane1" style="width: 100%;">
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
                                 <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
-                                    <h:outputText escape="false" value="#{ordNMDSBean.file2DSampleScoresPath}"/>
+                                    <h:outputText style="padding-left: 0px" escape="false" value="#{ordNMDSBean.file2DSampleScoresPath}"/>
                                 </i>
                             </h:panelGrid>
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
                                 <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
-                                    <h:outputText escape="false" value="#{ordNMDSBean.file2DColScoresPath}"/>
+                                    <h:outputText style="padding-left: 0px" escape="false" value="#{ordNMDSBean.file2DColScoresPath}"/>
                                 </i>    
                             </h:panelGrid>
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
-                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
-                                    <h:outputText escape="false" value="#{ordNMDSBean.file2DEnvScoresPath}"/>
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 3px; padding-right: 1px">
+                                    <h:outputText style="padding-left: 0px" escape="false" value="#{ordNMDSBean.file2DEnvScoresPath}"/>
                                 </i>
                             </h:panelGrid>  
                             
                         <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
-                            <p:commandButton value="Export"
-                                styleClass="exportButton"
-                                style="box-shadow: none !important; float:right; text-shadow: none !important;"
-                                actionListener="#{sessionBean1.graphicsLnk_action('ord_nmds_2D')}"
-                                oncomplete="PF('graphDialog').show()"/>
+                                <p:commandButton value="Export"
+                                    styleClass="exportButton"
+                                    style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                    actionListener="#{sessionBean1.graphicsLnk_action('ord_nmds_2D')}"
+                                    oncomplete="PF('graphDialog').show()"/>
                         </h:panelGrid>      
-                            
                         <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
                             <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('ord_nmds_2D')}" alt="nmds2D"/>
                         </h:panelGrid>
@@ -144,29 +140,29 @@
                     </h:form>
                 </p:tab>
                 
-                <p:tab title ="3D Biplot" titleStyleClass="p-tab-nav">
+                <p:tab title ="3D Scores Plot" titleStyleClass="p-tab-nav">
                     <h:form id="form2">
                         <p>
-                            The use of data groupings will create more interesting plots. Load grouping data separately, where each row aligns with the rows in your data set, or include groupings as columns in your data set.
+                            Represent the pairwise dissimilarity between data points using a specified distance metric, and view results in a three dimensional plot. 
+                            <a href=" " style="color:blue"  title="Perform Relative Abundance Transformation: Click checkbox if you have community data and want to apply a relative abundance transformation where each value is divded by the sum of the variable." >
+                                help?
+                            </a> 
                         </p>
-                        <h3>Dataset Options:</h3>
-                        <h:panelGrid id="panelGrid2" columns="5" cellpadding="3" columnClasses="colBrayLong,colBrayShort,colBrayLong,colBrayShort, colLast">
-                                
+                        <h:panelGrid id="panelGrid1" columns="4" cellpadding="3" columnClasses="colNMDSLong, colNMDSShort, colNMDSLong, colNMDSShort">
+
                             <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
                             <p:selectBooleanCheckbox value ="#{ordNMDSBean.doOriginal}"/> 
 
-                            <h:outputLabel style="font-weight: bold" value="Perform Relative Abundance Transformation:"/>
-                            <p:selectBooleanCheckbox value ="#{ordNMDSBean.doAbundance}"/> 
-                            
-                            <p:panelGrid></p:panelGrid>
-
-                            <h:outputLabel style="font-weight: bold" value="Distance Measure:"/>
+                            <h:outputLabel style="font-weight: bold" value="Distance Metric for Measuring Dissimilarity:"/>
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordNMDSBean.vegdistOpts}">
                                 <f:selectItems value="#{applicationBean1.vegdistMeasureOpts}" />
                             </p:selectOneMenu> 
 
-                            <p:panelGrid></p:panelGrid>
-                                
+                            <h:outputLabel style="font-weight: bold" value="Perform Relative Abundance Transformation:"/>
+                            <p:selectBooleanCheckbox value ="#{ordNMDSBean.doAbundance}"/> 
+                            
+                            <p:spacer></p:spacer>
+                            
                         </h:panelGrid>
                         <h:panelGrid columns="1" cellpadding="3" style="float: right">    
                             <p:commandButton value="Update" 
@@ -175,7 +171,7 @@
                                             onclick="PF('statusDialog').show()"
                                             oncomplete="PF('statusDialog').hide()"  
                                             update=":NMDS:form2:nmdsPane2  :cmdPane" 
-                                            actionListener="#{ordNMDSBean.nmdsUpdate_action2()}"/>                           
+                                            actionListener="#{ordNMDSBean.nmdsUpdate_action3D()}"/>                           
                         </h:panelGrid>
                         <h:panelGrid class="resultsBar" columns="2">
                             <h:panelGroup>
@@ -185,7 +181,7 @@
                             </h:panelGroup> 
                             <h:panelGroup>
                                 <h:panelGrid columns="3" class="resultsImages">
-                                    <i class="fa fa-question-circle"></i>
+                                    <i class="fa fa-question-circle" title="TO DO: Help with plot"></i>
                                 </h:panelGrid>
                             </h:panelGroup>                            
                         </h:panelGrid>
@@ -219,27 +215,28 @@
                 
                 <p:tab title ="Scree Plot" titleStyleClass="p-tab-nav">
                     <h:form id="form3">
-                        <p>
-                            The use of data groupings will create more interesting plots. Load grouping data separately, where each row aligns with the rows in your data set, or include groupings as columns in your data set.
-                        </p>
-                        <h3>Dataset Options:</h3>
-                        <h:panelGrid id="panelGrid3" columns="5" cellpadding="3" columnClasses="colBrayLong,colBrayShort,colBrayLong,colBrayShort, colLast">
-                                
+                        <p style="font-size: 13px">
+                            Calculate the proportion of variance explained by each dimension. The green line on top shows the accumulated variance explained; the blue line underneath shows the variance explained by individual dimensions.
+                            <a href=" " style="color:blue"  title="Perform Relative Abundance Transformation: Click checkbox if you have community data and want to apply a relative abundance transformation where each value is divded by the sum of the variable." >
+                                help?
+                            </a>                         </p>
+                        <h:panelGrid id="panelGrid1" columns="4" cellpadding="3" columnClasses="colNMDSLong, colNMDSShort, colNMDSLong, colNMDSShort">
+
                             <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
                             <p:selectBooleanCheckbox value ="#{ordNMDSBean.doOriginal}"/> 
-                            
-                            <h:outputLabel style="font-weight: bold" value="Perform Relative Abundance Transformation:"/>
-                            <p:selectBooleanCheckbox value ="#{ordNMDSBean.doAbundance}"/> 
-                            
-                            <p:panelGrid></p:panelGrid>
 
-                            <h:outputLabel style="font-weight: bold" value="Distance Measure:"/>
+                            <h:outputLabel style="font-weight: bold" value="Distance Metric for Measuring Dissimilarity:"/>
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordNMDSBean.vegdistOpts}">
                                 <f:selectItems value="#{applicationBean1.vegdistMeasureOpts}" />
                             </p:selectOneMenu> 
 
-                            <p:panelGrid></p:panelGrid>
-                                
+                            <h:outputLabel style="font-weight: bold" value="Perform Relative Abundance Transformation:"/>
+                            <p:selectBooleanCheckbox value ="#{ordNMDSBean.doAbundance}"/> 
+                            
+                            <h:outputLabel style="font-weight: bold" value="Number of Dimensions:"/>
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordNMDSBean.nmdsScreeDimNum}">
+                                <f:selectItems value="#{ordNMDSBean.nmdsScreeDimOpts}" />
+                            </p:selectOneMenu> 
                         </h:panelGrid>
                         <h:panelGrid columns="1" cellpadding="3" style="float: right">    
                             <p:commandButton value="Update" 
@@ -248,7 +245,7 @@
                                             onclick="PF('statusDialog').show()"
                                             oncomplete="PF('statusDialog').hide()"                                            
                                             update=":NMDS:form3:nmdsPane3  :cmdPane" 
-                                            actionListener="#{ordNMDSBean.nmdsUpdate_action3()}"/>                          
+                                            actionListener="#{ordNMDSBean.nmdsUpdate_actionScree()}"/>                          
                         </h:panelGrid>
                         <h:panelGrid class="resultsBar" columns="2">
                             <h:panelGroup>
@@ -256,11 +253,11 @@
                                     Results
                                 </h:panelGrid>
                             </h:panelGroup> 
-                            <h:panelGroup>
+<!--                            <h:panelGroup>
                                 <h:panelGrid columns="3" class="resultsImages">
                                     <i class="fa fa-question-circle"></i>
                                 </h:panelGrid>
-                            </h:panelGroup> 
+                            </h:panelGroup> -->
                         </h:panelGrid>
                         <h:panelGrid id="nmdsPane3" style="width: 100%;">
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
@@ -283,33 +280,34 @@
                     </h:form>
                 </p:tab>    
                 
-                <p:tab title ="Stress Plot" titleStyleClass="p-tab-nav">
+                <p:tab title ="Shepard Plot" titleStyleClass="p-tab-nav">
                     <h:form id="form4">
-                        <p>
-                            The use of data groupings will create more interesting plots. Load grouping data separately, where each row aligns with the rows in your data set, or include groupings as columns in your data set.
+                        <p style="font-size: 13px">
+                            Plot the pairwise dissimilarity between data points against the ordination distance calculated by the NMDS analysis. When data points swarm around the red line and R squared approaches 1, the analysis was successful in representing the data in lower dimensions. 
+                            <a href=" " style="color:blue"  title="Perform Relative Abundance Transformation: Click checkbox if you have community data and want to apply a relative abundance transformation where each value is divded by the sum of the variable." >
+                                help?
+                            </a> 
                         </p>
-                        <h3>Dataset Options:</h3>
-                        <h:panelGrid id="panelGrid4" columns="5" cellpadding="3" columnClasses="colBrayLong,colBrayShort,colBrayLong,colBrayShort, colLast">
-                                
+                        <h:panelGrid id="panelGrid1" columns="4" cellpadding="3" columnClasses="colNMDSLong, colNMDSShort, colNMDSLong, colNMDSShort">
+
                             <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
                             <p:selectBooleanCheckbox value ="#{ordNMDSBean.doOriginal}"/> 
-                            
-                            <h:outputLabel style="font-weight: bold" value="Perform Relative Abundance Transformation:"/>
-                            <p:selectBooleanCheckbox value ="#{ordNMDSBean.doAbundance}"/> 
-                            
-                            <p:panelGrid></p:panelGrid>
 
-                            <h:outputLabel style="font-weight: bold" value="Distance Measure:"/>
+                            <h:outputLabel style="font-weight: bold" value="Distance Metric for Measuring Dissimilarity:"/>
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordNMDSBean.vegdistOpts}">
                                 <f:selectItems value="#{applicationBean1.vegdistMeasureOpts}" />
                             </p:selectOneMenu> 
-                            
-                            <h:outputLabel style="font-weight: bold" value="Dimension:"/>
-                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordNMDSBean.ordStressDimOpts}">
-                                <f:selectItems value="#{applicationBean1.ordStressDimensionOpts}" />
+
+                            <h:outputLabel style="font-weight: bold" value="Perform Relative Abundance Transformation:"/>
+                            <p:selectBooleanCheckbox value ="#{ordNMDSBean.doAbundance}"/> 
+                                                        
+                            <h:outputLabel style="font-weight: bold" value="Dimension Number:"/>
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordNMDSBean.nmdsStressDimNum}">
+                                <f:selectItems value="#{ordNMDSBean.nmdsStressDimOpts}" />
                             </p:selectOneMenu> 
+                            
                             <p:panelGrid></p:panelGrid>
-                                
+                            
                         </h:panelGrid>
                         <h:panelGrid columns="1" cellpadding="3" style="float: right">    
                             <p:commandButton value="Update" 
@@ -318,7 +316,7 @@
                                             onclick="PF('statusDialog').show()"
                                             oncomplete="PF('statusDialog').hide()"  
                                             update=":NMDS:form4:nmdsPane4  :cmdPane" 
-                                            actionListener="#{ordNMDSBean.nmdsUpdate_action4()}"/>                          
+                                            actionListener="#{ordNMDSBean.nmdsUpdate_actionStress()}"/>                          
                         </h:panelGrid>
                         <h:panelGrid class="resultsBar" columns="2">
                             <h:panelGroup>
@@ -326,11 +324,11 @@
                                     Results
                                 </h:panelGrid>
                             </h:panelGroup> 
-                            <h:panelGroup>
+<!--                            <h:panelGroup>
                                 <h:panelGrid columns="3" class="resultsImages">
                                     <i class="fa fa-question-circle"></i>
                                 </h:panelGrid>
-                            </h:panelGroup> 
+                            </h:panelGroup> -->
                         </h:panelGrid>
                         <h:panelGrid id="nmdsPane4" style="width: 100%;">
                             
@@ -358,13 +356,13 @@
             draggable="false" closable="true" resizable="false"> 
             <ui:include src="_color_palette_nmds1.xhtml" />
         </p:dialog>
-        <script type="text/javascript">
+<!--        <script type="text/javascript">
             showNMDS3DScore();
             $("[id='ac:chart']").bind('jqplotDataClick',
                     function (ev, seriesIndex, pointIndex, data) {
                         //note, we use the internal index, not point index 
                         remoteCall([{name: 'cmpdIndex', value: data[0]}]);
                     });
-        </script>
+        </script>-->
     </ui:define>
 </ui:composition>

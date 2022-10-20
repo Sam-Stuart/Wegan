@@ -5,11 +5,16 @@
  */
 package metaboanalyst.controllers.stats;
 
+import java.io.File;
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.model.SelectItem;
 import metaboanalyst.controllers.SessionBean1;
+import metaboanalyst.models.User;
 import metaboanalyst.rwrappers.ChemoMetrics;
+import metaboanalyst.rwrappers.OAUtils;
 import metaboanalyst.rwrappers.RDataUtils;
 import metaboanalyst.utils.DataUtils;
 import org.primefaces.context.RequestContext;
@@ -27,7 +32,7 @@ import org.rosuda.REngine.Rserve.RConnection;
 public class PCABean implements Serializable {
 
     private final SessionBean1 sb = (SessionBean1) DataUtils.findBean("sessionBean1");
-    private int pcaPairNum = 5;
+    private int pcaPairNum = 2;
 
     public int getPcaPairNum() {
         return pcaPairNum;
@@ -38,7 +43,8 @@ public class PCABean implements Serializable {
     }
 
     public SelectItem[] getPcaPCs() {
-        int pcNums = ChemoMetrics.GetMaxPCACompNumber(sb) - 2;
+//        int pcNums = ChemoMetrics.GetMaxPCACompNumber(sb) - 2;
+        int pcNums = ChemoMetrics.GetMaxPCACompNumber(sb);
         System.out.print("in PcaPCS... pcNums : ");
         System.out.print(pcNums);
         SelectItem[] items = new SelectItem[pcNums];
@@ -50,7 +56,8 @@ public class PCABean implements Serializable {
     }
 
     public SelectItem[] getPcaAllPCs() {
-        int pcNums = ChemoMetrics.GetMaxPCACompNumber(sb) - 1;
+//        int pcNums = ChemoMetrics.GetMaxPCACompNumber(sb) - 1;
+        int pcNums = ChemoMetrics.GetMaxPCACompNumber(sb);
         SelectItem[] items = new SelectItem[pcNums];
         for (int i = 0; i < pcNums; i++) {
             int pcNum = i + 1;
@@ -58,13 +65,22 @@ public class PCABean implements Serializable {
         }
         return items;
     }
-
-    public String pcaPairBtn_action() {
-        ChemoMetrics.PlotPCAPairSummary(sb, sb.getNewImage("pca_pair"), "png", 72, pcaPairNum);
-        RequestContext.getCurrentInstance().scrollTo("ac:form1:pairPane");
-        return null;
+        
+    public void pcaPairBtn_action() {
+        ChemoMetrics.InitPCA(sb, doOriginal);
+        ChemoMetrics.PlotPCAPairSummary(sb, pcaPairsColorOpts, sb.getNewImage("pca_pair"), "png", 72, pcaPairNum);
     }
 
+    private boolean doOriginal = false; 
+    
+    public boolean isDoOriginal() {
+        return doOriginal;
+    }
+    
+    public void setDoOriginal(boolean doOriginal) {
+        this.doOriginal = doOriginal;
+    }
+    
     private boolean greyScale = false;
 
     public boolean isGreyScale() {
@@ -85,7 +101,7 @@ public class PCABean implements Serializable {
         this.diffShapes = diffShapes;
     }
 
-    private int pcaScreeNum = 5;
+    private int pcaScreeNum = 2;
 
     public int getPcaScreeNum() {
         return pcaScreeNum;
@@ -96,12 +112,13 @@ public class PCABean implements Serializable {
     }
 
     public String pcaScreeBtn_action() {
+        ChemoMetrics.InitPCA(sb, doOriginal);
         ChemoMetrics.PlotPCAScree(sb, sb.getNewImage("pca_scree"), "png", 72, pcaScreeNum);
         RequestContext.getCurrentInstance().scrollTo("ac:form2:screePane");
         return null;
     }
 
-    private boolean displayNames = true;
+    private boolean displayNames = false;
 
     public boolean isDisplayNames() {
         return displayNames;
@@ -111,7 +128,7 @@ public class PCABean implements Serializable {
         this.displayNames = displayNames;
     }
 
-    private boolean displayFeatNames = true;
+    private boolean displayFeatNames = false;
 
     public boolean isDisplayFeatNames() {
         return displayFeatNames;
@@ -121,7 +138,7 @@ public class PCABean implements Serializable {
         this.displayFeatNames = displayFeatNames;
     }
 
-    private boolean displayConfs = true;
+    private boolean displayConfs = false;
 
     public boolean isDisplayConfs() {
         return displayConfs;
@@ -150,6 +167,114 @@ public class PCABean implements Serializable {
         this.pcaScoreY = pcaScoreY;
     }
 
+    private boolean ellipseOpts = false; 
+    
+    public boolean isEllipseOpts() {
+        return ellipseOpts;
+    }
+    
+    public void setEllipseOpts(boolean ellipseOpts) {
+        this.ellipseOpts = ellipseOpts;
+    }
+        
+    
+    private boolean var_arrowsOpts = false; 
+    
+    public boolean isVar_arrowsOpts() {
+        return var_arrowsOpts;
+    }
+    
+    public void setVar_arrowsOpts(boolean var_arrowsOpts) {
+        this.var_arrowsOpts = var_arrowsOpts;
+    }
+    
+    
+        
+    private boolean env_arrowsOpts = false; 
+    
+    public boolean isEnv_arrowsOpts() {
+        return env_arrowsOpts;
+    }
+    
+    public void setEnv_arrowsOpts(boolean env_arrowsOpts) {
+        this.env_arrowsOpts = env_arrowsOpts;
+    }
+    
+         
+    private boolean env_centOpts = false; 
+    
+    public boolean isEnv_centOpts() {
+        return env_centOpts;
+    }
+    
+    public void setEnv_centOpts(boolean env_centOpts) {
+        this.env_centOpts = env_centOpts;
+    }
+     
+         
+    private boolean sampleNamesOpts = false; 
+    
+    public boolean isSampleNamesOpts() {
+        return sampleNamesOpts;
+    }
+    
+    public void setSampleNamesOpts(boolean sampleNamesOpts) {
+        this.sampleNamesOpts = sampleNamesOpts;
+    }
+
+    private boolean noPointsOpts = false; 
+    
+    public boolean isNoPointsOpts() {
+        return noPointsOpts;
+    }
+    
+    public void setNoPointsOpts(boolean noPointsOpts) {
+        this.noPointsOpts = noPointsOpts;
+    }
+    
+   private String pcaPairsColorOpts = "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.pcaPairsColorPaletteOpts
+    
+    public String getPcaPairsColorOpts() {
+        return pcaPairsColorOpts;
+    }
+
+    public void setPcaPairsColorOpts(String pcaPairsColorOpts) {
+        this.pcaPairsColorOpts = pcaPairsColorOpts;
+    }
+    
+   private String ordColorOpts = "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.ordColorPaletteOpts
+    
+    public String getOrdColorOpts() {
+        return ordColorOpts;
+    }
+
+    public void setOrdColorOpts(String ordColorOpts) {
+        this.ordColorOpts = ordColorOpts;
+    }    
+    private SelectItem[] pcaMetaColumnOpts = null;
+    
+    public SelectItem[] getPcaMetaColumnOpts(){
+        String[] columns = OAUtils.GetPCAMetaColumns(sb);
+        int columnsLen = columns.length;
+        pcaMetaColumnOpts = new SelectItem[columnsLen];
+        List<String> columnNames = Arrays.asList(columns);
+        for (int i = 0; i < columnsLen; i++) {
+            pcaMetaColumnOpts[i] = new SelectItem(columnNames.get(i), columnNames.get(i));
+        }
+        return pcaMetaColumnOpts;
+    }
+    
+    private String pcaMetaColumnName = getPcaMetaColumnOpts()[0].getLabel();
+    
+    public String getPcaMetaColumnName() {
+        return pcaMetaColumnName;
+    }
+
+    public void setPcaMetaColumnName(String pcaMetaColumnName) {
+        this.pcaMetaColumnName = pcaMetaColumnName;
+    }
+
+    
     public String pcaScore2dBtn_action() {
         if (pcaScoreX == pcaScoreY) {
             sb.updateMsg("Error", "X and Y axes are of the same PC");
@@ -167,7 +292,8 @@ public class PCABean implements Serializable {
             if (greyScale) {
                 useGreyScale = 1;
             }
-            ChemoMetrics.PlotPCA2DScore(sb, sb.getNewImage("pca_score2d"), "png", 72, pcaScoreX, pcaScoreY, conf, showNames, useGreyScale);
+            ChemoMetrics.InitPCA(sb, doOriginal);
+            ChemoMetrics.PlotPCA2DScore(sb, ellipseOpts, var_arrowsOpts, env_arrowsOpts, env_centOpts, sampleNamesOpts, pcaPairsColorOpts, pcaMetaColumnName, noPointsOpts, sb.getNewImage("pca_score2d"), "png", 72);
             RequestContext.getCurrentInstance().scrollTo("ac:form3:score2dPane");
         }
         return null;
@@ -215,7 +341,8 @@ public class PCABean implements Serializable {
             sb.updateMsg("Error", "Detected the same PC on two axes!");
         } else {
             //ChemoMetrics.PlotPCA3DScore(sb, sb.getNewImage("pca_score3d"), "png", 72, pcaScore3dX, pcaScore3dY, pcaScore3dZ, rotationAngle);
-            ChemoMetrics.PlotPCA3DScore(sb, sb.getNewImage("pca_score3d"), "json", 72, pcaScore3dX, pcaScore3dY, pcaScore3dZ);
+            ChemoMetrics.InitPCA(sb, doOriginal);
+            ChemoMetrics.PlotPCA3DScore(sb, sb.getNewImage("pca_score3d"), "json", ordColorOpts, pcaMetaColumnName);
             //  RequestContext.getCurrentInstance().scrollTo("ac:form4:score3dPane");
         }
         return null;
@@ -254,6 +381,7 @@ public class PCABean implements Serializable {
         if (pcaLoadX == pcaLoadY) {
             sb.updateMsg("Error", "Detected the same PC on two axes!");
         } else {
+            ChemoMetrics.InitPCA(sb, doOriginal);
             ChemoMetrics.PlotPCALoading(sb, sb.getNewImage("pca_loading"), "png", 72, pcaLoadX, pcaLoadY, loadPlotOpt, displayFeatNames ? 1 : 0);
             updateLoadModel();
         }
@@ -282,6 +410,7 @@ public class PCABean implements Serializable {
         if (pcaBiplotX == pcaBiplotY) {
             sb.updateMsg("Error", "Detected the same PC on two axes!");
         } else {
+            ChemoMetrics.InitPCA(sb, doOriginal);
             ChemoMetrics.PlotPCABiplot(sb, sb.getNewImage("pca_biplot"), "png", 72, pcaBiplotX, pcaBiplotY);
             RequestContext.getCurrentInstance().scrollTo("ac:form6:biplotPane");
         }
@@ -381,14 +510,14 @@ public class PCABean implements Serializable {
     }
 
     public void flipPCA() {
-        ChemoMetrics.FlipPCA(sb, flipOpt);
-        ChemoMetrics.PlotPCAPairSummary(sb, sb.getNewImage("pca_pair"), "png", 72, 5);
-        ChemoMetrics.PlotPCAScree(sb, sb.getNewImage("pca_scree"), "png", 72, 5);
-        ChemoMetrics.PlotPCA2DScore(sb, sb.getNewImage("pca_score2d"), "png", 72, 1, 2, 0.95, 1, 0);
+//        ChemoMetrics.FlipPCA(sb, flipOpt);
+        ChemoMetrics.PlotPCAPairSummary(sb, "NULL", sb.getNewImage("pca_pair"), "png", 72, 2);
+        ChemoMetrics.PlotPCAScree(sb, sb.getNewImage("pca_scree"), "png", 72, 2);
+        ChemoMetrics.PlotPCA2DScore(sb, false, false, false, false, false, "NULL", "NULL", false, sb.getCurrentImage("pca_score2d"), "png", 72);
         ChemoMetrics.PlotPCALoading(sb, sb.getNewImage("pca_loading"), "png", 72, 1, 2, "scatter", 1);  // setLoadingTable(pcImpInx);
         ChemoMetrics.PlotPCABiplot(sb, sb.getNewImage("pca_biplot"), "png", 72, 1, 2);
         // ChemoMetrics.PlotPCA3DScore(sb, sb.getCurrentImage("pca_score3d"), "png", 72, 1, 2, 3, 40);
-        ChemoMetrics.PlotPCA3DScore(sb, sb.getNewImage("pca_score3d"), "json", 72, 1, 2, 3);
+        ChemoMetrics.PlotPCA3DScore(sb, sb.getNewImage("pca_score3d"), "json", "NULL", "NULL");
     }
     
     private String flipOpt="y";
@@ -400,4 +529,69 @@ public class PCABean implements Serializable {
     public void setFlipOpt(String flipOtp) {
         this.flipOpt = flipOtp;
     }
+    
+    
+    //TABLES FOR DOWNLOAD
+    private User usr = sb.getCurrentUser();
+    private String usrName = usr.getName();
+
+    private String file2DSampleScores = "pca_sample_scores.csv";
+    private String file2DSampleScoresPath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + file2DSampleScores + "\">" + file2DSampleScores + "</a>";
+ 
+    public String getFile2DSampleScoresPath() {
+        return file2DSampleScoresPath;
+    }
+        
+    public void setFile2DSampleScoresPath(String file2DSampleScoresPath) {
+        this.file2DSampleScoresPath = file2DSampleScoresPath;
+    } 
+    
+    
+    private String file2DColScores = "pca_variable_scores.csv";
+    private String file2DColScoresPath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + file2DColScores + "\">" + file2DColScores + "</a>";
+ 
+    public String getFile2DColScoresPath() {
+        return file2DColScoresPath;
+    }
+        
+    public void setFile2DColScoresPath(String file2DColScoresPath) {
+        this.file2DColScoresPath = file2DColScoresPath;
+    } 
+    
+    
+    private String file2DEnvScores = "pca_constraining_variable_scores.csv"; //TABLE SHOULD ONLY POP UP IF ENVDATA IS UPLOADED
+    private String file2DEnvScoresPath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + file2DEnvScores + "\">" + file2DEnvScores + "</a>";
+ 
+    public String getFile2DEnvScoresPath() {
+        return file2DEnvScoresPath;
+    }
+        
+    public void setFile2DEnvScoresPath(String file2DEnvScoresPath) {
+        this.file2DEnvScoresPath = file2DEnvScoresPath;
+    } 
+    
+    
+    private String file3DSampleScores = "pca_3D_sample_scores.csv";
+    private String file3DSampleScoresPath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + file3DSampleScores + "\">" + file3DSampleScores + "</a>";
+ 
+    public String getFile3DSampleScoresPath() {
+        return file3DSampleScoresPath;
+    }
+        
+    public void setFile3DSampleScoresPath(String file3DSampleScoresPath) {
+        this.file3DSampleScoresPath = file3DSampleScoresPath;
+    } 
+        
+    
+    private String fileScree = "pca_scree_data.csv";
+    private String fileScreePath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileScree + "\">" + fileScree + "</a>";
+ 
+    public String getFileScreePath() {
+        return fileScreePath;
+    }
+        
+    public void setFileScreePath(String fileScreePath) {
+        this.fileScreePath = fileScreePath;
+    } 
+ 
 }

@@ -31,7 +31,7 @@ import org.rosuda.REngine.Rserve.RConnection;
  * @author Louisa Normington
  */
 @ManagedBean(name = "ordPCOABean")
-public class OrdinationPCOABean implements Serializable {
+public class OAPCOABean implements Serializable {
 
     private final SessionBean1 sb = (SessionBean1) DataUtils.findBean("sessionBean1");
     
@@ -51,6 +51,7 @@ public class OrdinationPCOABean implements Serializable {
     public void setFile2DSampleScoresPath(String file2DSampleScoresPath) {
         this.file2DSampleScoresPath = file2DSampleScoresPath;
     } 
+    
     
     
     private String file2DColScores = "pcoa_2D_variable_scores.csv";
@@ -283,16 +284,55 @@ public class OrdinationPCOABean implements Serializable {
     }
 
     
-
-//// ACTION BUTTONS //
-    public void pcoaUpdate_action() {
-        OAUtils.CreatePCOAOrdination(sb, doOriginal, vegdistOpts, doBinary, doAbundance, envDataCol);
-        OAUtils.PlotPCOA2DOrdination(sb, ellipseOpts, var_arrowsOpts, env_arrowsOpts, env_centOpts, sampleNamesOpts, ordColorOpts, pcoaMetaColumnName, sb.getNewImage("ord_pcoa_2D"), "png", 72);
-        OAUtils.PlotPCOA3DOrdination(sb, ordColorOpts, var_arrowsOpts, pcoaMetaColumnName, sb.getNewImage("ord_pcoa_3D"));
-        OAUtils.PlotPCOAstressOrdination(sb, sb.getNewImage("ord_pcoa_stress"), "png", 72);
-        OAUtils.PlotPCOAscreeOrdination(sb, sb.getNewImage("ord_pcoa_scree"), "png", 72);    
+    private SelectItem[] pcoaScreeDimOpts = null;
+    
+    public SelectItem[] getPcoaScreeDimOpts(){
+        String[] dims = OAUtils.GetPCOAScreeDims(sb);
+        int dimsLen = dims.length;
+        pcoaScreeDimOpts = new SelectItem[dimsLen];
+        List<String> dimension = Arrays.asList(dims);
+        for (int i = 0; i < dimsLen; i++) {
+            pcoaScreeDimOpts[i] = new SelectItem(dimension.get(i), dimension.get(i));
+        }
+        return pcoaScreeDimOpts;
+    }
+    
+    private String pcoaScreeDimNum = getPcoaScreeDimOpts()[0].getLabel();
+    
+    public String getPcoaScreeDimNum() {
+        return pcoaScreeDimNum;
     }
 
+    public void setPcoaScreeDimNum(String pcoaScreeDimNum) {
+        this.pcoaScreeDimNum = pcoaScreeDimNum;
+    }
+
+//// ACTION BUTTONS //
+//    public void pcoaUpdate_action() {
+//        OAUtils.CreatePCOAOrdination(sb, doOriginal, vegdistOpts, doBinary, doAbundance, envDataCol);
+//        OAUtils.PlotPCOA2DOrdination(sb, ellipseOpts, var_arrowsOpts, env_arrowsOpts, env_centOpts, sampleNamesOpts, ordColorOpts, pcoaMetaColumnName, sb.getNewImage("ord_pcoa_2D"), "png", 72);
+//        OAUtils.PlotPCOA3DOrdination(sb, ordColorOpts, var_arrowsOpts, pcoaMetaColumnName, sb.getNewImage("ord_pcoa_3D"));
+//        OAUtils.PlotPCOAstressOrdination(sb, sb.getNewImage("ord_pcoa_stress"), "png", 72);
+//        OAUtils.PlotPCOAscreeOrdination(sb, sb.getNewImage("ord_pcoa_scree"), "png", 72);    
+//    }
+    public void pcoa_2D_Update_action() {
+        OAUtils.CreatePCOAOrdination(sb, doOriginal, vegdistOpts, doBinary, doAbundance, envDataCol);
+        OAUtils.PlotPCOA2DOrdination(sb, ellipseOpts, var_arrowsOpts, env_arrowsOpts, env_centOpts, sampleNamesOpts, ordColorOpts, pcoaMetaColumnName, sb.getNewImage("ord_pcoa_2D"), "png", 72);
+    }
+    
+    public void pcoa_3D_Update_action() {
+        OAUtils.CreatePCOAOrdination(sb, doOriginal, vegdistOpts, doBinary, doAbundance, envDataCol);
+        OAUtils.PlotPCOA3DOrdination(sb, ordColorOpts, var_arrowsOpts, pcoaMetaColumnName, sb.getNewImage("ord_pcoa_3D"));
+    }
+    
+    public void pcoa_stress_Update_action() {
+        OAUtils.CreatePCOAOrdination(sb, doOriginal, vegdistOpts, doBinary, doAbundance, envDataCol);
+        OAUtils.PlotPCOAstressOrdination(sb, sb.getNewImage("ord_pcoa_stress"), "png", 72);
+    }
+    public void pcoa_scree_Update_action() {
+        OAUtils.CreatePCOAOrdination(sb, doOriginal, vegdistOpts, doBinary, doAbundance, envDataCol);
+        OAUtils.PlotPCOAscreeOrdination(sb, pcoaScreeDimNum, sb.getNewImage("ord_pcoa_scree"), "png", 72);    
+    }
 }
 
 

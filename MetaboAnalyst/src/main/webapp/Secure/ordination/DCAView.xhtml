@@ -15,6 +15,7 @@
     </ui:define>
     <ui:define name="content">
         <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
+            <h1>Detrended Correspondence Analysis:</h1>            
             <p:tabView id="overviewcca">
                 <p:tab title ="Biplot" titleStyleClass="p-tab-nav">
                     <h:form id="form1">
@@ -27,11 +28,11 @@
                                 <h:outputLabel style="font-weight: bold" value="Perform Relative Abundance Transformation:"/>
                                 <p:selectBooleanCheckbox value ="#{dcaBean.doAbundance}"/>    
                         </h:panelGrid>
-                        <h:panelGrid columns="2" cellpadding="3">
+<!--                        <h:panelGrid columns="2" cellpadding="3">
                             <h:outputLabel style="font-weight: bold" value="Environmental Data Column Selection:"/>
                             <p:inputText style="width:400px; height:100px; line-height:5px;" value="#{dcaBean.envDataCol}"/>
 
-                        </h:panelGrid>
+                        </h:panelGrid>-->
                         <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
                             
                             <p:commandButton value="Customize Graph"
@@ -103,11 +104,11 @@
 
 
                         </h:panelGrid>
-                        <h:panelGrid columns="2" cellpadding="3">
+<!--                        <h:panelGrid columns="2" cellpadding="3">
                             <h:outputLabel style="font-weight: bold" value="Environmental Data Column Selection:"/>
                             <p:inputText style="width:400px; height:100px" value="#{dcaBean.envDataCol}"/>
 
-                        </h:panelGrid>
+                        </h:panelGrid>-->
                         <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
                             <p:commandButton value="Update" 
                                              styleClass="updateButton"

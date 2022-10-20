@@ -13,7 +13,7 @@
     <ui:define name="content">
         <h:form id="form" enctype="multipart/form-data"> 
             <h:panelGrid style="padding:20px 40px 20px 40px; font-size: 13px; line-height: 25px; width:100%">
-                <h1 style="margin-top: 10px; margin-bottom: 4px">Upload your data</h1>
+                <h1 style="margin-top: 10px; margin-bottom: 4px">Upload your data:</h1>
                 <h:panelGrid style="width:100%; background-color: #75bafb;"></h:panelGrid>
                 <h:panelGrid style="width:100%; background-color: white; "></h:panelGrid>
                 <h:panelGrid style="width:100%; background-color: #75bafb;"></h:panelGrid>
@@ -27,13 +27,13 @@
                     </h:panelGrid>                   
                     <h:panelGrid columns="3" style="padding: 10px; margin-left: 40px">
                         <p:outputLabel style="font-size:12px; font-weight: bold" value="Format:"/>
-                        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:170px" value="#{uploader.dataFormat}">
+                        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:210px" value="#{uploader.dataFormat}">
                             <f:selectItems value="#{applicationBean1.csvFormatOpts}" />
                         </p:selectOneMenu> 
                     </h:panelGrid>                     
                     <h:panelGrid columns="3" style="padding: 10px; margin-left: 40px">
                         <p:outputLabel style="font-size:12px; font-weight: bold" value="Labels:"/>
-                        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:170px" value="#{uploader.dataNames}">
+                        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:210px" value="#{uploader.dataNames}">
                             <f:selectItems value="#{applicationBean1.dataNamesOpts}" />
                         </p:selectOneMenu> 
                     </h:panelGrid>                  

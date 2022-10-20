@@ -85,7 +85,7 @@ ord.dca <- function(mSetObj=NA, abundance="NULL", metaData="NULL", envData="NULL
   #Run DCA
   dca <- decorana(num_data1, ira=0)
   
-  #meta (grouping) data, used to group samples using colors or plotting symbols
+  #meta (grouping) data, used to group samples using colors
   if (is.data.frame(metaData)==FALSE) { #No user uplaoded grouping data
     if (count.fac.cols >= 1) { #If species data had at least one categorical column, call it grouping data
       metaData1 <- as.data.frame(fac_data)
@@ -185,10 +185,10 @@ ord.dca <- function(mSetObj=NA, abundance="NULL", metaData="NULL", envData="NULL
   mSetObj$analSet$dca$eigenValues <- dca$evals 
   
   #Download relevent data
-  write.csv(samp.scores, file="dca_row_scores.csv", row.names=TRUE)
-  write.csv(var_scores, file="dca_column_scores.csv", row.names=TRUE)
+  write.csv(samp.scores, file="dca_sample_scores.csv", row.names=TRUE)
+  write.csv(var_scores, file="dca_variable_scores.csv", row.names=TRUE)
   if (is.data.frame(envData1)==TRUE) { #If environmental data uploaded
-    write.csv(env_scores, file="dca_environment_scores.csv", row.names=TRUE)
+    write.csv(env_scores, file="dca_constraining_data_scores.csv", row.names=TRUE)
   } 
   
   eigenValues_data <- cbind(dca$evals, dca$evals/sum(dca$evals))

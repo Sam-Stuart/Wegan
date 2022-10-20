@@ -129,6 +129,8 @@ public class ProcessBean implements Serializable {
             return "Normalization";
         } else if (!sb.getDataType().equalsIgnoreCase("conc")) {
             return "Data filter";
+        } else if (!sb.getDataType().equalsIgnoreCase("main")) {
+            return "Data filter";
         } else {
             return "Normalization";
         }

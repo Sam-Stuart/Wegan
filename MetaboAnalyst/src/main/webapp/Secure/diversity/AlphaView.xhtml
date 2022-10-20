@@ -1,63 +1,121 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+<!DOCTYPE html>
+<html>
+
+
+
+   <head>
+      <style>
+         .bar {
+            fill: green;
+         }
+        
+         .highlight {
+            fill: red;
+         }
+         
+         .title {
+            fill: blue;
+            font-weight: bold;
+         }
+      </style>
+      <script src="https://d3js.org/d3.v4.min.js"></script>
+      <script src="#{facesContext.externalContext.requestContextPath}/resources/jscripts/d3.min.js"></script>
+      <script  src="#{facesContext.externalContext.requestContextPath}/resources/jscripts/d3.js"></script>
+      <title> Animated bar chart </title>
+   </head>
+
+   <body>
+      
+     <!-- Load d3.js -->
+<script src="https://d3js.org/d3.v4.js"></script>
+
+<!-- Create a div where the graph will take place -->
+<div id="my_dataviz"></div>
+      <svg width="1000" height="1000"></svg>
+   <script>
+//d3 graph testing 
+// set the dimensions and margins of the graph
+var margin = {top: 10, right: 30, bottom: 30, left: 60},
+    width = 460 - margin.left - margin.right,
+    height = 400 - margin.top - margin.bottom;
+
+// append the svg object to the body of the page
+var svg = d3.select("#my_dataviz")
+  .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+
+//Read the data
+d3.csv("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/iris.csv", function(data) {
+
+  // Add X axis
+  var x = d3.scaleLinear()
+    .domain([4, 8])
+    .range([ 0, width ]);
+  svg.append("g")
+    .attr("transform", "translate(0," + height + ")")
+    .call(d3.axisBottom(x));
+
+  // Add Y axis
+  var y = d3.scaleLinear()
+    .domain([0, 9])
+    .range([ height, 0]);
+  svg.append("g")
+    .call(d3.axisLeft(y));
+
+  // Color scale: give me a specie name, I return a color
+  var color = d3.scaleOrdinal()
+    .domain(["setosa", "versicolor", "virginica" ])
+    .range([ "#440154ff", "#21908dff", "#fde725ff"])
+
+  // Add dots
+  svg.append('g')
+    .selectAll("dot")
+    .data(data)
+    .enter()
+    .append("circle")
+      .attr("cx", function (d) { return x(d.Sepal_Length); } )
+      .attr("cy", function (d) { return y(d.Petal_Length); } )
+      .attr("r", 5)
+      .style("fill", function (d) { return color(d.Species) } )
+
+})
+
+</script>   
+     <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:p="http://primefaces.org/ui"
-                template="/frags/_anal_template.xhtml">
-    <ui:define name="metaInfo">
-        <f:event type="preRenderView" listener="#{diversityBean.performDefaultAnalysis('Alpha')}"/> 
-    </ui:define>
-    <ui:define name="content">
-        <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
-            <p:tabView id="alpha">
-                <p:tab title ="Overview" titleStyleClass="p-tab-nav">
-                    <h:form id="form1">
-                        <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
-                            <p:commandButton value="Update" 
-                                             styleClass="updateButton"
-                                             style="box-shadow: none !important; text-shadow: none !important"
-                                            onclick="PF('statusDialog').show()"
-                                            oncomplete="PF('statusDialog').hide()"  
-                                            update=":alpha:form1:alphaPane1  :cmdPane" 
-                                            actionListener="#{alphaBean.alphaUpdate_action()}"/>                          
-                        </h:panelGrid>
-                        
-                        <h:panelGrid class="resultsBar" columns="2">
-                            <h:panelGroup>
-                                <h:panelGrid columns="1" style="text-align : left;">
-                                    Results
-                                </h:panelGrid>
-                            </h:panelGroup> 
-                            <h:panelGroup>
-                                <h:panelGrid columns="3" class="resultsImages">
-                                    <i class="fa fa-question-circle"></i>
-                                </h:panelGrid>
-                            </h:panelGroup>                            
-                        </h:panelGrid>
-                        <h:panelGrid id="alphaPane1" style="width: 100%;">
-                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
-                                
-                            </h:panelGrid>
-                                                    
-                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
-                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('div_alpha')}" alt="AlphaDiversity"/>
-                            </h:panelGrid>                            
-                        </h:panelGrid> 
-                    </h:form>
-                </p:tab>
-                <p:tab title ="Tab 2" titleStyleClass="p-tab-nav">
-                    <h:form id="form2">
-                        
-                    </h:form>
-                </p:tab> 
-                <p:tab title ="Tab 3" titleStyleClass="p-tab-nav">
-                    <h:form id="form3">
-                        
-                    </h:form>
-                </p:tab>        
-            </p:tabView>
-        </h:panelGrid>
-    </ui:define>
-</ui:composition>
+                xmlns:p="http://primefaces.org/ui">
+    
+    <p>
+        THIS IS THE SCATTER VIEW
+    </p>
+        
+    <h:panelGrid class="resultsBar" columns="2">
+        <h:panelGroup>
+            <h:panelGrid columns="1" style="text-align : left;">
+                Results
+            </h:panelGrid>
+        </h:panelGroup> 
+        <h:panelGroup>
+            <h:panelGrid columns="3" class="resultsImages">
+                <i class="fas fa-palette"></i>
+                <i class="fa fa-table"></i>
+                <i class="fa fa-question-circle"></i>
+            </h:panelGrid>
+
+        </h:panelGroup>                            
+    </h:panelGrid>  
+    <h:panelGrid id="plotScatterPane1" style="width: 100%;">
+         <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+            <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('plot_scatter_chart')}" alt="ScatterChartImage"/>
+        </h:panelGrid>                           
+
+    </h:panelGrid>
+</ui:composition> 
+   </body>
+</html>

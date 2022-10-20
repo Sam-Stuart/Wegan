@@ -11,6 +11,7 @@
     </ui:define>
     <ui:define name="content">
         <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
+            <h1>Penalized Regression:</h1>
             <p:tabView id="penalCA" style="width:100%; border: none; background: none; font-size: 13px;">
                 <p:tab title ="Predicted vs Actual Plot" titleStyleClass="p-tab-nav">
                     <h:form id="form1">
@@ -27,8 +28,8 @@
                                     <f:selectItems value="#{applicationBean1.corrMethodsOpts}" />
                                 </p:selectOneMenu> 
 
-                            <h:outputLabel style="font-weight: bold" value="Include Weights:"/>
-                                <p:selectBooleanCheckbox value ="#{penalCABean.addWeights}"/> 
+                            <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
+                                <p:selectBooleanCheckbox value ="#{penalCABean.doOriginal}"/> 
 
                             <p:panelGrid></p:panelGrid>
                             
@@ -38,42 +39,59 @@
                                 </p:selectOneMenu>
                             
                         </h:panelGrid>
-                        <h:panelGrid id="panelGrid4" columns="1" cellpadding="3" style="float: right; text-shadow: none !important;"> 
+                        
+                        <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
+                            <p:commandButton value="Customize Graph"
+                                             styleClass="graphicsButton"
+                                             style="box-shadow: none !important; text-shadow: none !important;"
+                                             actionListener="#{sessionBean1.graphicsLnk_action('corr_penalized')}" 
+                                            oncomplete="PF('graphApperancePenal').show()"/>  
+                                           
                             <p:commandButton value="Update" 
                                              styleClass="updateButton"
                                              style="box-shadow: none !important; text-shadow: none !important"
                                             onclick="PF('statusDialog').show()"
                                             oncomplete="PF('statusDialog').hide()"  
                                             update=":penalCA:form1:corrPenalPane1  :cmdPane" 
-                                            actionListener="#{penalCABean.penalizedUpdate_action()}"/>  
-                        </h:panelGrid>
+                                            actionListener="#{penalCABean.penalizedUpdate_action()}"/> 
+                            
+                        </h:panelGrid>                     
+                       
                         <h:panelGrid class="resultsBar" columns="2">
                             <h:panelGroup>
                                 <h:panelGrid columns="1" style="text-align : left;">
                                     Results
                                 </h:panelGrid>
-                            </h:panelGroup> 
-                            <h:panelGroup>
+                            </h:panelGroup>
+                         <h:panelGroup>
                                 <h:panelGrid columns="3" class="resultsImages">
-                                    <i class="fas fa-palette"></i>
-                                    <i class="fa fa-table"></i>
-                                    <i class="fa fa-question-circle"></i>
-<!--                                                                       <i class="fas fa-table"></i>
-                                   <i class="fas fa-palette"></i>
-                                   <i class="far fa-question-circle"></i>-->
+                                    <i id="question" class="fa fa-question-circle" title="Only numeric variables are used in linear correlation. The linear model can be written in the form (Y = X * Beta + epsilon), where:
+Y = dependent variable; 
+X = independent variable;
+Beta = regression parameter coefficients (including the intercept);
+Epsilon = error values (the sum of all other influences on Y after accounting for X)
+
+The R-squared value is the fraction of variance explained by the model; the adjusted R-squared value is the R-squared value adjusted for the number of predictors in a regression model. The confidence interval represents the level of certainty about the predicted values; if the same procedure was repeatedly used to make new estimates, the confidence interval would contain the average of all the estimates 95% of the time. https://www.census.gov/programs-surveys/saipe/guidance/confidence-intervals.html "></i>
                                 </h:panelGrid>
-                            
-                            </h:panelGroup>                            
-                        </h:panelGrid>   
+                            </h:panelGroup>   
+                        </h:panelGrid>  
                         
                         <h:panelGrid id="corrPenalPane1" style="width: 100%;">
-                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
-                                <h:outputLabel style="font-weight: bold" value="Root-Mean-Square Error : #{penalCABean.corrPenalResults.get(2)}"/>
-                            </h:panelGrid>
+<!--                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                               <h:outputLabel style="font-weight: bold" value="Root-Mean-Square Error : hash{penalCABean.corrPenalResults.get(2)}"/>
+                            </h:panelGrid>                         -->
+                            
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <p:commandButton value="Export"
+                                    styleClass="exportButton"
+                                    style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                    actionListener="#{sessionBean1.graphicsLnk_action('corr_penalized')}"
+                                    oncomplete="PF('graphDialog').show()"/>
+                            </h:panelGrid> 
                              <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
                                 <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_penalized')}" alt="Correrlationimage"/>
-                            </h:panelGrid>                           
-                            
+                            </h:panelGrid>  
+
                         </h:panelGrid>  
 
                     </h:form>    
@@ -93,8 +111,8 @@
                                     <f:selectItems value="#{applicationBean1.corrMethodsOpts}" />
                                 </p:selectOneMenu> 
 
-                            <h:outputLabel style="font-weight: bold" value="Include Weights:"/>
-                                <p:selectBooleanCheckbox value ="#{penalCABean.addWeights}"/> 
+                            <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
+                                <p:selectBooleanCheckbox value ="#{penalCABean.doOriginal}"/> 
 
                             <p:panelGrid></p:panelGrid>
                             
@@ -103,40 +121,71 @@
                                     <f:selectItems value="#{penalCABean.columnOpts}" />
                                 </p:selectOneMenu>
                             
-                            <p:panelGrid></p:panelGrid>
-                            <p:panelGrid></p:panelGrid>
-                                    <p:commandButton value="Update" 
-                                                    styleClass="updateButton"
-                                                    style="box-shadow: none !important; text-shadow: none !important"
-                                                     onclick="PF('statusDialog').show()"
-                                                     oncomplete="PF('statusDialog').hide()"  
-                                                     update=":penalCA:form2:corrPenalPane2  :cmdPane" 
-                                                     actionListener="#{penalCABean.penalizedUpdate2_action()}"/>  
-                        </h:panelGrid>                       
+                        </h:panelGrid>
+                        
+                        <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
+                            <p:commandButton value="Customize Graph"
+                                             styleClass="graphicsButton"
+                                             style="box-shadow: none !important; text-shadow: none !important;"
+                                             actionListener="#{sessionBean1.graphicsLnk_action('corr_penalized2')}" 
+                                            oncomplete="PF('graphApperancePenal2').show()"/>  
+                                           
+                            <p:commandButton value="Update" 
+                                             styleClass="updateButton"
+                                             style="box-shadow: none !important; text-shadow: none !important"
+                                            onclick="PF('statusDialog').show()"
+                                            oncomplete="PF('statusDialog').hide()"  
+                                            update=":penalCA:form2:corrPenalPane2  :cmdPane" 
+                                            actionListener="#{penalCABean.penalizedUpdate2_action()}"/> 
+                            
+                        </h:panelGrid>
+                        
                         <h:panelGrid class="resultsBar" columns="2">
                             <h:panelGroup>
                                 <h:panelGrid columns="1" style="text-align : left;">
                                     Results
                                 </h:panelGrid>
                             </h:panelGroup> 
-                            <h:panelGroup>
+                           <h:panelGroup>
                                 <h:panelGrid columns="3" class="resultsImages">
-                                    <i class="fas fa-palette"></i>
-                                    <i class="fa fa-table"></i>
-                                    <i class="fa fa-question-circle"></i>
-<!--                                                                       <i class="fas fa-table"></i>
-                                   <i class="fas fa-palette"></i>
-                                   <i class="far fa-question-circle"></i>-->
+                                    <i id="question" class="fa fa-question-circle" title="Only numeric variables are used in linear correlation. The linear model can be written in the form (Y = X * Beta + epsilon), where:
+Y = dependent variable; X = independent variable; Beta = regression parameter coefficients (including the intercept); Epsilon = error values.
+
+The R-squared value is the fraction of variance explained by the model; the adjusted R-squared value is the R-squared value adjusted for the number of predictors in a regression model. The confidence interval represents the level of certainty about the predicted values; if the same procedure was repeatedly used to make new estimates, the confidence interval would contain the average of all the estimates 95% of the time. https://www.census.gov/programs-surveys/saipe/guidance/confidence-intervals.html "></i>
                                 </h:panelGrid>
-                            
-                            </h:panelGroup>                            
+                            </h:panelGroup>                           
                         </h:panelGrid> 
-                        <h:panelGrid id="corrPenalPane2" style="text-align: center; width: 100%;">
-                            <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_penalized2')}" alt="CorrelationPolyPredictimage"/>
-                        </h:panelGrid>        
+                        
+                         <h:panelGrid id="corrPenalPane2" style="width: 100%;">
+                        <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <p:commandButton value="Export"
+                                    styleClass="exportButton"
+                                    style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                    actionListener="#{sessionBean1.graphicsLnk_action('corr_penalized2')}"
+                                    oncomplete="PF('graphDialog').show()"/>
+                            </h:panelGrid> 
+                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_penalized2')}" alt="CorrelationPolyPredictimage"/>
+                            </h:panelGrid> 
+                           </h:panelGrid> 
+     
                     </h:form>
                 </p:tab>
             </p:tabView> 
         </h:panelGrid> 
+        
+        <p:dialog modal="true" widgetVar="graphApperancePenal" 
+            style="width: 400px; height:400px;" 
+            appendTo="@(body)" header="Graphics Center"
+            draggable="false" closable="true" resizable="false"> 
+            <ui:include src="_color_palette_penal.xhtml" />
+        </p:dialog>
+<!--         <p:dialog modal="true" widgetVar="graphApperancePenal2" 
+            style="width: 400px; height:400px;" 
+            appendTo="@(body)" header="Graphics Center"
+            draggable="false" closable="true" resizable="false"> 
+            <ui:include src="_color_palette_penal2.xhtml" />
+        </p:dialog>-->
+        
     </ui:define>
 </ui:composition>

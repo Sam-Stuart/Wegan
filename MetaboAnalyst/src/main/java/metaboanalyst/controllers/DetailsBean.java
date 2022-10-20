@@ -122,10 +122,10 @@ public class DetailsBean implements Serializable {
             colnames = SigVarSelect.GetSAMSigColNames(sb);
             fileName = "sam_sigfeatures.csv";
         } else if (from.equals("pca")) {
-            sigmat = ChemoMetrics.GetPCALoadingScore(sb);
-            rownames = ChemoMetrics.GetPCALoadingRowName(sb);
-            colnames = ChemoMetrics.GetPCALoadingColName(sb);
-            fileName = "pca_loadings.csv";
+//            sigmat = ChemoMetrics.GetPCALoadingScore(sb);
+//            rownames = ChemoMetrics.GetPCALoadingRowName(sb);
+//            colnames = ChemoMetrics.GetPCALoadingColName(sb);
+//            fileName = "pca_loadings.csv";
         } else if (from.startsWith("pls")) {
             String spec = from.split("\\.")[1];
             sigmat = ChemoMetrics.GetPLSSigMat(sb, spec);

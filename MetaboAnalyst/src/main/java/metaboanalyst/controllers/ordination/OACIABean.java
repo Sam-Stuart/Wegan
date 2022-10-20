@@ -28,7 +28,7 @@ import org.rosuda.REngine.Rserve.RConnection;
  * @author Louisa Normington
  */
 @ManagedBean(name = "ordCIABean")
-public class OrdinationCIABean implements Serializable {
+public class OACIABean implements Serializable {
 
     private final SessionBean1 sb = (SessionBean1) DataUtils.findBean("sessionBean1");
         

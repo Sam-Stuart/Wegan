@@ -12,26 +12,30 @@
     </ui:define>
     <ui:define name="content">
         <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
+            <h1>Correspondence Analysis:</h1>
             <p:tabView id="overviewCA">
                 <p:tab title ="Biplot" titleStyleClass="p-tab-nav">
                     <h:form id="form1">
-                        <h:panelGrid columns="4" cellpadding="3" columnClasses="colBrayLong,colBrayShort,colBrayLong,colBrayShort" >
+                        <h:panelGrid columns="5" cellpadding="3" columnClasses="colBrayLong,colBrayShort,colBrayShort,colBrayShort, colLast" >
                             <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
                             <p:selectBooleanCheckbox value ="#{oaCaBean.doOriginal}"/>
-                            <h:outputLabel style="font-weight: bold" value="Variable Arrows:"/>
-                            <p:selectBooleanCheckbox value ="#{oaCaBean.varArrows}"/> 
+
                             <h:outputLabel style="font-weight: bold" value="Color Pallet:"/>
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{oaCaBean.color}">
-
                                 <f:selectItems value="#{applicationBean1.ordColorPaletteOpts}" />
                             </p:selectOneMenu>
+                            <spacer></spacer>
+                            
+                            <h:outputLabel style="font-weight: bold" value="Variable Arrows:"/>
+                            <p:selectBooleanCheckbox value ="#{oaCaBean.varArrows}"/> 
+
                         </h:panelGrid>
-                        <h:panelGrid columns="2" cellpadding="3">
+<!--                        <h:panelGrid columns="2" cellpadding="3">
                             <h:outputLabel style="font-weight: bold" value="Environmental Data Column Selection:"/>
                             <p:inputText style="width:400px; height:100px; line-height:5px;" value="#{oaCaBean.envDataCol}"/>
+                        </h:panelGrid>-->
+                        <h:panelGrid></h:panelGrid>
 
-
-                        </h:panelGrid>
                         <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
                             <p:commandButton value="Update" 
                                              styleClass="updateButton"
@@ -82,16 +86,18 @@
                 </p:tab>
                 <p:tab title ="Scree Plot" titleStyleClass="p-tab-nav">
                     <h:form id="form2">
-                        <h:panelGrid columns="4" cellpadding="3" columnClasses="colBrayLong,colBrayShort,colBrayLong,colBrayShort" >
+                        <h:panelGrid columns="5" cellpadding="3" columnClasses="colBrayLong,colBrayShort,colBrayLong,colBrayLong,colBrayLong" >
                             <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
                             <p:selectBooleanCheckbox value ="#{oaCaBean.doOriginal}"/>
                         </h:panelGrid>
-                        <h:panelGrid columns="2" cellpadding="3">
+<!--                        <h:panelGrid columns="2" cellpadding="3">
                             <h:outputLabel style="font-weight: bold" value="Environmental Data Column Selection:"/>
                             <p:inputText style="width:400px; height:100px; line-height:5px;" value="#{oaCaBean.envDataCol}"/>
-
-
-                        </h:panelGrid>
+                        </h:panelGrid>-->
+                            <spacer></spacer>
+                            <spacer></spacer>
+                            <spacer></spacer>
+                            <h:panelGrid></h:panelGrid>
                         <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
                              
                             <p:commandButton value="Update" 
@@ -119,7 +125,6 @@
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
                                 <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
                                     <h:outputText style="padding-left: 0px" escape="false" value="#{oaCaBean.fileScreePath}"/>    
-
                                 </i>
                                 
                             </h:panelGrid>

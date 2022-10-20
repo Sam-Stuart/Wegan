@@ -194,9 +194,9 @@ ord.cca <- function(mSetObj=NA, envData=NA, abundance="false", data="false", env
   mSetObj$analSet$cca$eigenValues <- cca$CCA$eig
   
   #Download relevent data
-  write.csv(samp.scores, file="cca_row_scores.csv", row.names=TRUE)
-  write.csv(var_scores, file="cca_column_scores.csv", row.names=TRUE)
-  write.csv(env_scores, file="cca_environment_scores.csv", row.names=TRUE)
+  write.csv(samp.scores, file="cca_sample_scores.csv", row.names=TRUE)
+  write.csv(var_scores, file="cca_variable_scores.csv", row.names=TRUE)
+  write.csv(env_scores, file="cca_constraining_data_scores.csv", row.names=TRUE)
   eigenValues_data <- cbind(cca$CCA$eig, cca$CCA$eig/sum(cca$CCA$eig))
   n <- nrow(eigenValues_data)
   eigenValues_data <- as.data.frame(cbind(paste0("CCA ", 1:nrow(eigenValues_data)), eigenValues_data))
@@ -283,7 +283,8 @@ Plot.CCA.biplot <- function(mSetObj=NA, color="NULL", ellipse="NULL", var_arrows
   #Produce constrained ordination plot
   Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
   par(xpd=FALSE, mar=c(5.1, 4.1, 4.1, 2.1)) 
-  plot(cca, type="n", xlab=paste0("CCA 1 (", signif(CCA1, 4)*100, " %)"), ylab=paste0("CCA 2 (", signif(CCA2, 4)*100, " %)"), main="Constrained Correspondence Analysis", yaxt="n") #Empty ordination plot
+  #plot(cca, type="n", xlab=paste0("CCA 1 (", signif(CCA1, 4)*100, " %)"), ylab=paste0("CCA 2 (", signif(CCA2, 4)*100, " %)"), main="Constrained Correspondence Analysis", yaxt="n") #Empty ordination plot
+  plot(cca, type="n", main="Constrained Correspondence Analysis", yaxt="n") #Empty ordination plot
   axis(2, las=2)
 
   #Plot with and without ellipses/sample labels/metadata options/variable arrows/env data arrows

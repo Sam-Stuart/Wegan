@@ -23,7 +23,7 @@ BestNormalize <- function(mSetObj=NA){
  
   mSetObj <- .get.mSet(mSetObj);
   library(dplyr)
- 
+  
   if(is.null(mSetObj$dataSet[["procr"]])){
     data<-mSetObj$dataSet$preproc
   }else if(is.null(mSetObj$dataSet[["prenorm"]])){
@@ -37,52 +37,77 @@ BestNormalize <- function(mSetObj=NA){
   rowNamesNum <- rownames(data)
 
   #QuantileNorm
-  numDataQuantileNorm <- QuantileNormalize(numData);
+  numDataQuantileNorm <- as.data.frame(QuantileNormalize(numData));
   colnames(numDataQuantileNorm) <- colNamesNum;
   rownames(numDataQuantileNorm) <- rowNamesNum;
 
   #SumNorm
-  numDataSumNorm<-apply(numData, 2, SumNorm);
+  numDataSumNorm<-as.data.frame(apply(numData, 2, SumNorm));
   colnames(numDataSumNorm) <- colNamesNum;
   rownames(numDataSumNorm) <- rowNamesNum;
 
   #MedianNorm
-  numDataMedianNorm<-apply(numData, 2, MedianNorm);
+  numDataMedianNorm<-as.data.frame(apply(numData, 2, MedianNorm));
   colnames(numDataMedianNorm) <- colNamesNum;
   rownames(numDataMedianNorm) <- rowNamesNum;
 
-  #BoxNorm
+  #BoxNorm 
   if(sum(as.numeric(numData<=0)) > 0){
-    numDataBoxNorm<-apply(numData, 2, YeoNorm);
+    numDataBoxNorm<-as.data.frame(apply(numData, 2, YeoNorm));
+    numDataBoxNorm <- numDataBoxNorm[1:nrow(data),]
   } else {
-    numDataBoxNorm<-apply(numData, 2, BoxNorm);
+    numDataBoxNorm<-as.data.frame(apply(numData, 2, BoxNorm));
   }
   colnames(numDataBoxNorm) <- colNamesNum;
   rownames(numDataBoxNorm) <- rowNamesNum;
 
-  numDataNormList <- list(numDataQuantileNorm, numDataSumNorm, numDataMedianNorm, numDataBoxNorm)
-  normNames <- c("QuantileNorm", "SumNorm", "MedianNorm", "BoxNorm")
+  numDataNormList <- list(numData, numDataQuantileNorm, numDataSumNorm, numDataMedianNorm, numDataBoxNorm)
+  normNames <- c("NULL", "QuantileNorm", "SumNorm", "MedianNorm", "BoxNorm")
 
-  SWList <- list()
-  pSum <- list()
+  skewList <- list()
+  skewMean <- list()
   for (i in 1:length(numDataNormList)) {
-    SWList[[normNames[i]]] <- apply(numDataNormList[[i]], 2, shapiroWilk)
-    pSum[[normNames[i]]] <- sum(SWList[[normNames[i]]])
-  }  
+    skewList[[normNames[i]]] <- apply(numDataNormList[[i]], 2, skewTest)
+    skewMean[[normNames[i]]] <- mean(skewList[[normNames[i]]])
+  }   
 
-  pSum_unlist <- unlist(pSum)
-  #return(names(which.min(pSum_unlist))) #I COMMENTED THIS OUT FOR NOW
-
-  mSetObj$dataSet$bestNorm <- names(which.min(pSum_unlist))
+  skewMean_unlist <- unlist(skewMean)
+  bestNorm <- names(which.min(abs(skewMean_unlist)))
+  print(bestNorm)
+  mSetObj$dataSet$bestnorm <- bestNorm
   return(.set.mSet(mSetObj));
 }
 
 
 
+#Extract best normalization name
+extractBestNorm <- function(mSetObj=NA) {
+  mSetObj <- .get.mSet(mSetObj);
+  bestNorm <- mSetObj$dataSet$bestnorm
+  return(bestNorm);
+}
+
+
+
+
+
+#'AutoNormOptions
+#'@description This function returns the list of radio button options for data normalization
+#'@usage Normalization()
+#'@author Louisa Normington \email{normingt@ualberta.ca}
+#'University of Alberta, Canada
+#'
+AutoNormOptions <- function(){
+  options <- c("NULL", "QuantileNorm", "SumNorm", "MedianNorm", "BoxNorm")
+  return(options)
+}
+ 
+
 #'Normalization
 #'@description This function performs row-wise normalization, transformation, and
 #'scaling of your metabolomic data.
-#'@usage Normalization(mSetObj, rowNorm, transNorm, scaleNorm, ref=NULL, ratio=FALSE, ratioNum=20)
+##'@usage Normalization(mSetObj, rowNorm, transNorm, scaleNorm, ref=NULL, ratio=FALSE, ratioNum=20) #I CHANGED THIS 
+#'@usage Normalization(mSetObj, rowNorm, transNorm, scaleNorm)
 #'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
 #'@param rowNorm Select the option for row-wise normalization, "QuantileNorm" for Quantile Normalization,
 #'"ProbNormT" for Probabilistic Quotient Normalization without using a reference sample,
@@ -202,7 +227,21 @@ Normalization <- function(mSetObj=NA, rowNorm, transNorm, scaleNorm, ref=NULL, r
     }
     rownm<-"Normalization by sample-specific factor";
     numData<-numData/norm.vec;
-  }else{
+  }else if(rowNorm=='LogNorm'){
+      #min.val <- min(abs(numData[numData!=0]))/10; #I REMOVED THIS TO REPLACE WITH LOG10
+      #numData<-apply(numData, 2, LogNorm, min.val);
+      numData <- apply(numData, 2, log10)
+      rownm<-"Log Normalization";
+    }else if(rowNorm=='SqNorm'){
+      numData <- numData^(1/2);
+      rownm<-"Square Root Transformation";
+    }else if(rowNorm=='CrNorm'){
+      numData <- numData^(1/3);
+      #norm.data <- abs(numData)^(1/3); #I REMOVED THIS
+      #norm.data[numData<0] <- - norm.data[numData<0];
+      #numData <- norm.data;
+      rownm<-"Cubic Root Transformation";
+    }else{
     # nothing to do
     rownm<-"N/A";
   }
@@ -329,12 +368,22 @@ Normalization <- function(mSetObj=NA, rowNorm, transNorm, scaleNorm, ref=NULL, r
 #'@export
 #'
 SumNorm<-function(x){
-  1000*x/sum(x, na.rm=T);
+  min.val <- min(abs(x[x!=0]))/10 #I ADDED THIS TO ACCOUNT FOR SUM 0
+  if (sum(x, na.rm=T)==0) {
+    x/(sum(x, na.rm=T)+min.val);
+  } else {
+    x/sum(x, na.rm=T);
+  }
 }
 
 # normalize by median
 MedianNorm<-function(x){
-  x/median(x, na.rm=T);
+  min.val <- min(abs(x[x!=0]))/10 #I ADDED THIS TO ACCOUNT FOR MEDIAN 0
+  if (median(x, na.rm=T)==0) {
+    x/(median(x, na.rm=T)+min.val);
+  } else {
+    x/median(x, na.rm=T);
+  }
 }
 
 # normalize by a reference sample (probability quotient normalization)
@@ -398,16 +447,15 @@ YeoNorm <- function(x) {
 }
 
 
-#'Shapiro Wilk test for normality
-#'@usage shapiroWilk(x)
+#'Skewness test for normality
+#'@usage skewTest(x)
 #'@param x is the column being normalized
 #'@author Louisa Normington \email{normingt@ualberta.ca}
 #'University of Alberta, Canada
 #'@export
-shapiroWilk <- function(x) {
-  shapiro <- shapiro.test(x) #Perform the test
-  p <- shapiro[["p.value"]]
-  return(p)
+skewTest <- function(x) {
+  skew <- 3*(mean(x)-median(x))/sd(x) #Perform the test
+  return(skew)
 }
 
 
@@ -427,12 +475,22 @@ LogNorm<-function(x, min.val){
 
 # normalize to zero mean and unit variance
 AutoNorm<-function(x){
-  (x - mean(x))/sd(x, na.rm=T);
+  min.val <- min(abs(x[x!=0]))/10
+  if (sd(x, na.rm=T)==0) {
+    (x - mean(x))/(sd(x, na.rm=T)+min.val);
+  } else {
+    (x - mean(x))/sd(x, na.rm=T);
+  }
 }
 
 # normalize to zero mean but variance/SE
 ParetoNorm<-function(x){
-  (x - mean(x))/sqrt(sd(x, na.rm=T));
+  min.val <- min(abs(x[x!=0]))/10
+  if (sd(x, na.rm=T)==0) {
+    (x - mean(x))/(sqrt(sd(x, na.rm=T))+min.val);
+  } else {
+    (x - mean(x))/sqrt(sd(x, na.rm=T));
+  }
 }
 
 # normalize to zero mean but variance/SE
@@ -575,7 +633,6 @@ PlotSampleNormSummary <- function(mSetObj=NA, imgName, format="png", dpi=72, wid
 
   # since there may be too many samples, only plot a subsets (50) in box plot
   # but density plot will use all the data
-   print("1")
   if(is.null(mSetObj$dataSet[["procr"]])){
     data<-mSetObj$dataSet$preproc
   }else if(is.null(mSetObj$dataSet[["prenorm"]])){
@@ -583,33 +640,25 @@ PlotSampleNormSummary <- function(mSetObj=NA, imgName, format="png", dpi=72, wid
   }else{
     data<-mSetObj$dataSet$prenorm
   } 
-   print("2")
   numData <- select_if(data, is.numeric)
   normNumData <- select_if(mSetObj$dataSet$norm, is.numeric)
-   print("3")
   pre.inx<-GetRandomSubsetIndex(nrow(numData), sub.num=50);
   namesVec <- rownames(numData[pre.inx,]);
-    print("4")
   # only get common ones
   nm.inx <- namesVec %in% rownames(normNumData)
   namesVec <- namesVec[nm.inx];
   pre.inx <- pre.inx[nm.inx];
-    print("5")
   norm.inx<-match(namesVec, rownames(normNumData));
   namesVec <- substr(namesVec, 1, 12); # use abbreviated name
-    print("6")
   rangex.pre <- range(numData[pre.inx,], na.rm=T);
   rangex.norm <- range(normNumData[norm.inx,], na.rm=T);
-    print("7")
   x.label<-GetAbundanceLabel(mSetObj$dataSet$type);
   y.label<-"Samples";
-    print("8")
   # fig 1
   op<-par(mar=c(4,7,4,0), xaxt="s");
   plot(density(apply(numData, 1, mean, na.rm=TRUE)), col='darkblue', las =2, lwd=2, main="", xlab="", ylab="");
   mtext("Density", 2, 5);
   mtext("Before Normalization",3, 1)
-   print("9")
   # fig 2
   op<-par(mar=c(7,7,0,0), xaxt="s");
   boxplot(t(numData[pre.inx, ]), names= namesVec, ylim=rangex.pre, las = 2, col="lightgreen", horizontal=T);
