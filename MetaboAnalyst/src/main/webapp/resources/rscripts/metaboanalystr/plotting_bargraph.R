@@ -6,66 +6,68 @@
 #'@usage barGraph_setup(mSetObj = NA, byrow = FALSE, colNum = NULL, rowNum = NULL,
 #' colors = NULL, xlab = NULL, ylab = NULL, barLabels = NULL, mainTitle = NULL)
 #'@param mSetObj Input the name of the created mSetObj
-#'@param byrow boolean value, TRUE = read data by row(s), FALSE = read data by column(s)
-#'@param colNum column number(s) to use for data
-#'@param rowNum type of (if any) trend line to be used. NULL = no trendline; 'lbf' = line of best fit ; 'lowess' = locally weighted trend line
 #'@param colors color of bars
 #'@param xlab x axis title. NULL will choose column name
 #'@param ylab y axis title, NULL will choose column name
 #'@param barLabels y axis title, NULL will choose column name
 #'@param maintitle graph title 
-#'@author Leif Wilm\email{lwilm@ualberta.ca}
+#'@author Hieu Nguyen\email{nguyet3@ualberta.ca}
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2)
 #'@export
+library(dplyr)
+library(reshape2)
+library(ggplot2)
+
+mSetObj = list()
+data()
+input <- iris
+mSetObj$dataSet$orig = input
+mSetObj$dataSet$norm = input
+facA = "NULL"
+colors = "NULL"
+xlab = "NULL"
+ylab = "NULL"
+aggregate_function = "NULL"
+barLabels = "NULL"
+mainTitle = "NULL"
+data = "false"
 
 
-barGraph_setup <- function(mSetObj = NA, byrow = "FALSE", colNum = "NULL", rowNum = "NULL",
-                           colors = "NULL", xlab = "NULL", ylab = "NULL", barLabels = "NULL", mainTitle = "NULL"){
-  
-  #print("This comment is in plotting_bargraph.R");
+barGraph_setup <- function(mSetObj = NA, facA = "NULL", colors = "NULL", xlab = "NULL", ylab = "NULL", barLabels = "NULL", mainTitle = "NULL", data = "false"){
   mSetObj <- .get.mSet(mSetObj)
-  input <- mSetObj$dataSet$norm
-  if (!is.vector(input)){
-    if (byrow != "FALSE"){ # read data by rows boolean. 
-        
-      if (rowNum == "NULL"){
-        input <- input[1,]# Default is to use the first row of the data set
-      } else {
-        input <- input[rowNum,]
-      }
-      if (colNum != "NULL"){ 
-        input <- input[,colNum] # input selected columns,  default is to use all the columns
-      }  
-      
-      if (is.numeric(input)){
-        input <- input[which(input > 0)] # remove any zeros from the data.
-      }
-      if (barLabels == "NULL"){  # if barLabels is NULL 
-        barLabels = colnames(input) # grab column names from data
-      }
-      
-    } else { # read data by column 
-    
-      if(colNum == "NULL"){
-        input <- input[,1] # default is first column.
-        
-      } else {
-        input <- input[,colNum]
-      } 
-      if (rowNum != "NULL"){
-        input <- input[rowNum,] # input selected rows, default is to use all the rows.
-      }
-      if (is.numeric(input)){
-        input <- input[which(input > 0)] # remove any zeros from the data.
-      }
-      
-      
-      if ((barLabels == "NULL") & !is.null(rownames(input))){ #if no user-inputted labels, and the data has row names, use the data row names.
-        barLabels <- rownames(input)
-      } 
-    }
+  
+  if (data=="false") {
+    input <- mSetObj$dataSet$norm
+  } else {
+    input <- mSetObj$dataSet$orig
   }
+  
+  categorical_data <- select_if(input, is.factor)
+  numerical_data <- select_if(input, is.numeric)
+  
+  # Create a hash table of aggregate functions
+  if(aggregate_function == "NULL")
+    aggregate_function = "mean"
+  
+  # Create aggregate data
+  df <- aggregate(input[,1:4], by = categorical_data, FUN = get(aggregate_function))
+  md.df <- melt(df, id.vars = c('Species'))
+  
+  # Label for each bar
+  if(barLabels == "NULL")
+    barLabels <- colnames(numerical_data)  
+  
+  if(facA == "NULL")
+    #Set it to the first column name 
+    facA <- colnames(categorical_data)[1]
+  
+  if(xlab == "NULL")
+    xlab <- facA
+  
+  if(ylab == "NULL")
+    ylab <- "Values"
+  
   
   # select Color
   if (colors == "NULL"){
@@ -80,9 +82,8 @@ barGraph_setup <- function(mSetObj = NA, byrow = "FALSE", colNum = "NULL", rowNu
     colors <- grey.colors(length(input))
   }
     
-  count <- table(input) # group data 
   # Save bar graph parameters in mSetObj$analSet 
-  mSetObj$analSet$barGraph <- list(count = count, barColor = colors, xlab = xlab, ylab = ylab,
+  mSetObj$analSet$barGraph <- list(df = df, facA = facA, barColor = colors, xlab = xlab, ylab = ylab,
                                    barLabels = barLabels, mainTitle = mainTitle)
   
   return(.set.mSet(mSetObj));
@@ -102,17 +103,24 @@ barGraph_setup <- function(mSetObj = NA, byrow = "FALSE", colNum = "NULL", rowNu
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2)
 #'@export
-
+imgName = "test"
+format = "png"
+dpi = 72
+width = NA
 
 plotBarGraph <- function(mSetObj=NA, imgName = NA, format="png", dpi=72, width=NA){
   # call upon variables
   mSetObj <- .get.mSet(mSetObj)
-  count = mSetObj$analSet$barGraph$count
+  df <- mSetObj$analSet$barGraph$df
   barColor <- mSetObj$analSet$barGraph$barColor
+  facA <- mSetObj$analSet$barGraph$facA
   xlab <- mSetObj$analSet$barGraph$xlab
   ylab <- mSetObj$analSet$barGraph$ylab
   barLabels <- mSetObj$analSet$barGraph$barLabels
   mainTitle <- mSetObj$analSet$barGraph$mainTitle
+  
+  # Convert to sym to use with aes
+  facA <- sym(facA)
   
   
   #Set plot dimensions
@@ -129,11 +137,19 @@ plotBarGraph <- function(mSetObj=NA, imgName = NA, format="png", dpi=72, width=N
   imgName <- paste(imgName, "dpi", dpi, ".", format, sep="")
   mSetObj$imgSet$barGraph <- imgName
   
+  
+  
   #Generate plot
   Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
   
-  barplot(height = count, names.arg = barLabels, main = mainTitle, xlab = xlab, ylab = ylab, col = barColor)
-  
+  plot <- ggplot(md.df, aes(x = !!facA, y = value, group = variable, fill = variable)) +
+          geom_bar(stat = "identity", color = "black", position = "dodge") +
+          xlab(xlab) +
+          ylab(ylab) +
+          theme_bw() +
+          geom_text(aes(label=value), vjust=-0.3, size=3, # adding values
+              position = position_dodge(0.9))
+  show(plot)
   dev.off()
   
   return(.set.mSet(mSetObj))
