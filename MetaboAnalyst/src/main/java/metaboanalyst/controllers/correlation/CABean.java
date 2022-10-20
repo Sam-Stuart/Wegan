@@ -166,19 +166,19 @@ public class CABean implements Serializable {
     }    
 
     private void doDefaultRF() {
-        CAUtils.CreateRFModel(sb, "NULL", " ", false);
+        CAUtils.CreateRFModel(sb, "NULL", "NULL", false);
         CAUtils.PlotRFCA(sb,
                  "NULL", " ", false,
                 "NULL","NULL",  false,
                  " ", " "," ",
                 sb.getCurrentImage("corr_rf_pred"), "png", 72);
         CAUtils.PlotRFRelativeCA(sb, 
-                "NULL", " ", false, 
+                "NULL", "NULL", false, 
                 "NULL",  false,
                  " ", " "," ",
                 sb.getCurrentImage("corr_rf_relaimpo"), "png", 72);
         CAUtils.PlotRFErrorCA(sb, 
-                "NULL", " ", false, 
+                "NULL", "NULL", false, 
                 "NULL",  " ", " "," ",
                 sb.getCurrentImage("corr_rf_error"), "png", 72);
     }  
