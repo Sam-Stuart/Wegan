@@ -1,88 +1,297 @@
+#' #'Plot Dendrogram 
+#' #'@description Dendogram
+#' #'@param mSetObj Input name of the created mSet Object
+#' #'@param imgName Input a name for the plot
+#' #'@param format Select the image format, "png", or "pdf".
+#' #'@param dpi Input the dpi. If the image format is "pdf", users need not define the dpi. For "png" images, 
+#' #'the default dpi is 72. It is suggested that for high-resolution images, select a dpi of 300.  
+#' #'@param width Input the width, there are 2 default widths, the first, width = NULL, is 10.5.
+#' #'The second default is width = 0, where the width is 7.2. Otherwise users can input their own width.  
+#' #'@param smplDist Method to calculate sample distance
+#' #'@param clstDist Method to calculate clustering distance 
+#' #'@author Jeff Xia\email{jeff.xia@mcgill.ca}
+#' #'McGill University, Canada
+#' #'License: GNU GPL (>= 2)
+#' #'@export
+#' #'
+#' PlotHCTree <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, smplDist, clstDist){
+#'   
+#'   mSetObj <- .get.mSet(mSetObj);
+#'   # set up data set
+#'   hc.dat <- as.matrix(mSetObj$dataSet$norm);
+#'   colnames(hc.dat) <- substr(colnames(hc.dat), 1, 18) # some names are too long
+#'   # set up distance matrix
+#'   if(smplDist == 'euclidean'){
+#'     dist.mat <- dist(hc.dat, method = smplDist);
+#'   }else{
+#'     dist.mat <- dist(1-cor(t(hc.dat), method = smplDist));
+#'   }
+#'   
+#'   # record the paramters
+#'   mSetObj$analSet$tree <- list(dist.par=smplDist, clust.par=clstDist);
+#'   # build the tree
+#'   hc_tree <- hclust(dist.mat, method=clstDist);
+#'   
+#'   # plot the tree
+#'   imgName = paste(imgName, "dpi", dpi, ".", format, sep="");
+#'   if(is.na(width)){
+#'     w <- minH <- 630;
+#'     myH <- nrow(hc.dat)*10 + 150;
+#'     if(myH < minH){
+#'       myH <- minH;
+#'     }   
+#'     w <- round(w/72,2);
+#'     h <- round(myH/72,2);
+#'   }else if(width == 0){
+#'     w <- h <- 7.2;
+#'   }else{
+#'     w <- h <- 7.2;
+#'   }
+#'   
+#'   mSetObj$imgSet$tree <- imgName;
+#'   
+#'   Cairo::Cairo(file = imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white");
+#'   par(cex=0.8, mar=c(4,2,2,8));
+#'   if(mSetObj$dataSet$cls.type == "disc"){
+#'     clusDendro <- as.dendrogram(hc_tree);
+#'     cols <- GetColorSchema(mSetObj);
+#'     names(cols) <- rownames(hc.dat);
+#'     labelColors <- cols[hc_tree$order];
+#'     colLab <- function(n){
+#'       if(is.leaf(n)) {
+#'         a <- attributes(n)
+#'         labCol <- labelColors[a$label];
+#'         attr(n, "nodePar") <- 
+#'           if(is.list(a$nodePar)) c(a$nodePar, lab.col = labCol,pch=NA) else
+#'             list(lab.col = labCol,pch=NA)
+#'       }
+#'       n
+#'     }
+#'     clusDendro <- dendrapply(clusDendro, colLab)
+#'     plot(clusDendro,horiz=T,axes=T);
+#'     par(cex=1);
+#'     
+#'     if(mSetObj$dataSet$type.cls.lbl=="integer"){
+#'       legend.nm <- as.character(sort(as.factor(as.numeric(levels(mSetObj$dataSet$cls))[mSetObj$dataSet$cls])));
+#'     }else{
+#'       legend.nm <- as.character(mSetObj$dataSet$cls);
+#'     }
+#'     
+#'     legend("topleft", legend = unique(legend.nm), pch=15, col=unique(cols), bty = "n");
+#'     
+#'   }else{
+#'     plot(as.dendrogram(hc_tree), hang=-1, main=paste("Cluster with", clstDist, "method"), xlab=NULL, sub=NULL, horiz=TRUE);
+#'   }
+#'   dev.off();
+#'   
+#'   return(.set.mSet(mSetObj));
+#' }
+
 #'Plot Dendrogram 
 #'@description Dendogram
 #'@param mSetObj Input name of the created mSet Object
 #'@param imgName Input a name for the plot
+#'@param data Which data set to use, normalized (default) or original
 #'@param format Select the image format, "png", or "pdf".
 #'@param dpi Input the dpi. If the image format is "pdf", users need not define the dpi. For "png" images, 
 #'the default dpi is 72. It is suggested that for high-resolution images, select a dpi of 300.  
 #'@param width Input the width, there are 2 default widths, the first, width = NULL, is 10.5.
 #'The second default is width = 0, where the width is 7.2. Otherwise users can input their own width.  
-#'@param smplDist Method to calculate sample distance
-#'@param clstDist Method to calculate clustering distance 
+#'@param smplDist Method to calculate sample distance, 'euclidean' (default), 'spearman', 'pearson'.
+#'@param clstDist Method to calculate clustering distance, 'ward' (default), 'average', 'complete', 'single'.
+#'@param rotate Default is horizontal, checkbox option for vertical.
 #'@author Jeff Xia\email{jeff.xia@mcgill.ca}
 #'McGill University, Canada
 #'License: GNU GPL (>= 2)
 #'@export
 #'
-PlotHCTree <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, smplDist, clstDist){
+
+#### Trouble Shooting assignments ####
+# dataset <- iris;
+# smplDist <- 'euclidean'
+# clstDist <- 'complete'
+# imgName <- 'test'
+# rotate <- 'true'
+# branch_labels <- 'false'
+# plot_palette <- "plasma"
+# plot_title <- "This is the Title"
+# plot_legtitle <- "legend_title"
+# colorbar_name <- 'Species' # column names to pick from
+#######################################
+
+# Get column names from user dataset
+dendro.columns <- function(mSetObj=NA) {
+  mSetObj <- .get.mSet(mSetObj)
+  data <- mSetObj$analSet$dendro$data
+  name.all.cols <- c(colnames(metaData), "No groupings")
+  return(name.all.cols)
+}
+
+
+PlotHCTree <- function(mSetObj=NA,
+                       data = "false",
+                       imgName, 
+                       format="png", 
+                       dpi=72, 
+                       width=NA, 
+                       smplDist="NULL", 
+                       clstDist="NULL",
+                       rotate='false',
+                       branch_labels='false',
+                       plot_palette="NULL",
+                       plot_legtitle=" ",
+                       plot_title=" ",
+                       colorbar_name="NULL"){
   
-  mSetObj <- .get.mSet(mSetObj);
-  # set up data set
-  hc.dat <- as.matrix(mSetObj$dataSet$norm);
-  colnames(hc.dat) <- substr(colnames(hc.dat), 1, 18) # some names are too long
+  library('ggplot2')
+  library('dplyr')
+  library('ggdendro')
+  library("viridis")
+  
+  # Obtain mSet dataset
+  mSetObj <- .get.mSet(mSetObj)
+  if (data=="false") {
+    dataset <- mSetObj$dataSet$norm
+  } else {
+    dataset <- mSetObj$dataSet$orig
+  };
+  
+  #colnames(dataset) <- substr(colnames(dataset), 1, 18)  # some names are too long
+  
   # set up distance matrix
-  if(smplDist == 'euclidean'){
-    dist.mat <- dist(hc.dat, method = smplDist);
-  }else{
-    dist.mat <- dist(1-cor(t(hc.dat), method = smplDist));
+  input <- select_if(dataset, is.numeric)
+  if (smplDist == 'euclidean' || smplDist == "NULL"){  # default is 'euclidean'
+    smplDist <- 'euclidean'
+    dist.mat <- dist(input, method = smplDist);
+  }else {
+    dist.mat <- dist(1-cor(t(input), method = smplDist));
+  }
+  
+  if (clstDist == "NULL"){  # default is 'ward'
+    clstDist <- 'ward'
   }
   
   # record the paramters
   mSetObj$analSet$tree <- list(dist.par=smplDist, clust.par=clstDist);
+  
   # build the tree
-  hc_tree <- hclust(dist.mat, method=clstDist);
+  hc <- hclust(dist.mat, method=clstDist);
+  dendro <- as.dendrogram(hc)
+  ddata <- dendro %>% dendro_data(type="rectangle")
   
-  # plot the tree
-  imgName = paste(imgName, "dpi", dpi, ".", format, sep="");
+  # Set up df for color bar option and join df by index values so categorical value aligned properly
+  facA_df <- dataset %>% mutate(id=row_number(), var = as.factor(dataset[,colorbar_name])) %>% select(c(var, id));
+  ddata$labels <- ddata$labels %>% mutate(id=hc$order) %>% left_join(facA_df, by='id')
+  
+  p <- ggplot() + 
+    # Plot dendrogram
+    geom_segment(data = ddata$segments, aes(x = x, y = y, xend = xend, yend = yend)) +
+    # Add title
+    ggtitle(plot_title) +
+    theme(plot.title = element_text(hjust = 0.5),
+          axis.text = element_blank(),
+          axis.ticks =  element_blank(),
+          axis.line = element_blank(),
+          axis.title = element_blank(),
+          panel.background = element_blank(),
+          legend.key = element_blank(),
+          legend.position = c("top"))
+  # Add text labels 
+  if (branch_labels == 'true') {
+    scale_y_continuous(expand = expansion(mult = c(.2, .05)))
+    if (rotate == 'true'){
+      p <- p + geom_text(data = ddata$labels,
+                         aes(x = x, y = -(max(ddata$segments$yend)*0.05), label = label),
+                         color = "black",
+                         vjust = 'middle',
+                         hjust = 'right',
+                         angle = 0,
+                         show.legend = FALSE) +
+        coord_flip()
+    }
+    else{
+      p <- p + geom_text(data = ddata$labels,
+                         aes(x = x, y = -(max(ddata$segments$yend)*0.05), label = label),
+                         color = "black",
+                         vjust = 'middle',
+                         hjust = 'right',
+                         angle = 90,
+                         show.legend = FALSE)
+    }
+    
+  }
+  # Add colorbar and  corresponding legend
+  if (colorbar_name != "NULL"){
+    p <- p + geom_point(data = ddata$labels, 
+                        aes(x = x, y = y, color = var), 
+                        shape = 15,
+                        size=2.5,
+                        show.legend = TRUE) + 
+      theme(legend.background = element_blank(),
+            legend.key = element_blank(),
+            legend.position = c("top")) + 
+      guides(color=guide_legend(title=plot_legtitle)) +
+      scale_color_viridis(discrete=TRUE, option=plot_palette)
+  }
+  
+  
+  
+  
+  #Set plot dimensions
   if(is.na(width)){
-    w <- minH <- 630;
-    myH <- nrow(hc.dat)*10 + 150;
-    if(myH < minH){
-      myH <- minH;
-    }   
-    w <- round(w/72,2);
-    h <- round(myH/72,2);
-  }else if(width == 0){
-    w <- h <- 7.2;
-  }else{
-    w <- h <- 7.2;
+    w <- 10.5
+  } else if(width==0){
+    w <- 7.2
+  } else{
+    w <- width
   }
+  h <- w
   
-  mSetObj$imgSet$tree <- imgName;
+  #Name plot for download
+  imgName <- paste(imgName, "dpi", dpi, ".", format, sep="")
+  mSetObj$imgSet$Plot.NMDS.2D <- imgName
   
-  Cairo::Cairo(file = imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white");
-  par(cex=0.8, mar=c(4,2,2,8));
-  if(mSetObj$dataSet$cls.type == "disc"){
-    clusDendro <- as.dendrogram(hc_tree);
-    cols <- GetColorSchema(mSetObj);
-    names(cols) <- rownames(hc.dat);
-    labelColors <- cols[hc_tree$order];
-    colLab <- function(n){
-      if(is.leaf(n)) {
-        a <- attributes(n)
-        labCol <- labelColors[a$label];
-        attr(n, "nodePar") <- 
-          if(is.list(a$nodePar)) c(a$nodePar, lab.col = labCol,pch=NA) else
-            list(lab.col = labCol,pch=NA)
-      }
-      n
-    }
-    clusDendro <- dendrapply(clusDendro, colLab)
-    plot(clusDendro,horiz=T,axes=T);
-    par(cex=1);
-    
-    if(mSetObj$dataSet$type.cls.lbl=="integer"){
-      legend.nm <- as.character(sort(as.factor(as.numeric(levels(mSetObj$dataSet$cls))[mSetObj$dataSet$cls])));
-    }else{
-      legend.nm <- as.character(mSetObj$dataSet$cls);
-    }
-    
-    legend("topleft", legend = unique(legend.nm), pch=15, col=unique(cols), bty = "n");
-    
-  }else{
-    plot(as.dendrogram(hc_tree), hang=-1, main=paste("Cluster with", clstDist, "method"), xlab=NULL, sub=NULL, horiz=TRUE);
-  }
-  dev.off();
+  Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
+  print(p)
+  dev.off()
+  
+  # Make JSON
+  
+  #### Making Dendrogram with Cairo
+  # Cairo::Cairo(file = imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white");
+  # par(cex=0.8, mar=c(4,2,2,8));
+  # if(mSetObj$dataSet$cls.type == "disc"){
+  #   clusDendro <- as.dendrogram(hc_tree);
+  #   #cols <- GetColorSchema(mSetObj);
+  #   cols <- as.numeric(mSetObj$dataSet$cls)+1
+  #   names(cols) <- rownames(input);
+  #   labelColors <- cols[hc_tree$order];
+  #   colLab <- function(n){
+  #     if(is.leaf(n)) {
+  #       a <- attributes(n)
+  #       labCol <- labelColors[a$label];
+  #       attr(n, "nodePar") <- 
+  #         if(is.list(a$nodePar)) c(a$nodePar, lab.col = labCol,pch=NA) else
+  #           list(lab.col = labCol,pch=NA)
+  #     }
+  #     n
+  #   }
+  #   clusDendro <- dendrapply(clusDendro, colLab)
+  #   plot(clusDendro,horiz=T,axes=T);
+  #   par(cex=1);
+  #   
+  #   if(mSetObj$dataSet$type.cls.lbl=="integer"){
+  #     legend.nm <- as.character(sort(as.factor(as.numeric(levels(mSetObj$dataSet$cls))[mSetObj$dataSet$cls])));
+  #   }else{
+  #     legend.nm <- as.character(mSetObj$dataSet$cls);
+  #   }
+  #   
+  #   legend("topleft", legend = unique(legend.nm), pch=15, col=unique(cols), bty = "n");
+  #   
+  # }else{
+  #   plot(as.dendrogram(hc_tree), hang=-1, main=paste("Cluster with", clstDist, "method"), xlab=NULL, sub=NULL, horiz=TRUE);
+  # }
+  # dev.off();
   
   return(.set.mSet(mSetObj));
 }

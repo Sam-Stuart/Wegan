@@ -85,10 +85,98 @@ public class ClusterBean implements Serializable{
     public void setViewOpt(String viewOpt) {
         this.viewOpt = viewOpt;
     }
+    
+        //CHECKBOX
+    private boolean doData = false; 
+    
+    public boolean isDoData() {
+        return doData;
+    }
+    
+    public void setDoData(boolean doData) {
+        this.doData = doData;
+    }
+        //CHECKBOX
+    private boolean doRotate = false; 
+    
+    public boolean isDoRotate() {
+        return doRotate;
+    }
+    
+    public void setDoRotate(boolean doRotate) {
+        this.doRotate = doRotate;
+    }
+            //CHECKBOX
+    private boolean doBranchLabels = false; 
+    
+    public boolean isDoBranchLabels() {
+        return doBranchLabels;
+    }
+    
+    public void setDoBranchLabels(boolean doBranchLabels) {
+        this.doBranchLabels = doBranchLabels;
+    }
+    
+            //STATIC DROPDOWN 
+    private String dendroColorOpts = "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.vegdistMeasureOpts
+    
+    public String getDendroColorOpts() {
+        return dendroColorOpts;
+    }
 
+    public void setDendroColorOpts(String dendroColorOpts) {
+        this.dendroColorOpts = dendroColorOpts;
+    }
+    
+        //TEXT BOX  
+    private String dendroLegendTitle = " ";
+        
+    public String getDendroLegendTitle() {
+        return dendroLegendTitle;
+    }
+
+    public void setDendroLegendTitle(String dendroLegendTitle) {
+        this.dendroLegendTitle = dendroLegendTitle;
+    } 
+    
+            //TEXT BOX  
+    private String dendroPlotTitle = " ";
+        
+    public String getDendroPlotTitle() {
+        return dendroPlotTitle;
+    }
+
+    public void setDendroPlotTitle(String dendroPlotTitle) {
+        this.dendroPlotTitle = dendroPlotTitle;
+    }
+    
+    //DYNAMIC DROPDOWN done?
+    private SelectItem[] dendroColumnOpts = null;
+    
+    public SelectItem[] getDendroColumnOpts(){
+        String[] columns = Clustering.dendroColNames(sb);
+        int columnsLen = columns.length;
+        dendroColumnOpts = new SelectItem[columnsLen];
+        List<String> columnNames = Arrays.asList(columns);
+        for (int i = 0; i < columnsLen; i++) {
+            dendroColumnOpts[i] = new SelectItem(columnNames.get(i), columnNames.get(i));
+        }
+        return dendroColumnOpts;
+    }
+    
+    private String dendroColumnName = getDendroColumnOpts()[0].getLabel();
+    
+    public String getDendroColumnName() {
+        return dendroColumnName;
+    }
+
+    public void setDendroColumnName(String dendroColumnName) {
+        this.dendroColumnName = dendroColumnName;
+    }
+    
     public String treeButton_action() {
         String imgName = sb.getNewImage("tree");
-        Clustering.PlotClustTree(sb, imgName, "png", 72, clustDistOpt, clustMethodOpt);
+        Clustering.PlotClustTree(sb, doData, imgName, "png", 72, clustDistOpt, clustMethodOpt, doRotate, doBranchLabels, dendroColorOpts, dendroLegendTitle, dendroPlotTitle, dendroColumnName);
         RequestContext.getCurrentInstance().scrollTo("form1:treePane");
         return null;
     }
