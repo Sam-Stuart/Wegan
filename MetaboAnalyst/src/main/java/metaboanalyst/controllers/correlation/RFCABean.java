@@ -72,7 +72,7 @@ public class RFCABean implements Serializable {
     private SelectItem[] columnOpts = null;
     
     public SelectItem[] getColumnOpts(){
-        String[] columns = CAUtils.GetRFColumns(sb);
+        String[] columns = CAUtils.GetPolynomialColumns(sb);
         int columnsLen = columns.length;
         columnOpts = new SelectItem[columnsLen];
         List<String> columnNames = Arrays.asList(columns);
