@@ -57,6 +57,8 @@ facA="NULL",
     predtext <- predtext #taken from text box by java, fed as string into R code
   }
   
+predtext1 <- predtext
+
   #PREDICTORS: Curate formula right side, and extract predictors character vector
   predtext <- gsub("\n", "", predtext, fixed=TRUE) #fixed=TRUE means we are dealing with one string, versus a vector of strings (fixed=FALSE)
   predtext <- gsub(",", "+", predtext, fixed=TRUE) 
@@ -76,12 +78,12 @@ facA="NULL",
   predictors2 <- unlist(strsplit(predtext, "+", fixed = TRUE), use.names = FALSE)
   #predictors2 <- unlist(strsplit(predictors1, ":", fixed = TRUE), use.names = FALSE)
   
-# if(any(!colnames(data) %in% predictors2)){
-#   stop(paste0("THIS_is_1st_function_", "'", predictors2[!predictors2 %in% colnames(data)],
-#  "' not found in data variables ('",
-#  paste(colnames(data), collapse = "', '"),
-#  "'): check spelling of text box input."))
-#}
+  if(!all(predictors2 %in% colnames(data)) ){
+   warning(paste0("THIS_is_1st_function_", "'", predictors2[!predictors2 %in% colnames(data)],
+  "' not found in data variables ('",
+  paste(colnames(data), collapse = "', '"),
+  "'): check spelling of text box input."))
+}
 
   pred_data <- input[,which(colnames(input) %in% predictors2), drop = FALSE]
   model_data <- data.frame(input[,facA, drop = TRUE], pred_data)
@@ -134,7 +136,7 @@ facA="NULL",
 print("after predicting model test")  
 
   #STORE REMAINING RESULTS
-  mSetObj$analSet$rfReg$res <- list(summary=summary, response=facA, predictors=pred_data, predtext=predtext, predicted.values=fitted, train.RMSE=train_rmse, test.prediction=test_prediction, test.RMSE=test_rmse, train_data=train_data, test_data=test_data, method=model_name, fileName=fileName)       
+  mSetObj$analSet$rfReg$res <- list(summary=summary, response=facA, predictors=pred_data, predtext=predtext1, predicted.values=fitted, train.RMSE=train_rmse, test.prediction=test_prediction, test.RMSE=test_rmse, train_data=train_data, test_data=test_data, method=model_name, fileName=fileName)       
   mSetObj$analSet$rfReg$mod <- list(model_name=model_name, model=model, response=facA, predictors=predictors2)
   mSetObj$analSet$rfReg$res$test_this <- test_data
 
@@ -186,7 +188,6 @@ svm.pred.plot <- function(mSetObj=NA,
 facA = "NULL", 
 predtext ="NULL",
 # data="false",
-  
   col_dots="NULL",
   col_line="NULL", 
   plot_title=" ",
@@ -241,7 +242,7 @@ imgName, format="png", dpi=72, width=NA){
         break
       }
     }
- }
+# }
 } else {
     facA <- facA #User selected, java uses function numeric.columns() to provide options in drop down menu
   }
@@ -249,16 +250,23 @@ imgName, format="png", dpi=72, width=NA){
   #SET FORMULA RIGHT SIDE WITH PREDICTORS (Default = 2nd column)
   if (predtext == "NULL") {
 #    if("res" %in% names(mSetObj$analSet$svmReg) ){#if there are results made already, use the predictor(s)
-#        predtext <- mSetObj$analSet$svmReg$res$predictor
+#        predtext <- mSetObj$analSet$svmReg$res$predtext
 #     } else {
     data <- input[ , colnames(input) != facA, drop=FALSE] #drop=FALSE means it will be a df
    # num.data <- dplyr::select_if(data, is.numeric)
     predtext <- colnames(data)[1] #Default is the 1st potential predictor column
- } 
+    # predtext <- paste0(predtext, ",")
+# } 
     } else {
     predtext <- predtext #taken from text box by java, fed as string into R code
   }
   
+#CHECK PREDTEXT FOR COMMAS  
+  if( !any(grepl(",", predtext, fixed = TRUE)) ){ # if there are no commas in input predictor name(s)
+    if(ncol( input[ , colnames(input) != facA, drop=FALSE] ) > 1){ # can't be >1 other cols to use, so if there is, error
+warning("Check your predictor variables; Have you separated them by a comma? Are they spelled as they are in your input data?")
+    } }
+
   #CURATE FORUMLA RIGHT SIDE, EXTRACT CHAR VEC OF PREDICTORS 
   predtext <- gsub("\n", "", predtext, fixed = TRUE)
   predtext <- gsub(",", "+", predtext, fixed = TRUE) 
@@ -272,12 +280,12 @@ imgName, format="png", dpi=72, width=NA){
   predictors2 <- unlist(strsplit(predtext, "+", fixed = TRUE), use.names = FALSE)
   #predictors2 <- unlist(strsplit(predictors1, ":", fixed = TRUE), use.names = FALSE)
  
-#if(any(!colnames(data) %in% predictors2)){
-#   stop(paste0("THIS_is_2nd_function_", "'", predictors2[!predictors2 %in% colnames(data)],
-#  "' not found in data variables ('",
-#  paste(colnames(data), collapse = "', '"),
-#  "'): check spelling of text box input."))
-#}
+  if(!all(predictors2 %in% colnames(data)) ){
+   warning(paste0("THIS_is_2nd_function_", "'", predictors2[!predictors2 %in% colnames(data)],
+  "' not found in data variables ('",
+  paste(colnames(data), collapse = "', '"),
+  "'): check spelling of text box input."))
+}
 
   #SUBSET DATA USING PREDICTOR COLUMN NAMES
   pred_data <- input[,which(colnames(input) %in% predictors2), drop = FALSE]
@@ -298,7 +306,6 @@ imgName, format="png", dpi=72, width=NA){
   
  
 #BUILD MODEL, get predicted
-# hereo
 print("PLOT: before model making")
     model <- e1071::tune(e1071::svm, formula,  data = as.data.frame(predictors_train), ranges = list(epsilon = seq(0,1,0.1), cost = 2^(seq(0.5,8,.5))))
 print("PLOT: after model making")
