@@ -27,7 +27,7 @@ log.reg.anal <- function(mSetObj=NA,
   library("MASS") #For ordinal regression
   library("dplyr") #For data manipulation # `%>%` should be exported for piping 
   # library("tidyselect") # tidyselect helper 'where' is not exported to namespace, but workaround exists (so still need package) ; to replace deprecated select_ variant `select_if`
-  # library("JSONIO")
+## remove JSONIO library call 20221019
 
   mSetObj <- .get.mSet(mSetObj)
 
@@ -75,11 +75,20 @@ if (is.null(facData)) {
     # resp.col.num <- which(colnames(data) == facA); predData <- data[,-resp.col.num]
     predData <- data[, !(colnames(data) == facA)]
     predtext <- colnames(predData)[2] #Default is 2nd predictor column
+    # predtext <- paste0(predtext, ",") # for comma checking later
     # predtext <- paste(colnames(predData), collapse="+")
   } else {
     predtext <- predtext #taken from text box by java, fed as string into R code
   }
+
+predtext1 <- predtext
   
+#CHECK PREDTEXT FOR COMMAS
+   if( !any(grepl(",", predtext, fixed = TRUE)) ){ # if there are no commas in input predictor name(s)
+if(ncol( input[ , colnames(input) != facA, drop=FALSE] ) > 1){ # can't be >1 other cols to use, so if there is, error
+warning("Check your predictor variables; Have you separated them by a comma? Are they spelled as they are in your input data?")
+}}
+
 ## predtext is input into R as one string (??)
 
   #CURATE RIGHT SIDE OF FORMULA; EXTRACT CHARACTER VECTOR OR PREDICTORS 
@@ -102,7 +111,7 @@ if (is.null(facData)) {
 ## CHECK: are all input predictors in data
  predictors <- unlist(strsplit(predtext, "+", fixed=TRUE), use.names = FALSE) ## use.names = FALSE speeds up unlist
  if(any(!colnames(data) %in% predictors)){
-stop(paste0( "'", predictors[!predictors %in% colnames(data)],
+warning(paste0( "'", predictors[!predictors %in% colnames(data)],
  "' not found in data variables ('", 
 paste(colnames(data), collapse = "', '"), 
 "'): check spelling of text box input."))
@@ -201,7 +210,7 @@ if(!is.factor(model_data[,1])){
     # fileName <- paste0("ordinal_logistic_regression_reference_", reference, "_summary.txt") #File name for results
     
     #STORE RESULTS
-    mSetObj$analSet$logOrdReg$res <- list(summary = summary, model.data = model_data, response = facA, predictor = predictors, predicted.values = fitted, confidence.intervals = conf.int, 
+    mSetObj$analSet$logOrdReg$res <- list(summary = summary, model.data = model_data, response = facA, predictor = predictors, pretext = pretext1, predicted.values = fitted, confidence.intervals = conf.int, 
                                           Hessian = Hessian, oddsRatio = oddsRatio, covariance.matrix = covar, Loglikelihood = logLik, zValues = zValues, pValues = pValues, fileName = fileName)       
     mSetObj$analSet$logOrdReg$mod <- list(model_name = model_name, model = model, model.data = model_data, response = facA, predictor = predictors)
     
@@ -271,7 +280,7 @@ c(reference, levels(model_data[,1])[!levels(model_data[,1]) %in% reference])
 
     #Store results
     mSetObj$analSet$logMultinomReg$res <- list(summary = summary, model.data = model_data,
- response = facA, predictor = predictors, 
+ response = facA, predictor = predictors, predtext = predtext1, 
 residuals = residuals, predicted.values = fitted, 
 confidence.intervals = conf.int, oddsRatio = oddsRatio, 
 covariance.matrix = covar, Loglikelihood = logLik, 
@@ -344,7 +353,7 @@ model = model, model.data = model_data, response = facA, predictor = predictors)
 
     #Store results
     mSetObj$analSet$logBinomReg$res <- list(summary = summary, model.data = model_data,
- response = facA, predictor = predictors, 
+ response = facA, predictor = predictors, predtext = predtext1,
 residuals = residuals, predicted.values = fitted,
  confidence.intervals = conf.int, oddsRatio = oddsRatio,
 covariance.matrix = covar, modelDiff = testStat,
@@ -519,15 +528,22 @@ data = "false",
   #SET FORMULA RIGHT SIDE WITH PREDICTORS (Default = 2nd column)
   if (predtext == "NULL") {
     if( "res" %in% names(output) ){
-        predtext <- output$res$predictor
+        predtext <- output$res$predtext
      } else {
     dat <- input[ , colnames(input) != facA]
     num.data <- dplyr::select_if(dat, is.numeric)
     predtext <- colnames(num.data)[1] #Default is the first potential predictor column
+    # predtext <- paste0(predtext, ",")
  }
     } else {
     predtext <- predtext #taken from text box by java, fed as string into R code
   }
+
+#CHECK PREDTEXT FOR COMMAS
+   if( !any(grepl(",", predtext, fixed = TRUE)) ){ # if there are no commas in input predictor name(s)
+if(ncol( input[ , colnames(input) != facA, drop=FALSE] ) > 1){ # can't be >1 other cols to use, so if there is, error
+warning("Check your predictor variables; Have you separated them by a comma? Are they spelled as they are in your input data?")
+}}
 
   #CURATE FORUMLA RIGHT SIDE, EXTRACT CHAR VEC OF PREDICTORS
   predtext <- gsub("\n", "", predtext, fixed = TRUE)
@@ -536,6 +552,7 @@ data = "false",
   predtext <- gsub(" ", "", predtext, fixed = TRUE)
   predtext <- gsub(":", "+", predtext, fixed = TRUE)
   predtext <- gsub("*", "+", predtext, fixed = TRUE)
+
 
   #GENERATE FORMULA
   formula <- as.formula(paste(facA, "~", predtext))
@@ -547,8 +564,9 @@ data = "false",
    ### CHECK: are all input predictor names in data
   predictors1 <- unlist(strsplit(predtext, "+", fixed = TRUE), use.names = FALSE)
   predictors2 <- unlist(strsplit(predictors1, ":", fixed = TRUE), use.names = FALSE)
- if(any(!colnames(data) %in% predictors2)){
-   stop(paste0( "'", predictors[!predictors2 %in% colnames(data)],
+  # if(any(!colnames(data) %in% predictors2)){
+if(!all(predictors2 %in% colnames(data)) ){
+   warning(paste0( "'", predictors2[!predictors2 %in% colnames(data)],
   "' not found in data variables ('",
   paste(colnames(data), collapse = "', '"),
   "'): check spelling of text box input."))
@@ -857,24 +875,31 @@ if (type == "ordinal") {
   #SET FORMULA RIGHT SIDE WITH PREDICTORS (Default = 2nd column)
   if (predtext == "NULL") {
     if( "res" %in% nom ){
-        # predtext <- output$res$predictor
+        # predtext <- output$res$predtext
 
        if (type == "ordinal") {
-    predtext <- mSetObj$analSet$logOrdReg$res$predictor
+    predtext <- mSetObj$analSet$logOrdReg$res$predtext
   } else if (type == "multinomial") {
-    predtext <- mSetObj$analSet$logMultinomReg$res$predictor
+    predtext <- mSetObj$analSet$logMultinomReg$res$predtext
   } else { #Binomial
-    predtext <- mSetObj$analSet$logBinomReg$res$predictor
+    predtext <- mSetObj$analSet$logBinomReg$res$predtext
   }
 
      } else {
     dat <- input[ , colnames(input) != facA]
     num.data <- dplyr::select_if(dat, is.numeric)
     predtext <- colnames(num.data)[1] #Default is the first potential predictor column
+    # predtext <- paste0(predtext, ",")
  }
     } else {
     predtext <- predtext #taken from text box by java, fed as string into R code
   }
+
+#CHECK PREDTEXT FOR COMMAS
+   if( !any(grepl(",", predtext, fixed = TRUE)) ){ # if there are no commas in input predictor name(s)
+if(ncol( input[ , colnames(input) != facA, drop=FALSE] ) > 1){ # can't be >1 other cols to use, so if there is, error
+warning("Check your predictor variables; Have you separated them by a comma? Are they spelled as they are in your input data?")
+}}
   
 # paste(.simcap(type), " Logistic Regression \nROC Curve", sep="")
   # main <- paste0("Predicted Probabilities of ", facA, main_end)
@@ -897,8 +922,9 @@ if (type == "ordinal") {
    ### CHECK: are all input predictor names in data
   predictors1 <- unlist(strsplit(predtext, "+", fixed = TRUE), use.names = FALSE)
   predictors2 <- unlist(strsplit(predictors1, ":", fixed = TRUE), use.names = FALSE)
- if(any(!colnames(data) %in% predictors2)){
-   stop(paste0( "'", predictors[!predictors2 %in% colnames(data)],
+  # if(any(!colnames(data) %in% predictors2)){
+if(!all(predictors2 %in% colnames(data)) ){
+   warning(paste0( "'", predictors2[!predictors2 %in% colnames(data)],
   "' not found in data variables ('",
   paste(colnames(data), collapse = "', '"),
   "'): check spelling of text box input."))
