@@ -10,31 +10,30 @@
     <h:form id="SVMGraph">
         <h:panelGrid columns="1" style="width:380px;">
             <h:panelGrid id="panelGrid1" columns="2" cellpadding="5" columnClasses="colBrayLong,colBrayShort">
-               <!--Predicted vs Actual point/line Plot-->
                 <h3>Line and Point Options</h3>
                 <p:panelGrid></p:panelGrid>
 
                 <h:outputLabel style="font-weight: bold" value="Point Color:"/>
-                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{svmCABean.corColorDotsOpts}">
-                    <f:selectItems value="#{applicationBean1.corLinColorDotsOpts}" />
+<!--                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="has{polyCABean.corColorDotsOpts}">
+                    <f:selectItems value="hash{applicationBean1.corLinColorDotsOpts}" />
                 </p:selectOneMenu> 
                 
                 <h:outputLabel style="font-weight: bold" value="Line Color:"/>
-                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{svmCABean.corColorLineOpts}">
-                    <f:selectItems value="#{applicationBean1.corLinColorLineOpts}" />
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="hash{svmCABean.corColorLineOpts}">
+                    <f:selectItems value="hash{applicationBean1.corLinColorLineOpts}" />
                 </p:selectOneMenu>   
                 
                 <h3>Titles</h3>
                 <p:panelGrid></p:panelGrid>                 
                 
                 <h:outputLabel style="font-weight: bold" value="Plot Title:"/>
-                <p:inputText value = "#{svmCABean.corPlotTitle}"/> 
+                <p:inputText value = "hash{svmCABean.corPlotTitle}"/>
                 
                 <h:outputLabel style="font-weight: bold" value="X-Axis Label"/>
-                <p:inputText value = "#{svmCABean.corPlotXlab}"/> 
+                <p:inputText value = "hash{svmCABean.corPlotXlab}"/> 
                 
                  <h:outputLabel style="font-weight: bold" value="Y-Axis Label"/>
-                <p:inputText value = "#{svmCABean.corPlotYlab}"/> 
+                <p:inputText value = "hash{svmCABean.corPlotYlab}"/> -->
                 
                 <!--<p:panelGrid></p:panelGrid>-->
 
@@ -45,8 +44,8 @@
                                  style="box-shadow: none !important; text-shadow: none !important"
                                 onclick="PF('statusDialog').show()"
                                 oncomplete="PF('graphApperanceSVM').hide(); PF('statusDialog').hide()"  
-                                update=":form1:corrSVMPane1  :cmdPane"
-                                actionListener="#{svmCABean.corrSVMBtn_action()}"/>
+                                update="SVMCA:form1:corrSVMPane1  :cmdPane"
+                                actionListener="{svmCABean.corrSVMBtn_action()}"/> 
             </h:panelGrid>
         </h:panelGrid>
         
