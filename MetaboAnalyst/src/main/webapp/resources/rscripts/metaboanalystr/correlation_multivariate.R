@@ -61,7 +61,7 @@ multi.reg.anal <- function(mSetObj=NA,
   }
   
 #CHECK PREDTEXT FOR COMMAS
-   if( !any(grepl(",", predtext, fixed = TRUE, perl=TRUE)) ){ # if there are no commas in input predictor name(s)
+   if( !any(grepl(",", predtext, fixed = TRUE)) ){ # if there are no commas in input predictor name(s)
 if(ncol( input[ , colnames(input) != facA, drop=FALSE] ) > 1){ # can't be >1 other cols to use, so if there is, error
 warning("Check your predictor variables; Have you separated them by a comma? Are they spelled as they are in your input data?")
 }}
@@ -89,7 +89,7 @@ predtext1 <- predtext
   
   # if(any(!colnames(data) %in% predictors2)){
 if(!all(predictors2 %in% colnames(data)) ){
-   stop(paste0( "'", predictors2[!predictors2 %in% colnames(data)],
+   warning(paste0( "'", predictors2[!predictors2 %in% colnames(data)],
   "' not found in data variables ('",
   paste(colnames(data), collapse = "', '"),
   "'): check spelling of text box input."))
@@ -310,7 +310,7 @@ multi.pred.plot <- function(mSetObj=NA,
   }
   
   #CHECK PREDTEXT FOR COMMAS
- if( !any(grepl(",", predtext, fixed = TRUE, perl=TRUE)) ){ # if there are no commas in input predictor name(s)
+ if( !any(grepl(",", predtext, fixed = TRUE)) ){ # if there are no commas in input predictor name(s)
    if(ncol( input[ , colnames(input) != facA, drop=FALSE] ) > 1){ # can't be >1 other cols to use, so if there is, error  (not counting the default)
 warning("Check your predictor variables; Have you separated them by a comma? Are they spelled as they are in your input data?")
     } }
@@ -335,7 +335,7 @@ warning("Check your predictor variables; Have you separated them by a comma? Are
   predictors2 <- unlist(strsplit(predictors1, ":", fixed = TRUE), use.names = FALSE)
  # if(any(!colnames(data) %in% predictors2)){
 if(!all(predictors2 %in% colnames(data)) ){
-   stop(paste0( "'", predictors2[!predictors2 %in% colnames(data)],
+   warning(paste0( "'", predictors2[!predictors2 %in% colnames(data)],
   "' not found in data variables ('",
   paste(colnames(data), collapse = "', '"),
   "'): check spelling of text box input."))
@@ -467,8 +467,6 @@ imgName2 <- paste(gsub( "\\_\\d+\\_", "", imgName),
         # legend.title=element_text(12), legend.text=element_text(size=12), 
         plot.title = element_text(face = 'bold', hjust = 0.5)
   )
-
-
 
 
   ## y actual input[,facA] fA
@@ -660,7 +658,7 @@ multi.relaimpo.plot <- function(mSetObj=NA,
   }
   
 # CHECK IN PREDTEXT FOR COMMAS
- if( !any(grepl(",", predtext, fixed = TRUE, perl=TRUE)) ){ # if there are no commas in input predictor name(s)
+ if( !any(grepl(",", predtext, fixed = TRUE)) ){ # if there are no commas in input predictor name(s)
     if(ncol( input[ , colnames(input) != facA, drop=FALSE] ) > 1){ # can't be >1 other cols to use, so if there is, error
 warning("Check your predictor variables; Have you separated them by a comma? Are they spelled as they are in your input data?")
     } }
@@ -685,7 +683,7 @@ warning("Check your predictor variables; Have you separated them by a comma? Are
   predictors2 <- unlist(strsplit(predictors1, ":", fixed = TRUE), use.names = FALSE)
   # if(any(!colnames(data) %in% predictors2)){
 if(!all(predictors2 %in% colnames(data)) ){ # if any of the input predictors2 are not in colnames of data
-   stop(paste0( "'", predictors2[!predictors2 %in% colnames(data)], #predictors2 not in data
+   warning(paste0( "'", predictors2[!predictors2 %in% colnames(data)], #predictors2 not in data
   "' not found in data variables ('",
   paste(colnames(data), collapse = "', '"), #list data variables, so user can see what the actual names are
   "'): check spelling of text box input."))
