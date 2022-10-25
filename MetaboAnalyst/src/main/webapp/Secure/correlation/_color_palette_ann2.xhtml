@@ -7,22 +7,23 @@
                 xmlns:p="http://primefaces.org/ui">
 
 
-    <h:form id="RFGraph2">
+    <h:form id="ANNGraph2">
         <h:panelGrid columns="1" style="width:380px;">
             <h:panelGrid id="panelGrid1" columns="2" cellpadding="5" columnClasses="colBrayLong,colBrayShort">
                 <!--Relative Importance (Bar)Plot-->
                 <h3>Plot and Color</h3>
                 <p:panelGrid></p:panelGrid>
                 
-                <h:outputLabel style="font-weight: bold" value="Color Palette:"/>
-                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{rfCABean.corPaletteOpts}">
-                    <f:selectItems value="#{applicationBean1.corColorPaletteOpts}" />
+                <h:outputLabel style="font-weight: bold" value="Line Color "/>
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{rfCABean.corColorLineOpts}">
+                    <f:selectItems value="#{applicationBean1.corColorOpts}" />
                 </p:selectOneMenu>  
 
-                <h:outputLabel style="font-weight: bold" value="Show Label on Plot"/>
-                <p:selectBooleanCheckbox value ="#{rfCABean.doLabelPlot}"/> 
+                <h:outputLabel style="font-weight: bold" value="Point Color"/>
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{rfCABean.corColorDotsOpts}">
+                    <f:selectItems value="#{applicationBean1.corColorOpts}" />
+                </p:selectOneMenu>  
                         
-                
                 <h3>Titles</h3>
                 <p:panelGrid></p:panelGrid>    
                 
@@ -43,9 +44,9 @@
                                  styleClass="updateButton"
                                  style="box-shadow: none !important; text-shadow: none !important"
                                 onclick="PF('statusDialog').show()"
-                                oncomplete="PF('graphApperanceRF2').hide(); PF('statusDialog').hide()"  
-                                update=":RFCA:form2:corrRFPane2  :cmdPane"
-                                actionListener="#{rfCABean.corrRFBtn2_action()}"/>
+                                oncomplete="PF('graphApperanceANN2').hide(); PF('statusDialog').hide()"  
+                                update=":ANNCA:form2:corrANNPane2  :cmdPane"
+                                actionListener="#{rfCABean.corrANNBtn2_action()}"/>
             </h:panelGrid>
         </h:panelGrid>
     </h:form>
