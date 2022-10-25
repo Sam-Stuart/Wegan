@@ -58,7 +58,7 @@ public class RFCABean implements Serializable {
         this.fileMultiSummaryPath = fileMultiSummaryPath;
     }
     
-    
+//   PREDICTOR VARIABLES 
     private String indInput = "";
 
     public String getIndInput() {
@@ -82,6 +82,32 @@ public class RFCABean implements Serializable {
         //List<String> columnNames = Arrays.asList(columns);
         return columnOpts;
     }
+    
+//    FOR ANN: PREDICTOR VARIABLES NOT TO BE SCALED
+    private String indInputB = "";
+
+    public String getIndInputB() {
+        return indInputB;
+    }
+
+    public void setIndInputB(String indInputB) {
+        this.indInputB = indInputB;
+    }
+    
+    private SelectItem[] columnOptsB = null;
+    
+    public SelectItem[] getColumnOptsB(){
+        String[] columns = CAUtils.GetPolynomialColumns(sb);
+        int columnsLen = columns.length;
+        columnOptsB = new SelectItem[columnsLen];
+        List<String> columnNames = Arrays.asList(columns);
+        for (int i = 0; i < columnsLen; i++) {
+            columnOptsB[i] = new SelectItem(columnNames.get(i), columnNames.get(i));
+        }
+        //List<String> columnNames = Arrays.asList(columns);
+        return columnOptsB;
+    }
+    
     
     private String columnNameA = getColumnOpts()[0].getLabel();
     
@@ -140,7 +166,7 @@ public class RFCABean implements Serializable {
     
     // CHECK BOX 
      private boolean doLabelPlot = false;
-
+//MULTIVARIATE
     public boolean isdoLabelPlot() {
         return doLabelPlot;
     }
@@ -151,7 +177,7 @@ public class RFCABean implements Serializable {
     
  //STATIC DROPDOWN for selecting colour:   replaced: corColorOpts : change name from logPaletteOpts to corPaletteOpts, and logColorPaletteOpts to corColorPaletteOpts
     private String corPaletteOpts = "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corColorPaletteOpts
-
+//MULTIVARIATE
     public String getCorPaletteOpts() {
         return corPaletteOpts; 
     }
@@ -192,6 +218,56 @@ public class RFCABean implements Serializable {
     public void setCorPlotYlab(String corPlotYlab) {
         this.corPlotYlab = corPlotYlab;
     } 
+   
+// ANN   
+  // STATIC DROPDOWN: for selecting color of input (predictor) bubbles (left-most) on network diagram
+//    corresponds with applicationBean1 : corColorPalettePredictors
+     private String corPalettePredictors = "NULL";
+
+    public String getCorPalettePredictors() {
+        return corPalettePredictors;
+    }
+
+    public void setCorPalettePredictors(String corPalettePredictors) {
+        this.corPalettePredictors = corPalettePredictors;
+    }       
+   
+//  ANN  
+ // STATIC DROPDOWN: for selecting color of other (non-predictor) nodes (circles) on network diagram ( all other circles except the ones on the left side)
+//    corresponds with applicationBean1 : corColorNonPredictors
+     private String corPaletteNonPredictors = "NULL";
+
+    public String getCorPaletteNonPredictors() {
+        return corPaletteNonPredictors;
+    }
+
+    public void setCorPaletteNonPredictors(String corPaletteNonPredictors) {
+        this.corPaletteNonPredictors = corPaletteNonPredictors;
+    }          
+//ANN
+ // STATIC DROPDOWN: for selecting text size of text appearing next nodes (cricles) in network diagram
+//    corresponds with applicationBean1 : corLinTextSizeOpts
+     private String corTextSizeOpts = "NULL";
+
+    public String getCorTextSizeOpts() {
+        return corTextSizeOpts;
+    }
+
+    public void setCorTextSizeOpts(String corTextSizeOpts) {
+        this.corTextSizeOpts = corTextSizeOpts;
+    }     
+// ANN   
+ // STATIC DROPDOWN: for selecting amount to decrease width ('squish') the network diagram, higher number means more more squish
+//    corresponds with applicationBean1 : corPlotNarrowWidthOpts
+     private String corNarrowWidthOpts = "NULL";
+
+    public String getCorNarrowWidthOpts() {
+        return corNarrowWidthOpts;
+    }
+
+    public void setCorNarrowWidthOpts(String corNarrowWidthOpts) {
+        this.corNarrowWidthOpts = corNarrowWidthOpts;
+    }     
     
     
 //    private List<String> corrPolyResults = null;
@@ -229,7 +305,7 @@ public class RFCABean implements Serializable {
                 sb.getNewImage("corr_rf_error"), "png", 72);
     }
     
-    
+//MULTIVARIATE    
  
       public void corrMultiBtn_action() {
         CAUtils.CreateMultivariateModel(sb, columnNameA, indInput, doOriginal);
@@ -252,6 +328,28 @@ public class RFCABean implements Serializable {
                 sb.getNewImage("corr_multi_relaimpo"), "png", 72);
     }
    
+         
+//ANN         
+     
+ 
+      public void corrANNBtn_action() {
+        CAUtils.CreateANNModel(sb, columnNameA, indInput, indInput);
+        CAUtils.PlotANNPredictCA(sb,
+                columnNameA, indInput, indInput,
+                corColorDotsOpts, corColorLineOpts, 
+               corPlotTitle, corPlotXlab, corPlotYlab,
+                sb.getNewImage("corr_multi_pred"), "png", 72);
+    }
+      
+         public void corrANNBtn2_action() {
+        CAUtils.CreateANNModel(sb, columnNameA, indInput, indInput);
+        CAUtils.PlotANNCA(sb, 
+                columnNameA, indInput, indInput,
+              corPalettePredictors, corPaletteNonPredictors,
+             corTextSizeOpts, corNarrowWidthOpts,  corPlotTitle, 
+                sb.getNewImage("corr_multi_relaimpo"), "png", 72);
+    }         
+         
 //         corColorDotsOpts, corColorLineOpts, doPlotConfInt,
 //                doPlotEq, doPlotRsq, doPlotRsqAdj,
 //               corPlotTitle, corPlotXlab, corPlotYlab,
