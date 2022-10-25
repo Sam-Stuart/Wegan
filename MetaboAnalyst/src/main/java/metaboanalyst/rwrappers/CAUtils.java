@@ -496,6 +496,7 @@ public static boolean PlotLinearResidFitCA(SessionBean1 sb,
     }    
     
 //MACHINE LEARNING (ML)
+//SVM    
     public static void CreateSVMModel(SessionBean1 sb, String facA, String predtext) {
         try {
             RConnection RC = sb.getRConnection();
@@ -535,7 +536,8 @@ public static boolean PlotLinearResidFitCA(SessionBean1 sb,
             System.out.println(rse);
         }
     }
-    
+ 
+// RF   
         public static void CreateRFModel(SessionBean1 sb, String facA, String predtext, Boolean data) {
         try {
             RConnection RC = sb.getRConnection();
@@ -625,6 +627,84 @@ public static boolean PlotLinearResidFitCA(SessionBean1 sb,
         }
     }
  
+// Artifical Neural Network (ANN)   
+     public static boolean CreateANNModel(SessionBean1 sb,
+            String facA,  String predtext,  String vars_nottoscale
+            ) {
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "ann.reg.anal(NA" + ", \"" 
+                    + facA + "\", \""
+                    + predtext + "\", \""
+                    + vars_nottoscale + "\" )";
+            RCenter.recordRCommand(RC, rCommand);
+            RC.voidEval(rCommand);
+            return true;
+        } catch (RserveException rse) {
+            System.out.println(rse);
+            return false;
+        }
+    }
+    
+
+public static boolean PlotANNCA(SessionBean1 sb,
+        String facA, String predtext,  String vars_nottoscale,
+        String col_input, String col_other, String text_size,
+            String squish, String plot_title,
+                String imgName, String format, int dpi) {
+    try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "ann.nid.plot(NA" + ", \"" 
+                    + facA + "\", \""
+                    + predtext + "\", \""
+                    + vars_nottoscale + "\", \""
+                    + col_input + "\", \""
+                    + col_other + "\", \"" 
+                    + text_size + "\", \"" 
+                    + squish + "\", \"" 
+                    + plot_title + "\", \"" 
+                    + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            sb.addGraphicsCMD("corr_ann_nid", rCommand);
+            RC.voidEval(rCommand);
+//            RC.eval(rCommand);
+            return true;
+        } catch (RserveException rse) {
+            System.out.println(rse);
+            return false;
+        }
+    }    
+    
+public static boolean PlotANNPredictCA(SessionBean1 sb,
+        String facA,  String predtext,  String vars_nottoscale,
+        String col_dots, String col_line, Boolean plot_ci, 
+        Boolean plot_eq, Boolean plot_rsq, Boolean plot_rsq_adj,
+        String plot_title, String plot_xlab, String plot_ylab, 
+                String imgName, String format, int dpi) {
+    try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "ann.pred.plot(NA" + ", \"" 
+                    + facA + "\", \""
+                    + predtext + "\", \""
+                    + vars_nottoscale + "\", \""
+                    + col_dots + "\", \"" 
+                    + col_line + "\", \"" 
+                    + predtext + "\", \""
+                    + vars_nottoscale + "\", \""
+                    + plot_title + "\", \""  
+                    + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            sb.addGraphicsCMD("corr_ann_pred", rCommand);
+            RC.voidEval(rCommand);
+//            RC.eval(rCommand);
+            return true;
+        } catch (RserveException rse) {
+            System.out.println(rse);
+            return false;
+        }
+    }       
+        
+    
 // LOGISTIC   
     
         public static void CreateLogisticModel(SessionBean1 sb,
