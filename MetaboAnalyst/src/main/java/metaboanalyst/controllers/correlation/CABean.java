@@ -57,6 +57,9 @@ public class CABean implements Serializable {
                     case "RF":
                         doDefaultRF();
                         break;
+                    case "ANN":
+                        doDefaultANN();
+                        break;
                     case "Logistic":
                         doDefaultLogistic();
                         break;
@@ -157,34 +160,45 @@ public class CABean implements Serializable {
 
 
     private void doDefaultSVM() {
-        CAUtils.CreateSVMModel(sb, "NULL", "NULL");
+        CAUtils.CreateSVMModel(sb, "NULL", "");
         CAUtils.PlotSVMCA(sb,
-                "NULL", "NULL",
+                "NULL", "",
                 "NULL","NULL",
                  " ", " "," ",
                 sb.getCurrentImage("corr_svm_pred"), "png", 72);
     }    
 
     private void doDefaultRF() {
-        CAUtils.CreateRFModel(sb, "NULL", "NULL", false);
+        CAUtils.CreateRFModel(sb, "NULL", "", false);
         CAUtils.PlotRFCA(sb,
-                 "NULL", " ", false,
+                 "NULL", "", false,
                 "NULL","NULL",  false,
                  " ", " "," ",
                 sb.getCurrentImage("corr_rf_pred"), "png", 72);
         CAUtils.PlotRFRelativeCA(sb, 
-                "NULL", "NULL", false, 
+                "NULL", "", false, 
                 "NULL",  false,
                  " ", " "," ",
                 sb.getCurrentImage("corr_rf_relaimpo"), "png", 72);
         CAUtils.PlotRFErrorCA(sb, 
-                "NULL", "NULL", false, 
+                "NULL", "", false, 
                 "NULL",  " ", " "," ",
                 sb.getCurrentImage("corr_rf_error"), "png", 72);
     }  
     
     
-
+    private void doDefaultANN() {
+        CAUtils.CreateANNModel(sb, "NULL","", "");
+        CAUtils.PlotANNPredictCA(sb,
+                "NULL", "", "", 
+                "NULL", "NULL", " ", " ", " ", 
+                sb.getCurrentImage("corr_ann_pred"), "png", 72);
+        CAUtils.PlotANNCA(sb,
+                "NULL", "","","NULL",
+                "NULL","NULL","NULL"," ", 
+                 sb.getCurrentImage("corr_ann_nid"), "png", 72);       
+    }    
+    
     private void doDefaultLogistic() {
         CAUtils.CreateLogisticModel(sb, 
                 "NULL", "NULL", "multinomial","NULL", "NULL");
