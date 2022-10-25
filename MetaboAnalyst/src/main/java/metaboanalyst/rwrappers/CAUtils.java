@@ -677,8 +677,7 @@ public static boolean PlotANNCA(SessionBean1 sb,
     
 public static boolean PlotANNPredictCA(SessionBean1 sb,
         String facA,  String predtext,  String vars_nottoscale,
-        String col_dots, String col_line, Boolean plot_ci, 
-        Boolean plot_eq, Boolean plot_rsq, Boolean plot_rsq_adj,
+        String col_dots, String col_line, 
         String plot_title, String plot_xlab, String plot_ylab, 
                 String imgName, String format, int dpi) {
     try {
@@ -689,9 +688,9 @@ public static boolean PlotANNPredictCA(SessionBean1 sb,
                     + vars_nottoscale + "\", \""
                     + col_dots + "\", \"" 
                     + col_line + "\", \"" 
-                    + predtext + "\", \""
-                    + vars_nottoscale + "\", \""
-                    + plot_title + "\", \""  
+                    + plot_title + "\", \""
+                    + plot_xlab + "\", \""
+                    + plot_ylab + "\", \""  
                     + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
             RCenter.recordRCommand(RC, rCommand);
             sb.addGraphicsCMD("corr_ann_pred", rCommand);
