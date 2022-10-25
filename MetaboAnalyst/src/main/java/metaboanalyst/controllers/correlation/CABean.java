@@ -189,15 +189,16 @@ public class CABean implements Serializable {
     
     private void doDefaultANN() {
         CAUtils.CreateANNModel(sb, "NULL","", "");
-        CAUtils.PlotANNPredictCA(sb,
-                "NULL", "", "", 
-                "NULL", "NULL", " ", " ", " ", 
-                sb.getCurrentImage("corr_ann_pred"), "png", 72);
         CAUtils.PlotANNCA(sb,
                 "NULL", "","","NULL",
                 "NULL","NULL","NULL"," ", 
                  sb.getCurrentImage("corr_ann_nid"), "png", 72);       
-    }    
+   
+        CAUtils.PlotANNPredictCA(sb,
+                "NULL", "", "", 
+                "NULL", "NULL", " ", " ", " ", 
+                sb.getCurrentImage("corr_ann_pred"), "png", 72);
+}
     
     private void doDefaultLogistic() {
         CAUtils.CreateLogisticModel(sb, 
