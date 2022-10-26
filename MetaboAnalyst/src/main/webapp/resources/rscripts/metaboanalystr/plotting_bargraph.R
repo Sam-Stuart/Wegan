@@ -18,10 +18,11 @@
 library(dplyr)
 library(reshape2)
 library(ggplot2)
+library(vegan)
 
 mSetObj = list()
-data()
-input <- iris
+data(dune)
+input <- dune
 mSetObj$dataSet$orig = input
 mSetObj$dataSet$norm = input
 facA = "NULL"
@@ -50,10 +51,19 @@ barGraph_setup <- function(mSetObj = NA, facA = "NULL", colors = "NULL", xlab = 
   if(aggregate_function == "NULL")
     aggregate_function = "mean"
   
-  # Create aggregate data
-  df <- aggregate(input[,1:4], by = categorical_data, FUN = get(aggregate_function))
-  md.df <- melt(df, id.vars = c('Species'))
+  if(length(as.matrix(categorical_data)) == 0) {
+    input$Sites <- row.names(input)
+    categorical_data <- select_if(input, is.character)
+    df <- input
+  } else {
+    # Create aggregate data
+    df <- aggregate(input[,1:4], by = categorical_data, FUN = get(aggregate_function))
+  }
+
+  md.df <- melt(df, id = c('Sites'))
   
+  #Filter 0 values
+  md.df <- filter(md.df, value > 0)
   # Label for each bar
   if(barLabels == "NULL")
     barLabels <- colnames(numerical_data)  
@@ -121,7 +131,6 @@ plotBarGraph <- function(mSetObj=NA, imgName = NA, format="png", dpi=72, width=N
   
   # Convert to sym to use with aes
   facA <- sym(facA)
-  
   
   #Set plot dimensions
   if(is.na(width)){
