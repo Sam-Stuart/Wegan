@@ -6,6 +6,7 @@
 #'@usage barGraph_setup(mSetObj = NA, byrow = FALSE, colNum = NULL, rowNum = NULL,
 #' colors = NULL, xlab = NULL, ylab = NULL, barLabels = NULL, mainTitle = NULL)
 #'@param mSetObj Input the name of the created mSetObj
+#'@param facA The categorical data name
 #'@param colors color of bars
 #'@param xlab x axis title. NULL will choose column name
 #'@param ylab y axis title, NULL will choose column name
@@ -109,7 +110,7 @@ barGraph_setup <- function(mSetObj = NA, facA = "NULL", colors = "NULL", xlab = 
 #'the default dpi is 72. It is suggested that for high-resolution images, select a dpi of 300.  
 #'@param width Input the width, there are 2 default widths. The first, width=NULL, is 10.5.
 #'The second default is width=0, where the width is 7.2. Otherwise users can input their own width.   
-#'@author  Leif Wilm\email{lwilm@ualberta.ca}
+#'@author  Hieu Nguyen\email{htnguye3@ualberta.ca}
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2)
 #'@export
