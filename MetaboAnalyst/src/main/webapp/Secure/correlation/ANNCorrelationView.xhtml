@@ -23,18 +23,20 @@
                  The response variable is normalized to fall within a range of [0,1]. Predictors are z-score scaled unless specified to be excluded using the text box.
                  The Neural Interpretation Diagram (NID) shows a network plot of the model. Line thickness represents the connection weight size and direction (black = positive, grey = negative).
                  <!--Julian D. Olden & Donald A. Jackson (2002). 'Illuminating the ‘‘black box’’: a randomization approach for understanding variable contributions in artificial neural networks' *Ecological Modelling* 154 pp. 135–150. DOI: 10.1016/S0304-3800(02)00064-9-->
-                   (<a href="http://depts.washington.edu/oldenlab/wordpress/wp-content/uploads/2013/03/EcologicalModelling_2002.pdf">Olden, J. D. & Jackson, D. A. <i> Illuminating the ‘‘black box’’: a randomization approach for understanding variable contributions in artificial neural networks. Ecological Modelling</i>. 2002. </a>)
+                   <!--(Olden, J. D. & Jackson, D. A. <i> Illuminating the ‘‘black box’’: a randomization approach for understanding variable contributions in artificial neural networks. Ecological Modelling</i>. 2002.)--> 
+                   <!--/oldenlab/wordpress/wp-content/uploads/2013/03/EcologicalModelling_2002.pdf-->
                         </p>
                       <!--colLeftLong25 colRightShort30 colRight35 colLeft20 colBrayLong40 colBrayShort15-->
                       <!--<h:panelGrid id="panelGrid" columns="5" cellpadding="3" columnClasses="colLeft,colRightShort,colLeft,colRightShort, colLast">-->
                     <h:panelGrid id="panelGrid" columns="5" cellpadding="3" columnClasses="colLeftLong,colRight,colLeftLong,colRight, colLast">
                             <h:outputLabel style="font-weight: bold" value="Dependant Variable:"/>
-                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{rfCABean.corrColumnNameA}">
-                                <f:selectItems value="#{rf.corrColumnOpts}" />
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{rfCABean.columnNameA}">
+                                <f:selectItems value="#{rf.columnOpts}" />
                             </p:selectOneMenu>
 
                             <h:outputLabel style="font-weight: bold" value="Independent variables (type column names with commas in between):"/>
                             <p:inputText style="width:400px; height:40px" value="#{rfCABean.indInput}"/> 
+                        <h:panelGrid></h:panelGrid> 
                             <h:outputLabel style="font-weight: bold" value="Independent variables to exclude from Z-score scaling (type column names with commas in between):"/>
                             <p:inputText style="width:400px; height:40px" value="#{rfCABean.indInput}"/>
                             
@@ -95,6 +97,7 @@ The R &#xb2; value is the fraction of variance explained by the model and is a v
                        </h:panelGrid>  
                     </h:form>
                 </p:tab>
+                
                 <p:tab title ="Predicted vs Actual Plot" titleStyleClass="p-tab-nav">
                     <h:form id="form2">
                         <p style="font-size: 13px">
@@ -102,8 +105,8 @@ The R &#xb2; value is the fraction of variance explained by the model and is a v
                         </p>
                     <h:panelGrid id="panelGrid2" columns="5" cellpadding="3" columnClasses="colLeftLong,colRight,colLeftLong,colRight, colLast"> <!--"colLeft,colRightShort,colLeft,colRightShort, colLast"-->
                             <h:outputLabel style="font-weight: bold" value="Dependant Variable:"/>
-                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{rfCABean.corrColumnNameA}">
-                                    <f:selectItems value="#{rfCABean.corrColumnOpts}" />
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{rfCABean.columnNameA}">
+                                    <f:selectItems value="#{rfCABean.columnOpts}" />
                                 </p:selectOneMenu>
 
                             <h:outputLabel style="font-weight: bold" value="Independent variables (type column names with commas in between):"/>
@@ -111,7 +114,7 @@ The R &#xb2; value is the fraction of variance explained by the model and is a v
                             <h:outputLabel style="font-weight: bold" value="Independent variables to exclude from Z-score scaling (type column names with commas in between):"/>
                             <p:inputText style="width:400px; height:40px" value="#{rfCABean.indInput}"/>
                             
-                        
+                     </h:panelGrid>         
                          <h:panelGrid></h:panelGrid>    
                         <h:panelGrid id="panelGrid1" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;">                   
                             <p:commandButton value="Customize Graph"
