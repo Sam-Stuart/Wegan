@@ -330,24 +330,23 @@ public class RFCABean implements Serializable {
    
          
 //ANN         
-     
- 
-      public void corrANNBtn_action() {
-        CAUtils.CreateANNModel(sb, columnNameA, indInput, indInput);
-        CAUtils.PlotANNPredictCA(sb,
-                columnNameA, indInput, indInput,
-                corColorDotsOpts, corColorLineOpts, 
-               corPlotTitle, corPlotXlab, corPlotYlab,
-                sb.getNewImage("corr_multi_pred"), "png", 72);
-    }
       
-         public void corrANNBtn2_action() {
+         public void corrANNBtn_action() {
         CAUtils.CreateANNModel(sb, columnNameA, indInput, indInput);
         CAUtils.PlotANNCA(sb, 
                 columnNameA, indInput, indInput,
               corPalettePredictors, corPaletteNonPredictors,
              corTextSizeOpts, corNarrowWidthOpts,  corPlotTitle, 
-                sb.getNewImage("corr_multi_relaimpo"), "png", 72);
+                sb.getNewImage("corr_ann_nid"), "png", 72);
+    }    
+         
+      public void corrANNBtn2_action() {
+        CAUtils.CreateANNModel(sb, columnNameA, indInput, indInput);
+        CAUtils.PlotANNPredictCA(sb,
+                columnNameA, indInput, indInput,
+                corColorDotsOpts, corColorLineOpts, 
+               corPlotTitle, corPlotXlab, corPlotYlab,
+                sb.getNewImage("corr_ann_pred"), "png", 72);
     }         
          
 //         corColorDotsOpts, corColorLineOpts, doPlotConfInt,
