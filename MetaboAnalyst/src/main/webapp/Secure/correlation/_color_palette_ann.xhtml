@@ -28,15 +28,15 @@
                 <p:panelGrid></p:panelGrid>
                 <h:outputLabel style="font-weight: bold" value="Text Size:"/>
                 <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{rfCABean.corTextSizeOpts}">
-                    <f:selectItems value="#{applicationBean1.corTextSizeOpts}" />
+                    <f:selectItems value="#{applicationBean1.corLinTextSizeOpts}" />
                 </p:selectOneMenu>  
-                
+
                 <h:outputLabel style="font-weight: bold" value="Squish Plot:"/>
                 <p style="font-size: 10px">
                             Higher numbers mean bring elements closer and make plot narrower.
                         </p>
-                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{rfCABean.corTextSizeOpts}">
-                    <f:selectItems value="#{applicationBean1.corTextSizeOpts}" />
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{rfCABean.corNarrowWidthOpts}">
+                    <f:selectItems value="#{applicationBean1.corPlotNarrowWidthOpts}" />
                 </p:selectOneMenu>  
                 
                 <h:outputLabel style="font-weight: bold" value="Plot Title:"/>
