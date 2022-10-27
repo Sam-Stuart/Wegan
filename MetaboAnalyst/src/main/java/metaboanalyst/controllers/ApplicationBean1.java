@@ -294,14 +294,14 @@ public class ApplicationBean1 implements Serializable {
         ciaDataSetOpts[1] = new SelectItem("env", "Constraining Data Set");
                 
         corLinColorDotsOpts = new SelectItem[5];
-        corLinColorDotsOpts[0] = new SelectItem("NULL", "black");
+        corLinColorDotsOpts[0] = new SelectItem("NULL", "Black");
         corLinColorDotsOpts[1] = new SelectItem("blue", "Blue");
         corLinColorDotsOpts[2] = new SelectItem("red", "Red");
         corLinColorDotsOpts[3] = new SelectItem("green", "Green");
         corLinColorDotsOpts[4] = new SelectItem("grey", "Grey");
 
         corLinColorLineOpts = new SelectItem[5];
-        corLinColorLineOpts[0] = new SelectItem("NULL", "black");
+        corLinColorLineOpts[0] = new SelectItem("NULL", "Black");
         corLinColorLineOpts[1] = new SelectItem("blue", "Blue");
         corLinColorLineOpts[2] = new SelectItem("red", "Red");
         corLinColorLineOpts[3] = new SelectItem("green", "Green");
@@ -317,7 +317,7 @@ public class ApplicationBean1 implements Serializable {
 
 //        lightpink = hashFFB6C1, lightblue = hashADD8E6, orchid = hashDA70D6, palegreen = hash98FB98
         corColorPaletteNonPredictors = new SelectItem[5];
-        corColorPaletteNonPredictors[0] = new SelectItem("NULL", "lightblue");
+        corColorPaletteNonPredictors[0] = new SelectItem("NULL", "Blue");
         corColorPaletteNonPredictors[1] = new SelectItem("lightpink", "Pink");
         corColorPaletteNonPredictors[2] = new SelectItem("orchid", "Purple");
         corColorPaletteNonPredictors[3] = new SelectItem("palegreen", "Green");
@@ -334,13 +334,12 @@ public class ApplicationBean1 implements Serializable {
         corLinTextSizeOpts[5] = new SelectItem("7", "7");
         corLinTextSizeOpts[5] = new SelectItem("8", "8"); 
  
-        corPlotNarrowWidthOpts = new SelectItem[6];
+        corPlotNarrowWidthOpts = new SelectItem[5];
         corPlotNarrowWidthOpts[0] = new SelectItem("NULL", "1");
         corPlotNarrowWidthOpts[1] = new SelectItem("1", "1");
         corPlotNarrowWidthOpts[2] = new SelectItem("2", "2");
         corPlotNarrowWidthOpts[3] = new SelectItem("3", "3");
         corPlotNarrowWidthOpts[4] = new SelectItem("4", "4");
-        corPlotNarrowWidthOpts[5] = new SelectItem("5", "5");
         
         corModType = new SelectItem[3];
         corModType[0] = new SelectItem("NULL", "Binomial");
