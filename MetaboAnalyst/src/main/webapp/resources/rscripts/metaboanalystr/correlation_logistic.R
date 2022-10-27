@@ -25,6 +25,7 @@ log.reg.anal <- function(mSetObj=NA,
   
   library("nnet") #For multinomial regression
   library("MASS") #For ordinal regression
+  library("assertr")
   library("dplyr") #For data manipulation # `%>%` should be exported for piping 
   # library("tidyselect") # tidyselect helper 'where' is not exported to namespace, but workaround exists (so still need package) ; to replace deprecated select_ variant `select_if`
 ## remove JSONIO library call 20221019
@@ -73,8 +74,8 @@ if (is.null(facData)) {
   #SET RIGHT SIDE OF FORMULA WITH PREDICTOR VARIABLES (ie not facA)
   if (predtext == "NULL") {
     # resp.col.num <- which(colnames(data) == facA); predData <- data[,-resp.col.num]
-    predData <- data[, !(colnames(data) == facA)]
-    predtext <- colnames(predData)[2] #Default is 2nd predictor column
+    predData <- data[, !(colnames(data) == facA), drop = FALSE]
+    predtext <- colnames(predData)[1] #Default is 2nd predictor column
     # predtext <- paste0(predtext, ",") # for comma checking later
     # predtext <- paste(colnames(predData), collapse="+")
   } else {
@@ -99,67 +100,58 @@ warning("Check your predictor variables; Have you separated them by a comma? Are
   predtext <- gsub(":", "+", predtext, fixed=TRUE)
   predtext <- gsub("*", "+", predtext, fixed=TRUE)
   
-
-  #GENERATE FORMULA 
-  formula <- as.formula(paste0(facA, "~", predtext))   ## BEFORE IT WAS this
-  # formula <- as.formula(paste(facA, paste(predtext, collapse=" + "), sep=" ~ "))
-  #Text should be visible to user
-  #cat(paste0("You have created this formula for model building: ", facA, " ~ ", predtext))
-  #cat("The L hand side is the dependent variable. The R hand side is the independent variable(s). If there is >1 independent variable, the plus signs indicate the variables are evaluated on their own; colons indicate an interaction between the variables is evaluated.")
-  #cat("If the formula is not what you intended, retype independent variable(s) in the text box and/or choose another dependent variable.")
-
+#GENERATE FORMULA 
+form <- as.formula(paste0(facA, "~", predtext))   
 ## CHECK: are all input predictors in data
- predictors <- unlist(strsplit(predtext, "+", fixed=TRUE), use.names = FALSE) ## use.names = FALSE speeds up unlist
- if(any(!colnames(data) %in% predictors)){
-warning(paste0( "'", predictors[!predictors %in% colnames(data)],
- "' not found in data variables ('", 
-paste(colnames(data), collapse = "', '"), 
-"'): check spelling of text box input."))
-}
+predictors <- unlist(strsplit(predtext, "+", fixed=TRUE), use.names = FALSE) ## use.names = FALSE speeds up unlist
 
- #SUBSET DATA USING PREDICTOR COLUMN NAMES
-  pred_data <- data[,which(colnames(data) %in% predictors)]
-  model_data <- data.frame(data[,facA], pred_data)
-  colnames(model_data) <- c(paste0(facA), predictors)
+   # data %>% assertr::verify(assertr::has_all_names(predictors), error_fun = justwarn)
+
+   if( !all(is.element(predictors, colnames(data)) )){
+     warning(paste0("log.reg.anal():", "'",
+    paste( setdiff(predictors, colnames(data)), collapse = "', '" ),
+    "' not found in data variables ('",   paste(colnames(data), collapse = "', '"), "'): check spelling of text box input."))
+   }
+
+#SUBSET DATA USING PREDICTOR COLUMN NAMES
+pred_data <- data[,which(colnames(data) %in% predictors), drop = FALSE]
+model_data <- data.frame(data[,facA], pred_data)
+colnames(model_data) <- c(paste0(facA), predictors)
 
 ## MAKE RESPONSE VAR A FACTOR
 if(!is.factor(model_data[,1])){
-    model_data[,1] <- factor(model_data[,1])
-  }   
- 
- #CHECK NUMBER OF LEVELS 
-  levels.num <- nlevels(model_data[,1])
+  model_data[,1] <- factor(model_data[,1])
+  warning("response variable is a being coerced to factor")
+}   
+#CHECK NUMBER OF LEVELS 
+facA_col <- model_data[,1]
+levels.num <- nlevels(facA_col)
+levels.facA <- levels(facA_col)
 
 # REFERENCE LEVEL
-    if (reference == "NULL") {
-      ref.col <- as.data.frame(model_data[,1])
-      print("'ref.col' (response col):") 
-      print(ref.col) 
-      ref.col.levels <- levels(model_data[,1])
-      reference <- ref.col.levels[1] #Reference level defaults the 1st level of the response column
-      print("reference:")
-      print(reference)
-    } else {
-      reference <- reference
-    }
-
+if (reference == "NULL") {
+  ref.col <- as.data.frame(facA_col)
+  ref.col.levels <- levels.facA
+  reference <- ref.col.levels[1] #Reference level defaults the 1st level of
+} else {
+  reference <- reference
+}
 
 ## ordertext: (ONLY USED FOR ORDINAL)
- if (ordertext == "NULL") {
-      ordertext <- levels( ordered(model_data[,1]) )#Default is use order as inputted
-    } else {
-      ordertext <- ordertext #Order is user inputted in ascending order, taken from text box by java, entered into R code as one character value (names separated by commas) (string)
-      ordertext <- gsub(" ", "", ordertext, fixed = TRUE)
-      ordertext <- unlist(strsplit(ordertext, ",", fixed = TRUE))
-    }
-
-   ### CHECK IF ORDERTEXT HAS VALID NAMES:
-  if(any(!levels(model_data[,1]) %in% ordertext)){
-   stop(paste0( "'", ordertext[!ordertext %in% levels(model_data[,1])], 
-     "' not found in dependent variable levels of data (variable levels: '",
-     paste(levels(model_data[,1]), collapse = "', '"), 
-     "'): check spelling of text box input."))
-     }
+if (ordertext == "NULL") {
+  ordertext <- levels( ordered(facA_col) )#Default is use order as inputted
+} else {
+  ordertext <- ordertext #Order is user inputted in ascending order, taken from text box by java, entered into R code as one character value (names separated by commas) (string)
+  ordertext <- gsub(" ", "", ordertext, fixed = TRUE)
+  ordertext <- unlist(strsplit(ordertext, ",", fixed = TRUE))
+  ordertext <- strtrim(ordertext)
+}
+### CHECK IF ORDERTEXT HAS VALID NAMES:
+if(!all(is.element(ordertext, levels.facA))){
+  warning(paste0( "'", ordertext[!ordertext %in% levels.facA], 
+  "' not found in dependent variable levels of data (variable levels: '",
+  paste(levels.facA, collapse = "', '"), "'): check spelling of text box input."))
+}
 
 ### TYPE OF LOG REGRESSION LOOP:
 ## ORDINAL
@@ -191,18 +183,18 @@ if(!is.factor(model_data[,1])){
     ## NOTE ABOUT ORDINAL MODEL CALLING with polr() from {MASS}:
      # Hess argument (T/F); whether the Hessian (observed info matrix) should be returned
      # (Used when calling summary() or vcov() on the fit (also returned for user) )
-    model <- MASS::polr(formula, data = model_data, method = "logistic", Hess = TRUE)
+    mod <- MASS::polr(formula, data = model_data, method = "logistic", Hess = TRUE)
     model_name <- "Ordinal Logistic Regression"
     
     #EXTRACT RESULTS
     summary <- summary(model) #Summary of effects: Response/predictor odds ratios, SE and confidence intervals
-    order <- paste0(ordertext, collapse = " < ")
-    fitted <- fitted(model) #Linear predicted values
-    conf.int <- confint(model, level = 0.95) #Confidence intervals for predictor variables
-    oddsRatio <- exp(coef(model))
-    covar <- vcov(model) #Covariance matrix for predictor variables
-    logLik <- logLik(model) 
-    coeffs <- coef(model)
+    order <- paste(ordertext, collapse = " < ")
+    fitted <- fitted(mod) #Linear predicted values
+    conf.int <- confint(mod, level = 0.95) #Confidence intervals for predictor variables
+    oddsRatio <- exp(coef(mod))
+    covar <- vcov(mod) #Covariance matrix for predictor variables
+    logLik <- logLik(mod) 
+    coeffs <- coef(mod)
     std.errors <- sqrt(diag(covar))
     zValues <- coeffs / std.errors
     pValues <- pnorm(abs(zValues), lower.tail = FALSE)*2
@@ -212,7 +204,7 @@ if(!is.factor(model_data[,1])){
     #STORE RESULTS
     mSetObj$analSet$logOrdReg$res <- list(summary = summary, model.data = model_data, response = facA, predictor = predictors, pretext = pretext1, predicted.values = fitted, confidence.intervals = conf.int, 
                                           Hessian = Hessian, oddsRatio = oddsRatio, covariance.matrix = covar, Loglikelihood = logLik, zValues = zValues, pValues = pValues, fileName = fileName)       
-    mSetObj$analSet$logOrdReg$mod <- list(model_name = model_name, model = model, model.data = model_data, response = facA, predictor = predictors)
+    mSetObj$analSet$logOrdReg$mod <- list(model_name = model_name, model = mod, model.data = model_data, response = facA, predictor = predictors)
     
     #Download text document containing the results, called the fileName. Document goes into the working directory and should be accessible to the user as part of the report.
     sink(fileName) 
@@ -261,17 +253,17 @@ c(reference, levels(model_data[,1])[!levels(model_data[,1]) %in% reference])
     #model_data[,1] <- relevel(as.factor(model_data[,1]), ref=reference) 
 
     #Build model for multinomial regression
-    model <- nnet::multinom(formula, data = model_data, Hess = TRUE, maxit = 1000, weights = NULL)
+    mod <- nnet::multinom(formula, data = model_data, Hess = TRUE, maxit = 1000, weights = NULL)
     model_name <- "Multinomial Logistic Regression"
     #Extract results
-    summary <- summary(model)
-    residuals <- model[["residuals"]]
-    fitted <- fitted(model) #Predicted values
-    conf.int <- confint(model, level = 0.95) #Confidence intervals for predictor variables
-    oddsRatio <- exp(coef(model))
-    covar <- vcov(model) #Covariance matrix for preductor variables
-    logLik <- logLik(model)
-    coeffs <- coef(model)
+    summary <- summary(mod)
+    residuals <- mod[["residuals"]]
+    fitted <- fitted(mod) #Predicted values
+    conf.int <- confint(mod, level = 0.95) #Confidence intervals for predictor variables
+    oddsRatio <- exp(coef(mod))
+    covar <- vcov(mod) #Covariance matrix for preductor variables
+    logLik <- logLik(mod)
+    coeffs <- coef(mod)
     std.errors <- sqrt(diag(covar))
     zValues <- coeffs / std.errors
     pValues <- pnorm(abs(zValues), lower.tail = FALSE)*2
@@ -286,7 +278,7 @@ confidence.intervals = conf.int, oddsRatio = oddsRatio,
 covariance.matrix = covar, Loglikelihood = logLik, 
 zValues = zValues, pValues = pValues, fileName = fileName)       
     mSetObj$analSet$logMultinomReg$mod <- list(model_name = model_name, 
-model = model, model.data = model_data, response = facA, predictor = predictors)
+model = mod, model.data = model_data, response = facA, predictor = predictors)
     cat("NUMBER 6")
     #Download text document containing the results, called the fileName. Document goes into the working directory and should be accessible to the user as part of the report.
     sink(fileName) 
@@ -331,21 +323,21 @@ model = model, model.data = model_data, response = facA, predictor = predictors)
     model_data[,1] <- relevel(as.factor(model_data[,1]), ref = reference) 
   
     #Build model
-    model <- glm(formula, data = model_data, family = binomial("logit"), maxit = 1000, weights = NULL)
+    mod <- glm(formula, data = model_data, family = binomial("logit"), maxit = 1000, weights = NULL)
     model_name <- "Binomial Logistic Regression"
     
     #Extract results
-    summary <- summary(model)
-    residuals <- model[["residuals"]]
-    fitted <- fitted(model) #Predicted values
-    conf.int <- confint(model, level = 0.95) #Confidence intervals for predictor variables
-    oddsRatio <- exp(coef(model))
-    covar <- vcov(model) #Covariance matrix for preductor variables
-    testStat <- with(model, null.deviance - deviance)
-    testStatDF <- with(model, df.null - df.residual)
-    pValue <- with(model, pchisq(null.deviance - deviance, df.null - df.residual, lower.tail = FALSE))
-    logLik <- logLik(model)
-    coeffs <- coef(model)
+    summary <- summary(mod)
+    residuals <- mod[["residuals"]]
+    fitted <- fitted(mod) #Predicted values
+    conf.int <- confint(mod, level = 0.95) #Confidence intervals for predictor variables
+    oddsRatio <- exp(coef(mod))
+    covar <- vcov(mod) #Covariance matrix for preductor variables
+    testStat <- with(mod, null.deviance - deviance)
+    testStatDF <- with(mod, df.null - df.residual)
+    pValue <- with(mod, pchisq(null.deviance - deviance, df.null - df.residual, lower.tail = FALSE))
+    logLik <- logLik(mod)
+    coeffs <- coef(mod)
     std.errors <- sqrt(diag(covar))
     zValues <- coeffs / std.errors
     pValues <- pnorm(abs(zValues), lower.tail = FALSE)*2
@@ -360,7 +352,7 @@ covariance.matrix = covar, modelDiff = testStat,
 modelDiffDF = testStatDF, pValue = pValue, 
 Loglikelihood = logLik, zValues = zValues, pValues = pValues, fileName = fileName)       
     mSetObj$analSet$logBinomReg$mod <- list(model_name = model_name,
-model = model, model.data = model_data, 
+model = mod, model.data = model_data, 
 response = facA, predictor = predictors)
     
     #Download text document containing the results, called the fileName. Document goes into the working directory and should be accessible to the user as part of the report.
@@ -447,7 +439,9 @@ data = "false",
   
   ## was named: plot.effects.logReg
   # library("effects")
+  library("ggplot2")
   library("ggeffects")
+ # library("JSONIO")
 
   #EXTRACT OBJECTS FROM MSET
   mSetObj <- .get.mSet(mSetObj)
@@ -468,14 +462,23 @@ data = "false",
   if (type == "ordinal") { 
     # main = "Ordinal Logistic Regression \nEffects Plot"
     output <- mSetObj$analSet$logOrdReg
+    mod <- mSetObj$analSet$logOrdReg$mod$model
+    predictors <- mSetObj$analSet$logOrdReg$res$predictor
+    facA <- mSetObj$analSet$logOrdReg$res$response
     main_end <- " ( Ordinal Logistic Regression)" #  # main = "Ordinal Logistic Regression \nEffects Plot"
   } else if (type == "multinomial") {
     # main = "Multinomial Logistic Regression \nEffects Plot"
     output <- mSetObj$analSet$logMultinomReg
+    mod <- mSetObj$analSet$logMultinomReg$mod$model
+    predictors <- mSetObj$analSet$logMultinomReg$res$predictor
+    facA <- mSetObj$analSet$logMultinomReg$res$response
     main_end <- " ( Multinomial Logistic Regression)" #  # main = "Multinomial Logistic Regression \nEffects Plot"
   } else { #Binomial
     # main = "Binomial Logistic Regression \nEffects Plot"
     output <- mSetObj$analSet$logBinomReg
+    model <- mSetObj$analSet$logBinomReg$mod$model
+    predictors <- mSetObj$analSet$logBinomReg$res$predictor
+    facA <- mSetObj$analSet$logBinomReg$res$response
     main_end <- " ( Binomial Logistic Regression)" ## main = "Binomial Logistic Regression \nEffects Plot"
   }
   
@@ -505,86 +508,86 @@ data = "false",
   ###### WITH facA and predtext options
   ##### [CRUNCH]
   #####
-  ##### iF VARIABLES ARE SET
-  #SET RESPONSE (DEPENDENT) VARIABLE
-  if (facA == "NULL") {
-    if( "res" %in% names(output) ){
-        facA <- output$res$response
-     } else {
-    for (i in seq_along(colnames(input)) ) {
-      if (is.factor(input[,i]) == FALSE) {
-        facA <- colnames(input)[i]# Default is to choose the first numeric column as response column
-        break
-      }
-    }
- }
-} else {
-    facA <- facA #User selected, java uses function numeric.columns() to provide options in drop down menu (only numeric columns are available)
-  }
-
-  #Textbox instructions for selecting predictor variables.
-  cat("Indicate independent variables using the column names with commas in between. If interested in an interaction between particular variables, indicate it with a colon rather than a comma.")
-
-  #SET FORMULA RIGHT SIDE WITH PREDICTORS (Default = 2nd column)
-  if (predtext == "NULL") {
-    if( "res" %in% names(output) ){
-        predtext <- output$res$predtext
-     } else {
-    dat <- input[ , colnames(input) != facA]
-    num.data <- dplyr::select_if(dat, is.numeric)
-    predtext <- colnames(num.data)[1] #Default is the first potential predictor column
-    # predtext <- paste0(predtext, ",")
- }
-    } else {
-    predtext <- predtext #taken from text box by java, fed as string into R code
-  }
-
-#CHECK PREDTEXT FOR COMMAS
-   if( !any(grepl(",", predtext, fixed = TRUE)) ){ # if there are no commas in input predictor name(s)
-if(ncol( input[ , colnames(input) != facA, drop=FALSE] ) > 1){ # can't be >1 other cols to use, so if there is, error
-warning("Check your predictor variables; Have you separated them by a comma? Are they spelled as they are in your input data?")
-}}
-
-  #CURATE FORUMLA RIGHT SIDE, EXTRACT CHAR VEC OF PREDICTORS
-  predtext <- gsub("\n", "", predtext, fixed = TRUE)
-  predtext <- gsub(",", "+", predtext, fixed = TRUE)
-  predtext <- gsub(";", "+", predtext, fixed = TRUE)
-  predtext <- gsub(" ", "", predtext, fixed = TRUE)
-  predtext <- gsub(":", "+", predtext, fixed = TRUE)
-  predtext <- gsub("*", "+", predtext, fixed = TRUE)
-
-
-  #GENERATE FORMULA
-  formula <- as.formula(paste(facA, "~", predtext))
-  #Text should be visible to user
-  cat(paste0("You have created this formula for model building: ", facA, " ~ ", predtext))
-  cat("The L hand side is the dependent variable. The R hand side is the independent variable(s). If there is >1 independent variable, plus signs indicate the variables are evaluated on their own; colons indicate an interaction between the variables is evaluated.")
-  cat("If the formula is not what you intended, retype independent variable(s) in the text box and/or choose another dependent variable.")
-
-   ### CHECK: are all input predictor names in data
-  predictors1 <- unlist(strsplit(predtext, "+", fixed = TRUE), use.names = FALSE)
-  predictors2 <- unlist(strsplit(predictors1, ":", fixed = TRUE), use.names = FALSE)
-  # if(any(!colnames(data) %in% predictors2)){
-if(!all(predictors2 %in% colnames(data)) ){
-   warning(paste0( "'", predictors2[!predictors2 %in% colnames(data)],
-  "' not found in data variables ('",
-  paste(colnames(data), collapse = "', '"),
-  "'): check spelling of text box input."))
-}
-
-  #SUBSET DATA USING PREDICTOR COLUMN NAMES
-  pred_data <- as.data.frame(input[, colnames(input) %in% predictors2])
- 
-  #DETERMINE IF ANY PREDICTORS ARE CATEGORICAL
-  for (i in seq_along(colnames(pred_data)) ){
-    if (is.factor(pred_data[,i]) || is.character(pred_data[,i]) ) {
-      stop("You have chosen a categorical independent variable! Please adjust your independent variables appropriately. You can also try other regression models such as logistic, SVM or random forest.")
-    }
-  }
-  
-  model_data <- data.frame(input[,facA], pred_data)
-  colnames(model_data) <- c(paste0(facA), predictors2)
-  model <- lm(formula = formula, data = model_data, weights = NULL)
+# ##### iF VARIABLES ARE SET
+# #SET RESPONSE (DEPENDENT) VARIABLE
+# if (facA == "NULL") {
+#   if( "res" %in% names(output) ){
+#     facA <- output$res$response
+#   } else {
+#     for (i in seq_along(colnames(input)) ) {
+#       if (is.factor(input[,i]) == FALSE) {
+#         facA <- colnames(input)[i]# Default is to choose the first numeric column as response column
+#         break
+#       }
+#     }
+#   }
+# } else {
+#   facA <- facA #User selected, java uses function numeric.columns() to provide options in drop down menu (only numeric columns are available)
+# }
+# 
+# #Textbox instructions for selecting predictor variables.
+# cat("Indicate independent variables using the column names with commas in between. If interested in an interaction between particular variables, indicate it with a colon rather than a comma.")
+# 
+# #SET FORMULA RIGHT SIDE WITH PREDICTORS (Default = 2nd column)
+# if (predtext == "NULL") {
+#   if( "res" %in% names(output) ){
+#     predtext <- output$res$predtext
+#   } else {
+#     dat <- input[ , colnames(input) != facA]
+#     num.data <- dplyr::select_if(dat, is.numeric)
+#     predtext <- colnames(num.data)[1] #Default is the first potential predictor column
+#     # predtext <- paste0(predtext, ",")
+#   }
+# } else {
+#   predtext <- predtext #taken from text box by java, fed as string into R code
+# }
+# 
+# #CHECK PREDTEXT FOR COMMAS
+# if( !any(grepl(",", predtext, fixed = TRUE)) ){ # if there are no commas in input predictor name(s)
+#   if(ncol( input[ , colnames(input) != facA, drop=FALSE] ) > 1){ # can't be >1 other cols to use, so if there is, error
+#     warning("Check your predictor variables; Have you separated them by a comma? Are they spelled as they are in your input data?")
+#   }}
+# 
+# #CURATE FORUMLA RIGHT SIDE, EXTRACT CHAR VEC OF PREDICTORS
+# predtext <- gsub("\n", "", predtext, fixed = TRUE)
+# predtext <- gsub(",", "+", predtext, fixed = TRUE)
+# predtext <- gsub(";", "+", predtext, fixed = TRUE)
+# predtext <- gsub(" ", "", predtext, fixed = TRUE)
+# predtext <- gsub(":", "+", predtext, fixed = TRUE)
+# predtext <- gsub("*", "+", predtext, fixed = TRUE)
+# 
+# 
+# #GENERATE FORMULA
+# formula <- as.formula(paste(facA, "~", predtext))
+# #Text should be visible to user
+# cat(paste0("You have created this formula for model building: ", facA, " ~ ", predtext))
+# cat("The L hand side is the dependent variable. The R hand side is the independent variable(s). If there is >1 independent variable, plus signs indicate the variables are evaluated on their own; colons indicate an interaction between the variables is evaluated.")
+# cat("If the formula is not what you intended, retype independent variable(s) in the text box and/or choose another dependent variable.")
+# 
+# ### CHECK: are all input predictor names in data
+# predictors1 <- unlist(strsplit(predtext, "+", fixed = TRUE), use.names = FALSE)
+# predictors2 <- unlist(strsplit(predictors1, ":", fixed = TRUE), use.names = FALSE)
+# # if(any(!colnames(data) %in% predictors2)){
+# if(!all(predictors2 %in% colnames(data)) ){
+#   warning(paste0( "'", predictors2[!predictors2 %in% colnames(data)],
+#                   "' not found in data variables ('",
+#                   paste(colnames(data), collapse = "', '"),
+#                   "'): check spelling of text box input."))
+# }
+# 
+# #SUBSET DATA USING PREDICTOR COLUMN NAMES
+# pred_data <- as.data.frame(input[, colnames(input) %in% predictors2])
+# 
+# #DETERMINE IF ANY PREDICTORS ARE CATEGORICAL
+# for (i in seq_along(colnames(pred_data)) ){
+#   if (is.factor(pred_data[,i]) || is.character(pred_data[,i]) ) {
+#     stop("You have chosen a categorical independent variable! Please adjust your independent variables appropriately. You can also try other regression models such as logistic, SVM or random forest.")
+#   }
+# }
+# 
+# model_data <- data.frame(input[,facA], pred_data)
+# colnames(model_data) <- c(paste0(facA), predictors2)
+# model <- lm(formula = formula, data = model_data, weights = NULL)
 
   #########
   ######### [CRUNCH]
@@ -668,11 +671,10 @@ if(!all(predictors2 %in% colnames(data)) ){
       plot_ci1 <- TRUE
     }
 
-main <- paste0("Predicted Probabilities of ", facA, main_end)
 
   # PLOT TITLE
   if(plot_title == " "){
-    plot_title1 <- main
+    plot_title1 <- paste0("Predicted Probabilities of ", facA, main_end)
   } else {
     plot_title1 <- plot_title
   }
@@ -706,7 +708,7 @@ main <- paste0("Predicted Probabilities of ", facA, main_end)
   imgName2 <- paste(gsub( "\\_\\d+\\_", "", imgName),
  ".json", sep="") 
   imgName <- paste(imgName, "dpi", dpi, ".", format, sep="")
-  mSetObj$imgSet$plot.effects.logReg <- imgName
+  mSetObj$imgSet$ploteffectslogReg <- imgName
  
   a0 <- plot(
     ggeffects::ggpredict(model = model, terms = predictors[1:2]
