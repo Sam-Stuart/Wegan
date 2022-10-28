@@ -47,6 +47,7 @@ public class RFCABean implements Serializable {
         this.fileRFSummaryPath = fileRFSummaryPath;
     }
     
+//MULTIARIATE    
     private String fileMultiSummary = "multivariate_regression_summary.txt";
     private String fileMultiSummaryPath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileMultiSummary + "\">" + fileMultiSummary + "</a>";
     
@@ -57,6 +58,19 @@ public class RFCABean implements Serializable {
     public void setFileMultiSummaryPath(String fileMultiSummaryPath) {
         this.fileMultiSummaryPath = fileMultiSummaryPath;
     }
+    
+// ANN 
+    private String fileANNSummary = "ann_regession_summary.txt";
+    private String fileANNSummaryPath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileANNSummary + "\">" + fileANNSummary + "</a>";
+    
+    public String getFileANNSummaryPath() {
+        return fileANNSummaryPath;
+    }
+
+    public void setFileANNSummaryPath(String fileANNSummaryPath) {
+        this.fileANNSummaryPath = fileANNSummaryPath;
+    }
+    
     
 //   PREDICTOR VARIABLES 
     private String indInput = "";
