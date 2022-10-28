@@ -31,11 +31,12 @@
                     <h:panelGrid id="panelGrid" columns="5" cellpadding="3" columnClasses="colLeftLong,colRight,colLeftLong,colRight, colLast">
                             <h:outputLabel style="font-weight: bold" value="Dependant Variable:"/>
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{rfCABean.columnNameA}">
-                                <f:selectItems value="#{rf.columnOpts}" />
+                                <f:selectItems value="#{rfCABean.columnOpts}" />
                             </p:selectOneMenu>
 
                             <h:outputLabel style="font-weight: bold" value="Independent variables (type column names with commas in between):"/>
                             <p:inputText style="width:400px; height:40px" value="#{rfCABean.indInput}"/> 
+                        <h:panelGrid></h:panelGrid> 
                         <h:panelGrid></h:panelGrid> 
                             <h:outputLabel style="font-weight: bold" value="Independent variables to exclude from Z-score scaling (type column names with commas in between):"/>
                             <p:inputText style="width:400px; height:40px" value="#{rfCABean.indInput}"/>
