@@ -59,7 +59,7 @@
                                 <h:panelGrid columns="3" class="resultsImages">
                                     <i id="question" class="fa fa-question-circle" title="Based on the linear model generated, the predicted response variable is plotted against the actual response variable in the test data (30% of the input data). 
 
-The R &#xb2; value is the fraction of variance explained by the model and is a value from 0 to 1. The adjusted R &#xb2; value is the R &#xb2; value adjusted for the number of predictors in the model. R &#xb2; is used to assess how well a model fits the data, with a higher R &#xb2; value indicating a better model fit. The confidence interval represents the level of certainty about the predicted values; if the same procedure was repeatedly used to make new estimates, the confidence interval would contain the average of all the estimates 95% of the time. https://www.census.gov/programs-surveys/saipe/guidance/confidence-intervals.html "></i>
+The underlying principle of SVM is an attempt to separate classes using the nearest data point to either class, with the help of a separating 'border' called a hyperplane. Because distances between data points are being calculated, the data is sensitive to variable scale. The R &#xb2; value is the fraction of variance explained by the model and is a value from 0 to 1. The adjusted R &#xb2; value is the R &#xb2; value adjusted for the number of predictors in the model. R &#xb2; is used to assess how well a model fits the data, with a higher R &#xb2; value indicating a better model fit. The confidence interval represents the level of certainty about the predicted values; if the same procedure was repeatedly used to make new estimates, the confidence interval would contain the average of all the estimates 95% of the time. https://www.census.gov/programs-surveys/saipe/guidance/confidence-intervals.html "></i>
                                 </h:panelGrid>
                             </h:panelGroup>
                           </h:panelGrid>
@@ -67,6 +67,11 @@ The R &#xb2; value is the fraction of variance explained by the model and is a v
 <!--                            </h:panelGrid>                           
                         </h:panelGrid>  -->
                 <h:panelGrid id="corrSVMPane1" style="width: 100%;">
+                                                <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
+                                    <h:outputText escape="false" value="#{svmCABean.fileSVMSummaryPath}"/>
+                                </i>
+                            </h:panelGrid>
                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
                                 <p:commandButton value="Export"
                                     styleClass="exportButton"
