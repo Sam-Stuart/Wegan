@@ -238,7 +238,7 @@
 
    #STORE REMAINING RESULTS
    mSetObj$analSet$annReg$res <- list(summary = summary, response = facA, predictor = predictors2, predtext = predtext1, pred.nottoscale = vars_noscale, pred.data = pred_data, predicted.values = fitted, train.RMSE=train_rmse, test.prediction = test_prediction, test.RMSE = test_rmse, train.data = train_data, test.data = test_data, method = model_name, fileName = fileName)
-   mSetObj$analSet$annReg$mod <- list(model_name=model_name, model=mod, final.model = tunedModel, formula = form, response = facA, predictor = predictors2)
+   mSetObj$analSet$annReg$mod <- list(model.name=model_name, model=mod, final.model = tunedModel, formula = form, response = facA, predictor = predictors2)
 
 
 
@@ -260,8 +260,6 @@
    return(.set.mSet(mSetObj))
 
 }
-
-
 
 
 
