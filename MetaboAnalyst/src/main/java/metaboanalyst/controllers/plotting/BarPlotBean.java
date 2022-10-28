@@ -5,36 +5,21 @@
  */
 package metaboanalyst.controllers.plotting;
 
-import java.io.File;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Locale.Category;
-import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ViewScoped;
+import javax.inject.Named;
+import javax.faces.view.ViewScoped;
 import javax.faces.model.SelectItem;
-import metaboanalyst.controllers.ApplicationBean1;
 import metaboanalyst.controllers.SessionBean1;
-import metaboanalyst.rwrappers.CAUtils;
 import metaboanalyst.rwrappers.PlottingUtils;
-import metaboanalyst.rwrappers.RDataUtils;
-import metaboanalyst.rwrappers.UniVarTests;
 import metaboanalyst.utils.DataUtils;
-import org.primefaces.context.RequestContext;
-import org.primefaces.model.chart.Axis;
-import org.primefaces.model.chart.AxisType;
-import org.primefaces.model.chart.LineChartModel;
-import org.primefaces.model.chart.LineChartSeries;
-import org.rosuda.REngine.Rserve.RConnection;
 
 
 
-@ManagedBean(name = "barPlotBean")
+
 @ViewScoped
+@Named("barPlotBean")
 public class BarPlotBean implements Serializable {
 
-    private final ApplicationBean1 ab = (ApplicationBean1) DataUtils.findBean("applicationBean1");
     private final SessionBean1 sb = (SessionBean1) DataUtils.findBean("sessionBean1");
     private final SelectItem[] colorOpts;
     
@@ -90,20 +75,17 @@ public class BarPlotBean implements Serializable {
     
 
     public void barBtn_action() {
-        PlottingUtils.CreateBarChart(sb, "FALSE", "NULL", "NULL", colorChosen, labx, laby, "NULL", title);
+        PlottingUtils.CreateBarChart(sb, "NULL", "NULL", "NULL", "NULL", "NULL", "NULL", "NULL", "NULL", false);
         PlottingUtils.PlotBarChart(sb,  sb.getNewImage("plot_bar_chart"), "png", 72); 
     }
     
     public BarPlotBean() {
-
         colorOpts = new SelectItem[5];
         colorOpts[0] = new SelectItem("r", "Rainbow");
         colorOpts[1] = new SelectItem("v", "Viridis");
         colorOpts[2] = new SelectItem("g", "Grey");
         colorOpts[3] = new SelectItem("p", "Plasma");
-        colorOpts[4] = new SelectItem("NULL", "Light blue");
-        
-  
+        colorOpts[4] = new SelectItem("NULL", "Light blue");  
     }
    
 }

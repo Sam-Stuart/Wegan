@@ -41,6 +41,7 @@ public class PlottingMainBean implements Serializable {
                         // doDefaultBarChart();
                         doDefaultBoxChart();
                         doDefaultScatterChart();
+                        doDefaultBarChart();
                         break;  
                     case "linear":
                         doDefaultLinear();
@@ -67,7 +68,7 @@ public class PlottingMainBean implements Serializable {
     }
     
     private void doDefaultBarChart(){  
-        PlottingUtils.CreateBarChart(sb, "FALSE", "NULL", "NULL", "Goodbye", "Hello", "NULL", "NULL", "NULL");
+        PlottingUtils.CreateBarChart(sb, "NULL", "NULL", "NULL", "Goodbye", "Hello", "NULL", "NULL", "NULL", false);
         PlottingUtils.PlotBarChart(sb, sb.getCurrentImage("plot_bar_chart"), "png", 72);     
     }
     

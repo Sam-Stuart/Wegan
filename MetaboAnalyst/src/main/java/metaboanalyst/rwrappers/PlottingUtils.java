@@ -68,31 +68,41 @@ public class PlottingUtils {
         }
     }
 
-    public static void CreateBarChart(SessionBean1 sb, String byRow, String colNum, String rowNum, String color, String xLab, String yLab, String barLabels, String mainTitle) {
+    public static boolean CreateBarChart(SessionBean1 sb, String facA, String colors, String xlab, String ylab, String xLab, String barLabels, String mainTitle, String aggregate_function, Boolean data) {
         try {
             RConnection RC = sb.getRConnection();
             String rCommand = "barGraph_setup(NA"
-                                                + ", \"" + byRow
-                                                + "\", \"" + colNum
-                                                + "\", \"" + rowNum
-                                                + "\", \"" + color
-                                                + "\", \"" + xLab
-                                                + "\", \"" + yLab
+                                                + ", \"" + facA
+                                                + "\", \"" + colors
+                                                + "\", \"" + xlab
+                                                + "\", \"" + ylab
                                                 + "\", \"" + barLabels
-                                                + "\", \"" + mainTitle + "\")";
+                                                + "\", \"" + mainTitle
+                                                + "\", \"" + aggregate_function
+                                                + "\", \"" + data + "\")";
             RCenter.recordRCommand(RC, rCommand);
             RC.voidEval(rCommand);
+            return true;
         } catch (RserveException rse) {
             System.out.println(rse);
+            return false;
         }
     }   
     
+    /**
+     *
+     * @param sb
+     * @param imgName
+     * @param format
+     * @param dpi
+     */
     public static void PlotBarChart(SessionBean1 sb, String imgName, String format, int dpi) {
         try {
             RConnection RC = sb.getRConnection();
             String rCommand = "plotBarGraph(NA" + ", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
             RCenter.recordRCommand(RC, rCommand);
             RC.voidEval(rCommand);
+    
         } catch (RserveException rse) {
             System.out.println(rse);
         }
