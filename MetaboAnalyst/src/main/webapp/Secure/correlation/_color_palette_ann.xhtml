@@ -14,12 +14,12 @@
                 <h3>Node Colors</h3>
                 <p:panelGrid></p:panelGrid>
 
-                <h:outputLabel style="font-weight: bold" value="Point Color:"/>
+                <h:outputLabel style="font-weight: bold" value="Input Node Color:"/>
                 <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{rfCABean.corPaletteNonPredictors}">
                     <f:selectItems value="#{applicationBean1.corColorPaletteNonPredictors}" />
                 </p:selectOneMenu> 
                 
-                <h:outputLabel style="font-weight: bold" value="Line Color:"/>
+                <h:outputLabel style="font-weight: bold" value="Remaining Nodes Color:"/>
                 <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{rfCABean.corPalettePredictors}">
                     <f:selectItems value="#{applicationBean1.corColorPalettePredictors}" />
                 </p:selectOneMenu>  
@@ -32,9 +32,10 @@
                 </p:selectOneMenu>  
 
                 <h:outputLabel style="font-weight: bold" value="Squish Plot:"/>
+                <p:panelGrid></p:panelGrid>
                 <p style="font-size: 10px">
                             Higher numbers mean bring elements closer and make plot narrower.
-                        </p>
+                </p>
                 <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{rfCABean.corNarrowWidthOpts}">
                     <f:selectItems value="#{applicationBean1.corPlotNarrowWidthOpts}" />
                 </p:selectOneMenu>  
