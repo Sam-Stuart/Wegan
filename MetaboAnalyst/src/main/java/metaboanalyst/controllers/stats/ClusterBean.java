@@ -38,8 +38,8 @@ public class ClusterBean implements Serializable{
     private User usr = sb.getCurrentUser();
     private String usrName = usr.getName();
 
-    private String clustMethodOpt;
-    private String clustDistOpt;
+    private String clustMethodOpt = "ward.D";
+    private String clustDistOpt  = "euclidean";
     private String scaleOpt = "row";
 
     public String getScaleOpt() {
