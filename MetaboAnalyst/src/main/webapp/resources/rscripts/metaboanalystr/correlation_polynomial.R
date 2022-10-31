@@ -18,7 +18,7 @@ poly.reg.anal <- function(mSetObj=NA,
   
   mSetObj <- .get.mSet(mSetObj)
   
-  #Text should be visable to user
+  #Text should be visible to user
   cat("Two variables will be tested for correlation, a dependent variable and an independent variable. Both must have numeric values.")
   
  ### SET DATA (whether to use original data or not)
@@ -34,7 +34,7 @@ poly.reg.anal <- function(mSetObj=NA,
   #SET DEPENDENT (RESPONSE) VARIABLE NAME
   if (facA == "NULL") {
     for (i in 1:ncol(input)) {
-      if (is.factor(input[,i]) == FALSE) {
+      if (is.factor(input[,i+1]) == FALSE || is.character(input[,i+1]) == FALSE ) {
         facA <- colnames(input)[i]# Default: choose the 1st numeric column as response column
         break
       }
@@ -46,7 +46,7 @@ poly.reg.anal <- function(mSetObj=NA,
   #SET INDEPENDENT (PREDICTOR) VARIABLE NAME
   if (facB == "NULL") {
     for (i in 1:ncol(input)) {
-      if (is.factor(input[,i+1]) == FALSE) {
+      if (is.factor(input[,i+1]) == FALSE || is.character(input[,i+1]) == FALSE ) {
         facB <- colnames(input)[i+1]# Default: choose the 2nd numeric column as response column
         break
       }
@@ -75,16 +75,17 @@ poly.reg.anal <- function(mSetObj=NA,
   for (i in 2:max.deg){
     
     #GENERATE MODEL
+## change names from 'formula','model','summary', 'fitted' to 'form', 'mod','summ', 'fitt' to avoid scoping errors
     ### alpha(yint) + beta(slope) * x
     degree <- i
-    formula <- as.formula(paste0(facA, " ~ poly(", facB, ", ", degree, ")"))
-    model <- lm(formula = formula, weights = NULL, data = input) #Create polynomial regression model
+    form <- as.formula(paste0(facA, " ~ poly(", facB, ", ", degree, ")"))
+    mod <- lm(formula = form, weights = NULL, data = input) #Create polynomial regression model
     model_name <- paste0("polynomial.degree.", degree, ".model")
     
     #EXTRACT RESULTS
-    summary <- summary(model) #PRINT #Summary w coeffs, resids & fit
-    conf.int <- confint(model, level = 0.95) #PRINT  #Conf intervals for predictor variables
-    fitted <- fitted(model) # PRINT #Predicted values
+    summ <- summary(mod) #PRINT #Summary w coeffs, resids & fit
+    conf.int <- confint(mod, level = 0.95) #PRINT  #Conf intervals for predictor variables
+    fitt <- fitted(mod) # PRINT #Predicted values
     coeffs <- summary[["coefficients"]] #Extract model coefficients
 
     #Generate equation
@@ -94,7 +95,7 @@ poly.reg.anal <- function(mSetObj=NA,
       beta.2 <- round(coeffs[3], digits = 2) 
       equation <- paste(facA, " = ", 
        paste(paste(beta.2, paste0(facB, "^", degree), sep = "*"),
-       paste(beta.1, facB, sep = "*"), alpha, sep = " + ")) #Create equation with intercept, coefficient and predictor variable name
+       paste(beta.1, facB, sep = "*"), alpha, sep = " + ")) #Create eqn: w/ intercept, coeff, pred name
     } else if (degree == 3) {
       alpha <- round(coeffs[1], digits = 2)
       beta.1 <- round(coeffs[2], digits = 2)
@@ -215,8 +216,8 @@ poly.reg.anal <- function(mSetObj=NA,
       equation <- paste(facA, " = ", paste(paste(beta.10, paste0(facB, "^", degree), sep = "*"), paste(beta.9, paste0(facB, "^", degree-1), sep = "*"), paste(beta.8, paste0(facB, "^", degree-2), sep = "*"), paste(beta.7, paste0(facB, "^", degree-3), sep = "*"), paste(beta.6, paste0(facB, "^", degree-4), sep = "*"), paste(beta.5, paste0(facB, "^", degree-5), sep = "*"), paste(beta.4, paste0(facB, "^", degree-6), sep = "*"), paste(beta.3, paste0(facB, "^", degree-7), sep = "*"), paste(beta.2, paste0(facB, "^", degree-8), sep = "*"), paste(beta.1, facB, sep = "*"), alpha, sep = " + ")) #Create equation with intercept, coefficient and predictor variable name
     }
     
-     r_sq <- summary[["r.squared"]] #Extract R^2 # was stored in r.squared #was using 'adj.r.squared' ?
-     r_sq_adj <- summary[["adj.r.squared"]]#Extract adjusted R^2 value # was in r.squared.adj
+     r_sq <- summ[["r.squared"]] #Extract R^2 # was stored in r.squared #was using 'adj.r.squared' ?
+     r_sq_adj <- summ[["adj.r.squared"]]#Extract adjusted R^2 value # was in r.squared.adj
     # r.squared.eq <- paste("R-squared = ", r_sq) #Generate R^2 equation
     # r.squared.adj.eq <- paste("R-squared adjusted = ", r_sq_adj)
     # R.sq <- summary$r.squared #Extract R^2 value
@@ -234,21 +235,21 @@ poly.reg.anal <- function(mSetObj=NA,
 
     #Store results in mSetObj$analSet$polyReg
     list_index <- i-1
-    mSetObj$analSet$polyReg$res[[list_index]] <- list(response = facA, predictor = facB, degree = degree, summary = summary, predicted.values = fitted, confidence.intervals = conf.int,  equation = equation,  r.squared.eq=paste("R-squared = ", round(r_sq, digits = 2)), r.squared.adj.eq=paste("R-squared adjusted = ", round(r_sq_adj, digits = 2)), formula = formula, fileName = fileName  )
+    mSetObj$analSet$polyReg$res[[list_index]] <- list(response = facA, predictor = facB, degree = degree, summary = summ, predicted.values = fitt, confidence.intervals = conf.int,  equation = equation,  r.squared.eq=paste("R-squared = ", round(r_sq, digits = 2)), r.squared.adj.eq=paste("R-squared adjusted = ", round(r_sq_adj, digits = 2)), formula = form, fileName = fileName  )
     
-     mSetObj$analSet$polyReg$mod[[list_index]] <- list(model_name = model_name, model = model, response = facA, predictor = facB)
+     mSetObj$analSet$polyReg$mod[[list_index]] <- list(model.name = model_name, model = mod, response = facA, predictor = facB)
     
-    # mSetObj$analSet$polyReg$res[[list_index]] <- list(response = facA, predictor = facB, degree = degree, summary = summary, predicted.values = fitted, confidence.intervals = conf.int, fileName = fileName, equation = equation, R.sq.eq = R.sq.eq, adj.R.sq.eq = adj.R.sq.eq)
+    # mSetObj$analSet$polyReg$res[[list_index]] <- list(response = facA, predictor = facB, degree = degree, summary = summ, predicted.values = fitt, confidence.intervals = conf.int, fileName = fileName, equation = equation, R.sq.eq = R.sq.eq, adj.R.sq.eq = adj.R.sq.eq)
   
    
     ### Printing Values ## R CODE ERROR CHECK: MAKE SURE BACKSLASH IS FOLLOWED BY N
     # Text document, goes into wd; accessible as part of the report.
     sink(fileName) 
     cat("Formula:\n")
-    print(formula)
+    print(form)
     cat("Equation:\n")
     print(equation)
-    print(summary)
+    print(summ)
     # cat("\nLinear Model Assumption Check:")
     # print(df)
     # print(failed)
@@ -258,7 +259,7 @@ poly.reg.anal <- function(mSetObj=NA,
     cat("\nConfidence intervals for predictor variables:\n")
     print(conf.int)
     # cat("\nPredicted values:")
-    # print(fitted)
+    # print(fitt)
     sink()
     
   } 
@@ -320,7 +321,7 @@ poly.reg.plot <- function(mSetObj=NA, # was called plot.polyReg
 library("ggplot2")
 library("ggpmisc")
 # library("stringr")
-# library("JSONIO")
+library("RJSONIO")
 
   #Extract necessary objects from mSetObj
   mSetObj <- .get.mSet(mSetObj)
@@ -339,65 +340,68 @@ library("ggpmisc")
     degree <- as.numeric(degree) #user defined in drop down menu. See Poly.Reg.Degrees() for more information
   }
 
+#Extract plot components
+ facA <- mSetObj[["analSet"]][["polyReg"]][["res"]][[list_index]][["response"]]#For x-axis label
+ facB <- mSetObj[["analSet"]][["polyReg"]][["res"]][[list_index]][["predictor"]] #For y-axis label
+ mod <- mSetObj$analSet$polyReg$mod[[list_index]][["model"]]
+ form <- formula(mod)
+ formula2 <- as.formula( gsub(facB, "x",
+      gsub(facA, "y", deparse(form) ) 
+         ))  
+response <- input[,facA] #First column is reponse variable by default
+predictor <- input[,facB] #Predictor column used for model construction by poly.reg.anal()
+
+
+#    mSetObj$analSet$polyReg$res[[list_index]] <- list(response = facA, predictor = facB, degree = degree, summary = summ, predicted.values = fitt, confidence.intervals = conf.int,  equation = equation,  r.squared.eq=paste("R-squared = ", round(r_sq, digits = 2)), r.squared.adj.eq=paste("R-squared adjusted = ", round(r_sq_adj, digits = 2)), formula = formula, fileName = fileName  )   
+  #     mSetObj$analSet$polyReg$mod[[list_index]] <- list(model.name = model_name, model = mod, response = facA, predictor = facB)
+
+
+
 ## ASSIGN LIST INDEX FOR SUBSETTING MSET 
 list_index <- degree - 1
 
-### SET VARIABLES
-  #SET DEPENDENT (RESPONSE) VARIABLE NAME
-  if (facA == "NULL") {
-     if( !"res" %in% names(mSetObj$analSet$polyReg) ){
-        facA <- mSetObj$analSet$polyReg$res[[list_index]][["response"]] #y
-     } else { 
-
-    for (i in seq_along(colnames(input)) ){
-      if (is.factor(input[,i]) == FALSE) {
-        facA <- colnames(input)[i]# Default: choose the 1st numeric column as response column
-        break
-      }
-    }
-}
-  } else {
-    facA <- facA #User selected, java uses function numeric.columns() to provide options in drop down menu (only numeric columns are available)
-  }
-  
-  #SET INDEPENDENT (PREDICTOR) VARIABLE NAME
-  if (facB == "NULL") {
- if( !"res" %in% names(mSetObj$analSet$polyReg) ){
-        facB <- mSetObj$analSet$polyReg$res[[list_index]][["predictor"]] #x
-     } else { 
-    for (i in seq_along(colnames(input)) ) {
-      if (is.factor(input[,i+1]) == FALSE) {
-        facB <- colnames(input)[i+1]# Default: choose the 2nd numeric column as response column
-        break
-      }
-    }
-  }
-} else {
-    facB <- facB #User selected, java uses function numeric.columns() to provide options in drop down menu (only numeric columns are available)
-  }
-   
-
-  #Extract plot components
-  #facA <- mSetObj[["analSet"]][["polyReg"]][["res"]][[list_index]][["response"]]#For x-axis label
-  #facB <- mSetObj[["analSet"]][["polyReg"]][["res"]][[list_index]][["predictor"]] #For y-axis label
-  # model <- mSetObj$analSet$polyReg$mod[[list_index]][["model"]]
-  # formula <- formula(model)
-  # formula2 <- as.formula( gsub(facB, "x",
-  #     gsub(facA, "y", deparse(formula) ) 
-  #       ))  
-  #    mSetObj$analSet$polyReg$res[[list_index]] <- list(response = facA, predictor = facB, degree = degree, summary = summary, predicted.values = fitted, confidence.intervals = conf.int,  equation = equation,  r.squared.eq=paste("R-squared = ", round(r_sq, digits = 2)), r.squared.adj.eq=paste("R-squared adjusted = ", round(r_sq_adj, digits = 2)), formula = formula, fileName = fileName  )   
-  #     mSetObj$analSet$polyReg$mod[[list_index]] <- list(model_name = model_name, model = model, response = facA, predictor = facB)
-
-   #GENERATE MODEL
-  list_index <- degree - 1     
-  formula <- as.formula(paste(facA, " ~ poly(", facB, ", ", degree, ")", sep = ""))
-  model <- lm(formula = formula, weights = NULL, data = input) #Create polynomial regression model
-  formula2 <- as.formula(
-   stringr::str_replace_all(deparse(formula), facA, "y") %>%
-     stringr::str_replace_all(., facB, "x") )
-  response <- input[,facA] #First column is reponse variable by default
-  predictor <- input[,facB] #Predictor column used for model construction by poly.reg.anal()
-
+# ### SET VARIABLES
+#   #SET DEPENDENT (RESPONSE) VARIABLE NAME
+#   if (facA == "NULL") {
+#      if( !"res" %in% names(mSetObj$analSet$polyReg) ){
+#         facA <- mSetObj$analSet$polyReg$res[[list_index]][["response"]] #y
+#      } else { 
+# 
+#     for (i in seq_along(colnames(input)) ){
+#       if (is.factor(input[,i]) == FALSE) {
+#         facA <- colnames(input)[i]# Default: choose the 1st numeric column as response column
+#         break
+#       }
+#     }
+# }
+#   } else {
+#     facA <- facA #User selected, java uses function numeric.columns() to provide options in drop down menu (only numeric columns are available)
+#   }
+#   
+#   #SET INDEPENDENT (PREDICTOR) VARIABLE NAME
+#   if (facB == "NULL") {
+#  if( !"res" %in% names(mSetObj$analSet$polyReg) ){
+#         facB <- mSetObj$analSet$polyReg$res[[list_index]][["predictor"]] #x
+#      } else { 
+#     for (i in seq_along(colnames(input)) ) {
+#       if (is.factor(input[,i+1]) == FALSE) {
+#         facB <- colnames(input)[i+1]# Default: choose the 2nd numeric column as response column
+#         break
+#       }
+#     }
+#   }
+# } else {
+#     facB <- facB #User selected, java uses function numeric.columns() to provide options in drop down menu (only numeric columns are available)
+#   }
+# 
+#    #GENERATE MODEL
+#   list_index <- degree - 1     
+#   formula <- as.formula(paste(facA, " ~ poly(", facB, ", ", degree, ")", sep = ""))
+#   model <- lm(formula = formula, weights = NULL, data = input) #Create polynomial regression model
+#   formula2 <- as.formula(
+#    stringr::str_replace_all(deparse(formula), facA, "y") %>%
+#      stringr::str_replace_all(., facB, "x") )
+ 
 
 
   #Set plot dimensions
@@ -454,7 +458,7 @@ list_index <- degree - 1
 
 ## plotmath: https://www.r-bloggers.com/2018/03/math-notation-for-r-plot-titles-expression-and-bquote/
    # plot_title1 <- bquote("Polynomial Regression: "~.(facA) ~ "~"~.(facB)^.(degree)) 
-  plot_title1 <- paste("Polynomial Regression: ", as.expression(formula), sep = "")
+  plot_title1 <- paste("Polynomial Regression: ", as.expression(form), sep = "")
   } else {
     plot_title1 <- plot_title
   }
@@ -647,13 +651,13 @@ linear_plot_json$bool_rsq_adj <- TRUE
 
 #### MODEL VARS FOR LINE
   linear_plot_json$r_sq <-
-    summary(model)[["r.squared"]] #Extract R^2
+    summary(mod)[["r.squared"]] #Extract R^2
   linear_plot_json$r_sq_adj <-
-    summary(model)[["adj.r.squared"]] #Extract adjusted R^2 
+    summary(mod)[["adj.r.squared"]] #Extract adjusted R^2 
   linear_plot_json$slope <-
-    summary(model)[["coefficients"]][2] # beta
+    summary(mod)[["coefficients"]][2] # beta
   linear_plot_json$yint <-
-    summary(model)[["coefficients"]][1] # alpha
+    summary(mod)[["coefficients"]][1] # alpha
 
  
  json.obj <- RJSONIO::toJSON(linear_plot_json, .na='null')
@@ -662,7 +666,7 @@ linear_plot_json$bool_rsq_adj <- TRUE
  sink()
 print(json.obj)
 print(paste("PLOT1 | facA: ", facA, " | facB: ", facB, " | degree: ", degree, sep = ""))
-print("I'm json the highway to hell")
+print("I'm JSON the highway to hell")
 
 if(!.on.public.web){
   return(.set.mSet(mSetObj))
@@ -713,7 +717,7 @@ poly.pred.plot <- function(mSetObj=NA,
   
 library("dplyr")
 library("ggplot2")
-#library("JSONIO")
+#library("RJSONIO")
 
   ## was called: plot.pred.polyReg
   #Extract necessary objects from mSetObj
@@ -733,49 +737,74 @@ library("ggplot2")
     degree <- as.numeric(degree) #user defined in drop down menu. See Poly.Reg.Degrees() for more information
   }
 
+#Extract plot components
+ facA <- mSetObj[["analSet"]][["polyReg"]][["res"]][[list_index]][["response"]]#For x-axis label
+ facB <- mSetObj[["analSet"]][["polyReg"]][["res"]][[list_index]][["predictor"]] #For y-axis label
+ mod <- mSetObj$analSet$polyReg$mod[[list_index]][["model"]]
+ form <- formula(mod)
+ formula2 <- as.formula( gsub(facB, "x",
+      gsub(facA, "y", deparse(form) ) 
+         ))  
+response <- input[,facA] #First column is reponse variable by default
+predictor <- input[,facB] #Predictor column used for model construction by poly.reg.anal()
+
+
+#    mSetObj$analSet$polyReg$res[[list_index]] <- list(response = facA, predictor = facB, degree = degree, summary = summ, predicted.values = fitt, confidence.intervals = conf.int,  equation = equation,  r.squared.eq=paste("R-squared = ", round(r_sq, digits = 2)), r.squared.adj.eq=paste("R-squared adjusted = ", round(r_sq_adj, digits = 2)), formula = formula, fileName = fileName  )   
+  #     mSetObj$analSet$polyReg$mod[[list_index]] <- list(model.name = model_name, model = mod, response = facA, predictor = facB)
+
+
+
 ## ASSIGN LIST INDEX FOR SUBSETTING MSET 
 list_index <- degree - 1
 
-### SET VARIABLES
-  #SET DEPENDENT (RESPONSE) VARIABLE NAME
-  if (facA == "NULL") {
-     if( !"res" %in% names(mSetObj$analSet$polyReg) ){
-        facA <- mSetObj$analSet$polyReg$res[[list_index]][["response"]] #y
-     } else { 
-
-    for (i in seq_along(colnames(input)) ){
-      if (is.factor(input[,i]) == FALSE) {
-        facA <- colnames(input)[i]# Default: choose the 1st numeric column as response column
-        break
-      }
-    }
-}
-  } else {
-    facA <- facA #User selected, java uses function numeric.columns() to provide options in drop down menu (only numeric columns are available)
-  }
-  
-  #SET INDEPENDENT (PREDICTOR) VARIABLE NAME
-  if (facB == "NULL") {
- if( !"res" %in% names(mSetObj$analSet$polyReg) ){
-        facB <- mSetObj$analSet$polyReg$res[[list_index]][["predictor"]] #x
-     } else { 
-    for (i in seq_along(colnames(input)) ){
-      if (is.factor(input[,i+1]) == FALSE) {
-        facB <- colnames(input)[i+1]# Default: choose the 2nd numeric column as response column
-        break
-      }
-    }
-  }
-} else {
-    facB <- facB #User selected, java uses function numeric.columns() to provide options in drop down menu (only numeric columns are available)
-  }
+# ### SET VARIABLES
+#   #SET DEPENDENT (RESPONSE) VARIABLE NAME
+#   if (facA == "NULL") {
+#      if( !"res" %in% names(mSetObj$analSet$polyReg) ){
+#         facA <- mSetObj$analSet$polyReg$res[[list_index]][["response"]] #y
+#      } else { 
+# 
+#     for (i in seq_along(colnames(input)) ){
+#       if (is.factor(input[,i]) == FALSE) {
+#         facA <- colnames(input)[i]# Default: choose the 1st numeric column as response column
+#         break
+#       }
+#     }
+# }
+#   } else {
+#     facA <- facA #User selected, java uses function numeric.columns() to provide options in drop down menu (only numeric columns are available)
+#   }
+#   
+#   #SET INDEPENDENT (PREDICTOR) VARIABLE NAME
+#   if (facB == "NULL") {
+#  if( !"res" %in% names(mSetObj$analSet$polyReg) ){
+#         facB <- mSetObj$analSet$polyReg$res[[list_index]][["predictor"]] #x
+#      } else { 
+#     for (i in seq_along(colnames(input)) ) {
+#       if (is.factor(input[,i+1]) == FALSE) {
+#         facB <- colnames(input)[i+1]# Default: choose the 2nd numeric column as response column
+#         break
+#       }
+#     }
+#   }
+# } else {
+#     facB <- facB #User selected, java uses function numeric.columns() to provide options in drop down menu (only numeric columns are available)
+#   }
+# 
+#    #GENERATE MODEL
+#   list_index <- degree - 1     
+#   form <- as.formula(paste(facA, " ~ poly(", facB, ", ", degree, ")", sep = ""))
+#   mod <- lm(formula = formula, weights = NULL, data = input) #Create polynomial regression model
+#   formula2 <- as.formula(
+#    stringr::str_replace_all(deparse(formula), facA, "y") %>%
+#      stringr::str_replace_all(., facB, "x") )
    
 
  #GENERATE MODEL
   method <- "Polynomial Regression"
   formula1 <- as.formula(paste(facA, " ~ poly(", facB, ", ", degree, ")", sep = ""))
 model1 <- lm(formula = formula1, weights = NULL, data = input) #Create polynomial regression model
-prediction <- fitted(model1)
+prediction <- fitted(mod)
 
    dfpred <- data.frame(fpred = prediction, fA = input[,facA])
    formula <- as.formula("fA~fpred")
@@ -1038,7 +1067,9 @@ poly.reg.get.results <- function(mSetObj=NA, degree=NULL){
   #Extract plot components
   list_index <- as.numeric(degree) - 1
 
-  lin.reg.result <- c(mSetObj$analSet$polyReg$res[[list_index]][["equation"]], mSetObj$analSet$polyReg$res[[list_index]][["R.sq.eq"]], mSetObj$analSet$polyReg$res[[list_index]][["adj.R.sq.eq"]])
+  lin.reg.result <- c(mSetObj$analSet$polyReg$res[[list_index]][["equation"]],
+                  mSetObj$analSet$polyReg$res[[list_index]][["R.sq.eq"]], 
+                  mSetObj$analSet$polyReg$res[[list_index]][["adj.R.sq.eq"]])
   return(lin.reg.result)
 
 }
