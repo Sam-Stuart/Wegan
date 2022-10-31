@@ -20,16 +20,33 @@
                         to adjust the dendrogram.
                         </p> 
                         <h:panelGrid id="panelGrid" columns="5" cellpadding="3" columnClasses="colLeft,colRight,colLeft,colRight, colLast">
+                            <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
+                            <p:selectBooleanCheckbox value ="#{clusterBean.doData}" /> 
+                            
                             <h:outputLabel style="font-weight: bold" value="Distance Measure:"/>
-                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{clusterBean.clustDistOpt}">
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style= "width:50%;" value="#{clusterBean.clustDistOpt}">
                                 <f:selectItems value="#{applicationBean1.clustDistOpts}" />
                             </p:selectOneMenu>
+                             
+                            
                             <h:outputLabel style="font-weight: bold" value="Clustering Algorithm:"/>
-                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{clusterBean.clustMethodOpt}">
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:50%" value="#{clusterBean.clustMethodOpt}">
                                 <f:selectItems value="#{applicationBean1.clustMethodOpts}" />
                             </p:selectOneMenu>
+                            
+                            <h:outputLabel style="font-weight: bold" value="Grouping Variable:"/>
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:50%;" value="#{clusterBean.dendroColumnName}">
+                                <f:selectItems value="#{clusterBean.dendroColumnOpts}" />
+                            </p:selectOneMenu>
+
                         </h:panelGrid>
-                        <h:panelGrid columns="1" cellpadding="3" style="float: right">    
+                        <h:panelGrid columns="2" cellpadding="3" style="float: right">    
+                            <p:commandButton value="Customize Graph"
+                                             styleClass="graphicsButton"
+                                             style="box-shadow: none !important; text-shadow: none !important;"
+                                             actionListener="#{sessionBean1.graphicsLnk_action('tree')}" 
+                                            oncomplete="PF('graphApperanceTree').show()"/>
+                            
                             <p:commandButton value="Update" 
                                              styleClass="updateButton"
                                              style="box-shadow: none !important; text-shadow: none !important"
@@ -61,5 +78,11 @@
                 </p:tab>
             </p:tabView>
         </h:panelGrid>
+        <p:dialog modal="true" widgetVar="graphApperanceTree" 
+                    style="width: 400px; height:400px;" 
+                    appendTo="@(body)" header="Graphics Center"
+                    draggable="false" closable="true" resizable="false"> 
+                    <ui:include src="_color_palette_tree.xhtml" />
+        </p:dialog>
     </ui:define>
 </ui:composition>

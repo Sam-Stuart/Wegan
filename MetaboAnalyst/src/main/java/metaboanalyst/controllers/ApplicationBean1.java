@@ -320,11 +320,11 @@ public class ApplicationBean1 implements Serializable {
         vegdistMeasureOpts[12] = new SelectItem("mountford", "Mountford");
         vegdistMeasureOpts[13] = new SelectItem("raup" , "Raup-Crick");
         
-        dendroPalletteOpts = new SelectItem[4];
+        dendroPalletteOpts = new SelectItem[3];
         dendroPalletteOpts[0] = new SelectItem("NULL", "Viridis");
         dendroPalletteOpts[1] = new SelectItem("plasma", "Plasma");
         dendroPalletteOpts[2] = new SelectItem("grey", "Grayscale");
-        dendroPalletteOpts[3] = new SelectItem("none", "No Color");
+        //dendroPalletteOpts[3] = new SelectItem("none", "No Color");
         
         ciaTypeOpts = new SelectItem[2];
         ciaTypeOpts[0] = new SelectItem("NULL", "Numeric Data Types");

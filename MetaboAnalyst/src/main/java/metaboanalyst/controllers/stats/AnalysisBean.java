@@ -215,7 +215,7 @@ public class AnalysisBean implements Serializable {
     }
 
     private void doDefaultDendrogram() {
-        Clustering.PlotClustTree(sb, false, sb.getCurrentImage("tree"), "png", 72, "NULL", "NULL", false, false, "NULL", " ", " ", "NULL");
+        Clustering.PlotClustTree(sb, false, sb.getCurrentImage("tree"), "png", 72, "euclidean", "ward.D", false, false, "NULL", " ", " ", "NULL");
     }
 
     private void doDefaultHmClust() {

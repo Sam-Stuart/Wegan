@@ -107,23 +107,23 @@
 #'
 
 #### Trouble Shooting assignments ####
-# dataset <- iris;
+# dataset <- mtcars;
 # smplDist <- 'euclidean'
 # clstDist <- 'complete'
 # imgName <- 'test'
 # rotate <- 'true'
 # branch_labels <- 'false'
-# plot_palette <- "plasma"
+# plot_palette <- "grey"
 # plot_title <- "This is the Title"
 # plot_legtitle <- "legend_title"
-# colorbar_name <- 'Species' # column names to pick from
+# colorbar_name <- 'cyl' # column names to pick from
 #######################################
 
 # Get column names from user dataset
 dendro.columns <- function(mSetObj=NA) {
   mSetObj <- .get.mSet(mSetObj)
-  data <- mSetObj$analSet$dendro$data
-  name.all.cols <- c(colnames(metaData), "No groupings")
+  data <- mSetObj$dataSet$orig
+  name.all.cols <- c("No groupings", colnames(data))
   return(name.all.cols)
 }
 
@@ -134,19 +134,21 @@ PlotHCTree <- function(mSetObj=NA,
                        format="png", 
                        dpi=72, 
                        width=NA, 
-                       smplDist="NULL", 
-                       clstDist="NULL",
+                       smplDist, 
+                       clstDist,
                        rotate='false',
                        branch_labels='false',
                        plot_palette="NULL",
                        plot_legtitle=" ",
                        plot_title=" ",
-                       colorbar_name="NULL"){
+                       colorbar_name="No groupings"){
   
   library('ggplot2')
   library('dplyr')
   library('ggdendro')
   library("viridis")
+  library("viridisLite")
+  
   
   # Obtain mSet dataset
   mSetObj <- .get.mSet(mSetObj)
@@ -168,7 +170,7 @@ PlotHCTree <- function(mSetObj=NA,
   }
   
   if (clstDist == "NULL"){  # default is 'ward'
-    clstDist <- 'ward'
+    clstDist <- 'ward.D'
   }
   
   # record the paramters
@@ -179,10 +181,7 @@ PlotHCTree <- function(mSetObj=NA,
   dendro <- as.dendrogram(hc)
   ddata <- dendro %>% dendro_data(type="rectangle")
   
-  # Set up df for color bar option and join df by index values so categorical value aligned properly
-  facA_df <- dataset %>% mutate(id=row_number(), var = as.factor(dataset[,colorbar_name])) %>% select(c(var, id));
-  ddata$labels <- ddata$labels %>% mutate(id=hc$order) %>% left_join(facA_df, by='id')
-  
+  # build plot
   p <- ggplot() + 
     # Plot dendrogram
     geom_segment(data = ddata$segments, aes(x = x, y = y, xend = xend, yend = yend)) +
@@ -198,14 +197,24 @@ PlotHCTree <- function(mSetObj=NA,
           legend.position = c("top"))
   # Add text labels 
   if (branch_labels == 'true') {
-    scale_y_continuous(expand = expansion(mult = c(.2, .05)))
-    if (rotate == 'true'){
+    p <- p + scale_y_continuous(expand = expansion(mult = c(0.2, .05)))
+    if (length(ddata$labels$label) <= 50){
+      text_size <- 3
+    }
+    else if (length(ddata$labels$label) <= 100){
+      text_size <- 2
+    }
+    else{
+      text_size <- 1
+    }
+    if (rotate == 'false'){
       p <- p + geom_text(data = ddata$labels,
                          aes(x = x, y = -(max(ddata$segments$yend)*0.05), label = label),
                          color = "black",
                          vjust = 'middle',
                          hjust = 'right',
                          angle = 0,
+                         size = text_size,
                          show.legend = FALSE) +
         coord_flip()
     }
@@ -216,12 +225,27 @@ PlotHCTree <- function(mSetObj=NA,
                          vjust = 'middle',
                          hjust = 'right',
                          angle = 90,
+                         size = text_size,
                          show.legend = FALSE)
     }
     
   }
+  else {
+    if (rotate == 'false') {
+      p <- p + coord_flip()
+    }
+  }
+  
   # Add colorbar and  corresponding legend
-  if (colorbar_name != "NULL"){
+  if (colorbar_name == "No groupings" || colorbar_name == "NULL"){
+    p <- p
+  }
+  else {
+    # Set up df for color bar option and join df by index values so categorical value aligned properly
+    facA_df <- dataset %>% 
+      dplyr::mutate(id=row_number(), var = as.factor(dataset[,colorbar_name])) %>% 
+      dplyr::select(c(var, id));
+    ddata$labels <- ddata$labels %>% mutate(id=hc$order) %>% left_join(facA_df, by='id');
     p <- p + geom_point(data = ddata$labels, 
                         aes(x = x, y = y, color = var), 
                         shape = 15,
@@ -230,8 +254,13 @@ PlotHCTree <- function(mSetObj=NA,
       theme(legend.background = element_blank(),
             legend.key = element_blank(),
             legend.position = c("top")) + 
-      guides(color=guide_legend(title=plot_legtitle)) +
-      scale_color_viridis(discrete=TRUE, option=plot_palette)
+      guides(color=guide_legend(title=plot_legtitle))
+    if (plot_palette == "grey"){
+      p <- p + scale_colour_grey()
+    }
+    else {
+      p <- p + scale_color_viridis(discrete=TRUE, option=plot_palette)
+    }
   }
   
   

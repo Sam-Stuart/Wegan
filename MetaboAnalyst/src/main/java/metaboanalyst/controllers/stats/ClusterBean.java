@@ -118,7 +118,7 @@ public class ClusterBean implements Serializable{
     }
     
             //STATIC DROPDOWN 
-    private String dendroColorOpts = "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.vegdistMeasureOpts
+    private String dendroColorOpts = "NULL"; 
     
     public String getDendroColorOpts() {
         return dendroColorOpts;
@@ -150,7 +150,7 @@ public class ClusterBean implements Serializable{
         this.dendroPlotTitle = dendroPlotTitle;
     }
     
-    //DYNAMIC DROPDOWN done?
+    //DYNAMIC DROPDOWN 
     private SelectItem[] dendroColumnOpts = null;
     
     public SelectItem[] getDendroColumnOpts(){
@@ -175,9 +175,12 @@ public class ClusterBean implements Serializable{
     }
     
     public String treeButton_action() {
-        String imgName = sb.getNewImage("tree");
-        Clustering.PlotClustTree(sb, doData, imgName, "png", 72, clustDistOpt, clustMethodOpt, doRotate, doBranchLabels, dendroColorOpts, dendroLegendTitle, dendroPlotTitle, dendroColumnName);
-        RequestContext.getCurrentInstance().scrollTo("form1:treePane");
+        //String imgName = sb.getNewImage("tree");
+            Clustering.PlotClustTree(sb, doData, sb.getNewImage("tree"),  "png", 72, clustDistOpt,
+                clustMethodOpt, doRotate, doBranchLabels, dendroColorOpts,
+                dendroLegendTitle, dendroPlotTitle, dendroColumnName);
+            //RequestContext.getCurrentInstance().scrollTo("form1:treePane");
+            //RequestContext.getCurrentInstance().scrollTo("treeGraph:panelGrid1");
         return null;
     }
 

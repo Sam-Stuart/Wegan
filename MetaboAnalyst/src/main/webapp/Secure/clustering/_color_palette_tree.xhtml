@@ -1,0 +1,41 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="treeGraph">
+        <h:panelGrid columns="1" style="width:380px;">
+            <h:panelGrid id="panelGrid1" columns="2" cellpadding="5" columnClasses="colBrayLong,colBrayShort">
+                
+                <h:outputLabel style="font-weight: bold" value="Plot Title:"/>
+                <p:inputText value ="#{clusterBean.dendroPlotTitle}"/>
+
+                <h:outputLabel style="font-weight: bold" value="Legend Title:"/>
+                <p:inputText value ="#{clusterBean.dendroLegendTitle}"/>
+
+                <h:outputLabel style="font-weight: bold" value="Colour Pallette:"/>
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:50%;" value="#{clusterBean.dendroColorOpts}">
+                    <f:selectItems value="#{applicationBean1.dendroPalletteOpts}" />
+                </p:selectOneMenu> 
+                
+                <h:outputLabel style="font-weight: bold" value="Rotate:"/>
+                <p:selectBooleanCheckbox value ="#{clusterBean.doRotate}" />
+                <h:outputLabel style="font-weight: bold" value="Add Branch Labels:"/>
+                <p:selectBooleanCheckbox value ="#{clusterBean.doBranchLabels}" />
+
+            </h:panelGrid>
+            <h:panelGrid id="panelGrid2" columns="1" cellpadding="5" style="float: right">
+                <p:commandButton value="Update" 
+                               styleClass="updateButton"
+                               style="box-shadow: none !important; text-shadow: none !important"
+                               onclick="PF('statusDialog').show()"
+                               oncomplete="PF('graphApperanceTree').hide(); PF('statusDialog').hide()"  
+                               update=":overviewTree:form1:treePane1  :cmdPane" 
+                               actionListener="#{clusterBean.treeButton_action()}"/>
+            </h:panelGrid>
+        </h:panelGrid>
+    </h:form>
+</ui:composition>

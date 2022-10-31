@@ -125,7 +125,8 @@ public class OACABean implements Serializable {
 // ACTION BUTTONS //
     public void caUpdate_action() {
 //        OAUtils.CreateBray(sb, "NULL", "NULL", "NULL", "NULL");
-//        OAUtils.PlotCCA(sb, color, addEllipse, varArrows, envArrows, envCentroid, sampleNames, groupCol, "NULL", "NULL", sb.getNewImage("ord_cca_2D"), "png", 72, "NULL");
+//        OAUtils.PlotCCA(sb, color, addEllipse, varArrows, envArrows,
+// envCentroid, sampleNames, groupCol, "NULL", "NULL", sb.getNewImage("ord_cca_2D"), "png", 72, "NULL");
     }
     
     

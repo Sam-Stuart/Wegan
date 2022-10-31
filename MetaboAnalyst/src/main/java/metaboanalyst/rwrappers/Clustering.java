@@ -21,7 +21,11 @@ public class Clustering {
 
     //private static Object Logger;
 
-    public static void PlotClustTree(SessionBean1 sb, boolean data, String imgName, String format, int dpi, String smplDist, String clstDist, boolean rotate, boolean branch_labels, String plot_palette, String plot_legtitle, String plot_title, String colorbar_name) {
+    public static void PlotClustTree(SessionBean1 sb, boolean data,
+            String imgName, String format, int dpi, String smplDist,
+            String clstDist, boolean rotate, boolean branch_labels,
+            String plot_palette, String plot_legtitle, String plot_title,
+            String colorbar_name) {
         try {
             RConnection RC = sb.getRConnection();
             String rCommand = "PlotHCTree(NA" 
