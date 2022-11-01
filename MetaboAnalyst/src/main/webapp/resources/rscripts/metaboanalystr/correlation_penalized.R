@@ -225,7 +225,7 @@ pen.reg.anal <- function(mSetObj=NA,
   #Extract results
   summ <- params 
   #resp.col.num <- which(colnames(data) == facA)
-  fitted <- predict(model, newx = as.matrix(data[,colnames(data) != facA, drop = FALSE]))
+  fitted <- predict(mod, newx = as.matrix(data[,colnames(data) != facA, drop = FALSE]))
   colnames(fitted) <- "Predicted values"
   call <- mod[["call"]]
   form <- as.formula(paste(facA, "~", paste(colnames(predictors_train), collapse = "+", sep = "")))
@@ -263,7 +263,7 @@ pen.reg.anal <- function(mSetObj=NA,
   #Download text document containing the summary, called the fileName. Document goes into the working directory and should be accessible to the user as part of the report
   sink(fileName) 
   cat("Formula:\n")
-  print(formula)
+  print(form)
   cat("\nMethod:\n")
   cat(paste0(method))
   cat("\n\nCall:\n")
@@ -328,6 +328,8 @@ pen.pred.plot <- function(mSetObj=NA,
 # Penalized regression uses the bias-variance tradeoff to give us coefficient estimates with lower variance, but with bias. Reporting a CI around a biased estimate will give an unrealistically optimistic indication of how close the true value of the coefficient may be to the point estimate.
 #section 6 of the vignette for the penalized R package ("L1 and L2 Penalized Regression Models" Jelle Goeman, Rosa Meijer, Nimisha Chaturvedi, Package version 0.9-47), https://cran.r-project.org/web/packages/penalized/vignettes/penalized.pdf.
 
+# another possible option: HDCI — High Dimensional Confidence Interval Based on Lasso and Bootstrap (https://github.com/cran/HDCI)
+
 
 library("glmnet")
 library("dplyr")
@@ -353,7 +355,7 @@ data <- dplyr::select_if(input, is.numeric)
 method <- mSetObj$analSet$penReg$res$method
 mod <- mSetObj$analSet$penReg$mod$model
   predictors_test <- mSetObj$analSet$penReg$res$predictors.test.data
-  test_prediction <- predict(model, newx = as.matrix(predictors_test))
+  test_prediction <- predict(mod, newx = as.matrix(predictors_test))
   test_data <- mSetObj$analSet$penReg$res$test.data
   predictors_train <- mSetObj$analSet$penReg$res$predictors.train.data
   form <- paste(facA, "~", paste(colnames(predictors_train), collapse = "+", sep = ""))
@@ -386,14 +388,14 @@ mod <- mSetObj$analSet$penReg$mod$model
 #   
 #   
 #   
-#   # model <- mSetObj$analSet$penReg$mod$model
+#   # mod <- mSetObj$analSet$penReg$mod$model
 #   # method <- mSetObj$analSet$penReg$res$method
 #   # predictors_test <- mSetObj$analSet$penReg$res$predictors.test.data
-#   # test_prediction <- predict(model, newx = as.matrix(predictors_test))
+#   # test_prediction <- predict(mod, newx = as.matrix(predictors_test))
 #   # # facA <- mSetObj$analSet$penReg$res$response
 #   # test_data <- mSetObj$analSet$penReg$res$test_data
 #   # predictors_train <- mSetObj$analSet$penReg$res$predictors.train.data
-#   # formula <- paste(facA, "~", paste(colnames(predictors_train), collapse = "+", sep = ""))
+#   # form <- paste(facA, "~", paste(colnames(predictors_train), collapse = "+", sep = ""))
 # 
 #   #TEST AND TRAIN DATA FOR MODEL BUILDING
 #   set.seed(37) #Ensures same selection of data for test and train each time
@@ -538,7 +540,7 @@ mod <- mSetObj$analSet$penReg$mod$model
 #bestLambda <- params$bestTune$lambda #Extract best parameter
 #method <- "Ridge Regression"
 #cv <- glmnet::cv.glmnet(x = as.matrix(predictors_train), y = as.matrix(response_train), alpha=bestAlpha)
-#test_prediction <- predict(model, newx = as.matrix(predictors_test))
+#test_prediction <- predict(mod, newx = as.matrix(predictors_test))
 #plot_ci1 <- TRUE
 #col_dots1 <- "blue"
 #col_line1 <- "red"
@@ -697,7 +699,7 @@ data <- dplyr::select_if(input, is.numeric)
 mod <- mSetObj$analSet$penReg$mod$model
   method <- mSetObj$analSet$penReg$res$method
   predictors_test <- mSetObj$analSet$penReg$res$predictors.test.data
-  test_prediction <- predict(model, newx = as.matrix(predictors_test))
+  test_prediction <- predict(mod, newx = as.matrix(predictors_test))
   facA <- mSetObj$analSet$penReg$res$response
   test_data <- mSetObj$analSet$penReg$res$test_data
   predictors_train <- mSetObj$analSet$penReg$res$predictors.train.data
@@ -777,7 +779,7 @@ cv <- mSetObj$analSet$penReg$res$cross.validation
 #     }
 #
 #form <- paste(facA, "~", paste(colnames(predictors_train), collapse = "+", sep = ""))
-# test_prediction <- predict(model, newx = as.matrix(predictors_test)) 
+# test_prediction <- predict(mod, newx = as.matrix(predictors_test)) 
 # test_rmse <- Metrics::rmse(test_data[,facA], test_prediction)
 
   
@@ -912,13 +914,13 @@ linear_plot_json$lines$size <- build_line[,c("size")]
   
 #### MODEL VARS FOR LINE
 #  linear_plot_json$r_sq <-
-#    summary(model)[["r.squared"]] #Extract R^2
+#    summary(mod)[["r.squared"]] #Extract R^2
 #  linear_plot_json$r_sq_adj <-
-#    summary(model)[["adj.r.squared"]] #Extract adjusted R^2 
+#    summary(mod)[["adj.r.squared"]] #Extract adjusted R^2 
 #  linear_plot_json$slope <-
-#    summary(model)[["coefficients"]][2] # beta
+#    summary(mod)[["coefficients"]][2] # beta
 #  linear_plot_json$yint <-
-#    summary(model)[["coefficients"]][1] # alpha
+#    summary(mod)[["coefficients"]][1] # alpha
 
  
  json.obj <- RJSONIO::toJSON(linear_plot_json, .na='null')
