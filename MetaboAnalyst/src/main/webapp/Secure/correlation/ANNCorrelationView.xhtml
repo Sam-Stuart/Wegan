@@ -15,31 +15,37 @@
             <p:tabView id="ANNCA" style="border-bottom-color: #8cbd48 !important">
                 <p:tab title ="Neural Interpretation Plot" titleStyleClass="p-tab-nav">
                     <h:form id="form1">
-                        <p style="font-size: 13px">
+                        <p style="text-indent:10px; font-size: 13px">
                             <!--add a hyperlink: from CaUploadView: /home/gina/Desktop/Wegan/MetaboAnalyst/src/main/webapp/upload/CaUploadView.xhtml : Iris setosa, Iris versicolor, and Iris virginica. Variables are labeled, but samples are not. (<a href="">view data set</a>) (<a href="https:/www.rdocumentation.org/packages/datasets/versions/3.6.2/topics/iris">Becker, R. <i>et al. The New S Language</i>. 1988. </a>)--> 
-                  Artificial Neural Networks (ANN) are made of units called perceptrons (ptrons), arranged in structured layers. The ptrons have one or more inputs, an activation function, and an output. Ptron output is determined by a nonlinear activation function. 
-                 The input layer of the network has a ptron for each predictor variable. These feed to ptrons in the hidden layer(s). Output layer ptrons are fed by the final hidden layer.
-                 Connections between ptrons are weighted. Weight size relates to how much influence an input has on the receiving ptron. Negative weight means the influence is inhibitory,while positive weights are stimulatory. 
-                 The response variable is normalized to fall within a range of [0,1]. Predictors are z-score scaled unless specified to be excluded using the text box.
-                 The Neural Interpretation Diagram (NID) shows a network plot of the model. Line thickness represents the connection weight size and direction (black = positive, grey = negative).
+                            Artificial Neural Networks (ANN) are made of units called perceptrons (ptrons), arranged in structured layers. The ptrons have one or more inputs, an activation function, and an output. Ptron output is determined by a nonlinear activation function.</p> 
+                      <p style="text-indent:10px; font-size: 13px">The input layer of the network has a ptron for each predictor variable. These feed to ptrons in the hidden layer(s). Output layer ptrons are fed by the final hidden layer.</p>
+                      <p style="text-indent:10px; font-size: 13px">Connections between ptrons are weighted. Weight size relates to how much influence an input has on the receiving ptron. Negative weight means the influence is inhibitory,while positive weights are stimulatory.</p> 
+                      <p style="text-indent:10px; font-size: 13px">The response variable is normalized to fall within a range of [0,1]. Predictors are z-score scaled unless specified to be excluded using the text box.</p>
+                      <p style="text-indent:10px; font-size: 13px">The Neural Interpretation Diagram (NID) shows a network plot of the model. Line thickness represents the connection weight size and direction (black = positive, grey = negative).</p>
                  <!--Julian D. Olden & Donald A. Jackson (2002). 'Illuminating the ‘‘black box’’: a randomization approach for understanding variable contributions in artificial neural networks' *Ecological Modelling* 154 pp. 135–150. DOI: 10.1016/S0304-3800(02)00064-9-->
                    <!--(Olden, J. D. & Jackson, D. A. <i> Illuminating the ‘‘black box’’: a randomization approach for understanding variable contributions in artificial neural networks. Ecological Modelling</i>. 2002.)--> 
                    <!--/oldenlab/wordpress/wp-content/uploads/2013/03/EcologicalModelling_2002.pdf-->
-                        </p>
+                        
                       <!--colLeftLong25 colRightShort30 colRight35 colLeft20 colBrayLong40 colBrayShort15-->
                       <!--<h:panelGrid id="panelGrid" columns="5" cellpadding="3" columnClasses="colLeft,colRightShort,colLeft,colRightShort, colLast">-->
-                    <h:panelGrid id="panelGrid" columns="5" cellpadding="3" columnClasses="colLeftLong,colRight,colLeftLong,colRight, colLast">
+                  <!--&nbsp adds whitespace-->
+                      <h:panelGrid id="panelGrid" columns="5" cellpadding="3" columnClasses="colLeftLong,colRight,colLeftLong,colRight, colLast">
+   
                             <h:outputLabel style="font-weight: bold" value="Dependant Variable:"/>
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{rfCABean.columnNameA}">
                                 <f:selectItems value="#{rfCABean.columnOpts}" />
                             </p:selectOneMenu>
-
-                            <h:outputLabel style="font-weight: bold" value="Independent variables (type column names with commas in between):"/>
-                            <p:inputText style="width:400px; height:40px" value="#{rfCABean.indInput}"/> 
+                             <h:panelGrid></h:panelGrid> 
+                             <h:panelGrid></h:panelGrid> 
+                              <h:panelGrid></h:panelGrid> 
+                            <h:outputLabel style="font-weight: bold; margin-right: 50px" value="Independent variables (column names with commas in between):"/>
+                            <p:inputText style="width:400px; height:20px" value="#{rfCABean.indInput}"/> 
+ <h:panelGrid></h:panelGrid> 
+  <h:panelGrid></h:panelGrid> 
                         <h:panelGrid></h:panelGrid> 
-                        <h:panelGrid></h:panelGrid> 
-                            <h:outputLabel style="font-weight: bold" value="Independent variables to exclude from Z-score scaling (type column names with commas in between):"/>
-                            <p:inputText style="width:400px; height:40px" value="#{rfCABean.indInput}"/>
+                         <h:panelGrid></h:panelGrid> 
+                            <h:outputLabel style="font-weight: bold" value="Independent variables to exclude from scaling (column names with commas in between):"/>
+                            <p:inputText style="width:400px; height:20px" value="#{rfCABean.indInput}"/>
                             
                     </h:panelGrid>                            
                         <h:panelGrid></h:panelGrid>     
@@ -111,7 +117,9 @@ The R &#xb2; value is the fraction of variance explained by the model and is a v
                                 </p:selectOneMenu>
 
                             <h:outputLabel style="font-weight: bold" value="Independent variables (type column names with commas in between):"/>
-                            <p:inputText style="width:400px; height:40px" value="#{rfCABean.indInput}"/> 
+                            <p:inputText style="width:400px; height:40px" value="#{rfCABean.indInput}"/>
+                             <h:panelGrid></h:panelGrid> 
+                              <h:panelGrid></h:panelGrid> 
                             <h:outputLabel style="font-weight: bold" value="Independent variables to exclude from Z-score scaling (type column names with commas in between):"/>
                             <p:inputText style="width:400px; height:40px" value="#{rfCABean.indInput}"/>
                             
