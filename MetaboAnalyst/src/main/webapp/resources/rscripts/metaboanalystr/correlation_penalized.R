@@ -28,6 +28,8 @@ pen.reg.anal <- function(mSetObj=NA,
   mSetObj <- .get.mSet(mSetObj)
   
 
+method1 <- method
+
 ## df[, subset, drop = FALSE] # drop = FALSE returns df; drop = TRUE returns a vector
 
 ### penalized regression: Important to standardize
@@ -40,7 +42,7 @@ pen.reg.anal <- function(mSetObj=NA,
 ## removed data param: 202209-30
 #  ### SET DATA (whether to use original data or not)
 #  if (data=="false") { 
-    mSetObj$dataSet$norm <- mSetObj$dataSet$norm[order(as.numeric(rownames(mSetObj$dataSet$norm))),,drop=FALSE]
+#    mSetObj$dataSet$norm <- mSetObj$dataSet$norm[order(as.numeric(rownames(mSetObj$dataSet$norm))),,drop=FALSE]
     input <- mSetObj$dataSet$norm #default use norm
  # } else {
  #   input <- mSetObj$dataSet$orig
@@ -80,30 +82,30 @@ pen.reg.anal <- function(mSetObj=NA,
   index <- sample(1:nrow(data), 0.7*nrow(data)) #Select 70% of dataset
   train_data <- data[index,,drop = FALSE] #70% of dataset
   test_data <- data[-index,, drop = FALSE] #30% of dataset
-  resp.col.num <- which(colnames(data)==facA)
-  predictors_train <- train_data[,-resp.col.num, drop = FALSE]
-  predictors_test <- test_data[,-resp.col.num, drop = FALSE]
+  # resp.col.num <- which(colnames(data)==facA)
+  predictors_train <- train_data[,!colnames(train_data) %in% facA, drop = FALSE]
+  predictors_test <- test_data[,!colnames(train_data) %in% facA, drop = FALSE]
   response_train <- train_data[,facA, drop = TRUE] # response data for train dataset
-  # response_test <- test_data[,facA, drop = TRUE]
+  response_test <- test_data[,facA, drop = TRUE]
   cat("The train data for model building is 70% of the dataset, while the test data for model testing is 30% of the dataset.") #Text will be visible to user.
   
-
+# object of type 'closure' is not subsettable
   # if (is.null(weights)==TRUE) { #No weights for model building
   
 ## METHOD TYPE LOOP
   
   ### ELASTIC NET
-    if (method == "elastic net") {
+    if (method1 == "elastic net") {
       
       #Build model
       params <- caret::train(x = predictors_train, y = response_train, weights = NULL, method = "glmnet", 
-                      trControl = caret::trainControl("cv", number = 10), tuneLength = 5) #testing variour parameters
+            trControl = caret::trainControl("cv", number = 10), tuneLength = 5) #testing variour parameters
       mod <- glmnet(as.matrix(predictors_train), as.matrix(response_train), 
                       alpha = params$bestTune$alpha, lambda = params$bestTune$lambda, 
                       weights = NULL, family = "gaussian") #Build model with "best" parameters
       bestLambda <- params$bestTune$lambda #Extract best parameters
       bestAlpha <- params$bestTune$alpha
-      method <- "Elastic Net Regression"
+      method1 <- "Elastic Net Regression"
       
       ##File name for summary download
       ##fileName <- "elastic_net_regression_summary.txt"
@@ -111,7 +113,7 @@ pen.reg.anal <- function(mSetObj=NA,
       #Cross validation results for plotting
       cv <- glmnet::cv.glmnet(x = as.matrix(predictors_train), y = as.matrix(response_train), alpha=bestAlpha)
       
-    } else if (method == "lasso") {
+    } else if (method1 == "lasso") {
       
 ## LASSO
       #Build model
@@ -124,7 +126,7 @@ pen.reg.anal <- function(mSetObj=NA,
                       weights = NULL, family = "gaussian") #Build model with "best" parameters
       bestAlpha <- 1
       bestLambda <- params$bestTune$lambda #Extract best parameter
-      method <- "Lasso Regression"
+      method1 <- "Lasso Regression"
       
       ##File name for summary download
       ##fileName <- "lasso_regression_summary.txt"
@@ -136,22 +138,27 @@ pen.reg.anal <- function(mSetObj=NA,
       
  ## RIDGE
       #Build model for ridge regression
+
       lambda <- 10^seq(-3, 3, length = 100)
+print("lambda")
       params <- caret::train(predictors_train, response_train, weights = NULL, method = "glmnet", 
                       trControl = caret::trainControl("cv", number = 10),
                       tuneGrid = expand.grid(alpha = 0, lambda = lambda)) #testing various parameters
+print("params")
       mod <- glmnet::glmnet(as.matrix(predictors_train), as.matrix(response_train), 
                       alpha=params$bestTune$alpha, lambda = params$bestTune$lambda, 
                       weights = NULL, family = "gaussian")#Build model with "best" parameters
+print("model built")
       bestAlpha <- 0
       bestLambda <- params$bestTune$lambda #Extract best parameter
-      method <- "Ridge Regression"
+      method1 <- "Ridge Regression"
       
       ##File name for summary download
       ##fileName <- "ridge_regression_summary.txt" 
       
       #Cross validation results for plotting
       cv <- glmnet::cv.glmnet(x = as.matrix(predictors_train), y = as.matrix(response_train), alpha=bestAlpha)
+print("cv")
       
     }
     
@@ -220,14 +227,17 @@ pen.reg.anal <- function(mSetObj=NA,
   #   }
   # }
   
-  cat("The", method, " model was optimized using alpha = ", bestAlpha, " and lambda = ", bestLambda, ".", sep="") #Text will be visible to user.
+  cat("The", method1, " model was optimized using alpha = ", bestAlpha, " and lambda = ", bestLambda, ".", sep="") #Text will be visible to user.
   
-  #Extract results
+  #EXTRACT VALUES
   summ <- params 
+print("params summary")
   #resp.col.num <- which(colnames(data) == facA)
-  fitted <- predict(mod, newx = as.matrix(data[,colnames(data) != facA, drop = FALSE]))
-  colnames(fitted) <- "Predicted values"
-  call <- mod[["call"]]
+  # fitted <- predict(mod, newx = as.matrix(data[,colnames(data) != facA, drop = FALSE]))
+  fitt <- predict(mod, newx = as.matrix(predictors_train) ) 
+print("fitted (train)")
+  mod_call <- mod[["call"]]
+print("model call")
   form <- as.formula(paste(facA, "~", paste(colnames(predictors_train), collapse = "+", sep = "")))
   # coef <- as.data.frame(summary(coef(mod)))
   coefs <- as.data.frame(as.matrix(
@@ -235,6 +245,7 @@ pen.reg.anal <- function(mSetObj=NA,
       coef(mod)
             # ) 
             ))
+print("coefficients")
 ### uncomment
   #coef$variable <- "variable"
   #x <- 1
@@ -248,34 +259,46 @@ pen.reg.anal <- function(mSetObj=NA,
   #coef <- data.frame(coef$variable, coef$x)
   #colnames(coef) <- c("Variables", "Coefficients")
 ### uncomment done
-  overall.rsme <- Metrics::rmse(data[,facA, drop = TRUE], fitted)
+# fit_all <- predict(mod, newx = as.matrix(data[,colnames(data) != facA, drop = FALSE]))
+print("fitted on all")
+#  overall.rsme <- Metrics::rmse(data[,facA, drop = TRUE], fit_all)
+print("overall.rmse")
 
   #PREDICT ON TEST, OBTAIN RMSE
-  predictors_test2 <- as.matrix(predictors_test)
+#  predictors_test2 <- as.matrix(predictors_test)
   # predictors_test2 <- as.data.frame(predictors_test2)
-  test_prediction <- predict(mod, newx =predictors_test2  )
-  test_rmse <- Metrics::rmse(test_data[,facA, drop = TRUE], test_prediction)
+print("predictors_test2")
+#  test_prediction <- predict(mod, newx =predictors_test2  )
+print("test_prediction")
+#  test_rmse <- Metrics::rmse(response_test, test_prediction)
+print("test_rmse")
 
   #Store results in mSetObj$analSet$penReg
-  mSetObj$analSet$penReg$mod <- list(model.name = method, model = mod, formula = form, response = facA, predictor = colnames(predictors_train), alpha = bestAlpha, lambda = bestLambda)
-  mSetObj$analSet$penReg$res <- list(response = facA, predictors = colnames(predictors_train), predictors.test.data = predictors_test, predictors.train.data = predictors_train, summary = summ, coefficients = coefs, predicted.values = fitted, overall.rmse = overall.rsme, train.data = train_data, test.data = test_data, test.rmse = test_rmse, cross.validation = cv, method = method, fileName = fileName) 
+  mSetObj$analSet$penReg$mod <- list(model.name = method1, model = mod, formula = form, response = facA, predictor = colnames(predictors_train), alpha = bestAlpha, lambda = bestLambda)
+  mSetObj$analSet$penReg$res <- list(response = facA, predictor = colnames(predictors_train), predictors.test.data = predictors_test, predictors.train.data = predictors_train, summary = summ, coefficients = coefs, predicted.values = fitt, 
+#test.prediction = test_prediction, 
+overall.rmse = overall.rsme, train.data = train_data, test.data = test_data, 
+#test.rmse = test_rmse, 
+cross.validation = cv, method = method1, fileName = fileName) 
+print("stored results in mSetObj")
 
   #Download text document containing the summary, called the fileName. Document goes into the working directory and should be accessible to the user as part of the report
   sink(fileName) 
   cat("Formula:\n")
   print(form)
   cat("\nMethod:\n")
-  cat(paste0(method))
+  cat(paste0(method1))
   cat("\n\nCall:\n")
-  print(call)
+  print(mod_call)
   cat("\nSummary:\n")
   print(summ)
   cat("\nCoefficients:\n")
   print(coefs)
   cat("\nPredicted values using trained model:\n")
-  print(fitted)
+  # print(fitt)
+  # print(test_prediction)
   cat("\nOverall RMSE:\n")
-  cat(paste0(overall.rsme))
+#  cat(paste0(overall.rsme))
   sink()
   
   return(.set.mSet(mSetObj))
@@ -327,7 +350,6 @@ pen.pred.plot <- function(mSetObj=NA,
 # problem with ci for penalizec regression: https://stats.stackexchange.com/questions/224796/why-are-confidence-intervals-and-p-values-not-reported-as-default-for-penalized
 # Penalized regression uses the bias-variance tradeoff to give us coefficient estimates with lower variance, but with bias. Reporting a CI around a biased estimate will give an unrealistically optimistic indication of how close the true value of the coefficient may be to the point estimate.
 #section 6 of the vignette for the penalized R package ("L1 and L2 Penalized Regression Models" Jelle Goeman, Rosa Meijer, Nimisha Chaturvedi, Package version 0.9-47), https://cran.r-project.org/web/packages/penalized/vignettes/penalized.pdf.
-
 # another possible option: HDCI — High Dimensional Confidence Interval Based on Lasso and Bootstrap (https://github.com/cran/HDCI)
 
 
@@ -337,7 +359,8 @@ library("Metrics")
 library("ggplot2")
 library("RJSONIO")
   
-  #Extract necessary objects from mSetObj
+
+  #EXTRACT FROM mSetObj NECESSARY OBJECTS 
   mSetObj <- .get.mSet(mSetObj)
   
 ## removed data param: 202209-30
@@ -349,19 +372,21 @@ library("RJSONIO")
 #cat("NOT USING STANDARDIZED DATA IN PENALIZED REGRESSION? BE CAREFUL - you may be penalized for differences in scale between variables (remember the same penalty factor lambda will be applied to all variables equally!)")
 #  }
   
+print("pred: input set")
 data <- dplyr::select_if(input, is.numeric)
+print("pred: numeric ('data') set")
 
  facA <- mSetObj$analSet$penReg$res$response
-method <- mSetObj$analSet$penReg$res$method
+method1 <- mSetObj$analSet$penReg$res$method
 mod <- mSetObj$analSet$penReg$mod$model
   predictors_test <- mSetObj$analSet$penReg$res$predictors.test.data
-  test_prediction <- predict(mod, newx = as.matrix(predictors_test))
+#  test_prediction <- predict(mod, newx = as.matrix(predictors_test))
   test_data <- mSetObj$analSet$penReg$res$test.data
   predictors_train <- mSetObj$analSet$penReg$res$predictors.train.data
   form <- paste(facA, "~", paste(colnames(predictors_train), collapse = "+", sep = ""))
-  # test_rmse <- Metrics::rmse(test_data[,facA, drop = TRUE], test_prediction)  
+#  test_rmse <- <- mSetObj$analSet$penReg$res$test.rmse #Metrics::rmse(test_data[,facA, drop = TRUE], test_prediction)  
 
-
+print("pred: extracted from mSet set")
 
 # ### changed facA to 1st column of numeric data instead of just generic data 202209-30
 #   #SET RESPONSE VARIABLE NAME
@@ -444,12 +469,15 @@ mod <- mSetObj$analSet$penReg$mod$model
 #       cv <- glmnet::cv.glmnet(x = as.matrix(predictors_train), y = as.matrix(response_train), alpha=bestAlpha)
 #     }
 
- 
+
    form <- paste(facA, "~", paste(colnames(predictors_train), collapse = "+", sep = ""))
+ print("pred: formula set")
    dfpred <- data.frame(fpred = as.vector(test_prediction), fA = test_data[,facA, drop = TRUE])
-   formula2 <- as.formula("fA~fpred")
-   model2 <- lm(formula = formula, data = dfpred, weights = NULL)
- 
+ print("pred: dfpred set") 
+  formula2 <- as.formula("fA~fpred")
+ print("pred: formula2 set")
+   model2 <- lm(formula = formula2, data = dfpred, weights = NULL)
+  print("pred: model2 set")
 
   #Set plot dimensions
   if(is.na(width)){
@@ -502,7 +530,7 @@ mod <- mSetObj$analSet$penReg$mod$model
   
   # PLOT TITLE
   if(plot_title == " "){ 
-    plot_title1 <- paste0(method,"\n",form)
+    plot_title1 <- paste0(method1,"\n",form)
   } else {
     plot_title1 <- plot_title
   }
@@ -520,7 +548,7 @@ mod <- mSetObj$analSet$penReg$mod$model
   } else { #prediction
     plot_xlab1 <- plot_xlab
   }
- 
+  print("pred: plot color, labels set")
 ### TROUBLESHOOTING
 #input <- iris
 #data <- dplyr::select_if(input, is.numeric)
@@ -538,7 +566,7 @@ mod <- mSetObj$analSet$penReg$mod$model
 #model <- glmnet::glmnet(as.matrix(predictors_train), as.matrix(response_train), alpha=params$bestTune$alpha, lambda = params$bestTune$lambda, weights = NULL, family = "gaussian")
 #bestAlpha <- 0
 #bestLambda <- params$bestTune$lambda #Extract best parameter
-#method <- "Ridge Regression"
+#method1 <- "Ridge Regression"
 #cv <- glmnet::cv.glmnet(x = as.matrix(predictors_train), y = as.matrix(response_train), alpha=bestAlpha)
 #test_prediction <- predict(mod, newx = as.matrix(predictors_test))
 #plot_ci1 <- TRUE
@@ -551,11 +579,11 @@ mod <- mSetObj$analSet$penReg$mod$model
 
   # plot(x=test_prediction, y=test_data[,facA], xlab="Predicted", ylab="Actual", main=method, yaxt="n"); axis(2, las=2); abline(a=0,b=1)
 
-  a0 <- ggplot(data = dfpred, #data.frame(
+  a0 <- ggplot(data = dfpred, aes(x = fpred, y = fA)) +
+   #data.frame(
    #fpred = as.vector(test_prediction), fA = test_data[,facA, drop = TRUE]),
    # aes(x = .data[[facA]], y = .data[[facB]]) ) +
    # aes_(x = as.name(facA), y = as.name(facB)) )+
-  aes(x = fpred, y = fA)) +
     labs(title = plot_title1) +
      ylab(plot_ylab1)+ xlab(plot_xlab1) +
      geom_smooth(color = col_line1, fullrange = TRUE, method = "lm") +
@@ -569,9 +597,10 @@ mod <- mSetObj$analSet$penReg$mod$model
         plot.title = element_text(face = 'bold', hjust = 0.5)
   )
 
-  
+   print("pred: made plot set")
 #STORE IN mset
-  mSetObj$analSet$penReg$plotpred <- list(plot= a0, title = plot_title1, xlab = plot_xlab1, ylab = plot_ylab1)
+  mSetObj$analSet$penReg$plotpred <- list(plot= a0, title = plot_title1, 
+         xlab = plot_xlab1, ylab = plot_ylab1)
 
 #GENERATE PLOT
   Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
@@ -597,8 +626,6 @@ linear_plot_json$points$size <- build_points[,c("size")]#[,7]
 linear_plot_json$lines$coords <- build_line[,c("x","y")]
 linear_plot_json$lines$cols <- build_line[,grepl("col",colnames(build_line))]
 linear_plot_json$lines$size <- build_line[,c("size")]
- ## linear_plot_json$label <- build$data[[3]][,c("label")]
- ## linear_plot_json$lines$ci <- build$data[[1]][,c("se")]
   if(any(grepl("ymin", colnames(build_line))) && any(grepl("ymax", colnames(build_line))) ){
    ci<- build_line[,c("x","y", "ymin", "ymax")] 
    colnames(ci) <- c("x","y","CI_down", "CI_up")
@@ -608,11 +635,11 @@ linear_plot_json$lines$size <- build_line[,c("size")]
  }   
   
 ## BOOLEANS
-if(plot_ci1 == TRUE){
- linear_plot_json$bool_ci <- TRUE
- } else{
-linear_plot_json$bool_ci <- FALSE
-}
+#if(plot_ci1 == TRUE){
+# linear_plot_json$bool_ci <- TRUE
+# } else{
+#linear_plot_json$bool_ci <- FALSE
+#}
 
 #### MODEL VARS FOR LINE
   linear_plot_json$r_sq <-
@@ -630,7 +657,7 @@ linear_plot_json$bool_ci <- FALSE
  cat(json.obj)
  sink()
 print(json.obj)
-print(paste("PLOT1 | facA: ", facA, " | method: ", method, sep = ""))
+print(paste("PLOT1 | facA: ", facA, " | method: ", method1, sep = ""))
 print("JSON and the argonauts")
 
 if(!.on.public.web){
@@ -697,7 +724,7 @@ library("RJSONIO")
 data <- dplyr::select_if(input, is.numeric)
 
 mod <- mSetObj$analSet$penReg$mod$model
-  method <- mSetObj$analSet$penReg$res$method
+  method1 <- mSetObj$analSet$penReg$res$method
   predictors_test <- mSetObj$analSet$penReg$res$predictors.test.data
   test_prediction <- predict(mod, newx = as.matrix(predictors_test))
   facA <- mSetObj$analSet$penReg$res$response
@@ -827,7 +854,7 @@ cv <- mSetObj$analSet$penReg$res$cross.validation
   
   # PLOT TITLE
   if(plot_title == " "){ 
-    plot_title1 <- paste0(method, " Cross Validation Plot", "\n")
+    plot_title1 <- paste0(method1, " Cross Validation Plot", "\n")
   } else {
     plot_title1 <- plot_title
   }
@@ -847,7 +874,7 @@ cv <- mSetObj$analSet$penReg$res$cross.validation
     plot_xlab1 <- plot_xlab
   }
  
-  # plot(cv, yaxt="n", xlab="Log(Lambda)", main=paste0(method, " Cross Validation Plot", "\n")); axis(2, las=2)
+  # plot(cv, yaxt="n", xlab="Log(Lambda)", main=paste0(method1, " Cross Validation Plot", "\n")); axis(2, las=2)
   # plot of MSE as a function of lambda
 
 a0 <- ggplot(broom::tidy(cv), aes(lambda, estimate)) +
@@ -928,7 +955,7 @@ linear_plot_json$lines$size <- build_line[,c("size")]
  cat(json.obj)
  sink()
 print(json.obj)
-print(paste("PLOT2 | facA: ", facA, " | method: ", method, sep = ""))
+print(paste("PLOT2 | facA: ", facA, " | method: ", method1, sep = ""))
 print("Bourne. JSON Bourne.")
 
 if(!.on.public.web){
