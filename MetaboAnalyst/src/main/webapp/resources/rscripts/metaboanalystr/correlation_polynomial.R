@@ -1,3 +1,48 @@
+#'Return formula for a polynomial model, utility function used in poly.reg.anal'
+#'@description Create equation from coefficients of a polynomial model
+#'@param coeff coefficients from polynomial model
+#'@param pwr highest power of polynomial model
+#'@author Gina Sykes\email{gsykes@ualberta.ca}
+#'University of Alberta, Canada
+#'License: GNU GPL (>= 2)
+#'@export
+
+poly_eqn <- function(coeff, pwr){
+
+#  if(length(coeff) != (pwr+1)){
+#    stop("Length of input coefficients needs to be one more than input power")
+#  }
+  
+  # a <- coeff
+  i <- 1
+  pp <- rev(seq(0, pwr, 1))
+  yy <- vector(mode = "list", length = length(coeff))
+  
+while(i < (pwr+2)){
+
+    if (coeff[i] > 0 & i!=1){
+     ye<-   sprintf("+ ")
+      }else if(a[i] < 0){
+      ye<-  sprintf("- ")
+      } else{
+       ye <- sprintf("")
+      }
+  
+  if(pp[i] == 0){
+    yy[[i]] <- paste0(ye, sprintf("%.2f ", abs(coeff[i])) )
+  }else if(pp[i] == 1 ){
+    yy[[i]] <- paste0(ye, sprintf("%.2fx ",  abs(coeff[i]) ) )
+   } else {
+   yy[[i]] <- paste0(ye, sprintf("%.2fx^%d ", abs(coeff[i]), pp[i]) )
+  }
+   i <- i + 1
+  }
+
+ return( trimws(paste(unlist(yy, use.names=FALSE), collapse = "")) )
+ 
+}
+
+
 #'Perform Polynomial Regression'
 #'@description Build polynomial regression models of various degrees for one user selected predictor variable
 #'@param mSetObj Input the name of the created mSetObj
@@ -88,133 +133,137 @@ poly.reg.anal <- function(mSetObj=NA,
     fitt <- fitted(mod) # PRINT #Predicted values
     coeffs <- summary[["coefficients"]] #Extract model coefficients
 
-    #Generate equation
-    if (degree == 2) {
-      alpha <- round(coeffs[1], digits = 2) #yint
-      beta.1 <- round(coeffs[2], digits = 2) #slope
-      beta.2 <- round(coeffs[3], digits = 2) 
-      equation <- paste(facA, " = ", 
-       paste(paste(beta.2, paste0(facB, "^", degree), sep = "*"),
-       paste(beta.1, facB, sep = "*"), alpha, sep = " + ")) #Create eqn: w/ intercept, coeff, pred name
-    } else if (degree == 3) {
-      alpha <- round(coeffs[1], digits = 2)
-      beta.1 <- round(coeffs[2], digits = 2)
-      beta.2 <- round(coeffs[3], digits = 2) 
-      beta.3 <- round(coeffs[4], digits = 2) 
-      equation <- paste(facA, " = ", 
-        paste(paste(beta.3, paste0(facB, "^", degree), sep = "*"),
-        paste(beta.2, paste0(facB, "^", degree-1), sep = "*"),
-        paste(beta.1, facB, sep = "*"), alpha, sep = " + ")) #Create equation with intercept, coefficient and predictor variable name
-    } else if (degree == 4) {
-      alpha <- round(coeffs[1], digits = 2)
-      beta.1 <- round(coeffs[2], digits = 2)
-      beta.2 <- round(coeffs[3], digits = 2) 
-      beta.3 <- round(coeffs[4], digits = 2) 
-      beta.4 <- round(coeffs[5], digits = 2) 
-      equation <- paste(facA, " = ", 
-        paste(paste(beta.4, paste0(facB, "^", degree), sep = "*"),
-        paste(beta.3, paste0(facB, "^", degree-1), sep = "*"),
-        paste(beta.2, paste0(facB, "^", degree-2), sep = "*"),
-        paste(beta.1, facB, sep = "*"), alpha, sep = " + ")) #Create equation with intercept, coefficient and predictor variable name
-    } else if (degree == 5) {
-      alpha <- round(coeffs[1], digits = 2)
-      beta.1 <- round(coeffs[2], digits = 2)
-      beta.2 <- round(coeffs[3], digits = 2) 
-      beta.3 <- round(coeffs[4], digits = 2) 
-      beta.4 <- round(coeffs[5], digits = 2) 
-      beta.5 <- round(coeffs[6], digits = 2) 
-      equation <- paste(facA, " = ", 
-        paste(paste(beta.5, paste0(facB, "^", degree), sep = "*"),
-        paste(beta.4, paste0(facB, "^", degree-1), sep = "*"),
-        paste(beta.3, paste0(facB, "^", degree-2), sep = "*"),
-        paste(beta.2, paste0(facB, "^", degree-3), sep = "*"),
-        paste(beta.1, facB, sep = "*"), alpha, sep = " + ")) #Create equation with intercept, coefficient and predictor variable name
-    } else if (degree == 6) {
-      alpha <- round(coeffs[1], digits = 2)
-      beta.1 <- round(coeffs[2], digits = 2)
-      beta.2 <- round(coeffs[3], digits = 2) 
-      beta.3 <- round(coeffs[4], digits = 2) 
-      beta.4 <- round(coeffs[5], digits = 2) 
-      beta.5 <- round(coeffs[6], digits = 2) 
-      beta.6 <- round(coeffs[7], digits = 2) 
-      equation <- paste(facA, " = ", 
-        paste(paste(beta.6, paste0(facB, "^", degree), sep = "*"),
-        paste(beta.5, paste0(facB, "^", degree-1), sep = "*"),
-        paste(beta.4, paste0(facB, "^", degree-2), sep = "*"),
-        paste(beta.3, paste0(facB, "^", degree-3), sep = "*"),
-        paste(beta.2, paste0(facB, "^", degree-4), sep = "*"),
-        paste(beta.1, facB, sep = "*"), alpha, sep = " + ")) #Create equation with intercept, coefficient and predictor variable name
-    } else if (degree == 7) {
-      alpha <- round(coeffs[1], digits = 2)
-      beta.1 <- round(coeffs[2], digits = 2)
-      beta.2 <- round(coeffs[3], digits = 2) 
-      beta.3 <- round(coeffs[4], digits = 2) 
-      beta.4 <- round(coeffs[5], digits = 2) 
-      beta.5 <- round(coeffs[6], digits = 2) 
-      beta.6 <- round(coeffs[7], digits = 2) 
-      beta.7 <- round(coeffs[8], digits = 2) 
-      equation <- paste(facA, " = ", 
-        paste(paste(beta.7, paste0(facB, "^", degree), sep = "*"),
-        paste(beta.6, paste0(facB, "^", degree-1), sep = "*"),
-        paste(beta.5, paste0(facB, "^", degree-2), sep = "*"),
-        paste(beta.4, paste0(facB, "^", degree-3), sep = "*"),
-        paste(beta.3, paste0(facB, "^", degree-4), sep = "*"),
-        paste(beta.2, paste0(facB, "^", degree-5), sep = "*"),
-        paste(beta.1, facB, sep = "*"), alpha, sep = " + ")) #Create equation with intercept, coefficient and predictor variable name
-    } else if (degree == 8) {
-      alpha <- round(coeffs[1], digits = 2)
-      beta.1 <- round(coeffs[2], digits = 2)
-      beta.2 <- round(coeffs[3], digits = 2) 
-      beta.3 <- round(coeffs[4], digits = 2) 
-      beta.4 <- round(coeffs[5], digits = 2) 
-      beta.5 <- round(coeffs[6], digits = 2) 
-      beta.6 <- round(coeffs[7], digits = 2) 
-      beta.7 <- round(coeffs[8], digits = 2) 
-      beta.8 <- round(coeffs[9], digits = 2) 
-       equation <- paste(facA, " = ", 
-        paste(paste(beta.8, paste0(facB, "^", degree-1), sep = "*"),
-        paste(beta.7, paste0(facB, "^", degree-2), sep = "*"),
-        paste(beta.6, paste0(facB, "^", degree-3), sep = "*"),
-        paste(beta.5, paste0(facB, "^", degree-4), sep = "*"),
-        paste(beta.4, paste0(facB, "^", degree-5), sep = "*"),
-        paste(beta.3, paste0(facB, "^", degree-6), sep = "*"),
-        paste(beta.2, paste0(facB, "^", degree-7), sep = "*"),
-        paste(beta.1, facB, sep = "*"), alpha, sep = " + ")) #Create equation with intercept, coefficient and predictor variable name
-    } else if (degree == 9) {
-      alpha <- round(coeffs[1], digits = 2)
-      beta.1 <- round(coeffs[2], digits = 2)
-      beta.2 <- round(coeffs[3], digits = 2) 
-      beta.3 <- round(coeffs[4], digits = 2) 
-      beta.4 <- round(coeffs[5], digits = 2) 
-      beta.5 <- round(coeffs[6], digits = 2) 
-      beta.6 <- round(coeffs[7], digits = 2) 
-      beta.7 <- round(coeffs[8], digits = 2) 
-      beta.8 <- round(coeffs[9], digits = 2) 
-      beta.9 <- round(coeffs[10], digits = 2) 
-      equation <- paste(facA, " = ", 
-        paste(paste(beta.9, paste0(facB, "^", degree), sep = "*"),
-        paste(beta.8, paste0(facB, "^", degree-1), sep = "*"),
-        paste(beta.7, paste0(facB, "^", degree-2), sep = "*"),
-        paste(beta.6, paste0(facB, "^", degree-3), sep = "*"),
-        paste(beta.5, paste0(facB, "^", degree-4), sep = "*"),
-        paste(beta.4, paste0(facB, "^", degree-5), sep = "*"),
-        paste(beta.3, paste0(facB, "^", degree-6), sep = "*"),
-        paste(beta.2, paste0(facB, "^", degree-7), sep = "*"),
-        paste(beta.1, facB, sep = "*"), alpha, sep = " + ")) #Create equation with intercept, coefficient and predictor variable name
-    } else {
-      alpha <- round(coeffs[1], digits = 2)
-      beta.1 <- round(coeffs[2], digits = 2)
-      beta.2 <- round(coeffs[3], digits = 2) 
-      beta.3 <- round(coeffs[4], digits = 2) 
-      beta.4 <- round(coeffs[5], digits = 2) 
-      beta.5 <- round(coeffs[6], digits = 2) 
-      beta.6 <- round(coeffs[7], digits = 2) 
-      beta.7 <- round(coeffs[8], digits = 2) 
-      beta.8 <- round(coeffs[9], digits = 2) 
-      beta.9 <- round(coeffs[10], digits = 2) 
-      beta.10 <- round(coeffs[11], digits = 2) 
-      equation <- paste(facA, " = ", paste(paste(beta.10, paste0(facB, "^", degree), sep = "*"), paste(beta.9, paste0(facB, "^", degree-1), sep = "*"), paste(beta.8, paste0(facB, "^", degree-2), sep = "*"), paste(beta.7, paste0(facB, "^", degree-3), sep = "*"), paste(beta.6, paste0(facB, "^", degree-4), sep = "*"), paste(beta.5, paste0(facB, "^", degree-5), sep = "*"), paste(beta.4, paste0(facB, "^", degree-6), sep = "*"), paste(beta.3, paste0(facB, "^", degree-7), sep = "*"), paste(beta.2, paste0(facB, "^", degree-8), sep = "*"), paste(beta.1, facB, sep = "*"), alpha, sep = " + ")) #Create equation with intercept, coefficient and predictor variable name
-    }
+# GENERATE EQUATION using internal function
+equation <- gsub("x", facB, 
+            poly_eqn(coeff = coeffs[,"Estimate"], pwr = degree)  )
+
+# #Generate equation
+# if (degree == 2) {
+#   alpha <- round(coeffs[1], digits = 2) #yint
+#   beta.1 <- round(coeffs[2], digits = 2) #slope
+#   beta.2 <- round(coeffs[3], digits = 2) 
+#   equation <- paste(facA, " = ", 
+#                     paste(paste(beta.2, paste0(facB, "^", degree), sep = "*"),
+#                           paste(beta.1, facB, sep = "*"), alpha, sep = " + ")) #Create eqn: w/ intercept, coeff, pred name
+# } else if (degree == 3) {
+#   alpha <- round(coeffs[1], digits = 2)
+#   beta.1 <- round(coeffs[2], digits = 2)
+#   beta.2 <- round(coeffs[3], digits = 2) 
+#   beta.3 <- round(coeffs[4], digits = 2) 
+#   equation <- paste(facA, " = ", 
+#                     paste(paste(beta.3, paste0(facB, "^", degree), sep = "*"),
+#                           paste(beta.2, paste0(facB, "^", degree-1), sep = "*"),
+#                           paste(beta.1, facB, sep = "*"), alpha, sep = " + ")) #Create equation with intercept, coefficient and predictor variable name
+# } else if (degree == 4) {
+#   alpha <- round(coeffs[1], digits = 2)
+#   beta.1 <- round(coeffs[2], digits = 2)
+#   beta.2 <- round(coeffs[3], digits = 2) 
+#   beta.3 <- round(coeffs[4], digits = 2) 
+#   beta.4 <- round(coeffs[5], digits = 2) 
+#   equation <- paste(facA, " = ", 
+#                     paste(paste(beta.4, paste0(facB, "^", degree), sep = "*"),
+#                           paste(beta.3, paste0(facB, "^", degree-1), sep = "*"),
+#                           paste(beta.2, paste0(facB, "^", degree-2), sep = "*"),
+#                           paste(beta.1, facB, sep = "*"), alpha, sep = " + ")) #Create equation with intercept, coefficient and predictor variable name
+# } else if (degree == 5) {
+#   alpha <- round(coeffs[1], digits = 2)
+#   beta.1 <- round(coeffs[2], digits = 2)
+#   beta.2 <- round(coeffs[3], digits = 2) 
+#   beta.3 <- round(coeffs[4], digits = 2) 
+#   beta.4 <- round(coeffs[5], digits = 2) 
+#   beta.5 <- round(coeffs[6], digits = 2) 
+#   equation <- paste(facA, " = ", 
+#                     paste(paste(beta.5, paste0(facB, "^", degree), sep = "*"),
+#                           paste(beta.4, paste0(facB, "^", degree-1), sep = "*"),
+#                           paste(beta.3, paste0(facB, "^", degree-2), sep = "*"),
+#                           paste(beta.2, paste0(facB, "^", degree-3), sep = "*"),
+#                           paste(beta.1, facB, sep = "*"), alpha, sep = " + ")) #Create equation with intercept, coefficient and predictor variable name
+# } else if (degree == 6) {
+#   alpha <- round(coeffs[1], digits = 2)
+#   beta.1 <- round(coeffs[2], digits = 2)
+#   beta.2 <- round(coeffs[3], digits = 2) 
+#   beta.3 <- round(coeffs[4], digits = 2) 
+#   beta.4 <- round(coeffs[5], digits = 2) 
+#   beta.5 <- round(coeffs[6], digits = 2) 
+#   beta.6 <- round(coeffs[7], digits = 2) 
+#   equation <- paste(facA, " = ", 
+#                     paste(paste(beta.6, paste0(facB, "^", degree), sep = "*"),
+#                           paste(beta.5, paste0(facB, "^", degree-1), sep = "*"),
+#                           paste(beta.4, paste0(facB, "^", degree-2), sep = "*"),
+#                           paste(beta.3, paste0(facB, "^", degree-3), sep = "*"),
+#                           paste(beta.2, paste0(facB, "^", degree-4), sep = "*"),
+#                           paste(beta.1, facB, sep = "*"), alpha, sep = " + ")) #Create equation with intercept, coefficient and predictor variable name
+# } else if (degree == 7) {
+#   alpha <- round(coeffs[1], digits = 2)
+#   beta.1 <- round(coeffs[2], digits = 2)
+#   beta.2 <- round(coeffs[3], digits = 2) 
+#   beta.3 <- round(coeffs[4], digits = 2) 
+#   beta.4 <- round(coeffs[5], digits = 2) 
+#   beta.5 <- round(coeffs[6], digits = 2) 
+#   beta.6 <- round(coeffs[7], digits = 2) 
+#   beta.7 <- round(coeffs[8], digits = 2) 
+#   equation <- paste(facA, " = ", 
+#                     paste(paste(beta.7, paste0(facB, "^", degree), sep = "*"),
+#                           paste(beta.6, paste0(facB, "^", degree-1), sep = "*"),
+#                           paste(beta.5, paste0(facB, "^", degree-2), sep = "*"),
+#                           paste(beta.4, paste0(facB, "^", degree-3), sep = "*"),
+#                           paste(beta.3, paste0(facB, "^", degree-4), sep = "*"),
+#                           paste(beta.2, paste0(facB, "^", degree-5), sep = "*"),
+#                           paste(beta.1, facB, sep = "*"), alpha, sep = " + ")) #Create equation with intercept, coefficient and predictor variable name
+# } else if (degree == 8) {
+#   alpha <- round(coeffs[1], digits = 2)
+#   beta.1 <- round(coeffs[2], digits = 2)
+#   beta.2 <- round(coeffs[3], digits = 2) 
+#   beta.3 <- round(coeffs[4], digits = 2) 
+#   beta.4 <- round(coeffs[5], digits = 2) 
+#   beta.5 <- round(coeffs[6], digits = 2) 
+#   beta.6 <- round(coeffs[7], digits = 2) 
+#   beta.7 <- round(coeffs[8], digits = 2) 
+#   beta.8 <- round(coeffs[9], digits = 2) 
+#   equation <- paste(facA, " = ", 
+#                     paste(paste(beta.8, paste0(facB, "^", degree-1), sep = "*"),
+#                           paste(beta.7, paste0(facB, "^", degree-2), sep = "*"),
+#                           paste(beta.6, paste0(facB, "^", degree-3), sep = "*"),
+#                           paste(beta.5, paste0(facB, "^", degree-4), sep = "*"),
+#                           paste(beta.4, paste0(facB, "^", degree-5), sep = "*"),
+#                           paste(beta.3, paste0(facB, "^", degree-6), sep = "*"),
+#                           paste(beta.2, paste0(facB, "^", degree-7), sep = "*"),
+#                           paste(beta.1, facB, sep = "*"), alpha, sep = " + ")) #Create equation with intercept, coefficient and predictor variable name
+# } else if (degree == 9) {
+#   alpha <- round(coeffs[1], digits = 2)
+#   beta.1 <- round(coeffs[2], digits = 2)
+#   beta.2 <- round(coeffs[3], digits = 2) 
+#   beta.3 <- round(coeffs[4], digits = 2) 
+#   beta.4 <- round(coeffs[5], digits = 2) 
+#   beta.5 <- round(coeffs[6], digits = 2) 
+#   beta.6 <- round(coeffs[7], digits = 2) 
+#   beta.7 <- round(coeffs[8], digits = 2) 
+#   beta.8 <- round(coeffs[9], digits = 2) 
+#   beta.9 <- round(coeffs[10], digits = 2) 
+#   equation <- paste(facA, " = ", 
+#                     paste(paste(beta.9, paste0(facB, "^", degree), sep = "*"),
+#                           paste(beta.8, paste0(facB, "^", degree-1), sep = "*"),
+#                           paste(beta.7, paste0(facB, "^", degree-2), sep = "*"),
+#                           paste(beta.6, paste0(facB, "^", degree-3), sep = "*"),
+#                           paste(beta.5, paste0(facB, "^", degree-4), sep = "*"),
+#                           paste(beta.4, paste0(facB, "^", degree-5), sep = "*"),
+#                           paste(beta.3, paste0(facB, "^", degree-6), sep = "*"),
+#                           paste(beta.2, paste0(facB, "^", degree-7), sep = "*"),
+#                           paste(beta.1, facB, sep = "*"), alpha, sep = " + ")) #Create equation with intercept, coefficient and predictor variable name
+# } else {
+#   alpha <- round(coeffs[1], digits = 2)
+#   beta.1 <- round(coeffs[2], digits = 2)
+#   beta.2 <- round(coeffs[3], digits = 2) 
+#   beta.3 <- round(coeffs[4], digits = 2) 
+#   beta.4 <- round(coeffs[5], digits = 2) 
+#   beta.5 <- round(coeffs[6], digits = 2) 
+#   beta.6 <- round(coeffs[7], digits = 2) 
+#   beta.7 <- round(coeffs[8], digits = 2) 
+#   beta.8 <- round(coeffs[9], digits = 2) 
+#   beta.9 <- round(coeffs[10], digits = 2) 
+#   beta.10 <- round(coeffs[11], digits = 2) 
+#   equation <- paste(facA, " = ", paste(paste(beta.10, paste0(facB, "^", degree), sep = "*"), paste(beta.9, paste0(facB, "^", degree-1), sep = "*"), paste(beta.8, paste0(facB, "^", degree-2), sep = "*"), paste(beta.7, paste0(facB, "^", degree-3), sep = "*"), paste(beta.6, paste0(facB, "^", degree-4), sep = "*"), paste(beta.5, paste0(facB, "^", degree-5), sep = "*"), paste(beta.4, paste0(facB, "^", degree-6), sep = "*"), paste(beta.3, paste0(facB, "^", degree-7), sep = "*"), paste(beta.2, paste0(facB, "^", degree-8), sep = "*"), paste(beta.1, facB, sep = "*"), alpha, sep = " + ")) #Create equation with intercept, coefficient and predictor variable name
+# }
     
      r_sq <- summ[["r.squared"]] #Extract R^2 # was stored in r.squared #was using 'adj.r.squared' ?
      r_sq_adj <- summ[["adj.r.squared"]]#Extract adjusted R^2 value # was in r.squared.adj
