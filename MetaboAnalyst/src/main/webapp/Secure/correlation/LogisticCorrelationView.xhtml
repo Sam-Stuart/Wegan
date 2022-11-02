@@ -15,14 +15,12 @@
             <p:tabView id="logCA" style="width:100%; border: none; background: none; font-size: 13px;">
                 <p:tab title ="Effects Plot" titleStyleClass="p-tab-nav">
                     <h:form id="form1">
-                        <p style="font-size: 13px">
-                            One response variable and one or more independent variables are tested for correlation. The independent variables can be numeric or categorical. The dependent variable must be represented as a character. (This means if you have converted your dependent variable to 0's and 1's, make sure the data is input with quotes around the numbers - or better yet, converted back to the original value names in place of the numbers - so it will be recognized).
-                             For categorical independent variables, make sure to use characters and not numbers. For example, if there are levels 1, 2 and 3, change the level labels to I, II and III prior to upload. Independent variables can be indicated using the text box with commas to separate names. 
-                              
-                            Choose model type 'binomial' when there are 2 possible outcomes in the dependent variable. If there are more than 2, choose type 'multinomial'. However, if the dependent variable is also inherently ordered (for example, representing sizes small, medium, and large) use the text box to input the ascending variable order and choose model type 'ordinal'. 
-                            The reference level of a categorical variable (level being a unique value) can be thought of as a variable's baseline (or 'default') observed value. This means that the model results are given relative to this value. To input the reference level, use the given text box (otherwise the first level alphabetically is used).
-                           
-                            The train data for model building is 70% of the dataset, while the test data for model testing is 30% of the dataset.
+                        <p style="text-indent:10px; font-size: 13px">
+                            One response variable and one or more independent variables are tested for correlation. The independent variables can be numeric or categorical. The dependent variable must be represented as a character. (This means if you have converted your dependent variable to 0's and 1's, make sure the data is input with quotes around the numbers - or better yet, converted back to the original value names in place of the numbers - so it will be recognized).</p>
+                        <p style="text-indent:10px; font-size: 13px"> For categorical independent variables, make sure to use characters and not numbers. For example, if there are levels 1, 2 and 3, change the level labels to I, II and III prior to upload. Independent variables can be indicated using the text box with commas to separate names. </<p>
+                       <p style="text-indent:10px; font-size: 13px">Choose model type 'binomial' when there are 2 possible outcomes in the dependent variable. If there are more than 2, choose type 'multinomial'. However, if the dependent variable is also inherently ordered (for example, representing sizes small, medium, and large) use the text box to input the ascending variable order and choose model type 'ordinal'.</p> 
+                       <p style="text-indent:10px; font-size: 13px">The reference level of a categorical variable (level being a unique value) can be thought of as a variable's baseline (or 'default') observed value. This means that the model results are given relative to this value. To input the reference level, use the given text box (otherwise the first level alphabetically is used).</p>
+                         <p style="text-indent:10px; font-size: 13px">The train data for model building is 70% of the dataset, while the test data for model testing is 30% of the dataset.
                         </p>
 
                         <h:panelGrid id="corrLogPane1" columns="3" cellpadding="3" columnClasses="colLeft,colRight,colLast">
@@ -36,7 +34,7 @@
                                 <f:selectItems value="#{logCABean.columnLevelOpts}" />
                             </p:selectOneMenu>
                             <spacer></spacer>
-                            <h:outputLabel style="font-weight: bold" value="Indicate independent variables using the column names with commas in between:"/>
+                            <h:outputLabel style="font-weight: bold" value="Independent variables (column names with commas in between):"/>
                             <p:inputText style="width:400px; height:40px" value="#{logCABean.indInput}"/> 
                             
                             <p:panelGrid></p:panelGrid>
