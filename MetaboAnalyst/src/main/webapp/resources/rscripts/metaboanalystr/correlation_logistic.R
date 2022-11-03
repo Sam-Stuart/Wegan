@@ -222,7 +222,7 @@ if(!all(is.element(ordertext, levels.facA))){
     std.errors <- sqrt(diag(covar))
     zValues <- coeffs / std.errors
     pValues <- pnorm(abs(zValues), lower.tail = FALSE)*2
-    Hessian <- model[["Hessian"]]
+    Hessian <- mod[["Hessian"]]
     # fileName <- paste0("ordinal_logistic_regression_reference_", reference, "_summary.txt") #File name for results
     
     #STORE RESULTS
@@ -291,10 +291,10 @@ c(reference, levels(model_data[,1])[!levels(model_data[,1]) %in% reference])
     std.errors <- sqrt(diag(covar))
     zValues <- coeffs / std.errors
     pValues <- pnorm(abs(zValues), lower.tail = FALSE)*2
-    Hessian <- model[["Hessian"]]
+    Hessian <- mod[["Hessian"]]
     # fileName <- paste0("multinomial_logistic_regression_reference_", reference, "_summary.txt") #File name for results
 
-    #Store results
+    #STORE RESULTS
     mSetObj$analSet$logMultinomReg$res <- list(summary = summ, model.data = model_data,
  response = facA, predictor = predictors, predtext = predtext1, 
 residuals = resid, predicted.values = fitt, 
@@ -367,7 +367,7 @@ model = mod, formula = form, model.data = model_data, response = facA, predictor
     pValues <- pnorm(abs(zValues), lower.tail = FALSE)*2
     # fileName <- paste0("binomial_logistic_regression_reference_", reference, "_summary.txt") #File name for results
 
-    #Store results
+    #STORE RESULTS
     mSetObj$analSet$logBinomReg$res <- list(summary = summ, model.data = model_data,
  response = facA, predictor = predictors, predtext = predtext1,
 residuals = resid, predicted.values = fitt,
@@ -500,34 +500,13 @@ data = "false",
   } else { #Binomial
     # main = "Binomial Logistic Regression \nEffects Plot"
     output <- mSetObj$analSet$logBinomReg
-    model <- mSetObj$analSet$logBinomReg$mod$model
+    mod <- mSetObj$analSet$logBinomReg$mod$model
     predictors <- mSetObj$analSet$logBinomReg$res$predictor
     facA <- mSetObj$analSet$logBinomReg$res$response
     main_end <- " ( Binomial Logistic Regression)" ## main = "Binomial Logistic Regression \nEffects Plot"
   }
   
  
-
-# ## GET VARIABLES  
-#   if (type == "ordinal") { 
-#     # main = "Ordinal Logistic Regression \nEffects Plot"
-#     model <- mSetObj$analSet$logOrdReg$mod$model
-#     predictors <- mSetObj$analSet$logOrdReg$res$predictor
-#     facA <- mSetObj$analSet$logOrdReg$res$response
-#     main = paste0("Predicted Probabilities of ", facA, " ( Ordinal Logistic Regression)")
-#   } else if (type == "multinomial") {
-#     # main = "Multinomial Logistic Regression \nEffects Plot"
-#     model <- mSetObj$analSet$logMultinomReg$mod$model
-#     predictors <- mSetObj$analSet$logMultinomReg$res$predictor
-#     facA <- mSetObj$analSet$logMultinomReg$res$response
-#     main = paste0("Predicted Probabilities of ", facA, " ( Multinomial Logistic Regression)")
-#   } else { #Binomial
-#     # main = "Binomial Logistic Regression \nEffects Plot"
-#     model <- mSetObj$analSet$logBinomReg$mod$model
-#     predictors <- mSetObj$analSet$logBinomReg$res$predictor
-#     facA <- mSetObj$analSet$logBinomReg$res$response
-#     main = paste0("Predicted Probabilities of ", facA, " ( Binomial Logistic Regression)")
-#   }
   
   ###### WITH facA and predtext options
   ##### [CRUNCH]
@@ -611,7 +590,7 @@ data = "false",
 # 
 # model_data <- data.frame(input[,facA], pred_data)
 # colnames(model_data) <- c(paste0(facA), predictors2)
-# model <- lm(formula = formula, data = model_data, weights = NULL)
+# mod <- lm(formula = form, data = model_data, weights = NULL)
 
   #########
   ######### [CRUNCH]
@@ -735,7 +714,7 @@ data = "false",
   mSetObj$imgSet$ploteffectslogReg <- imgName
  
   a0 <- plot(
-    ggeffects::ggpredict(model = model, terms = predictors[1:2]
+    ggeffects::ggpredict(model = mod, terms = predictors[1:2]
                          ), 
     colors = plot_palette1,
      # add.data = TRUE,
@@ -767,7 +746,7 @@ data = "false",
 
   Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
   print(a0)
-  # plot(effects::allEffects(mod=model), ylim=c(0,1), rescale.axis=FALSE, main=main)
+  # plot(effects::allEffects(mod=mod), ylim=c(0,1), rescale.axis=FALSE, main=main)
   dev.off()
   
 build <- ggplot_build(a0)
@@ -860,7 +839,32 @@ imgName, format="png", dpi=72, width=NA){
     input <- mSetObj$dataSet$orig
   }
 
-
+### VARIABLES: STORE OUTPUT SOURCE BASED ON REGSN TYPE
+  if (type == "ordinal") { 
+    # main = "Ordinal Logistic Regression \nEffects Plot"
+    output <- mSetObj$analSet$logOrdReg
+    mod <- mSetObj$analSet$logOrdReg$mod$model
+    model_data <- mSetObj$analSet$logOrdReg$res$model.data
+    predictors <- mSetObj$analSet$logOrdReg$res$predictor
+    facA <- mSetObj$analSet$logOrdReg$res$response
+    main_end <- " ( Ordinal Logistic Regression)" #  # main = "Ordinal Logistic Regression \nEffects Plot"
+  } else if (type == "multinomial") {
+    # main = "Multinomial Logistic Regression \nEffects Plot"
+    output <- mSetObj$analSet$logMultinomReg
+    mod <- mSetObj$analSet$logMultinomReg$mod$model
+    model_data <- mSetObj$analSet$logMultinomReg$res$model.data
+    predictors <- mSetObj$analSet$logMultinomReg$res$predictor
+    facA <- mSetObj$analSet$logMultinomReg$res$response
+    main_end <- " ( Multinomial Logistic Regression)" #  # main = "Multinomial Logistic Regression \nEffects Plot"
+  } else { #Binomial
+    # main = "Binomial Logistic Regression \nEffects Plot"
+    output <- mSetObj$analSet$logBinomReg
+    mod <- mSetObj$analSet$logBinomReg$mod$model
+    model_data <- mSetObj$analSet$logBinomReg$res$model.data
+    predictors <- mSetObj$analSet$logBinomReg$res$predictor
+    facA <- mSetObj$analSet$logBinomReg$res$response
+    main_end <- " ( Binomial Logistic Regression)" ## main = "Binomial Logistic Regression \nEffects Plot"
+  }
 
 
   #Set plot dimensions
@@ -909,11 +913,8 @@ imgName, format="png", dpi=72, width=NA){
   }
    
   if (type=="ordinal") {
-    mod <- mSetObj$analSet$logOrdReg$mod$model
-    model_data <- mSetObj$analSet$logOrdReg$res$model.data
-    facA <- mSetObj$analSet$logOrdReg$res$response
-    predicted <- fitted(summary(mod))
-    # mSetObj$analSet$logOrdReg$res$linear.predicted.values
+ 
+    predicted <- fitted(summary(mod)) # mSetObj$analSet$logOrdReg$res$linear.predicted.values
     prob <- predict(mod, type="probs")
     
     ############ using {multiROC} - does it work or ordinal??
@@ -950,11 +951,8 @@ axis.title = element_text(face = "bold", size = 12)
 # pROC::ggroc( pROC::multiclass.roc(model_data[,facA]~prob , plot=TRUE, print.auc = TRUE, xlab = "Specificity ( True Negative)", ylab = "Sensitivity (True Positive)", main = main, yaxt = "n" ) ); axis(2, las=2)
   
   } else if (type == "multinomial") {
-
 ##   ## https://github.com/WandeRum/multiROC
-    mod <- mSetObj$analSet$logMultinomReg$mod$model
-    model_data <- mSetObj$analSet$logMultinomReg$res$model.data
-    facA <- mSetObj$analSet$logMultinomReg$res$response
+ 
     predicted <- fitted(summary(mod)) # mSetObj$analSet$logMultinomReg$res$linear.predicted.values
     prob <- predict(mod, type="probs")
     
@@ -989,11 +987,8 @@ axis.title = element_text(face = "bold", size = 12)
     
   } else { #binomial
 
-    mod <- mSetObj$analSet$logBinomReg$mod$model
-    model_data <- mSetObj$analSet$logBinomReg$res$model.data
-    facA <- mSetObj$analSet$logBinomReg$res$response
     predicted <- fitted(summary(mod))
-    prob <- predict(model, type="response")
+    prob <- predict(mod, type="response")
     
 a0 <- pROC::ggroc(  pROC::roc(model_data[,facA]~prob )) # , plot=TRUE, print.auc=TRUE, xlab="Specificity (True Negative)", ylab="Sensitivity (True Positive)", main=main, yaxt="n"
 
@@ -1041,21 +1036,21 @@ a0 <- pROC::ggroc(  pROC::roc(model_data[,facA]~prob )) # , plot=TRUE, print.auc
   linear_plot_json$line2$linetype <- build_line2[,c("linetype")]#[,7]
   
   ## BOOLEANS
-  if(plot_ci1 == TRUE){
-    linear_plot_json$bool_ci <- TRUE
-    } else{
-      linear_plot_json$bool_ci <- FALSE
-   }
+#  if(plot_ci1 == TRUE){
+#    linear_plot_json$bool_ci <- TRUE
+#    } else{
+#      linear_plot_json$bool_ci <- FALSE
+#   }
 
   
-  linear_plot_json$model$r_sq <-
-   summary(model2)[["r.squared"]] #Extract R^2
-  linear_plot_json$model$r_sq_adj <-
-    summary(model2)[["adj.r.squared"]] #Extract adjusted R^2 
-  linear_plot_json$model$slope <-
-    summary(model2)[["coefficients"]][2] # beta
-  linear_plot_json$model$yint <-
-    summary(model2)[["coefficients"]][1] # alpha
+#  linear_plot_json$model$r_sq <-
+#   summary(model2)[["r.squared"]] #Extract R^2
+#  linear_plot_json$model$r_sq_adj <-
+#    summary(model2)[["adj.r.squared"]] #Extract adjusted R^2 
+#  linear_plot_json$model$slope <-
+#    summary(model2)[["coefficients"]][2] # beta
+#  linear_plot_json$model$yint <-
+#   summary(model2)[["coefficients"]][1] # alpha
 
   json.obj <- RJSONIO::toJSON(linear_plot_json, .na='null')
   sink(imgName2)
@@ -1087,7 +1082,7 @@ factor.columns <- function(mSetObj=NA){
   load_dplyr()
   mSetObj <- .get.mSet(mSetObj)
 
-# fac.cols <- data[,sapply(mSetObj$dataSet$norm, is.factor) & sapply(mSetObj$dataSet$norm, is.character), drop = FALSE]
+# fac.cols <- data[,sapply(mSetObj$dataSet$norm, is.factor) | sapply(mSetObj$dataSet$norm, is.character), drop = FALSE]
   # fac.cols <- dplyr::select_if(mSetObj$dataSet$norm, is.character)
   fac.cols <- mSetObj$dataSet$norm %>% 
              dplyr::select_if(function(col) {is.character(col) | is.factor(col)})   
