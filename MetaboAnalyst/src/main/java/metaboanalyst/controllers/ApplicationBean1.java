@@ -341,10 +341,11 @@ public class ApplicationBean1 implements Serializable {
         corPlotNarrowWidthOpts[3] = new SelectItem("3", "3");
         corPlotNarrowWidthOpts[4] = new SelectItem("4", "4");
         
-        corModType = new SelectItem[3];
-        corModType[0] = new SelectItem("NULL", "Binomial");
-        corModType[1] = new SelectItem("multinomial", "Multinomial");
-        corModType[2] = new SelectItem("ordinal", "Ordinal");
+        corModType = new SelectItem[4];
+        corModType[0] = new SelectItem("NULL", "Select");
+        corModType[1] = new SelectItem("binomial", "Binomial");
+        corModType[2] = new SelectItem("multinomial", "Multinomial");
+        corModType[3] = new SelectItem("ordinal", "Ordinal");
         
         corLegPosOpts = new SelectItem[4];
         corLegPosOpts[0] = new SelectItem("NULL", "Bottom");
