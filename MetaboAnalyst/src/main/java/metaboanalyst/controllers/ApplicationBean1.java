@@ -119,6 +119,7 @@ public class ApplicationBean1 implements Serializable {
     private final SelectItem[] corLinTextSizeOpts;   
     private final SelectItem[] corPlotNarrowWidthOpts; 
     private final SelectItem[] corColorPaletteOpts;
+    private final SelectItem[] corBrewerPaletteOpts;
     private final SelectItem[] ordColorPaletteOpts;
     private final SelectItem[] pcaPairsColorPaletteOpts;
     private final SelectItem[] pairAnalOpts;
@@ -362,6 +363,13 @@ public class ApplicationBean1 implements Serializable {
         corColorPaletteOpts[5] = new SelectItem("viridis", "Virdis");
         corColorPaletteOpts[6] = new SelectItem("breakfast.club", "Breakfast Club");
         corColorPaletteOpts[7] = new SelectItem("aqua", "Aqua");
+        
+        corBrewerPaletteOpts = new SelectItem[5];
+        corBrewerPaletteOpts[0] = new SelectItem("NULL", "Dark2");
+        corBrewerPaletteOpts[1] = new SelectItem("Set2", "Set2");
+        corBrewerPaletteOpts[2] = new SelectItem("RdYlBu", "Red Yellow Blue");
+        corBrewerPaletteOpts[3] = new SelectItem("PiYG", "Pink Yellow Green");
+        corBrewerPaletteOpts[4] = new SelectItem("BrBG", "Brown Blue Green");
         
         ordColorPaletteOpts = new SelectItem[4];
         ordColorPaletteOpts[0] = new SelectItem("NULL", "Viridis");
@@ -1030,6 +1038,10 @@ public class ApplicationBean1 implements Serializable {
     
     public SelectItem[] getCorColorPaletteOpts(){
         return corColorPaletteOpts;
+    }
+    
+    public SelectItem[] getCorBrewerPaletteOpts(){
+        return corBrewerPaletteOpts;
     }
     
     public SelectItem[] getCorModType() {
