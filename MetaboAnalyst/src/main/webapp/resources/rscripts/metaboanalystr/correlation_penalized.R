@@ -232,7 +232,6 @@ print("cv")
   #EXTRACT VALUES
   summ <- params 
 print("params summary")
-  #resp.col.num <- which(colnames(data) == facA)
   # fitted <- predict(mod, newx = as.matrix(data[,colnames(data) != facA, drop = FALSE]))
   fitt <- predict(mod, newx = as.matrix(predictors_train) ) 
 print("fitted (train)")
@@ -259,16 +258,16 @@ print("coefficients")
   #coef <- data.frame(coef$variable, coef$x)
   #colnames(coef) <- c("Variables", "Coefficients")
 ### uncomment done
-# fit_all <- predict(mod, newx = as.matrix(data[,colnames(data) != facA, drop = FALSE]))
+fit_all <- predict(mod, newx = as.matrix(data[,colnames(data) != facA, drop = FALSE]))
 print("fitted on all")
-#  overall.rsme <- Metrics::rmse(data[,facA, drop = TRUE], fit_all)
+  overall.rsme <- Metrics::rmse(data[,facA, drop = TRUE], fit_all)
 print("overall.rmse")
 
   #PREDICT ON TEST, OBTAIN RMSE
-#  predictors_test2 <- as.matrix(predictors_test)
+  predictors_test2 <- as.matrix(predictors_test)
   # predictors_test2 <- as.data.frame(predictors_test2)
 print("predictors_test2")
-#  test_prediction <- predict(mod, newx =predictors_test2  )
+  test_prediction <- predict(mod, newx =predictors_test2  )
 print("test_prediction")
 #  test_rmse <- Metrics::rmse(response_test, test_prediction)
 print("test_rmse")
@@ -276,7 +275,7 @@ print("test_rmse")
   #Store results in mSetObj$analSet$penReg
   mSetObj$analSet$penReg$mod <- list(model.name = method1, model = mod, formula = form, response = facA, predictor = colnames(predictors_train), alpha = bestAlpha, lambda = bestLambda)
   mSetObj$analSet$penReg$res <- list(response = facA, predictor = colnames(predictors_train), predictors.test.data = predictors_test, predictors.train.data = predictors_train, summary = summ, coefficients = coefs, predicted.values = fitt, 
-#test.prediction = test_prediction, 
+test.prediction = test_prediction, 
 overall.rmse = overall.rsme, train.data = train_data, test.data = test_data, 
 #test.rmse = test_rmse, 
 cross.validation = cv, method = method1, fileName = fileName) 
@@ -336,7 +335,7 @@ pen.pred.plot <- function(mSetObj=NA,
 
   col_dots="NULL",
   col_line="NULL", 
-  plot_ci="false",
+  # plot_ci="false", # Reporting a CI around a biased estimate will give an unrealistically optimistic indication of how close the true value of the coefficient may be to the point estimate.
   # plot_eq="false",  # plot_rsq="false", # plot_rsq_adj="false",
 
   plot_title=" ",
@@ -376,14 +375,14 @@ print("pred: input set")
 data <- dplyr::select_if(input, is.numeric)
 print("pred: numeric ('data') set")
 
- facA <- mSetObj$analSet$penReg$res$response
+facA <- mSetObj$analSet$penReg$res$response
 method1 <- mSetObj$analSet$penReg$res$method
 mod <- mSetObj$analSet$penReg$mod$model
-  predictors_test <- mSetObj$analSet$penReg$res$predictors.test.data
-#  test_prediction <- predict(mod, newx = as.matrix(predictors_test))
-  test_data <- mSetObj$analSet$penReg$res$test.data
-  predictors_train <- mSetObj$analSet$penReg$res$predictors.train.data
-  form <- paste(facA, "~", paste(colnames(predictors_train), collapse = "+", sep = ""))
+predictors_test <- mSetObj$analSet$penReg$res$predictors.test.data
+test_prediction <-  mSetObj$analSet$penReg$res$test.prediction #predict(mod, newx = as.matrix(predictors_test))
+test_data <- mSetObj$analSet$penReg$res$test.data
+predictors_train <- mSetObj$analSet$penReg$res$predictors.train.data
+form <- paste(facA, "~", paste(colnames(predictors_train), collapse = "+", sep = ""))
 #  test_rmse <- <- mSetObj$analSet$penReg$res$test.rmse #Metrics::rmse(test_data[,facA, drop = TRUE], test_prediction)  
 
 print("pred: extracted from mSet set")
@@ -521,12 +520,6 @@ print("pred: extracted from mSet set")
 					NULL
 				)
 
-  #95% CONF INT
-#  if (plot_ci == "false") {
-#      plot_ci1 <- FALSE # default
-#    } else {
-#      plot_ci1 <- TRUE
-#    }
   
   # PLOT TITLE
   if(plot_title == " "){ 
@@ -569,7 +562,6 @@ print("pred: extracted from mSet set")
 #method1 <- "Ridge Regression"
 #cv <- glmnet::cv.glmnet(x = as.matrix(predictors_train), y = as.matrix(response_train), alpha=bestAlpha)
 #test_prediction <- predict(mod, newx = as.matrix(predictors_test))
-#plot_ci1 <- TRUE
 #col_dots1 <- "blue"
 #col_line1 <- "red"
 #plot_title1 <- paste0(method,"\n",formula) #paste0(method, " Cross Validation Plot", "\n")
@@ -579,14 +571,10 @@ print("pred: extracted from mSet set")
 
   # plot(x=test_prediction, y=test_data[,facA], xlab="Predicted", ylab="Actual", main=method, yaxt="n"); axis(2, las=2); abline(a=0,b=1)
 
-  a0 <- ggplot(data = dfpred, aes(x = fpred, y = fA)) +
-   #data.frame(
-   #fpred = as.vector(test_prediction), fA = test_data[,facA, drop = TRUE]),
-   # aes(x = .data[[facA]], y = .data[[facB]]) ) +
-   # aes_(x = as.name(facA), y = as.name(facB)) )+
+  a0 <- ggplot(data = dfpred, aes(x = fpred, y = fA)) 
     labs(title = plot_title1) +
      ylab(plot_ylab1)+ xlab(plot_xlab1) +
-     geom_smooth(color = col_line1, fullrange = TRUE, method = "lm") +
+     geom_smooth(se = FALSE, color = col_line1, fullrange = TRUE, method = "lm") +
      geom_point(shape = 16, color = col_dots1) +
      theme_bw() + 
   theme(panel.grid.major = element_blank(), 
