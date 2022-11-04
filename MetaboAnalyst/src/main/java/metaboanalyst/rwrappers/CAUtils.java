@@ -272,7 +272,7 @@ public static boolean PlotLinearResidFitCA(SessionBean1 sb,
     public static void PlotPenalizedCA(SessionBean1 sb, 
             String facA, String method, 
             //Boolean data, 
-            String col_dots, String col_line, Boolean plot_ci, 
+            String col_dots, String col_line, 
                 String plot_title, String plot_xlab, String plot_ylab,
             String imgName, String format, int dpi) {
         try {
@@ -283,7 +283,6 @@ public static boolean PlotLinearResidFitCA(SessionBean1 sb,
 //                    + data + "\", \""  
                     + col_dots + "\", \""
                     + col_line + "\", \""
-                    + plot_ci + "\", \""
                     + plot_title + "\", \""
                     + plot_xlab + "\", \""
                     + plot_ylab + "\", \""
