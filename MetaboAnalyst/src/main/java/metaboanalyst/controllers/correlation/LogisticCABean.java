@@ -50,7 +50,7 @@ public class LogisticCABean implements Serializable {
     } 
     
     
-    
+//    Independent Variable Names (Textbox)
     private String indInput = "";
 
     public String getIndInput() {
@@ -59,6 +59,17 @@ public class LogisticCABean implements Serializable {
 
     public void setIndInput(String indInput) {
         this.indInput = indInput;
+    }
+    
+    //   Reference Level Order
+    private String indOrder = "";
+
+    public String getIndOrder() {
+        return indOrder;
+    }
+
+    public void setIndOrder(String indOrder) {
+        this.indOrder = indOrder;
     }
     
     private SelectItem[] columnOpts = null;
@@ -206,6 +217,18 @@ public class LogisticCABean implements Serializable {
     public void setCorPaletteOpts(String corPaletteOpts) {
         this.corPaletteOpts = corPaletteOpts;
     }
+    
+ //STATIC DROPDOWN for selecting colours, in ROC plot
+    private String corPaletteBrewerOpts = "NULL"; // CORRESPONDS WITH applicationBean1.corBrewerPaletteOpts
+
+    public String getCorPaletteBrewerOpts() {
+        return corPaletteBrewerOpts; 
+    }
+
+    public void setCorPaletteBrewerOpts(String corPaletteBrewerOpts) {
+        this.corPaletteBrewerOpts = corPaletteBrewerOpts;
+    }    
+    
 
     // CHECK BOX 
      private boolean doPlotLegHoriz = false;
@@ -264,17 +287,11 @@ public class LogisticCABean implements Serializable {
     } 
     
     
-//     facA="NULL", # dropdown
-//                         predtext="NULL", # textbox
-//                         type="multinomial",
-//                         reference="NULL", # dropdown
-//                         ordertext="NULL" # textbox; or
-    
         // ACTION BUTTONS //
     public void corrLogBtn1_action() {
         CAUtils.CreateLogisticModel(sb, 
-                responseLevelVar,indInput,
-                  corModelType, responseLevelVar, indInput);
+                responseVar,indInput,doOriginal,
+                  corModelType, responseLevelVar, indOrder);
         CAUtils.PlotLogisticEffectCA(sb, corModelType, doPlotConfInt,
                  corPlotTitle, corPlotXlab, corPlotYlab,               
                 doLabelXtickRotate, corPaletteOpts, doPlotLegHoriz, corPlotLegPosOpts,
@@ -284,11 +301,11 @@ public class LogisticCABean implements Serializable {
    // ACTION BUTTONS //
     public void corrLogBtn2_action() {
         CAUtils.CreateLogisticModel(sb, 
-               responseLevelVar,indInput,
-               corModelType, responseLevelVar, indInput);
+               responseVar,indInput, doOriginal,
+               corModelType, responseLevelVar, indOrder);
 //                columnNameA, indInput);
-        CAUtils.PlotLogisticROCCA(sb, 
-                corPlotTitle, corPlotXlab, corPlotYlab,
+        CAUtils.PlotLogisticROCCA(sb, corModelType,
+               corPaletteBrewerOpts, corPlotTitle, 
                 sb.getCurrentImage("corr_log_roc"), "png", 72);
     }
     
