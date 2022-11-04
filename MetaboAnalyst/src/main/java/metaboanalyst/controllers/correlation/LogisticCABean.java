@@ -300,7 +300,7 @@ public class LogisticCABean implements Serializable {
     
    // ACTION BUTTONS //
     public void corrLogBtn2_action() {
-        CAUtils.CreateLogisticModel(sb, 
+        CAUtils.CreateLogisticModel(sb,
                responseVar,indInput, doOriginal,
                corModelType, responseLevelVar, indOrder);
 //                columnNameA, indInput);
