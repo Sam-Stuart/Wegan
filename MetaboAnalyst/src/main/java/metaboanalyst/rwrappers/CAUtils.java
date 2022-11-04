@@ -706,9 +706,7 @@ public static boolean PlotANNPredictCA(SessionBean1 sb,
     
 // LOGISTIC   
     
-        public static void CreateLogisticModel(SessionBean1 sb,
-                String facA, String predtext, String type,
-                String preference, String ordertext) {
+        public static void CreateLogisticModel(SessionBean1 sb, String facA, String predtext, boolean data, String type, String preference, String ordertext) {
         try {
             RConnection RC = sb.getRConnection();
 //            String rCommand = "log.reg.anal(NA)";
