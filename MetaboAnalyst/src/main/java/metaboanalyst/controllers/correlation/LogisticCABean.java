@@ -143,6 +143,7 @@ public class LogisticCABean implements Serializable {
     public void setdoOriginal(boolean doOriginal) {
         this.doOriginal = doOriginal;
     }
+    
   // CHECK BOX for adding (default) or omitting equation to plot (at top), see correlation_linear.R 
   // when >1 of rsq, eq, & rsqadj are checked, values are seperated by " | " 
      private boolean doPlotEq = false;
