@@ -150,7 +150,8 @@ if(type == "NULL"){
   type <- "multinomial"
  }
 }
-
+## STORE LOGISTIC TYPE IN MSET
+mSetObj$analSet$logRegType<- type
 
 # REFERENCE LEVEL
 if (reference == "NULL") {
@@ -226,7 +227,8 @@ if(!all(is.element(ordertext, levels.facA))){
     # fileName <- paste0("ordinal_logistic_regression_reference_", reference, "_summary.txt") #File name for results
     
     #STORE RESULTS
-    mSetObj$analSet$logOrdReg$res <- list(summary = summ, model.data = model_data, response = facA, predictor = predictors, pretext = pretext1, predicted.values = fitt, confidence.intervals = conf.int, 
+
+    mSetObj$analSet$logOrdReg$res <- list(summary = summ, model.data = model_data, response = facA, predictor = predictors, pretext = pretext1, level.reference = reference, level.resp.order = ordertext, predicted.values = fitt, confidence.intervals = conf.int, 
                                           Hessian = Hessian, oddsRatio = oddsRatio, covariance.matrix = covar, Loglikelihood = logLik, zValues = zValues, pValues = pValues, fileName = fileName)       
     mSetObj$analSet$logOrdReg$mod <- list(model.name = model_name, model = mod, formula = form, model.data = model_data, response = facA, predictor = predictors)
     
@@ -447,10 +449,12 @@ response = facA, predictor = predictors)
 #'@export
 
 log.effects.plot <- function(mSetObj=NA,
- facA = "NULL", 
- predtext = "NULL", 
-data = "false",
+# facA = "NULL", 
+# predtext = "NULL", 
+#  data = "false",
   type="NULL",  # was multinomial before
+#  var_viewby1 = "NULL",
+#  var_viewby2 = "NULL",
   plot_ci="false", #checkbox
   plot_title=" ",
   plot_ylab=" ",
@@ -465,17 +469,20 @@ data = "false",
   # library("effects")
   library("ggplot2")
   library("ggeffects")
- library("RJSONIO")
+  library("RJSONIO")
 
   #EXTRACT OBJECTS FROM MSET
   mSetObj <- .get.mSet(mSetObj)
   
  ### SET DATA (whether to use original data or not)
-  if (data == "false") { 
+#  if (data == "false") { 
     input <- mSetObj$dataSet$norm #default use norm
-  } else {
-    input <- mSetObj$dataSet$orig
-  }
+#  } else {
+#    input <- mSetObj$dataSet$orig
+#  }
+
+# SET LOGISTIC TYPE IF NOT SET
+type <- mSetObj$analSet$logRegType
 
 ### TROUBLESHOOTING (Q&D)
  # input <- iris; 
@@ -489,6 +496,8 @@ data = "false",
     mod <- mSetObj$analSet$logOrdReg$mod$model
     predictors <- mSetObj$analSet$logOrdReg$res$predictor
     facA <- mSetObj$analSet$logOrdReg$res$response
+    reference <- mSetObj$analSet$logOrdReg$res$level.reference
+    ordertext <- mSetObj$analSet$logOrdReg$res$level.resp.order
     main_end <- " ( Ordinal Logistic Regression)" #  # main = "Ordinal Logistic Regression \nEffects Plot"
   } else if (type == "multinomial") {
     # main = "Multinomial Logistic Regression \nEffects Plot"
@@ -595,6 +604,14 @@ data = "false",
   #########
   ######### [CRUNCH]
 
+## SET PREDICTORS TO PLOT
+if(length(predictors) > 2){
+var_pred <- predictors[c(1:2)]
+plot_xlab_use <- paste(var_pred, collapse="\n")
+} else {
+var_pred <- predictors[1]
+plot_xlab_use <- var_pred
+}
 
   # AXIS TICK LABELS SIDEWAYS
   if(plot_xangle == "false"){
@@ -691,7 +708,7 @@ data = "false",
   
   # PLOT XAXIS
   if(plot_xlab == " "){
-    plot_xlab1 <- predictors[1]#facB
+    plot_xlab1 <- plot_xlab_use
   } else {
     plot_xlab1 <- plot_xlab
   }
@@ -714,7 +731,7 @@ data = "false",
   mSetObj$imgSet$ploteffectslogReg <- imgName
  
   a0 <- plot(
-    ggeffects::ggpredict(model = mod, terms = predictors[1:2]
+    ggeffects::ggpredict(model = mod, terms = var_pred
                          ), 
     colors = plot_palette1,
      # add.data = TRUE,
@@ -734,6 +751,8 @@ data = "false",
       legend.title = element_text(face = "bold"),
     strip.background = element_rect(colour = "white", fill = "white"))
  
+print("eff.make plot")
+
   # STORE IN mSET
   if (type == "ordinal") { #mSetObj$analSet$logOrdReg$res
   mSetObj$analSet$logOrdReg$ploteff <- list(plot = a0, title = plot_title1, xlab = plot_xlab1, ylab = plot_ylab1)
@@ -743,6 +762,7 @@ data = "false",
     mSetObj$analSet$logBinomReg$ploteff <- list(plot = a0, title = plot_title1, xlab = plot_xlab1, ylab = plot_ylab1) 
   }
 
+print("eff.store in mSet")
 
   Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
   print(a0)
@@ -814,9 +834,9 @@ build <- ggplot_build(a0)
 #'@export
 
 log.ROC.plot <- function(mSetObj=NA, 
-facA = "NULL", 
-predtext = "NULL",
-data = "false",
+# facA = "NULL", 
+# predtext = "NULL",
+# data = "false",
 type="NULL", # was multinomial 
 plot_palette = "NULL", #dropdown  
 plot_title = " ",
@@ -827,18 +847,23 @@ imgName, format="png", dpi=72, width=NA){
 ## ggplot alternatives for ROC plotting:
 # library("precrec")
 # library("plotROC")
-# library("multiROC") # older package
+  library("multiROC") # older package
+  library("RJSONIO")
   
   #Extract necessary objects from mSetObj
   mSetObj <- .get.mSet(mSetObj)
   
  ### SET DATA (whether to use original data or not)
-  if (data=="false") { 
+#  if (data=="false") { 
     input <- mSetObj$dataSet$norm #default use norm
-  } else {
-    input <- mSetObj$dataSet$orig
-  }
+#  } else {
+#    input <- mSetObj$dataSet$orig
+#  }
 
+# SET LOGISTIC TYPE IF NOT SET
+type <- mSetObj$analSet$logRegType
+
+print("roc.before extracting")
 ### VARIABLES: STORE OUTPUT SOURCE BASED ON REGSN TYPE
   if (type == "ordinal") { 
     # main = "Ordinal Logistic Regression \nEffects Plot"
@@ -848,6 +873,7 @@ imgName, format="png", dpi=72, width=NA){
     predictors <- mSetObj$analSet$logOrdReg$res$predictor
     facA <- mSetObj$analSet$logOrdReg$res$response
     main_end <- " ( Ordinal Logistic Regression)" #  # main = "Ordinal Logistic Regression \nEffects Plot"
+print("roc.extracted order")
   } else if (type == "multinomial") {
     # main = "Multinomial Logistic Regression \nEffects Plot"
     output <- mSetObj$analSet$logMultinomReg
@@ -856,6 +882,7 @@ imgName, format="png", dpi=72, width=NA){
     predictors <- mSetObj$analSet$logMultinomReg$res$predictor
     facA <- mSetObj$analSet$logMultinomReg$res$response
     main_end <- " ( Multinomial Logistic Regression)" #  # main = "Multinomial Logistic Regression \nEffects Plot"
+print("roc.extracted multinomial")
   } else { #Binomial
     # main = "Binomial Logistic Regression \nEffects Plot"
     output <- mSetObj$analSet$logBinomReg
@@ -864,8 +891,8 @@ imgName, format="png", dpi=72, width=NA){
     predictors <- mSetObj$analSet$logBinomReg$res$predictor
     facA <- mSetObj$analSet$logBinomReg$res$response
     main_end <- " ( Binomial Logistic Regression)" ## main = "Binomial Logistic Regression \nEffects Plot"
+print("roc.extracted binomial")
   }
-
 
   #Set plot dimensions
   if(is.na(width)){
@@ -884,6 +911,7 @@ imgName, format="png", dpi=72, width=NA){
   imgName <- paste(imgName, "dpi", dpi, ".", format, sep="")
   mSetObj$imgSet$plot.ROC.logReg <- imgName
 
+print("roc.set image parames")
 
 # c("BrBG", "PiYG", "PRGn", "PuOr", "RdBu", "RdYlBu", "Dark2", "Paired", "Set2")
    # plot_palette1 <- "Dark2"
@@ -893,9 +921,9 @@ imgName, format="png", dpi=72, width=NA){
        "NULL" = "Dark2",
        "Dark2" = "Dark2", 
        "Set2" = "Set2",
-       "RedYellowBlue" = "RdYlBu", 
-       "PinkYellowGreen" = "PiYG", 
-       "BrownBlueGreen" = "BrBG",
+       "RdYlBu" = "RdYlBu",  #RedYellowBlue
+       "PiYG" = "PiYG",  #PinkYellowGreen
+       "BrBG" = "BrBG", # BrownBlueGreen
        NULL
      )
 
@@ -905,6 +933,7 @@ imgName, format="png", dpi=72, width=NA){
     paste(toupper(substring(s, 1, 1)), substring(s, 2),
           sep = "", collapse = " ")
    }
+
   # PLOT TITLE
   if(plot_title == " "){
     plot_title1 <- paste(.simcap(type), " Logistic Regression \nROC Curve", sep="")
@@ -912,21 +941,25 @@ imgName, format="png", dpi=72, width=NA){
     plot_title1 <- plot_title
   }
    
+print("roc.before making plot")
+
   if (type=="ordinal") {
- 
+ ## ORDINAL
     predicted <- fitted(summary(mod)) # mSetObj$analSet$logOrdReg$res$linear.predicted.values
     prob <- predict(mod, type="probs")
     
     ############ using {multiROC} - does it work or ordinal??
     
-    # Micro-average ROC/AUC was calculated by stacking all groups together, thus converting the multi-class classification into binary classification. Macro-average ROC/AUC was calculated by averaging all groups results (one vs rest) and linear interpolation was used between points of ROC. Methodsshows names of different classifiers.
+    # Micro-average ROC/AUC was calculated by stacking all groups together, thus converting the multi-class classification into binary classification. Macro-average ROC/AUC was calculated by averaging all groups results (one vs rest) and linear interpolation was used between points of ROC. Methods shows names of different classifiers.
     
 mn_pred <- data.frame(prob)
 mn_pred_col <- colnames(mn_pred)
 colnames(mn_pred) <- paste0(mn_pred_col, "_pred_MN")
 true_label <-data.frame(caret::class2ind(model_data[,facA]))
-true_label_col <- colnaes(true_label)
+true_label_col <- colnames(true_label)
 colnames(true_label) <- paste0(true_label_col, "_true")
+
+print("roc.ord.make df for plotting")
 
 plot_roc_df <- multiROC::plot_roc_data(
   multiROC::multi_roc(cbind(true_label, mn_pred),
@@ -944,14 +977,18 @@ a0 <- ggplot(plot_roc_df,
   theme(plot.title = element_text(hjust = 0.5, face = "bold"), 
   legend.justification=c(1, 0), legend.position=c(.95, .05),
  legend.title=element_blank(), 
-legend.background = element_rect(fill=NULL, size=0.5,           linetype="solid", colour ="black"), 
+legend.background = element_rect(fill=NULL, 
+ size=0.5,linetype="solid", colour ="black"), 
 axis.title = element_text(face = "bold", size = 12)
 )
-    
+
+print("roc.ord.make plot")   
+ 
 # pROC::ggroc( pROC::multiclass.roc(model_data[,facA]~prob , plot=TRUE, print.auc = TRUE, xlab = "Specificity ( True Negative)", ylab = "Sensitivity (True Positive)", main = main, yaxt = "n" ) ); axis(2, las=2)
   
   } else if (type == "multinomial") {
-##   ## https://github.com/WandeRum/multiROC
+ ## MULTINOMIAL 
+  ##   ## https://github.com/WandeRum/multiROC
  
     predicted <- fitted(summary(mod)) # mSetObj$analSet$logMultinomReg$res$linear.predicted.values
     prob <- predict(mod, type="probs")
@@ -961,12 +998,13 @@ mn_pred <- data.frame(prob)
 mn_pred_col <- colnames(mn_pred)
 colnames(mn_pred) <- paste0(mn_pred_col, "_pred_MN")
 true_label <-data.frame(caret::class2ind(model_data[,facA]))
-true_label_col <- colnaes(true_label)
+true_label_col <- colnames(true_label)
 colnames(true_label) <- paste0(true_label_col, "_true")
 
 plot_roc_df <- multiROC::plot_roc_data(
   multiROC::multi_roc(cbind(true_label, mn_pred),
                                force_diag = TRUE) )
+print("roc.multinom.make df for plotting")
 
 a0 <- ggplot(plot_roc_df, 
        aes(x = 1-Specificity, y = Sensitivity)) +
@@ -980,22 +1018,28 @@ a0 <- ggplot(plot_roc_df,
   theme(plot.title = element_text(hjust = 0.5, face = "bold"), 
   legend.justification=c(1, 0), legend.position=c(.95, .05),
  legend.title=element_blank(), 
-legend.background = element_rect(fill=NULL, size=0.5, linetype="solid", colour ="black"), 
+legend.background = element_rect(fill=NULL, size=0.5,
+ linetype="solid", colour ="black"), 
 axis.title = element_text(face = "bold", size = 12)
 )
+print("roc.multinom.make plot")
+
    # multiclass.roc(model_data[,facA]~prob, plot=TRUE, print.auc=TRUE, xlab="Specificity (True Negative)", ylab="Sensitivity (True Positive)", main=main, yaxt="n"); axis(2, las=2)
     
-  } else { #binomial
-
+  } else { 
+ ## BINOMIAL 
     predicted <- fitted(summary(mod))
     prob <- predict(mod, type="response")
     
+print("roc.binom.make df for plotting")
+
 a0 <- pROC::ggroc(  pROC::roc(model_data[,facA]~prob )) # , plot=TRUE, print.auc=TRUE, xlab="Specificity (True Negative)", ylab="Sensitivity (True Positive)", main=main, yaxt="n"
+
+print("roc.binom.make plot")
 
 #pROC::ggroc(  pROC::roc(model_data[,facA]~prob
    #, plot=TRUE, print.auc=TRUE, xlab="Specificity (True Negative)", ylab="Sensitivity (True Positive)", main=main, yaxt="n"
    #   ) )
- 
     
   }
 
@@ -1015,7 +1059,7 @@ a0 <- pROC::ggroc(  pROC::roc(model_data[,facA]~prob )) # , plot=TRUE, print.auc
     mSetObj$analSet$logBinomReg$plotRoc <- list(plot = a0, title = plot_title1, xlab = plot_xlab1, ylab = plot_ylab1) 
   }
    
-   
+  print("roc.store in mSet") 
    #JSON OBJECT MAKING
   build <- ggplot_build(a0)
   build_line <- build$data[[1]]
