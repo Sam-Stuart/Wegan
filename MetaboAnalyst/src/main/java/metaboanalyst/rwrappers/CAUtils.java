@@ -759,7 +759,7 @@ public static boolean PlotANNPredictCA(SessionBean1 sb,
             String imgName, String format, int dpi) {
         try {
             RConnection RC = sb.getRConnection();
-            String rCommand = "log.ROC.plot(NA" + ", \"" + type + "\", \""  
+            String rCommand = "log.ROC.plot(NA" + ", \"" 
                     + type + "\", \"" 
                     + plot_palette + "\", \"" 
                     + plot_title + "\", \"" 
