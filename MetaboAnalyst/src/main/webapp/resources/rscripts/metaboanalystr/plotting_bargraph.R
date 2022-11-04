@@ -197,8 +197,7 @@ plotBarGraph <-
       geom_bar(stat = "identity",
                color = "black",
                position = "dodge") +
-      xlab(xlab) +
-      ylab(ylab) +
+      labs(title = mainTitle, x = xlab, y = ylab) +
       theme_bw() +
       geom_text(
         aes(label = value),

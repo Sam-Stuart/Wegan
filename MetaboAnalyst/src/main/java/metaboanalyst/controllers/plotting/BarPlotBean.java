@@ -75,7 +75,7 @@ public class BarPlotBean implements Serializable {
     
 
     public void barBtn_action() {
-        PlottingUtils.CreateBarChart(sb, "NULL", "NULL", "NULL", "NULL", "NULL", "NULL", "NULL", "NULL", false);
+        PlottingUtils.CreateBarChart(sb, "NULL", "NULL", this.labx, this.laby, "NULL", "NULL", this.title, "NULL", false);
         PlottingUtils.PlotBarChart(sb,  sb.getNewImage("plot_bar_chart"), "png", 72); 
     }
     
