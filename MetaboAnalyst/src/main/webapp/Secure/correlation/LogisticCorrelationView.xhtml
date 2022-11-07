@@ -23,7 +23,7 @@
                          <p style="text-indent:10px; font-size: 13px">The train data for model building is 70% of the dataset, while the test data for model testing is 30% of the dataset.
                         </p>
 
-                        <h:panelGrid id="corrLogPane1" columns="3" cellpadding="3" columnClasses="colLeft,colRight,colLast">
+                        <h:panelGrid id="panelGrid1_1" columns="3" cellpadding="3" columnClasses="colLeft,colRight,colLast">
                             <h:outputLabel style="font-weight: bold" value="Response variable:"/>
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{logCABean.responseVar}">
                                 <f:selectItems value="#{logCABean.columnOpts}" />
@@ -93,7 +93,7 @@ The R &#xb2; value is the fraction of variance explained by the model and is a v
                             </h:panelGroup>   
                         </h:panelGrid>                     
                               <!--name was: 'corr_logistic1'-->                       
-                          <h:panelGrid id="corrLogPane1_2" style="width: 100%;"> 
+                          <h:panelGrid id="corrLogPane1" style="width: 100%;"> 
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
                                 <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
                              <h:outputText escape="false" value="#{logCABean.fileLogModValsPath}"/>
@@ -123,7 +123,7 @@ The R &#xb2; value is the fraction of variance explained by the model and is a v
                             <p style="text-indent:10px; font-size: 13px">The train data for model building is 70% of the dataset, while the test data for model testing is 30% of the dataset.
                         </p>
 
-                        <h:panelGrid id="corrLogPane2" columns="3" cellpadding="3" columnClasses="colLeft,colRight,colLast">
+                        <h:panelGrid id="panelGrid2_1" columns="3" cellpadding="3" columnClasses="colLeft,colRight,colLast">
                            <h:outputLabel style="font-weight: bold" value="Response variable:"/>
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{logCABean.responseVar}">
                                 <f:selectItems value="#{logCABean.columnOpts}" />
@@ -155,7 +155,7 @@ The R &#xb2; value is the fraction of variance explained by the model and is a v
 
                         <p:panelGrid></p:panelGrid>
                         
-                         <h:panelGrid id="panelGrid1" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;">                   
+                         <h:panelGrid id="panelGrid2_2" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;">                   
                             <p:commandButton value="Customize"
                                              styleClass="graphicsButton"
                                              style="box-shadow: none !important; text-shadow: none !important;"
@@ -189,7 +189,7 @@ The R &#xb2; value is the fraction of variance explained by the model and is a v
                             </h:panelGroup>   
                         </h:panelGrid>  
                                                     <!--name was: 'corr_logisticROC'-->                     
-                          <h:panelGrid id="corrLogPane2_2" style="width: 100%;"> 
+                          <h:panelGrid id="corrLogPane2" style="width: 100%;"> 
 <!--                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
                                 <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
                                     <h:outputText escape="false" value="hash{linearCABean.fileLinModValsPath}"/>

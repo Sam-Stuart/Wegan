@@ -113,17 +113,17 @@ public class CABean implements Serializable {
 //        sb.getCurrentImage("corr_linear"), "png", 72);
 //    }
                        
-    private void doDefaultPenalized() {
-        CAUtils.CreatePenalizedModel(sb, "NULL", "NULL");
+     private void doDefaultPenalized() {
+       CAUtils.CreatePenalizedModel(sb, "NULL", "NULL");
         CAUtils.PlotPenalizedCA(sb, "NULL", "NULL",
                 "NULL","NULL",
                  " "," "," ",
-                sb.getCurrentImage("corr_penalized"), "png", 72);
+                 sb.getCurrentImage("corr_penalized"), "png", 72);
         CAUtils.PlotPenalizedCVCA(sb,"NULL", "NULL",
                 "NULL", "NULL",
                 " "," "," ",
-                sb.getCurrentImage("corr_penalized2"), "png", 72);
-    }
+                 sb.getCurrentImage("corr_penalized2"), "png", 72);
+     }
 
 
     private void doDefaultPolynomial() {
