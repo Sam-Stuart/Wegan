@@ -32,6 +32,8 @@
                         </div>
                         <p:spacer style="width:180px; height: 1px"/><p:spacer style="width:180px; height: 1px"/>
                         <h:panelGrid id="panelGrid" columns="4" cellpadding="3" columnClasses="colLeft,colRight,colLeft,colRight">
+                            <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
+                            <p:selectBooleanCheckbox value ="#{clusterBean.doData}" />
                             <h:outputLabel style="font-weight: bold" value="Distance Measure:"/>
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{clusterBean.hmDistOpt}">
                                 <f:selectItem itemLabel="Euclidean" itemValue="euclidean"/> 
@@ -45,18 +47,17 @@
                             <h:outputLabel style="font-weight: bold" value="Color Contrast:"/>
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{clusterBean.hmColorOpt}">
                                 <f:selectItems value="#{applicationBean1.colorContrastOpts}" />
-                            </p:selectOneMenu>
-                            <h:outputLabel style="font-weight: bold" value="Data Source:"/>
-                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{clusterBean.dataOpt}">
-                                <f:selectItem itemLabel="Normalized data" itemValue="norm"/> 
-                                <f:selectItem itemLabel="Original data" itemValue="raw"/> 
-                            </p:selectOneMenu>
+                            </p:selectOneMenu> 
                             <h:outputLabel style="font-weight: bold" value="Standardization:"/>
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{clusterBean.scaleOpt}">
                                 <f:selectItem itemLabel="Autoscale features" itemValue="row"/> 
                                 <f:selectItem itemLabel="Autoscale samples" itemValue="column"/> 
                                 <f:selectItem itemLabel="None" itemValue="none"/> 
                             </p:selectOneMenu>
+                            <h:outputLabel style="font-weight: bold" value="Colour Pallette:"/>
+                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:50%;" value="#{clusterBean.hmSmplColorOpts}">
+                        <f:selectItems value="#{applicationBean1.dendroPalletteOpts}" />
+                    </p:selectOneMenu> 
                         </h:panelGrid>
                         <h:panelGrid columns="2" cellpadding="3" style="float: right"> 
                             <p:commandButton value="Customize Graph"

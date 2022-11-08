@@ -256,6 +256,17 @@ public class ClusterBean implements Serializable{
     public void setHmColorOpt(String hmColorOpt) {
         this.hmColorOpt = hmColorOpt;
     }
+    
+    //STATIC DROPDOWN 
+    private String hmSmplColorOpts = "NULL"; 
+    
+    public String getHmSmplColorOpts() {
+        return hmSmplColorOpts;
+    }
+
+    public void setHmSmplColorOpts(String hmSmplColorOpts) {
+        this.hmSmplColorOpts = hmSmplColorOpts;
+    }
 
     public String hmButton_action() {
 
@@ -284,9 +295,9 @@ public class ClusterBean implements Serializable{
         }
         
         if (useTopFeature) {
-            Clustering.PlotSubHeatMap(sb, sb.getNewImage("heatmap"), "png", 72, dataOpt, scaleOpt, hmDistOpt, hmMethodOpt, hmColorOpt, selectMethodOpt, topThresh, viewOpt, rowV, colV, (drawBorders) ? "T" : "F", (grpAves) ? "T" : "F");
+            Clustering.PlotSubHeatMap(sb, sb.getNewImage("heatmap"), "png", 72, doData, scaleOpt, hmDistOpt, hmMethodOpt, hmColorOpt, selectMethodOpt, topThresh, viewOpt, rowV, colV, (drawBorders) ? "T" : "F", (grpAves) ? "T" : "F", hmSmplColorOpts);
         } else {
-            Clustering.PlotHeatMap(sb, sb.getNewImage("heatmap"), "png", 72, dataOpt, scaleOpt, hmDistOpt, hmMethodOpt, hmColorOpt, viewOpt, rowV, colV, (drawBorders) ? "T" : "F", (grpAves) ? "T" : "F");
+            Clustering.PlotHeatMap(sb, sb.getNewImage("heatmap"), "png", 72, doData, scaleOpt, hmDistOpt, hmMethodOpt, hmColorOpt, viewOpt, rowV, colV, (drawBorders) ? "T" : "F", (grpAves) ? "T" : "F", hmSmplColorOpts);
         }
         RequestContext.getCurrentInstance().scrollTo("form1:hmPane");
         return null;

@@ -494,7 +494,7 @@ PlotKmeans <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA){
 #'@export
 #'
 PlotSubHeatMap <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, dataOpt, scaleOpt, 
-                           smplDist, clstDist, palette, method.nm, top.num, viewOpt, rowV=T, colV=T, border=T, grp.ave=F){
+                           smplDist, clstDist, palette, method.nm, top.num, viewOpt, rowV=T, colV=T, border=T, grp.ave=F, smplColor="NULL"){
   
   mSetObj <- .get.mSet(mSetObj);
   var.nms = colnames(mSetObj$dataSet$norm);
@@ -546,7 +546,7 @@ PlotSubHeatMap <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, 
     }
   }
   var.inx <- match(var.nms, colnames(mSetObj$dataSet$norm));
-  PlotHeatMap(mSetObj, imgName, format, dpi, width, dataOpt, scaleOpt, smplDist, clstDist, palette, viewOpt, rowV, colV, var.inx, border, grp.ave);
+  PlotHeatMap(mSetObj, imgName, format, dpi, width, dataOpt, scaleOpt, smplDist, clstDist, palette, viewOpt, rowV, colV, var.inx, border, grp.ave, smplColor);
 }
 
 #'Create Heat Map Plot
@@ -558,7 +558,7 @@ PlotSubHeatMap <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, 
 #'the default dpi is 72. It is suggested that for high-resolution images, select a dpi of 300.  
 #'@param width Input the width, there are 2 default widths, the first, width = NULL, is 10.5.
 #'The second default is width = 0, where the width is 7.2. Otherwise users can input their own width. 
-#'@param dataOpt Set data options
+#'@param dataOpt Set data options, default "false"
 #'@param scaleOpt Set the image scale
 #'@param smplDist Input the sample distance method
 #'@param clstDist Input the clustering distance method
@@ -574,16 +574,20 @@ PlotSubHeatMap <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, 
 #'License: GNU GPL (>= 2)
 #'@export
 #'
-PlotHeatMap <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, dataOpt, scaleOpt, smplDist, 
-                        clstDist, palette, viewOpt="detail", rowV=T, colV=T, var.inx=NA, border=T, grp.ave=F){
-  
+PlotHeatMap <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, 
+                        dataOpt="false", scaleOpt, smplDist, clstDist, palette, 
+                        viewOpt="detail", rowV=T, colV=T, var.inx=NA, 
+                        drawBorder=T, grpAve=F, smplColor="NULL"){
+  library(viridis)
+  library(viridisLite)
   mSetObj <- .get.mSet(mSetObj);
   
+  print(mSetObj$dataSet)
   # record the paramters
   mSetObj$analSet$htmap <- list(dist.par=smplDist, clust.par=clstDist);
   
   # set up data set
-  if(dataOpt=="norm"){
+  if(dataOpt=="false"){
     my.data <- mSetObj$dataSet$norm;
   }else{
     my.data <- mSetObj$dataSet$procr;
@@ -603,7 +607,7 @@ PlotHeatMap <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, dat
     hc.cls <- mSetObj$dataSet$cls;
   }
   
-  if(grp.ave){ # only use group average
+  if(grpAve){ # only use group average
     lvs <- levels(hc.cls);
     my.mns <- matrix(ncol=ncol(hc.dat),nrow=length(lvs));
     for(i in 1:length(lvs)){
@@ -671,12 +675,12 @@ PlotHeatMap <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, dat
   }
   
   # make the width smaller fro group average
-  if(grp.ave){
+  if(grpAve){
     w <- nrow(hc.dat)*25 + 300;
     w <- round(w/72,2);
   }
   
-  if(border){
+  if(drawBorder){
     border.col<-"grey60";
   }else{
     border.col <- NA;
@@ -691,12 +695,29 @@ PlotHeatMap <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, dat
     rownames(annotation) <- rownames(hc.dat); 
     
     # set up color schema for samples
-    if(palette == "gray"){
-      cols <- GetColorSchema(mSetObj, T);
-      uniq.cols <- unique(cols);
+    # if(palette == "gray"){
+    #   cols <- GetColorSchema(mSetObj, T);
+    #   uniq.cols <- unique(cols);
+    # }else{
+    #   cols <- GetColorSchema(mSetObj);
+    #   uniq.cols <- unique(cols);
+    # }
+    grp.num <- length(levels(mSetObj$dataSet$cls));
+    
+    if(smplColor == "grey"){
+      dist.cols <- colorRampPalette(c("grey90", "grey30"))(grp.num);
+    }else if(smplColor == "NULL"){
+      dist.cols <- viridis::viridis_pal(option = "viridis")(grp.num);
     }else{
-      cols <- GetColorSchema(mSetObj);
+      dist.cols <- viridis::viridis_pal(option = "plasma")(grp.num);
+    }
+    
+    lvs <- levels(mSetObj$dataSet$cls);
+    cols <- vector(mode="character", length=length(mSetObj$dataSet$cls));
+    for(i in 1:length(lvs)){
+      cols[mSetObj$dataSet$cls == lvs[i]] <- dist.cols[i];
       uniq.cols <- unique(cols);
+      uniq.cols <- viridis_pal(option = "viridis")(nlevels(hc.cls));
     }
     
     if(mSetObj$dataSet$type.cls.lbl=="integer"){

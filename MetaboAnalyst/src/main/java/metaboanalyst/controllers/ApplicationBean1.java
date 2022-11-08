@@ -162,6 +162,7 @@ public class ApplicationBean1 implements Serializable {
     private final SelectItem[] refLibOpts;
     private final SelectItem[] vegdistMeasureOpts;
     private final SelectItem[] dendroPalletteOpts;
+    private final SelectItem[] hmSmplColorOpts;
     private final SelectItem[] corrMethodsOpts;
     private final SelectItem[] ciaDataSetOpts;
     private final SelectItem[] ciaTypeOpts;
@@ -325,6 +326,12 @@ public class ApplicationBean1 implements Serializable {
         dendroPalletteOpts[1] = new SelectItem("plasma", "Plasma");
         dendroPalletteOpts[2] = new SelectItem("grey", "Grayscale");
         //dendroPalletteOpts[3] = new SelectItem("none", "No Color");
+        
+        hmSmplColorOpts = new SelectItem[3];
+        hmSmplColorOpts[0] = new SelectItem("NULL", "Viridis");
+        hmSmplColorOpts[1] = new SelectItem("plasma", "Plasma");
+        hmSmplColorOpts[2] = new SelectItem("grey", "Grayscale");
+        //hmSmplColorOpts[3] = new SelectItem("none", "No Color")
         
         ciaTypeOpts = new SelectItem[2];
         ciaTypeOpts[0] = new SelectItem("NULL", "Numeric Data Types");
@@ -1044,6 +1051,10 @@ public class ApplicationBean1 implements Serializable {
     
     public SelectItem[] getDendroPalletteOpts() {
         return dendroPalletteOpts;
+    }
+    
+    public SelectItem[] getHmSmplColorOpts() {
+        return hmSmplColorOpts;
     }
 
     
