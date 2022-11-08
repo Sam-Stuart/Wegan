@@ -15,12 +15,10 @@
             <p:tabView id="penalCA" style="width:100%; border: none; background: none; font-size: 13px;">
                 <p:tab title ="Predicted vs Actual Plot" titleStyleClass="p-tab-nav">
                     <h:form id="form1">
-                        <p>
-                            One dependent variable and one or more independent variables will be tested for correlation. The variables can be numeric or categorical. 
-                            Note that all variables other than the dependent variable will be treated as independent variables. The penalized regression models will constrain the contribution of the independent variables on the dependent variable accordingly.
-                            The train data for model building is 70% of the dataset, while the test data for model testing is 30% of the dataset. 
-                            Note that because the same penalty lambda (&lambda;) will be applied equally to all coefficients, if you do not standardize your variables before running the regression the results may be influenced by differences in variable scale.
-                        </p>
+                        <p style="text-indent:10px; font-size: 13px"> One dependent variable and one or more independent variables will be tested for correlation. The variables can be numeric or categorical. </p>
+                        <p style="text-indent:10px; font-size: 13px">    Note that all variables other than the dependent variable will be treated as independent variables. The models will constrain the contribution of the independent variables on the dependent variable using a penalty, according to the method chosen. </p>
+                        <p style="text-indent:10px; font-size: 13px">   10-fold cross validation chooses the tuning parameter lamda (&lambda;) associated with minimum mean squared error (MSE) for the model, which helps control overfitting. </p>
+                        <p style="text-indent:10px; font-size: 13px">   The train data for model building is 70% of the dataset, while the test data for model testing is 30% of the dataset.</p>
                         <h:panelGrid id="panelGrid" columns="5" cellpadding="3" columnClasses="colLeft,colRight,colLeft,colRight, colLast">
                             <h:outputLabel style="font-weight: bold" value="Regression Methods:"/>
                                 <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{penalCABean.corrFunctionMethods}">
@@ -96,13 +94,13 @@
                 </p:tab>
                 <p:tab title ="Mean Squared Error-log(Lambda) Plot" titleStyleClass="p-tab-nav">
                     <h:form id="form2">
-                        <p>
-                            One dependent variable and one or more independent variables will be tested for correlation. The variables can be numeric or categorical. 
-                            Note that all variables other than the dependent variable will be treated as independent variables. The penalized regression models will constrain the contribution of the independent variables on the dependent variable accordingly.
-                            The train data for model building is 70% of the dataset, while the test data for model testing is 30% of the dataset.
-                             Note that because the same penalty lamda (&lambda;) will be applied equally to all coefficients, if you do not standardize your variables before running the regression the results may be influenced by differences in variable scale.
+                        <p style="text-indent:10px; font-size: 13px"> One dependent variable and one or more independent variables will be tested for correlation. The variables can be numeric or categorical. </p>
+                        <p style="text-indent:10px; font-size: 13px">    Note that all variables other than the dependent variable will be treated as independent variables. The models will constrain the contribution of the independent variables on the dependent variable using a penalty, according to the method chosen. </p>
+                        <p style="text-indent:10px; font-size: 13px">   10-fold cross validation chooses the tuning parameter lamda (&lambda;) associated with minimum mean squared error (MSE) for the model, which helps control overfitting. </p>
+                        <p style="text-indent:10px; font-size: 13px">   The train data for model building is 70% of the dataset, while the test data for model testing is 30% of the dataset.</p>
+                        <p style="text-indent:10px; font-size: 13px">   The dotted line represents one standard error of the minimum  MSE, which is used to identify the largest lambda that falls within this bound.</p>
                             <!--The penalized regression model was optimized using alpha (&alpha;)= hash{penalCABean.corrPenalResults.get(0)} and lambda (&lambda;) = hash{penalCABean.corrPenalResults.get(1)}.--> 
-                        </p>
+                        
                         <h:panelGrid id="panelGrid" columns="5" cellpadding="3" columnClasses="colLeft,colRight,colLeft,colRight, colLast">
                             
                             <h:outputLabel style="font-weight: bold" value="Regression Method:"/>
@@ -148,8 +146,7 @@
                            <h:panelGroup>
                                 <h:panelGrid columns="3" class="resultsImages">
                                     <i id="question" class="fa fa-question-circle" title="Only numeric variables are used in linear correlation. 
-
-The R &#xb2; value is the fraction of variance explained by the model and is a value from 0 to 1. The adjusted R &#xb2; value is the R &#xb2; value adjusted for the number of predictors in the model. R &#xb2; is used to assess how well a model fits the data, with a higher R &#xb2; value indicating a better model fit. The confidence interval represents the level of certainty about the predicted values; if the same procedure was repeatedly used to make new estimates, the confidence interval would contain the average of all the estimates 95% of the time. https://www.census.gov/programs-surveys/saipe/guidance/confidence-intervals.html "></i>
+Note that the same penalty (controlled by tuning parameter lamda) is applied equally to all coefficients. This means if you do not standardize your variables before running the regression, the results may be influenced by differences in variable scale. Therefore only normalized data is allowed to be used in penalized regression. "></i>
                                 </h:panelGrid>
                             </h:panelGroup>                           
                         </h:panelGrid> 
