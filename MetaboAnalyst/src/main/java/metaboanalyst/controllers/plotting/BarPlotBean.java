@@ -21,22 +21,13 @@ import metaboanalyst.utils.DataUtils;
 public class BarPlotBean implements Serializable {
 
     private final SessionBean1 sb = (SessionBean1) DataUtils.findBean("sessionBean1");
-    private final SelectItem[] colorOpts;
+    private final SelectItem[] aggregateOpts;
     
-    private String colorChosen;
+    private String aggregateFunChosen;
     private String labx;
     private String laby;
     private String title;
-    private String[] columnNames = {"Volvo", "BMW", "Ford", "Mazda"};
-    
-    public void setColumnNames(String[] columnNames) {
-        this.columnNames = columnNames;
-    } 
-    
-    public String[] getColumnNames() {
-        return columnNames;
-    }
-    
+
     public void setTitle(String title) {
         this.title = title;
     } 
@@ -60,32 +51,32 @@ public class BarPlotBean implements Serializable {
         return labx;
     }
     
-    public String getColorChosen() {
-        return colorChosen;
+    public String getAggregateFunChosen() {
+        return aggregateFunChosen;
     }
 
-    public void setColorChosen(String colorChosen) {
-        this.colorChosen = colorChosen;
+    public void setAggregateFunChosen(String aggregateFunChosen) {
+        this.aggregateFunChosen = aggregateFunChosen;
     }
     
     
-    public SelectItem[] getColorOpts() {
-        return colorOpts;
+    public SelectItem[] getAggregateOpts() {
+        return aggregateOpts;
     }
     
 
     public void barBtn_action() {
-        PlottingUtils.CreateBarChart(sb, "NULL", "NULL", this.labx, this.laby, "NULL", "NULL", this.title, "NULL", false);
+        PlottingUtils.CreateBarChart(sb, "NULL", "NULL", this.labx, this.laby, "NULL", "NULL", this.title, this.aggregateFunChosen, false);
         PlottingUtils.PlotBarChart(sb,  sb.getNewImage("plot_bar_chart"), "png", 72); 
     }
     
     public BarPlotBean() {
-        colorOpts = new SelectItem[5];
-        colorOpts[0] = new SelectItem("r", "Rainbow");
-        colorOpts[1] = new SelectItem("v", "Viridis");
-        colorOpts[2] = new SelectItem("g", "Grey");
-        colorOpts[3] = new SelectItem("p", "Plasma");
-        colorOpts[4] = new SelectItem("NULL", "Light blue");  
+        aggregateOpts = new SelectItem[5];
+        aggregateOpts[0] = new SelectItem("mean", "Mean");
+        aggregateOpts[1] = new SelectItem("sum", "Sum");
+        aggregateOpts[2] = new SelectItem("length", "Count");
+        aggregateOpts[3] = new SelectItem("min", "Min");
+        aggregateOpts[4] = new SelectItem("max", "Max");  
     }
    
 }
