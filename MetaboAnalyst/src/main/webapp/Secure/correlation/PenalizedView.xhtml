@@ -16,7 +16,7 @@
                 <p:tab title ="Predicted vs Actual Plot" titleStyleClass="p-tab-nav">
                     <h:form id="form1">
                         <p style="text-indent:10px; font-size: 13px"> One dependent variable and one or more independent variables will be tested for correlation. The variables can be numeric or categorical. </p>
-                        <p style="text-indent:10px; font-size: 13px">    Note that all variables other than the dependent variable will be treated as independent variables. The models will constrain the contribution of the independent variables on the dependent variable using a penalty, according to the method chosen. </p>
+                        <p style="text-indent:10px; font-size: 13px">    Note that all variables other than the dependent variable will be treated as independent variables. The model will constrain the contribution of the independent variables on the dependent variable using a penalty, according to the method chosen. </p>
                         <p style="text-indent:10px; font-size: 13px">   10-fold cross validation chooses the tuning parameter lamda (&lambda;) associated with minimum mean squared error (MSE) for the model, which helps control overfitting. </p>
                         <p style="text-indent:10px; font-size: 13px">   The train data for model building is 70% of the dataset, while the test data for model testing is 30% of the dataset.</p>
                         <h:panelGrid id="panelGrid" columns="5" cellpadding="3" columnClasses="colLeft,colRight,colLeft,colRight, colLast">
@@ -25,10 +25,8 @@
                                     <f:selectItems value="#{applicationBean1.corrMethodsOpts}" />
                                 </p:selectOneMenu> 
 
-<!--                            <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
-                                <p:selectBooleanCheckbox value ="hash{penalCABean.doOriginal}"/> -->
-
-                            <p:panelGrid></p:panelGrid>
+ <p:panelGrid></p:panelGrid>  <p:panelGrid></p:panelGrid> 
+                            <!--<p:panelGrid></p:panelGrid>-->
                             
                             <h:outputLabel style="font-weight: bold" value="Dependant Variable:"/>
                                 <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{penalCABean.columnNameA}">
@@ -92,7 +90,7 @@
 
                     </h:form>    
                 </p:tab>
-                <p:tab title ="Mean Squared Error-log(Lambda) Plot" titleStyleClass="p-tab-nav">
+                <p:tab title ="Mean Squared Error-log(&lambda;) Plot" titleStyleClass="p-tab-nav">
                     <h:form id="form2">
                         <p style="text-indent:10px; font-size: 13px"> One dependent variable and one or more independent variables will be tested for correlation. The variables can be numeric or categorical. </p>
                         <p style="text-indent:10px; font-size: 13px">    Note that all variables other than the dependent variable will be treated as independent variables. The models will constrain the contribution of the independent variables on the dependent variable using a penalty, according to the method chosen. </p>
@@ -108,10 +106,7 @@
                                     <f:selectItems value="#{applicationBean1.corrMethodsOpts}" />
                                 </p:selectOneMenu> 
 
-<!--                            <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
-                                <p:selectBooleanCheckbox value ="hash{penalCABean.doOriginal}"/> -->
-
-                            <p:panelGrid></p:panelGrid>
+ <p:panelGrid></p:panelGrid>  <p:panelGrid></p:panelGrid> <p:panelGrid></p:panelGrid> 
                             
                             <h:outputLabel style="font-weight: bold" value="Dependant Variable:"/>
                                 <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{penalCABean.columnNameA}">
