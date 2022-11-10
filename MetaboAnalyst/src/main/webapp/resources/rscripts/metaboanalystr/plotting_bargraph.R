@@ -1,6 +1,7 @@
 
 
 
+
 #### BAR GRAPH #####
 #'Bar Graph'
 #'@description Produce bar graph components based on user data and preferences
@@ -24,10 +25,10 @@ library(vegan)
 
 mSetObj = list()
 data()
-input <- iris
+input <- read.csv(file = "/Users/hieunguyen/Documents/Wegan/pitlatrine.csv")
 mSetObj$dataSet$orig = input
 mSetObj$dataSet$norm = input
-facA = "NULL"
+facA = "Country"
 colors = "NULL"
 xlab = "NULL"
 ylab = "NULL"
@@ -58,6 +59,11 @@ barGraph_setup <-
     categorical_data <- select_if(input, is.character)
     numerical_data <- select_if(input, is.numeric)
     
+    if (facA == "NULL" & length(as.matrix(categorical_data)) > 0)
+      #Set it to the first column name
+      facA <- colnames(categorical_data)[1]
+    
+    
     # Create a hash table of aggregate functions
     if (aggregate_function == "NULL")
       aggregate_function = "mean"
@@ -68,12 +74,13 @@ barGraph_setup <-
       df <- input
       md.df <- melt(df, id = c('Sites'))
     } else {
+      
       # Create aggregate data
       df <-
-        aggregate(input[, 1:length(input) - 1],
-                  by = categorical_data,
+        aggregate(numerical_data,
+                  by = select(input, c(facA)),
                   FUN = get(aggregate_function))
-      md.df <- melt(df, id = colnames(categorical_data)[1])
+      md.df <- melt(df, id = c(facA))
     }
     
     #Filter 0 values
@@ -82,9 +89,7 @@ barGraph_setup <-
     if (barLabels == "NULL")
       barLabels <- colnames(numerical_data)
     
-    if (facA == "NULL")
-      #Set it to the first column name
-      facA <- colnames(categorical_data)[1]
+
     
     if (xlab == "NULL")
       xlab <- facA
@@ -186,7 +191,7 @@ plotBarGraph <-
       type = format,
       bg = "white"
     )
-     
+    
     plot <-
       ggplot(md.df, aes(
         x = !!facA,
@@ -200,7 +205,7 @@ plotBarGraph <-
       labs(title = mainTitle, x = xlab, y = ylab) +
       theme_bw() +
       geom_text(
-        aes(label = value),
+        aes(label = sprintf("%0.2f", value)),
         vjust = -0.3,
         size = 3,
         # adding values
