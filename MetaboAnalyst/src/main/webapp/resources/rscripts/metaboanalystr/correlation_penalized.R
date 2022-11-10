@@ -34,9 +34,10 @@
 # remember that: lambda is a tuning parameter that helps to control our model from over-fitting to the training data. https://uc-r.github.io/regularized_regression
 # want to identify the largest lambda that falls within one standard error of the (minimum)  MSE
 #  shows  how much one can constrain the coefficients while still maximizing predictive accuracy 
-#  (show on a coefficients (yacis) vs log lambda plot)
+#  (show on a coefficients (yaxis) vs log lambda plot)
 
 ### penalized regression: Important to standardize
+### {glmnet} automatically standardizes predictors for fitting by default. It also reports fitted coefficient using the original scale
 ### compared to least-squares, where it is not necessary to stdz the predictors or outcomes prior to fitting model
 ### for penalized IT IS important to stdz BECAUSE the same penalty factor lambda is applied to all coefficients (Bj) equally - to interpret Bj coeffeicients in the original units, invert the sdzn after estimation
 ## https://jwmi.github.io/SL/11-Penalized-regression.pdf
@@ -422,19 +423,19 @@ print("pred: numeric ('data') set")
 facA <- mSetObj$analSet$penReg$res$response
 method1 <- mSetObj$analSet$penReg$res$method
 mod <- mSetObj$analSet$penReg$mod$model
-form <- mSetObj$analSet$penReg$mod$formula
 predictors_test <- mSetObj$analSet$penReg$res$predictors.test.data
 test_prediction <-  mSetObj$analSet$penReg$res$test.prediction #predict(mod, newx = as.matrix(predictors_test))
 test_data <- mSetObj$analSet$penReg$res$test.data
 predictors_train <- mSetObj$analSet$penReg$res$predictors.train.data
-# form <- paste(facA, "~", paste(colnames(predictors_train), collapse = "+", sep = ""))
+form <- paste(facA, "~", paste(colnames(predictors_train), collapse = "+", sep = ""))
+# form <- mSetObj$analSet$penReg$mod$formula
 #  test_rmse <- <- mSetObj$analSet$penReg$res$test.rmse #Metrics::rmse(test_data[,facA, drop = TRUE], test_prediction)  
 
 print("pred: extracted from mSet set")
 
 
-   # form <- paste(facA, "~", paste(colnames(predictors_train), collapse = "+", sep = ""))
- # print("pred: formula set")
+  # form <- paste(facA, "~", paste(colnames(predictors_train), collapse = "+", sep = ""))
+  # print("pred: formula set")
    dfpred <- data.frame(fpred = as.vector(test_prediction), fA = test_data[,facA, drop = TRUE])
  print("pred: dfpred set") 
   formula2 <- as.formula("fA~fpred")
@@ -443,7 +444,7 @@ print("pred: extracted from mSet set")
   print("pred: model2 set")
  
 
-    #Set plot dimensions
+  #Set plot dimensions
   if(is.na(width)){
     w <- 10.5
   } else if(width == 0){
@@ -488,10 +489,12 @@ print("pred: extracted from mSet set")
   
   # PLOT TITLE
   if(plot_title == " "){ 
-    plot_title1 <- paste0(method1,"\n",form)
+    plot_title1 <- paste0(method1, "Predicted vs. Actual")
+#    plot_title1 <- paste0(method1,"\n",form)
   } else {
     plot_title1 <- plot_title
   }
+
 print("pred: title")
   print(plot_title1)
 
@@ -546,7 +549,8 @@ print("pred: xlab:")
  
 
   a0 <- ggplot(data = dfpred, aes(x = fpred, y = fA)) +
-     labs(title = plot_title1) +
+#     labs(title = plot_title1) +
+     labs(title = plot_title1, subtitle = form) +
       ylab(plot_ylab1)+ xlab(plot_xlab1) +
      geom_smooth(se = FALSE, color = col_line1, fullrange = TRUE, method = "lm") +
       geom_point(shape = 16, color = col_dots1) +
@@ -556,7 +560,8 @@ print("pred: xlab:")
         axis.text = element_text(size = 12, colour = "black"), 
         axis.title = element_text(size = 12),
         # legend.title=element_text(12), legend.text=element_text(size=12),
-        plot.title = element_text(face = 'bold', hjust = 0.5)
+        plot.title = element_text(face = 'bold', hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5)
   )
  
 
@@ -581,7 +586,7 @@ build_line <- build$data[[1]] ### line is 1
 # build_points <- build$data[[2]] # points is 2
 linear_plot_json <- list()
 
-linear_plot_json$main <- plot_title1 #title
+linear_plot_json$main <- paste0(plot_title1, "\n", form) #title
 linear_plot_json$axis <- c(plot_xlab1, plot_ylab1) #axis titles
 # linear_plot_json$points$coords <- build_points[,c("x","y")] #[,1:2]
 # linear_plot_json$points$cols <- build_points[,grepl("col",colnames(build_points))] #[,6] #colours
@@ -686,8 +691,6 @@ library("RJSONIO")
   
 ## EXTRACT MODEL VARIABLES  
   mod <- mSetObj$analSet$penReg$mod$model
-  form <- mSetObj$analSet$penReg$mod$formula
-  # form <- paste(facA, "~", paste(colnames(predictors_train), collapse = "+", sep = ""))
   method1 <- mSetObj$analSet$penReg$res$method
   predictors_test <- mSetObj$analSet$penReg$res$predictors.test.data
   test_prediction <- predict(mod, newx = as.matrix(predictors_test))
@@ -695,7 +698,8 @@ library("RJSONIO")
   test_data <- mSetObj$analSet$penReg$res$test_data
   predictors_train <- mSetObj$analSet$penReg$res$predictors.train.data
   cv <- mSetObj$analSet$penReg$res$cross.validation
-
+  form <- paste(facA, "~", paste(colnames(predictors_train), collapse = "+", sep = ""))
+  # form <- mSetObj$analSet$penReg$mod$formula
 
 # ### changed facA to 1st column of numeric data instead of just generic data 202209-30
 #   #SET RESPONSE VARIABLE NAME
@@ -773,7 +777,7 @@ library("RJSONIO")
 # test_rmse <- Metrics::rmse(test_data[,facA], test_prediction)
  
 
-    #Set plot dimensions
+ #Set plot dimensions
   if(is.na(width)){
     w <- 10.5
   } else if(width == 0){
@@ -824,7 +828,7 @@ library("RJSONIO")
   
   # PLOT YAXIS
   if(plot_ylab == " "){
-  plot_ylab1 <- "Mean-Squared Error"
+  plot_ylab1 <- "Mean-Squared Error (MSE)"
   } else { # facA, response
     plot_ylab1 <- plot_ylab
   }
@@ -832,7 +836,7 @@ library("RJSONIO")
   # PLOT XAXIS
   if(plot_xlab == " "){
    plot_xlab1 <- "Log(Lambda)"
-   plot_xlab1 <- expression(paste("Log ", lambda))
+   # plot_xlab1 <- expression(paste("Log ", lambda))
   } else { #prediction
     plot_xlab1 <- plot_xlab
   }
@@ -841,7 +845,8 @@ library("RJSONIO")
   # plot of MSE as a function of lambda
 
 a0 <- ggplot(broom::tidy(cv), aes(lambda, estimate)) +
-   labs(title = plot_title1) +
+#   labs(title = plot_title1) +
+   labs(title = plot_title1, subtitle = form) +
      ylab(plot_ylab1)+ xlab(plot_xlab1) +
      geom_point(shape = 16, color = col_dots1) +
   geom_line(color = col_line1) +
@@ -855,12 +860,14 @@ a0 <- ggplot(broom::tidy(cv), aes(lambda, estimate)) +
         axis.text = element_text(size = 12, colour = "black"), 
         axis.title = element_text(size = 12),
         # legend.title=element_text(12), legend.text=element_text(size=12),
-        plot.title = element_text(face = 'bold', hjust = 0.5)
+        plot.title = element_text(face = 'bold', hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5)
   )
 
 
 #STORE IN mset
-  mSetObj$analSet$penReg$plotcv <- list(plot= a0, title = plot_title1, xlab = plot_xlab1, ylab = plot_ylab1) 
+  mSetObj$analSet$penReg$plotcv <- list(plot= a0, title = paste0(plot_title1, "\n", form),
+ xlab = plot_xlab1, ylab = plot_ylab1) 
 
 #GENERATE PLOT
   Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
@@ -883,7 +890,7 @@ build_line3 <- build$data[[5]] ### xint -1.78, linetype = 2
 
 linear_plot_json <- list()
 
-linear_plot_json$main <- plot_title1 #title
+linear_plot_json$main <- paste0(plot_title1, "\n", form) #title
 linear_plot_json$axis <- c(plot_xlab1, plot_ylab1) #axis titles
 linear_plot_json$points$coords <- build_points[,c("x","y")] #[,1:2]
 linear_plot_json$points$cols <- build_points[,grepl("col",colnames(build_points))] #[,6] #colours
@@ -917,7 +924,7 @@ linear_plot_json$lines$size <- build_line[,c("size")]
  sink(imgName2)
  cat(json.obj)
  sink()
-print(json.obj)
+#print(json.obj)
 print(paste("PLOT2 | facA: ", facA, " | method: ", method1, sep = ""))
 print("Bourne. JSON Bourne.")
 
@@ -928,6 +935,251 @@ if(!.on.public.web){
 }
   
   
+
+
+
+
+
+
+
+
+
+
+
+
+
+ #'Produce coefficients vs log-lambda plot for penalized regression
+ #'@description Line plot,log10-lambda values on x, coefficients on the y
+#'@usage pen.coef.plot(mSetObj, method="NULL", plot_title=" ", plot_ylab=" ", plot_xlab = " ,"imgName, format="png", dpi=72, width=NA)
+ #'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
+ #'@param facA Input the name of the response column (java uses Columns() to give user options)
+###@param data Boolean, whether to use original data; "false" (default) means normalized or "true" means original (checkbox) ## removed data param: 202209-30
+ #'@param method Set penalized regression method, default is ridge
+  #'@param plot_title Input the name of the title (default: "Polynomial Regression Predicted vs Actual: (formula);, textbox)
+ #'@param plot_xlab Input the name to use for x-axis label (default: facB, textbox)
+ #'the default dpi is 72. It is suggested that for high-resolution images, select a dpi of 300.  
+ #'@param width Input the width, there are 2 default widths. The first, width=NULL, is 10.5.
+ #'The second default is width=0, where the width is 7.2. Otherwise users can input their own width.   
+###@param weights Set weight values, default is NULL
+ #'@author Gina Sykes\email{gsykes@ualberta.ca}
+ #'University of Alberta, Canada
+ #'License: GNU GPL (>= 2)
+ #'@export
+ 
+ pen.coef.plot <- function(mSetObj=NA,
+ # facA = "NULL", 
+  method = "NULL", 
+  #data='false', ## removed data param: 202209-30
+
+ #  col_palette="NULL",
+   plot_title=" ",
+   plot_ylab=" ",
+   plot_xlab=" ",
+   imgName, format="png", dpi=72, width=NA){
+   
+   ## name used to be: plot.pred.penReg
+
+ # Based on ggplot/data table code from: https://enhancedatascience.com/2017/07/04/machine-learning-explained-regularization/
+
+
+library("glmnet")
+library('data.table')
+library("dplyr")
+library("ggplot2")
+library("RJSONIO")
+   
+
+  #EXTRACT FROM mSetObj NECESSARY OBJECTS 
+  mSetObj <- .get.mSet(mSetObj)
+   
+## removed data param: 202209-30
+   ### SET DATA (whether to use original data or not)
+#  if (data=="false") { 
+
+     input <- mSetObj$dataSet$norm #default use norm
+
+#  } else {
+#    input <- mSetObj$dataSet$orig
+#cat("NOT USING STANDARDIZED DATA IN PENALIZED REGRESSION? BE CAREFUL - you may be penalized for differences in scale between variables (remember the same penalty factor lambda will be applied to all variables equally!)")
+#  }
+  
+print("pred: input set")
+data <- dplyr::select_if(input, is.numeric)
+print("pred: numeric ('data') set")
+
+facA <- mSetObj$analSet$penReg$res$response
+method1 <- mSetObj$analSet$penReg$res$method
+mod <- mSetObj$analSet$penReg$mod$model
+predictors_test <- mSetObj$analSet$penReg$res$predictors.test.data
+test_prediction <-  mSetObj$analSet$penReg$res$test.prediction #predict(mod, newx = as.matrix(predictors_test))
+test_data <- mSetObj$analSet$penReg$res$test.data
+predictors_train <- mSetObj$analSet$penReg$res$predictors.train.data
+form <- paste(facA, "~", paste(colnames(predictors_train), collapse = "+", sep = ""))
+# form <- mSetObj$analSet$penReg$mod$formula
+#  test_rmse <- <- mSetObj$analSet$penReg$res$test.rmse #Metrics::rmse(test_data[,facA, drop = TRUE], test_prediction)  
+
+print("pred: extracted from mSet set")
+
+
+ 
+
+  #Set plot dimensions
+  if(is.na(width)){
+    w <- 10.5
+  } else if(width == 0){
+    w <- 7.2
+  } else{
+    w <- width
+  }
+  h <- w
+  
+ #NAME PLOT FOR DOWNLOAD
+  # must put imgName2 first, re-writing imgName var in next line
+  imgName2 <- paste(gsub( "\\_\\d+\\_", "", imgName),
+ ".json", sep="") 
+  imgName <- paste(imgName, "dpi", dpi, ".", format, sep="")
+  mSetObj$imgSet$plot.pred.penReg <- imgName
+  
+## PREP DATA FOR PLOTTING
+ lamb<-mod$lambda
+ coeff<-as.matrix(mod$beta)
+ rowName<-rownames(coeff)
+ coeff<-data.table::data.table(coeff)
+ coeff[,name:=rowName]
+ coeff<-data.table::melt(coeff,id.vars = 'name')
+ coeff[,variable:=rep(lamb, each=length(unique(name)))]
+  
+  # PLOT TITLE
+  if(plot_title == " "){ 
+    plot_title1 <- paste0("Coefficients vs. Log(Lambda) Plot")
+  } else {
+    plot_title1 <- plot_title
+  }
+
+  print("pred: title")
+  print(plot_title1)
+
+  # PLOT YAXIS
+  if(plot_ylab == " "){
+  plot_ylab1 <- "Coefficients"
+  } else { # 
+    plot_ylab1 <- plot_ylab
+  }
+  print("pred: ylab:")
+  print(plot_ylab1)
+
+  # PLOT XAXIS
+  if(plot_xlab == " "){
+   plot_xlab1 <- "Log Lambda"
+  } else { #prediction
+    plot_xlab1 <- plot_xlab
+  }
+  print("pred: xlab:")
+  print(plot_xlab1)
+  print("pred: plot color, labels set")
+  
+  
+### TROUBLESHOOTING
+#input <- iris
+#data <- dplyr::select_if(input, is.numeric)
+#facA <- colnames(input)[1]
+#set.seed(37) #Ensures same selction of data for test and train each time
+#index <- sample(1:nrow(data), 0.7*nrow(data)) #Select 70% of dataset
+#train_data <- data[index,,drop = FALSE] #70% of dataset
+#test_data <- data[-index,, drop = FALSE] #30% of dataset
+#resp.col.num <- which(colnames(data)==facA)
+#predictors_train <- train_data[,-resp.col.num, drop = TRUE]
+#predictors_test <- test_data[,-resp.col.num, drop = TRUE]
+#response_train <- train_data[,facA, drop = TRUE]
+#lambda <- 10^seq(-3, 3, length = 100)
+#params <- caret::train(predictors_train, response_train, weights = NULL, method = "glmnet",  trControl = caret::trainControl("cv", number = 10), tuneGrid = expand.grid(alpha = 0, lambda = lambda))
+#model <- glmnet::glmnet(as.matrix(predictors_train), as.matrix(response_train), alpha=params$bestTune$alpha, lambda = params$bestTune$lambda, weights = NULL, family = "gaussian")
+#bestAlpha <- 0
+#bestLambda <- params$bestTune$lambda #Extract best parameter
+#method1 <- "Ridge Regression"
+#cv <- glmnet::cv.glmnet(x = as.matrix(predictors_train), y = as.matrix(response_train), alpha=bestAlpha)
+#test_prediction <- predict(mod, newx = as.matrix(predictors_test))
+#plot_title1 <- paste0(method) #paste0(method, " Cross Validation Plot", "\n")
+#plot_ylab1 <- "Actual"
+#plot_xlab1 <- "Predicted"
+#### TROUBLESHOOTING OVER
+
+   # plot(x=test_prediction, y=test_data[,facA], xlab="Predicted", ylab="Actual", main=method, yaxt="n"); axis(2, las=2); abline(a=0,b=1)
+ 
+
+  a0 <- ggplot(coeff,aes(x=variable, y=value, color=name))+
+   geom_line()+ scale_x_log10() +
+     labs(title = plot_title1, subtitle = method1) +
+      ylab(plot_ylab1)+ xlab(plot_xlab1) +
+
+          theme_bw() + 
+  theme(panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(),
+        axis.text = element_text(size = 12, colour = "black"), 
+        axis.title = element_text(size = 12),
+        # legend.title=element_text(12), legend.text=element_text(size=12),
+        plot.title = element_text(face = 'bold', hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5)
+  )
+ 
+
+   print("coef: made plot set")
+ #STORE IN mset
+  mSetObj$analSet$penReg$plotcoef <- list(plot= a0, title = paste0(plot_title1, "\n Coefficients vs. Log(Lambda) Plot"), 
+         xlab = plot_xlab1, ylab = plot_ylab1)
+ 
+#GENERATE PLOT
+  Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
+ 
+   print(a0)
+   # a0
+   dev.off()
+   
+   
+ # GENERATE JSON
+build <- ggplot_build(a0)
+linear_plot_json <- list()
+
+build_line <- build$data[[1]] ### line is 1
+# build_points <- build$data[[2]] # points is 2
+linear_plot_json <- list()
+
+linear_plot_json$main <- paste0(plot_title1, "\n", form) #title
+linear_plot_json$axis <- c(plot_xlab1, plot_ylab1) #axis titles
+# linear_plot_json$points$coords <- build_points[,c("x","y")] #[,1:2]
+# linear_plot_json$points$cols <- build_points[,grepl("col",colnames(build_points))] #[,6] #colours
+# linear_plot_json$points$shape <- build_points[,c("group")]#[,5]
+# linear_plot_json$points$size <- build_points[,c("size")]#[,7]
+linear_plot_json$lines$coords <- build_line[,c("x","y")]
+linear_plot_json$lines$cols <- build_line[,grepl("col",colnames(build_line))]
+linear_plot_json$lines$size <- build_line[,c("size")]
+linear_plot_json$lines$ci <- data.frame(x = build_line[,c("x")], y = build_line[,c("y")], CI_down = 0, CI_up = 0)
+ 
+
+#### MODEL VARS FOR LINE
+#  linear_plot_json$r_sq <-
+#    summary(model2)[["r.squared"]] #Extract R^2
+#  linear_plot_json$r_sq_adj <-
+#    summary(model2)[["adj.r.squared"]] #Extract adjusted R^2 
+#  linear_plot_json$slope <-
+#    summary(model2)[["coefficients"]][2] # beta
+#  linear_plot_json$yint <-
+#    summary(model2)[["coefficients"]][1] # alpha  
+   
+  
+ json.obj <- RJSONIO::toJSON(linear_plot_json, .na='null')
+ sink(imgName2)
+ cat(json.obj)
+ sink()
+ print(json.obj)
+ print(paste("PLOT1 | facA: ", facA, " | method: ", method1, sep = ""))
+ print("Toronto Blue JSONs")
+  
+  
+  if(!.on.public.web){
+    return(.set.mSet(mSetObj))
+  }
+ }
 
 
 
