@@ -9,6 +9,8 @@ import metaboanalyst.models.User;
 import metaboanalyst.utils.DataUtils;
 import java.io.File;
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
@@ -16,6 +18,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import metaboanalyst.rwrappers.CAUtils;
 import metaboanalyst.rwrappers.RCenter;
 
 @ManagedBean(name = "applicationBean1")
@@ -145,6 +148,8 @@ public class ApplicationBean1 implements Serializable {
     private final SelectItem[] ciaTypeOpts;
     private final SelectItem[] plottingDataOpts;
     private final SelectItem[] betadisperDataOpts;
+//    private final SelectItem[] columnOptsFill = null;
+   
     
     //Wegan variables begin here (currently ot used, regulat TestDataOpt is used
     
@@ -168,6 +173,8 @@ public class ApplicationBean1 implements Serializable {
     private final String testORA = "Acetoacetic acid\nBeta-Alanine\nCreatine\nDimethylglycine\nFumaric acid\nGlycine\nHomocysteine\nL-Cysteine\n"
             + "L-Isolucine\nL-Phenylalanine\nL-Serine\nL-Threonine\nL-Tyrosine\nL-Valine\nPhenylpyruvic acid\nPropionic acid\nPyruvic acid\nSarcosine";
 
+    
+   
     public ApplicationBean1() {
 
         domain_url = ((HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRe‌​quest()).getRequestURL().toString();
@@ -1008,6 +1015,10 @@ public class ApplicationBean1 implements Serializable {
         return ordStressDimensionOpts;
     }
 
+//    public SelectItem[] getColumnOptsFill() {
+//        return columnOptsFill;
+//    } 
+    
      public SelectItem[] getCorPlotNarrowWidthOpts() {
         return corPlotNarrowWidthOpts;
     } 
