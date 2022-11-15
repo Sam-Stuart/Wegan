@@ -28,18 +28,40 @@
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{logCABean.responseVar}">
                                 <f:selectItems value="#{logCABean.columnOpts}" />
                             </p:selectOneMenu>
-                            <spacer></spacer>
+                            <p:panelGrid>></p:panelGrid>
+                            
                             <h:outputLabel style="font-weight: bold" value="Reference level:"/>
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{logCABean.responseLevelVar}">
                                 <f:selectItems value="#{logCABean.columnLevelOpts}" />
                             </p:selectOneMenu>
-                            <spacer></spacer>
+                            <p:panelGrid></p:panelGrid>
+                            
                             <h:outputLabel style="font-weight: bold" value="Independent variables (names with commas in between):"/>
                             <p:inputText style="width:400px; height:40px" value="#{logCABean.indInput}"/> 
                             
+                            
+                          <h:panelGrid id="listPane">
+                            <h:panelGrid style="padding-left:20px;">
+                                <p:inputTextarea  autoResize="false" value="#{pathLoader.pathOraList}" rows="16" cols="40" />
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" style="width:360px; padding-top: 5px;">
+                                <p:outputLabel style="font-size:13px; font-weight: bold" value="Input Type: "/>
+                               
+                            </h:panelGrid>
+                        </h:panelGrid>    
+                            
+                        <h:panelGrid columns="2">
+                            <!--<p:selectBooleanCheckbox value="hash{pathLoader.usePathListExample}">-->
+                  <!--<p:ajax update=":form1:listPane" event="change" listener="hash{pathLoader.updatePathListArea()}"/>-->
+                        <p:ajax update=":form1:listPane" event="change" listener="#{logCABean.corrFillColumnNames()}"/>
+                            <!--</p:selectBooleanCheckbox>-->  
+                            <p:outputLabel style="font-size:13px; font-weight: bold" value="Use our example data"/>
+                        </h:panelGrid>
+                            
+                            
                             <p:panelGrid></p:panelGrid>
                             
-                             <h:outputLabel style="font-weight: bold" value="Increasing order of reference levels (names with commas in between):"/>
+                            <h:outputLabel style="font-weight: bold" value="Increasing order of reference levels (names with commas in between):"/>
                             <p:inputText style="width:400px; height:40px" value="#{logCABean.indOrder}"/> 
 
                             <p:panelGrid></p:panelGrid>
@@ -84,7 +106,7 @@
                             </h:panelGroup>
                          <h:panelGroup>
                                 <h:panelGrid columns="3" class="resultsImages">
-                                    <i id="question" class="fa fa-question-circle" title="Only numeric variables are used in linear correlation. The linear model can be written in the form (y = x * &#946; + &#949;), where y = dependent variable; x = independent variable; &beta; = regression parameter coefficients; and &epsilon; = error values.
+                                    <i id="question" class="fa fa-question-circle" title="Only numeric variables are used in linear correlation. The generalized linear model can be written in the form (y = x * &#946; + &#949;), where y = dependent variable; x = independent variable; &beta; = regression parameter coefficients; and &epsilon; = error values.
 
 The model makes several assumptions, namely linearity, normality, homoscedasticity, independence, and that the model is not disproportionately influenced by outliers. Tests for these assumptions include the RESET for linearity(J.B. Ramsey (1969), Tests for Specification Errors in Classical Linear Least-Squares Regression Analysis. Journal of the Royal Statistical Society, Series B 31, 350--371); Kruskal-Wallis for normality(); Breusch-Pagan for homoscedasticity (T.S. Breusch and A.R. Pagan (1979), A Simple Test for Heteroscedasticity and Random Coefficient Variation. Econometrica 47, 1287--1294); and Durbin-Watson for autocorrelation (J. Durbin and G.S. Watson (1950), Testing for Serial Correlation in Least Squares Regression I. Biometrika 37, 409--428) 
 
