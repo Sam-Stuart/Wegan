@@ -57,8 +57,20 @@ public class LinearCABean implements Serializable {
     
     
     // GET COLUMN NAMES
-    private SelectItem[] corrColumnOpts = null;
+//    try to get it with cleaner, variable replacing way (didn't work (202211-15
+//    public SelectItem[] getCorrColumnOpts(SelectItem[] nameofvar){
+//        String[] columns = CAUtils.GetDataColumns(sb);
+//        int columnsLen = columns.length;
+//        nameofvar = new SelectItem[columnsLen];
+//        List<String> columnNames = Arrays.asList(columns);
+//        for (int i = 0; i < columnsLen; i++) {
+//            nameofvar[i] = new SelectItem(columnNames.get(i), columnNames.get(i));
+//        }
+//        //List<String> columnNames = Arrays.asList(columns);
+//        return nameofvar;
+//    }
     
+     private SelectItem[] corrColumnOpts = null;
     public SelectItem[] getCorrColumnOpts(){
         String[] columns = CAUtils.GetDataColumns(sb);
         int columnsLen = columns.length;
