@@ -24,7 +24,6 @@
         <p:commandButton value="Customize Graph"
                          styleClass="graphicsButton"
                          style="box-shadow: none !important; text-shadow: none !important;"
-                         actionListener="#{sessionBean1.graphicsLnk_action('plot_bar_chart')}"
                          oncomplete="PF('graphApperanceLinear').show();"/>
         <p:commandButton value="Update"
                          styleClass="updateButton"
@@ -57,11 +56,5 @@
         </h:panelGrid>
     </h:panelGrid>
 
-    <p:dialog modal="true" widgetVar="graphApperanceLinear"
-              style="width: 400px; height:400px;"
-              appendTo="@(body)" header="Graphics Center"
-              draggable="false" closable="true" resizable="false">
-        <ui:include src="_color_palette_linear2.xhtml"/>
-    </p:dialog>
 </ui:composition>
                
