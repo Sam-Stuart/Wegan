@@ -38,27 +38,25 @@
                             
                             <h:outputLabel style="font-weight: bold" value="Independent variables (names with commas in between):"/>
                             <p:inputText style="width:400px; height:40px" value="#{logCABean.indInput}"/> 
-                            
-                            
-                          <h:panelGrid id="listPane">
+  
+<!--                          <h:panelGrid id="listPane">
                             <h:panelGrid style="padding-left:20px;">
-                                <p:inputTextarea  autoResize="false" value="#{pathLoader.pathOraList}" rows="16" cols="40" />
+                            <p:inputTextarea  autoResize="false" value="hash{pathLoader.pathOraList}" rows="16" cols="40" />
                             </h:panelGrid>
                             <h:panelGrid columns="2" style="width:360px; padding-top: 5px;">
                                 <p:outputLabel style="font-size:13px; font-weight: bold" value="Input Type: "/>
                                
                             </h:panelGrid>
-                        </h:panelGrid>    
+                        </h:panelGrid>    -->
                             
-                        <h:panelGrid columns="2">
+                        <!--<h:panelGrid columns="2">-->
                             <!--<p:selectBooleanCheckbox value="hash{pathLoader.usePathListExample}">-->
                   <!--<p:ajax update=":form1:listPane" event="change" listener="hash{pathLoader.updatePathListArea()}"/>-->
-                        <p:ajax update=":form1:listPane" event="change" listener="#{logCABean.corrFillColumnNames()}"/>
+                <!--<p:ajax update=":form1:listPane" event="change" listener="hash{logCABean.corrFillColumnNames()}"/>-->
                             <!--</p:selectBooleanCheckbox>-->  
-                            <p:outputLabel style="font-size:13px; font-weight: bold" value="Use our example data"/>
-                        </h:panelGrid>
-                            
-                            
+                            <!--<p:outputLabel style="font-size:13px; font-weight: bold" value="Use our example data"/>-->
+                        <!--</h:panelGrid>-->
+                                    
                             <p:panelGrid></p:panelGrid>
                             
                             <h:outputLabel style="font-weight: bold" value="Increasing order of reference levels (names with commas in between):"/>
