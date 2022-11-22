@@ -23,19 +23,18 @@ library(reshape2)
 library(ggplot2)
 library(vegan)
 
-mSetObj = list()
-data()
-input <- read.csv(file = "/Users/hieunguyen/Documents/Wegan/pitlatrine.csv")
-mSetObj$dataSet$orig = input
-mSetObj$dataSet$norm = input
-facA = "Country"
-colors = "NULL"
-xlab = "NULL"
-ylab = "NULL"
-aggregate_function = "NULL"
-barLabels = "NULL"
-mainTitle = "NULL"
-data = "false"
+# mSetObj = list()
+# data()
+# mSetObj$dataSet$orig = input
+# mSetObj$dataSet$norm = input
+# facA = "Country"
+# colors = "NULL"
+# xlab = "NULL"
+# ylab = "NULL"
+# aggregate_function = "NULL"
+# barLabels = "NULL"
+# mainTitle = "NULL"
+# data = "false"
 
 
 barGraph_setup <-
@@ -141,10 +140,10 @@ barGraph_setup <-
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2)
 #'@export
-imgName = "test"
-format = "png"
-dpi = 72
-width = NA
+# imgName = "test"
+# format = "png"
+# dpi = 72
+# width = NA
 
 plotBarGraph <-
   function(mSetObj = NA,

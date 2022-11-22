@@ -42,12 +42,11 @@ public class PlottingMainBean implements Serializable {
                         doDefaultBoxChart();
                         doDefaultScatterChart();
                         doDefaultBarChart();
+                        doDefaultLinear();
                         break;  
                     case "linear":
-                        doDefaultLinear();
                         break;
                     case "boxplot":
-                        
                         break;
                     case "bargraph":
 //                        doDefaultBetaDisper();

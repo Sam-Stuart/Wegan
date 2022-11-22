@@ -20,7 +20,7 @@ import metaboanalyst.utils.DataUtils;
 @Named("barPlotBean")
 public class BarPlotBean implements Serializable {
 
-    private final SessionBean1 sb = (SessionBean1) DataUtils.findBean("sessionBean1");
+    private final SessionBean1 sb = DataUtils.findBean("sessionBean1");
     private final SelectItem[] aggregateOpts;
     
     private String aggregateFunChosen;
@@ -47,7 +47,7 @@ public class BarPlotBean implements Serializable {
         this.labx = labx;
     } 
     
-    public String getlabx() {
+    public String getLabx() {
         return labx;
     }
     
@@ -66,6 +66,7 @@ public class BarPlotBean implements Serializable {
     
 
     public void barBtn_action() {
+        System.out.println("I was called");
         PlottingUtils.CreateBarChart(sb, "NULL", "NULL", this.labx, this.laby, "NULL", "NULL", this.title, this.aggregateFunChosen, false);
         PlottingUtils.PlotBarChart(sb,  sb.getNewImage("plot_bar_chart"), "png", 72); 
     }

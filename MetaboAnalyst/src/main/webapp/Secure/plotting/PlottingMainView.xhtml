@@ -42,7 +42,7 @@
                 </p:tab>
                 <p:tab title ="Histogram" titleStyleClass="p-tab-nav">
                     <h:form id="form5">
-                      <ui:include src="_histogram_view.xhtml" />
+                        <ui:include src="_histogram_view.xhtml" />
                     </h:form>    
                 </p:tab>
                 <p:tab title ="Pie Chart" titleStyleClass="p-tab-nav">
@@ -52,5 +52,31 @@
                 </p:tab>
             </p:tabView> 
         </h:panelGrid> 
+
+        <p:dialog modal="true" widgetVar="graphApperanceLinear"
+                  style="width: 400px; height:400px;"
+                  appendTo="@(body)" header="Graphics Center"
+                  draggable="false" closable="true" resizable="false">
+            <ui:include src="_color_palette_linear2.xhtml"/>
+        </p:dialog>
+
+        <!--For box plot-->
+        <p:dialog modal="true" widgetVar="graphApperanceLinear2" 
+                  style="width: 400px; height:400px;" 
+                  appendTo="@(body)" header="Graphics Center"
+                  draggable="false" closable="true" resizable="false"> 
+            <ui:include src="_color_palette_linear3.xhtml" />
+        </p:dialog>
+
+          
+        <p:dialog modal="true" widgetVar="graphApperanceLinear3" 
+                  style="width: 400px; height:400px;" 
+                  appendTo="@(body)" header="Graphics Center"
+                  draggable="false" closable="true" resizable="false"> 
+            <ui:include src="_color_palette_linear1.xhtml" />
+        </p:dialog>
+
+
+
     </ui:define>
 </ui:composition>
