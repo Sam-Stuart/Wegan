@@ -268,6 +268,30 @@ public class ClusterBean implements Serializable{
         this.hmSmplColorOpts = hmSmplColorOpts;
     }
 
+    //DYNAMIC DROPDOWN 
+    private SelectItem[] hmColumnOpts = null;
+    
+    public SelectItem[] getHmColumnOpts(){
+        String[] columns = Clustering.hmColNames(sb);
+        int columnsLen = columns.length;
+        hmColumnOpts = new SelectItem[columnsLen];
+        List<String> columnNames = Arrays.asList(columns);
+        for (int i = 0; i < columnsLen; i++) {
+            hmColumnOpts[i] = new SelectItem(columnNames.get(i), columnNames.get(i));
+        }
+        return hmColumnOpts;
+    }
+    
+    private String hmColumnName = getHmColumnOpts()[0].getLabel();
+    
+    public String getHmColumnName() {
+        return hmColumnName;
+    }
+
+    public void setHmColumnName(String hmColumnName) {
+        this.hmColumnName = hmColumnName;
+    }
+    
     public String hmButton_action() {
 
         String rowV = "T";
@@ -295,9 +319,15 @@ public class ClusterBean implements Serializable{
         }
         
         if (useTopFeature) {
-            Clustering.PlotSubHeatMap(sb, sb.getNewImage("heatmap"), "png", 72, doData, scaleOpt, hmDistOpt, hmMethodOpt, hmColorOpt, selectMethodOpt, topThresh, viewOpt, rowV, colV, (drawBorders) ? "T" : "F", (grpAves) ? "T" : "F", hmSmplColorOpts);
+            Clustering.PlotSubHeatMap(sb, sb.getNewImage("heatmap"), "png", 72, 
+                    doData, scaleOpt, hmDistOpt, hmMethodOpt, hmColorOpt, 
+                    selectMethodOpt, topThresh, viewOpt, rowV, colV, (drawBorders) ? "T" : "F", (grpAves) ? "T" : "F", 
+                    hmSmplColorOpts, hmColumnName);
         } else {
-            Clustering.PlotHeatMap(sb, sb.getNewImage("heatmap"), "png", 72, doData, scaleOpt, hmDistOpt, hmMethodOpt, hmColorOpt, viewOpt, rowV, colV, (drawBorders) ? "T" : "F", (grpAves) ? "T" : "F", hmSmplColorOpts);
+            Clustering.PlotHeatMap(sb, sb.getNewImage("heatmap"), "png", 72, 
+                    doData, scaleOpt, hmDistOpt, hmMethodOpt, 
+                    hmColorOpt, viewOpt, rowV, colV, (drawBorders) ? "T" : "F", (grpAves) ? "T" : "F", 
+                    hmSmplColorOpts, hmColumnName);
         }
         RequestContext.getCurrentInstance().scrollTo("form1:hmPane");
         return null;

@@ -20,7 +20,19 @@ import org.rosuda.REngine.REXPMismatchException;
 public class Clustering {
 
     //private static Object Logger;
-
+        public static String[] dendroColNames(SessionBean1 sb){
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "dendro.columns(NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            return RC.eval(rCommand).asStrings();
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        } catch (REXPMismatchException ex) {
+            Logger.getLogger(OAUtils.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
     public static void PlotClustTree(SessionBean1 sb, boolean data,
             String imgName, String format, int dpi, String smplDist,
             String clstDist, boolean rotate, boolean branch_labels,
@@ -48,10 +60,10 @@ public class Clustering {
             System.out.println(rse);
         }
     }
-    public static String[] dendroColNames(SessionBean1 sb){
+    public static String[] hmColNames(SessionBean1 sb){
         try {
             RConnection RC = sb.getRConnection();
-            String rCommand = "dendro.columns(NA)";
+            String rCommand = "heatmap.columns(NA)";
             RCenter.recordRCommand(RC, rCommand);
             return RC.eval(rCommand).asStrings();
         } catch (RserveException rse) {
@@ -65,7 +77,7 @@ public class Clustering {
                                     int dpi, boolean dataOpt, String scaleOpt, 
                                     String smplDist, String clstDist, String palette, 
                                     String viewOpt, String rowV, String colV, 
-                                    String drawBorder, String grpAve, String smplColor) {
+                                    String drawBorder, String grpAve, String smplColor, String grpName) {
         try {
             RConnection RC = sb.getRConnection();
             String rCommand = "PlotHeatMap(NA" 
@@ -84,7 +96,8 @@ public class Clustering {
                     + ", NA, " 
                     + drawBorder 
                     + ", " + grpAve
-                    + ", \"" + smplColor + "\")";
+                    + ", \"" + smplColor 
+                    + "\", \"" + grpName + "\")";
             RCenter.recordRCommand(RC, rCommand);
             sb.addGraphicsCMD("heatmap", rCommand);
             RC.voidEval(rCommand);
@@ -93,8 +106,11 @@ public class Clustering {
         }
     }
 
-    public static void PlotSubHeatMap(SessionBean1 sb, String imgName, String format, int dpi, boolean dataOpt, String scaleOpt, String smplDist,
-            String clstDist, String colors, String method, int num, String viewOpt, String rowV, String colV, String drawBorder, String grpAve, String smplColor) {
+    public static void PlotSubHeatMap(SessionBean1 sb, String imgName, String format, 
+            int dpi, boolean dataOpt, String scaleOpt, String smplDist,
+            String clstDist, String colors, String method, int num, 
+            String viewOpt, String rowV, String colV, String drawBorder, 
+            String grpAve, String smplColor, String grpName) {
         try {
             RConnection RC = sb.getRConnection();
             String rCommand = "PlotSubHeatMap(NA" 
@@ -113,7 +129,8 @@ public class Clustering {
                     + ", " + colV 
                     + ", " + drawBorder 
                     + ", " + grpAve
-                    + ", \"" + smplColor + "\")";
+                    + ", \"" + smplColor 
+                    + "\", \"" + grpName+ "\")";
             RCenter.recordRCommand(RC, rCommand);
             sb.addGraphicsCMD("heatmap", rCommand);
             RC.voidEval(rCommand);

@@ -160,7 +160,7 @@ PlotHCTree <- function(mSetObj=NA,
   
   #colnames(dataset) <- substr(colnames(dataset), 1, 18)  # some names are too long
   
-  # set up distance matrix
+  # set up distance matrix 
   input <- select_if(dataset, is.numeric)
   if (smplDist == 'euclidean' || smplDist == "NULL"){  # default is 'euclidean'
     smplDist <- 'euclidean'
@@ -494,7 +494,7 @@ PlotKmeans <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA){
 #'@export
 #'
 PlotSubHeatMap <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, dataOpt, scaleOpt, 
-                           smplDist, clstDist, palette, method.nm, top.num, viewOpt, rowV=T, colV=T, border=T, grp.ave=F, smplColor="NULL"){
+                           smplDist, clstDist, palette, method.nm, top.num, viewOpt, rowV=T, colV=T, border=T, grp.ave=F, smplColor="NULL", grpName=""){
   
   mSetObj <- .get.mSet(mSetObj);
   var.nms = colnames(mSetObj$dataSet$norm);
@@ -549,6 +549,212 @@ PlotSubHeatMap <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, 
   PlotHeatMap(mSetObj, imgName, format, dpi, width, dataOpt, scaleOpt, smplDist, clstDist, palette, viewOpt, rowV, colV, var.inx, border, grp.ave, smplColor);
 }
 
+#' #'Create Heat Map Plot
+#' #'@description Plot a heatmap based on results from t-tests/ANOVA, VIP or randomforest
+#' #'@param mSetObj Input name of the created mSet Object
+#' #'@param imgName Input a name for the plot
+#' #'@param format Select the image format, "png", or "pdf".
+#' #'@param dpi Input the dpi. If the image format is "pdf", users need not define the dpi. For "png" images, 
+#' #'the default dpi is 72. It is suggested that for high-resolution images, select a dpi of 300.  
+#' #'@param width Input the width, there are 2 default widths, the first, width = NULL, is 10.5.
+#' #'The second default is width = 0, where the width is 7.2. Otherwise users can input their own width. 
+#' #'@param dataOpt Set data options, default "false"
+#' #'@param scaleOpt Set the image scale
+#' #'@param smplDist Input the sample distance method
+#' #'@param clstDist Input the clustering distance method
+#' #'@param palette Input color palette choice
+#' #'@param viewOpt Set heatmap options, default is set to "detail"
+#' #'@param rowV Default is set to T
+#' #'@param colV Default is set to T
+#' #'@param var.inx Default is set to NA
+#' #'@param border Indicate whether or not to show cell-borders, default is set to T
+#' #'@param grp.ave Logical, default is set to F
+#' #'@param smplColor Color of facA colorbar
+#' #'@author Jeff Xia\email{jeff.xia@mcgill.ca}
+#' #'McGill University, Canada
+#' #'License: GNU GPL (>= 2)
+#' #'@export
+#' #'
+#' PlotHeatMap <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, 
+#'                         dataOpt="false", scaleOpt, smplDist, clstDist, palette, 
+#'                         viewOpt="detail", rowV=T, colV=T, var.inx=NA, 
+#'                         drawBorder=T, grpAve=F, smplColor="NULL"){
+#'   library(viridis)
+#'   library(viridisLite)
+#'   mSetObj <- .get.mSet(mSetObj);
+#'   
+#'   # record the paramters
+#'   mSetObj$analSet$htmap <- list(dist.par=smplDist, clust.par=clstDist);
+#'   
+#'   # set up data set
+#'   if (dataOpt=="false"){
+#'     my.data <- mSetObj$dataSet$norm;
+#'   } else {
+#'     my.data <- mSetObj$dataSet$procr;
+#'   }
+#'   
+#'   if(is.na(var.inx)){
+#'     hc.dat<-as.matrix(my.data);
+#'   }else{
+#'     hc.dat<-as.matrix(my.data[,var.inx]);
+#'   }
+#'   
+#'   colnames(hc.dat) <- substr(colnames(hc.dat),1,18) # some names are too long
+#'   
+#'   if(mSetObj$dataSet$type.cls.lbl=="integer"){
+#'     hc.cls <- as.factor(as.numeric(levels(mSetObj$dataSet$cls))[mSetObj$dataSet$cls]);
+#'   }else{
+#'     hc.cls <- mSetObj$dataSet$cls;
+#'   }
+#'   
+#'   if(grpAve){ # only use group average
+#'     lvs <- levels(hc.cls);
+#'     my.mns <- matrix(ncol=ncol(hc.dat),nrow=length(lvs));
+#'     for(i in 1:length(lvs)){
+#'       inx <-hc.cls == lvs[i];
+#'       my.mns[i,]<- apply(hc.dat[inx, ], 2, mean);
+#'     }
+#'     rownames(my.mns) <- lvs;
+#'     colnames(my.mns) <- colnames(hc.dat);
+#'     hc.dat <- my.mns;
+#'     hc.cls <- as.factor(lvs);
+#'   }
+#'   
+#'   # set up colors for heatmap
+#'   if(palette=="gbr"){
+#'     colors <- colorRampPalette(c("green", "black", "red"), space="rgb")(256);
+#'   }else if(palette == "heat"){
+#'     colors <- heat.colors(256);
+#'   }else if(palette == "topo"){
+#'     colors <- topo.colors(256);
+#'   }else if(palette == "gray"){
+#'     colors <- colorRampPalette(c("grey90", "grey10"), space="rgb")(256);
+#'   }else{
+#'     colors <- rev(colorRampPalette(RColorBrewer::brewer.pal(10, "RdBu"))(256));
+#'   }
+#'   
+#'   imgName = paste(imgName, "dpi", dpi, ".", format, sep="");
+#'   
+#'   if(is.na(width)){
+#'     minW <- 630;
+#'     myW <- nrow(hc.dat)*18 + 150;
+#'     
+#'     if(myW < minW){
+#'       myW <- minW;
+#'     }   
+#'     w <- round(myW/72,2);
+#'   }else if(width == 0){
+#'     w <- 7.2;
+#'   }else{
+#'     w <- 7.2;
+#'   }
+#'   
+#'   mSetObj$imgSet$heatmap <- imgName;
+#'   
+#'   myH <- ncol(hc.dat)*18 + 150;
+#'   h <- round(myH/72,2);
+#'   
+#'   if(viewOpt == "overview"){
+#'     if(is.na(width)){
+#'       if(w > 9){
+#'         w <- 9;
+#'       }
+#'     }else if(width == 0){
+#'       if(w > 7.2){
+#'         w <- 7.2;
+#'       }
+#'       
+#'     }else{
+#'       w <- 7.2;
+#'     }
+#'     if(h > w){
+#'       h <- w;
+#'     }
+#'     
+#'     mSetObj$imgSet$heatmap <- imgName;
+#'   }
+#'   
+#'   # make the width smaller fro group average
+#'   if(grpAve){
+#'     w <- nrow(hc.dat)*25 + 300;
+#'     w <- round(w/72,2);
+#'   }
+#'   
+#'   if(drawBorder){
+#'     border.col<-"grey60";
+#'   }else{
+#'     border.col <- NA;
+#'   }
+#'   if(format=="pdf"){
+#'     pdf(file = imgName, width=w, height=h, bg="white", onefile=FALSE);
+#'   }else{
+#'     Cairo::Cairo(file = imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white");
+#'   }
+#'   if(mSetObj$dataSet$cls.type == "disc"){
+#'     annotation <- data.frame(class = hc.cls);
+#'     rownames(annotation) <- rownames(hc.dat); 
+#'     
+#'     # set up color schema for samples
+#'     # if(palette == "gray"){
+#'     #   cols <- GetColorSchema(mSetObj, T);
+#'     #   uniq.cols <- unique(cols);
+#'     # }else{
+#'     #   cols <- GetColorSchema(mSetObj);
+#'     #   uniq.cols <- unique(cols);
+#'     # }
+#'     grp.num <- length(levels(mSetObj$dataSet$cls));
+#'     
+#'     if(smplColor == "grey"){
+#'       dist.cols <- colorRampPalette(c("grey90", "grey30"))(grp.num);
+#'     }else if(smplColor == "NULL"){
+#'       dist.cols <- viridis::viridis_pal(option = "viridis")(grp.num);
+#'     }else{
+#'       dist.cols <- viridis::viridis_pal(option = "plasma")(grp.num);
+#'     }
+#'     
+#'     lvs <- levels(mSetObj$dataSet$cls);
+#'     cols <- vector(mode="character", length=length(mSetObj$dataSet$cls));
+#'     for(i in 1:length(lvs)){
+#'       cols[mSetObj$dataSet$cls == lvs[i]] <- dist.cols[i];
+#'       uniq.cols <- unique(cols);
+#'       uniq.cols <- viridis_pal(option = "viridis")(nlevels(hc.cls));
+#'     }
+#'     
+#'     if(mSetObj$dataSet$type.cls.lbl=="integer"){
+#'       cls <- as.factor(as.numeric(levels(mSetObj$dataSet$cls))[mSetObj$dataSet$cls]);
+#'     }else{
+#'       cls <- mSetObj$dataSet$cls;
+#'     }
+#'     
+#'     names(uniq.cols) <- unique(as.character(sort(cls)));
+#'     ann_colors <- list(class= uniq.cols);
+#'     
+#'     pheatmap::pheatmap(t(hc.dat), 
+#'              annotation=annotation, 
+#'              fontsize=8, fontsize_row=8, 
+#'              clustering_distance_rows = smplDist,
+#'              clustering_distance_cols = smplDist,
+#'              clustering_method = clstDist, 
+#'              border_color = border.col,
+#'              cluster_rows = colV, 
+#'              cluster_cols = rowV,
+#'              scale = scaleOpt, 
+#'              color = colors,
+#'              annotation_colors = ann_colors);
+#'   }else{
+#'     heatmap(hc.dat, Rowv = rowTree, Colv=colTree, col = colors, scale="column");
+#'   }
+#'   dev.off();
+#'   return(.set.mSet(mSetObj));
+#' }
+#' 
+#' ##############################################
+#' ##############################################
+#' ########## Utilities for web-server ##########
+#' ##############################################
+#' ##############################################
+
+## Jenna Test
 #'Create Heat Map Plot
 #'@description Plot a heatmap based on results from t-tests/ANOVA, VIP or randomforest
 #'@param mSetObj Input name of the created mSet Object
@@ -564,86 +770,120 @@ PlotSubHeatMap <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, 
 #'@param clstDist Input the clustering distance method
 #'@param palette Input color palette choice
 #'@param viewOpt Set heatmap options, default is set to "detail"
-#'@param rowV Default is set to T
-#'@param colV Default is set to T
-#'@param var.inx Default is set to NA
+#'@param rowV Cluster rows, Default is set to T
+#'@param colV Cluster columns, Default is set to T
+#'@param var.inx Default is set to NA, used for subheatmap
 #'@param border Indicate whether or not to show cell-borders, default is set to T
 #'@param grp.ave Logical, default is set to F
-#'@author Jeff Xia\email{jeff.xia@mcgill.ca}
-#'McGill University, Canada
+#'@param smplColor Color of facA colorbar
+#'@param grpName default "NULL", uses external function to gather non-numeric column names
+#'@author Jenna Poelzer\email{poelzer@ualberta.ca}
+#'University of Alberta, Canada
 #'License: GNU GPL (>= 2)
 #'@export
 #'
+
+# Get column names from user dataset
+heatmap.columns <- function(mSetObj = NA){
+  mSetObj <- .get.mSet(mSetObj)
+  data <- mSetObj$dataSet$orig
+  fac.dat <- select(data, !where(is.numeric))
+  name.fac.cols <- c("No groupings", colnames(fac.dat))
+  return(name.fac.cols)
+}
+
 PlotHeatMap <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, 
-                        dataOpt="false", scaleOpt, smplDist, clstDist, palette, 
-                        viewOpt="detail", rowV=T, colV=T, var.inx=NA, 
-                        drawBorder=T, grpAve=F, smplColor="NULL"){
+                        dataOpt="false", 
+                        scaleOpt, 
+                        smplDist, 
+                        clstDist, 
+                        palette, 
+                        viewOpt="detail", 
+                        rowV=T, 
+                        colV=T, 
+                        var.inx=NA, 
+                        drawBorder=T, 
+                        grpAve=F, 
+                        smplColor="NULL",
+                        grpName="NULL"){
   library(viridis)
   library(viridisLite)
+  
   mSetObj <- .get.mSet(mSetObj);
   
-  print(mSetObj$dataSet)
   # record the paramters
-  mSetObj$analSet$htmap <- list(dist.par=smplDist, clust.par=clstDist);
+  mSetObj$analSet$htmap <- list(dist.par = smplDist, clust.par = clstDist);
   
   # set up data set
-  if(dataOpt=="false"){
+  if (dataOpt == "false") {
     my.data <- mSetObj$dataSet$norm;
-  }else{
-    my.data <- mSetObj$dataSet$procr;
+  } else {
+    my.data <- mSetObj$dataSet$orig;
   }
   
-  if(is.na(var.inx)){
-    hc.dat<-as.matrix(my.data);
-  }else{
-    hc.dat<-as.matrix(my.data[,var.inx]);
-  }
+  #Obtain numeric data for ordination and categorical data for grouping data
+  num.dat <- select(my.data, where(is.numeric))
   
+  # used for subheatmap
+  if (is.na(var.inx)) {
+    hc.dat <- as.matrix(num.dat);
+  }else{
+    hc.dat <- as.matrix(my.data[,var.inx]);
+  }
   colnames(hc.dat) <- substr(colnames(hc.dat),1,18) # some names are too long
   
-  if(mSetObj$dataSet$type.cls.lbl=="integer"){
-    hc.cls <- as.factor(as.numeric(levels(mSetObj$dataSet$cls))[mSetObj$dataSet$cls]);
-  }else{
-    hc.cls <- mSetObj$dataSet$cls;
-  }
+  # #Variable for colorbar as a factor
+  # if(typeof(fac.dat[grpName])=="integer"){
+  #   hc.facA <- as.factor(as.numeric(levels(fac.dat[grpName])[fac.dat[grpName]]));
+  # }else{
+  #   hc.facA <- as.factor(as.character(fac.dat[grpName]));
+  # }
+  # names(hc.facA) <- rownames(my.data)
   
-  if(grpAve){ # only use group average
-    lvs <- levels(hc.cls);
-    my.mns <- matrix(ncol=ncol(hc.dat),nrow=length(lvs));
-    for(i in 1:length(lvs)){
-      inx <-hc.cls == lvs[i];
-      my.mns[i,]<- apply(hc.dat[inx, ], 2, mean);
-    }
-    rownames(my.mns) <- lvs;
-    colnames(my.mns) <- colnames(hc.dat);
-    hc.dat <- my.mns;
-    hc.cls <- as.factor(lvs);
-  }
+  # only use group average as columns
+  # if (grpAve) { 
+  #   lvs <- levels(hc.facA);
+  #   my.mns <- matrix(ncol = ncol(hc.dat), nrow = length(lvs));
+  #   for (i in 1:length(lvs)) {
+  #     inx <- hc.facA == lvs[i];
+  #     my.mns[i,] <- apply(hc.dat[inx, ], 2, mean);
+  #   }
+  #   rownames(my.mns) <- lvs;
+  #   colnames(my.mns) <- colnames(hc.dat);
+  #   hc.dat <- my.mns;
+  #   hc.facA <- as.factor(lvs);
+  # }
   
-  # set up colors for heatmap
-  if(palette=="gbr"){
-    colors <- colorRampPalette(c("green", "black", "red"), space="rgb")(256);
-  }else if(palette == "heat"){
+  # set up colors for heatmap cells
+  if (palette == "gbr") {
+    colors <- colorRampPalette(c("green", "black", "red"), space = "rgb")(256);
+  }else if (palette == "heat") {
     colors <- heat.colors(256);
-  }else if(palette == "topo"){
+  }else if (palette == "topo") {
     colors <- topo.colors(256);
-  }else if(palette == "gray"){
-    colors <- colorRampPalette(c("grey90", "grey10"), space="rgb")(256);
-  }else{
+  }else if (palette == "gray") {
+    colors <- colorRampPalette(c("grey90", "grey10"), space = "rgb")(256);
+  }else{ # default is blue-red-white
     colors <- rev(colorRampPalette(RColorBrewer::brewer.pal(10, "RdBu"))(256));
   }
+  # set up cell borders
+  if (drawBorder) {
+    border.col <- "grey60";
+  }else{
+    border.col <- NA;
+  }
+  # set up image dimensions
+  imgName = paste(imgName, "dpi", dpi, ".", format, sep = "");
   
-  imgName = paste(imgName, "dpi", dpi, ".", format, sep="");
-  
-  if(is.na(width)){
+  if (is.na(width)) {
     minW <- 630;
     myW <- nrow(hc.dat)*18 + 150;
     
-    if(myW < minW){
+    if (myW < minW) {
       myW <- minW;
     }   
     w <- round(myW/72,2);
-  }else if(width == 0){
+  }else if (width == 0) {
     w <- 7.2;
   }else{
     w <- 7.2;
@@ -654,99 +894,109 @@ PlotHeatMap <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA,
   myH <- ncol(hc.dat)*18 + 150;
   h <- round(myH/72,2);
   
-  if(viewOpt == "overview"){
-    if(is.na(width)){
-      if(w > 9){
+  if (viewOpt == "overview") {
+    if (is.na(width)) {
+      if (w > 9) {
         w <- 9;
       }
-    }else if(width == 0){
-      if(w > 7.2){
+    }else if (width == 0) {
+      if (w > 7.2) {
         w <- 7.2;
       }
       
     }else{
       w <- 7.2;
     }
-    if(h > w){
+    if (h > w) {
       h <- w;
     }
     
     mSetObj$imgSet$heatmap <- imgName;
   }
   
-  # make the width smaller fro group average
-  if(grpAve){
+  # make the width smaller for group average
+  if (grpAve) {
     w <- nrow(hc.dat)*25 + 300;
     w <- round(w/72,2);
   }
   
-  if(drawBorder){
-    border.col<-"grey60";
+  # Set up image export
+  if (format == "pdf") {
+    pdf(file = imgName, width = w, height = h, bg = "white", onefile = FALSE);
   }else{
-    border.col <- NA;
+    Cairo::Cairo(file = imgName, unit = "in", dpi = dpi, width = w, height = h, type = format, bg = "white");
   }
-  if(format=="pdf"){
-    pdf(file = imgName, width=w, height=h, bg="white", onefile=FALSE);
-  }else{
-    Cairo::Cairo(file = imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white");
-  }
-  if(mSetObj$dataSet$cls.type == "disc"){
-    annotation <- data.frame(class = hc.cls);
-    rownames(annotation) <- rownames(hc.dat); 
+  
+  # Set up color anotation df and anotation_col list
+  if (grpName != "NULL" & grpName != "No groupings") {
+    hc.facA <- as.factor(as.character(my.data[[grpName]]))
+    names(hc.facA) <- rownames(my.data)
     
-    # set up color schema for samples
-    # if(palette == "gray"){
-    #   cols <- GetColorSchema(mSetObj, T);
-    #   uniq.cols <- unique(cols);
-    # }else{
-    #   cols <- GetColorSchema(mSetObj);
-    #   uniq.cols <- unique(cols);
+    # if (grpAve) { 
+    #   lvs <- levels(hc.facA);
+    #   my.mns <- matrix(ncol = ncol(hc.dat), nrow = length(lvs));
+    #   for (i in 1:length(lvs)) {
+    #     inx <- hc.facA == lvs[i];
+    #     my.mns[i,] <- apply(hc.dat[inx, ], 2, mean);
+    #   }
+    #   rownames(my.mns) <- lvs;
+    #   colnames(my.mns) <- colnames(hc.dat);
+    #   hc.dat <- my.mns;
+    #   hc.facA <- as.factor(lvs);
     # }
-    grp.num <- length(levels(mSetObj$dataSet$cls));
     
-    if(smplColor == "grey"){
+    annotation <- data.frame(grpName = hc.facA); 
+    rownames(annotation) <- rownames(my.data); 
+    
+    grp.num <- length(levels(hc.facA));
+    
+    if (smplColor == "grey") {
       dist.cols <- colorRampPalette(c("grey90", "grey30"))(grp.num);
-    }else if(smplColor == "NULL"){
+    }else if (smplColor == "NULL") {
       dist.cols <- viridis::viridis_pal(option = "viridis")(grp.num);
     }else{
       dist.cols <- viridis::viridis_pal(option = "plasma")(grp.num);
     }
     
-    lvs <- levels(mSetObj$dataSet$cls);
-    cols <- vector(mode="character", length=length(mSetObj$dataSet$cls));
-    for(i in 1:length(lvs)){
-      cols[mSetObj$dataSet$cls == lvs[i]] <- dist.cols[i];
+    lvs <- levels(hc.facA);
+    cols <- vector(mode = "character", length = length(hc.facA));
+    for (i in 1:length(lvs)) {
+      cols[hc.facA == lvs[i]] <- dist.cols[i];
       uniq.cols <- unique(cols);
-      uniq.cols <- viridis_pal(option = "viridis")(nlevels(hc.cls));
     }
     
-    if(mSetObj$dataSet$type.cls.lbl=="integer"){
-      cls <- as.factor(as.numeric(levels(mSetObj$dataSet$cls))[mSetObj$dataSet$cls]);
-    }else{
-      cls <- mSetObj$dataSet$cls;
-    }
-    
-    names(uniq.cols) <- unique(as.character(sort(cls)));
-    ann_colors <- list(class= uniq.cols);
+    names(uniq.cols) <- unique(as.character(sort(hc.facA)));
+    ann_colors <- list(grpName = uniq.cols);
     
     pheatmap::pheatmap(t(hc.dat), 
-             annotation=annotation, 
-             fontsize=8, fontsize_row=8, 
-             clustering_distance_rows = smplDist,
-             clustering_distance_cols = smplDist,
-             clustering_method = clstDist, 
-             border_color = border.col,
-             cluster_rows = colV, 
-             cluster_cols = rowV,
-             scale = scaleOpt, 
-             color = colors,
-             annotation_colors = ann_colors);
+                       annotation = annotation,
+                       annotation_colors = ann_colors, 
+                       fontsize_col = 5, #sample
+                       fontsize_row = 12, #feature
+                       clustering_distance_rows = smplDist,
+                       clustering_distance_cols = smplDist,
+                       clustering_method = clstDist, 
+                       border_color = border.col,
+                       cluster_rows = colV, 
+                       cluster_cols = rowV,
+                       scale = scaleOpt, 
+                       color = colors);
   }else{
-    heatmap(hc.dat, Rowv = rowTree, Colv=colTree, col = colors, scale="column");
+    pheatmap::pheatmap(t(hc.dat), 
+                       fontsize_col = 8, 
+                       fontsize_row = 8, 
+                       clustering_distance_rows = smplDist,
+                       clustering_distance_cols = smplDist,
+                       clustering_method = clstDist, 
+                       border_color = border.col,
+                       cluster_rows = colV, 
+                       cluster_cols = rowV,
+                       scale = scaleOpt, 
+                       color = colors);
   }
   dev.off();
   return(.set.mSet(mSetObj));
-}
+  }
 
 ##############################################
 ##############################################
