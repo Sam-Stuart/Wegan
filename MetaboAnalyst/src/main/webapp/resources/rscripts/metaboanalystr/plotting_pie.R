@@ -5,7 +5,7 @@ library(vegan)
 
 mSetObj = list()
 data()
-input <- read.csv(file = "/Users/hieunguyen/Documents/Wegan/pitlatrine.csv")
+input <- iris 
 mSetObj$dataSet$orig = input
 mSetObj$dataSet$norm = input
 facA = "NULL"
@@ -35,14 +35,14 @@ data = "false"
 #'@export
 pieChart_setup <-
   function(mSetObj = NA,
-           byrow = "false",
-           bysum = "false",
-           columns = 1,
-           rows = "NULL",
-           labels = "NULL",
+           facA = "NULL",
            colors = "NULL",
-           mainTitle = "Main Title",
-           lgnd = "false") {
+           xlab = "NULL",
+           ylab = "NULL",
+           barLabels = "NULL",
+           mainTitle = "NULL",
+           aggregate_function = "NULL",
+           data = "false") {
     #print("BANANA PIE : This comment is in plotting_pieChart.R");
     mSetObj <- .get.mSet(mSetObj)
     input <- mSetObj$dataSet$norm
@@ -52,7 +52,7 @@ pieChart_setup <-
       input <- mSetObj$dataSet$orig
     }
     
-    categorical_data <- select_if(input, is.factor)
+    categorical_data <- select_if(input, is.character)
     numerical_data <- select_if(input, is.numeric)
     
     # Create a hash table of aggregate functions
@@ -184,7 +184,9 @@ plotPieChart <-
                color = "white") +
       coord_polar("y", start = 0) +
       theme_void() +
-      geom_text(aes(y = ypos, label = value), color = "white", size = 6) +
+    labs(title = "Mean sepal length of species") +
+      geom_text(aes(y = ypos, label = value), color = "white", size = 6)
+    
     show(plot)
     
     dev.off()
