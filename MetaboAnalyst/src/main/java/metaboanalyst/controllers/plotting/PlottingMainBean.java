@@ -43,6 +43,7 @@ public class PlottingMainBean implements Serializable {
                         doDefaultScatterChart();
                         doDefaultBarChart();
                         doDefaultLinear();
+                        doDefaultPieChart();
                         break;  
                     case "linear":
                         break;
@@ -62,8 +63,8 @@ public class PlottingMainBean implements Serializable {
     }
 
     private void doDefaultPieChart(){  
-        PlottingUtils.CreatePieChart(sb, false, false, 1, "NULL", "NULL", "NULL", "Main Title", false);
-        PlottingUtils.PlotPieChart(sb, sb.getCurrentImage("plot_pie_chart"), "png", 72);     
+        PlottingUtils.CreatePieChart(sb, "NULL", "NULL", "NULL", "NULL", "NULL", "NULL", "NULL", "NULL", false);
+        PlottingUtils.PlotPieChart(sb,  sb.getNewImage("plot_pie_chart"), "png", 72); 
     }
     
     private void doDefaultBarChart(){  

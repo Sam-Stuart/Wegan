@@ -37,19 +37,31 @@ public class PlottingUtils {
         }
     } 
 
-    public static void CreatePieChart(SessionBean1 sb, Boolean byRow, Boolean bySum, int columns, String rows, String labels, String colors, String mainTitle, Boolean lgnd) {
+    /**
+     *
+     * @param sb
+     * @param facA
+     * @param colors
+     * @param xlab
+     * @param ylab
+     * @param xLab
+     * @param barLabels
+     * @param mainTitle
+     * @param aggregate_function
+     * @param data
+     */
+    public static void CreatePieChart(SessionBean1 sb, String facA, String colors, String xlab, String ylab, String xLab, String barLabels, String mainTitle, String aggregate_function, Boolean data) {
         try {
             RConnection RC = sb.getRConnection();
             String rCommand = "pieChart_setup(NA"
-                                                + ", \"" + byRow
-                                                + "\", \"" + bySum
-                                                + "\", " + columns
-                                                + ", \"" + rows
-                                                + "\", \"" + labels
+                                                + ", \"" + facA
                                                 + "\", \"" + colors
+                                                + "\", \"" + xlab
+                                                + "\", \"" + ylab
+                                                + "\", \"" + barLabels
                                                 + "\", \"" + mainTitle
-                                                + "\", \"" + lgnd
-                                                + "\")";
+                                                + "\", \"" + aggregate_function
+                                                + "\", \"" + data + "\")";
             RCenter.recordRCommand(RC, rCommand);
             RC.voidEval(rCommand);
         } catch (RserveException rse) {
