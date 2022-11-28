@@ -289,7 +289,7 @@ GetFC <- function(mSetObj=NA, paired=FALSE, cmpType){
 #'@export
 #'
 Ttests.Anal <- function(mSetObj=NA, nonpar=F, threshp=0.05, paired=FALSE, equal.var=TRUE){
-  
+ 
   mSetObj <- .get.mSet(mSetObj);
   
   res <- GetTtestRes(mSetObj, paired, equal.var, nonpar);

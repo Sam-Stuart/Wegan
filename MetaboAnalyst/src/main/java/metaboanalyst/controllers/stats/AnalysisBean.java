@@ -225,7 +225,7 @@ public class AnalysisBean implements Serializable {
         Clustering.PlotHeatMap(sb, sb.getCurrentImage("heatmap"), "png", 
                                 72, false, "row", "euclidean", 
                                 "ward.D", "bwm", "overview", "T", 
-                                "T", "T", "F", "NULL", "NULL");
+                                "T", "T", "F", "NULL", "NULL", 8, 8);
     }
 
     private void doDefaultKmeanClust() {

@@ -192,6 +192,8 @@ public class ClusterBean implements Serializable{
     private int topThresh = 25;
     private String selectMethodOpt;
     private String noOrgOpt;
+    private int hmFontSizeCol = 8;
+    private int hmFontSizeRow = 8;
 
     public String getSelectMethodOpt() {
         return selectMethodOpt;
@@ -292,6 +294,22 @@ public class ClusterBean implements Serializable{
         this.hmColumnName = hmColumnName;
     }
     
+    public int getHmFontSizeCol() {
+        return hmFontSizeCol;
+    }
+
+    public void setHmFontSizeCol(int hmFontSizeCol) {
+        this.hmFontSizeCol = hmFontSizeCol;
+    }
+    
+    public int getHmFontSizeRow() {
+        return hmFontSizeRow;
+    }
+
+    public void setHmFontSizeRow(int hmFontSizeRow) {
+        this.hmFontSizeRow = hmFontSizeRow;
+    }
+    
     public String hmButton_action() {
 
         String rowV = "T";
@@ -322,12 +340,12 @@ public class ClusterBean implements Serializable{
             Clustering.PlotSubHeatMap(sb, sb.getNewImage("heatmap"), "png", 72, 
                     doData, scaleOpt, hmDistOpt, hmMethodOpt, hmColorOpt, 
                     selectMethodOpt, topThresh, viewOpt, rowV, colV, (drawBorders) ? "T" : "F", (grpAves) ? "T" : "F", 
-                    hmSmplColorOpts, hmColumnName);
+                    hmSmplColorOpts, hmColumnName, hmFontSizeCol, hmFontSizeRow);
         } else {
             Clustering.PlotHeatMap(sb, sb.getNewImage("heatmap"), "png", 72, 
                     doData, scaleOpt, hmDistOpt, hmMethodOpt, 
                     hmColorOpt, viewOpt, rowV, colV, (drawBorders) ? "T" : "F", (grpAves) ? "T" : "F", 
-                    hmSmplColorOpts, hmColumnName);
+                    hmSmplColorOpts, hmColumnName, hmFontSizeCol, hmFontSizeRow);
         }
         RequestContext.getCurrentInstance().scrollTo("form1:hmPane");
         return null;

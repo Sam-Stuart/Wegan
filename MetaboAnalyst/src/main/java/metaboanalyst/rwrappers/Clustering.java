@@ -77,7 +77,8 @@ public class Clustering {
                                     int dpi, boolean dataOpt, String scaleOpt, 
                                     String smplDist, String clstDist, String palette, 
                                     String viewOpt, String rowV, String colV, 
-                                    String drawBorder, String grpAve, String smplColor, String grpName) {
+                                    String drawBorder, String grpAve, String smplColor, 
+                                    String grpName, int fontSizeCol, int fontSizeRow) {
         try {
             RConnection RC = sb.getRConnection();
             String rCommand = "PlotHeatMap(NA" 
@@ -97,7 +98,9 @@ public class Clustering {
                     + drawBorder 
                     + ", " + grpAve
                     + ", \"" + smplColor 
-                    + "\", \"" + grpName + "\")";
+                    + "\", \"" + grpName
+                    + "\", " + fontSizeCol
+                    + ", " + fontSizeRow + ")";
             RCenter.recordRCommand(RC, rCommand);
             sb.addGraphicsCMD("heatmap", rCommand);
             RC.voidEval(rCommand);
@@ -107,10 +110,12 @@ public class Clustering {
     }
 
     public static void PlotSubHeatMap(SessionBean1 sb, String imgName, String format, 
-            int dpi, boolean dataOpt, String scaleOpt, String smplDist,
-            String clstDist, String colors, String method, int num, 
-            String viewOpt, String rowV, String colV, String drawBorder, 
-            String grpAve, String smplColor, String grpName) {
+                                        int dpi, boolean dataOpt, String scaleOpt, 
+                                        String smplDist, String clstDist, String palette, 
+                                        String methodNm, int topNum, String viewOpt, 
+                                        String rowV, String colV, String drawBorder, 
+                                        String grpAve, String smplColor, String grpName, 
+                                        int fontSizeCol, int fontSizeRow) {
         try {
             RConnection RC = sb.getRConnection();
             String rCommand = "PlotSubHeatMap(NA" 
@@ -121,16 +126,18 @@ public class Clustering {
                     + "\", \""+ scaleOpt 
                     + "\", \"" + smplDist 
                     + "\", \"" + clstDist 
-                    + "\",\"" + colors 
-                    + "\", \"" + method 
-                    + "\", " + num 
+                    + "\",\"" + palette 
+                    + "\", \"" + methodNm 
+                    + "\", " + topNum 
                     + ", \"" + viewOpt 
                     +"\", " + rowV 
                     + ", " + colV 
                     + ", " + drawBorder 
                     + ", " + grpAve
-                    + ", \"" + smplColor 
-                    + "\", \"" + grpName+ "\")";
+                    + ", \"" + smplColor
+                    + "\", \"" + grpName
+                    + "\", " + fontSizeCol
+                    + ", " + fontSizeRow + ")";
             RCenter.recordRCommand(RC, rCommand);
             sb.addGraphicsCMD("heatmap", rCommand);
             RC.voidEval(rCommand);

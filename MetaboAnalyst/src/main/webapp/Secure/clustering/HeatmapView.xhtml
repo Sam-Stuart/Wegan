@@ -98,6 +98,10 @@
                                 <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:50%;" value="#{clusterBean.hmColumnName}">
                                     <f:selectItems value="#{clusterBean.hmColumnOpts}" />
                                 </p:selectOneMenu>
+                                <h:outputLabel style="font-weight: bold" value="Sample Font Size"/>
+                                <p:inputText style="width:50px" value="#{clusterBean.hmFontSizeCol}"/>
+                                <h:outputLabel style="font-weight: bold" value="Feature Font Size"/>
+                                <p:inputText style="width:50px" value="#{clusterBean.hmFontSizeRow}"/>
                     <!-- End of Graphics Center -->
                         </h:panelGrid>
                         <h:panelGrid columns="2" cellpadding="3" style="float: right"> 

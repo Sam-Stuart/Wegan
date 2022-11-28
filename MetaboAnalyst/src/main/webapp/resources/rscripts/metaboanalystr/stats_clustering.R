@@ -481,40 +481,55 @@ PlotKmeans <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA){
 #'@param smplDist Input the sample distance method
 #'@param clstDist Input the clustering distance method
 #'@param palette Input color palette choice
-#'@param method.nm Input the method for sub-heat map
-#'@param top.num Input the top number
+#'@param methodNm Input the method for sub-heat map
+#'@param topNum Input the top number
 #'@param viewOpt Set heatmap options, default is set to "detail"
 #'@param rowV Default is set to T
 #'@param colV Default is set to T
 #'@param border Indicate whether or not to show cell-borders, default is set to T
 #'@param grp.ave Logical, default is set to F
+#'@param smplColor Color of facA colorbar
+#'@param grpName default "NULL", uses external function to gather non-numeric column names
+#'@param fontSizeCol sample label font size, defalt 8
+#'@param fontSizeRow feature label font size, default 8
 #'@author Jeff Xia\email{jeff.xia@mcgill.ca}
 #'McGill University, Canada
 #'License: GNU GPL (>= 2)
 #'@export
 #'
-PlotSubHeatMap <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, dataOpt, scaleOpt, 
-                           smplDist, clstDist, palette, method.nm, top.num, viewOpt, rowV=T, colV=T, border=T, grp.ave=F, smplColor="NULL", grpName=""){
+PlotSubHeatMap <- function(mSetObj=NA, imgName, format="png", dpi=72, 
+                           width=NA, dataOpt, scaleOpt, 
+                           smplDist, clstDist, palette, 
+                           methodNm, topNum, viewOpt, 
+                           rowV=T, colV=T, border=T, 
+                           grp.ave=F, smplColor="NULL", 
+                           grpName="NULL",
+                           fontSizeCol,
+                           fontSizeRow){
   
   mSetObj <- .get.mSet(mSetObj);
+  print(mSetObj$dataSet$cls)
+  mSetObj$dataSet$cls <- mSetObj$dataSet$norm[[grpName]]
+  print(mSetObj$dataSet$cls)
   var.nms = colnames(mSetObj$dataSet$norm);
-  if(top.num < length(var.nms)){
-    if(method.nm == 'tanova'){
-      if(GetGroupNumber(mSetObj) == 2){
-        if(is.null(mSetObj$analSet$tt)){
+  
+  if (topNum < length(var.nms)) {
+    if (methodNm == 'tanova') {
+      if (GetGroupNumber(mSetObj) == 2) { # length(levels()), nlevels()
+        if (is.null(mSetObj$analSet$tt)) {
           Ttests.Anal(mSetObj);
           mSetObj <- .get.mSet(mSetObj);
         }
-        var.nms <- names(sort(mSetObj$analSet$tt$p.value))[1:top.num];
+        var.nms <- names(sort(mSetObj$analSet$tt$p.value))[1:topNum];
       }else{
-        if(is.null(mSetObj$analSet$aov)){
+        if (is.null(mSetObj$analSet$aov)) {
           ANOVA.Anal(mSetObj);
           mSetObj <- .get.mSet(mSetObj);
         }
-        var.nms <- names(sort(mSetObj$analSet$aov$p.value))[1:top.num];
+        var.nms <- names(sort(mSetObj$analSet$aov$p.value))[1:topNum];
       }
-    }else if(method.nm == 'cor'){
-      if(is.null(mSetObj$analSet$cor.res)){
+    }else if (methodNm == 'cor') {
+      if (is.null(mSetObj$analSet$cor.res)) {
         Match.Pattern(mSetObj);
         mSetObj <- .get.mSet(mSetObj);
       }
@@ -522,31 +537,31 @@ PlotSubHeatMap <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, 
       # re-order for pretty view
       cor.res <- mSetObj$analSet$cor.res;
       
-      ord.inx<-order(cor.res[,3]);
+      ord.inx <- order(cor.res[,3]);
       cor.res <- cor.res[ord.inx, ];
       
-      ord.inx<-order(cor.res[,1]);
+      ord.inx <- order(cor.res[,1]);
       cor.res <- cor.res[ord.inx, ];
       
-      var.nms <- rownames(cor.res)[1:top.num];
-    }else if(method.nm == 'vip'){
-      if(is.null(mSetObj$analSet$plsda)){
+      var.nms <- rownames(cor.res)[1:topNum];
+    }else if (methodNm == 'vip') {
+      if (is.null(mSetObj$analSet$plsda)) {
         PLSR.Anal(mSetObj);
         PLSDA.CV(mSetObj);
         mSetObj <- .get.mSet(mSetObj);
       }
       vip.vars <- mSetObj$analSet$plsda$vip.mat[,1];# use the first component
-      var.nms <- names(rev(sort(vip.vars)))[1:top.num];
-    }else if(method.nm == 'rf'){
-      if(is.null(analSet$rf)){
+      var.nms <- names(rev(sort(vip.vars)))[1:topNum];
+    }else if (methodNm == 'rf') {
+      if (is.null(analSet$rf)) {
         RF.Anal(mSetObj);
         mSetObj <- .get.mSet(mSetObj);
       }
-      var.nms <- GetRFSigRowNames()[1:top.num];
+      var.nms <- GetRFSigRowNames()[1:topNum];
     }
   }
   var.inx <- match(var.nms, colnames(mSetObj$dataSet$norm));
-  PlotHeatMap(mSetObj, imgName, format, dpi, width, dataOpt, scaleOpt, smplDist, clstDist, palette, viewOpt, rowV, colV, var.inx, border, grp.ave, smplColor);
+  PlotHeatMap(mSetObj, imgName, format, dpi, width, dataOpt, scaleOpt, smplDist, clstDist, palette, viewOpt, rowV, colV, var.inx, border, grp.ave, smplColor, grpName, fontSizeCol, fontSizeRow);
 }
 
 #' #'Create Heat Map Plot
@@ -777,6 +792,8 @@ PlotSubHeatMap <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, 
 #'@param grp.ave Logical, default is set to F
 #'@param smplColor Color of facA colorbar
 #'@param grpName default "NULL", uses external function to gather non-numeric column names
+#'@param fontSizeCol sample label font size, defalt 8
+#'@param fontSizeRow feature label font size, default 8
 #'@author Jenna Poelzer\email{poelzer@ualberta.ca}
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2)
@@ -791,7 +808,7 @@ heatmap.columns <- function(mSetObj = NA){
   name.fac.cols <- c("No groupings", colnames(fac.dat))
   return(name.fac.cols)
 }
-
+ 
 PlotHeatMap <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, 
                         dataOpt="false", 
                         scaleOpt, 
@@ -805,7 +822,9 @@ PlotHeatMap <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA,
                         drawBorder=T, 
                         grpAve=F, 
                         smplColor="NULL",
-                        grpName="NULL"){
+                        grpName="NULL",
+                        fontSizeCol,
+                        fontSizeRow){
   library(viridis)
   library(viridisLite)
   
@@ -821,7 +840,7 @@ PlotHeatMap <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA,
     my.data <- mSetObj$dataSet$orig;
   }
   
-  #Obtain numeric data for ordination and categorical data for grouping data
+  #Obtain numeric data 
   num.dat <- select(my.data, where(is.numeric))
   
   # used for subheatmap
@@ -831,36 +850,14 @@ PlotHeatMap <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA,
     hc.dat <- as.matrix(my.data[,var.inx]);
   }
   colnames(hc.dat) <- substr(colnames(hc.dat),1,18) # some names are too long
-  
-  # #Variable for colorbar as a factor
-  # if(typeof(fac.dat[grpName])=="integer"){
-  #   hc.facA <- as.factor(as.numeric(levels(fac.dat[grpName])[fac.dat[grpName]]));
-  # }else{
-  #   hc.facA <- as.factor(as.character(fac.dat[grpName]));
-  # }
-  # names(hc.facA) <- rownames(my.data)
-  
-  # only use group average as columns
-  # if (grpAve) { 
-  #   lvs <- levels(hc.facA);
-  #   my.mns <- matrix(ncol = ncol(hc.dat), nrow = length(lvs));
-  #   for (i in 1:length(lvs)) {
-  #     inx <- hc.facA == lvs[i];
-  #     my.mns[i,] <- apply(hc.dat[inx, ], 2, mean);
-  #   }
-  #   rownames(my.mns) <- lvs;
-  #   colnames(my.mns) <- colnames(hc.dat);
-  #   hc.dat <- my.mns;
-  #   hc.facA <- as.factor(lvs);
-  # }
-  
+
   # set up colors for heatmap cells
   if (palette == "gbr") {
     colors <- colorRampPalette(c("green", "black", "red"), space = "rgb")(256);
   }else if (palette == "heat") {
-    colors <- heat.colors(256);
+    colors <- heat.colors(256, 1);
   }else if (palette == "topo") {
-    colors <- topo.colors(256);
+    colors <- topo.colors(256, 1);
   }else if (palette == "gray") {
     colors <- colorRampPalette(c("grey90", "grey10"), space = "rgb")(256);
   }else{ # default is blue-red-white
@@ -872,9 +869,10 @@ PlotHeatMap <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA,
   }else{
     border.col <- NA;
   }
+  
   # set up image dimensions
   imgName = paste(imgName, "dpi", dpi, ".", format, sep = "");
-  
+  mSetObj$imgSet$heatmap <- imgName;
   if (is.na(width)) {
     minW <- 630;
     myW <- nrow(hc.dat)*18 + 150;
@@ -888,8 +886,6 @@ PlotHeatMap <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA,
   }else{
     w <- 7.2;
   }
-  
-  mSetObj$imgSet$heatmap <- imgName;
   
   myH <- ncol(hc.dat)*18 + 150;
   h <- round(myH/72,2);
@@ -910,15 +906,13 @@ PlotHeatMap <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA,
     if (h > w) {
       h <- w;
     }
-    
-    mSetObj$imgSet$heatmap <- imgName;
   }
   
   # make the width smaller for group average
-  if (grpAve) {
-    w <- nrow(hc.dat)*25 + 300;
-    w <- round(w/72,2);
-  }
+  # if (grpAve) {
+  #   w <- nrow(hc.dat)*25 + 300;
+  #   w <- round(w/72,2);
+  # }
   
   # Set up image export
   if (format == "pdf") {
@@ -932,21 +926,39 @@ PlotHeatMap <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA,
     hc.facA <- as.factor(as.character(my.data[[grpName]]))
     names(hc.facA) <- rownames(my.data)
     
-    # if (grpAve) { 
-    #   lvs <- levels(hc.facA);
-    #   my.mns <- matrix(ncol = ncol(hc.dat), nrow = length(lvs));
-    #   for (i in 1:length(lvs)) {
-    #     inx <- hc.facA == lvs[i];
-    #     my.mns[i,] <- apply(hc.dat[inx, ], 2, mean);
-    #   }
-    #   rownames(my.mns) <- lvs;
-    #   colnames(my.mns) <- colnames(hc.dat);
-    #   hc.dat <- my.mns;
-    #   hc.facA <- as.factor(lvs);
-    # }
+    if (grpAve) {
+      lvs <- levels(hc.facA);
+      my.mns <- matrix(ncol = ncol(hc.dat), nrow = length(lvs));
+      for (i in 1:length(lvs)) {
+        inx <- hc.facA == lvs[i];
+        my.mns[i,] <- apply(hc.dat[inx, ], 2, mean);
+      }
+      rownames(my.mns) <- lvs;
+      colnames(my.mns) <- colnames(hc.dat);
+      hc.dat <- my.mns;
+      hc.facA <- as.factor(lvs);
+      #Set up color annotations
+      annotation <- data.frame(hc.facA); 
+      names(annotation) <- grpName
+      rownames(annotation) <- rownames(my.mns)
+      
+      #Set up image dimensions
+      w <- nrow(hc.dat)*25 + 300;
+      w <- round(w/72,2);
+
+      # Set up image export
+      if (format == "pdf") {
+        pdf(file = imgName, width = w, height = h, bg = "white", onefile = FALSE);
+      }else{
+        Cairo::Cairo(file = imgName, unit = "in", dpi = dpi, width = w, height = h, type = format, bg = "white");
+      }
+    } else {
+      annotation <- data.frame(hc.facA); 
+      names(annotation) <- grpName
+      rownames(annotation) <- rownames(my.data);
+    }
     
-    annotation <- data.frame(grpName = hc.facA); 
-    rownames(annotation) <- rownames(my.data); 
+ 
     
     grp.num <- length(levels(hc.facA));
     
@@ -966,13 +978,14 @@ PlotHeatMap <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA,
     }
     
     names(uniq.cols) <- unique(as.character(sort(hc.facA)));
-    ann_colors <- list(grpName = uniq.cols);
+    ann_colors <- list(uniq.cols);
+    names(ann_colors) <- grpName
     
     pheatmap::pheatmap(t(hc.dat), 
                        annotation = annotation,
                        annotation_colors = ann_colors, 
-                       fontsize_col = 5, #sample
-                       fontsize_row = 12, #feature
+                       fontsize_col = fontSizeCol, #sample
+                       fontsize_row = fontSizeRow, #feature
                        clustering_distance_rows = smplDist,
                        clustering_distance_cols = smplDist,
                        clustering_method = clstDist, 
@@ -983,8 +996,8 @@ PlotHeatMap <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA,
                        color = colors);
   }else{
     pheatmap::pheatmap(t(hc.dat), 
-                       fontsize_col = 8, 
-                       fontsize_row = 8, 
+                       fontsize_col = fontSizeCol, 
+                       fontsize_row = fontSizeRow, 
                        clustering_distance_rows = smplDist,
                        clustering_distance_cols = smplDist,
                        clustering_method = clstDist, 
@@ -994,6 +1007,8 @@ PlotHeatMap <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA,
                        scale = scaleOpt, 
                        color = colors);
   }
+
+  
   dev.off();
   return(.set.mSet(mSetObj));
   }
