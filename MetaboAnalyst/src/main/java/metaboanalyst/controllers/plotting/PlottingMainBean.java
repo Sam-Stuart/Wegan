@@ -68,7 +68,7 @@ public class PlottingMainBean implements Serializable {
     }
     
     private void doDefaultBarChart(){  
-        PlottingUtils.CreateBarChart(sb, "NULL", "NULL", "NULL", "Goodbye", "Hello", "NULL", "NULL", "NULL", false);
+        PlottingUtils.CreateBarChart(sb, "NULL", "NULL", "NULL", "Goodbye", "Hello", "NULL", "NULL", "NULL", 12, 12, false);
         PlottingUtils.PlotBarChart(sb, sb.getCurrentImage("plot_bar_chart"), "png", 72);     
     }
     

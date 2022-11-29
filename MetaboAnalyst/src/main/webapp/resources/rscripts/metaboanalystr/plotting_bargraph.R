@@ -23,18 +23,21 @@ library(reshape2)
 library(ggplot2)
 library(vegan)
 
-# mSetObj = list()
-# data()
-# mSetObj$dataSet$orig = input
-# mSetObj$dataSet$norm = input
-# facA = "Country"
-# colors = "NULL"
-# xlab = "NULL"
-# ylab = "NULL"
-# aggregate_function = "NULL"
-# barLabels = "NULL"
-# mainTitle = "NULL"
-# data = "false"
+mSetObj = list()
+data()
+input <- iris
+mSetObj$dataSet$orig = input
+mSetObj$dataSet$norm = input
+facA = "NULL"
+colors = "NULL"
+xlab = "NULL"
+ylab = "NULL"
+aggregate_function = "NULL"
+barLabels = "NULL"
+mainTitle = "NULL"
+data = "false"
+titleTextSize = 12
+axisTextSize = 12
 
 
 barGraph_setup <-
@@ -46,6 +49,8 @@ barGraph_setup <-
            barLabels = "NULL",
            mainTitle = "NULL",
            aggregate_function = "NULL",
+           titleTextSize = 12,
+           axisTextSize = 12,
            data = "false") {
     mSetObj <- .get.mSet(mSetObj)
     
@@ -119,6 +124,8 @@ barGraph_setup <-
         xlab = xlab,
         ylab = ylab,
         barLabels = barLabels,
+        titleTextSize = titleTextSize,
+        axisTextSize = axisTextSize,
         mainTitle = mainTitle
       )
     
@@ -160,6 +167,8 @@ plotBarGraph <-
     ylab <- mSetObj$analSet$barGraph$ylab
     barLabels <- mSetObj$analSet$barGraph$barLabels
     mainTitle <- mSetObj$analSet$barGraph$mainTitle
+    titleTextSize <- mSetObj$analSet$barGraph$titleTextSize
+    axisTextSize <- mSetObj$analSet$barGraph$axisTextSize
     
     # Convert to sym to use with aes
     facA <- sym(facA)
@@ -209,6 +218,13 @@ plotBarGraph <-
         size = 3,
         # adding values
         position = position_dodge(0.9)
+      )+
+      theme(
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.text = element_text(size = axisTextSize, colour = "black"),
+        axis.title = element_text(size = axisTextSize),
+        plot.title = element_text(face = 'bold', hjust = 0.5, size = titleTextSize)
       )
     show(plot)
     dev.off()

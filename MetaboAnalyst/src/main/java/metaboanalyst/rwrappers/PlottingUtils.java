@@ -12,30 +12,26 @@ import org.rosuda.REngine.Rserve.RserveException;
 
 import org.rosuda.REngine.REXPMismatchException;
 
-
 public class PlottingUtils {
-    
-    
+
     public static void PlotlinearGraph(SessionBean1 sb, String imgName, String format, int dpi, String type, int numlines,
             String colors, int weights, int pchs, String xlab, String ylab, String title, String facA, String facB) {
         try {
             // Calling function from plotting.r
             RConnection RC = sb.getRConnection();
             String rCommand = "plotLinearFunction(NA" + ", \"" + imgName + "\", \"" + format + "\", "
-                    + dpi + ", width=NA, \"" + type + "\", \"" + numlines + "\", \"" + colors + "\", \"" + weights + "\", \""  + pchs + "\", \"" 
-                    + xlab + "\", \""  + ylab + "\", \""  + title + "\", \""  + facA + "\", \""  + facB + "\")";
+                    + dpi + ", width=NA, \"" + type + "\", \"" + numlines + "\", \"" + colors + "\", \"" + weights + "\", \"" + pchs + "\", \""
+                    + xlab + "\", \"" + ylab + "\", \"" + title + "\", \"" + facA + "\", \"" + facB + "\")";
             RCenter.recordRCommand(RC, rCommand);
-            
+
             sb.addGraphicsCMD("lin", rCommand);
-            
-            
+
             RC.voidEval(rCommand);
-            
-            
+
         } catch (RserveException rse) {
             System.out.println(rse);
         }
-    } 
+    }
 
     /**
      *
@@ -54,20 +50,20 @@ public class PlottingUtils {
         try {
             RConnection RC = sb.getRConnection();
             String rCommand = "pieChart_setup(NA"
-                                                + ", \"" + facA
-                                                + "\", \"" + colors
-                                                + "\", \"" + xlab
-                                                + "\", \"" + ylab
-                                                + "\", \"" + barLabels
-                                                + "\", \"" + mainTitle
-                                                + "\", \"" + aggregate_function
-                                                + "\", \"" + data + "\")";
+                    + ", \"" + facA
+                    + "\", \"" + colors
+                    + "\", \"" + xlab
+                    + "\", \"" + ylab
+                    + "\", \"" + barLabels
+                    + "\", \"" + mainTitle
+                    + "\", \"" + aggregate_function
+                    + "\", \"" + data + "\")";
             RCenter.recordRCommand(RC, rCommand);
             RC.voidEval(rCommand);
         } catch (RserveException rse) {
             System.out.println(rse);
         }
-    }   
+    }
 
     public static void PlotPieChart(SessionBean1 sb, String imgName, String format, int dpi) {
         try {
@@ -80,18 +76,20 @@ public class PlottingUtils {
         }
     }
 
-    public static boolean CreateBarChart(SessionBean1 sb, String facA, String colors, String xlab, String ylab, String xLab, String barLabels, String mainTitle, String aggregate_function, Boolean data) {
+    public static boolean CreateBarChart(SessionBean1 sb, String facA, String colors, String xlab, String ylab, String xLab, String barLabels, String mainTitle, String aggregate_function, Integer titleTextSize, Integer axisTextSize, Boolean data) {
         try {
             RConnection RC = sb.getRConnection();
             String rCommand = "barGraph_setup(NA"
-                                                + ", \"" + facA
-                                                + "\", \"" + colors
-                                                + "\", \"" + xlab
-                                                + "\", \"" + ylab
-                                                + "\", \"" + barLabels
-                                                + "\", \"" + mainTitle
-                                                + "\", \"" + aggregate_function
-                                                + "\", \"" + data + "\")";
+                    + ", \"" + facA
+                    + "\", \"" + colors
+                    + "\", \"" + xlab
+                    + "\", \"" + ylab
+                    + "\", \"" + barLabels
+                    + "\", \"" + mainTitle
+                    + "\", \"" + aggregate_function
+                    + "\", \"" + titleTextSize
+                    + "\", \"" + axisTextSize
+                    + "\", \"" + data + "\")";
             RCenter.recordRCommand(RC, rCommand);
             RC.voidEval(rCommand);
             return true;
@@ -99,8 +97,8 @@ public class PlottingUtils {
             System.out.println(rse);
             return false;
         }
-    }   
-    
+    }
+
     /**
      *
      * @param sb
@@ -114,30 +112,27 @@ public class PlottingUtils {
             String rCommand = "plotBarGraph(NA" + ", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
             RCenter.recordRCommand(RC, rCommand);
             RC.voidEval(rCommand);
-    
+
         } catch (RserveException rse) {
             System.out.println(rse);
         }
     }
-    
-    
-    
-    public static boolean CreateBoxPlot(SessionBean1 sb, String facA, String facB, String facC, String fillColor ,
-                          String xlab, String ylab, String legendTitle, String mainTitle, Boolean data) {
+
+    public static boolean CreateBoxPlot(SessionBean1 sb, String facA, String facB, String facC, String fillColor,
+            String xlab, String ylab, String legendTitle, String mainTitle, Boolean data) {
         try {
             RConnection RC = sb.getRConnection();
             String rCommand = "boxPlot_setup(NA"
-                                                + ", \"" + facA
-                                                + "\", \"" + facB
-                                                + "\", \"" + facC
-                                                + "\", \"" + fillColor
-                                                + "\", \"" + xlab
-                                                + "\", \"" + ylab
-                                                + "\", \"" + legendTitle
-                                                + "\", \"" + mainTitle
-                                                + "\", \"" + data + "\")";
-            
-            
+                    + ", \"" + facA
+                    + "\", \"" + facB
+                    + "\", \"" + facC
+                    + "\", \"" + fillColor
+                    + "\", \"" + xlab
+                    + "\", \"" + ylab
+                    + "\", \"" + legendTitle
+                    + "\", \"" + mainTitle
+                    + "\", \"" + data + "\")";
+
             RCenter.recordRCommand(RC, rCommand);
             RC.voidEval(rCommand);
             return true;
@@ -145,8 +140,8 @@ public class PlottingUtils {
             System.out.println(rse);
             return false;
         }
-    }   
-    
+    }
+
     public static void PlotBoxPlot(SessionBean1 sb, String imgName, String format, int dpi) {
         try {
             RConnection RC = sb.getRConnection();
@@ -158,21 +153,21 @@ public class PlottingUtils {
             System.out.println(rse);
         }
     }
-    
-     public static boolean CreateScatterChart(SessionBean1 sb, String facA, String facB, String type, String lineColor,
-             String fillColor, String xLabel, String yLabel, String mainTitle, boolean data) {
+
+    public static boolean CreateScatterChart(SessionBean1 sb, String facA, String facB, String type, String lineColor,
+            String fillColor, String xLabel, String yLabel, String mainTitle, boolean data) {
         try {
             RConnection RC = sb.getRConnection();
             String rCommand = "scatterPlot_setup(NA"
-                                                + ", \"" + facA
-                                                + "\", \"" + facB
-                                                + "\", \"" + type
-                                                + "\", \"" + lineColor
-                                                + "\", \"" + "black"
-                                                + "\", \"" + xLabel
-                                                + "\", \"" + yLabel
-                                                + "\", \"" + mainTitle
-                                                + "\", \"" + data + "\")";
+                    + ", \"" + facA
+                    + "\", \"" + facB
+                    + "\", \"" + type
+                    + "\", \"" + lineColor
+                    + "\", \"" + "black"
+                    + "\", \"" + xLabel
+                    + "\", \"" + yLabel
+                    + "\", \"" + mainTitle
+                    + "\", \"" + data + "\")";
             System.out.println(rCommand);
             RCenter.recordRCommand(RC, rCommand);
             RC.eval(rCommand);
@@ -181,8 +176,8 @@ public class PlottingUtils {
             System.out.println(rse);
             return false;
         }
-    }   
-    
+    }
+
     public static void PlotScatterChart(SessionBean1 sb, String imgName, String format, int dpi) {
         try {
             RConnection RC = sb.getRConnection();
@@ -192,10 +187,10 @@ public class PlottingUtils {
         } catch (RserveException rse) {
             System.out.println(rse);
         }
-    }   
-    
+    }
+
     // linear get data colums n
-    public static String[] GetDataColumns(SessionBean1 sb){
+    public static String[] GetDataColumns(SessionBean1 sb) {
         try {
             RConnection RC = sb.getRConnection();
             String rCommand = "lin.reg.columns(NA)";
@@ -204,12 +199,13 @@ public class PlottingUtils {
         } catch (RserveException rse) {
             System.out.println(rse);
         } catch (REXPMismatchException ex) {
-            Logger.getLogger(CAUtils.class.getName()).log(Level.SEVERE, null, ex);   /* Currently using CAUtils ..... Need to channnnne to PlottingUtils    */ 
+            Logger.getLogger(CAUtils.class.getName()).log(Level.SEVERE, null, ex);
+            /* Currently using CAUtils ..... Need to channnnne to PlottingUtils    */
         }
         return null;
     }
-    
-    public static String[] GetDataColumnsBoxPlt(SessionBean1 sb){
+
+    public static String[] GetDataColumnsBoxPlt(SessionBean1 sb) {
         try {
             RConnection RC = sb.getRConnection();
             String rCommand = "all.columns(NA)";
@@ -218,11 +214,13 @@ public class PlottingUtils {
         } catch (RserveException rse) {
             System.out.println(rse);
         } catch (REXPMismatchException ex) {
-            Logger.getLogger(CAUtils.class.getName()).log(Level.SEVERE, null, ex);   /* Currently using CAUtils ..... Need to channnnne to PlottingUtils    */ 
+            Logger.getLogger(CAUtils.class.getName()).log(Level.SEVERE, null, ex);
+            /* Currently using CAUtils ..... Need to channnnne to PlottingUtils    */
         }
         return null;
     }
-    public static String[] GetFactorDataColumnsBoxPlt(SessionBean1 sb){
+
+    public static String[] GetFactorDataColumnsBoxPlt(SessionBean1 sb) {
         try {
             RConnection RC = sb.getRConnection();
             String rCommand = "factor.columns(NA)";
@@ -231,11 +229,13 @@ public class PlottingUtils {
         } catch (RserveException rse) {
             System.out.println(rse);
         } catch (REXPMismatchException ex) {
-            Logger.getLogger(CAUtils.class.getName()).log(Level.SEVERE, null, ex);   /* Currently using CAUtils ..... Need to channnnne to PlottingUtils    */ 
+            Logger.getLogger(CAUtils.class.getName()).log(Level.SEVERE, null, ex);
+            /* Currently using CAUtils ..... Need to channnnne to PlottingUtils    */
         }
         return null;
     }
-    public static String[] GetNumericDataColumnsBoxPlt(SessionBean1 sb){
+
+    public static String[] GetNumericDataColumnsBoxPlt(SessionBean1 sb) {
         try {
             RConnection RC = sb.getRConnection();
             String rCommand = "numeric.columns(NA)";
@@ -244,9 +244,10 @@ public class PlottingUtils {
         } catch (RserveException rse) {
             System.out.println(rse);
         } catch (REXPMismatchException ex) {
-            Logger.getLogger(CAUtils.class.getName()).log(Level.SEVERE, null, ex);   /* Currently using CAUtils ..... Need to channnnne to PlottingUtils    */ 
+            Logger.getLogger(CAUtils.class.getName()).log(Level.SEVERE, null, ex);
+            /* Currently using CAUtils ..... Need to channnnne to PlottingUtils    */
         }
         return null;
     }
-    
+
 }

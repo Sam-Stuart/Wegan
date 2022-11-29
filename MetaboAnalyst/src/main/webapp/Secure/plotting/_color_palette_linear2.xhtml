@@ -26,7 +26,19 @@
                 <h:outputLabel style="font-weight: bold" value="Y axis label: "/>
                 <p:inputText value="#{barPlotBean.laby}"/>
 
-                <!--<p:panelGrid></p:panelGrid>-->
+                <h:outputLabel style="font-weight: bold" value="Title Text Size:"/>
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{barPlotBean.chosenTitleTextSize}"
+                                 style="width: 75%">
+                    <f:selectItems value="#{barPlotBean.textFontSizeOpts}"/>
+                </p:selectOneMenu>
+
+                <h:outputLabel style="font-weight: bold" value="Title Text Size:"/>
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{barPlotBean.chosenAxisTextSize}"
+                                 style="width: 75%">
+                    <f:selectItems value="#{barPlotBean.axisFontSizeOpts}"/>
+                </p:selectOneMenu>
+
+
             </h:panelGrid>
             <h:panelGrid
                 id="panelGrid2"
