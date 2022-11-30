@@ -59,8 +59,9 @@ public class CAloadBean implements Serializable {
     public void setDataFile(UploadedFile dataFile) {
         this.dataFile = dataFile;
     }
+    private UploadedFile dataFileWeight;
 
-        
+
     private String dataNames = "colOnly";
 
     public String getDataNames() {
@@ -71,6 +72,14 @@ public class CAloadBean implements Serializable {
         this.dataNames = dataNames;
     }
     
+
+    public UploadedFile getDataFileWeight() {
+        return dataFileWeight;
+    }
+
+    public void setDataFileWeight(UploadedFile dataFileWeight) {
+        this.dataFileWeight = dataFileWeight;
+    }
     /*
     Data upload for statistics module
      */
@@ -207,23 +216,40 @@ public class CAloadBean implements Serializable {
     
     //Function for grrabbing the Test files for CA
     public String handleCATestFileUpload() {
+        
         boolean paired = false;
         boolean isZip = false;
         String testFile = null;
-        String testWeightFile = null;
+        String testFileWeight = null;
         
         if (testDataOpt == null) {                   
             sb.updateMsg("Error", "No data set is selected!");
             return null;
+            
         } else if (testDataOpt.equals("Iris")) {
             dataType = "Iris";
             testFile = ab.getTestIris();
             dataFormat = "rowu";    
             dataNames = "colOnly";
+            
         } else if (testDataOpt.equals("WolvesElk")) {
+            dataType = "main";
             testFile = ab.getTestWolvesElk();
             dataFormat = "rowu";
             dataNames = "bothNames";
+            
+        } else if (testDataOpt.equals("Pitlatrine")) {
+            dataType = "main";
+            testFile = ab.getTestPitlatrine();
+            dataFormat = "colu";
+            dataNames = "bothNames";        
+            
+        } else if (testDataOpt.equals("Dune")) {
+            dataType = "main";
+            testFile = ab.getTestDuneEnv();
+            dataFormat = "rowu";
+            dataNames = "colOnly";
+            
         } else {
             sb.updateMsg("Error", "Unknown data selected?");
             return null;
@@ -245,10 +271,6 @@ public class CAloadBean implements Serializable {
                 sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
                 return null;
             }
-//            if (!RDataUtils.readTextData(RC, testWeightFile, format, "disc")) {
-//                sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
-//                return null;
-//            }
         }
         sb.setDataUploaded(true);
         return "Data check";
