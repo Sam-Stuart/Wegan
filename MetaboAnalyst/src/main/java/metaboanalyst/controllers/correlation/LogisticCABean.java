@@ -49,8 +49,11 @@ public class LogisticCABean implements Serializable {
         this.fileLogModValsPath = fileLogModValsPath;
     } 
     
+
     
-//    Independent Variable Names (Textbox)
+ // (PREDICTOR) INDEPENDENT VARIABLE
+    
+    //   (Predictor) Indep. Variable NAMES (Textbox)
     private String indInput = "";
 
     public String getIndInput() {
@@ -61,17 +64,34 @@ public class LogisticCABean implements Serializable {
         this.indInput = indInput;
     }
     
-    //   Reference Level Order
-    private String indOrder = "";
-
-    public String getIndOrder() {
-        return indOrder;
-    }
-
-    public void setIndOrder(String indOrder) {
-        this.indOrder = indOrder;
-    }
+//    //   (Predictor) Indep. Variable NAMES (Textbox)     AUTOFILL
+//    private SelectItem[] corrColumnOptsFill = null;
+//    public SelectItem[] getFillColumnOpts(){
+//        String[] columns = CAUtils.GetDataColumns(sb);
+//        int columnsLen = columns.length;
+//        corrColumnOptsFill = new SelectItem[columnsLen];
+//        List<String> columnNames = Arrays.asList(columns);
+//        for (int i = 0; i < columnsLen; i++) {
+//            corrColumnOptsFill[i] = new SelectItem(columnNames.get(i), columnNames.get(i));
+//        }
+//        //List<String> columnNames = Arrays.asList(columns);
+//        return corrColumnOptsFill;
+//    }
+//    
+//    private String corrFillColumnNames = getFillColumnOpts()[0].getLabel();
+//    
+//    public String getCorrFillColumnNames() {
+//        return corrFillColumnNames;
+//    }
+//
+//    public void setCorrFillColumnNames(String corrFillColumnNames) {
+//        this.corrFillColumnNames = corrFillColumnNames;
+//    }     
+   
     
+   // (RESPONSE) DEPENDENT VARIABLE
+    
+    // (Response) Dependent Variable NAMES (Dropdown)
     private SelectItem[] columnOpts = null;
     
     public SelectItem[] getColumnOpts(){
@@ -85,7 +105,9 @@ public class LogisticCABean implements Serializable {
         //List<String> columnNames = Arrays.asList(columns);
         return columnOpts;
     }
+
     
+    // (Response) Dependent Variable NAME (get it)
     private String responseVar = getColumnOpts()[0].getLabel();
     
     public String getResponseVar() {
@@ -96,6 +118,8 @@ public class LogisticCABean implements Serializable {
         this.responseVar = responseVar;
     }
     
+    
+    // (Response) Dependent Variable LEVELS (dropdown)
     private SelectItem[] columnLevelOpts = null;
     
     public SelectItem[] getColumnLevelOpts(){
@@ -110,6 +134,8 @@ public class LogisticCABean implements Serializable {
         return columnLevelOpts;
     }
     
+    
+    // (Response) Dependent Variable LEVEL (get one)
     private String responseLevelVar = getColumnLevelOpts()[0].getLabel();
     
     public String getResponseLevelVar() {
@@ -120,29 +146,18 @@ public class LogisticCABean implements Serializable {
         this.responseLevelVar = responseLevelVar;
     }
         
+    
+    //   Reference Level ORDER (Response variable)
+    private String indOrder = "";
 
-    private SelectItem[] corrColumnOptsFill = null;
-    public SelectItem[] getFillColumnOpts(){
-        String[] columns = CAUtils.GetDataColumns(sb);
-        int columnsLen = columns.length;
-        corrColumnOptsFill = new SelectItem[columnsLen];
-        List<String> columnNames = Arrays.asList(columns);
-        for (int i = 0; i < columnsLen; i++) {
-            corrColumnOptsFill[i] = new SelectItem(columnNames.get(i), columnNames.get(i));
-        }
-        //List<String> columnNames = Arrays.asList(columns);
-        return corrColumnOptsFill;
-    }
-    
-    private String corrFillColumnNames = getFillColumnOpts()[0].getLabel();
-    
-    public String getCorrFillColumnNames() {
-        return corrFillColumnNames;
+    public String getIndOrder() {
+        return indOrder;
     }
 
-    public void setCorrFillColumnNames(String corrFillColumnNames) {
-        this.corrFillColumnNames = corrFillColumnNames;
-    }   
+    public void setIndOrder(String indOrder) {
+        this.indOrder = indOrder;
+    }
+  
     
     
     
@@ -318,7 +333,7 @@ public class LogisticCABean implements Serializable {
         CAUtils.CreateLogisticModel(sb, 
                 responseVar,indInput,doOriginal,
                   corModelType, responseLevelVar, indOrder);
-        CAUtils.PlotLogisticEffectCA(sb, corModelType, doPlotConfInt,
+        CAUtils.PlotLogisticEffectCA(sb, doOriginal, corModelType, doPlotConfInt,
                  corPlotTitle, corPlotXlab, corPlotYlab,               
                 doLabelXtickRotate, corPaletteOpts, doPlotLegHoriz, corPlotLegPosOpts,
                 sb.getCurrentImage("corr_log_eff"), "png", 72);
@@ -330,14 +345,10 @@ public class LogisticCABean implements Serializable {
                responseVar,indInput, doOriginal,
                corModelType, responseLevelVar, indOrder);
 //                columnNameA, indInput);
-        CAUtils.PlotLogisticROCCA(sb, corModelType,
+        CAUtils.PlotLogisticROCCA(sb, doOriginal, corModelType,
                corPaletteBrewerOpts, corPlotTitle, 
                 sb.getCurrentImage("corr_log_roc"), "png", 72);
     }
-    
-    
-    
-    
     
         // ACTION BUTTONS //
 //    public void corrLogBtn_action() {
