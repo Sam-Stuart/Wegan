@@ -84,22 +84,23 @@ log.reg.anal <- function(mSetObj=NA,
 #  facData2 <- input %>% dplyr::select_if(function(col) {is.character(col) | is.factor(col)})
 #)
 #  facData <- input[,sapply(input, is.factor) | sapply(input, is.character), drop = FALSE]
-#
-#if (is.null(facData)) {
-#        stop("No categorical variables for analysis; did you input your categorical variables as numbers (for example, as hot-one coded)?")
-#    } else {
-#        facA <- colnames(facData)[1]# Default is to choose the first factor column as response column
-#    }
+
+if(!any(sapply(input, is.factor) | sapply(input, is.character))){
+errm <- c("No categorical variables for analysis; did you input your categorical variables as numbers (for example, as hot-one coded)? Try SVM, multivariate, or linear which don't require categorical variables, or try splitting your numeric variable of interest into categories.")
+AddErrMsg(errm)
+stop(errm)
+}
+
 
 # CHOOSE RESPONSE VARIABLE
   if (facA == "NULL") {
-if(any(sapply(input, is.factor) | sapply(input, is.character))){
+# if(any(sapply(input, is.factor) | sapply(input, is.character))){ # already checked above for factor column presence
   facA <- colnames(
         input[,sapply(input, is.factor) | sapply(input, is.character), drop = FALSE]
         )[1]
-  } else{
-     stop("No categorical variables for analysis; did you input your categorical variables as numbers (for example, as hot-one coded)?")
-  }
+#  } else{
+#     stop("No categorical variables for analysis; did you input your categorical variables as numbers (for example, as hot-one coded)?")
+#  }
   } else {
     facA <- facA #User selected, java uses function factor.columns() to provide options in drop down menu (only categorical columns are available)
   }
@@ -153,6 +154,7 @@ if(!is.factor(model_data[,1])){
   model_data[,1] <- factor(model_data[,1])
   warning("response variable is a being coerced to factor")
 }   
+
 #CHECK NUMBER OF LEVELS 
 facA_col <- model_data[,1]
 levels.num <- nlevels(facA_col)
@@ -168,7 +170,7 @@ if(type == "NULL"){
 }
 
 ## STORE LOGISTIC TYPE, PREDICTORS, RESPONSE IN MSET
-mSetObj$analSet$logRegInfo<- list(type=type, response = facA, predictor = predictors)
+mSetObj$analSet$logRegInfo<- list(type = type, response = facA, predictor = predictors)
 
 # REFERENCE LEVEL
 if (reference == "NULL") {
@@ -208,8 +210,8 @@ if(!all(is.element(ordertext, levels.facA))){
   if (type == "ordinal") {
 
  if (levels.num < 3) {
-      #AddErrMsg("The dependent variable has less than 3 levels! Try binomial regression instead.")
-      stop("The dependent variable has less than 3 levels. Try binomial regression instead.")
+      AddErrMsg("The dependent variable has less than 3 levels! Try binomial regression instead.")
+      #stop("The dependent variable has less than 3 levels. Try binomial regression instead.")
     } 
 
     #REFERENCE LEVEL: SET FOR RESPONSE VARIABLE
@@ -290,8 +292,8 @@ if(!all(is.element(ordertext, levels.facA))){
  ## MULTINOMIAL
     #CHECK NUMBER OF LEVELS
     if (levels.num < 3) {
-      #AddErrMsg("The dependent variable has less than 3 levels! Try binomial regression instead.")
-      stop("The dependent variable has less than 3 levels! Try binomial regression instead.")
+      AddErrMsg("The dependent variable has less than 3 levels! Try binomial regression instead.")
+      #stop("The dependent variable has less than 3 levels! Try binomial regression instead.")
     }
 
  ## SET REFERENCE
@@ -361,10 +363,10 @@ model = mod, formula = form, model.data = model_data, response = facA, predictor
 ## BINOMIAL
  # CHECK N LEVELS
     if (levels.num < 2) {
-      #AddErrMsg("The dependent variable has less than 2 levels! Check the levels of the variable and make sure there are only 2 unique values.")
+      AddErrMsg("The dependent variable has less than 2 levels! Check the levels of the variable and make sure there are only 2 unique values.")
       stop("The dependent variable has less than 2 levels! Check the levels of the variable and make sure there are only 2 unique values.")
     } else if (levels.num > 2) {
-      #AddErrMsg("The dependent variable has more than 2 levels! Try multinomial regression instead.")
+      AddErrMsg("The dependent variable has more than 2 levels! Try multinomial regression instead.")
       stop("The dependent variable has more than 2 levels! Try multinomial regression instead.")
     }
 
@@ -475,8 +477,8 @@ response = facA, predictor = predictors)
 log.effects.plot <- function(mSetObj=NA,
 # facA = "NULL", 
 # predtext = "NULL", 
-#  data = "false",
-  type="NULL",  # was multinomial before
+  data = "false",
+  type = "NULL",  # was multinomial before # can maybe remove the type argument?
 #  var_viewby1 = "NULL",
 #  var_viewby2 = "NULL",
   plot_ci="false", #checkbox
@@ -499,11 +501,11 @@ log.effects.plot <- function(mSetObj=NA,
   mSetObj <- .get.mSet(mSetObj)
   
  ### SET DATA (whether to use original data or not)
-#  if (data == "false") { 
+ if (data == "false") { 
     input <- mSetObj$dataSet$norm #default use norm
-#  } else {
-#    input <- mSetObj$dataSet$orig
-#  }
+  } else {
+    input <- mSetObj$dataSet$orig
+  }
 
 # SET LOGISTIC TYPE IF NOT SET
 type1 <- mSetObj$analSet$logRegInfo$type
@@ -771,7 +773,7 @@ print("eff.store in mSet")
 log.ROC.plot <- function(mSetObj=NA, 
 # facA = "NULL", 
 # predtext = "NULL",
-# data = "false",
+data = "false",
 type="NULL", # was multinomial 
 plot_palette = "NULL", #dropdown  
 plot_title = " ",
@@ -789,11 +791,11 @@ imgName, format="png", dpi=72, width=NA){
   mSetObj <- .get.mSet(mSetObj)
   
  ### SET DATA (whether to use original data or not)
-#  if (data=="false") { 
+  if (data=="false") { 
     input <- mSetObj$dataSet$norm #default use norm
-#  } else {
-#    input <- mSetObj$dataSet$orig
-#  }
+  } else {
+    input <- mSetObj$dataSet$orig
+  }
 
 # SET LOGISTIC TYPE IF NOT SET
 type1 <- mSetObj$analSet$logRegInfo$type
