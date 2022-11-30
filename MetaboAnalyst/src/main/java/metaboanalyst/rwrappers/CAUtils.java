@@ -705,15 +705,18 @@ public static boolean PlotANNPredictCA(SessionBean1 sb,
     
 // LOGISTIC   
     
-        public static void CreateLogisticModel(SessionBean1 sb, String facA, String predtext, boolean data, String type, String preference, String ordertext) {
+        public static void CreateLogisticModel(SessionBean1 sb, 
+                String facA, String predtext, Boolean data, 
+                String type, String reference, String ordertext) {
         try {
             RConnection RC = sb.getRConnection();
 //            String rCommand = "log.reg.anal(NA)";
             String rCommand = "log.reg.anal(NA" + ", \"" 
                     + facA + "\", \"" 
                     + predtext + "\", \"" 
+                    + data + "\", \""    
                     + type + "\", \"" 
-                    + preference + "\", \"" 
+                    + reference + "\", \"" 
                     + ordertext + "\" )";
             RCenter.recordRCommand(RC, rCommand);
             RC.voidEval(rCommand);
@@ -723,8 +726,9 @@ public static boolean PlotANNPredictCA(SessionBean1 sb,
     }
         
     public static void PlotLogisticEffectCA(SessionBean1 sb,
+             Boolean data,
             String type, 
-//            String facA, Boolean data,
+//            String facA, 
              Boolean plot_ci, 
              String plot_title, String plot_xlab, String plot_ylab,
              Boolean plot_xangle, String plot_palette, Boolean plot_leg_horiz, String plot_leg_pos,
@@ -732,9 +736,9 @@ public static boolean PlotANNPredictCA(SessionBean1 sb,
         try {
             RConnection RC = sb.getRConnection();
             String rCommand = "log.effects.plot(NA" + ", \"" 
+                    + data + "\", \""                     
                     + type + "\", \""  
 //                    + facA + "\", \"" 
-//                    + data + "\", \"" 
                     + plot_ci + "\", \"" 
                     + plot_title + "\", \"" 
                     + plot_xlab + "\", \"" 
@@ -754,11 +758,13 @@ public static boolean PlotANNPredictCA(SessionBean1 sb,
     }
 
     public static void PlotLogisticROCCA(SessionBean1 sb,
+             Boolean data,
             String type, String plot_palette, String plot_title,
             String imgName, String format, int dpi) {
         try {
             RConnection RC = sb.getRConnection();
             String rCommand = "log.ROC.plot(NA" + ", \"" 
+                    + data + "\", \""                      
                     + type + "\", \"" 
                     + plot_palette + "\", \"" 
                     + plot_title + "\", \"" 
