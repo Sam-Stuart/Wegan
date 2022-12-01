@@ -509,13 +509,13 @@ PlotSubHeatMap <- function(mSetObj=NA, imgName, format="png", dpi=72,
   
   mSetObj <- .get.mSet(mSetObj);
   print(mSetObj$dataSet$cls)
-  mSetObj$dataSet$cls <- mSetObj$dataSet$norm[[grpName]]
+  mSetObj$dataSet$cls <- as.factor(mSetObj$dataSet$norm[[grpName]])
   print(mSetObj$dataSet$cls)
   var.nms = colnames(mSetObj$dataSet$norm);
   
   if (topNum < length(var.nms)) {
     if (methodNm == 'tanova') {
-      if (GetGroupNumber(mSetObj) == 2) { # length(levels()), nlevels()
+      if (nlevels(mSetObj$dataSet$cls) == 2) { # length(levels()), nlevels()
         if (is.null(mSetObj$analSet$tt)) {
           Ttests.Anal(mSetObj);
           mSetObj <- .get.mSet(mSetObj);

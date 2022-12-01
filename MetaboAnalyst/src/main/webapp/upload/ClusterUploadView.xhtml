@@ -40,7 +40,41 @@
                         <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:210px" value="#{Clusterload.dataNames}">
                             <f:selectItems value="#{applicationBean1.dataNamesOpts}" />
                         </p:selectOneMenu> 
-                    </h:panelGrid>   
+                    </h:panelGrid>
+                    <h:panelGrid></h:panelGrid>
+                    <h:panelGrid columns="2">
+                        <p:selectBooleanCheckbox value="#{Clusterload.checkboxValue}">
+                            <f:ajax event="change" render="suppPanel"/>
+                        </p:selectBooleanCheckbox>
+                        <h:outputLabel style="font-size:16px; font-weight: bold" value="Supplemental data tables (optional): Plain text files (.csv or .txt)"/>
+                    </h:panelGrid>
+
+                    <h:panelGroup id="suppPanel">
+                        <h:panelGroup rendered="#{Clusterload.checkboxValue}">
+                        <h:panelGrid>
+                            Including supplemental data tables will enable more interesting and informative plots for certain analyses.
+                            <b>Grouping data</b> assigns categories to each sample to group one or more samples together. 
+                            <b>Constraining data</b> assigns external conditions to each sample. One common example is environmental data.
+                            Note that constraining data is required for Co-Inertia Analysis and Analysis of Similarities. 
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" style="padding: 10px">
+                            <p:outputLabel style="font-size:14px; font-weight: bold" value="Grouping Data File:"/>
+                            <p:fileUpload value="#{Clusterload.dataFileMeta}" mode="simple"/>
+                        </h:panelGrid>   
+                        <h:panelGrid columns="2" style="padding: 10px; margin-left: 40px">
+                            <p:outputLabel style="font-size:12px; font-weight: bold" value="Format:"/>
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:210px" value="#{Clusterload.metaFormat}">
+                                <f:selectItems value="#{applicationBean1.metaFormatOpts}" />
+                            </p:selectOneMenu> 
+                        </h:panelGrid> 
+                        <h:panelGrid columns="2" style="padding: 10px; margin-left: 40px">
+                            <p:outputLabel style="font-size:12px; font-weight: bold" value="Labels:"/>
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:210px" value="#{Clusterload.metaNames}">
+                                <f:selectItems value="#{applicationBean1.metaNamesOpts}" />
+                            </p:selectOneMenu> 
+                        </h:panelGrid>
+                    </h:panelGroup>
+                    </h:panelGroup>
                     <h:panelGrid></h:panelGrid>
                     <h:panelGrid style="padding: 10px; float:right">
                         <p:commandButton value="Submit" 
@@ -52,7 +86,9 @@
                                          action="#{Clusterload.handleFileUpload()}"/>   
                         
                     </h:panelGrid>
+                    
                 </h:panelGrid>
+
                 
                 <p:spacer style="width: 30px"/>
                 
