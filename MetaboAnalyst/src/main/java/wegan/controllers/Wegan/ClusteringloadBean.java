@@ -116,10 +116,15 @@ public class ClusteringloadBean implements Serializable {
             try {
                 RConnection RC = sb.getRConnection();
                 String fileName = DataUtils.uploadFile(dataFile, sb, null, ab.isOnPublicServer());
+                String fileNameMeta = DataUtils.uploadFile(dataFileMeta, sb, null, ab.isOnPublicServer());
+                
                 if (fileName == null) {
                     return null;
                 }
 
+                if (fileNameMeta != null){
+                    RDataUtils.readTextDataMeta(RC, fileNameMeta, metaFormat, "disc", metaNames);
+                }
                 if (RDataUtils.readTextData(RC, fileName, dataFormat, "disc", dataNames)) {
                     sb.setDataUploaded(true);
                     sb.updateMsg("Error", "Data Uploaded successfully");
@@ -369,7 +374,16 @@ public class ClusteringloadBean implements Serializable {
         return "Data check";
     }
     
-    
+//    Checkbox for viewing supplemental data loader panel
+    public boolean checkboxValue;
+
+    public void setCheckboxValue(boolean checkboxValue) {
+        this.checkboxValue = checkboxValue;
+    }
+
+    public boolean getCheckboxValue() {
+        return this.checkboxValue;
+    }    
     
     public boolean runDCaR(String inputData,String ext){
         RConnection RC = sb.getRConnection();
