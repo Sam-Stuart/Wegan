@@ -160,7 +160,7 @@ public class CABean implements Serializable {
 
 
     private void doDefaultSVM() {
-        CAUtils.CreateSVMModel(sb, "NULL", "");
+        CAUtils.CreateSVMModel(sb, "NULL", "NULL");
         CAUtils.PlotSVMCA(sb,
                 "NULL", "",
                 "NULL","NULL",

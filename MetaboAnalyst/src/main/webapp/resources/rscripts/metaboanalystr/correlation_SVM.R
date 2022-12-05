@@ -11,11 +11,11 @@
 
 svm.reg.anal <- function(mSetObj=NA, 
 facA="NULL",
-predtext=""#,data="false"
+predtext="NULL"#,data="false"
 ) {
 
   #install.packages(c("e1071", "Metrics"))
-  library("assertr")
+  # library("assertr")
   library("e1071")
   library("Metrics")
 
@@ -53,15 +53,16 @@ predtext=""#,data="false"
   #Set right side of formula with predictor variables
     data <- input[,colnames(input) != facA, drop = FALSE]
 
-  if (predtext == "") {
+  if (predtext == "NULL") {
     #resp.col.num <- which(colnames(input) == facA); data <- input[,-resp.col.num]
-    predtext <- colnames(data)[1] #Default is the 1st potential predictor column
+   predtext <- colnames( input[, !(colnames(input) == facA), drop = FALSE] )[1] 
+   # predtext <- colnames(data)[1] #Default is the 1st potential predictor column
   } else {
     predtext <- predtext #taken from text box by java, fed as string into R code
   }
   
     print("svm.anal: predictor var set")
-predtext1 <- predtext
+    predtext1 <- predtext
 
   #PREDICTORS: Curate formula right side, and extract predictors character vector
   predtext <- gsub("\n", "", predtext, fixed=TRUE) #fixed=TRUE means we are dealing with one string, versus a vector of strings (fixed=FALSE)
@@ -83,7 +84,7 @@ predtext1 <- predtext
   predictors2 <- unlist(strsplit(predtext, "+", fixed = TRUE), use.names = FALSE)
   #predictors2 <- unlist(strsplit(predictors1, ":", fixed = TRUE), use.names = FALSE)
   
-   data %>% assertr::verify(assertr::has_all_names(predictors2), error_fun = justwarn)
+ #  data %>% assertr::verify(assertr::has_all_names(predictors2), error_fun = justwarn)
 
 #  if(!all(predictors2 %in% colnames(data)) ){
 #   warning(paste0("THIS_is_1st_function_", "'", predictors2[!predictors2 %in% colnames(data)],
@@ -113,26 +114,21 @@ print("svm.anal: train/test set made")
   # cat("The train data for model building is 70% of the dataset, while the test data for model testing is 30% of the dataset.") #Text will be visible to user.
  
 #BUILD MODEL, PREDICT
-    model <- e1071::tune(e1071::svm, formula,  data = as.data.frame(predictors_train), ranges = list(epsilon = seq(0,1,0.1), cost = 2^(seq(0.5,8,.5))))
-    tunedModel <- model$best.model
+    mod <- e1071::tune(e1071::svm, form,  data = as.data.frame(predictors_train), ranges = list(epsilon = seq(0,1,0.1), cost = 2^(seq(0.5,8,.5))))
+    tunedModel <- mod$best.model
     model_name <- "SVM Regression"
   print("svm.anal: model built")
     prediction <- predict(tunedModel, newdata = as.matrix(predictors_test)) #Need to create loop for when family="multinomial"
   print("svm.anal: after predicting model 1")
 
- # STORE SOME MODEL RESULTS
-    mSetObj$analSet$svmReg$meth <- model_name
-    mSetObj$analSet$svmReg$pred <- prediction
-    mSetObj$analSet$svmReg$test <- test_data
-
   #GENERATE AND DOWNLOAD SUMMARY OF PARAMETER TESTING, WRITE TO TXT DOC 
-  summary <- summary(tunedModel) 
-  residuals <- residuals(tunedModel)
+  summ <- summary(tunedModel) 
+  resid <- residuals(tunedModel)
   decision_values <- tunedModel[["decision.values"]]
-  fitted <- predict(tunedModel)
+  fitt <- predict(tunedModel)
   print("svm.anal: after predicting model train")
-  train_rmse <- Metrics::rmse(response_train, fitted)
-# svm_RMSE <- Metrics::rmse(predictors_train[,1], fitted)
+  train_rmse <- Metrics::rmse(response_train, fitt)
+# svm_RMSE <- Metrics::rmse(predictors_train[,1], fitt)
   fileName <- "SVM_regression_summary.txt"
   
   #Obtain test RMSE for plotting # not in the original not ml.R file function
@@ -141,28 +137,28 @@ print("svm.anal: train/test set made")
 print("after predicting model test")  
 
   #STORE REMAINING RESULTS
-  mSetObj$analSet$svmReg$res <- list(summary=summary, response=facA, predictors=predictors2, predtext=predtext1, pred.data = pred_data, predicted.values=fitted, train.RMSE=train_rmse, test.prediction=test_prediction, test.RMSE=test_rmse, train.data=train_data, test.data=test_data, method=model_name, fileName=fileName)
-  mSetObj$analSet$svmReg$mod <- list(model_name=model_name, model=model, response=facA, predictors=predictors2)
+  mSetObj$analSet$svmReg$res <- list(summary=summ, response=facA, predictors=predictors2, predtext=predtext1, pred.data = pred_data, predicted.values=fitt, train.RMSE=train_rmse, test.prediction=test_prediction, test.RMSE=test_rmse, train.data=train_data, test.data=test_data, method=model_name, fileName=fileName)
+  mSetObj$analSet$svmReg$mod <- list(model_name=model_name, model=mod, response=facA, predictors=predictors2)
   mSetObj$analSet$svmReg$res$test_this <- test_data
 
     ##Store results FROM ML.R FILE:
-    ##mSetObj$analSet$svmReg$res <- list(summary = summary, predicted.values = fitted, residuals = residuals, decision.values = decision_values, RSME = svm_RMSE, fileName = fileName)       
-    ##mSetObj$analSet$svmReg$mod <- list(model_name = model_name, model = model, response = response_train_name, predictor = predictors_train_name)
+    ##mSetObj$analSet$svmReg$res <- list(summary = summ, predicted.values = fitt, residuals = resid, decision.values = decision_values, RSME = svm_RMSE, fileName = fileName)       
+    ##mSetObj$analSet$svmReg$mod <- list(model_name = model_name, model = mod, response = response_train_name, predictor = predictors_train_name)
 
   
 #DOWNLOAD TEXT DOC: containing the results, called the fileName. Document goes into the working directory and should be accessible to the user as part of the report.
   sink(fileName) 
   cat("Formula:\n")
-  print(formula)
+  print(form)
   # cat("\nReference category:\n")
   # cat(paste0(reference))
-  print(summary)
+  print(summ)
   cat("Residuals:\n")
-  print(residuals)
+  print(resid)
   cat("\nDecision values:\n")
   print(decision_values)
   cat("\nPredicted values:\n")
-  print(fitted)
+  print(fitt)
   cat("\nModel RMSE:\n")
   #cat(paste0(svm_RMSE))
   sink()
@@ -200,14 +196,15 @@ predtext ="",
 # data="false",
   col_dots="NULL",
   col_line="NULL", 
+# plot_ci = "false",
   plot_title=" ",
   plot_ylab=" ",
   plot_xlab=" ",
 imgName, format="png", dpi=72, width=NA){
   # name used to be: plot.pred.svmReg
 
-  library("assertr")
-  library("e1071")
+#  library("assertr")
+#  library("e1071")
   library("Metrics")
   library("ggplot2")
 #  library("RJSONIO")
@@ -230,9 +227,9 @@ print("svm.pred: set data")
  # facA <- mSetObj$analSet$svmReg$res$response
 ## wasthis:
   #facA <- mSetObj$analSet$svmReg$mod$response
-  #method <- mSetObj$analSet$svmReg$meth
+  #method <- mSetObj$analSet$svmReg$res$method
   #prediction <- mSetObj$analSet$svmReg$predicted.values
-  #test_data <- mSetObj$analSet$svmReg$test
+  #test_data <- mSetObj$analSet$svmReg$res$test.data
   #input <- test_data
     
 ### GET FACA AND PREDTEXT
@@ -297,7 +294,10 @@ print("svm.pred: predictor vars set")
 #  predictors2 <- unlist(strsplit(predtext, "+", fixed = TRUE), use.names = FALSE)
 #  #predictors2 <- unlist(strsplit(predictors1, ":", fixed = TRUE), use.names = FALSE)
 # 
-   data %>% assertr::verify(assertr::has_all_names(predictors2), error_fun = justwarn)
+
+
+#   data %>% assertr::verify(assertr::has_all_names(predictors2), error_fun = justwarn)
+
 #  if(!all(predictors2 %in% colnames(data)) ){
 #   warning(paste0("THIS_is_2nd_function_", "'", predictors2[!predictors2 %in% colnames(data)],
 #  "' not found in data variables ('",
@@ -326,15 +326,15 @@ print("svm.pred: predictor vars set")
  #
 #BUILD MODEL, get predicted
 # print("PLOT: before model making")
-#    model <- e1071::tune(e1071::svm, formula,  data = as.data.frame(predictors_train), ranges = list(epsilon = seq(0,1,0.1), cost = 2^(seq(0.5,8,.5))))
+#    mod <- e1071::tune(e1071::svm, form,  data = as.data.frame(predictors_train), ranges = list(epsilon = seq(0,1,0.1), cost = 2^(seq(0.5,8,.5))))
 #print("PLOT: after model making")
-#    tunedModel <- model$best.model
+#    tunedModel <- mod$best.model
 #    prediction <- predict(tunedModel, newdata = as.matrix(predictors_test)) #Need to create loop for when family="multinomial" making
 #print("PLOT: after predicting")
 #
 
-mod <- mSetObj$analSet$svmReg$mod$model
-tunedModel <- model$best.model
+# mod <- mSetObj$analSet$svmReg$mod$model
+# tunedModel <- mod$best.model
 test_data <- mSetObj$analSet$svmReg$res$test.data
 prediction <- mSetObj$analSet$svmReg$res$test.prediction
 ###### 
@@ -423,7 +423,8 @@ prediction <- mSetObj$analSet$svmReg$res$test.prediction
    a0 <- ggplot(data =  dfpred, aes(x = fpred, y = fA)) +
     labs(title = plot_title1) +
      ylab(plot_ylab1)+ xlab(plot_xlab1) +
-     geom_smooth(se = plot_ci1, color = col_line1, fullrange = TRUE) +#, formula = formula2) +
+     geom_smooth(#se = plot_ci1, 
+                 color = col_line1, fullrange = TRUE) +#, formula = formula2) +
      geom_point(shape = 16, color = col_dots1) +
      theme_bw() + 
   theme(panel.grid.major = element_blank(), 
@@ -458,8 +459,6 @@ prediction <- mSetObj$analSet$svmReg$res$test.prediction
   linear_plot_json$points$shape <- build_points[,c("group")]#[,5]
   linear_plot_json$points$size <- build_points[,c("size")]#[,7]
   linear_plot_json$lines$cols <- build_line[,grepl("col",colnames(build_line))]
-  # linear_plot_json$label <- build$data[[3]][,c("label")]
-  # linear_plot_json$lines$ci <- build$data[[1]][,c("se")]
 
 
   linear_plot_json$model$r_sq <-

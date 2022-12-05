@@ -43,18 +43,10 @@
                                  styleClass="updateButton"
                                  style="box-shadow: none !important; text-shadow: none !important"
                                 onclick="PF('statusDialog').show()"
-                                oncomplete="PF('graphApperanceSVM').hide(); PF('statusDialog').hide()"  
+                                oncomplete="PF('graphApperanceSVM').hide(); PF('statusDialog').hide()"
                                 update="SVMCA:form1:corrSVMPane1  :cmdPane"
-                                actionListener="{svmCABean.corrSVMBtn_action()}"/> 
+                                actionListener="#{svmCABean.corrSVMBtn_action()}"/> 
             </h:panelGrid>
-        </h:panelGrid>
-        
-        <p:dialog modal="true" widgetVar="graphApperanceSVM" 
-            style="width: 400px; height:400px;" 
-            appendTo="@(body)" header="Graphics Center"
-            draggable="false" closable="true" resizable="false"> 
-            <ui:include src="_color_palette_svm.xhtml" />
-        </p:dialog>        
-        
+        </h:panelGrid>     
     </h:form>
 </ui:composition>
