@@ -129,7 +129,7 @@ print("svm.anal: train/test set made")
   print("svm.anal: after predicting model train")
   train_rmse <- Metrics::rmse(response_train, fitt)
 # svm_RMSE <- Metrics::rmse(predictors_train[,1], fitt)
-  fileName <- "SVM_regression_summary.txt"
+  fileName <- "svm_regression_summary.txt"
   
   #Obtain test RMSE for plotting # not in the original not ml.R file function
   test_prediction <- predict(tunedModel, newdata=test_data)
@@ -139,7 +139,6 @@ print("after predicting model test")
   #STORE REMAINING RESULTS
   mSetObj$analSet$svmReg$res <- list(summary=summ, response=facA, predictors=predictors2, predtext=predtext1, pred.data = pred_data, predicted.values=fitt, train.RMSE=train_rmse, test.prediction=test_prediction, test.RMSE=test_rmse, train.data=train_data, test.data=test_data, method=model_name, fileName=fileName)
   mSetObj$analSet$svmReg$mod <- list(model_name=model_name, model=mod, response=facA, predictors=predictors2)
-  mSetObj$analSet$svmReg$res$test_this <- test_data
 
     ##Store results FROM ML.R FILE:
     ##mSetObj$analSet$svmReg$res <- list(summary = summ, predicted.values = fitt, residuals = resid, decision.values = decision_values, RSME = svm_RMSE, fileName = fileName)       
@@ -173,6 +172,7 @@ print("after predicting model test")
 #'@usage svm.pred.plot(mSetObj, facA="NULL", predtext = "NULL", col_dots="NULL", col_line="NULL", plot_title=" ", plot_ylab=" ", plot_xlab=" ",imgName, format="png", dpi=72, width=NA)
 #'@param col_dots point color
 #'@param col_line line color
+#'@param plot_metric one of: NULL (for no plot annotation), RMSE (for root mean squared error)
 #'@param plot_title Input the name of the title (default: "SVM Regression: Predicted vs Actual"), textbox
 #'@param plot_ylab Input the name of the y axis label, textbox
 #'@param plot_xlab Input the name of the x axis label, textbox
@@ -192,11 +192,15 @@ print("after predicting model test")
 
 svm.pred.plot <- function(mSetObj=NA, 
 facA = "NULL", 
-predtext ="",
+predtext ="NULL",
 # data="false",
+
   col_dots="NULL",
   col_line="NULL", 
-# plot_ci = "false",
+
+  plot_metric = "NULL",  # added 202212-05
+  plot_label_size = "NULL", # added 202212-05
+
   plot_title=" ",
   plot_ylab=" ",
   plot_xlab=" ",
@@ -337,6 +341,9 @@ print("svm.pred: predictor vars set")
 # tunedModel <- mod$best.model
 test_data <- mSetObj$analSet$svmReg$res$test.data
 prediction <- mSetObj$analSet$svmReg$res$test.prediction
+
+test_rmse <- mSetObj$analSet$svmReg$res$test.RMSE
+
 ###### 
 ###### [CRUNCH DONE]
 
@@ -352,6 +359,15 @@ prediction <- mSetObj$analSet$svmReg$res$test.prediction
   mSetObj$imgSet$plot.pred.svmReg <- imgName
     
     
+ # PLOT METRIC
+if(plot_metric == "NULL"){
+plot_metric1 <- ""
+} else  if(plot_metric == "rmse"){
+plot_metric1 <- paste0("RMSE = ", test_rmse)
+} else {
+plot_metric1 <- ""
+}
+
  ### TROUBLESHOOTING:
   ##   col_dots1<-"blue"
   ##   col_line1<-"red"
@@ -419,11 +435,15 @@ prediction <- mSetObj$analSet$svmReg$res$test.prediction
     h <- w
   # plot(x=prediction, y=model_data[,facA], xlab=paste0("Predicted ", facA), ylab=paste0("Actual ", facA), main=model_name, yaxt="n"); axis(2, las=2); abline(a=0,b=1)
   
+  line_slope <- function(x, y){
+    sum((x - mean(x))*(y-mean(y))) /  sum((x - mean(x))^2)
+  }
+
   ## MAKE PLOT  
    a0 <- ggplot(data =  dfpred, aes(x = fpred, y = fA)) +
     labs(title = plot_title1) +
      ylab(plot_ylab1)+ xlab(plot_xlab1) +
-     geom_smooth(#se = plot_ci1, 
+     geom_smooth(se = FALSE, 
                  color = col_line1, fullrange = TRUE) +#, formula = formula2) +
      geom_point(shape = 16, color = col_dots1) +
      theme_bw() + 
@@ -434,6 +454,19 @@ prediction <- mSetObj$analSet$svmReg$res$test.prediction
         # legend.title=element_text(12), legend.text=element_text(size=12), 
         plot.title = element_text(face = 'bold', hjust = 0.5)
   )
+
+  ## if slope is negative, line goes top L to bottom R
+  ##### want annotation to go top R 
+  ## if slope is positive, line goes bottom L to top R
+  #### want annotation to go top L 
+   
+## https://stackoverflow.com/questions/22488563/ggplot2-annotate-layer-position-in-r#22492191
+   if(line_slope(dfpred$fpred, dfpred$fA) > 0){
+   a0 <- a0 +
+      annotate("text",x=min(dfpred$fpred),y=max(dfpred$fA), hjust=.2, label=plot_metric1)
+   } else {
+    a0 <- a0 +   annotate("text",x=max(dfpred$fpred),y=max(dfpred$fA), hjust=.2, label=plot_metric1)
+   }
   print("svm.pred: PLOT: made plot")
 
   #GENERATE PLOT

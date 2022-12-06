@@ -106,10 +106,33 @@ public class SVMCABean implements Serializable {
     public void setdoPlotConfInt(boolean doPlotConfInt) {
         this.doPlotConfInt = doPlotConfInt;
     }    
+  
+     //STATIC DROPDOWN for selecting text size
+    private String corPlotLabelSize = "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corPlotLabSize
+
+    public String getCorPlotLabelSize() {
+        return corPlotLabelSize;
+    }
+
+    public void setCorPlotLabelSize(String corPlotLabelSize) {
+        this.corPlotLabelSize = corPlotLabelSize;
+    }    
+    
+     //STATIC DROPDOWN for selecting metric (text) to add to plot, whether to add to plot
+    private String corPlotMetric = "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corPlotMetricOpts
+
+    public String getCorPlotMetric() {
+        return corPlotMetric;
+    }
+
+    public void setCorPlotMetric(String corPlotMetric) {
+        this.corPlotMetric = corPlotMetric;
+    }
+    
     
  //STATIC DROPDOWN for selecting colour of dots on plot
 //    replaced: corColorOpts
-    private String corColorDotsOpts = "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corColorOpts
+    private String corColorDotsOpts = "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corLinColorDotsOpts
 
     public String getCorColorDotsOpts() {
         return corColorDotsOpts;
@@ -120,7 +143,7 @@ public class SVMCABean implements Serializable {
     }
 
  //STATIC DROPDOWN for selecting colour of line on plot
-    private String corColorLineOpts = "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corColorOpts
+    private String corColorLineOpts = "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corLinColorLineOpts
 
     public String getCorColorLineOpts() {
         return corColorLineOpts;
@@ -180,6 +203,7 @@ public class SVMCABean implements Serializable {
         CAUtils.CreateSVMModel(sb, columnNameA, indInput);
         CAUtils.PlotSVMCA(sb, columnNameA, indInput,
                 corColorDotsOpts, corColorLineOpts,
+                corPlotMetric, corPlotLabelSize,
                corPlotTitle, corPlotXlab, corPlotYlab,
                 sb.getNewImage("corr_svm_pred"), "png", 72);
     }
