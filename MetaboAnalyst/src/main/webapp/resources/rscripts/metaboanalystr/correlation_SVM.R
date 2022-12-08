@@ -30,8 +30,8 @@ predtext="NULL"#,data="false"
 
  # input <- input[order(as.numeric(rownames(input)),,drop=FALSE),]
  # print(input)
-  #Text should be visible to user
-#  cat("One dependent variable and one or more independent variables will be tested for correlation. The dependent variable must be numeric. The independent variables can be numeric or categorical.")
+#Text should be visible to user
+ #  cat("One dependent variable and one or more independent variables will be tested for correlation. The dependent variable must be numeric. The independent variables can be numeric or categorical.")
   cat("For categorical independent variables, make sure to use characters for the levels and not numbers. For example, if you have levels 1, 2 and 3, change the level labels to I, II and III prior to upload.")
   
   #Set dependent (response) variable name
@@ -48,7 +48,7 @@ predtext="NULL"#,data="false"
     print("svm.anal: response var set")  
 
   #Text box instructions for selecting predictor variables. Text box should be interactive, meaning any change in text alters the result in real time. Default predtext is second column. 
-# cat("Indicate independent variables using the column names with commas in between.")
+  # cat("Indicate independent variables using the column names with commas in between.")
   
   #Set right side of formula with predictor variables
     data <- input[,colnames(input) != facA, drop = FALSE]
@@ -86,12 +86,12 @@ predtext="NULL"#,data="false"
   
  #  data %>% assertr::verify(assertr::has_all_names(predictors2), error_fun = justwarn)
 
-#  if(!all(predictors2 %in% colnames(data)) ){
-#   warning(paste0("THIS_is_1st_function_", "'", predictors2[!predictors2 %in% colnames(data)],
-#  "' not found in data variables ('",
-#  paste(colnames(data), collapse = "', '"),
-#  "'): check spelling of text box input."))
-#}
+  if(!all(predictors2 %in% colnames(data)) ){
+   warning(paste0("THIS_is_1st_function_", "'", predictors2[!predictors2 %in% colnames(data)],
+  "' not found in data variables ('",
+  paste(colnames(data), collapse = "', '"),
+  "'): check spelling of text box input."))
+}
 
   pred_data <- input[,which(colnames(input) %in% predictors2), drop = FALSE]
   model_data <- data.frame(input[,facA, drop = TRUE], pred_data)
@@ -128,17 +128,17 @@ print("svm.anal: train/test set made")
   fitt <- predict(tunedModel)
   print("svm.anal: after predicting model train")
   train_rmse <- Metrics::rmse(response_train, fitt)
-# svm_RMSE <- Metrics::rmse(predictors_train[,1], fitt)
+  # svm_RMSE <- Metrics::rmse(predictors_train[,1], fitt)
   fileName <- "svm_regression_summary.txt"
   
   #Obtain test RMSE for plotting # not in the original not ml.R file function
   test_prediction <- predict(tunedModel, newdata=test_data)
   test_rmse <- Metrics::rmse(response_test, test_prediction)
-print("after predicting model test")  
+ print("after predicting model test")  
 
   #STORE REMAINING RESULTS
-  mSetObj$analSet$svmReg$res <- list(summary=summ, response=facA, predictors=predictors2, predtext=predtext1, pred.data = pred_data, predicted.values=fitt, train.RMSE=train_rmse, test.prediction=test_prediction, test.RMSE=test_rmse, train.data=train_data, test.data=test_data, method=model_name, fileName=fileName)
-  mSetObj$analSet$svmReg$mod <- list(model_name=model_name, model=mod, response=facA, predictors=predictors2)
+  mSetObj$analSet$svmReg$res <- list(summary = summ, response = facA, predictors = predictors2, predtext = predtext1, pred.data = pred_data, predicted.values = fitt, train.RMSE = train_rmse, test.prediction = test_prediction, test.RMSE = test_rmse, train.data = train_data, test.data = test_data, method = model_name, fileName=fileName)
+  mSetObj$analSet$svmReg$mod <- list(model_name = model_name, model = mod, final.model = tunedModel, formula = form, response = facA, predictors = predictors2)
 
     ##Store results FROM ML.R FILE:
     ##mSetObj$analSet$svmReg$res <- list(summary = summ, predicted.values = fitt, residuals = resid, decision.values = decision_values, RSME = svm_RMSE, fileName = fileName)       
@@ -173,6 +173,7 @@ print("after predicting model test")
 #'@param col_dots point color
 #'@param col_line line color
 #'@param plot_metric one of: NULL (for no plot annotation), RMSE (for root mean squared error)
+#'@param plot_text_size 
 #'@param plot_title Input the name of the title (default: "SVM Regression: Predicted vs Actual"), textbox
 #'@param plot_ylab Input the name of the y axis label, textbox
 #'@param plot_xlab Input the name of the x axis label, textbox
@@ -199,7 +200,7 @@ predtext ="NULL",
   col_line="NULL", 
 
   plot_metric = "NULL",  # added 202212-05
-  plot_label_size = "NULL", # added 202212-05
+  plot_text_size = "NULL", # added 202212-05
 
   plot_title=" ",
   plot_ylab=" ",
@@ -226,9 +227,7 @@ imgName, format="png", dpi=72, width=NA){
 print("svm.pred: set data")
 
 
- # method <- mSetObj$analSet$svmReg$res$method
- # prediction <- mSetObj$analSet$svmReg$res$test.prediction
- # facA <- mSetObj$analSet$svmReg$res$response
+
 ## wasthis:
   #facA <- mSetObj$analSet$svmReg$mod$response
   #method <- mSetObj$analSet$svmReg$res$method
@@ -239,7 +238,7 @@ print("svm.pred: set data")
 ### GET FACA AND PREDTEXT
 
 ##### WITH facA and predtext options
-  ##### [CRUNCH]
+  ##### [COLLAPSE]
   ##### 
   ##### iF VARIABLES ARE SET
   #SET RESPONSE (DEPENDENT) VARIABLE
@@ -299,7 +298,6 @@ print("svm.pred: predictor vars set")
 #  #predictors2 <- unlist(strsplit(predictors1, ":", fixed = TRUE), use.names = FALSE)
 # 
 
-
 #   data %>% assertr::verify(assertr::has_all_names(predictors2), error_fun = justwarn)
 
 #  if(!all(predictors2 %in% colnames(data)) ){
@@ -337,16 +335,21 @@ print("svm.pred: predictor vars set")
 #print("PLOT: after predicting")
 #
 
+###### 
+###### [COLLAPSE FINISH]
+
 # mod <- mSetObj$analSet$svmReg$mod$model
-# tunedModel <- mod$best.model
+tunedModel <- mod$final.model
 test_data <- mSetObj$analSet$svmReg$res$test.data
 prediction <- mSetObj$analSet$svmReg$res$test.prediction
+#test_rmse <- mSetObj$analSet$svmReg$res$test.RMSE
 
-test_rmse <- mSetObj$analSet$svmReg$res$test.RMSE
-
-###### 
-###### [CRUNCH DONE]
-
+##### THINGS TO PLOT: 
+## REGRESSION TYPE: https://stats.stackexchange.com/questions/94118/difference-between-ep-svr-and-nu-svr-and-least-squares-svr
+## EPSILON, NU 
+## epsilon value, cost value, gamma value, number of support vectors
+## plot_cost <- tunedModel$cost; plot_gamma <- tunedModel$gamma ; plot_nsv <- tunedModel$tot.nSV
+    
   dfpred <- data.frame(fpred = prediction, fA = test_data[,facA])
   formula2 <- as.formula("fA ~ fpred")
   model2 <- lm(formula = formula2, data = dfpred)
@@ -358,15 +361,6 @@ test_rmse <- mSetObj$analSet$svmReg$res$test.RMSE
   imgName <- paste(imgName, "dpi", dpi, ".", format, sep="")
   mSetObj$imgSet$plot.pred.svmReg <- imgName
     
-    
- # PLOT METRIC
-if(plot_metric == "NULL"){
-plot_metric1 <- ""
-} else  if(plot_metric == "rmse"){
-plot_metric1 <- paste0("RMSE = ", test_rmse)
-} else {
-plot_metric1 <- ""
-}
 
  ### TROUBLESHOOTING:
   ##   col_dots1<-"blue"
@@ -375,7 +369,53 @@ plot_metric1 <- ""
   ##   plot_title1 <- paste0("Predicted vs Actual\n(", as.expression(formula), ")")
   ##   plot_ylab1 <- "Actual"
   ##   plot_xlab1<- "Predicted"
-  
+  ##  plot_label_size1 <- 3.88*0.9
+  ##  plot_text_size1 <-  12*0.9  
+  ## plot_metric1 <- "RMSE : 0.5"
+
+ # PLOT METRIC
+if(plot_metric == "NULL"){
+plot_metric1 <- ""
+} else  if(plot_metric == "rmse"){
+plot_metric1 <- paste0("RMSE = ", round(mSetObj$analSet$svmReg$res$test.RMSE, 2))
+} else  if(plot_metric == "cost"){
+plot_metric1 <- paste0("Cost = ", round(tunedModel$cost, 2) )
+} else  if(plot_metric == "gamma"){
+plot_metric1 <- paste0("Gamma = ", round(tunedModel$gamma, 2) )
+} else  if(plot_metric == "epsilon"){
+plot_metric1 <- paste0("Epsilon = ", round(tunedModel$epsilon, 2) )
+} else {
+plot_metric1 <- ""
+}
+
+# PLOT TEXT SIZE
+# plot_base_size <- theme_bw()$text$size # 11 
+# https://stackoverflow.com/questions/53560599/how-to-change-the-default-font-size-in-ggplot2-including-geom-text
+ plot_label_size <- GeomLabel$default_aes$size #3.88
+ plot_base_size <- 12
+    #SET TEXT SIZE
+  plot_text_size1 <- 
+				switch(
+					plot_text_size,
+					"NULL" = plot_base_size,
+					"medium" = plot_base_size,
+					"small" = 0.8*plot_base_size,
+					"extrasmall" = 0.6*plot_base_size,
+                                        "large" = 1.2*plot_base_size,
+					"extralarge" = 1.4*plot_base_size,
+					NULL
+				)
+ plot_label_size1 <- 
+				switch(
+					plot_text_size,
+					"NULL" = plot_label_size,
+					"medium" = plot_label_size,
+					"small" = 0.9*plot_label_size,
+					"extrasmall" = 0.8*plot_label_size,
+                                        "large" = 1.1*plot_label_size,
+					"extralarge" = 1.15*plot_label_size,
+					NULL
+				)
   
     #SET POINT COLOR
   col_dots1 <- 
@@ -446,12 +486,13 @@ plot_metric1 <- ""
      geom_smooth(se = FALSE, 
                  color = col_line1, fullrange = TRUE) +#, formula = formula2) +
      geom_point(shape = 16, color = col_dots1) +
-     theme_bw() + 
+     # theme_bw() +
+     theme_bw(base_size = plot_text_size1) + 
   theme(panel.grid.major = element_blank(), 
         panel.grid.minor = element_blank(),
-        axis.text = element_text(size = 12, colour = "black"), 
-        axis.title = element_text(size = 12),
-        # legend.title=element_text(12), legend.text=element_text(size=12), 
+        axis.text = element_text(size=plot_text_size1, colour = "black"), 
+        axis.title = element_text(colour = "black"),
+        # legend.title=element_text(plot_text_size1), legend.text=element_text(size=plot_text_size1), 
         plot.title = element_text(face = 'bold', hjust = 0.5)
   )
 
@@ -463,9 +504,9 @@ plot_metric1 <- ""
 ## https://stackoverflow.com/questions/22488563/ggplot2-annotate-layer-position-in-r#22492191
    if(line_slope(dfpred$fpred, dfpred$fA) > 0){
    a0 <- a0 +
-      annotate("text",x=min(dfpred$fpred),y=max(dfpred$fA), hjust=.2, label=plot_metric1)
+      annotate("text",x=min(dfpred$fpred),y=max(dfpred$fA), hjust=.2, label=plot_metric1, size = plot_label_size1)
    } else {
-    a0 <- a0 +   annotate("text",x=max(dfpred$fpred),y=max(dfpred$fA), hjust=.2, label=plot_metric1)
+    a0 <- a0 +   annotate("text",x=max(dfpred$fpred),y=max(dfpred$fA), hjust=.2, label=plot_metric1, label = plot_label_size1)
    }
   print("svm.pred: PLOT: made plot")
 
@@ -476,7 +517,7 @@ plot_metric1 <- ""
     dev.off()
       
    # STORE IN mSET
-  mSetObj$analSet$svmReg$plotpred <- list(plot = a0, title = plot_title1, xlab = plot_xlab1, ylab = plot_ylab1)
+  mSetObj$analSet$svmReg$plotpred <- list(plot = a0, title = plot_title1, xlab = plot_xlab1, ylab = plot_ylab1, metric = plot_metric1)
 
   
  #JSON OBJECT MAKING
@@ -493,6 +534,8 @@ plot_metric1 <- ""
   linear_plot_json$points$size <- build_points[,c("size")]#[,7]
   linear_plot_json$lines$cols <- build_line[,grepl("col",colnames(build_line))]
 
+
+  linear_plot_json$metric <- plot_metric1
 
   linear_plot_json$model$r_sq <-
    summary(model2)[["r.squared"]] #Extract R^2
