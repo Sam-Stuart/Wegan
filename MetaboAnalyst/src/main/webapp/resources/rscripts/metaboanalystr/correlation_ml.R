@@ -26,7 +26,7 @@
    library("dplyr")
    library("nnet")
    library("caret")
-   library("assertr")
+#   library("assertr")
    library("datawizard")
    library("Metrics")
 
@@ -92,14 +92,14 @@
 
    data %>% assertr::verify(assertr::has_all_names(predictors2), error_fun = justwarn)
   
-   # if(!all(predictors2 %in% colnames(data)) ){
-   #   warning(paste0("THIS_is_1st_function_", "'", 
-   #                 paste( setdiff(predictors2, colnames(data)), collapse = "', '" ),
-   #                  # predictors2[!predictors2 %in% colnames(data)],
-   #                  "' not found in data variables ('",
-   #                  paste(colnames(data), collapse = "', '"),
-   #                  "'): check spelling of text box input."))
-   # }
+    if(!all(predictors2 %in% colnames(data)) ){
+      warning(paste0("THIS_is_1st_function_", "'", 
+                    paste( setdiff(predictors2, colnames(data)), collapse = "', '" ),
+                     # predictors2[!predictors2 %in% colnames(data)],
+                     "' not found in data variables ('",
+                     paste(colnames(data), collapse = "', '"),
+                     "'): check spelling of text box input."))
+    }
 
    pred_data <- input[,which(colnames(input) %in% predictors2), drop = FALSE]
    model_data <- data.frame(input[,facA, drop = TRUE], pred_data)
@@ -220,15 +220,15 @@
    print("ann.anal: after predicting model 1")
 
    # STORE SOME MODEL RESULTS
-   mSetObj$analSet$annReg$meth <- model_name
-   mSetObj$analSet$annReg$pred <- prediction
+   #mSetObj$analSet$annReg$meth <- model_name
+   # mSetObj$analSet$annReg$pred <- prediction
 
    #GENERATE AND DOWNLOAD SUMMARY OF PARAMETER TESTING, WRITE TO TXT DOC
-   summary <- summary(tunedModel)
-   residuals <- residuals(tunedModel)
-   fitted <- predict(tunedModel)
+   summ <- summary(tunedModel)
+   resid <- residuals(tunedModel)
+   fitt <- predict(tunedModel)
    print("after predicting model train")
-   train_rmse <- Metrics::rmse(response_train, fitted)
+   train_rmse <- Metrics::rmse(response_train, fitt)
    fileName <- "ANN_regression_summary.txt"
 
    #Obtain test RMSE for plotting # not in the original not ml.R file function
@@ -237,7 +237,7 @@
    print("ann.anal: after predicting model test")
 
    #STORE REMAINING RESULTS
-   mSetObj$analSet$annReg$res <- list(summary = summary, response = facA, predictor = predictors2, predtext = predtext1, pred.nottoscale = vars_noscale, pred.data = pred_data, predicted.values = fitted, train.RMSE=train_rmse, test.prediction = test_prediction, test.RMSE = test_rmse, train.data = train_data, test.data = test_data, method = model_name, fileName = fileName)
+   mSetObj$analSet$annReg$res <- list(summary = summ, response = facA, predictor = predictors2, predtext = predtext1, pred.nottoscale = vars_noscale, pred.data = pred_data, predicted.values = fitt, train.RMSE=train_rmse, test.prediction = test_prediction, test.RMSE = test_rmse, train.data = train_data, test.data = test_data, method = model_name, fileName = fileName)
    mSetObj$analSet$annReg$mod <- list(model.name=model_name, model=mod, final.model = tunedModel, formula = form, response = facA, predictor = predictors2)
 
 
@@ -248,11 +248,11 @@
    print(form)
    # cat("\nReference category:\n")
    # cat(paste0(reference))
-   print(summary)
+   print(summ)
    cat("Residuals:\n")
-   print(residuals)
+   print(resid)
    cat("\nPredicted values:\n")
-   print(fitted)
+   print(fitt)
    cat("\nModel RMSE:\n")
    #cat(paste0(train_RMSE))
    sink()
@@ -296,6 +296,10 @@ predtext ="",
 vars_nottoscale = "", # text box numeric variables
   col_dots="NULL",
   col_line="NULL", 
+
+#  plot_metric = "NULL", 
+  plot_text_size = "NULL", # added 202212-08
+
   plot_title=" ",
   plot_ylab=" ",
   plot_xlab=" ",
@@ -303,7 +307,7 @@ imgName, format="png", dpi=72, width=NA){
 
 library("nnet")
 library("caret")
-library("assertr")
+# library("assertr")
 library("ggplot2")
 library("RJSONIO")
 
@@ -316,23 +320,10 @@ library("RJSONIO")
 #  } else {
     input <- mSetObj$dataSet$orig
 #  }
-print("ann.plotpred: set data")  
-### GET FACA AND PREDTEXT
 
-# mSetObj$analSet$annReg$res <- list(summary = summary, response = facA, predictor = predictors2, predtext = predtext1, pred.nottoscale = vars_noscale, pred.data = pred_data, predicted.values = fitted, train.RMSE=train_rmse, test.prediction = test_prediction, test.RMSE = test_rmse, train.data = train_data, test.data = test_data, method = model_name, fileName = fileName)
-#   mSetObj$analSet$annReg$mod <- list(model.name = model_name, model=mod, final.model = tunedModel, formula = form, response = facA, predictor = predictors2)
-
-facA <- mSetObj$analSet$annReg$res$response
-print("ann.plotpred: set facA")  
-predictors2 <- mSetObj$analSet$annReg$res$predictor
-print("ann.plotpred: set predictors")  
-test_prediction <- mSetObj$analSet$annReg$res$test.prediction
-test_data <- mSetObj$analSet$annReg$res$test.data
-# train_prediction <- mSetObj$analSet$annReg$res$predicted.values
-# tunedModel <- mSetObj$analSet$annReg$mod$final.model
 
 ##### WITH facA and predtext options
-  ##### [CRUNCH]
+  ##### [COLLAPSE]
   ##### 
   ##### iF VARIABLES ARE SET
   #SET RESPONSE (DEPENDENT) VARIABLE
@@ -440,7 +431,16 @@ test_data <- mSetObj$analSet$annReg$res$test.data
 #   prediction <- predict(tunedModel, newdata = as.matrix(predictors_test)) #Need to create loop for when family="multinomial"
 #   print("ann.plotpred: after predicting model 1")
 ###### 
-###### [CRUNCH DONE]
+###### [COLLAPSE DONE]
+
+### GET FACA AND PREDTEXT
+ facA <- mSetObj$analSet$annReg$res$response
+ predictors2 <- mSetObj$analSet$annReg$res$predictor
+ test_prediction <- mSetObj$analSet$annReg$res$test.prediction
+ test_data <- mSetObj$analSet$annReg$res$test.data
+ # train_prediction <- mSetObj$analSet$annReg$res$predicted.values
+ tunedModel <- mSetObj$analSet$annReg$mod$final.model
+print("ann.plotpred: set data")  
 
    dfpred <- data.frame(fpred = test_prediction, fA = test_data[,facA])
    formula2 <- as.formula("fA ~ fpred")
@@ -453,7 +453,6 @@ test_data <- mSetObj$analSet$annReg$res$test.data
   imgName <- paste(imgName, "dpi", dpi, ".", format, sep="")
   mSetObj$imgSet$plot.pred.annReg <- imgName
     
-    
  ### TROUBLESHOOTING:
   ##   col_dots1<-"blue"
   ##   col_line1<-"red"
@@ -461,8 +460,37 @@ test_data <- mSetObj$analSet$annReg$res$test.data
   ##   plot_title1 <- paste0("Predicted vs Actual\n(", as.expression(form), ")")
   ##   plot_ylab1 <- "Actual"
   ##   plot_xlab1<- "Predicted"
-  
-  
+  ##  plot_label_size1 <- 3.88*0.9
+  ##  plot_text_size1 <-  12*0.9  
+
+# PLOT TEXT SIZE
+# plot_base_size <- theme_bw()$text$size # 11
+ plot_label_size <- 3.88 #GeomLabel$default_aes$size #3.88
+ plot_base_size <- 12
+    #SET TEXT SIZE
+  plot_text_size1 <- 
+				switch(
+					plot_text_size,
+					"NULL" = plot_base_size,
+					"medium" = plot_base_size,
+					"small" = 0.8*plot_base_size,
+					"extrasmall" = 0.6*plot_base_size,
+                                        "large" = 1.2*plot_base_size,
+					"extralarge" = 1.4*plot_base_size,
+					NULL
+				)
+ plot_label_size1 <- 
+				switch(
+					plot_text_size,
+					"NULL" = plot_label_size,
+					"medium" = plot_label_size,
+					"small" = 0.9*plot_label_size,
+					"extrasmall" = 0.8*plot_label_size,
+                                        "large" = 1.1*plot_label_size,
+					"extralarge" = 1.15*plot_label_size,
+					NULL
+				)
+
     #SET POINT COLOR
   col_dots1 <- 
 				switch(
@@ -527,12 +555,13 @@ test_data <- mSetObj$analSet$annReg$res$test.data
      ylab(plot_ylab1)+ xlab(plot_xlab1) +
      geom_smooth(se = FALSE, color = col_line1, fullrange = TRUE) +#, formula = formula2) +
      geom_point(shape = 16, color = col_dots1) +
-     theme_bw() + 
+      # theme_bw() +
+     theme_bw(base_size = plot_text_size1) + 
   theme(panel.grid.major = element_blank(), 
         panel.grid.minor = element_blank(),
-        axis.text = element_text(size = 12, colour = "black"), 
-        axis.title = element_text(size = 12),
-        # legend.title=element_text(12), legend.text=element_text(size=12), 
+        axis.text = element_text(size=plot_text_size1, colour = "black"), 
+        axis.title = element_text(colour = "black"),
+        # legend.title=element_text(plot_text_size1), legend.text=element_text(size=plot_text_size1), 
         plot.title = element_text(face = 'bold', hjust = 0.5)
   )
   
@@ -557,17 +586,7 @@ test_data <- mSetObj$analSet$annReg$res$test.data
   linear_plot_json$points$cols <- build_points[,grepl("col",colnames(build_points))] #[,6] #colours
   linear_plot_json$points$shape <- build_points[,c("group")]#[,5]
   linear_plot_json$points$size <- build_points[,c("size")]#[,7]
-  linear_plot_json$lines$cols <- build_line[,grepl("col",colnames(build_line))]
-  # linear_plot_json$label <- build$data[[3]][,c("label")]
-  # linear_plot_json$lines$ci <- build$data[[1]][,c("se")]
-  
-  if(any(grepl("ymin", colnames(build_line))) && any(grepl("ymax", colnames(build_line))) ){
-   ci<- build_line[,c("x","y", "ymin", "ymax")] 
-   colnames(ci) <- c("x","y","CI_down", "CI_up")
-   linear_plot_json$lines$ci <- ci # build$data[[1]][,c("ymin", "ymax")]
- } else{
-    linear_plot_json$lines$ci <- data.frame(x = build_line[,c("x")], y = build_line[,c("y")], CI_down = 0, CI_up = 0)
- }   
+  linear_plot_json$lines$cols <- build_line[,grepl("col",colnames(build_line))]  
 
   
   linear_plot_json$model$r_sq <-
@@ -580,7 +599,7 @@ test_data <- mSetObj$analSet$annReg$res$test.data
     summary(model2)[["coefficients"]][1] # alpha
 
   json.obj <- RJSONIO::toJSON(linear_plot_json, .na='null')
-print("JSON the road again")
+print("JSON bon jovi")
   sink(imgName2)
   cat(json.obj)
   sink()
@@ -606,10 +625,10 @@ print("JSON the road again")
 #'@param facA Input the name of the response column. Response column will be normalized by min-max scaling so that the range of facA column has a range [0-1]
 #'@param predtext Input predictor column names plus potential interactions between predictor variables (java uses text box to obtain string)
 #'@param vars_nottoscale Input predictor column names not to scale (by z-score standardizing) (java uses text box to obtain string)
-#'@param col_input  colours of input (left-most) node bubbles; default lightpink, static dropdown 
-#'@param col_other  colours of non-input node bubbles; default lightblue, static dropdown 
-#'@param text_size  text size of node bubble labels; static dropdown   
-#'@param squish amount to compress the plot width-wise; default no compressing; 1 least to 4 most compressing; static dropdown
+#'@param col_input  Colours of input (left-most) node bubbles; default lightpink, static dropdown 
+#'@param col_other  Colours of non-input node bubbles; default lightblue, static dropdown 
+#'@param text_size  Text size of node bubble labels; static dropdown   
+#'@param squish Amount to compress the plot width-wise; default no compressing; 1 least to 4 most compressing; static dropdown
 #'@param plot_title Input the name of the title (default: "ANN Regression");, textbox)
 #'@param imgName Input the image name
 #'@param format Select the image format, "png" or "pdf", default is "png" 
@@ -646,21 +665,7 @@ imgName, format="png", dpi=72, width=NA){
 #  } else {
     input <- mSetObj$dataSet$orig
 #  }
-print("ann.plotpred: set data")  
-### GET FACA AND PREDTEXT
 
-   facA <- mSetObj$analSet$annReg$res$response
-   print("ann.plotnid: set facA")  
-  predictor <- mSetObj$analSet$annReg$res$predictor
-  print("ann.plotnid: set predictors")  
-
- mod <- mSetObj$analSet$annReg$mod$model
-  print("ann.plotnid: model:")
-  print(summary(mod))  
-
-tunedModel <- mSetObj$analSet$annReg$mod$final.model
-print("ann.nid: tuned model:")
-print(summary(tunedModel))
 
 ##### WITH facA and predtext options
   ##### [CRUNCH]
@@ -775,6 +780,15 @@ print(summary(tunedModel))
 ###### 
 ###### [CRUNCH DONE]
 
+### GET FACA AND PREDTEXT
+  facA <- mSetObj$analSet$annReg$res$response
+  predictor <- mSetObj$analSet$annReg$res$predictor 
+  #mod <- mSetObj$analSet$annReg$mod$model
+  tunedModel <- mSetObj$analSet$annReg$mod$final.model
+ print("ann.nid: tuned model:")
+ print(summary(tunedModel))
+print("ann.plotpred: set data")  
+
 
   #NAME PLOT FOR DOWNLOAD
   ### must put imgName2 first, re-writing imgName var in next line
@@ -883,24 +897,57 @@ print(summary(tunedModel))
    # STORE IN mSET
   #mSetObj$analSet$annReg$plotnid <- list(plot = a0, title = plot_title1, xlab = "", ylab = "")
   
+
 #  #JSON OBJECT MAKING
-#   build <- ggplot_build(a0)
-#   build_line <- build$data[[1]]
-#   build_points <- build$data[[2]]
-#   linear_plot_json <- list()
-# 
-#   linear_plot_json$main <- plot_title1 #title
-#   linear_plot_json$points$coords <- build_points[,c("x","y")] #[,1:2]
-#   linear_plot_json$points$cols <- c(left_points = col_input1, other_points = col_other1)
-#   linear_plot_json$points$shape <- build_points[,c("group")]#[,5]
-#   linear_plot_json$points$size <- build_points[,c("size")]#[,7]
-#   linear_plot_json$lines$cols <- c("black", "grey")
-#      
-#   json.obj <- RJSONIO::toJSON(linear_plot_json, .na='null')
-# print("JSON de replay")
-#   sink(imgName2)
-#   cat(json.obj)
-#   sink()
+
+## create edge/node data frame
+nn_coef <- nnet:::coef.nnet(tunedModel)
+nn_df <- data.frame(do.call(rbind,
+        strsplit(
+        toupper(names(nn_coef)),
+         "->" )
+          ))
+colnames(nn_df)<-c("n1", "n2")
+nn_df$wt<-unname(nn_coef)
+
+### Differentiate bias nodes
+if("B" %in% nn_df$n1){
+   nn_df$n1[nn_df$n1 %in% "B" & nn_df$n2 %in% "O"] <- "B1"
+   nn_df$n1[nn_df$n1 %in% "B" & !nn_df$n2 %in% "O"] <- "B2"
+}
+
+### IDs of nodes
+nn_id <- unique(c(nn_df$n1, nn_df$n2))
+nn_names <- nn_id
+### names of nodes
+nn_names[grepl("I", nn_id )] <- tunedModel$coefnames
+nn_names[grepl("O", nn_id)] <- "outcome"
+### colours of nodes
+nn_col - rep(col_other1, length(nn_id))
+nn_col[grepl("I", nn_id )] <- col_input1
+
+nnet_plot_json <- list(
+  main = plot_title1,
+  nodes = 
+    list(ID = nn_id, 
+         name = nn_names, 
+         text_magnification_cex = text_size1,
+         node_layout_squishiness = squish1,
+         cols = nn_col),
+  edges = 
+    list(source = nn_df$n1,
+         target=nn_df$n2,
+         weight_line_thickness = nn_df$wt,
+         cols = ifelse(as.numeric(nn_df$wt) < 0, "grey", "black"))
+)
+
+
+   json.obj <- RJSONIO::toJSON(nnet_plot_json, .na='null')
+  print(json.obj)
+  print("JSON de replay")
+   sink(imgName2)
+   cat(json.obj)
+   sink()
   
    if(!.on.public.web){
     return(.set.mSet(mSetObj))
