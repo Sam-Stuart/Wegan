@@ -515,7 +515,7 @@ public static boolean PlotLinearResidFitCA(SessionBean1 sb,
     public static void PlotSVMCA(SessionBean1 sb, 
               String facA, String predtext, 
              String col_dots, String col_line, 
-             String plot_metric, String plot_label_size,
+             String plot_metric, String plot_text_size,
                 String plot_title, String plot_xlab, String plot_ylab,
             String imgName, String format, int dpi) {
         try {
@@ -526,7 +526,7 @@ public static boolean PlotLinearResidFitCA(SessionBean1 sb,
                     + col_dots + "\", \"" 
                     + col_line + "\", \"" 
                     + plot_metric + "\", \"" 
-                    + plot_label_size + "\", \"" 
+                    + plot_text_size + "\", \"" 
                     + plot_title + "\", \"" 
                     + plot_xlab + "\", \"" 
                     + plot_ylab + "\", \"" 
