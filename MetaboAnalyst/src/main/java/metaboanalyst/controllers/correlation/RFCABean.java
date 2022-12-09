@@ -282,6 +282,19 @@ public class RFCABean implements Serializable {
     public void setCorNarrowWidthOpts(String corNarrowWidthOpts) {
         this.corNarrowWidthOpts = corNarrowWidthOpts;
     }     
+
+// ANN    
+     //STATIC DROPDOWN for selecting text size
+    private String corPlotLabelSize = "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corPlotLabSize
+
+    public String getCorPlotLabelSize() {
+        return corPlotLabelSize;
+    }
+
+    public void setCorPlotLabelSize(String corPlotLabelSize) {
+        this.corPlotLabelSize = corPlotLabelSize;
+    }    
+    
     
     
 //    private List<String> corrPolyResults = null;
@@ -358,7 +371,7 @@ public class RFCABean implements Serializable {
         CAUtils.CreateANNModel(sb, columnNameA, indInput, indInput);
         CAUtils.PlotANNPredictCA(sb,
                 columnNameA, indInput, indInput,
-                corColorDotsOpts, corColorLineOpts, 
+                corColorDotsOpts, corColorLineOpts,                corPlotLabelSize,
                corPlotTitle, corPlotXlab, corPlotYlab,
                 sb.getNewImage("corr_ann_pred"), "png", 72);
     }         

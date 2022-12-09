@@ -679,6 +679,7 @@ public static boolean PlotANNCA(SessionBean1 sb,
     
 public static boolean PlotANNPredictCA(SessionBean1 sb,
         String facA,  String predtext,  String vars_nottoscale,
+        String plot_text_size,
         String col_dots, String col_line, 
         String plot_title, String plot_xlab, String plot_ylab, 
                 String imgName, String format, int dpi) {
@@ -688,6 +689,7 @@ public static boolean PlotANNPredictCA(SessionBean1 sb,
                     + facA + "\", \""
                     + predtext + "\", \""
                     + vars_nottoscale + "\", \""
+                    + plot_text_size + "\", \""
                     + col_dots + "\", \"" 
                     + col_line + "\", \"" 
                     + plot_title + "\", \""

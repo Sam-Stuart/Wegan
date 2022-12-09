@@ -11,7 +11,7 @@
         <h:panelGrid columns="1" style="width:380px;">
             <h:panelGrid id="panelGrid1" columns="2" cellpadding="5" columnClasses="colBrayLong,colBrayShort">
                 <!--Relative Importance (Bar)Plot-->
-                <h3>Plot and Color</h3>
+                <h3>Color and Size</h3>
                 <p:panelGrid></p:panelGrid>
                 
                 <h:outputLabel style="font-weight: bold" value="Line Color "/>
@@ -22,7 +22,13 @@
                 <h:outputLabel style="font-weight: bold" value="Point Color"/>
                 <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{rfCABean.corColorDotsOpts}">
                     <f:selectItems value="#{applicationBean1.corLinColorDotsOpts}" />
-                </p:selectOneMenu>  
+                </p:selectOneMenu> 
+                
+                <h:outputLabel style="font-weight: bold" value="Text Size"/>
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{rfCABean.corPlotLabelSize}">
+                    <f:selectItems value="#{applicationBean1.corLinColorDotsOpts}" />
+                </p:selectOneMenu> 
+                <!--corPlotMetricOpts corPlotLabSize--> 
                         
                 <h3>Titles</h3>
                 <p:panelGrid></p:panelGrid>    

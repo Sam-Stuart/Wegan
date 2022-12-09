@@ -197,7 +197,8 @@ public class CABean implements Serializable {
    
         CAUtils.PlotANNPredictCA(sb,
                 "NULL", "", "", 
-                "NULL", "NULL", " ", " ", " ", 
+                "NULL", "NULL", 
+                "NULL"," ", " ", " ", 
                 sb.getCurrentImage("corr_ann_pred"), "png", 72);
 }
     

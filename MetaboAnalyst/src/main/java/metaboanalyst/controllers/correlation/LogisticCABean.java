@@ -64,29 +64,29 @@ public class LogisticCABean implements Serializable {
         this.indInput = indInput;
     }
     
-//    //   (Predictor) Indep. Variable NAMES (Textbox)     AUTOFILL
-//    private SelectItem[] corrColumnOptsFill = null;
-//    public SelectItem[] getFillColumnOpts(){
-//        String[] columns = CAUtils.GetDataColumns(sb);
-//        int columnsLen = columns.length;
-//        corrColumnOptsFill = new SelectItem[columnsLen];
-//        List<String> columnNames = Arrays.asList(columns);
-//        for (int i = 0; i < columnsLen; i++) {
-//            corrColumnOptsFill[i] = new SelectItem(columnNames.get(i), columnNames.get(i));
-//        }
-//        //List<String> columnNames = Arrays.asList(columns);
-//        return corrColumnOptsFill;
-//    }
-//    
-//    private String corrFillColumnNames = getFillColumnOpts()[0].getLabel();
-//    
-//    public String getCorrFillColumnNames() {
-//        return corrFillColumnNames;
-//    }
-//
-//    public void setCorrFillColumnNames(String corrFillColumnNames) {
-//        this.corrFillColumnNames = corrFillColumnNames;
-//    }     
+    //   (Predictor) Indep. Variable NAMES (Textbox)     AUTOFILL
+    private SelectItem[] corrColumnOptsFill = null;
+    public SelectItem[] getFillColumnOpts(){
+        String[] columns = CAUtils.GetDataColumns(sb);
+        int columnsLen = columns.length;
+        corrColumnOptsFill = new SelectItem[columnsLen];
+        List<String> columnNames = Arrays.asList(columns);
+        for (int i = 0; i < columnsLen; i++) {
+            corrColumnOptsFill[i] = new SelectItem(columnNames.get(i), columnNames.get(i));
+        }
+        //List<String> columnNames = Arrays.asList(columns);
+        return corrColumnOptsFill;
+    }
+    
+    private String corrFillColumnNames = getFillColumnOpts()[0].getLabel();
+    
+    public String getCorrFillColumnNames() {
+        return corrFillColumnNames;
+    }
+
+    public void setCorrFillColumnNames(String corrFillColumnNames) {
+        this.corrFillColumnNames = corrFillColumnNames;
+    }     
    
     
    // (RESPONSE) DEPENDENT VARIABLE

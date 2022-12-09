@@ -6,7 +6,7 @@
 #'  # @param facA Input the name of the response column (java uses numeric.columns() to give user options)
 #'  # @param predtext Input predictor column names (java uses text box to obtain string)
 #'  @param vars_notoscale Numeric variable names to not scale; all numeric variables are default scaled from 0 to 1
-#'  # @author Louisa Normington\email{normingt@ualberta.ca}
+#'  # @author Gina Sykes\email{gsykes@ualberta.ca}
 #'  # University of Alberta, Canada
 #'  # License: GNU GPL (>= 2)
 #'  # @export
@@ -270,6 +270,7 @@
 #'@param facA Input the name of the response column 
 #'@param predtext Input predictor column names (java uses text box to obtain string)
 #'@param vars_notoscale Numeric variable names to not scale; all numeric variables are default scaled from 0 to 1
+#'@param plot_text_size Size of text on plot; extra small - extra large (defaults to "medium", which is 12)
 #'@param col_dots point color
 #'@param col_line line color
 #'@param plot_title Input the name of the title (default: "ANN Regression: Predicted vs Actual"), textbox
@@ -281,7 +282,7 @@
 #'the default dpi is 72. It is suggested that for high-resolution images, select a dpi of 300.  
 #'@param width Input the width, there are 2 default widths. The first, width=NULL, is 10.5.
 #'The second default is width=0, where the width is 7.2. Otherwise users can input their own width.   
-#'@author Louisa Normington\email{normingt@ualberta.ca}
+#'@author Gina Sykes\email{gsykes@ualberta.ca}
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2)
 #'@export
@@ -636,7 +637,7 @@ print("JSON bon jovi")
 #'the default dpi is 72. It is suggested that for high-resolution images, select a dpi of 300.  
 #'@param width Input the width, there are 2 default widths. The first, width=NULL, is 10.5.
 #'The second default is width=0, where the width is 7.2. Otherwise users can input their own width.   
-#'@author Louisa Normington\email{normingt@ualberta.ca}
+#'@author Gina Sykes\email{gsykes@ualberta.ca}
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2)
 #'@export
@@ -923,7 +924,7 @@ nn_names <- nn_id
 nn_names[grepl("I", nn_id )] <- tunedModel$coefnames
 nn_names[grepl("O", nn_id)] <- "outcome"
 ### colours of nodes
-nn_col - rep(col_other1, length(nn_id))
+nn_col <- rep(col_other1, length(nn_id))
 nn_col[grepl("I", nn_id )] <- col_input1
 
 nnet_plot_json <- list(
