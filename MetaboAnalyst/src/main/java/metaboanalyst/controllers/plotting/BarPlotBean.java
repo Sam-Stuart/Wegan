@@ -29,6 +29,25 @@ public class BarPlotBean implements Serializable {
     private String title;
     private Integer chosenAxisTextSize;
     private Integer chosenTitleTextSize;
+    
+    public BarPlotBean() {
+        aggregateOpts = new SelectItem[5];
+        aggregateOpts[0] = new SelectItem("mean", "Mean");
+        aggregateOpts[1] = new SelectItem("sum", "Sum");
+        aggregateOpts[2] = new SelectItem("length", "Count");
+        aggregateOpts[3] = new SelectItem("min", "Min");
+        aggregateOpts[4] = new SelectItem("max", "Max");
+        
+        SelectItem[] fontSizeOpts = new SelectItem[5];
+        fontSizeOpts[0] = new SelectItem(12, "Extra Small");
+        fontSizeOpts[1] = new SelectItem(16, "Small");
+        fontSizeOpts[2] = new SelectItem(20, "Medium");
+        fontSizeOpts[3] = new SelectItem(24, "Large");
+        fontSizeOpts[4] = new SelectItem(32, "Extra Large");
+        
+        this.textFontSizeOpts = fontSizeOpts.clone();
+        this.axisFontSizeOpts = fontSizeOpts.clone();
+    }
 
     public SelectItem[] getTextFontSizeOpts() {
         return textFontSizeOpts;
@@ -95,23 +114,6 @@ public class BarPlotBean implements Serializable {
         PlottingUtils.PlotBarChart(sb, sb.getNewImage("plot_bar_chart"), "png", 72);
     }
 
-    public BarPlotBean() {
-        aggregateOpts = new SelectItem[5];
-        aggregateOpts[0] = new SelectItem("mean", "Mean");
-        aggregateOpts[1] = new SelectItem("sum", "Sum");
-        aggregateOpts[2] = new SelectItem("length", "Count");
-        aggregateOpts[3] = new SelectItem("min", "Min");
-        aggregateOpts[4] = new SelectItem("max", "Max");
-        
-        SelectItem[] fontSizeOpts = new SelectItem[5];
-        fontSizeOpts[0] = new SelectItem(12, "Extra Small");
-        fontSizeOpts[1] = new SelectItem(16, "Small");
-        fontSizeOpts[2] = new SelectItem(20, "Medium");
-        fontSizeOpts[3] = new SelectItem(24, "Large");
-        fontSizeOpts[4] = new SelectItem(32, "Extra Large");
-        
-        this.textFontSizeOpts = fontSizeOpts.clone();
-        this.axisFontSizeOpts = fontSizeOpts.clone();
-    }
+    
 
 }

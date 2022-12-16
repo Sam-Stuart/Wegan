@@ -110,6 +110,7 @@ pieChart_setup <-
     mSetObj$analSet$pieGraph <-
       list(
         md.df = md.df,
+        aggregate_function = aggregate_function,
         facA = facA,
         barColor = colors,
         xlab = xlab,
@@ -149,6 +150,9 @@ plotPieChart <-
            width = NA) {
     mSetObj <- .get.mSet(mSetObj)
     data <- mSetObj$analSet$pieGraph$md.df
+    aggregate_function <- mSetObj$analSet$pieGraph$aggregate_function
+    facA <- mSetObj$analSet$pieGraph$facA
+    
     #Set plot dimensions
     if (is.na(width)) {
       w <- 10.5
@@ -184,7 +188,7 @@ plotPieChart <-
                color = "white") +
       coord_polar("y", start = 0) +
       theme_void() +
-    labs(title = "Mean sepal length of species") +
+    labs(title = paste(aggregate_function, " ", facA, " of species")) +
       geom_text(aes(y = ypos, label = value), color = "white", size = 6)
     
     show(plot)
