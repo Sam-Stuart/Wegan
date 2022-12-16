@@ -5,9 +5,11 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:p="http://primefaces.org/ui">
-
-    <h:panelGrid id="panelGrid" columns="4" cellpadding="3" columnClasses="colLeft,colRight,colLeft,colRight">
-        <h:outputLabel  style="font-weight: bold" value="Dependant Data:"/>
+    <p>
+        <a href="https://en.wikipedia.org/wiki/Pie_chart" target="_blank">A pie chart (or a circle chart) is a circular statistical graphic, which is divided into slices to illustrate numerical proportion. In a pie chart, the arc length of each slice (and consequently its central angle and area) is proportional to the quantity it represents.</a>
+    </p>
+    <h:panelGrid id="panelGrid" columns="5" cellpadding="5" columnClasses="colLeft,colRight,colLeft,colRight, colLast">
+        <h:outputLabel  style="font-weight: bold" value="Numerical Data:"/>
         <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{piePlotBean.facA}">
             <f:selectItems value="#{piePlotBean.numericBoxColumnOpts}" />
         </p:selectOneMenu>
@@ -16,6 +18,7 @@
                          style="width: 35%">
             <f:selectItems value="#{piePlotBean.aggregateOpts}"/>
         </p:selectOneMenu>
+        <spacer/>
     </h:panelGrid>
     <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right;"> 
 
