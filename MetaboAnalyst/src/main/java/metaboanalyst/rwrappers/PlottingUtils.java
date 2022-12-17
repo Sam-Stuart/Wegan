@@ -90,6 +90,7 @@ public class PlottingUtils {
                     + "\", \"" + titleTextSize
                     + "\", \"" + axisTextSize
                     + "\", \"" + data + "\")";
+            System.out.println(rCommand);
             RCenter.recordRCommand(RC, rCommand);
             RC.voidEval(rCommand);
             return true;
