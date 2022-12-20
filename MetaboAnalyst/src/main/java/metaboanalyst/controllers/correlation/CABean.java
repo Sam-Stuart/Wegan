@@ -81,29 +81,42 @@ public class CABean implements Serializable {
         if (!CAUtils.CreateLinearModel(sb, "NULL", "NULL", false)){
             RConnection RC = sb.getRConnection();
             sb.updateMsg("Error", RDataUtils.getErrMsg(RC)); 
-        }
-        CAUtils.PlotLinearCA(sb,  "NULL", "NULL",
-                false, "NULL", "NULL", false,
+        }   
+        
+        CAUtils.PlotLinearCA(sb, 
+//                 facA, facB, data
+//                "NULL", "NULL", false,
+//                point color, line colour, conf int
+                 "NULL", "NULL", false,
                  false, false, false, " "," "," ",
 //                 TEXT SIZE
                  "NULL", "NULL","NULL", "NULL","NULL", 
                 sb.getCurrentImage("corr_linear"), "png", 72);
-        
-        CAUtils.PlotLinearPredictCA(sb, "NULL", "NULL",
-                false, 
+             
+        CAUtils.PlotLinearPredictCA(sb,
+//                 facA, facB, data
+//                "NULL", "NULL", false, 
+//                point color, line colour, conf int
                 "NULL", "NULL", false,
                 false, false, false, " ", " "," ",
 //                TEXT SIZE
                 "NULL", "NULL","NULL", "NULL","NULL", 
                 sb.getCurrentImage("corr_linear_pred"), "png", 72);
         
-        CAUtils.PlotLinearNormResidCA(sb, "NULL", "NULL", false,
+        // NormResid = qqplot
+        CAUtils.PlotLinearNormResidCA(sb, 
+//                 facA, facB, data
+//                "NULL", "NULL", false,
+//                point color, line colour,                
                 "NULL", "NULL", " ", " "," ",
 //                TEXT SIZE
                 "NULL", "NULL","NULL", "NULL","NULL", 
                 sb.getCurrentImage("corr_linear_normres"), "png", 72);
         
-        CAUtils.PlotLinearResidFitCA(sb, "NULL", "NULL", false,
+        CAUtils.PlotLinearResidFitCA(sb, 
+//                facA, facB, data
+//                "NULL", "NULL", false,
+//                point color, line colour,                  
                 "NULL", "NULL", " ", " "," ",
 //                TEXT SIZE
                 "NULL", "NULL","NULL", "NULL","NULL", 
