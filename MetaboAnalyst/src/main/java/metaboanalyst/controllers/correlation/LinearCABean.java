@@ -43,24 +43,24 @@ public class LinearCABean implements Serializable {
     private String usrName = usr.getName();
     
 //    private String fileLinModVals[] = null;
-//    private SelectItem[] corrColumnOpts = null;
-//    private String corrColumnNameA = getCorrColumnOpts()[1].getLabel();
-//    private String corrColumnNameB = getCorrColumnOpts()[0].getLabel();
-//    private boolean doOriginal = false;
-//    private boolean doPlotEq = false; 
-//    private boolean doPlotRsq = false;
-//    private boolean doPlotRsqAdj = false;
-//    private boolean doPlotConfInt = false;
-//    private String corColorDotsOpts = "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corColorOpts
-//    private String corColorLineOpts = "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corColorOpts
-//    private String corPlotTitle = " ";
-//    private String corPlotXlab = " ";
-//    private String corPlotYlab = " ";
-//    private String corTextSizeTitle= "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corSizeTitle
-//    private String corTextSizeXlab= "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corSizeXlab
-//    private String corTextSizeYlab= "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corSizeYlab
-//    private String corTextSizeXtick= "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corSizeXtick
-//    private String corTextSizeYtick= "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corSizeYtick
+    private SelectItem[] corrColumnOpts = null;
+    private String corrColumnNameA = getCorrColumnOpts()[1].getLabel();
+    private String corrColumnNameB = getCorrColumnOpts()[0].getLabel();
+    private boolean doOriginal = false;
+    private boolean doPlotEq = false; 
+    private boolean doPlotRsq = false;
+    private boolean doPlotRsqAdj = false;
+    private boolean doPlotConfInt = false;
+    private String corColorDotsOpts = "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corColorOpts
+    private String corColorLineOpts = "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corColorOpts
+    private String corPlotTitle = " ";
+    private String corPlotXlab = " ";
+    private String corPlotYlab = " ";
+    private String corTextSizeTitle= "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corSizeTitle
+    private String corTextSizeXlab= "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corSizeXlab
+    private String corTextSizeYlab= "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corSizeYlab
+    private String corTextSizeXtick= "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corSizeXtick
+    private String corTextSizeYtick= "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corSizeYtick
     
     
 //    private List<String> corrLinearResults = null;
@@ -89,7 +89,7 @@ public class LinearCABean implements Serializable {
     private String getSummaryDownload(){
         String facA = getCorrColumnNameA();
         String facB = getCorrColumnNameB();
-        return "linear_regression_summary_" + facA + "~" + facB + ".txt";
+        return "linear_regression_summary_" + facA + "-" + facB + ".txt";
     }
         
     private String fileLinModVals = getSummaryDownload();
@@ -116,7 +116,7 @@ public class LinearCABean implements Serializable {
 //        return nameofvar;
 //    }
     
-    private SelectItem[] corrColumnOpts = null;
+//    private SelectItem[] corrColumnOpts = null;
     public SelectItem[] getCorrColumnOpts(){
         String[] columns = CAUtils.GetDataColumns(sb);
         int columnsLen = columns.length;
@@ -129,8 +129,7 @@ public class LinearCABean implements Serializable {
         return corrColumnOpts;
     }
     
-    private String corrColumnNameA = getCorrColumnOpts()[1].getLabel();
-    
+//    private String corrColumnNameA = getCorrColumnOpts()[1].getLabel();
     public String getCorrColumnNameA() {
         return corrColumnNameA;
     }
@@ -139,8 +138,7 @@ public class LinearCABean implements Serializable {
         this.corrColumnNameA = corrColumnNameA;
     }
     
-    private String corrColumnNameB = getCorrColumnOpts()[0].getLabel();
-    
+//    private String corrColumnNameB = getCorrColumnOpts()[0].getLabel();
     public String getCorrColumnNameB() {
         return corrColumnNameB;
     }
@@ -149,12 +147,8 @@ public class LinearCABean implements Serializable {
         this.corrColumnNameB = corrColumnNameB;
     }    
     
-
-
-    
   // CHECK BOX for using normalized data (default) or original data
-    private boolean doOriginal = false;
-
+//    private boolean doOriginal = false;
     public boolean isdoOriginal() {
         return doOriginal;
     }
@@ -163,11 +157,9 @@ public class LinearCABean implements Serializable {
         this.doOriginal = doOriginal;
     }
     
-    
   // CHECK BOX for adding (default) or omitting equation to plot (at top), see correlation_linear.R 
   // when >1 of rsq, eq, & rsqadj are checked, values are seperated by " | " 
-    private boolean doPlotEq = false;
-
+//    private boolean doPlotEq = false;
     public boolean isdoPlotEq() {
         return doPlotEq;
     }
@@ -177,8 +169,7 @@ public class LinearCABean implements Serializable {
     } 
   // CHECK BOX for adding (default) or omitting rsq to plot (at top), see correlation_linear.R 
   // when >1 of rsq, eq, & rsqadj are checked, values are seperated by " | " 
-     private boolean doPlotRsq = false;
-
+//     private boolean doPlotRsq = false;
     public boolean isdoPlotRsq() {
         return doPlotRsq;
     }
@@ -188,8 +179,7 @@ public class LinearCABean implements Serializable {
     }     
   // CHECK BOX for omitting (default) or adding rsq-adj to plot (at top), see correlation_linear.R 
   // when >1 of rsq, eq, & rsqadj are checked, values are seperated by " | " 
-    private boolean doPlotRsqAdj = false;
-
+//    private boolean doPlotRsqAdj = false;
     public boolean isdoPlotRsqAdj() {
         return doPlotRsqAdj;
     }
@@ -198,8 +188,7 @@ public class LinearCABean implements Serializable {
         this.doPlotRsqAdj = doPlotRsqAdj;
     }  
   // CHECK BOX for omitting (default) or adding confidence interval to line, see correlation_linear.R 
-    private boolean doPlotConfInt = false;
-
+//    private boolean doPlotConfInt = false;
     public boolean isdoPlotConfInt() {
         return doPlotConfInt;
     }
@@ -210,8 +199,7 @@ public class LinearCABean implements Serializable {
     
  //STATIC DROPDOWN for selecting colour of dots on plot
 //    replaced: corColorOpts
-    private String corColorDotsOpts = "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corColorOpts
-
+//    private String corColorDotsOpts = "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corColorOpts
     public String getCorColorDotsOpts() {
         return corColorDotsOpts;
     }
@@ -221,8 +209,7 @@ public class LinearCABean implements Serializable {
     }
 
  //STATIC DROPDOWN for selecting colour of line on plot
-    private String corColorLineOpts = "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corColorOpts
-
+//    private String corColorLineOpts = "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corColorOpts
     public String getCorColorLineOpts() {
         return corColorLineOpts;
     }
@@ -230,11 +217,9 @@ public class LinearCABean implements Serializable {
     public void setCorColorLineOpts(String corColorLineOpts) {
         this.corColorLineOpts = corColorLineOpts;
     }
-    
   
   // TEXT BOX 
-    private String corPlotTitle = " ";
-    
+//    private String corPlotTitle = " ";
     public String getCorPlotTitle() {
         return corPlotTitle;
     }
@@ -244,8 +229,7 @@ public class LinearCABean implements Serializable {
     }
  
   // TEXT BOX 
-    private String corPlotXlab = " ";
-    
+//    private String corPlotXlab = " ";
     public String getCorPlotXlab() {
         return corPlotXlab;
     }
@@ -255,8 +239,7 @@ public class LinearCABean implements Serializable {
     }       
     
  // TEXT BOX 
-    private String corPlotYlab = " ";
-    
+//    private String corPlotYlab = " ";
     public String getCorPlotYlab() {
         return corPlotYlab;
     }
@@ -265,12 +248,10 @@ public class LinearCABean implements Serializable {
         this.corPlotYlab = corPlotYlab;
     }   
      
-    
 //TEXT SIZE    
        //STATIC DROPDOWN title text size
 //    WAS: corPlotLabelSize; applicaitonbean: corPlotLabSize
-    private String corTextSizeTitle= "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corSizeTitle
-
+//    private String corTextSizeTitle= "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corSizeTitle
     public String getCorTextSizeTitle() {
         return corTextSizeTitle;
     }
@@ -280,8 +261,7 @@ public class LinearCABean implements Serializable {
     }  
     
        //STATIC DROPDOWN title text size
-    private String corTextSizeXlab= "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corSizeXlab
-
+//    private String corTextSizeXlab= "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corSizeXlab
     public String getCorTextSizeXlab() {
         return corTextSizeXlab;
     }
@@ -291,8 +271,7 @@ public class LinearCABean implements Serializable {
     }  
     
        //STATIC DROPDOWN title text size
-    private String corTextSizeYlab= "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corSizeYlab
-
+//    private String corTextSizeYlab= "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corSizeYlab
     public String getCorTextSizeYlab() {
         return corTextSizeYlab;
     }
@@ -302,8 +281,7 @@ public class LinearCABean implements Serializable {
     }  
     
        //STATIC DROPDOWN title text size
-    private String corTextSizeXtick= "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corSizeXtick
-
+//    private String corTextSizeXtick= "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corSizeXtick
     public String getCorTextSizeXtick() {
         return corTextSizeXtick;
     }
@@ -313,8 +291,7 @@ public class LinearCABean implements Serializable {
     } 
     
        //STATIC DROPDOWN title text size
-    private String corTextSizeYtick= "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corSizeYtick
-
+//    private String corTextSizeYtick= "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corSizeYtick
     public String getCorTextSizeYtick() {
         return corTextSizeYtick;
     }
