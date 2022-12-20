@@ -582,7 +582,7 @@ size_leg <- size_xlab
         axis.title.y = element_text(size = size_ylab1),
         axis.text.x = element_text(size = size_xtick1),
         axis.text.y = element_text(size = size_ytick1),
-        # legend.title=element_text(size_leg), legend.text=element_text(), 
+        legend.title=element_text(size_leg), #legend.text=element_text(), 
         plot.title = element_text(size = size_title1, face = 'bold', hjust = 0.5)
   )
 
@@ -704,11 +704,8 @@ linear_plot_json$lines$size <- build_line[,c("size")]
   
 
 ## BOOLEANS
-if(plot_ci1 == TRUE){
+
  linear_plot_json$bool_ci <- TRUE
- } else{
-linear_plot_json$bool_ci <- FALSE
-}
 
 if (plot_eq == "false"){ # default
  linear_plot_json$bool_eq <- FALSE
@@ -1078,7 +1075,7 @@ size_leg <- size_xlab
         axis.title.y = element_text(size = size_ylab1),
         axis.text.x = element_text(size = size_xtick1),
         axis.text.y = element_text(size = size_ytick1),
-        # legend.title=element_text(size_leg), legend.text=element_text(), 
+        legend.title=element_text(size_leg), #legend.text=element_text(), 
         plot.title = element_text(size = size_title1, face = 'bold', hjust = 0.5)
   )
 
@@ -1454,7 +1451,7 @@ a0 <- ggplot() +
         axis.title.y = element_text(size = size_ylab1),
         axis.text.x = element_text(size = size_xtick1),
         axis.text.y = element_text(size = size_ytick1),
-        # legend.title=element_text(size_leg), legend.text=element_text(), 
+        legend.title=element_text(size_leg), #legend.text=element_text(), 
         plot.title = element_text(size = size_title1, face = 'bold', hjust = 0.5)
   ) #+ geom_point(aes(x = x, y = y), data = q1_q3,  shape = 3, size = 5,   stroke = 1.1)
 
@@ -1783,14 +1780,14 @@ size_leg <- size_xlab
      geom_hline(yintercept = 0) +
      geom_smooth(color = col_line1, fullrange = TRUE, se = FALSE) +
      theme_bw() + 
-theme(panel.grid.major = element_blank(), 
+     theme(panel.grid.major = element_blank(), 
         panel.grid.minor = element_blank(),
         #axis.text = element_text(size = 12, colour = "black"), 
         axis.title.x = element_text(size = size_xlab1),
         axis.title.y = element_text(size = size_ylab1),
         axis.text.x = element_text(size = size_xtick1),
         axis.text.y = element_text(size = size_ytick1),
-        # legend.title=element_text(size_leg), legend.text=element_text(), 
+        legend.title=element_text(size_leg), #legend.text=element_text(), 
         plot.title = element_text(size = size_title1, face = 'bold', hjust = 0.5)
   ) 
 
