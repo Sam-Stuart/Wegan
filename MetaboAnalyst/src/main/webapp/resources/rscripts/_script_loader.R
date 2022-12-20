@@ -10,7 +10,7 @@ ordination_files <- c("ord_nmds", "ord_pcoa", "ord_cia", "ord_dca", "ord_anosim"
 
 diversity_files <- c("div_divindices","div_rarefaction", "div_abundance_dist", "div_accumulation_model", "div_taxonomic", "div_fd", "div_unseen");
 
-taxonomy_files <- c();
+taxonomy_files <- "tax_lda";
 cluster_files <- c();
 general_anot_files <- "general_anot_utils";
 enrich_files <- c("enrich_graphics","enrich_mset","enrich_name_match","enrich_stats");
