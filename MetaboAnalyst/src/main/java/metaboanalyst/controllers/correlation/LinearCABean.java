@@ -78,13 +78,23 @@ public class LinearCABean implements Serializable {
 //    private String fileLinModVals = "corr_linear_model_summary.txt";
 
 //    DYNAMIC FILENAME (variables of model included)
-    private String fileLinModVals[] = null;
-    public void getCorrLinearResults(){
-        this.fileLinModVals = CAUtils.GetLinearCAResults(sb);
-    }  
+//    private String fileLinModVals[] = null;
+//    public void getCorrLinearResults(){
+//        this.fileLinModVals = CAUtils.GetLinearCAResults(sb);
+//    }  
+//    
+//    private String fileLinModValsPath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileLinModVals[0] + "\">" + fileLinModVals[0] + "</a>";
     
-    private String fileLinModValsPath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileLinModVals[0] + "\">" + fileLinModVals[0] + "</a>";
- 
+    
+    private String getSummaryDownload(){
+        String facA = getCorrColumnNameA();
+        String facB = getCorrColumnNameB();
+        return "linear_regression_summary_" + facA + "~" + facB + ".txt";
+    }
+        
+    private String fileLinModVals = getSummaryDownload();
+    private String fileLinModValsPath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileLinModVals + "\">" + fileLinModVals + "</a>";
+    
     public String getFileLinModValsPath() {
         return fileLinModValsPath;
     }
@@ -92,8 +102,6 @@ public class LinearCABean implements Serializable {
     public void setFileLinModValsPath(String fileLinModValsPath) {
         this.fileLinModValsPath = fileLinModValsPath;
     } 
-    
-    
     // GET COLUMN NAMES
 //    try to get it with cleaner, variable replacing way (didn't work (202211-15
 //    public SelectItem[] getCorrColumnOpts(SelectItem[] nameofvar){
@@ -108,7 +116,7 @@ public class LinearCABean implements Serializable {
 //        return nameofvar;
 //    }
     
-     private SelectItem[] corrColumnOpts = null;
+    private SelectItem[] corrColumnOpts = null;
     public SelectItem[] getCorrColumnOpts(){
         String[] columns = CAUtils.GetDataColumns(sb);
         int columnsLen = columns.length;
