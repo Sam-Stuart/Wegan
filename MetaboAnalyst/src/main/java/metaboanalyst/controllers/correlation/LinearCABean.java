@@ -329,10 +329,9 @@ public class LinearCABean implements Serializable {
 //        corrLin1_Update_action
         
         CAUtils.PlotLinearCA(sb, 
-                corrColumnNameA, corrColumnNameB, 
-                doOriginal, 
-                corColorDotsOpts, corColorLineOpts, 
-               doPlotConfInt, doPlotEq, doPlotRsq, doPlotRsqAdj,
+//                corrColumnNameA, corrColumnNameB, doOriginal, 
+                corColorDotsOpts, corColorLineOpts, doPlotConfInt, 
+               doPlotEq, doPlotRsq, doPlotRsqAdj,
                corPlotTitle, corPlotXlab, corPlotYlab,
                corTextSizeTitle, corTextSizeXlab, corTextSizeYlab, corTextSizeXtick, corTextSizeYtick,
 //                 sb.getCurrentImage("corr_linear"),"png", 72);
@@ -348,8 +347,7 @@ public class LinearCABean implements Serializable {
 //        corrLin1_Update_action
         
         CAUtils.PlotLinearPredictCA(sb,
-                corrColumnNameA, corrColumnNameB, 
-                doOriginal,
+//                corrColumnNameA, corrColumnNameB, doOriginal,
                 corColorDotsOpts, corColorLineOpts, doPlotConfInt,
                 doPlotEq, doPlotRsq, doPlotRsqAdj,
                corPlotTitle, corPlotXlab, corPlotYlab,
@@ -366,8 +364,7 @@ public class LinearCABean implements Serializable {
 //        corrLin1_Update_action
         
         CAUtils.PlotLinearNormResidCA(sb, 
-                corrColumnNameA, corrColumnNameB, 
-                doOriginal,
+//                corrColumnNameA, corrColumnNameB, doOriginal,
                 corColorDotsOpts, corColorLineOpts, 
                corPlotTitle, corPlotXlab, corPlotYlab,
                corTextSizeTitle, corTextSizeXlab, corTextSizeYlab, corTextSizeXtick, corTextSizeYtick,
@@ -383,7 +380,7 @@ public class LinearCABean implements Serializable {
 //        corrLin1_Update_action
         
         CAUtils.PlotLinearResidFitCA(sb, 
-                corrColumnNameA, corrColumnNameB, doOriginal,
+//                corrColumnNameA, corrColumnNameB, doOriginal,
                 corColorDotsOpts, corColorLineOpts, 
                corPlotTitle, corPlotXlab, corPlotYlab,
                corTextSizeTitle, corTextSizeXlab, corTextSizeYlab, corTextSizeXtick, corTextSizeYtick,
