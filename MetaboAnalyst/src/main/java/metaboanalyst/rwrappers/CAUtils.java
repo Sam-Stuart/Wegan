@@ -62,7 +62,9 @@ public static boolean PlotLinearCA(SessionBean1 sb,
         String facA, String facB, Boolean data,
         String col_dots, String col_line, Boolean plot_ci, 
         Boolean plot_eq, Boolean plot_rsq, Boolean plot_rsq_adj, 
-                String plot_title, String plot_xlab, String plot_ylab, 
+        String plot_title, String plot_xlab, String plot_ylab, 
+        String size_title, String size_xlab, String size_ylab, 
+        String size_xtick, String size_ytick, 
                 String imgName, String format, int dpi) {
     try {
             RConnection RC = sb.getRConnection();
@@ -79,6 +81,11 @@ public static boolean PlotLinearCA(SessionBean1 sb,
                     + plot_title + "\", \"" 
                     + plot_xlab + "\", \"" 
                     + plot_ylab + "\", \"" 
+                    + size_title + "\", \"" 
+                    + size_xlab + "\", \"" 
+                    + size_ylab + "\", \""
+                    + size_xtick + "\", \"" 
+                    + size_ytick + "\", \"" 
                     + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
             RCenter.recordRCommand(RC, rCommand);
             sb.addGraphicsCMD("corr_linear", rCommand);
@@ -97,6 +104,8 @@ public static boolean PlotLinearPredictCA(SessionBean1 sb,
         String col_dots, String col_line, Boolean plot_ci, 
         Boolean plot_eq, Boolean plot_rsq, Boolean plot_rsq_adj,
         String plot_title, String plot_xlab, String plot_ylab, 
+        String size_title, String size_xlab, String size_ylab, 
+        String size_xtick, String size_ytick, 
                 String imgName, String format, int dpi) {
     try {
             RConnection RC = sb.getRConnection();
@@ -113,6 +122,11 @@ public static boolean PlotLinearPredictCA(SessionBean1 sb,
                     + plot_title + "\", \"" 
                     + plot_xlab + "\", \"" 
                     + plot_ylab + "\", \"" 
+                    + size_title + "\", \"" 
+                    + size_xlab + "\", \"" 
+                    + size_ylab + "\", \""
+                    + size_xtick + "\", \"" 
+                    + size_ytick + "\", \"" 
                     + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
             RCenter.recordRCommand(RC, rCommand);
             sb.addGraphicsCMD("corr_linear_pred", rCommand);
@@ -131,6 +145,8 @@ public static boolean PlotLinearNormResidCA(SessionBean1 sb,
         Boolean data, 
         String col_dots, String col_line, 
         String plot_title, String plot_xlab, String plot_ylab, 
+        String size_title, String size_xlab, String size_ylab, 
+        String size_xtick, String size_ytick, 
                 String imgName, String format, int dpi) {
     try {
             RConnection RC = sb.getRConnection();
@@ -143,6 +159,11 @@ public static boolean PlotLinearNormResidCA(SessionBean1 sb,
                     + plot_title + "\", \"" 
                     + plot_xlab + "\", \"" 
                     + plot_ylab + "\", \"" 
+                    + size_title + "\", \"" 
+                    + size_xlab + "\", \"" 
+                    + size_ylab + "\", \""
+                    + size_xtick + "\", \"" 
+                    + size_ytick + "\", \"" 
                     + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
             RCenter.recordRCommand(RC, rCommand);
             sb.addGraphicsCMD("corr_linear_normres", rCommand);
@@ -160,6 +181,8 @@ public static boolean PlotLinearResidFitCA(SessionBean1 sb,
         Boolean data, 
         String col_dots, String col_line, 
         String plot_title, String plot_xlab, String plot_ylab, 
+        String size_title, String size_xlab, String size_ylab, 
+        String size_xtick, String size_ytick, 
                 String imgName, String format, int dpi) {
     try {
             RConnection RC = sb.getRConnection();
@@ -172,6 +195,11 @@ public static boolean PlotLinearResidFitCA(SessionBean1 sb,
                     + plot_title + "\", \"" 
                     + plot_xlab + "\", \"" 
                     + plot_ylab + "\", \"" 
+                    + size_title + "\", \"" 
+                    + size_xlab + "\", \"" 
+                    + size_ylab + "\", \""
+                    + size_xtick + "\", \"" 
+                    + size_ytick + "\", \"" 
                     + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
             RCenter.recordRCommand(RC, rCommand);
             sb.addGraphicsCMD("corr_linear_resfit", rCommand);
