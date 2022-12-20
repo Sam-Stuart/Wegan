@@ -9,8 +9,8 @@ import metaboanalyst.models.User;
 import metaboanalyst.utils.DataUtils;
 import java.io.File;
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.List;
+//import java.util.Arrays;
+//import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
@@ -18,7 +18,6 @@ import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
-import metaboanalyst.rwrappers.CAUtils;
 import metaboanalyst.rwrappers.RCenter;
 
 @ManagedBean(name = "applicationBean1")
@@ -125,6 +124,11 @@ public class ApplicationBean1 implements Serializable {
     private final SelectItem[] corBrewerPaletteOpts;
     private final SelectItem[] corPlotMetricOpts;
     private final SelectItem[] corPlotLabSize; 
+    private final SelectItem[] corSizeTitle;
+    private final SelectItem[] corSizeXlab;
+    private final SelectItem[] corSizeYlab;
+    private final SelectItem[] corSizeXtick;
+    private final SelectItem[] corSizeYtick;
     private final SelectItem[] ordColorPaletteOpts;
     private final SelectItem[] pcaPairsColorPaletteOpts;
     private final SelectItem[] pairAnalOpts;
@@ -385,7 +389,47 @@ public class ApplicationBean1 implements Serializable {
         corPlotLabSize[1] = new SelectItem("sm", "Small");
         corPlotLabSize[2] = new SelectItem("med", "Medium");
         corPlotLabSize[3] = new SelectItem("lg", "Large");
-        corPlotLabSize[4] = new SelectItem("lgs", "Largest");
+        corPlotLabSize[4] = new SelectItem("lgs", "Larger");
+        
+        corSizeTitle = new SelectItem[6];
+        corSizeTitle[0] = new SelectItem("NULL", "Medium");
+        corSizeTitle[1] = new SelectItem("extrasmall", "Extra Small");        
+        corSizeTitle[2] = new SelectItem("small", "Small");
+        corSizeTitle[3] = new SelectItem("medium", "Medium");
+        corSizeTitle[4] = new SelectItem("large", "Large");
+        corSizeTitle[5] = new SelectItem("extralarge", "Extra Large");
+        
+        corSizeXlab = new SelectItem[6];
+        corSizeXlab[0] = new SelectItem("NULL", "Medium");
+        corSizeXlab[1] = new SelectItem("extrasmall", "Extra Small");        
+        corSizeXlab[2] = new SelectItem("small", "Small");
+        corSizeXlab[3] = new SelectItem("medium", "Medium");
+        corSizeXlab[4] = new SelectItem("large", "Large");
+        corSizeXlab[5] = new SelectItem("extralarge", "Extra Large");
+        
+        corSizeYlab = new SelectItem[6];
+        corSizeYlab[0] = new SelectItem("NULL", "Medium");
+        corSizeYlab[1] = new SelectItem("extrasmall", "Extra Small");        
+        corSizeYlab[2] = new SelectItem("small", "Small");
+        corSizeYlab[3] = new SelectItem("medium", "Medium");
+        corSizeYlab[4] = new SelectItem("large", "Large");
+        corSizeYlab[5] = new SelectItem("extralarge", "Extra Large");
+        
+        corSizeXtick = new SelectItem[6];
+        corSizeXtick[0] = new SelectItem("NULL", "Medium");
+        corSizeXtick[1] = new SelectItem("extrasmall", "Extra Small");        
+        corSizeXtick[2] = new SelectItem("small", "Small");
+        corSizeXtick[3] = new SelectItem("medium", "Medium");
+        corSizeXtick[4] = new SelectItem("large", "Large");
+        corSizeXtick[5] = new SelectItem("extralarge", "Extra Large");
+        
+        corSizeYtick = new SelectItem[6];
+        corSizeYtick[0] = new SelectItem("NULL", "Medium");
+        corSizeYtick[1] = new SelectItem("extrasmall", "Extra Small");        
+        corSizeYtick[2] = new SelectItem("small", "Small");
+        corSizeYtick[3] = new SelectItem("medium", "Medium");
+        corSizeYtick[4] = new SelectItem("large", "Large");
+        corSizeYtick[5] = new SelectItem("extralarge", "Extra Large");
 
         corPlotMetricOpts = new SelectItem[2];
         corPlotMetricOpts[0] = new SelectItem("NULL", "None");
@@ -1078,6 +1122,26 @@ public class ApplicationBean1 implements Serializable {
     
     public SelectItem[] corPlotLabSize() {
         return corPlotLabSize;
+    }
+    
+    public SelectItem[] corSizeTitle() {
+        return corSizeTitle;
+    }
+    
+    public SelectItem[] corSizeXlab() {
+        return corSizeXlab;
+    }
+
+    public SelectItem[] corSizeYlab() {
+        return corSizeYlab;
+    }
+    
+    public SelectItem[] corSizeXtick() {
+        return corSizeXtick;
+    }
+    
+    public SelectItem[] corSizeYtick() {
+        return corSizeYtick;
     }
     
     public SelectItem[] getOrdColorPaletteOpts() {
