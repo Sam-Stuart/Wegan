@@ -1116,31 +1116,31 @@ public class ApplicationBean1 implements Serializable {
         return corModType;
     }
     
-    public SelectItem[] corPlotMetricOpts() {
+    public SelectItem[] getCorPlotMetricOpts() {
         return corPlotMetricOpts;
     }
     
-    public SelectItem[] corPlotLabSize() {
+    public SelectItem[] getCorPlotLabSize() {
         return corPlotLabSize;
     }
     
-    public SelectItem[] corSizeTitle() {
+    public SelectItem[] getCorSizeTitle() {
         return corSizeTitle;
     }
     
-    public SelectItem[] corSizeXlab() {
+    public SelectItem[] getCorSizeXlab() {
         return corSizeXlab;
     }
 
-    public SelectItem[] corSizeYlab() {
+    public SelectItem[] getCorSizeYlab() {
         return corSizeYlab;
     }
     
-    public SelectItem[] corSizeXtick() {
+    public SelectItem[] getCorSizeXtick() {
         return corSizeXtick;
     }
     
-    public SelectItem[] corSizeYtick() {
+    public SelectItem[] getCorSizeYtick() {
         return corSizeYtick;
     }
     
