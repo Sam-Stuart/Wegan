@@ -1,23 +1,27 @@
-#'Perform PCOA
-#'@description Perform principal coordinate analysis
+
+#'Perform LDA
+#'@description Linear Discriminant analysis. Used to classify a response variable into two or more classes using a set of predictors. Assumptions: predictor variables have the same variance (could scale 0-1 range). statology.org/linear-discriminant-analysis-in-r/
 #'@param mSetObj Input name of the created mSet Object
-#'@param distance Set abundance transformation, default is absolute (no change), else relative (divide by column total)
-#'@param metaData  Set meta data, default is categorical columns in data set
-#'@param envData  Set environmental data (must be user uploaded), default is none
-#'@param env_text Input environmental data column names (java uses text box to obtain string)
-#'@param abundance Set abundance transformation, default is absolute (no change), else relative (divide by column total)
 #'@param data Which data set to use, normalized (default) or original
-#'@param binary Boolean, is dataset presence/absence data?, no (default), else yes
-#'@author Louisa Normington\email{normingt@ualberta.ca}
+#'@param facA Input the name of the response column (java uses Columns() to give user options of numeric columns)
+#'@param predtext Input predictor data column names (java uses text box to obtain string)
+#'@author Gina Sykes\email{gsykes@ualberta.ca}
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2)
 #'@export
-ord.pcoa <- function(mSetObj=NA, data="false", distance="NULL", binary="false", abundance="false", env_text=" ") { #4 user inputs, plus option to upload 2 supplementary data sets
-  
-  options(error=traceback)
 
-  library("vegan") #For generating distance matrix
-  library("dplyr") #For easy data manipulation
+## USE METADATA OR NOT : PROBABLY NOT, SO REMOVE PARTS WITH METADATA 
+
+tax.lda <- function(mSetObj=NA, 
+data="false", 
+facA = "NULL",
+predtext="NULL" # textbox
+# env_text=" ",
+) { # env_text is textbox input for predictor variable names, separated by comma
+  
+ # options(error=traceback)
+
+  library('MASS') # lda
 
   #Obtain mSet dataset
   mSetObj <- .get.mSet(mSetObj)
@@ -30,146 +34,218 @@ ord.pcoa <- function(mSetObj=NA, data="false", distance="NULL", binary="false", 
   metaData <- mSetObj$dataSet$origMeta
   envData <- mSetObj$dataSet$origEnv
 
-  #Obtain categorical data for making dummy variables
-  num_data <- select_if(input, is.numeric)
+### NOTE ASSUMPTIONS FOR LDA (/QDA) : predictors are normal, equality of covariances among the predictor variables across all levels of the response variable; p must be < n
 
-  #Transform abundance data
-  if (abundance=="false") {
-    abundance1 <- "absolute"
-    num_data1 <- num_data #Default abundance is absolute and no change is made to data
-  } else {
-    abundance1 <- "relative"
-    num_data1 <- decostand(num_data, method="total") #Alternative option is relative abundance, each value is divided by the column sum
-  }
-  
-  #Combine numeric data and dummy variables #I REMOVED DUMMIES SINCE WE CANNOT USE SAME DIST MEASURES FOR BOTH NUMERIC AND CATEGORICAL VARS
-  data <- num_data1
-  if (ncol(data)<2) {
-    #AddErrMsg("Ordination requires at least 2 variables!")
-    stop("Ordination requires at least 2 variables!")
-  } 
-  #Set distance measure for creation of dissimilarity matrix
-  if (distance=="NULL") {
-    distance1 <- "bray" #Default distance
-  } else {
-    distance1 <- distance #USer selected from list "bray", "manhattan", "canberra", "kulczynski", "jaccard", "gower", "altGower", "morisita", "horn", "mountford", "raup" , "binomial", "chao", "cao", "mahalanobis"
-  } 
+# CHECK FOR CATEGORICAL COLUMNS (1: check for metadata, if yes check for cat columns 2: if no metatadata, check in input)
+ # NO METADATA
+if(
+ # !is.data.frame(metaData) &&
+ # INPUT HAS NO CATEGORICAL 
+  !any(sapply(input, is.factor) | sapply(input, is.character))  # || 
+ # or HAVE METADATA but
+ # is.data.frame(metaData) &&
+ # NO CATEGORICAL COLUMNS IN METADATA
+ # !any(sapply(metaData, is.factor) | sapply(metaData, is.character))
+ ) {
+AddErrMsg("No categorical variables (required as response variable); did you input your categorical variables as numbers (for example, as hot-one coded)? Alternatively, try splitting a numeric variable of interest into categories.")
+}
 
-  #Generate dissimilarity matrix
-  if (binary=="false") {
-    dist <- vegdist(data, method=distance1, binary=FALSE) #Generate dissimilarity matrix
-  } else {
-    dist <- vegdist(data, method=distance1, binary=TRUE) #Generate dissimilarity matrix for presence/absence data
-  }
+### DEPENDENT VARIABLE: CATEGORICAL
+### TAKE FROM METADATA #meta data, used to group samples using colors
 
-  #Run PCOA 
-  pcoa <- wcmdscale(dist, add="lingoes", eig=TRUE, x.ret=TRUE)
+   # IF NO USER UPLOADED META DATA:
+   # assuming '!is.data.frame(metaData)'  will test for presence of metadata
+   # needs to be incorporated into column selection function for Webserver (ie. which column names are presented on dropdown)
+  if (!is.data.frame(metaData)) { #No user uploaded meta data
+    # metaData1 <- "NA" #If species data had no categorical columns, meta data is NULL
+    # print("No grouping variables were uploaded!")  
 
-  #meta data, used to group samples using colors
-  if (is.data.frame(metaData)==FALSE) { #No user uploaded meta data
-    metaData1 <- "NA" #If species data had no categorical columns, meta data is NULL
-    print("No grouping variables were uploaded!")  
+   # GET CATEGORICAL COLUMNS FROM INPUT DATAFRAME
+   facdata <- input[,sapply(input, is.factor) | sapply(input, is.character), drop = FALSE]
+   
+   # IF THERE *IS* USER UPLOADED METADATA: 
   } else {  #User uploaded meta data
     metaData1 <- metaData #User uploaded like weights in correlation module
+
+  # GET CATEGORICAL COLUMNS FROM METADATA
+    facdata <- metaData[,sapply(metaData, is.factor) | sapply(metaData, is.character), drop = FALSE]
+
     if (nrow(metaData1)!=nrow(input)) {
       #AddErrMsg("Your grouping data does not have the same number of rows as your numerical data! Please check that you grouping data is correct.")
-      stop("Your grouping data does not have the same number of rows as your numerical data! Please check that you grouping data is correct.")
+      stop("Your Meta data does not have the same number of rows as your input data! Please check that you Meta Data is correct.")+
     }
-    for(i in 1:ncol(metaData1)) {
+    for(i in seq_len(ncol(metaData1)) ) {
       metaData1[,i] <- as.factor(metaData1[,i]) #Make sure all columns are read as factors
     }
   }
 
-  #environmental data, used to correlate with rows in main data set
-  if (is.data.frame(envData)==FALSE) { #No user uplaoded environmental data
-    envData1 <- "NA"
-  } else {  #User uplaoded environmental data
-    envData1 <- envData #User uploaded (like weights in correlation module)
-    if (nrow(envData1)!=nrow(input)) {
-      #AddErrMsg("Your environmental data does not have the same number of rows as your data set! Please check that you environmental data is correct.")
-      stop("Your environmental data does not have the same number of rows as your data set! Please check that you environmental data is correct.")
-    }
-  }
-  
-  #Text box instructions for selecting predictor variables. Text box should be interactive, meaning any change in text alters the result in real time. Default env_text is second column.
-  if (is.data.frame(envData1)==TRUE) { #User uplaoded environmental data
-    cat("You uploaded environmental data. Identify environmental variables for PCOA using the column names with commas in between.")
-  }
-  
-  #Set up environmental data using user selected columns
-  if (is.data.frame(envData1)==TRUE) { #User uplaoded environmental data
-    if (env_text==" ") { #User doesn't specify columns-- all columns used
-      env_text1 <- colnames(envData1) #Default is the all env columns
-      cat(paste0("You have selected these constraining variables: ", paste(env_text1, collapse=", ")))
-      cat("If the selection is not what you intended, reenter environmental variable(s) in the text box, using the column names with commas in between.")
-      
-    } else { #User enters columns
-      env_text1 <- env_text #taken from text box by java, fed as string into R code
-      env_text1 <- gsub("\n", "", env_text1, fixed=TRUE) #fixed=TRUE means we are dealing with one string, versus a vector of strings (fixed=FALSE)
-      env_text1 <- gsub(",", "+", env_text1, fixed=TRUE) 
-      env_text1 <- gsub(";", "+", env_text1, fixed=TRUE)
-      env_text1 <- gsub(" ", "", env_text1, fixed=TRUE)
-      env_text1 <- gsub(":", "+", env_text1, fixed=TRUE)
-      env_text1 <- gsub("*", "+", env_text1, fixed=TRUE)
-      cat(paste0("You have selected these constraining variables: ", gsub("+", ", ", env_text1, fixed=TRUE), "."))
-      cat("If the selection is not what you intended, reenter environmental variable(s) in the text box, using the column names with commas in between.")
-    }
-    
-    env_cols <- unlist(strsplit(env_text1, "+", fixed=TRUE)) #Extract column names from env_text1
-    env_data <- as.data.frame(envData1[,which(colnames(envData1) %in% env_cols)]) #Subset environmental data set to select columns of interest
-    colnames(env_data) <- env_cols #Name columns
-  } else { #No environmetal data uploaded
-    env_data <- "NA"
-  }
-  
-  #Fit environmental data to ordination plots for plotting arrows
-  if (is.data.frame(env_data)==FALSE) { #If environmental data not uploaded
-    env.fit <- "NA"
-    env.fit.char <- "NA"
-    env.fit.num <- "NA"
-  } else { #If environmental data uploaded
-    env_data_numeric <- select_if(env_data, is.numeric)
-    env_data_character <- select_if(env_data, is.character)
-    env.fit <- envfit(pcoa, env_data, permutations=999, p.max=NULL)
-    if (ncol(env_data_character)>0) { #If categorical variables present
-      env.fit.char <- envfit(pcoa, env_data_character, permutations=999, p.max=NULL) #Fit env data to species data
-    } else{
-      env.fit.char <- "NA"
-    }
-    if (ncol(env_data_numeric)>0) { #If numeric variables present
-      env.fit.num <- envfit(pcoa, env_data_numeric, permutations=999, p.max=NULL) #Fit env data to species data
-    } else{
-      env.fit.num <- "NA"
-    }
+
+# CHOOSE DEPENDENT VARIABLE
+  if (facA == "NULL") {
+  facA <- colnames(facdata)[1]
+  } else {
+    facA <- facA #User selected, java uses function columns() to provide options in drop down menu (only categorical columns are available)
   }
 
-  #Extract environment scores
-  if (is.data.frame(env_data)==FALSE) { #If environmental data not uploaded
-    env.scores <- "NA"
-  } else { #If environmental data uploaded
-    if (length(env_data_numeric)>0) { 
-      env.scores.num <- signif(scores(env.fit.num, display="vectors"), 5)
-    } else {
-      env.scores.num <- "NA"
-    }
-    
-    if (length(env_data_character)>0) {
-      env.scores.char <- signif(scores(env.fit.char, display="factors"), 5)
-    } else {
-      env.scores.char <- "NA"
-    }
-    
-    if (is.matrix(env.scores.num)==TRUE) { #Numeric constraining variables
-      if (is.matrix(env.scores.char)==TRUE) { #Categorical constraining variables
-        env.scores <- rbind(env.scores.num, env.scores.char)
-      } else {  #No categorical constraining variables
-        env.scores <- env.scores.num
-      }
-    } else { #No numeric constraining variables
-      env.scores <- env.scores.char
-    }
+# uc-r.github.io/discriminant_analysis
+## PREDICTOR VARIABLES: TEXTBOX
+
+## predtext is input into R as one string from textbox on webpage
+#CHECK PREDTEXT FOR COMMAS
+  # IF INPUT PREDICTOR NAMES ARE NOT " ", "", and don't contain ","
+   if( !any(grepl(",", predtext, fixed = TRUE)) && predtext != "" && predtext != " " ){ 
+    # if there are no commas in input predictor name(s)
+   if(ncol( input[ , colnames(input) != facA, drop=FALSE] ) > 1){ 
+    # can't be >1 other cols to use, so if there is, warning
+    warning("Check your predictor variables; Have you separated them by a comma? Are they spelled as they are in your input data?")
+  }}
+
+  ## FORMULA SET UP
+  #SET RIGHT SIDE OF FORMULA WITH PREDICTOR VARIABLES (ie not facA)
+  if (predtext == "NULL") {
+    predtext <- colnames( input[, !(colnames(input) == facA), drop = FALSE] )[1] #Default is 1st non-facA column
+    # predtext <- paste(colnames(predData), collapse=" , ") # for testing
+  } else {
+    predtext <- predtext #taken from text box by java, fed as string into R code
   }
+
+  #CURATE RIGHT SIDE OF FORMULA; EXTRACT CHARACTER VECTOR OR PREDICTORS 
+   predtext <- gsub("\n", "", predtext, fixed=TRUE) 
+   predtext <- gsub(" ", "", predtext, fixed=TRUE) 
+   predtext <- gsub(",", "+", predtext, fixed=TRUE)  
+   predtext <- gsub(";", "+", predtext, fixed=TRUE) 
+   predtext <- gsub(":", "+", predtext, fixed=TRUE) 
+   predtext <- gsub("*", "+", predtext, fixed=TRUE)
+
+
+  #GENERATE FORMULA 
+  form <- as.formula(paste0(facA, "~", predtext))
+
+  ## PREDICTORS 
+  predictors <- unlist(strsplit(predtext, "+", fixed=TRUE), use.names = FALSE) ## use.names = F speeds unlist
+  pred_data <- input[, colnames(input) %in% predictors, drop = FALSE]
+
+ #CHECK IF PREDICTORS ARE ALL FOUND IN DATAFRAME
+   # input %>% assertr::verify(assertr::has_all_names(predictors), error_fun = justwarn)
+
+   if( !all(is.element(predictors, colnames(input)) )){
+     warning(paste0("tax.lda():", "'",
+    paste( setdiff(predictors, colnames(input)), collapse = "', '" ),
+    "' not found in data variables ('",  
+    paste(colnames(input), collapse = "', '"), "'): check spelling of text box input."))
+   }
+
+#CHECK FOR LDA ASSUMPTION: number of p MUST BE < n
+#as p approaches n. A simple rule of thumb is to use LDA & QDA on data sets where n>=5×p.
+  # IF INPUT PREDICTOR NAMES ARE NOT " ", "", and don't contain ","
+   if( length(predictors) => nrow(input) ){ 
+   stop("LDA assumes that the number of predictor variables (p) is less than the sample size (n), however this is not true here. Eliminate some predictor variables to continue with LDA.")
+  }
+
+# WARN ABOUT DUMMY VARIABLE CREATION IF CAT VARS ARE IN PREDICTORS
+# if(any(sapply(pred_data, is.factor) | sapply(pred_data, is.character)) ){
+#  warning(paste0("tax.lda():", "'",
+#    paste( colnames( pred_data[,sapply(pred_data, is.factor) | sapply(pred_data, is.character)]), collapse = "', '" ),
+#    "' are categorical: they will be converted to dummy variables as numeric variables are required"))
+# }
+
+## OR IF ONLY WANT NUMERIC PREDICTOR VARIABLES
+
+# WARN IF CATEGORICAL VARIABLES ARE IN PREDICTORS, ONLY NUMERIC ARE USED
+ if(any(sapply(pred_data, is.factor) | sapply(pred_data, is.character)) ){
+
+  warning(paste0("tax.lda():", "'",
+    paste( colnames( pred_data[,sapply(pred_data, is.factor) | sapply(pred_data, is.character)]), collapse = "', '" ),
+    "' are categorical: only numeric variables will be used"))
+ }
+
+pred_data <- pred_data[, sapply(pred_data, is.numeric), drop = FALSE]
+predictors <- colnames(pred_data)
+
+#GENERATE DATAFRAMES
+model_data <- data.frame(input[,facA], pred_data)
+colnames(model_data) <- c(paste0(facA), predictors)
+
+
+print("tax.lda: model data made with predictors and facA")
+
+  # GENERATE TEST AND TRAIN DATA FOR MODEL BUILDING
+  set.seed(37) #Ensures same selection of data for test and train each time
+  index <- sample(1:nrow(model_data), 0.7*nrow(model_data)) #Select 70% of dataset
+  train_data <- model_data[index,,drop = FALSE] #70% of dataset
+  test_data <- model_data[-index,, drop = FALSE] #30% of dataset
   
+  predictors_test <- test_data[,predictors, drop = FALSE]
+  
+# PREDICTORS / RESPONSE (TRAIN / TEST)
+  # DUMMY VARIABLES OF CATEGORICAL:
+  # predictors_test <- model.matrix(test_data[,facA]~., test_data)[,-c(1,2), drop = FALSE]#[,-1] # Predictor variables in test dataset, creating dummy vars for categorical predictors # [,-c(1,2), drop = FALSE] removes intercept column of all 1's
+  #  predictors_test <- predictors_test[,-1, drop = FALSE]  #Error in if (n == 0) stop("data (x) has 0 rows") : argument is of length zero 
+  #  predictors_test <- predictors_test[,-1] # [,-1] removes facA from df
+  # predictors_train <- model.matrix(train_data[,facA]~., train_data)[,-c(1,2), drop = FALSE] # Predictor variables in train dataset, creating dummy vars for categorical predictors
+  #  predictors_train <- predictors_train[,-1,drop = FALSE]
+  #  predictors_train <- predictors_train[,-1] # predictor data for train dataset
+  response_train <- train_data[,facA, drop = TRUE] # response data for train dataset # vector
+  response_test <- test_data[,facA, drop = TRUE] # response data for test dataset #vector
+  #cat("The train data for model building is 70% of the dataset, while the test data for model testing is 30% of the dataset.") #Text will be visible to user.
+ print("rf.anal: made train/test pred/resp dfs")  
+
+  #BUILD MODE, PREDICT ##
+  mod <- MASS::lda(form, data = train_data)
+## statology.org/linear-discriminant-analysis-in-r/
+  
+## INTERPRET OUTPUT OF MODEL
+# Prior probabilities of group: These represent the proportions of each response variable level in the training set. For example, 35.8% of all observations in the training set were of species virginica.
+Prior probabilities of groups: # Species in iris dataset is the response var
+    setosa versicolor  virginica  # levels are groups
+ 0.3207547  0.3207547  0.3584906 
+# Group means: These display the mean values for each predictor variable for each species.
+#           Sepal.Length Sepal.Width Petal.Length Petal.Width   # predictor variables
+#setosa       -1.0397484   0.8131654   -1.2891006  -1.2570316   # for each level of the response var
+#versicolor    0.1820921  -0.6038909    0.3403524   0.2208153
+#virginica     0.9582674  -0.1919146    1.0389776   1.1229172
+# Coefficients of linear discriminants: These display the linear combination of predictor variables that are used to form the decision rule of the LDA model. For example:
+  #  LD1: .792*Sepal.Length + .571*Sepal.Width – 4.076*Petal.Length – 2.06*Petal.Width
+# Proportion of trace: These display the percentage separation achieved by each linear discriminant function.
+
+#Generate results
+  summ <- mod 
+  train_fitt <- predict(mod)
+  train_prediction <- train_fitt$class
+  train_ld <- train_fitt$x
+  train_prob <- train_fitt$posterior
+   
+  test_fitt <-  predict(mod, newdata = predictors_test)
+  test_prediction <- predict(mod, newdata = predictors_test)$class
+  test_ld <- test_fitt$x
+  test_prob <- test_fitt$posterior
+  
+  #train_rmse <- Metrics::rmse(response_train, train_fitt)
+  fileName <- "lda_summary.txt"
+
+
+# PLOT: HISTOGRAM OF CLASSES:
+### stackoverflow.com/questions/69941611/how-can-i-replicate-plot-lda-with-of-r-tidymodels
+### Double histogram plot (from plot.lda):
+# bind_cols(Smarket_train, .fitted = predictions) %>% 
+#  ggplot(aes(x=.fitted)) +
+#  geom_histogram(aes(y = stat(density)),binwidth = .5) + 
+#  scale_x_continuous(breaks = seq(-4, 4, by = 2))+
+#  facet_grid(vars(Direction)) +
+#  xlab("") + 
+#  ylab("Density")
+
+  
+# PLOT: SCATTER OF LINEAR DISCRIMINANTS 
+# statology.org/linear-discriminant-analysis-in-r/
+# lda_plot <- cbind(train_data, train_ld)
+# ggplot(lda_plot, aes(LD1, LD2)) +
+#  geom_point(aes_(color = as.name(facA)))
+
+
+
+ 
+## FROM PCOA BELOW  
   #Fit variables to ordination plots for plotting arrows
   var.fit <- envfit(pcoa, data, permutations=999, p.max=NULL)
   
@@ -694,6 +770,31 @@ pcoa.meta.columns <- function(mSetObj=NA) {
   return(name.all.meta.cols)
   
 }
+
+
+#'Determine names of categorical columns in dataset as potential response variable options
+#'@description Java will use the names and numbers of categorical columns to enable user options for response variable selection
+#'@param mSetObj Input name of the created mSetObject 
+#'@author Louisa Normington\email{normingt@ualberta.ca}
+#'University of Alberta, Canada
+#'License: GNU GPL (>= 2)
+#'@export
+
+factor.columns <- function(mSetObj=NA){
+  load_dplyr()
+  mSetObj <- .get.mSet(mSetObj)
+
+  # fac.cols <- data[,sapply(mSetObj$dataSet$norm, is.factor) | sapply(mSetObj$dataSet$norm, is.character), drop = FALSE]
+  # fac.cols <- dplyr::select_if(mSetObj$dataSet$norm, is.character)
+  # fac.cols <- mSetObj$dataSet$norm %>% 
+  #             dplyr::select_if(function(col) {is.character(col) | is.factor(col)})  
+  # fac.names <- colnames(fac.cols) 
+  fac.names <- colnames(
+     data[,sapply(mSetObj$dataSet$norm, is.factor) | sapply(mSetObj$dataSet$norm, is.character), drop = FALSE]
+     )
+  return(fac.names)
+}
+
 
 #'Determine number of possible dimensions for scree plot
 #'@description Java will use the dimension numbers to enable user options for scree plot
