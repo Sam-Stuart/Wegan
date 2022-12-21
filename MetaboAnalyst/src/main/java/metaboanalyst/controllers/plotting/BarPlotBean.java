@@ -20,7 +20,6 @@ public class BarPlotBean implements Serializable {
     private final SessionBean1 sb = DataUtils.findBean("sessionBean1");
     private final SelectItem[] aggregateOpts;
     private final SelectItem[] textFontSizeOpts;
-
     private final SelectItem[] axisFontSizeOpts;
 
     private String aggregateFunChosen;

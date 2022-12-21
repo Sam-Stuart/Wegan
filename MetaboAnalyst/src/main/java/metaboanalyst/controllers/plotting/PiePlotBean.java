@@ -30,15 +30,19 @@ public class PiePlotBean implements Serializable {
     private final ApplicationBean1 ab = (ApplicationBean1) DataUtils.findBean("applicationBean1");
     private final SessionBean1 sb = (SessionBean1) DataUtils.findBean("sessionBean1");
     private final SelectItem[] aggregateOpts;
+    private final SelectItem[] textFontSizeOpts;
+
+    private final SelectItem[] axisFontSizeOpts;
     private ArrayList<SelectItem> numericBoxColumnOpts;
 
     private String aggregateFunChosen;
+    private String chosenTitleTextSize;
+
+    private String chosenAxisTextSize;
     private String labx;
     private String laby;
     private String title;
     private String facA = getNumericBoxColumnOpts().get(0).getLabel();
-
-  
 
     public PiePlotBean() {
         aggregateOpts = new SelectItem[5];
@@ -48,17 +52,17 @@ public class PiePlotBean implements Serializable {
         aggregateOpts[3] = new SelectItem("min", "Min");
         aggregateOpts[4] = new SelectItem("max", "Max");
 
-//        SelectItem[] fontSizeOpts = new SelectItem[5];
-//        fontSizeOpts[0] = new SelectItem(12, "Extra Small");
-//        fontSizeOpts[1] = new SelectItem(16, "Small");
-//        fontSizeOpts[2] = new SelectItem(20, "Medium");
-//        fontSizeOpts[3] = new SelectItem(24, "Large");
-//        fontSizeOpts[4] = new SelectItem(32, "Extra Large");
-//        
-//        this.textFontSizeOpts = fontSizeOpts.clone();
-//        this.axisFontSizeOpts = fontSizeOpts.clone();
+        SelectItem[] fontSizeOpts = new SelectItem[5];
+        fontSizeOpts[0] = new SelectItem(12, "Extra Small");
+        fontSizeOpts[1] = new SelectItem(16, "Small");
+        fontSizeOpts[2] = new SelectItem(20, "Medium");
+        fontSizeOpts[3] = new SelectItem(24, "Large");
+        fontSizeOpts[4] = new SelectItem(32, "Extra Large");
+
+        this.textFontSizeOpts = fontSizeOpts.clone();
+        this.axisFontSizeOpts = fontSizeOpts.clone();
     }
-    
+
     public String getFacA() {
         return facA;
     }
@@ -66,7 +70,7 @@ public class PiePlotBean implements Serializable {
     public void setFacA(String facA) {
         this.facA = facA;
     }
-    
+
     public void setNumericBoxColumnOpts() {
         List<String> columns = Arrays.asList(PlottingUtils.GetNumericDataColumnsBoxPlt(sb));
         this.numericBoxColumnOpts = new ArrayList<SelectItem>();
@@ -86,12 +90,36 @@ public class PiePlotBean implements Serializable {
         return aggregateOpts;
     }
 
+    public SelectItem[] getTextFontSizeOpts() {
+        return textFontSizeOpts;
+    }
+
+    public SelectItem[] getAxisFontSizeOpts() {
+        return axisFontSizeOpts;
+    }
+
     public String getAggregateFunChosen() {
         return aggregateFunChosen;
     }
 
     public void setAggregateFunChosen(String aggregateFunChosen) {
         this.aggregateFunChosen = aggregateFunChosen;
+    }
+
+    public String getChosenTitleTextSize() {
+        return chosenTitleTextSize;
+    }
+
+    public void setChosenTitleTextSize(String chosenTitleTextSize) {
+        this.chosenTitleTextSize = chosenTitleTextSize;
+    }
+
+    public String getChosenAxisTextSize() {
+        return chosenAxisTextSize;
+    }
+
+    public void setChosenAxisTextSize(String chosenAxisTextSize) {
+        this.chosenAxisTextSize = chosenAxisTextSize;
     }
 
     public void setTitle(String title) {
