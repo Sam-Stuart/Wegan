@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <h:form id="piePlot">
+        <h:panelGrid columns="1" style="width:380px;">
+            <h:panelGrid
+                id="panelGrid1"
+                columns="2"
+                cellpadding="5"
+                columnClasses="colBrayLong,colBrayShort"
+                >
+
+                <h:outputLabel style="font-weight: bold" value="Main Title: "/>
+                <p:inputText value="#{piePlotBean.title}"/>
+
+                <h:outputLabel style="font-weight: bold" value="X axis label: "/>
+                <p:inputText value="#{piePlotBean.labx}"/>
+
+                <h:outputLabel style="font-weight: bold" value="Y axis label: "/>
+                <p:inputText value="#{piePlotBean.laby}"/>
+
+                <h:outputLabel style="font-weight: bold" value="Title Text Size:"/>
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{piePlotBean.chosenTitleTextSize}"
+                                 style="width: 75%">
+                    <f:selectItems value="#{piePlotBean.textFontSizeOpts}"/>
+                </p:selectOneMenu>
+
+                <h:outputLabel style="font-weight: bold" value="Title Text Size:"/>
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{piePlotBean.chosenAxisTextSize}"
+                                 style="width: 75%">
+                    <f:selectItems value="#{piePlotBean.axisFontSizeOpts}"/>
+                </p:selectOneMenu>
+
+
+            </h:panelGrid>
+            <h:panelGrid
+                id="panelGrid2"
+                columns="1"
+                cellpadding="5"
+                style="float: right"
+                >
+                <p:commandButton
+                    value="Update"
+                    styleClass="updateButton"
+                    style="
+                    box-shadow: none !important;
+                    text-shadow: none !important;
+                    "
+                    onclick="PF('statusDialog').show()"
+                    oncomplete="PF('graphApperanceLinear').hide(); PF('statusDialog').hide()"
+                    update=":ac:form3:plotBarPane1  :cmdPane"
+                    actionListener="#{piePlotBean.pieBtn_action()}"
+                    />
+            </h:panelGrid>
+        </h:panelGrid>
+    </h:form>
+</ui:composition>
+               
