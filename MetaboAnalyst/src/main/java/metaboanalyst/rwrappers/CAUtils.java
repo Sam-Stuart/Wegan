@@ -18,6 +18,7 @@ import org.primefaces.model.chart.AxisType;
 import org.primefaces.model.chart.LineChartModel;
 import org.primefaces.model.chart.LineChartSeries;
 import org.rosuda.REngine.REXPMismatchException;
+//import org.rosuda.REngine.REXP;
 
 /**
  *
@@ -208,6 +209,28 @@ public static boolean PlotLinearResidFitCA(SessionBean1 sb,
             return false;
         }
     }
+
+
+// TRYING TO TROUBLE SHOOT ERROR MESSAGE FROM PAYARA SERVER:
+//stackoverflow.com/questions/32081370/rserve-exception-eval-failed-request-status-error-code-127
+// also added RSE to imports, ie. (import org.rosuda.REngine.REXP)
+
+//            RCenter.recordRCommand(RC, rCommand);
+//            sb.addGraphicsCMD("corr_linear_pred", rCommand);
+////            REXP rResponseObject = RC.parseAndEval(rCommand);
+////            if (rResponseObject.inherits("try-error")) {
+////                System.out.println("R Serve Eval Exception : "+rResponseObject.asString());
+////}
+////            RC.eval(rCommand);
+//             RC.voidEval(rCommand);
+//            return true;
+////        } catch (REXPMismatchException | REngineException rse) {
+////            System.out.println(rse.toString());
+//        } catch (RserveException rse) {
+//            System.out.println(rse);
+//            return false;
+//        }
+//    }   
 
  
 //    public static void ConvertLinearJSONCA(SessionBean1 sb, String which_plot) {
