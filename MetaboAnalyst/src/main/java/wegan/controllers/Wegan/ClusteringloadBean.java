@@ -125,6 +125,7 @@ public class ClusteringloadBean implements Serializable {
                 if (fileNameMeta != null){
                     RDataUtils.readTextDataMeta(RC, fileNameMeta, metaFormat, "disc", metaNames);
                 }
+                
                 if (RDataUtils.readTextData(RC, fileName, dataFormat, "disc", dataNames)) {
                     sb.setDataUploaded(true);
                     sb.updateMsg("Error", "Data Uploaded successfully");

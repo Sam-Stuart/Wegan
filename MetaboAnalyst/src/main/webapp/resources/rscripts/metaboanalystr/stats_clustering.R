@@ -123,6 +123,7 @@
 dendro.columns <- function(mSetObj=NA) {
   mSetObj <- .get.mSet(mSetObj)
   data <- mSetObj$dataSet$orig
+  #print(str(mSetObj))
   name.all.cols <- c("No groupings", colnames(data))
   return(name.all.cols)
 }
@@ -241,19 +242,34 @@ PlotHCTree <- function(mSetObj=NA,
     p <- p
   }
   else {
+    # # Set up df for color bar option and join df by index values so categorical value aligned properly
+    # facA_df <- dataset %>% 
+    #   dplyr::mutate(id=row_number(), var = as.factor(dataset[,colorbar_name])) %>% 
+    #   dplyr::select(c(var, id));
+    # ddata$labels <- ddata$labels %>% mutate(id=hc$order) %>% left_join(facA_df, by='id');
+    # p <- p + geom_point(data = ddata$labels, 
+    #                     aes(x = x, y = y, color = var), 
+    #                     shape = 15,
+    #                     size=2.5,
+    #                     show.legend = TRUE) + 
+    #   theme(legend.background = element_blank(),
+    #         legend.key = element_blank(),
+    #         legend.position = c("top")) + 
+    #   guides(color=guide_legend(title=plot_legtitle))
+    
     # Set up df for color bar option and join df by index values so categorical value aligned properly
-    facA_df <- dataset %>% 
-      dplyr::mutate(id=row_number(), var = as.factor(dataset[,colorbar_name])) %>% 
+    facA_df <- mSetObj$dataSet$origMeta %>%
+      dplyr::mutate(id=row_number(), var = as.factor(mSetObj$dataSet$orig[,colorbar_name])) %>%
       dplyr::select(c(var, id));
     ddata$labels <- ddata$labels %>% mutate(id=hc$order) %>% left_join(facA_df, by='id');
-    p <- p + geom_point(data = ddata$labels, 
-                        aes(x = x, y = y, color = var), 
+    p <- p + geom_point(data = ddata$labels,
+                        aes(x = x, y = y, color = var),
                         shape = 15,
                         size=2.5,
-                        show.legend = TRUE) + 
+                        show.legend = TRUE) +
       theme(legend.background = element_blank(),
             legend.key = element_blank(),
-            legend.position = c("top")) + 
+            legend.position = c("top")) +
       guides(color=guide_legend(title=plot_legtitle))
     if (plot_palette == "grey"){
       p <- p + scale_colour_grey()
