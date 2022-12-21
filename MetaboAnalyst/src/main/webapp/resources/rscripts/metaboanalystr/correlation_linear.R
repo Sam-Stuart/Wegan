@@ -1,3 +1,10 @@
+# autocomplete: examples.javacodegeeks.com/enterprise-java/jsf/jsf-autocomplete-example/
+#
+# for colours: github.com/kassambara/ggpubr/blob/master/R/get_palette.R
+#  \item \strong{ggsci scientific journal palettes},
+#'  e.g.: "npg", "aaas", "lancet", "jco", "ucscgb", "uchicago",
+#
+#
 #' @title ggplot2 theme for scientific publications
 #'
 #' @description
@@ -97,6 +104,112 @@ theme_bww <- function(base_size = 12, base_family = "",
 
 
 
+# lin.reg.plot <- function(mSetObj=NA,
+#   # facA = "NULL", # response, dropdown
+#   # facB = "NULL", # predictor, dropdown
+#   # data = "false", # checkbox
+#              
+#   col_dots = "NULL",
+#   col_line = "NULL",
+#   plot_ci = "false",# weights=NULL,
+# 
+#   plot_eq = "false",
+#   plot_rsq = "false",
+#   plot_rsq_adj = "false",
+#   plot_title = " ",
+#   plot_ylab = " ",
+#   plot_xlab = " ",
+# 
+#   size_title = "NULL",
+#   size_xlab = "NULL",
+#   size_ylab = "NULL",
+#   size_xtick = "NULL",
+#   size_ytick = "NULL",
+#   
+#   imgName,
+#   format = "png",
+#   dpi = 72,
+#   width = NA
+#   ){
+# 
+# lin.pred.plot <- function(mSetObj=NA,
+#   # facA = "NULL", # response, dropdown
+#   # facB = "NULL", # predictor, dropdown
+#   # data = "false", # checkbox
+#              
+#   col_dots = "NULL",
+#   col_line = "NULL",
+#   plot_ci = "false",
+#   plot_eq = "false",
+#   plot_rsq = "false",
+#   plot_rsq_adj = "false",
+#   plot_title = " ",
+#   plot_ylab = " ",
+#   plot_xlab = " ",
+# 
+#   size_title = "NULL",
+#   size_xlab = "NULL",
+#   size_ylab = "NULL",
+#   size_xtick = "NULL",
+#   size_ytick = "NULL",
+# 
+#   imgName,
+#   format = "png",
+#   dpi = 72,
+#   width = NA
+#   ){
+# lin.qq.plot <- function(mSetObj=NA,
+# 
+# #  facA = "NULL", # response, dropdown
+# #  facB = "NULL", # predictor, dropdown
+# #  data = "false", # checkbox
+#              
+#   col_dots = "NULL",
+#   col_line = "NULL",
+#   
+#   plot_title = " ",
+#   plot_ylab = " ",
+#   plot_xlab = " ",
+# 
+#   size_title = "NULL",
+#   size_xlab = "NULL",
+#   size_ylab = "NULL",
+#   size_xtick = "NULL",
+#   size_ytick = "NULL",
+# 
+#   imgName,
+#   format = "png",
+#   dpi = 72,
+#   width = NA
+#   ){
+# 
+# lin.resfit.plot <- function(mSetObj=NA,
+# 
+# #  facA = "NULL", # response, dropdown
+# #  facB = "NULL", # predictor, dropdown
+# #  data = "false", # checkbox
+# 
+#   col_dots = "NULL",
+#   col_line = "NULL",
+# 
+#   plot_title = " ",
+#   plot_ylab = " ",
+#   plot_xlab = " ",
+# 
+#   size_title = "NULL",
+#   size_xlab = "NULL",
+#   size_ylab = "NULL",
+#   size_xtick = "NULL",
+#   size_ytick = "NULL",
+# 
+#   imgName,
+#   format = "png",
+#   dpi = 72,
+#   width = NA
+#   ){
+
+
+
 
 
 
@@ -111,7 +224,13 @@ theme_bww <- function(base_size = 12, base_family = "",
 #'@author Gina Sykes \email{gsykes@ualberta.ca}
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2)
-#' @importFrom rlang .data
+## @importFrom rlang .data
+## @seealso
+## \code{\link[lmtest]{dwtest}}
+## \code{\link[lmtest]{bptest}}
+## \code{\link[lmtest]{resettest}}
+##
+## @import lmtest
 #'@export
 
 lin.reg.anal <- function(mSetObj = NA,
@@ -151,7 +270,7 @@ lin.reg.anal <- function(mSetObj = NA,
   }
   
   # VARIABLE TYPE CHECK
-  if (is.factor(input[,facA]) || is.factor(input[,facB]) ){
+  if (any( is.factor(input[,facA]) ) || any( is.factor(input[,facB]) ) ){
     AddErrMsg("You have chosen 1 or more categorical columns! Try selecting another independent and/or dependent variable. You can also try other regression models such as penalized, logistic, SVM or random forest.")
     stop("You have chosen 1 or more categorical columns! Try selecting another independent and/or dependent variable. You can also try other regression models such as penalized, logistic, SVM or random forest.") #Error msg
   }
@@ -180,7 +299,7 @@ lin.reg.anal <- function(mSetObj = NA,
   summ <- summary(mod) #PRINT #Summary w coeff, resid & fit
   fitt <- fitted(mod) #PRINT
   covar <- vcov(mod) #PRINT
-  conf.int <- confint(model, level=0.95) #PRINT
+  conf.int <- confint(mod, level=0.95) #PRINT
   
   fileName <- paste0("corr_linear_model_summary", ".txt") #File name for summary
 # fileName <- paste0("linear_regression_summary_", facA, "~", facB, ".txt") #File name for summary
@@ -194,9 +313,9 @@ lin.reg.anal <- function(mSetObj = NA,
 
   ##### - MODEL ASSUMPTIONS TESTS - #####
   mod_shp <- stats::shapiro.test(model$residuals)$p.value
-  mod_bp <- lmtest::bptest(model)$p.value
-  mod_dw <- lmtest::dwtest(model)$p.value
-  mod_res <- lmtest::resettest(model)$p.value #linearity
+  mod_bp <- lmtest::bptest(mod)$p.value
+  mod_dw <- lmtest::dwtest(mod)$p.value
+  mod_res <- lmtest::resettest(mod)$p.value #linearity
 
   #   Ramsey Regression Equation Specification Error Test (RESET) to detect specification errors in the model (created in 1968 by a student for their dissertation). The RESET performs a nested model comparison with the current model and the current model plus some polynomial terms, and then returns the result of an F-test. The idea is, if the added non-linear terms explain variance in the outcome, then there is a specification error of some kind, such as the failure to include some curvilinear term or the use of a general linear model where a generalized linear model should have been used.
   # sscc.wisc.edu/sscc/pubs/RegDiag-R/linearity.html
@@ -331,16 +450,22 @@ lin.reg.anal <- function(mSetObj = NA,
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2)
 ## importFrom rlang .data
+## @import ggplot2
+## @import ggpmisc
+## @import RJSONIO
+## \code{\link[ggpmisc]{stat_poly_eq}}
+## @seealso
 #'@export
 
 lin.reg.plot <- function(mSetObj=NA,
- facA = "NULL", # response, dropdown
- facB = "NULL", # predictor, dropdown
- data = "false" # checkbox
+  # facA = "NULL", # response, dropdown
+  # facB = "NULL", # predictor, dropdown
+  # data = "false", # checkbox
              
   col_dots = "NULL",
   col_line = "NULL",
   plot_ci = "false",# weights=NULL,
+
   plot_eq = "false",
   plot_rsq = "false",
   plot_rsq_adj = "false",
@@ -825,9 +950,9 @@ linear_plot_json$bool_rsq_adj <- TRUE
 #'@export
 
 lin.pred.plot <- function(mSetObj=NA,
-  facA = "NULL", # response, dropdown
-  facB = "NULL", # predictor, dropdown
-  data = "false" # checkbox
+  # facA = "NULL", # response, dropdown
+  # facB = "NULL", # predictor, dropdown
+  # data = "false", # checkbox
              
   col_dots = "NULL",
   col_line = "NULL",
@@ -1197,9 +1322,9 @@ linear_plot_json$bool_ci <- FALSE
 
 lin.qq.plot <- function(mSetObj=NA,
 
-  facA = "NULL", # response, dropdown
-  facB = "NULL", # predictor, dropdown
-  data = "false" # checkbox
+#  facA = "NULL", # response, dropdown
+#  facB = "NULL", # predictor, dropdown
+#  data = "false", # checkbox
              
   col_dots = "NULL",
   col_line = "NULL",
@@ -1540,13 +1665,14 @@ linear_plot_json$lines$size <- build_line[,c("size")]
 #'@author Gina Sykes \email{gsykes@ualberta.ca}
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2)
-#' @importFrom rlang .data
+## @importFrom rlang .data
 #'@export
+
 lin.resfit.plot <- function(mSetObj=NA,
 
-  facA = "NULL", # response, dropdown
-  facB = "NULL", # predictor, dropdown
-  data = "false" # checkbox
+#  facA = "NULL", # response, dropdown
+#  facB = "NULL", # predictor, dropdown
+#  data = "false", # checkbox
 
   col_dots = "NULL",
   col_line = "NULL",
@@ -1787,7 +1913,7 @@ size_leg <- size_xlab
         axis.title.y = element_text(size = size_ylab1),
         axis.text.x = element_text(size = size_xtick1),
         axis.text.y = element_text(size = size_ytick1),
-        legend.title=element_text(size_leg), #legend.text=element_text(), 
+        legend.title = element_text(size_leg), #legend.text=element_text(), 
         plot.title = element_text(size = size_title1, face = 'bold', hjust = 0.5)
   ) 
 
@@ -1879,9 +2005,10 @@ lin.reg.plot.json <- function(mSetObj=NA, which_plot = "NULL"){
   # colnames(build$data[[1]]);  c("x", "y", "flipped_aes", "PANEL", "group", "colour", "fill",  "size", "linetype", "weight", "alpha")
   linear_plot_json <- list()
 
+## NEED TO HAVE PLOT SIZE OPTIONS STORED IN MSETOBJ
 
-
-if(which_plot == "NULL" || which_plot == "plot" || which_plot == "plotted"){
+# if(which_plot == "NULL" || which_plot == "plot" || which_plot == "plotted"){
+if(which_plot %in% c("NULL", "plot", "plotted") ){
   a0 <- mSetObj$analSet$linReg$plotted$plot
   plot_title1 <- mSetObj$analSet$linReg$plotted$title
   plot_ylab1 <- mSetObj$analSet$linReg$plotted$ylab
@@ -1900,11 +2027,12 @@ if(any(grepl("ymin", colnames( ggplot_build(mSetObj$analSet$linReg$plotPred$plot
  } else { # include se regardless, need it for json making
  plot_ci1 <- FALSE
  aj <- ggplot(data = data.frame(fpred = mSetObj$analSet$linReg$res$predicted.values, fA = mSetObj$analSet$linReg$res$response.vector,
-  aes(x = fpred, y = fA)) +
+  aes(x = fpred, y = fA)) ) +
      labs(title = plot_title1) + ylab(plot_ylab1)+ xlab(plot_xlab1) +
      geom_smooth(se = TRUE, color = col_line1, fullrange = TRUE, method = 'lm') +
      geom_point(shape = 16, color = col_dots1) +
-     theme_bw() + theme(panel.grid.major = element_blank(),panel.grid.minor = element_blank(), axis.text = element_text(size = colour = "black"),  axis.title = element_text(colour = "black"), plot.title = element_text(face = 'bold', hjust = 0.5)  )
+     theme_bw() + theme(panel.grid.major = element_blank(),
+                        panel.grid.minor = element_blank(), axis.text = element_text(colour = "black"),  axis.title = element_text(colour = "black"), plot.title = element_text(face = 'bold', hjust = 0.5)  )
 }
 
 build <- ggplot_build(aj)
