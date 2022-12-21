@@ -5,7 +5,6 @@
  */
 package metaboanalyst.controllers.plotting;
 
-import java.io.File;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
@@ -14,22 +13,14 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.model.SelectItem;
 import metaboanalyst.controllers.ApplicationBean1;
 import metaboanalyst.controllers.SessionBean1;
-import metaboanalyst.rwrappers.CAUtils;
-import metaboanalyst.rwrappers.DispersalUtils;
 import metaboanalyst.rwrappers.PlottingUtils;
 import metaboanalyst.rwrappers.RDataUtils;
-import metaboanalyst.rwrappers.UniVarTests;
 import metaboanalyst.utils.DataUtils;
-import org.primefaces.context.RequestContext;
-import org.primefaces.model.chart.Axis;
-import org.primefaces.model.chart.AxisType;
-import org.primefaces.model.chart.LineChartModel;
-import org.primefaces.model.chart.LineChartSeries;
 import org.rosuda.REngine.Rserve.RConnection;
 
 /**
  *
- * @author Leif
+ * @author Leif & Hieu
  */
 @ManagedBean(name = "boxPlotBean")
 @ViewScoped
