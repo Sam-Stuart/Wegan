@@ -1,109 +1,104 @@
-# autocomplete: examples.javacodegeeks.com/enterprise-java/jsf/jsf-autocomplete-example/
-#
 # for colours: github.com/kassambara/ggpubr/blob/master/R/get_palette.R
 #  \item \strong{ggsci scientific journal palettes},
-#'  e.g.: "npg", "aaas", "lancet", "jco", "ucscgb", "uchicago",
+#  e.g.: "npg", "aaas", "lancet", "jco", "ucscgb", "uchicago",
 #
 #
-#' @title ggplot2 theme for scientific publications
-#'
-#' @description
-#' from {envalysis}: github.com/zsteinmetz/envalysis/blob/main/R/theme_publish.R
-#' Themes set the general aspect of the plot such as the color of the
-#' background, grid lines, the size and color of fonts. This particular theme is
-#' based on the classic dark-on-light ggplot2 \code{\link[ggplot2]{theme_bw}}
-#' and has been used for scientific publications.
-#'
-#' @param base_size base font size
-#' @param base_family base font family
-#' @param base_line_size base line size for, e.g. for ticks and axes
-#' @param \dots further arguments to be passed to \code{\link[ggplot2]{theme_bw}}
-#'
-#' @author 
-#' Zacharias Steinmetz
-#' 
-#' @examples
-#' require(ggplot2)
-#' p <- ggplot(mtcars) + geom_point(aes(x = wt, y = mpg,
-#'      colour=factor(gear))) + facet_wrap( ~ am)
-#' p
-#' p + theme_bww()
-#'
-#' @seealso
-#' \code{\link[ggplot2]{ggtheme}}
-#' \code{\link[ggplot2]{theme_bw}}
-#'
-#' @import ggplot2
-#' @export
-theme_bww <- function(base_size = 12, base_family = "",
-                          base_line_size = 0.25, ...) {
-  half_line <- base_size / 2
-  small_rel <- 0.8
-  small_size <- small_rel * base_size
-  
-  # TODO: replace size with linewidth in `element_rect()`
-  theme_bw(base_size = base_size, base_family = base_family, ...) %+replace%
-    theme(
-      rect = element_rect(fill = "transparent", colour = NA, color = NA,
-                          size = 0, linetype = 0),
-      text = element_text(family = base_family, face = "plain",
-                          colour = "black", size = base_size, hjust = 0.5,
-                          vjust = 0.5, angle = 0, lineheight = 0.9,
-                          margin = ggplot2::margin(), debug = F),
-      
-      axis.text = element_text(size = small_size),
-      axis.text.x = element_text(margin = ggplot2::margin(t = small_size/4),
-                                 vjust = 1),
-      axis.text.y = element_text(margin = ggplot2::margin(r = small_size/4), 
-                                 hjust = 1),
-      axis.title.x = element_text(margin = ggplot2::margin(t = small_size,
-                                                           b = small_size)),
-      axis.title.y = element_text(angle = 90,
-                                  margin = ggplot2::margin(r = small_size,
-                                                           l = small_size/4)),
-      axis.ticks = element_line(colour = "black", size = base_line_size),
-      axis.ticks.length = unit(0.25, 'lines'),
-      
-      axis.line = element_line(colour = "black", size = base_line_size),
-      axis.line.x = element_line(colour = "black", size = base_line_size), 
-      axis.line.y = element_line(colour = "black", size = base_line_size), 
-      
-      legend.spacing = unit(base_size/4, "pt"),
-      legend.key = element_blank(),
-      legend.key.size = unit(1 * base_size, "pt"),
-      legend.key.width = unit(1.5 * base_size, 'pt'),
-      legend.text = element_text(size = rel(small_rel)),
-      legend.title = element_text(size = rel(small_rel), face = 'bold'),
-      legend.position = 'bottom',
-      legend.box = 'horizontal',
-      
-      panel.spacing = unit(1, "lines"),
-      panel.background = element_blank(),
-      panel.border = element_blank(), 
-      panel.grid.major = element_blank(),
-      panel.grid.minor = element_blank(),
-      
-      strip.text = element_text(size = base_size),
-      strip.background = element_rect(fill = NA, colour = "black",
-                                      size = 0.125),
-      strip.text.x = element_text(face = 'bold', hjust = 0,
-                                  margin = ggplot2::margin(b = small_size/2,
-                                                           t = small_size/4)),
-      strip.text.y = element_text(angle = -90, face = 'bold',
-                                  margin = ggplot2::margin(l = small_size/2,
-                                                           r = small_size/4)),
-      
-      plot.margin = unit(c(5,5,0,0), "pt"),
-      plot.background = element_blank(),
-      plot.title = element_text(face = "bold", size = 1.2 * base_size, 
-                                margin = ggplot2::margin(b = half_line),
-                                hjust = 0)
-    )
-}
-
-
-
-
+# @title ggplot2 theme for scientific publications
+#
+# @description
+# from {envalysis}: github.com/zsteinmetz/envalysis/blob/main/R/theme_publish.R
+# Themes set the general aspect of the plot such as the color of the
+# background, grid lines, the size and color of fonts. This particular theme is
+# based on the classic dark-on-light ggplot2 \code{\link[ggplot2]{theme_bw}}
+# and has been used for scientific publications.
+#
+# @param base_size base font size
+# @param base_family base font family
+# @param base_line_size base line size for, e.g. for ticks and axes
+# @param \dots further arguments to be passed to \code{\link[ggplot2]{theme_bw}}
+#
+# @author 
+# Zacharias Steinmetz
+# 
+# @examples
+# require(ggplot2)
+# p <- ggplot(mtcars) + geom_point(aes(x = wt, y = mpg,
+#      colour=factor(gear))) + facet_wrap( ~ am)
+# p
+# p + theme_bww()
+#
+# @seealso
+# \code{\link[ggplot2]{ggtheme}}
+# \code{\link[ggplot2]{theme_bw}}
+#
+# @import ggplot2
+# @export
+# theme_bww <- function(base_size = 12, base_family = "",
+#                           base_line_size = 0.25, ...) {
+#   half_line <- base_size / 2
+#   small_rel <- 0.8
+#   small_size <- small_rel * base_size
+#   
+#   # TODO: replace size with linewidth in `element_rect()`
+#   theme_bw(base_size = base_size, base_family = base_family, ...) %+replace%
+#     theme(
+#       rect = element_rect(fill = "transparent", colour = NA, color = NA,
+#                           size = 0, linetype = 0),
+#       text = element_text(family = base_family, face = "plain",
+#                           colour = "black", size = base_size, hjust = 0.5,
+#                           vjust = 0.5, angle = 0, lineheight = 0.9,
+#                           margin = ggplot2::margin(), debug = F),
+#       
+#       axis.text = element_text(size = small_size),
+#       axis.text.x = element_text(margin = ggplot2::margin(t = small_size/4),
+#                                  vjust = 1),
+#       axis.text.y = element_text(margin = ggplot2::margin(r = small_size/4), 
+#                                  hjust = 1),
+#       axis.title.x = element_text(margin = ggplot2::margin(t = small_size,
+#                                                            b = small_size)),
+#       axis.title.y = element_text(angle = 90,
+#                                   margin = ggplot2::margin(r = small_size,
+#                                                            l = small_size/4)),
+#       axis.ticks = element_line(colour = "black", size = base_line_size),
+#       axis.ticks.length = unit(0.25, 'lines'),
+#       
+#       axis.line = element_line(colour = "black", size = base_line_size),
+#       axis.line.x = element_line(colour = "black", size = base_line_size), 
+#       axis.line.y = element_line(colour = "black", size = base_line_size), 
+#       
+#       legend.spacing = unit(base_size/4, "pt"),
+#       legend.key = element_blank(),
+#       legend.key.size = unit(1 * base_size, "pt"),
+#       legend.key.width = unit(1.5 * base_size, 'pt'),
+#       legend.text = element_text(size = rel(small_rel)),
+#       legend.title = element_text(size = rel(small_rel), face = 'bold'),
+#       legend.position = 'bottom',
+#       legend.box = 'horizontal',
+#       
+#       panel.spacing = unit(1, "lines"),
+#       panel.background = element_blank(),
+#       panel.border = element_blank(), 
+#       panel.grid.major = element_blank(),
+#       panel.grid.minor = element_blank(),
+#       
+#       strip.text = element_text(size = base_size),
+#       strip.background = element_rect(fill = NA, colour = "black",
+#                                       size = 0.125),
+#       strip.text.x = element_text(face = 'bold', hjust = 0,
+#                                   margin = ggplot2::margin(b = small_size/2,
+#                                                            t = small_size/4)),
+#       strip.text.y = element_text(angle = -90, face = 'bold',
+#                                   margin = ggplot2::margin(l = small_size/2,
+#                                                            r = small_size/4)),
+#       
+#       plot.margin = unit(c(5,5,0,0), "pt"),
+#       plot.background = element_blank(),
+#       plot.title = element_text(face = "bold", size = 1.2 * base_size, 
+#                                 margin = ggplot2::margin(b = half_line),
+#                                 hjust = 0)
+#     )
+# }
+#
 # lin.reg.plot <- function(mSetObj=NA,
 #   # facA = "NULL", # response, dropdown
 #   # facB = "NULL", # predictor, dropdown
@@ -207,9 +202,6 @@ theme_bww <- function(base_size = 12, base_family = "",
 #   dpi = 72,
 #   width = NA
 #   ){
-
-
-
 
 
 
@@ -422,9 +414,9 @@ lin.reg.anal <- function(mSetObj = NA,
 #'@description Plot line of best fit on scatter plot of linear regression model on 2 variables in data
 #' default beginning name of plot is: 'corr_linear' (set in LinearView)
 #'@param mSetObj Input the name of the created mSetObj
-#'@param facA Input the name of the response column (default 1st column, dropdown) (java uses Columns() to give user numeric column options)
-#'@param facB Input the name of the predictor column (default 1st column, dropdown) (java uses Columns() to give user numeric column options)
-#'@param data Boolean, whether to use original data; "false" (default) means normalized or "true" means original (checkbox)
+#@param facA Input the name of the response column (default 1st column, dropdown) (java uses Columns() to give user numeric column options)
+#@param facB Input the name of the predictor column (default 1st column, dropdown) (java uses Columns() to give user numeric column options)
+#@param data Boolean, whether to use original data; "false" (default) means normalized or "true" means original (checkbox)
 #'@param col_dots Set color for scatterplot dots (default "NULL" is black); (static dropdown)
 #'@param col_line Set color for line (default "NULL" is black); (static dropdown)
 ###@param weights Set weight values, default is NULL
@@ -920,8 +912,8 @@ linear_plot_json$bool_rsq_adj <- TRUE
 #'Generate prediction/actual linear regression plot
 #' default beginning name of plot is: 'corr_linear_pred' (set in LinearView)
 #'@param mSetObj Input the name of the created mSetObj
-#'@param facA Input the name of the response column (default 1st column, dropdown) (java uses Columns() to give user numeric column options)
-#'@param facB Input the name of the predictor column (default 1st column, dropdown) (java uses Columns() to give user numeric column options)
+#@param facA Input the name of the response column (default 1st column, dropdown) (java uses Columns() to give user numeric column options)
+#@param facB Input the name of the predictor column (default 1st column, dropdown) (java uses Columns() to give user numeric column options)
 #'@param col_dots Set color for scatterplot dots (default "NULL" is black); (static dropdown)
 #'@param col_line Set color for line (default "NULL" is black); (static dropdown)
 ###@param weights Set weight values, default is NULL
@@ -1229,7 +1221,7 @@ aj <- ggplot(data = dfpred, # data.frame(fpred = prediction, fA = input[,facA]),
      labs(title = plot_title1) + ylab(plot_ylab1)+ xlab(plot_xlab1) +
      geom_smooth(se = TRUE, color = col_line1, fullrange = TRUE, method = 'lm') +
      geom_point(shape = 16, color = col_dots1) +
-     theme_bw() + theme(panel.grid.major = element_blank(),panel.grid.minor = element_blank(), axis.text = element_text(size = 12, colour = "black"),  axis.title = element_text(size = 12), plot.title = element_text(face = 'bold', hjust = 0.5)  )
+     theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), axis.title.x = element_text(size = size_xlab1), axis.title.y = element_text(size = size_ylab1), axis.text.x = element_text(size = size_xtick1), axis.text.y = element_text(size = size_ytick1), legend.title=element_text(size_leg), plot.title = element_text(size = size_title1, face = 'bold', hjust = 0.5) )
 }
 
 build <- ggplot_build(aj)
@@ -1294,9 +1286,9 @@ linear_plot_json$bool_ci <- FALSE
 #'@description Plot line of best fit on scatter plot of linear regression model on 2 variables in data
 #' default beginning name of plot is: 'corr_linear_normres' (set in LinearView)
 #'@param mSetObj Input the name of the created mSetObj
-#'@param facA Input the name of the response column (default 1st column, dropdown) (java uses Columns() to give user numeric column options)
-#'@param facB Input the name of the predictor column (default 1st column, dropdown) (java uses Columns() to give user numeric column options)
-#'@param data Boolean, whether to use original data; "false" (default) means normalized or "true" means original (checkbox)
+#@param facA Input the name of the response column (default 1st column, dropdown) (java uses Columns() to give user numeric column options)
+#@param facB Input the name of the predictor column (default 1st column, dropdown) (java uses Columns() to give user numeric column options)
+#@param data Boolean, whether to use original data; "false" (default) means normalized or "true" means original (checkbox)
 #'@param col_line Set color for line (default "NULL" is blue); (static dropdown)
 #'@param col_dots Set color for scatterplot dots (default "NULL" is black); (static dropdown)
 #'@param plot_title Input the name of the title (default: "Normality of Residuals (response ~ predictor)" where predictor is predictor name and response is response name, textbox)
@@ -1307,7 +1299,6 @@ linear_plot_json$bool_ci <- FALSE
 #'@param size_ytick Set size of text for y axis ticks (default: 'NULL' = 'medium', options: very small, small, medium, large, very large; dropdown)
 #'@param plot_xlab Input the name to use for x-axis label (default: facA, textbox)
 #'@param plot_ylab Input the name to use for y-axis label (default: facB, textbox)
-
 #'@param imgName Input the image name
 #'@param format Select the image format, "png" or "pdf", default is "png" 
 #'@param dpi Input the dpi. If the image format is "pdf", users need not define the dpi. For "png" images, 
@@ -1643,9 +1634,9 @@ linear_plot_json$lines$size <- build_line[,c("size")]
 #'Generate Residuals vs. Fitted values plot for model
 #'@description Plot residuals and predicted (fitted or yhat values) of linear regression model on 2 variables in data (check linearity assumption)
 #'@param mSetObj Input the name of the created mSetObj
-#'@param facA Input the name of the response column (default 1st column, dropdown) (java uses Columns() to give user numeric column options)
-#'@param facB Input the name of the predictor column (default 1st column, dropdown) (java uses Columns() to give user numeric column options)
-#'@param data Boolean, whether to use original data; "false" (default) means normalized or "true" means original (checkbox)
+#@param facA Input the name of the response column (default 1st column, dropdown) (java uses Columns() to give user numeric column options)
+#@param facB Input the name of the predictor column (default 1st column, dropdown) (java uses Columns() to give user numeric column options)
+#@param data Boolean, whether to use original data; "false" (default) means normalized or "true" means original (checkbox)
 #'@param col_line Set color for line (default "NULL" is blue); (static dropdown)
 #'@param col_dots Set color for scatterplot dots (default "NULL" is black); (static dropdown)
 #'@param plot_title Input the name of the title (default: "Univariate Linear Regression Line of Best Fit", textbox)
@@ -1883,8 +1874,10 @@ lin.resfit.plot <- function(mSetObj=NA,
 					NULL
 				)
 
-if(any(!c(size_xlab, size_ylab) %in% "NULL")){
-if(all(!c(size_xlab, size_ylab) %in% "NULL")){
+
+## DON'T USE '1' version of 'size_' vars, must be originals
+if( !isTRUE("NULL" %in% c(size_xlab, size_ylab) )){
+if(!all(c(size_xlab, size_ylab) %in% "NULL")){
 size_leg <- size_xlab
 } else {
 size_leg <- c(size_xlab, size_ylab)[!c(size_xlab, size_ylab) %in% "NULL"]
@@ -2013,6 +2006,23 @@ if(which_plot %in% c("NULL", "plot", "plotted") ){
   plot_title1 <- mSetObj$analSet$linReg$plotted$title
   plot_ylab1 <- mSetObj$analSet$linReg$plotted$ylab
   plot_xlab1 <- mSetObj$analSet$linReg$plotted$xlab
+
+  build <- ggplot_build(a0)
+  linear_plot_json$main <- plot_title1 #title
+  linear_plot_json$axis <- c(plot_xlab1, plot_ylab1) #axis titles
+
+  linear_plot_json$points$coords <- build$data[[1]] ["x"]["y"] #[,c("x","y")] #[,1:2]
+  linear_plot_json$points$cols <- build$data[[1]][,grepl("col",colnames(build$data[[1]]))] #[,6] #colours
+  linear_plot_json$points$shape <- build$data[[1]][,c("group")]#[,5]
+  linear_plot_json$points$size <- build$data[[1]][,c("size")]#[,7]
+  linear_plot_json$lines$cols <- build$data[[2]][,grepl("col",colnames(build$data[[2]]))]
+
+  linear_plot_json$r_sq <- round(summary(mod)[["r.squared"]], digits = 2) #Extract R^2
+  linear_plot_json$r_sq_adj <- round(summary(mod)[["adj.r.squared"]], digits = 2) #Extract adjusted R^2 
+  linear_plot_json$slope <- round(summary(mod)[["coefficients"]][2], digits = 2) # beta
+  linear_plot_json$yint <- round(summary(mod)[["coefficients"]][1], digits = 2) # alpha
+
+
 } else if(which_plot == "pred"){
 
   # a0 <- mSetObj$analSet$linReg$plotPred$plot
@@ -2151,22 +2161,6 @@ linear_plot_json$lines2$slope <- 0
   imgName <- mSetObj$imgSet$plot.linReg
   # facA <- mSetObj$analSet$linReg$res$response
   # facB <- mSetObj$analSet$linReg$res$predictor
-
-
-  linear_plot_json$main <- plot_title1 #title
-  linear_plot_json$axis <- c(plot_xlab1, plot_ylab1) #axis titles
-
-  linear_plot_json$points$coords <- build$data[[1]] ["x"]["y"] #[,c("x","y")] #[,1:2]
-  linear_plot_json$points$cols <- build$data[[1]][,grepl("col",colnames(build$data[[1]]))] #[,6] #colours
-  linear_plot_json$points$shape <- build$data[[1]][,c("group")]#[,5]
-  linear_plot_json$points$size <- build$data[[1]][,c("size")]#[,7]
-  linear_plot_json$lines$cols <- build$data[[2]][,grepl("col",colnames(build$data[[2]]))]
-
-
-  linear_plot_json$r_sq <- round(summary(mod)[["r.squared"]], digits = 2) #Extract R^2
-  linear_plot_json$r_sq_adj <- round(summary(mod)[["adj.r.squared"]], digits = 2) #Extract adjusted R^2 
-  linear_plot_json$slope <- round(summary(mod)[["coefficients"]][2], digits = 2) # beta
-  linear_plot_json$yint <- round(summary(mod)[["coefficients"]][1], digits = 2) # alpha
 
   imgName2 <- paste(imgName, ".json", sep="")
   json.obj <- RJSONIO::toJSON(linear_plot_json, .na='null')
