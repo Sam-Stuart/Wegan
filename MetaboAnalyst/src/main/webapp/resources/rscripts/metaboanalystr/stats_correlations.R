@@ -124,6 +124,7 @@ PlotCorr <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA){
 
 #'Pattern hunter, corr heatmap
 #'@description Plot correlation heatmap
+#' Generate downloadable csv matrices of correlation ('correlation_table')and p-values ('pval_corr_table');for the latter use  {Hmisc}. Use {pheatmap} to make plot.
 #'@author Jeff Xia\email{jeff.xia@mcgill.ca}
 #'@param mSetObj Input name of the created mSet Object.
 #'@param imgName Input the name of the image to create
@@ -137,10 +138,10 @@ PlotCorr <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA){
 #'@param colors Indicate the colors for the heatmap, "bwm" for default, "gbr" for red/green, "heat" for heat colors,
 #'"topo" for topo colors, and "gray" for gray scale.
 #'@param viewOpt Indicate "overview" to get an overview of the heatmap, and "detail" to get a detailed view of the heatmap.
-#'@param fix.col Logical, fix colors (TRUE) or not (FALSE).
+#'@param fix.col Logical, fix colors on fixed interval of -1 to 1 (TRUE) or not (FALSE).
 #'@param no.clst Logical, indicate if the correlations should be clustered (TRUE) or not (FALSE).
-#'@param top View top
-#'@param topNum Numeric, view top 
+#'@param top View top TRUE or FALSE
+#'@param topNum Numeric, view top 'topNum' number of values, based on correlation method-created correlation matrix, ranked
 #'McGill University, Canada
 #'License: GNU GPL (>= 2)
 #'@export
@@ -154,6 +155,8 @@ PlotCorrHeatMap<-function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, t
   data <- mSetObj$dataSet$norm;
   data <- select_if(data, is.numeric)
 
+## no default setting for target in R code; BUT automatically use the variables (columns) 
+
   if(target == 'row'){
     data <- t(data);
   }
@@ -166,12 +169,14 @@ PlotCorrHeatMap<-function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, t
     print("Data is reduced to 1000 vars ..");
   }
   
+# make correlation matrix
   colnames(data) <- substr(colnames(data), 1, 18);
   corr.mat <- cor(data, method=cor.method);
 
+# make p-value matrix
   pval.mat <- Hmisc::rcorr(as.matrix(data), type=cor.method)$P;
   
-  # use total abs(correlation) to select
+  # use total abs(correlation) to select top values
   if(top){
     cor.sum <- apply(abs(corr.mat), 1, sum);
     cor.rk <- rank(-cor.sum);
@@ -185,6 +190,7 @@ PlotCorrHeatMap<-function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, t
   }
   
   # set up parameter for heatmap
+  # colours
   if(colors=="gbr"){
     colors <- colorRampPalette(c("green", "black", "red"), space="rgb")(256);
   }else if(colors == "heat"){
@@ -199,6 +205,7 @@ PlotCorrHeatMap<-function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, t
   
   imgName = paste(imgName, "dpi", dpi, ".", format, sep="");
   
+# height and width, based on whether it is overview or top view
   if(viewOpt == "overview"){
     if(is.na(width)){
       w <- 9;
@@ -236,6 +243,8 @@ PlotCorrHeatMap<-function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, t
   }else{
     Cairo::Cairo(file = imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white");
   }
+
+  # cluster or not
   if(no.clst){
     rowv=FALSE;
     colv=FALSE;
@@ -265,6 +274,7 @@ PlotCorrHeatMap<-function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, t
   }
   dev.off();
 
+  # if not clustering, reorder (?)
   if(!no.clst){ # when no clustering, tree_row is NA
     new.ord <- res$tree_row$order;
     corr.mat <- corr.mat[new.ord, new.ord];
