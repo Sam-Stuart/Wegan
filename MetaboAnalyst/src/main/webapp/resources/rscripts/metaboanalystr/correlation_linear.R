@@ -206,7 +206,9 @@
 
 
 #'Generate linear regression model
-#'@description Plot line of best fit on scatter plot of linear regression model on 2 variables in data
+#'@description Create linear regression model on 2 variables in data. 
+#' Includes tests for linear model assumptions: Shapiro-Wilk test for Normality of Residuals, Beusch-Pagan test for Homoscedasticity, Durbin-Watson test for Autocorrelation (Independent Residual Errors), and RESET test for linearity
+#' Normality of residuals (Shapiro-Wilk), Homoscedasticity (Breusch-Pagan), Autocorrelation of Residuals (Durbin-Watson) and Linearity (RESET)
 #' generates a text doc summary of the model named: "corr_linear_model_summary.txt"
 #' results from calculations are stored in mSet in analSet in 'linReg' as 'res' (response name, predictor name, model summary, predicted values, confidence intervals, covariance matrix, model equation, R squared value, adjusted R squared value, the filename) and 'mod' (regression type, model, formula, model assumptions, response name, predictor name)
 #'@param mSetObj Input the name of the created mSetObj
@@ -304,7 +306,7 @@ lin.reg.anal <- function(mSetObj = NA,
   r_sq_adj <- round(summ[["adj.r.squared"]], digits = 2) #Extract adjusted R^2 value
 
   ##### - MODEL ASSUMPTIONS TESTS - #####
-  mod_shp <- stats::shapiro.test(model$residuals)$p.value
+  mod_shp <- stats::shapiro.test(mod$residuals)$p.value
   mod_bp <- lmtest::bptest(mod)$p.value
   mod_dw <- lmtest::dwtest(mod)$p.value
   mod_res <- lmtest::resettest(mod)$p.value #linearity
