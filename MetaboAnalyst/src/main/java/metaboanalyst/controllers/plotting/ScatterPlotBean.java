@@ -20,46 +20,26 @@ import org.rosuda.REngine.Rserve.RConnection;
 
 /**
  *
- * @author Leif
+ * @author Leif & Hieu
  */
 @ManagedBean(name = "scatterBean")
 @ViewScoped
-public class ScatterPlotBean implements Serializable {
-
-    private final ApplicationBean1 ab = (ApplicationBean1) DataUtils.findBean("applicationBean1");
-    private final SessionBean1 sb = (SessionBean1) DataUtils.findBean("sessionBean1");
+public class ScatterPlotBean extends PlotBean implements Serializable {
 
     // Class Necessary Attributes
-    private String box_xAxis = "NULL";
-    private String box_yAxis = "NULL";
     private SelectItem[] boxColumnOpts = null;
     private SelectItem[] numericBoxColumnOpts = null;
-    private String xLabel = " ";
-    private String yLabel = " ";
     private String legendTitle = "NULL";
-    private String mainTitle = " ";
     private String boxLabels = "NULL";
     private String lineColor = "NULL";
     private String color = "NULL";
-    private boolean data = false;
     private String facA = getNumericBoxColumnOpts()[0].getLabel();
     private String facB = getNumericBoxColumnOpts()[1].getLabel();
 
-    public String getBox_xAxis() {
-        return this.box_xAxis;
+    public ScatterPlotBean() {
+        super();
     }
-
-    public void setBox_xAxis(String box_xAxis) {
-        this.box_xAxis = box_xAxis;
-    }
-
-    public String getBox_yAxis() {
-        return this.box_yAxis;
-    }
-
-    public void setBox_yAxis(String box_yAxis) {
-        this.box_yAxis = box_yAxis;
-    }
+//    Get dependant data
 
     public void setBoxColumnOpts() {
         String[] columns = PlottingUtils.GetDataColumnsBoxPlt(sb);
@@ -77,6 +57,7 @@ public class ScatterPlotBean implements Serializable {
         }
         return this.boxColumnOpts;
     }
+//Get independant data
 
     public void setNumericBoxColumnOpts() {
         String[] columns = PlottingUtils.GetNumericDataColumnsBoxPlt(sb);
@@ -93,22 +74,6 @@ public class ScatterPlotBean implements Serializable {
             this.setNumericBoxColumnOpts();
         }
         return this.numericBoxColumnOpts;
-    }
-
-    public String getxLabel() {
-        return this.xLabel;
-    }
-
-    public void setxLabel(String input) {
-        this.xLabel = input;
-    }
-
-    public String getyLabel() {
-        return this.yLabel;
-    }
-
-    public void setyLabel(String input) {
-        this.yLabel = input;
     }
 
     public String getFacA() {
@@ -151,22 +116,6 @@ public class ScatterPlotBean implements Serializable {
         return legendTitle;
     }
 
-    public void setMainTitle(String mainTitle) {
-        this.mainTitle = mainTitle;
-    }
-
-    public String getMainTitle() {
-        return mainTitle;
-    }
-
-    public boolean data() {
-        return data;
-    }
-
-    public void setData(boolean data) {
-        this.data = data;
-    }
-
     public void setLineColor(String lineColor) {
         this.lineColor = color;
     }
@@ -175,14 +124,14 @@ public class ScatterPlotBean implements Serializable {
         return this.lineColor;
     }
 
-    public void scatterBtn_action() {
-        if (!PlottingUtils.CreateScatterChart(sb, facA, facB, "lm", lineColor, color, xLabel, yLabel, mainTitle, data)) {
+    @Override
+    public void button_action() {
+        if (!PlottingUtils.CreateScatterChart(sb, facA, facB, "lm", lineColor, color, this.labx, this.laby, this.title, this.chosenTitleTextSize, this.chosenAxisTextSize, this.data)) {
             RConnection RC = sb.getRConnection();
             sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
         } else {
             PlottingUtils.PlotScatterChart(sb, sb.getNewImage("plot_scatter_chart"), "png", 72);
         }
-
     }
 
 }
