@@ -156,7 +156,7 @@ public class PlottingUtils {
     }
 
     public static boolean CreateScatterChart(SessionBean1 sb, String facA, String facB, String type, String lineColor,
-            String fillColor, String xLabel, String yLabel, String mainTitle, boolean data) {
+            String fillColor, String xLabel, String yLabel, String mainTitle, Integer titleTextSize, Integer axisTextSize, boolean data) {
         try {
             RConnection RC = sb.getRConnection();
             String rCommand = "scatterPlot_setup(NA"
@@ -168,8 +168,9 @@ public class PlottingUtils {
                     + "\", \"" + xLabel
                     + "\", \"" + yLabel
                     + "\", \"" + mainTitle
+                    + "\", \"" + titleTextSize
+                    + "\", \"" + axisTextSize
                     + "\", \"" + data + "\")";
-            System.out.println(rCommand);
             RCenter.recordRCommand(RC, rCommand);
             RC.eval(rCommand);
             return true;

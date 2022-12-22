@@ -84,7 +84,7 @@ public class PlottingMainBean implements Serializable {
     } 
     
     private void doDefaultScatterChart(){  
-        if (!PlottingUtils.CreateScatterChart(sb, "NULL", "NULL", "NULL", "NULL", "NULL", "NULL", "NULL", "Title", false)){
+        if (!PlottingUtils.CreateScatterChart(sb, "NULL", "NULL", "NULL", "NULL", "NULL", "NULL", "NULL", "Title", 12, 12, false)){
             RConnection RC = sb.getRConnection();
             sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
         }
