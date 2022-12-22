@@ -34,7 +34,7 @@ import org.rosuda.REngine.Rserve.RConnection;
  * @author jianguox
  */
 @ManagedBean(name = "linearCABean")
-@ViewScoped
+//@ViewScoped
 
 public class LinearCABean implements Serializable {
 
