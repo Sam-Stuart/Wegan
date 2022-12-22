@@ -5,7 +5,7 @@ library(vegan)
 
 mSetObj = list()
 data()
-input <- iris 
+input <- iris
 mSetObj$dataSet$orig = input
 mSetObj$dataSet$norm = input
 facA = "NULL"
@@ -16,6 +16,8 @@ aggregate_function = "NULL"
 barLabels = "NULL"
 mainTitle = "NULL"
 data = "false"
+titleTextSize = 12
+axisTextSize = 12
 
 #'Pie Chart'
 #'@description Construct pie chart components based on default variables and user input
@@ -42,6 +44,8 @@ pieChart_setup <-
            barLabels = "NULL",
            mainTitle = "NULL",
            aggregate_function = "NULL",
+           titleTextSize = 12,
+           axisTextSize = 12,
            data = "false") {
     #print("BANANA PIE : This comment is in plotting_pieChart.R");
     mSetObj <- .get.mSet(mSetObj)
@@ -84,7 +88,7 @@ pieChart_setup <-
     if (barLabels == "NULL")
       barLabels <- colnames(numerical_data)
     
-  
+    
     
     if (xlab == "NULL")
       xlab <- facA
@@ -116,6 +120,9 @@ pieChart_setup <-
         xlab = xlab,
         ylab = ylab,
         barLabels = barLabels,
+        titleTextSize = titleTextSize,
+        axisTextSize = axisTextSize,
+        
         mainTitle = mainTitle
       )
     
@@ -150,7 +157,8 @@ plotPieChart <-
            width = NA) {
     mSetObj <- .get.mSet(mSetObj)
     data <- mSetObj$analSet$pieGraph$md.df
-    aggregate_function <- mSetObj$analSet$pieGraph$aggregate_function
+    aggregate_function <-
+      mSetObj$analSet$pieGraph$aggregate_function
     facA <- mSetObj$analSet$pieGraph$facA
     
     #Set plot dimensions
@@ -177,18 +185,20 @@ plotPieChart <-
       type = format,
       bg = "white"
     )
-    data <- data %>% 
+    data <- data %>%
       arrange(desc(Species)) %>%
-      mutate(prop = value / sum(data$value) *100) %>%
-      mutate(ypos = cumsum(prop)- 0.5*prop )
+      mutate(prop = value / sum(data$value) * 100) %>%
+      mutate(ypos = cumsum(prop) - 0.5 * prop)
     
     plot <- ggplot(data, aes(x = "", y = prop, fill = Species)) +
       geom_bar(stat = "identity",
                width = 1,
                color = "white") +
       coord_polar("y", start = 0) +
-      theme_void() +
-    labs(title = paste(aggregate_function, " ", facA, " of species")) +
+      labs(title = paste(aggregate_function, " ", facA, " of species")) +
+      theme_void(
+        base_size = 13,
+      ) +
       geom_text(aes(y = ypos, label = value), color = "white", size = 6)
     
     show(plot)
