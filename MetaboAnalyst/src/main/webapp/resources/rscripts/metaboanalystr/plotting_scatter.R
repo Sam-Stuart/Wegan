@@ -45,6 +45,8 @@ scatterPlot_setup <-
            xlab = "NULL",
            ylab = "NULL",
            maintitle = 'Title',
+           titleTextSize = 12,
+           axisTextSize = 12,
            data = "false") {
     #Obtain mSet dataset
     mSetObj <- .get.mSet(mSetObj)
@@ -111,7 +113,9 @@ scatterPlot_setup <-
         point_color = point_color,
         xlab = xlab,
         ylab = ylab,
-        maintitle = maintitle
+        maintitle = maintitle,
+        titleTextSize = titleTextSize,
+        axisTextSize = axisTextSize
       )
     return(.set.mSet(mSetObj))
   }
@@ -155,6 +159,8 @@ plotScatterPlot <-
     xlab <- mSetObj$analSet$scatterPlot$xlab
     ylab <- mSetObj$analSet$scatterPlot$ylab
     maintitle <- mSetObj$analSet$scatterPlot$maintitle
+    axisTextSize <- mSetObj$analSet$scatterPlot$axisTextSize
+    titleTextSize <- mSetObj$analSet$scatterPlot$titleTextSize
     
     # Convert to sym to use with aes
     facA <- sym(facA)
@@ -203,9 +209,9 @@ plotScatterPlot <-
       theme(
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
-        axis.text = element_text(size = 12, colour = "black"),
-        axis.title = element_text(size = 12),
-        plot.title = element_text(face = 'bold', hjust = 0.5)
+        axis.text = element_text(size = axisTextSize, colour = "black"),
+        axis.title = element_text(size = axisTextSize),
+        plot.title = element_text(face = 'bold', hjust = 0.5, size = titleTextSize)
       )
     show(plot)
     dev.off()
