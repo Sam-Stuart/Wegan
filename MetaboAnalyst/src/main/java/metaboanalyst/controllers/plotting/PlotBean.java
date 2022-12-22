@@ -7,6 +7,7 @@ package metaboanalyst.controllers.plotting;
 import javax.faces.model.SelectItem;
 import metaboanalyst.controllers.SessionBean1;
 import metaboanalyst.utils.DataUtils;
+
 /**
  *
  * @author hieunguyen
@@ -21,6 +22,7 @@ public abstract class PlotBean {
     protected String title;
     protected Integer chosenAxisTextSize;
     protected Integer chosenTitleTextSize;
+    protected boolean data;
 
     protected PlotBean() {
         SelectItem[] fontSizeOpts = new SelectItem[5];
@@ -81,6 +83,14 @@ public abstract class PlotBean {
 
     public SelectItem[] getAxisFontSizeOpts() {
         return axisFontSizeOpts;
+    }
+
+    public boolean isData() {
+        return data;
+    }
+
+    public void setData(boolean data) {
+        this.data = data;
     }
 
     protected abstract void button_action();
