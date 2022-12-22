@@ -10,24 +10,36 @@
         <h:panelGrid columns="1" style="width:380px;">
             <h:panelGrid id="panelGrid2" columns="2" cellpadding="5" columnClasses="colBrayLong,colBrayShort">
                 <h:outputLabel style="font-weight: bold" value="Graph Title:"/>
-                <p:inputText value="#{scatterBean.mainTitle}"></p:inputText>
+                <p:inputText value="#{scatterBean.title}"></p:inputText>
+                
                 <h:outputLabel style="font-weight: bold" value="x axis label: "/>
-                <p:inputText value="#{scatterBean.box_xAxis}"></p:inputText>
+                <p:inputText value="#{scatterBean.labx}"></p:inputText>
+                
                 <h:outputLabel style="font-weight: bold" value="y axis label: "/>
-                <p:inputText value="#{scatterBean.box_yAxis}"></p:inputText>  
+                <p:inputText value="#{scatterBean.laby}"></p:inputText>  
+                
+                <h:outputLabel style="font-weight: bold" value="Title Text Size:"/>
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{scatterBean.chosenTitleTextSize}"
+                                 style="width: 75%">
+                    <f:selectItems value="#{scatterBean.textFontSizeOpts}"/>
+                </p:selectOneMenu>
 
+                <h:outputLabel style="font-weight: bold" value="Title Text Size:"/>
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{scatterBean.chosenAxisTextSize}"
+                                 style="width: 75%">
+                    <f:selectItems value="#{scatterBean.axisFontSizeOpts}"/>
+                </p:selectOneMenu>
 
             </h:panelGrid>
             <h:panelGrid columns="1" cellpadding="5" style="float: right">
                 <p:commandButton value="Update" 
                                  styleClass="updateButton"
                                  style="box-shadow: none !important; text-shadow: none !important"
-                                onclick="PF('statusDialog').show()"
-                                oncomplete="PF('graphApperanceLinear3').hide(); PF('statusDialog').hide()"  
-                                update=":ac:form4:plotScatterPane :cmdPane" 
-                                actionListener="#{scatterBean.scatterBtn_action()}"/>
+                                 onclick="PF('statusDialog').show()"
+                                 oncomplete="PF('graphApperanceLinear3').hide(); PF('statusDialog').hide()"  
+                                 update=":ac:form4:plotScatterPane :cmdPane" 
+                                 actionListener="#{scatterBean.button_action()}"/>
             </h:panelGrid>
         </h:panelGrid>
     </h:form>
 </ui:composition>
-               

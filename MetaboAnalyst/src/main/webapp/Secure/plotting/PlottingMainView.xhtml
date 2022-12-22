@@ -53,13 +53,22 @@
             </p:tabView> 
         </h:panelGrid> 
 
+        <!-- For linear -->
         <p:dialog modal="true" widgetVar="graphApperanceLinear"
                   style="width: 400px; height:400px;"
                   appendTo="@(body)" header="Graphics Center"
                   draggable="false" closable="true" resizable="false">
-            <ui:include src="_color_palette_linear2.xhtml"/>
+            <ui:include src="_color_palette_linear.xhtml"/>
         </p:dialog>
 
+        <!-- For bar -->
+        <p:dialog modal="true" widgetVar="graphApperanceBar"
+                  style="width: 400px; height:400px;"
+                  appendTo="@(body)" header="Graphics Center"
+                  draggable="false" closable="true" resizable="false">
+            <ui:include src="_color_palette_bar.xhtml"/>
+        </p:dialog>
+        
         <!--For box plot-->
         <p:dialog modal="true" widgetVar="graphApperanceLinear2" 
                   style="width: 400px; height:400px;" 
@@ -68,7 +77,7 @@
             <ui:include src="_color_palette_linear3.xhtml" />
         </p:dialog>
 
-          
+
         <p:dialog modal="true" widgetVar="graphApperanceLinear3" 
                   style="width: 400px; height:400px;" 
                   appendTo="@(body)" header="Graphics Center"

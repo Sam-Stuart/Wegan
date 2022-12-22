@@ -5,7 +5,7 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:p="http://primefaces.org/ui">
-    
+
     <h:panelGrid id="panelGrid" columns="5" cellpadding="3" columnClasses="colLeft,colRight,colLeft,colRight, colLast">
         <h:outputLabel style="font-weight: bold" value="Independant Variable:"/>
         <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linear.linColumnNameA}">
@@ -15,33 +15,33 @@
         <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linear.linColumnNameB}">
             <f:selectItems value="#{linear.linColumnOpts}" />
         </p:selectOneMenu>
-<!--            <h:outputLabel style="font-weight: bold" value="Graph Type:"/>
-        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linear.linearPlotType}">
-            <f:selectItem itemLabel="Lines" itemValue="l" /> 
-            <f:selectItem itemLabel="Points" itemValue="p" />
-            <f:selectItem itemLabel="Both" itemValue="b" />
-        </p:selectOneMenu>
-        <h:outputLabel style="font-weight: bold" value="Line Color:"/>
-        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linear.linColor}" >
-            <f:selectItem itemLabel="black" itemValue="black" /> 
-            <f:selectItem itemLabel="green" itemValue="green" /> 
-            <f:selectItem itemLabel="blue" itemValue="blue" /> 
-        </p:selectOneMenu>
-        <h:outputLabel style="font-weight: bold" value="Point Shapes:"/>
-        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linear.linPchs}">
-            <f:selectItem itemLabel="Bullets" itemValue="20" /> 
-            <f:selectItem itemLabel="Circles" itemValue="1" />
-            <f:selectItem itemLabel="Squares" itemValue="0" />
-            <f:selectItem itemLabel="Plus Signs" itemValue="3" /> 
-            <f:selectItem itemLabel="x marks" itemValue="4" />
-            <f:selectItem itemLabel="Diamonds" itemValue="5" />   
-        </p:selectOneMenu>-->
-<!--            <h:outputLabel style="font-weight: bold" value="Graph Title:"/>
-        <p:inputText value="#{linear.linTitle}"></p:inputText>
-        <h:outputLabel style="font-weight: bold" value="x axis label: "/>
-        <p:inputText value="#{linear.linxLabel}"></p:inputText>
-        <h:outputLabel style="font-weight: bold" value="y axis label: "/>
-        <p:inputText value="#{linear.linyLabel}"></p:inputText>-->
+        <!--            <h:outputLabel style="font-weight: bold" value="Graph Type:"/>
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linear.linearPlotType}">
+                    <f:selectItem itemLabel="Lines" itemValue="l" /> 
+                    <f:selectItem itemLabel="Points" itemValue="p" />
+                    <f:selectItem itemLabel="Both" itemValue="b" />
+                </p:selectOneMenu>
+                <h:outputLabel style="font-weight: bold" value="Line Color:"/>
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linear.linColor}" >
+                    <f:selectItem itemLabel="black" itemValue="black" /> 
+                    <f:selectItem itemLabel="green" itemValue="green" /> 
+                    <f:selectItem itemLabel="blue" itemValue="blue" /> 
+                </p:selectOneMenu>
+                <h:outputLabel style="font-weight: bold" value="Point Shapes:"/>
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linear.linPchs}">
+                    <f:selectItem itemLabel="Bullets" itemValue="20" /> 
+                    <f:selectItem itemLabel="Circles" itemValue="1" />
+                    <f:selectItem itemLabel="Squares" itemValue="0" />
+                    <f:selectItem itemLabel="Plus Signs" itemValue="3" /> 
+                    <f:selectItem itemLabel="x marks" itemValue="4" />
+                    <f:selectItem itemLabel="Diamonds" itemValue="5" />   
+                </p:selectOneMenu>-->
+        <!--            <h:outputLabel style="font-weight: bold" value="Graph Title:"/>
+                <p:inputText value="#{linear.linTitle}"></p:inputText>
+                <h:outputLabel style="font-weight: bold" value="x axis label: "/>
+                <p:inputText value="#{linear.linxLabel}"></p:inputText>
+                <h:outputLabel style="font-weight: bold" value="y axis label: "/>
+                <p:inputText value="#{linear.linyLabel}"></p:inputText>-->
 
     </h:panelGrid>
     <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right;"> 
@@ -50,16 +50,16 @@
                          styleClass="graphicsButton"
                          style="box-shadow: none !important; text-shadow: none !important;"
                          actionListener="#{sessionBean1.graphicsLnk_action('pca_pair')}" 
-                        oncomplete="PF('graphApperanceLinear').show()"/>  
+                         oncomplete="PF('graphApperanceLinear').show()"/>  
 
 
         <p:commandButton value="Update" 
                          styleClass="updateButton"
                          style="box-shadow: none !important; text-shadow: none !important"
-                        onclick="PF('statusDialog').show()"
-                        oncomplete="PF('statusDialog').hide()"  
-                        update=":ac:form1:linPane  :cmdPane" 
-                        actionListener="#{linear.linearBtn_action()}"/>                          
+                         onclick="PF('statusDialog').show()"
+                         oncomplete="PF('statusDialog').hide()"  
+                         update=":ac:form1:linPane  :cmdPane" 
+                         actionListener="#{linear.linearBtn_action()}"/>                          
     </h:panelGrid> 
     <h:panelGrid class="resultsBar" columns="2">
         <h:panelGroup>
@@ -75,14 +75,9 @@
 
         </h:panelGroup>                            
     </h:panelGrid>  
-    <h:panelGrid id="linPane" style="text-align: center; width: 100%;">
-        <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('lin')}" alt="Linearimage"/>
+    <h:panelGrid id="linPane" style="width: 100%;">
+        <h:panelGrid style="text-align: center; width: 100%;">
+            <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('lin')}" alt="Linearimage"/>
+        </h:panelGrid>
     </h:panelGrid>
-    <p:dialog modal="true" widgetVar="graphApperanceLinear" 
-        style="width: 400px; height:400px;" 
-        appendTo="@(body)" header="Graphics Center"
-        draggable="false" closable="true" resizable="false"> 
-        <ui:include src="_color_palette_linear.xhtml" />
-    </p:dialog>
 </ui:composition>
-               
