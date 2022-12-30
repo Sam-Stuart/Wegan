@@ -22,12 +22,14 @@ import metaboanalyst.utils.DataUtils;
 import org.primefaces.context.RequestContext;
 import org.primefaces.model.DualListModel;
 import org.rosuda.REngine.Rserve.RConnection;
+import javax.faces.bean.ViewScoped;  // added to help customize graph part work
 
 /**
  *
- * @author dnallen
+ * @author gpsykes
  */
 @ManagedBean(name = "logCABean")
+//@ViewScoped
 public class LogisticCABean implements Serializable {
 
     private final SessionBean1 sb = (SessionBean1) DataUtils.findBean("sessionBean1");
@@ -37,8 +39,54 @@ public class LogisticCABean implements Serializable {
     private String usrName = usr.getName();
     
     
-    private String fileLogModVals = "corr_logistic_model_summary.txt";
-//            getSummaryLinDownload();
+    //   (Predictor) Indep. Variable NAMES (Textbox)
+    private String indInput = "";
+    //   (Predictor) Indep. Variable NAMES (Textbox)     AUTOFILL
+    private SelectItem[] corrColumnOptsFill = null;
+    //   (Predictor) Indep. Variable NAMES (Textbox) get     AUTOFILL
+    private String corrFillColumnNames = getFillColumnOpts()[0].getLabel();
+    // (Response) Dependent Variable NAMES (Dropdown)
+    private SelectItem[] columnOpts = null;
+    // (Response) Dependent Variable NAME (get it)
+    private String responseVar = getColumnOpts()[0].getLabel();
+    // (Response) Dependent Variable LEVELS (dropdown)
+    private SelectItem[] columnLevelOpts = null;
+    // (Response) Dependent Variable LEVEL (get one)
+    private String responseLevelVar = getColumnLevelOpts()[0].getLabel();
+    //   Reference Level ORDER (Response variable)
+    private String indOrder = "";
+    
+    private boolean doOriginal = false;
+    private boolean doPlotEq = false; 
+    private boolean doPlotRsq = false;
+    private boolean doPlotRsqAdj = false;
+    private boolean doPlotConfInt = false;
+    private String corModelType = "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corModType    
+    private boolean doLabelXtickRotate = false;
+    private boolean doPlotLegHoriz = false;
+    private String corPlotLegPosOpts = "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corLegPosOpts
+    private String corPaletteOpts = "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corColorPaletteOpts
+    private String corPaletteBrewerOpts = "NULL"; // CORRESPONDS WITH applicationBean1.corBrewerPaletteOpts
+//    private String corColorDotsOpts = "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corLinColorDotsOpts
+//    private String corColorLineOpts = "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corLinColorLineOpts
+    private String corPlotTitle = " ";
+    private String corPlotXlab = " ";
+    private String corPlotYlab = " ";
+    private String corTextSizeTitle= "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corSizeTitle
+    private String corTextSizeXlab= "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corSizeXlab
+    private String corTextSizeYlab= "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corSizeYlab
+    private String corTextSizeXtick= "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corSizeXtick
+    private String corTextSizeYtick= "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corSizeYtick
+    
+    
+    
+    private String getSummaryDownload(){
+        String facA = getResponseVar();
+        return "logistic_regression_summary_" + facA + ".txt";
+    }
+    
+    private String fileLogModVals = getSummaryDownload();
+//    private String fileLogModVals = "corr_logistic_model_summary.txt";
     private String fileLogModValsPath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileLogModVals + "\">" + fileLogModVals + "</a>";
  
     public String getFileLogModValsPath() {
@@ -49,13 +97,10 @@ public class LogisticCABean implements Serializable {
         this.fileLogModValsPath = fileLogModValsPath;
     } 
     
-
     
  // (PREDICTOR) INDEPENDENT VARIABLE
-    
     //   (Predictor) Indep. Variable NAMES (Textbox)
-    private String indInput = "";
-
+//    private String indInput = "";
     public String getIndInput() {
         return indInput;
     }
@@ -65,7 +110,7 @@ public class LogisticCABean implements Serializable {
     }
     
     //   (Predictor) Indep. Variable NAMES (Textbox)     AUTOFILL
-    private SelectItem[] corrColumnOptsFill = null;
+//    private SelectItem[] corrColumnOptsFill = null;
     public SelectItem[] getFillColumnOpts(){
         String[] columns = CAUtils.GetDataColumns(sb);
         int columnsLen = columns.length;
@@ -78,8 +123,8 @@ public class LogisticCABean implements Serializable {
         return corrColumnOptsFill;
     }
     
-    private String corrFillColumnNames = getFillColumnOpts()[0].getLabel();
-    
+    //   (Predictor) Indep. Variable NAMES (Textbox) get     AUTOFILL
+//    private String corrFillColumnNames = getFillColumnOpts()[0].getLabel();
     public String getCorrFillColumnNames() {
         return corrFillColumnNames;
     }
@@ -87,13 +132,11 @@ public class LogisticCABean implements Serializable {
     public void setCorrFillColumnNames(String corrFillColumnNames) {
         this.corrFillColumnNames = corrFillColumnNames;
     }     
-   
     
    // (RESPONSE) DEPENDENT VARIABLE
     
     // (Response) Dependent Variable NAMES (Dropdown)
-    private SelectItem[] columnOpts = null;
-    
+//    private SelectItem[] columnOpts = null;   
     public SelectItem[] getColumnOpts(){
         String[] columns = CAUtils.GetCatDataColumns(sb);
         int columnsLen = columns.length;
@@ -105,11 +148,10 @@ public class LogisticCABean implements Serializable {
         //List<String> columnNames = Arrays.asList(columns);
         return columnOpts;
     }
-
     
     // (Response) Dependent Variable NAME (get it)
-    private String responseVar = getColumnOpts()[0].getLabel();
-    
+//    like corrColumnNameA in LinearCABean.java
+//    private String responseVar = getColumnOpts()[0].getLabel();
     public String getResponseVar() {
         return responseVar;
     }
@@ -118,10 +160,8 @@ public class LogisticCABean implements Serializable {
         this.responseVar = responseVar;
     }
     
-    
     // (Response) Dependent Variable LEVELS (dropdown)
-    private SelectItem[] columnLevelOpts = null;
-    
+//    private SelectItem[] columnLevelOpts = null;
     public SelectItem[] getColumnLevelOpts(){
         String[] columns = CAUtils.GetCatLevelDataColumns(sb, "NULL");
         int columnsLen = columns.length;
@@ -134,10 +174,8 @@ public class LogisticCABean implements Serializable {
         return columnLevelOpts;
     }
     
-    
     // (Response) Dependent Variable LEVEL (get one)
-    private String responseLevelVar = getColumnLevelOpts()[0].getLabel();
-    
+//    private String responseLevelVar = getColumnLevelOpts()[0].getLabel();
     public String getResponseLevelVar() {
         return responseLevelVar;
     }
@@ -145,11 +183,9 @@ public class LogisticCABean implements Serializable {
     public void setResponseLevelVar(String responseLevelVar) {
         this.responseLevelVar = responseLevelVar;
     }
-        
     
     //   Reference Level ORDER (Response variable)
-    private String indOrder = "";
-
+//    private String indOrder = "";
     public String getIndOrder() {
         return indOrder;
     }
@@ -160,10 +196,7 @@ public class LogisticCABean implements Serializable {
   
     
     
-    
-    
     private List<String> corrPolyResults = null;
-    
     public List<String> getCorrPolyResults(){
         String[] results = CAUtils.GetPolyCAResults(sb, 2);
         corrPolyResults = Arrays.asList(results);
@@ -172,10 +205,9 @@ public class LogisticCABean implements Serializable {
     }
    
     
-    
-  // CHECK BOX for using normalized data (default) or original data
-    private boolean doOriginal = false;
-
+//ON-PLOT OPTIONS    
+    // CHECK BOX for using normalized data (default) or original data
+//    private boolean doOriginal = false;
     public boolean isdoOriginal() {
         return doOriginal;
     }
@@ -184,10 +216,9 @@ public class LogisticCABean implements Serializable {
         this.doOriginal = doOriginal;
     }
     
-  // CHECK BOX for adding (default) or omitting equation to plot (at top), see correlation_linear.R 
-  // when >1 of rsq, eq, & rsqadj are checked, values are seperated by " | " 
-     private boolean doPlotEq = false;
-
+    // CHECK BOX for adding (default) or omitting equation to plot (at top), see correlation_linear.R 
+    // when >1 of rsq, eq, & rsqadj are checked, values are seperated by " | " 
+//     private boolean doPlotEq = false;
     public boolean isdoPlotEq() {
         return doPlotEq;
     }
@@ -195,9 +226,8 @@ public class LogisticCABean implements Serializable {
     public void setdoPlotEq(boolean doPlotEq) {
         this.doPlotEq = doPlotEq;
     } 
-  // CHECK BOX
-     private boolean doPlotRsq = false;
-
+    // CHECK BOX
+//     private boolean doPlotRsq = false;
     public boolean isdoPlotRsq() {
         return doPlotRsq;
     }
@@ -205,9 +235,8 @@ public class LogisticCABean implements Serializable {
     public void setdoPlotRsq(boolean doPlotRsq) {
         this.doPlotRsq = doPlotRsq;
     }     
-  // CHECK BOX
-     private boolean doPlotRsqAdj = false;
-
+    // CHECK BOX
+//     private boolean doPlotRsqAdj = false;
     public boolean isdoPlotRsqAdj() {
         return doPlotRsqAdj;
     }
@@ -215,9 +244,8 @@ public class LogisticCABean implements Serializable {
     public void setdoPlotRsqAdj(boolean doPlotRsqAdj) {
         this.doPlotRsqAdj = doPlotRsqAdj;
     }  
-  // CHECK BOX 
-     private boolean doPlotConfInt = false;
-
+    // CHECK BOX 
+//     private boolean doPlotConfInt = false;
     public boolean isdoPlotConfInt() {
         return doPlotConfInt;
     }
@@ -226,9 +254,8 @@ public class LogisticCABean implements Serializable {
         this.doPlotConfInt = doPlotConfInt;
     }    
     
- //STATIC DROPDOWN    
-    private String corModelType = "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.logModType
-
+    //STATIC DROPDOWN    
+//    private String corModelType = "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corModType
     public String getCorModelType() {
         return corModelType;
     }
@@ -238,42 +265,17 @@ public class LogisticCABean implements Serializable {
     }
     
     // CHECK BOX 
-     private boolean doLabelXtickRotate = false;
-
+//     private boolean doLabelXtickRotate = false;
     public boolean isdoLabelXtickRotate() {
         return doLabelXtickRotate;
     }
 
     public void setdoLabelXtickRotate(boolean doLabelXtickRotate) {
         this.doLabelXtickRotate = doLabelXtickRotate;
-    }
-    
- //STATIC DROPDOWN for selecting colour:   replaced: corColorOpts : change name from logPaletteOpts to corPaletteOpts, and logColorPaletteOpts to corColorPaletteOpts
-    private String corPaletteOpts = "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corColorPaletteOpts
-
-    public String getCorPaletteOpts() {
-        return corPaletteOpts; 
-    }
-
-    public void setCorPaletteOpts(String corPaletteOpts) {
-        this.corPaletteOpts = corPaletteOpts;
-    }
-    
- //STATIC DROPDOWN for selecting colours, in ROC plot
-    private String corPaletteBrewerOpts = "NULL"; // CORRESPONDS WITH applicationBean1.corBrewerPaletteOpts
-
-    public String getCorPaletteBrewerOpts() {
-        return corPaletteBrewerOpts; 
-    }
-
-    public void setCorPaletteBrewerOpts(String corPaletteBrewerOpts) {
-        this.corPaletteBrewerOpts = corPaletteBrewerOpts;
     }    
     
-
     // CHECK BOX 
-     private boolean doPlotLegHoriz = false;
-
+//     private boolean doPlotLegHoriz = false;
     public boolean isdoPlotLegHoriz() {
         return doPlotLegHoriz; 
     }
@@ -282,9 +284,8 @@ public class LogisticCABean implements Serializable {
         this.doPlotLegHoriz = doPlotLegHoriz;
     }
     
- //STATIC DROPDOWN for selecting colour of line on plot
-    private String corPlotLegPosOpts = "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.logLegPosOpts
-
+    //STATIC DROPDOWN for selecting colour of line on plot
+//    private String corPlotLegPosOpts = "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corLegPosOpts
     public String getCorPlotLegPosOpts() {
         return corPlotLegPosOpts;
     }
@@ -292,11 +293,30 @@ public class LogisticCABean implements Serializable {
     public void setCorPlotLegPosOpts(String corPlotLegPosOpts) {
         this.corPlotLegPosOpts = corPlotLegPosOpts;
     }
+//COLOURS    
+    //STATIC DROPDOWN for selecting colour:   replaced: corColorOpts : change name from logPaletteOpts to corPaletteOpts, and logColorPaletteOpts to corColorPaletteOpts
+//    private String corPaletteOpts = "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corColorPaletteOpts
+    public String getCorPaletteOpts() {
+        return corPaletteOpts; 
+    }
+
+    public void setCorPaletteOpts(String corPaletteOpts) {
+        this.corPaletteOpts = corPaletteOpts;
+    }
+     
+    //STATIC DROPDOWN for selecting colours, in ROC plot
+//    private String corPaletteBrewerOpts = "NULL"; // CORRESPONDS WITH applicationBean1.corBrewerPaletteOpts
+    public String getCorPaletteBrewerOpts() {
+        return corPaletteBrewerOpts; 
+    }
+
+    public void setCorPaletteBrewerOpts(String corPaletteBrewerOpts) {
+        this.corPaletteBrewerOpts = corPaletteBrewerOpts;
+    }    
     
-  
-  // TEXT BOX 
-    private String corPlotTitle = " ";
-    
+//PLOT LABELS  
+    // TEXT BOX 
+//    private String corPlotTitle = " ";
     public String getCorPlotTitle() {
         return corPlotTitle;
     }
@@ -305,9 +325,8 @@ public class LogisticCABean implements Serializable {
         this.corPlotTitle = corPlotTitle;
     }
  
-     // TEXT BOX 
-    private String corPlotXlab = " ";
-    
+    // TEXT BOX 
+//    private String corPlotXlab = " ";
     public String getCorPlotXlab() {
         return corPlotXlab;
     }
@@ -316,9 +335,8 @@ public class LogisticCABean implements Serializable {
         this.corPlotXlab = corPlotXlab;
     }       
     
- // TEXT BOX 
-    private String corPlotYlab = " ";
-    
+    // TEXT BOX 
+//    private String corPlotYlab = " ";
     public String getCorPlotYlab() {
         return corPlotYlab;
     }
@@ -326,27 +344,80 @@ public class LogisticCABean implements Serializable {
     public void setCorPlotYlab(String corPlotYlab) {
         this.corPlotYlab = corPlotYlab;
     } 
+
+//TEXT SIZE    
+    //STATIC DROPDOWN title text size
+//    WAS: corPlotLabelSize; applicaitonbean: corPlotLabSize
+//    private String corTextSizeTitle= "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corSizeTitle
+    public String getCorTextSizeTitle() {
+        return corTextSizeTitle;
+    }
+
+    public void setCorTextSizeTitle(String corTextSizeTitle) {
+        this.corTextSizeTitle = corTextSizeTitle;
+    }  
     
+    //STATIC DROPDOWN title text size
+//    private String corTextSizeXlab= "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corSizeXlab
+    public String getCorTextSizeXlab() {
+        return corTextSizeXlab;
+    }
+
+    public void setCorTextSizeXlab(String corTextSizeXlab) {
+        this.corTextSizeXlab = corTextSizeXlab;
+    }  
+    
+    //STATIC DROPDOWN title text size
+//    private String corTextSizeYlab= "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corSizeYlab
+    public String getCorTextSizeYlab() {
+        return corTextSizeYlab;
+    }
+
+    public void setCorTextSizeYlab(String corTextSizeYlab) {
+        this.corTextSizeYlab = corTextSizeYlab;
+    }  
+    
+    //STATIC DROPDOWN title text size
+//    private String corTextSizeXtick= "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corSizeXtick
+    public String getCorTextSizeXtick() {
+        return corTextSizeXtick;
+    }
+
+    public void setCorTextSizeXtick(String corTextSizeXtick) {
+        this.corTextSizeXtick = corTextSizeXtick;
+    } 
+    
+    //STATIC DROPDOWN title text size
+//    private String corTextSizeYtick= "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corSizeYtick
+    public String getCorTextSizeYtick() {
+        return corTextSizeYtick;
+    }
+
+    public void setCorTextSizeYtick(String corTextSizeYtick) {
+        this.corTextSizeYtick = corTextSizeYtick;
+    }     
     
         // ACTION BUTTONS //
     public void corrLogBtn1_action() {
         CAUtils.CreateLogisticModel(sb, 
-                responseVar,indInput,doOriginal,
+                responseVar, indInput, doOriginal,
                   corModelType, responseLevelVar, indOrder);
         CAUtils.PlotLogisticEffectCA(sb, doOriginal, corModelType, doPlotConfInt,
                  corPlotTitle, corPlotXlab, corPlotYlab,               
                 doLabelXtickRotate, corPaletteOpts, doPlotLegHoriz, corPlotLegPosOpts,
+//                 corTextSizeTitle, corTextSizeXlab, corTextSizeYlab, corTextSizeXtick, corTextSizeYtick,
                 sb.getCurrentImage("corr_log_eff"), "png", 72);
     }
     
    // ACTION BUTTONS //
     public void corrLogBtn2_action() {
         CAUtils.CreateLogisticModel(sb,
-               responseVar,indInput, doOriginal,
+               responseVar, indInput, doOriginal,
                corModelType, responseLevelVar, indOrder);
 //                columnNameA, indInput);
         CAUtils.PlotLogisticROCCA(sb, doOriginal, corModelType,
                corPaletteBrewerOpts, corPlotTitle, 
+//                corTextSizeTitle, corTextSizeXlab, corTextSizeYlab, corTextSizeXtick, corTextSizeYtick,
                 sb.getCurrentImage("corr_log_roc"), "png", 72);
     }
     
