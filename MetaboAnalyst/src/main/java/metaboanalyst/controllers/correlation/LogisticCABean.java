@@ -24,6 +24,15 @@ import org.primefaces.model.DualListModel;
 import org.rosuda.REngine.Rserve.RConnection;
 import javax.faces.bean.ViewScoped;  // added to help customize graph part work
 
+//import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import javax.enterprise.context.RequestScoped;
+import javax.inject.Named;
+
 /**
  *
  * @author gpsykes
@@ -97,6 +106,49 @@ public class LogisticCABean implements Serializable {
         this.fileLogModValsPath = fileLogModValsPath;
     } 
     
+ // (PREDICTOR) INDEPENDENT VARIABLE
+  //  DYNAMIC CHECKBOXES
+  //  dzone.com/articles/binding-dynamic-multi-select
+    //   (Predictor) Indep. Variable NAMES (multiple checkboxes)    
+    private List<String> corrPredictors;//items
+  
+    String[] predictors = CAUtils.GetDataColumns(sb);
+    List<String> predictorNames = Arrays.asList(predictors);     
+  //fill the check map with the items defaulted to unchecked
+    public Map<String,Boolean> hashmapper(){
+        Map<String,Boolean> checkMap = new HashMap<String,Boolean>();
+            for(String item:predictorNames) {
+			checkMap.put(item, Boolean.FALSE);
+		}
+            return checkMap;
+        }
+    private Map<String,Boolean> checkMap = hashmapper();    
+    
+    public List<String> getPredictors() { //items
+//	return corrPredictors; //items
+        return predictorNames;
+    }
+
+    public Map<String, Boolean> getCheckMap() {
+	return checkMap;
+    }
+//        this creates our list of items and populates it with a set of values. The checkMap will be used to track which items are selected and which are not. The map contains a set of String,Boolean pairs.
+//Add one more method to return a string telling us which items are selected
+    public String getPredictorsSelected() {
+	String result = "";
+	    for (Entry<String, Boolean> entry : checkMap.entrySet()) {
+		    if (entry.getValue()) {
+				result = result + ", " + entry.getKey();
+			}
+		}
+		if (result.length() == 0) {
+			return "";
+		} else {
+			return result.substring(2);
+		}
+	}
+//To get the list of selected items, iterate through the set of entries and if the value in the map is true, then it is selected and added to the result string. 
+    
     
  // (PREDICTOR) INDEPENDENT VARIABLE
     //   (Predictor) Indep. Variable NAMES (Textbox)
@@ -107,7 +159,7 @@ public class LogisticCABean implements Serializable {
 
     public void setIndInput(String indInput) {
         this.indInput = indInput;
-    }
+    }   
     
     //   (Predictor) Indep. Variable NAMES (Textbox)     AUTOFILL
 //    private SelectItem[] corrColumnOptsFill = null;
@@ -400,7 +452,10 @@ public class LogisticCABean implements Serializable {
         // ACTION BUTTONS //
     public void corrLogBtn1_action() {
         CAUtils.CreateLogisticModel(sb, 
-                responseVar, indInput, doOriginal,
+                responseVar, 
+                getPredictorsSelected(),
+//                indInput,
+                doOriginal,
                   corModelType, responseLevelVar, indOrder);
         CAUtils.PlotLogisticEffectCA(sb, doOriginal, corModelType, doPlotConfInt,
                  corPlotTitle, corPlotXlab, corPlotYlab,               
@@ -412,7 +467,10 @@ public class LogisticCABean implements Serializable {
    // ACTION BUTTONS //
     public void corrLogBtn2_action() {
         CAUtils.CreateLogisticModel(sb,
-               responseVar, indInput, doOriginal,
+               responseVar, 
+               getPredictorsSelected(),
+//                indInput,
+                doOriginal,
                corModelType, responseLevelVar, indOrder);
 //                columnNameA, indInput);
         CAUtils.PlotLogisticROCCA(sb, doOriginal, corModelType,
