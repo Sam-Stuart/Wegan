@@ -649,6 +649,7 @@ public class DataUtils {
         TreeNode nodec5 = new DefaultTreeNode("Penalized", caNode);
         TreeNode nodec6 = new DefaultTreeNode("SVM", caNode);
         TreeNode nodec7 = new DefaultTreeNode("Random Forest", caNode);
+        TreeNode nodec8 = new DefaultTreeNode("ANN", caNode); // GPS added 'Artificial Neural Networks'
     }
 
     private static void addStatNodes(TreeNode parent) {
