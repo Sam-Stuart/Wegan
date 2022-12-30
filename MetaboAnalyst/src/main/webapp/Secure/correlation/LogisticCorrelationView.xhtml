@@ -39,6 +39,24 @@
                             <h:outputLabel style="font-weight: bold" value="Independent variables (names with commas in between):"/>
                             <p:inputText style="width:400px; height:40px" value="#{logCABean.indInput}"/> 
   
+                            
+    logCABean.hashmapper()
+    <!--dzone.com/articles/binding-dynamic-multi-select-->                           
+<h:form>
+	<h:outputText value="Currently Selected : #{logCABean.getPredictorsSelected()}" />
+
+	<ui:repeat var="item" value="#{logCABean.getPredictors()}">
+		<h:outputText value="#{item}" />
+		<h:selectBooleanCheckbox value="#{logCABean.checkMap[item]}"/>
+	</ui:repeat>
+
+	<h:commandButton value="Update" action="refresh" />
+</h:form>
+                            
+<h:selectBooleanCheckbox value="#{logCABean.checkMap[item]}">
+	<f:ajax event="click" execute="@form" render="@form" />
+</h:selectBooleanCheckbox>
+                            
 <!--                          <h:panelGrid id="listPane">
                             <h:panelGrid style="padding-left:20px;">
                             <p:inputTextarea  autoResize="false" value="hash{pathLoader.pathOraList}" rows="16" cols="40" />
