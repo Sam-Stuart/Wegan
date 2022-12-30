@@ -62,8 +62,6 @@ log.reg.anal <- function(mSetObj=NA,
 # 202211-03: change data back to input 
 #  data <- input
 
-  fileName <- paste0("corr_logistic_model_summary.txt") #File name for results
-
   #TEXT SHOULD BE VISIBLE TO USER 
 #  cat("One categorical dependent variable and one or more independent variables will be tested for correlation. Independent variables can be categorical or numeric." )
 #  cat("By default, the 1st categorical (cat.) variable (var.) is treated as the dependent (depnt). var. If the dataset has more than 1 cat. var., you may change the depnt var. using the drop down menu.")
@@ -105,6 +103,10 @@ stop(errm)
     facA <- facA #User selected, java uses function factor.columns() to provide options in drop down menu (only categorical columns are available)
   }
 
+# FILENAME
+  # fileName <- paste0("corr_logistic_model_summary.txt") #File name for results
+  fileName <- paste0("logistic_regression_summary_", facA, ".txt");
+
 ## predtext is input into R as one string from textbox on webpage
 #CHECK PREDTEXT FOR COMMAS
    if( !any(grepl(",", predtext, fixed = TRUE)) && predtext != "" && predtext != "NULL" ){ 
@@ -114,15 +116,34 @@ stop(errm)
     warning("Check your predictor variables; Have you separated them by a comma? Are they spelled as they are in your input data?")
   }}
 
-  ## FORMULA SET UP
+
+#### PREDICTORS (using dynamic checkboxes)
   #SET RIGHT SIDE OF FORMULA WITH PREDICTOR VARIABLES (ie not facA)
   if (predtext == "NULL") {
-    # predData <- input[, !(colnames(input) == facA), drop = FALSE]
     predtext <- colnames( input[, !(colnames(input) == facA), drop = FALSE] )[1] #Default is 1st column
-    # predtext <- paste(colnames(predData), collapse=" , ")
   } else {
-    predtext <- predtext #taken from text box by java, fed as string into R code
+
+    if("list" %in% class(predtext) ){
+   predtext1 <- vector(mode = "character",  length = length(predtext) )
+    for(i in seq_along(predtext) ){ 
+   predtext1[i] <- predtext[[i]]
+      }
+       predtext <- paste(predtext1, collapse = ",")
+    } else {
+       predtext <- paste(predtext, collapse = ",")
   }
+}
+
+
+ # ## FORMULA SET UP
+ # #SET RIGHT SIDE OF FORMULA WITH PREDICTOR VARIABLES (ie not facA)
+ # if (predtext == "NULL") {
+ #   # predData <- input[, !(colnames(input) == facA), drop = FALSE]
+ #   predtext <- colnames( input[, !(colnames(input) == facA), drop = FALSE] )[1] #Default is 1st column
+ #   # predtext <- paste(colnames(predData), collapse=" , ")
+ # } else {
+ #   predtext <- predtext #taken from text box by java, fed as string into R code
+ # }
 
 predtext1 <- predtext
 
