@@ -54,8 +54,8 @@ public class LinearCABean implements Serializable {
     private boolean doPlotRsq = false;
     private boolean doPlotRsqAdj = false;
     private boolean doPlotConfInt = false;
-    private String corColorDotsOpts = "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corColorOpts
-    private String corColorLineOpts = "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corColorOpts
+    private String corColorDotsOpts = "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corLinColorDotsOpts
+    private String corColorLineOpts = "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corLinColorLineOpts
     private String corPlotTitle = " ";
     private String corPlotXlab = " ";
     private String corPlotYlab = " ";
@@ -149,7 +149,7 @@ public class LinearCABean implements Serializable {
     public void setCorrColumnNameB(String corrColumnNameB) {
         this.corrColumnNameB = corrColumnNameB;
     }    
-    
+//ON-PLOT OPTIONS    
   // CHECK BOX for using normalized data (default) or original data
 //    private boolean doOriginal = false;
     public boolean isdoOriginal() {
@@ -199,7 +199,7 @@ public class LinearCABean implements Serializable {
     public void setdoPlotConfInt(boolean doPlotConfInt) {
         this.doPlotConfInt = doPlotConfInt;
     }    
-    
+//COLOURS    
  //STATIC DROPDOWN for selecting colour of dots on plot
 //    replaced: corColorOpts
 //    private String corColorDotsOpts = "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corColorOpts
@@ -220,7 +220,7 @@ public class LinearCABean implements Serializable {
     public void setCorColorLineOpts(String corColorLineOpts) {
         this.corColorLineOpts = corColorLineOpts;
     }
-  
+//PLOT LABELS  
   // TEXT BOX 
 //    private String corPlotTitle = " ";
     public String getCorPlotTitle() {
