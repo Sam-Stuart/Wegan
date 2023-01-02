@@ -83,8 +83,8 @@ log.reg.anal <- function(mSetObj=NA,
 #)
 #  facData <- input[,sapply(input, is.factor) | sapply(input, is.character), drop = FALSE]
 
-if(!any(sapply(input, is.factor) | sapply(input, is.character))){
-errm <- c("No categorical variables for analysis; did you input your categorical variables as numbers (for example, as hot-one coded)? Try SVM, multivariate, or linear which don't require categorical variables, or try splitting your numeric variable of interest into categories.")
+if(!any( sapply(input, is.factor) | sapply(input, is.character)) ){
+errm <- c("No categorical variables in data; did you input your categorical variables as numbers (for example, as hot-one coded)? Try using SVM, multivariate, or linear univariate methods, which don't require categorical variables, or try splitting your numeric variable of interest into categories.")
 AddErrMsg(errm)
 stop(errm)
 }
@@ -92,12 +92,13 @@ stop(errm)
 
 # CHOOSE RESPONSE VARIABLE
   if (facA == "NULL") {
-# if(any(sapply(input, is.factor) | sapply(input, is.character))){ # already checked above for factor column presence
+# if( any(sapply(input, is.factor) | sapply(input, is.character)) ){ # already checked above for factor column presence
   facA <- colnames(
         input[,sapply(input, is.factor) | sapply(input, is.character), drop = FALSE]
         )[1]
 #  } else{
-#     stop("No categorical variables for analysis; did you input your categorical variables as numbers (for example, as hot-one coded)?")
+#    AddErrMsg("No categorical variables in data; did you input your categorical variables as numbers (for example, as hot-one coded)?")
+#    stop("No categorical variables in data")
 #  }
   } else {
     facA <- facA #User selected, java uses function factor.columns() to provide options in drop down menu (only categorical columns are available)
@@ -122,6 +123,11 @@ stop(errm)
   if (predtext == "NULL") {
     predtext <- colnames( input[, !(colnames(input) == facA), drop = FALSE] )[1] #Default is 1st column
   } else {
+
+print(paste0("predtext: ", predtext))
+print(paste0("class predtext: ", class(predtext)))
+print(paste0("mode predtext: ", mode(predtext)))
+print(paste0("typeof predtext: ", typeof(predtext)))
 
     if("list" %in% class(predtext) ){
    predtext1 <- vector(mode = "character",  length = length(predtext) )
@@ -384,8 +390,8 @@ model = mod, formula = form, model.data = model_data, response = facA, predictor
 ## BINOMIAL
  # CHECK N LEVELS
     if (levels.num < 2) {
-      AddErrMsg("The dependent variable has less than 2 levels! Check the levels of the variable and make sure there are only 2 unique values.")
-      stop("The dependent variable has less than 2 levels! Check the levels of the variable and make sure there are only 2 unique values.")
+      AddErrMsg("The dependent variable has less than 2 levels! Make sure there are exactly 2 unique values in the dependent variable.")
+      stop("The dependent variable has less than 2 levels! Make sure there are exactly 2 unique values in the dependent variable.")
     } else if (levels.num > 2) {
       AddErrMsg("The dependent variable has more than 2 levels! Try multinomial regression instead.")
       stop("The dependent variable has more than 2 levels! Try multinomial regression instead.")
@@ -405,7 +411,7 @@ model = mod, formula = form, model.data = model_data, response = facA, predictor
     sefit <- predict(mod, se.fit = TRUE)$se.fit
     conf.int <- confint(mod, level = 0.95) #Confidence intervals for predictor variables
     oddsRatio <- exp(coef(mod))
-    covar <- vcov(mod) #Covariance matrix for preductor variables
+    covar <- vcov(mod) #Covariance matrix for predictor variables
     testStat <- with(mod, null.deviance - deviance)
     testStatDF <- with(mod, df.null - df.residual)
     pValue <- with(mod, pchisq(null.deviance - deviance, df.null - df.residual, lower.tail = FALSE))
@@ -468,7 +474,7 @@ response = facA, predictor = predictors)
 
 
 
-#'Effects plot for non-ordered logistic regression
+#'Effects plot for non-ordered logistic regression (conditional effects; non-focal terms are held constant at their mean value (if these are continuous) or at their reference level (for factors), and the effects are therefore conditional on these reference levels)
 #'@description 
 #'@usage plot.effects.logReg(mSetObj, type="binomial", imgName, format="png", dpi=72, width=NA)
 #'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
@@ -500,8 +506,10 @@ log.effects.plot <- function(mSetObj=NA,
 # predtext = "NULL", 
   data = "false",
   type = "NULL",  # was multinomial before # can maybe remove the type argument?
+#   plot_linear = "false", # if false, plot error bars; if true, plot linear (even categorical vars)
 #  var_viewby1 = "NULL",
 #  var_viewby2 = "NULL",
+#  var_viewby3 = "NULL",
   plot_ci="false", #checkbox
   plot_title=" ",
   plot_ylab=" ",
@@ -518,6 +526,12 @@ log.effects.plot <- function(mSetObj=NA,
   library("ggeffects")
   library("RJSONIO")
 
+### marginal effects or conditional effects? CONDITIONAL
+### from {ggeffects} vignette: strengejacke.github.io/ggeffects/articles/introduction_marginal_effects.html
+# ggpredict() (used in this function) holds non-focal terms constant at their mean value (if these are continuous) or at their reference level (for factors). Thus, effects returned by ggpredict() are actually conditional effects (i.e. these are conditioned on certain (reference) levels of factors). However, ggeffect() and ggemmeans() return marginal effects, since the effects are “marginalized” (or “averaged”) over the levels of factors.
+# SO from this function, it is the conditional effects returned instead of the marginal effects
+
+
   #EXTRACT OBJECTS FROM MSET
   mSetObj <- .get.mSet(mSetObj)
   
@@ -528,9 +542,11 @@ log.effects.plot <- function(mSetObj=NA,
     input <- mSetObj$dataSet$orig
   }
 
-# SET LOGISTIC TYPE IF NOT SET
+# SET LOGISTIC TYPE (IF NOT SET), SET RESPONSE & PREDICTORS
 type1 <- mSetObj$analSet$logRegInfo$type
 print(paste0("eff: ", type1))
+predictors <- mSetObj$analSet$logRegInfo$predictor
+facA <- mSetObj$analSet$logRegInfo$response
 
 ### TROUBLESHOOTING (Q&D)
  # input <- iris; 
@@ -540,29 +556,57 @@ print(paste0("eff: ", type1))
 ### VARIABLES: STORE OUTPUT SOURCE BASED ON REGSN TYPE
   if (type1 == "ordinal") { 
     # main = "Ordinal Logistic Regression \nEffects Plot"
-    output <- mSetObj$analSet$logOrdReg
+    # predictors <- mSetObj$analSet$logOrdReg$res$predictor
+    # facA <- mSetObj$analSet$logOrdReg$res$response
+    # output <- mSetObj$analSet$logOrdReg
     mod <- mSetObj$analSet$logOrdReg$mod$model
-    predictors <- mSetObj$analSet$logOrdReg$res$predictor
-    facA <- mSetObj$analSet$logOrdReg$res$response
     reference <- mSetObj$analSet$logOrdReg$res$level.reference
     ordertext <- mSetObj$analSet$logOrdReg$res$level.resp.order
     main_end <- " ( Ordinal Logistic Regression)" #  # main = "Ordinal Logistic Regression \nEffects Plot"
   } else if (type1 == "multinomial") {
     # main = "Multinomial Logistic Regression \nEffects Plot"
-    output <- mSetObj$analSet$logMultinomReg
+    # predictors <- mSetObj$analSet$logMultinomReg$res$predictor
+    # facA <- mSetObj$analSet$logMultinomReg$res$response
+    # output <- mSetObj$analSet$logMultinomReg
     mod <- mSetObj$analSet$logMultinomReg$mod$model
-    predictors <- mSetObj$analSet$logMultinomReg$res$predictor
-    facA <- mSetObj$analSet$logMultinomReg$res$response
     main_end <- " ( Multinomial Logistic Regression)" #  # main = "Multinomial Logistic Regression \nEffects Plot"
   } else { #Binomial
     # main = "Binomial Logistic Regression \nEffects Plot"
-    output <- mSetObj$analSet$logBinomReg
+    # predictors <- mSetObj$analSet$logBinomReg$res$predictor
+    # facA <- mSetObj$analSet$logBinomReg$res$response
+    # output <- mSetObj$analSet$logBinomReg
     mod <- mSetObj$analSet$logBinomReg$mod$model
-    predictors <- mSetObj$analSet$logBinomReg$res$predictor
-    facA <- mSetObj$analSet$logBinomReg$res$response
     main_end <- " ( Binomial Logistic Regression)" ## main = "Binomial Logistic Regression \nEffects Plot"
   }
   
+# if(var_viewby1 == "NULL"){
+#  var_viewby1 <- predictors[1]
+# } 
+#
+# if(var_viewby2 == "NULL"){
+#  if(length(predictors) > 1){
+#   var_viewby2 <- predictors[2]
+#   var_pred <- c(var_viewby1, var_viewby2)
+#  } else {
+#   var_pred <- var_viewby1
+# }
+# } else {
+#  var_pred <- c(var_viewby1, var_viewby2)
+# }
+
+# if(var_viewby3 == "NULL"){
+#  if(length(predictors) > 2){
+#   var_viewby2 <- predictors[3]
+#   var_pred <- c(var_viewby1, var_viewby2, var_viewby3)
+#  } else {
+# CHECK viewby2 
+# if(var_viewby2 == "NULL"){
+#   var_pred <- var_viewby1
+# }
+# } else {
+#  var_pred <- c(var_viewby1, var_viewby2)
+# }
+
 
 ## SET PREDICTORS TO PLOT
 if(length(predictors) > 2){
@@ -651,7 +695,6 @@ if(length(predictors) > 2){
       plot_ci1 <- TRUE
     }
 
-
   # PLOT TITLE
   if(plot_title == " "){
     plot_title1 <- paste0("Predicted Probabilities of ", facA, main_end)
@@ -690,6 +733,80 @@ if(length(predictors) > 2){
   imgName <- paste(imgName, "dpi", dpi, ".", format, sep="")
   mSetObj$imgSet$ploteffectslogReg <- imgName
  
+## if var_pred are 2 categorical, the 1st predictor is on x-axis, 2nd is colour variable
+### ggeffects plot defaults to using continuous x axis, regardless of cat/contin variable: 
+### to make an errorbar plot for a 1st categorical variable (will use discrete continuous bars)
+
+## strengejacke.github.io/ggeffects/reference/ggpredict.html
+# use categorical value on x-axis to make error bars
+# data(efc)
+# fitt <- lm(barthtot ~ c12hour + neg_c_7 + c161sex + c172code, data = efc)
+# dat <- ggpredict(fitt, terms = c("c172code", "c161sex")) # cat vars
+# ggplot(dat, aes(x, predicted, colour = group)) +
+#  geom_point(position = position_dodge(.1)) +
+#  geom_errorbar(
+#    aes(ymin = conf.low, ymax = conf.high),
+#    position = position_dodge(.1)
+#  ) 
+#  # + scale_x_discrete(breaks = 1:3, labels = get_x_labels(dat)) # doesn't work well
+## continuous ribbon plot:
+# ggplot(ggeffects::ggpredict(fitt, terms = "c12hour"),  # continuous var
+#       aes(x, predicted)) +
+# geom_line() +
+# geom_ribbon(aes(ymin = conf.low, ymax = conf.high), alpha = .1)
+#
+# 3 vars, use facets & groups (contin, cat, cat)
+# ggplot(ggeffects::ggpredict(fitt, terms = c("c12hour", "c161sex", "c172code")), 
+#        aes(x = x, y = predicted, colour = group)) +
+#  stat_smooth(method = "lm", se = plot_ci1) +
+#  facet_wrap(~facet, ncol = 2)
+
+
+## if(length(var_preds) == 3){ # if var_viewby3 is set, add shape term
+# aes(shape = facet)}
+
+# error bar plot
+# if(plot_linear == "false"){
+# a0 <- ggplot(ggeffects::ggpredict(mod, terms = var_preds),
+#        aes(x = x, y = predicted, colour = group)) +
+#  # stat_smooth(method = "lm", se = plot_ci1) +
+#   geom_point(position = position_dodge(.1)) +
+#   geom_errorbar(
+#     aes(ymin = conf.low, ymax = conf.high),
+#     position = position_dodge(.1)
+#   )
+# } else {
+# a0 <- plot(
+#     ggeffects::ggpredict(model = mod, terms = var_pred
+#                          ), 
+#     colors = plot_palette1,
+#      # add.data = TRUE,
+#      use.theme = FALSE,
+#      dodge = 0.4,
+#      one.plot = TRUE,
+#      ci = plot_ci1  ) 
+# }
+# 
+# if(length(var_preds) == 3){ # if var_viewby3 is set, add shape term to aes
+# a0 <- a0 + facet_wrap(~facet)
+# }
+# 
+# a0 <- a0 + 
+#   #scale_color_brewer(palette = plot_palette1) +
+#   # scale_fill_brewer(palette = plot_palette1) +
+#  labs(
+#      x = plot_xlab1, 
+#      y = plot_ylab1, 
+#      title = plot_title1
+#   )  + theme_bw() +
+#      theme(axis.text.x =  element_text(angle = plot_xangle1),
+#       axis.title = element_text(face = "bold"),
+#       plot.title = element_text(hjust = 0.5, face = "bold"),
+#       legend.position = plot_leg_pos1, 
+#       legend.direction = plot_leg_horiz1, 
+#       legend.title = element_text(face = "bold"),
+#     strip.background = element_rect(colour = "white", fill = "white"))
+
   a0 <- plot(
     ggeffects::ggpredict(model = mod, terms = var_pred
                          ), 
@@ -715,11 +832,14 @@ print("eff.make plot")
 
   # STORE IN mSET
   if (type == "ordinal") { #mSetObj$analSet$logOrdReg$res
-  mSetObj$analSet$logOrdReg$ploteff <- list(plot = a0, title = plot_title1, xlab = plot_xlab1, ylab = plot_ylab1)
+  mSetObj$analSet$logOrdReg$plotEff <- list(plot = a0, title = plot_title1, xlab = plot_xlab1, ylab = plot_ylab1)
+# mSetObj$analSet$logRegInfo$logOrd$plotEff <- list(plot = a0, title = plot_title1, xlab = plot_xlab1, ylab = plot_ylab1)
     } else if (type == "multinomial"){
-  mSetObj$analSet$logMultinomReg$ploteff <- list(plot = a0, title = plot_title1, xlab = plot_xlab1, ylab = plot_ylab1)  
+  mSetObj$analSet$logMultinomReg$plotEff <- list(plot = a0, title = plot_title1, xlab = plot_xlab1, ylab = plot_ylab1)  
+# mSetObj$analSet$logRegInfo$logMultinom$plotEff <- list(plot = a0, title = plot_title1, xlab = plot_xlab1, ylab = plot_ylab1)
   } else if (type == "binomial"){
-    mSetObj$analSet$logBinomReg$ploteff <- list(plot = a0, title = plot_title1, xlab = plot_xlab1, ylab = plot_ylab1) 
+    mSetObj$analSet$logBinomReg$plotEff <- list(plot = a0, title = plot_title1, xlab = plot_xlab1, ylab = plot_ylab1) 
+# mSetObj$analSet$logRegInfo$logBinom$plotEff <- list(plot = a0, title = plot_title1, xlab = plot_xlab1, ylab = plot_ylab1)
   }
 
 print("eff.store in mSet")
@@ -818,43 +938,46 @@ imgName, format="png", dpi=72, width=NA){
     input <- mSetObj$dataSet$orig
   }
 
-# SET LOGISTIC TYPE IF NOT SET
+# SET LOGISTIC TYPE (IF NOT SET), SET RESPONSE & PREDICTORS
 type1 <- mSetObj$analSet$logRegInfo$type
-## ORDINAL ROC analysis: using volume under an r-dimensional surface (VUS) for r ordered categories https://www.math.ucdavis.edu/~saito/data/roc/roc-regression.pdf
-# https://towardsdatascience.com/testing-an-alternative-visualisation-of-ordinal-data-and-regression-in-r-1dc838fcaa2d
+ predictors <- mSetObj$analSet$logRegInfo$predictor
+ facA <- mSetObj$analSet$logRegInfo$response
+
+## ORDINAL ROC analysis: using volume under an r-dimensional surface (VUS) for r ordered categories math.ucdavis.edu/~saito/data/roc/roc-regression.pdf
+# towardsdatascience.com/testing-an-alternative-visualisation-of-ordinal-data-and-regression-in-r-1dc838fcaa2d
 ##  Somers' Dxy rank correlation, a generalization of ROC area for ordinal or continuous Y
 ## It is computed for ordinal proportional odds regression in the lrm function in the rms package
-
 
 print(paste0("roc: ", type1))
 
 print("roc.before extracting")
+
 ### VARIABLES: STORE OUTPUT SOURCE BASED ON REGSN TYPE
   if (type1 == "ordinal") { 
     # main = "Ordinal Logistic Regression \nEffects Plot"
-    output <- mSetObj$analSet$logOrdReg
+    # predictors <- mSetObj$analSet$logOrdReg$res$predictor
+    # facA <- mSetObj$analSet$logOrdReg$res$response
+    # output <- mSetObj$analSet$logOrdReg
     mod <- mSetObj$analSet$logOrdReg$mod$model
     model_data <- mSetObj$analSet$logOrdReg$res$model.data
-    predictors <- mSetObj$analSet$logOrdReg$res$predictor
-    facA <- mSetObj$analSet$logOrdReg$res$response
     main_end <- " ( Ordinal Logistic Regression)" #  # main = "Ordinal Logistic Regression \nEffects Plot"
 print("roc.extracted order")
   } else if (type1 == "multinomial") {
     # main = "Multinomial Logistic Regression \nEffects Plot"
-    output <- mSetObj$analSet$logMultinomReg
+    # predictors <- mSetObj$analSet$logMultinomReg$res$predictor
+    # facA <- mSetObj$analSet$logMultinomReg$res$response
+    # output <- mSetObj$analSet$logMultinomReg
     mod <- mSetObj$analSet$logMultinomReg$mod$model
     model_data <- mSetObj$analSet$logMultinomReg$res$model.data
-    predictors <- mSetObj$analSet$logMultinomReg$res$predictor
-    facA <- mSetObj$analSet$logMultinomReg$res$response
     main_end <- " ( Multinomial Logistic Regression)" #  # main = "Multinomial Logistic Regression \nEffects Plot"
 print("roc.extracted multinomial")
   } else { #Binomial
     # main = "Binomial Logistic Regression \nEffects Plot"
-    output <- mSetObj$analSet$logBinomReg
+    # predictors <- mSetObj$analSet$logBinomReg$res$predictor
+    # facA <- mSetObj$analSet$logBinomReg$res$response
+    # output <- mSetObj$analSet$logBinomReg
     mod <- mSetObj$analSet$logBinomReg$mod$model
     model_data <- mSetObj$analSet$logBinomReg$res$model.data
-    predictors <- mSetObj$analSet$logBinomReg$res$predictor
-    facA <- mSetObj$analSet$logBinomReg$res$response
     main_end <- " ( Binomial Logistic Regression)" ## main = "Binomial Logistic Regression \nEffects Plot"
 print("roc.extracted binomial")
   }
@@ -893,7 +1016,7 @@ print("roc.set image parames")
      )
 
  # type <- "ordinal"  
-   .simcap <- function(x) { # https://stackoverflow.com/questions/58350357/capitalizing-the-first-character-in-a-string-in-r#58350475
+   .simcap <- function(x) { # stackoverflow.com/questions/58350357/capitalizing-the-first-character-in-a-string-in-r#58350475
     s <- strsplit(x, " ")[[1]]
     paste(toupper(substring(s, 1, 1)), substring(s, 2),
           sep = "", collapse = " ")
@@ -913,7 +1036,7 @@ print("roc.set image parames")
     predicted <- fitted(summary(mod)) # mSetObj$analSet$logOrdReg$res$linear.predicted.values
     prob <- predict(mod, type="probs")
     
-    ############ using {multiROC} - does it work or ordinal??
+    ############ using {multiROC} - does it work for ordinal??
     
     # Micro-average ROC/AUC was calculated by stacking all groups together, thus converting the multi-class classification into binary classification. Macro-average ROC/AUC was calculated by averaging all groups results (one vs rest) and linear interpolation was used between points of ROC. Methods shows names of different classifiers.
     
@@ -954,10 +1077,10 @@ print("roc.set image parames")
     predicted <- fitted(summary(mod)) # mSetObj$analSet$logMultinomReg$res$linear.predicted.values
     prob <- predict(mod, type="probs")
     
-    ############ using {multiROC} https://github.com/WandeRum/multiROC
+    ############ using {multiROC} github.com/WandeRum/multiROC
    mn_pred <- data.frame(prob)   #  mn_pred_col <- colnames(mn_pred)
    colnames(mn_pred) <- paste0(colnames(mn_pred), "_pred_MN")
-   true_label <-data.frame(caret::class2ind(model_data[,facA])) # true_label_col <- colnames(true_label)
+   true_label <-data.frame(caret::class2ind(model_data[,facA, drop = TRUE])) # true_label_col <- colnames(true_label)
    colnames(true_label) <- paste0(colnames(true_label), "_true")
 
   plot_roc_df <- multiROC::plot_roc_data(
@@ -1013,10 +1136,13 @@ print("roc.set image parames")
    # STORE IN mSET
   if (type1 == "ordinal") { #mSetObj$analSet$logOrdReg$res
   mSetObj$analSet$logOrdReg$plotRoc <- list(plot = a0, title = plot_title1, xlab = plot_xlab1, ylab = plot_ylab1)
+  # mSetObj$analSet$logRegInfo$logOrd$plotRoc <- list(plot = a0, title = plot_title1, xlab = plot_xlab1, ylab = plot_ylab1)
     } else if (type1 == "multinomial"){
   mSetObj$analSet$logMultinomReg$plotRoc <- list(plot = a0, title = plot_title1, xlab = plot_xlab1, ylab = plot_ylab1)
+  # mSetObj$analSet$logRegInfo$logMultinom$plotRoc <- list(plot = a0, title = plot_title1, xlab = plot_xlab1, ylab = plot_ylab1)
   } else if (type1 == "binomial"){
-    mSetObj$analSet$logBinomReg$plotRoc <- list(plot = a0, title = plot_title1, xlab = plot_xlab1, ylab = plot_ylab1)
+  mSetObj$analSet$logBinomReg$plotRoc <- list(plot = a0, title = plot_title1, xlab = plot_xlab1, ylab = plot_ylab1)
+  # mSetObj$analSet$logRegInfo$logBinom$plotRoc <- list(plot = a0, title = plot_title1, xlab = plot_xlab1, ylab = plot_ylab1)
   }
    
   print("roc.store in mSet") 
@@ -1110,7 +1236,7 @@ factor.columns <- function(mSetObj=NA){
   load_dplyr()
   mSetObj <- .get.mSet(mSetObj)
 
-# fac.cols <- data[,sapply(mSetObj$dataSet$norm, is.factor) | sapply(mSetObj$dataSet$norm, is.character), drop = FALSE]
+  # fac.cols <- data[,sapply(mSetObj$dataSet$norm, is.factor) | sapply(mSetObj$dataSet$norm, is.character), drop = FALSE]
   # fac.cols <- dplyr::select_if(mSetObj$dataSet$norm, is.character)
   fac.cols <- mSetObj$dataSet$norm %>% 
              dplyr::select_if(function(col) {is.character(col) | is.factor(col)})   
@@ -1128,19 +1254,33 @@ factor.columns <- function(mSetObj=NA){
 #'License: GNU GPL (>= 2)
 #'@export
 
-log.response.levels <- function(mSetObj=NA, facA="NULL"){
-  load_dplyr()
+log.response.levels <- function(mSetObj=NA){  #  contained facA="NULL" 202212-31
+#  load_dplyr()
 ## is this supposed to be equivalent to log.ref.level??
   mSetObj <- .get.mSet(mSetObj)
-  if (facA=="NULL") {
-        fac_cols <- mSetObj$dataSet$norm %>% dplyr::select_if(function(col) {is.character(col) | is.factor(col)})  
-        facA <- colnames(fac_cols)[1] # Choose the first factor column as response column
-  } else {
-    facA <- facA #User selected, java uses function factor.columns() to obtain options
-  }
-  resp.levels <- unique(mSetObj$dataSet$norm[,facA]) #List names of levels in the response column
-  model_data_as_factor <- as.factor(resp.levels)
-  resp.levels.names <- levels(model_data_as_factor) #Extract names in character vector
-  return(resp.levels.names)
+   
+  if("logRegInfo" %in% names(mSetObj$analSet) ){
+     facA <- mSetObj$analSet$logRegInfo$response
+   } else {
+  # if (facA=="NULL") {
+     fac.cols <- mSetObj$dataSet$norm[,sapply(mSetObj$dataSet$norm, is.factor) | sapply(mSetObj$dataSet$norm, is.character), drop = FALSE]  # fac_cols <- mSetObj$dataSet$norm %>% dplyr::select_if(function(col) {is.character(col) | is.factor(col)})  
+     facA <- colnames(fac_cols)[1] #Default is 1st factor column as response column
+   }
+  # } else {
+  #  facA <- facA #User selected, java uses function factor.columns() to obtain options
+  # }
+   
+  ## could be problematic if there are NAs in input data, could be removed in levels during data read-in conversion process - in order to have NA be converted as an explicit factor level, using factor(vector, exclude = NULL)
+# right now it looks like NA values are imputed or excluded during pre-processing so there aren't any NA values that may be excluded as factor levels (general_proc_utils)
+# or maybe, should tell user to explictly specify the grouping as "missing" if they want to view the effect of the group in the model as a seperate level - only with categorical variables
+#  - if data is read in with strings as factors, then the NAs may not show up as levels 
+#  - ie. if there are NAs, and someone wants that to count NA as a separate group (factor) level 
+# (eg. for exploratory data analysis, if they plan to attribute that NA group to an unknown factor or give it a grouping name like 'batch')
+# - as it looks like the data processing converts character columns to factors, and for factor variables it is the case (?) that NAs are not displayed as a factor level (unless explicitly specified with exclude = NULL),
+# is there a place where that NA information is stored, if present? Are those NAs converted to a different value character, name something different like 'NAwegan'or something, so that they are stored somewhere?
+
+  facA.levels <- unique(mSetObj$dataSet$norm[,facA, drop = TRUE]) #List names of levels in the response column
+  facA.levels.names <- levels( as.factor(resp.levels) ) #Extract names in character vector
+  return(facA.levels.names)
   
 }
