@@ -220,7 +220,7 @@ if (ordertext == "NULL") {
 } else { #Order is user inputted in ascending order, taken from text box by java, entered into R code as one character value (names separated by commas) (string)
   ordertext <- gsub(" ", "", ordertext, fixed = TRUE)
   ordertext <- unlist(strsplit(ordertext, ",", fixed = TRUE))
-  ordertext <- strtrim(ordertext)
+  ordertext <- trimws(ordertext)
 }
 
 ### CHECK IF ORDERTEXT HAS VALID NAMES:
@@ -1254,21 +1254,21 @@ factor.columns <- function(mSetObj=NA){
 #'License: GNU GPL (>= 2)
 #'@export
 
-log.response.levels <- function(mSetObj=NA){  #  contained facA="NULL" 202212-31
+log.response.levels <- function(mSetObj=NA, facA = "NULL"){  #  contained facA="NULL" 202212-31
 #  load_dplyr()
 ## is this supposed to be equivalent to log.ref.level??
   mSetObj <- .get.mSet(mSetObj)
    
+if(facA == "NULL") {
   if("logRegInfo" %in% names(mSetObj$analSet) ){
      facA <- mSetObj$analSet$logRegInfo$response
    } else {
-  # if (facA=="NULL") {
      fac.cols <- mSetObj$dataSet$norm[,sapply(mSetObj$dataSet$norm, is.factor) | sapply(mSetObj$dataSet$norm, is.character), drop = FALSE]  # fac_cols <- mSetObj$dataSet$norm %>% dplyr::select_if(function(col) {is.character(col) | is.factor(col)})  
      facA <- colnames(fac_cols)[1] #Default is 1st factor column as response column
    }
-  # } else {
-  #  facA <- facA #User selected, java uses function factor.columns() to obtain options
-  # }
+  } else {
+   facA <- facA #User selected, java uses function factor.columns() to obtain options
+  }
    
   ## could be problematic if there are NAs in input data, could be removed in levels during data read-in conversion process - in order to have NA be converted as an explicit factor level, using factor(vector, exclude = NULL)
 # right now it looks like NA values are imputed or excluded during pre-processing so there aren't any NA values that may be excluded as factor levels (general_proc_utils)
@@ -1280,7 +1280,7 @@ log.response.levels <- function(mSetObj=NA){  #  contained facA="NULL" 202212-31
 # is there a place where that NA information is stored, if present? Are those NAs converted to a different value character, name something different like 'NAwegan'or something, so that they are stored somewhere?
 
   facA.levels <- unique(mSetObj$dataSet$norm[,facA, drop = TRUE]) #List names of levels in the response column
-  facA.levels.names <- levels( as.factor(resp.levels) ) #Extract names in character vector
+  facA.levels.names <- levels( as.factor(facA.levels) ) #Extract names in character vector
   return(facA.levels.names)
   
 }
