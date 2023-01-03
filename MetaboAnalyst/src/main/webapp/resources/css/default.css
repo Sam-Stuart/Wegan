@@ -110,6 +110,12 @@
     color: black
 }
 
+/*CORRELATION: DYNAMIC CHECKBOXES*/
+/*stackoverflow.com/questions/10194274/how-to-hide-elements-in-jsf*/
+.hide { 
+    display: none;
+}
+
 .colLeft {
     width: 20%;
 }
