@@ -106,8 +106,8 @@ public class LogisticCABean implements Serializable {
         this.fileLogModValsPath = fileLogModValsPath;
     } 
     
- // (PREDICTOR) INDEPENDENT VARIABLE
-  //  DYNAMIC CHECKBOXES
+ //  DYNAMIC CHECKBOXES 
+  // (PREDICTOR) INDEPENDENT VARIABLE
   //  dzone.com/articles/binding-dynamic-multi-select
     //   (Predictor) Indep. Variable NAMES (multiple checkboxes)    
     private List<String> corrPredictors;//items
@@ -147,8 +147,6 @@ public class LogisticCABean implements Serializable {
 			return result.substring(2);
 		}
 	}
-//To get the list of selected items, iterate through the set of entries and if the value in the map is true, then it is selected and added to the result string. 
-    
     
  // (PREDICTOR) INDEPENDENT VARIABLE
     //   (Predictor) Indep. Variable NAMES (Textbox)
@@ -215,7 +213,7 @@ public class LogisticCABean implements Serializable {
     // (Response) Dependent Variable LEVELS (dropdown)
 //    private SelectItem[] columnLevelOpts = null;
     public SelectItem[] getColumnLevelOpts(){
-        String[] columns = CAUtils.GetCatLevelDataColumns(sb, "NULL");
+        String[] columns = CAUtils.GetCatLevelDataColumns(sb, getResponseVar());
         int columnsLen = columns.length;
         columnLevelOpts = new SelectItem[columnsLen];
         List<String> columnNames = Arrays.asList(columns);
