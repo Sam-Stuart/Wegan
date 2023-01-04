@@ -45,6 +45,21 @@ prep_boxtext <- function(textbox_text, purpose_ordtext = NULL
 #                              size_ytick = "NULL",
 #                              
 #                              imgName, format="png", dpi=72, width=NA)
+#
+# log.ROC.plot <- function(mSetObj=NA, 
+#  # facA = "NULL", 
+#  # predtext = "NULL",
+#  data = "false",
+#  type="NULL", # was multinomial 
+#  plot_palette = "NULL", #dropdown  
+#
+#  plot_title = " ",
+#  size_title = "NULL",
+#  size_xlab = "NULL",
+#  size_ylab = "NULL",
+#  size_xtick = "NULL",
+#  size_ytick = "NULL",
+
 
 #'Perform Multivariate Logistic Regression'
 #'@description Build a multivariate logistic regression model for user selected predictor variables
@@ -935,12 +950,12 @@ size_leg <- size_xlab
      y = plot_ylab1, 
      title = plot_title1
   )  + theme_bw() +
-     theme(axis.text.x =  element_text(angle = plot_xangle1),
+     theme(
       axis.title.x = element_text(size = size_xlab1),
       axis.title.y = element_text(size = size_ylab1),
-      axis.text.x = element_text(size = size_xtick1),
+      axis.text.x = element_text(size = size_xtick1, angle = plot_xangle1),
       axis.text.y = element_text(size = size_ytick1),
-      plot.title = element_text(size = size_title1, face = 'bold', hjust = 0.5)
+      plot.title = element_text(size = size_title1, face = 'bold', hjust = 0.5),
       legend.position = plot_leg_pos1, 
       legend.direction = plot_leg_horiz1, 
       legend.title = element_text(face = "bold", size = size_leg),
