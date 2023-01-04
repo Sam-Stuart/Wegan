@@ -779,12 +779,12 @@ public static boolean PlotANNPredictCA(SessionBean1 sb,
     }
         
     public static void PlotLogisticEffectCA(SessionBean1 sb,
-             Boolean data,
-            String type, 
+             Boolean data, String type, 
 //            String facA, 
              Boolean plot_ci, 
-             String plot_title, String plot_xlab, String plot_ylab,
              Boolean plot_xangle, String plot_palette, Boolean plot_leg_horiz, String plot_leg_pos,
+             String plot_title, String plot_xlab, String plot_ylab,
+             String size_title, String size_xlab, String size_ylab,String size_xtick, String size_ytick,
             String imgName, String format, int dpi) {
         try {
             RConnection RC = sb.getRConnection();
@@ -793,14 +793,20 @@ public static boolean PlotANNPredictCA(SessionBean1 sb,
                     + type + "\", \""  
 //                    + facA + "\", \"" 
                     + plot_ci + "\", \"" 
-                    + plot_title + "\", \"" 
-                    + plot_xlab + "\", \"" 
-                    + plot_ylab + "\", \"" 
-                    
                     + plot_xangle + "\", \"" 
                     + plot_palette + "\", \"" 
                     + plot_leg_horiz + "\", \"" 
                     + plot_leg_pos + "\", \"" 
+                    
+                    + plot_title + "\", \"" 
+                    + plot_xlab + "\", \"" 
+                    + plot_ylab + "\", \"" 
+                    + size_title + "\", \"" 
+                    + size_xlab + "\", \"" 
+                    + size_ylab + "\", \""
+                    + size_xtick + "\", \"" 
+                    + size_ytick + "\", \""                     
+
                     + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
             RCenter.recordRCommand(RC, rCommand);
             sb.addGraphicsCMD("corr_log_eff", rCommand);
@@ -813,6 +819,7 @@ public static boolean PlotANNPredictCA(SessionBean1 sb,
     public static void PlotLogisticROCCA(SessionBean1 sb,
              Boolean data,
             String type, String plot_palette, String plot_title,
+            String size_title, String size_xlab, String size_ylab,String size_xtick, String size_ytick,
             String imgName, String format, int dpi) {
         try {
             RConnection RC = sb.getRConnection();
@@ -821,6 +828,11 @@ public static boolean PlotANNPredictCA(SessionBean1 sb,
                     + type + "\", \"" 
                     + plot_palette + "\", \"" 
                     + plot_title + "\", \"" 
+                    + size_title + "\", \"" 
+                    + size_xlab + "\", \"" 
+                    + size_ylab + "\", \""
+                    + size_xtick + "\", \"" 
+                    + size_ytick + "\", \""     
                     + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
             RCenter.recordRCommand(RC, rCommand);
             sb.addGraphicsCMD("corr_log_roc", rCommand);

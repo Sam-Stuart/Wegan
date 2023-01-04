@@ -229,15 +229,18 @@ public class CABean implements Serializable {
         CAUtils.CreateLogisticModel(sb, 
                 "NULL", "NULL", false,"NULL", "NULL", "NULL");
 //                "NULL", "NULL");
-        CAUtils.PlotLogisticEffectCA(sb, false,
-                "NULL", false, 
-//                "NULL", "NULL", false, 
+        CAUtils.PlotLogisticEffectCA(sb,
+                false,"NULL", false, 
+                 false,"NULL", false, "NULL",
+//                 PLOT LABELS
                 " ", " ", " ",
-                false,"NULL", false,
-                "NULL",
+//                TEXT SIZE
+                "NULL", "NULL","NULL", "NULL","NULL", 
                 sb.getCurrentImage("corr_log_eff"), "png", 72);
-        CAUtils.PlotLogisticROCCA(sb, false,
-                "NULL", "NULL", " ",
+        CAUtils.PlotLogisticROCCA(sb, 
+                false, "NULL", "NULL",
+//                LABEL, SIZE
+                " ", "NULL", "NULL","NULL", "NULL","NULL", 
                 sb.getCurrentImage("corr_log_roc"), "png", 72);
     } 
     

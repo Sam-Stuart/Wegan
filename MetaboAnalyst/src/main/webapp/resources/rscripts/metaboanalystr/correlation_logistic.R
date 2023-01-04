@@ -19,6 +19,33 @@ prep_boxtext <- function(textbox_text, purpose_ordtext = NULL
     x
 }
 
+
+# log.effects.plot <- function(mSetObj=NA,
+#                              # facA = "NULL", 
+#                              # predtext = "NULL", 
+#                              data = "false",
+#                              type = "NULL",  # was multinomial before # can maybe remove the type argument?
+#                              #   plot_linear = "false", # if false, plot error bars; if true, plot linear (even categorical vars)
+#                              #  var_viewby1 = "NULL",
+#                              #  var_viewby2 = "NULL",
+#                              #  var_viewby3 = "NULL",
+#                              plot_ci="false", #checkbox
+#                              plot_xangle = "false", #checkbox
+#                              plot_palette = "NULL", #dropdown
+#                              plot_leg_horiz = "false", #checkbox
+#                              plot_leg_pos = "NULL", #dropdown
+#                              
+#                              plot_title=" ",
+#                              plot_ylab=" ",
+#                              plot_xlab=" ",
+#                              size_title = "NULL",
+#                              size_xlab = "NULL",
+#                              size_ylab = "NULL",
+#                              size_xtick = "NULL",
+#                              size_ytick = "NULL",
+#                              
+#                              imgName, format="png", dpi=72, width=NA)
+
 #'Perform Multivariate Logistic Regression'
 #'@description Build a multivariate logistic regression model for user selected predictor variables
 #'@param mSetObj Input the name of the created mSetObj
@@ -511,13 +538,20 @@ log.effects.plot <- function(mSetObj=NA,
 #  var_viewby2 = "NULL",
 #  var_viewby3 = "NULL",
   plot_ci="false", #checkbox
-  plot_title=" ",
-  plot_ylab=" ",
-  plot_xlab=" ",
   plot_xangle = "false", #checkbox
   plot_palette = "NULL", #dropdown
   plot_leg_horiz = "false", #checkbox
   plot_leg_pos = "NULL", #dropdown
+
+  plot_title=" ",
+  plot_ylab=" ",
+  plot_xlab=" ",
+  size_title = "NULL",
+  size_xlab = "NULL",
+  size_ylab = "NULL",
+  size_xtick = "NULL",
+  size_ytick = "NULL",
+  
   imgName, format="png", dpi=72, width=NA){
   
   ## was named: plot.effects.logReg
@@ -716,6 +750,84 @@ if(length(predictors) > 2){
     plot_xlab1 <- plot_xlab
   }
   
+# PLOT TEXT SIZE
+# size_base <- theme_bw()$text$size # 11
+# stackoverflow.com/questions/53560599/how-to-change-the-default-font-size-in-ggplot2-including-geom-text
+ size_base <- 12
+  #SET TITLE SIZE
+  size_title1 <-
+				switch(
+					size_title,
+					"NULL" = size_base,
+					"medium" = size_base,
+					"small" = 0.8*size_base,
+					"extrasmall" = 0.6*size_base,
+                                      "large" = 1.2*size_base,
+					"extralarge" = 1.4*size_base,
+					NULL
+				)
+
+ #SET X LABEL SIZE
+  size_xlab1 <-
+				switch(
+					size_xlab,
+					"NULL" = size_base,
+					"medium" = size_base,
+					"small" = 0.8*size_base,
+					"extrasmall" = 0.6*size_base,
+                                      "large" = 1.2*size_base,
+					"extralarge" = 1.4*size_base,
+					NULL
+				)
+ #SET Y LABEL SIZE
+  size_ylab1 <-
+				switch(
+					size_ylab,
+					"NULL" = size_base,
+					"medium" = size_base,
+					"small" = 0.8*size_base,
+					"extrasmall" = 0.6*size_base,
+                                      "large" = 1.2*size_base,
+					"extralarge" = 1.4*size_base,
+					NULL
+				)
+
+ #SET Y TICK SIZE
+  size_ytick1 <-
+				switch(
+					size_ytick,
+					"NULL" = size_base,
+					"medium" = size_base,
+					"small" = 0.8*size_base,
+					"extrasmall" = 0.6*size_base,
+                                      "large" = 1.2*size_base,
+					"extralarge" = 1.4*size_base,
+					NULL
+				)
+
+ #SET X TICK SIZE
+  size_xtick1 <-
+				switch(
+					size_xtick,
+					"NULL" = size_base,
+					"medium" = size_base,
+					"small" = 0.8*size_base,
+					"extrasmall" = 0.6*size_base,
+                                      "large" = 1.2*size_base,
+					"extralarge" = 1.4*size_base,
+					NULL
+				)
+
+if(any(!c(size_xlab, size_ylab) %in% "NULL")){
+if(all(!c(size_xlab, size_ylab) %in% "NULL")){
+size_leg <- size_xlab
+} else {
+size_leg <- c(size_xlab, size_ylab)[!c(size_xlab, size_ylab) %in% "NULL"]
+}
+} else {
+size_leg <- size_xlab
+}
+
   #SET PLOT DIMENSIONS
   if(is.na(width)){
     w <- 10.5
@@ -798,14 +910,17 @@ if(length(predictors) > 2){
 #      x = plot_xlab1, 
 #      y = plot_ylab1, 
 #      title = plot_title1
-#   )  + theme_bw() +
-#      theme(axis.text.x =  element_text(angle = plot_xangle1),
-#       axis.title = element_text(face = "bold"),
-#       plot.title = element_text(hjust = 0.5, face = "bold"),
+#   )  + theme(axis.text.x =  element_text(angle = plot_xangle1),
+#       axis.title.x = element_text(size = size_xlab1),
+#       axis.title.y = element_text(size = size_ylab1),
+#       axis.text.x = element_text(size = size_xtick1),
+#       axis.text.y = element_text(size = size_ytick1),
+#       plot.title = element_text(size = size_title1, face = 'bold', hjust = 0.5)
 #       legend.position = plot_leg_pos1, 
 #       legend.direction = plot_leg_horiz1, 
-#       legend.title = element_text(face = "bold"),
-#     strip.background = element_rect(colour = "white", fill = "white"))
+#       legend.title = element_text(face = "bold", size = size_leg),
+#       strip.background = element_rect(colour = "white", fill = "white"), 
+#       strip.text = element_text(size = size_leg) )
 
   a0 <- plot(
     ggeffects::ggpredict(model = mod, terms = var_pred
@@ -821,12 +936,16 @@ if(length(predictors) > 2){
      title = plot_title1
   )  + theme_bw() +
      theme(axis.text.x =  element_text(angle = plot_xangle1),
-      axis.title = element_text(face = "bold"),
-      plot.title = element_text(hjust = 0.5, face = "bold"),
+      axis.title.x = element_text(size = size_xlab1),
+      axis.title.y = element_text(size = size_ylab1),
+      axis.text.x = element_text(size = size_xtick1),
+      axis.text.y = element_text(size = size_ytick1),
+      plot.title = element_text(size = size_title1, face = 'bold', hjust = 0.5)
       legend.position = plot_leg_pos1, 
       legend.direction = plot_leg_horiz1, 
-      legend.title = element_text(face = "bold"),
-    strip.background = element_rect(colour = "white", fill = "white"))
+      legend.title = element_text(face = "bold", size = size_leg),
+      strip.background = element_rect(colour = "white", fill = "white"),
+      strip.text = element_text(size = size_leg) )
  
 print("eff.make plot")
 
@@ -912,13 +1031,21 @@ print("eff.store in mSet")
 #'@export
 
 log.ROC.plot <- function(mSetObj=NA, 
-# facA = "NULL", 
-# predtext = "NULL",
-data = "false",
-type="NULL", # was multinomial 
-plot_palette = "NULL", #dropdown  
-plot_title = " ",
-imgName, format="png", dpi=72, width=NA){
+  # facA = "NULL", 
+  # predtext = "NULL",
+  data = "false",
+  type="NULL", # was multinomial 
+  plot_palette = "NULL", #dropdown  
+
+  plot_title = " ",
+  size_title = "NULL",
+  size_xlab = "NULL",
+  size_ylab = "NULL",
+  size_xtick = "NULL",
+  size_ytick = "NULL",
+  # size_lgd_title = "NULL",
+
+  imgName, format="png", dpi=72, width=NA){
   
 ## named: plot.ROC.logReg
   library("pROC")
@@ -1028,6 +1155,84 @@ print("roc.set image parames")
   } else {
     plot_title1 <- plot_title
   }
+
+# PLOT TEXT SIZE
+# size_base <- theme_bw()$text$size # 11
+# stackoverflow.com/questions/53560599/how-to-change-the-default-font-size-in-ggplot2-including-geom-text
+ size_base <- 12
+  #SET TITLE SIZE
+  size_title1 <-
+				switch(
+					size_title,
+					"NULL" = size_base,
+					"medium" = size_base,
+					"small" = 0.8*size_base,
+					"extrasmall" = 0.6*size_base,
+                                      "large" = 1.2*size_base,
+					"extralarge" = 1.4*size_base,
+					NULL
+				)
+
+ #SET X LABEL SIZE
+  size_xlab1 <-
+				switch(
+					size_xlab,
+					"NULL" = size_base,
+					"medium" = size_base,
+					"small" = 0.8*size_base,
+					"extrasmall" = 0.6*size_base,
+                                      "large" = 1.2*size_base,
+					"extralarge" = 1.4*size_base,
+					NULL
+				)
+ #SET Y LABEL SIZE
+  size_ylab1 <-
+				switch(
+					size_ylab,
+					"NULL" = size_base,
+					"medium" = size_base,
+					"small" = 0.8*size_base,
+					"extrasmall" = 0.6*size_base,
+                                      "large" = 1.2*size_base,
+					"extralarge" = 1.4*size_base,
+					NULL
+				)
+
+ #SET Y TICK SIZE
+  size_ytick1 <-
+				switch(
+					size_ytick,
+					"NULL" = size_base,
+					"medium" = size_base,
+					"small" = 0.8*size_base,
+					"extrasmall" = 0.6*size_base,
+                                      "large" = 1.2*size_base,
+					"extralarge" = 1.4*size_base,
+					NULL
+				)
+
+ #SET X TICK SIZE
+  size_xtick1 <-
+				switch(
+					size_xtick,
+					"NULL" = size_base,
+					"medium" = size_base,
+					"small" = 0.8*size_base,
+					"extrasmall" = 0.6*size_base,
+                                      "large" = 1.2*size_base,
+					"extralarge" = 1.4*size_base,
+					NULL
+				)
+
+if(any(!c(size_xlab, size_ylab) %in% "NULL")){
+if(all(!c(size_xlab, size_ylab) %in% "NULL")){
+size_leg <- size_xlab
+} else {
+size_leg <- c(size_xlab, size_ylab)[!c(size_xlab, size_ylab) %in% "NULL"]
+}
+} else {
+size_leg <- size_xlab
+}
    
  print("roc.before making plot")
 
@@ -1054,18 +1259,7 @@ print("roc.set image parames")
        aes(x = 1-Specificity, y = Sensitivity)) +
   geom_path(aes(color = Group, linetype = Method), size=1.5) +
   geom_segment(aes(x = 0, y = 0, xend = 1, yend = 1), 
-                colour='grey',size = 0.75, linetype = 'dotdash') +
-  ggtitle(plot_title1) +
-  scale_color_brewer(palette = plot_palette1) +
-  # scale_fill_brewer(palette = plot_palette1) +
-  theme_bw() + 
-  theme(plot.title = element_text(hjust = 0.5, face = "bold"), 
-  legend.justification=c(1, 0), legend.position=c(.95, .05),
-  legend.title=element_blank(), 
-  legend.background = element_rect(fill=NULL, 
-   size=0.5,linetype="solid", colour ="black"), 
-   axis.title = element_text(face = "bold", size = 12)
-)
+                colour='grey',size = 0.75, linetype = 'dotdash') 
 
  print("roc.ord.make plot")   
  
@@ -1092,18 +1286,8 @@ print("roc.set image parames")
        aes(x = 1-Specificity, y = Sensitivity)) +
   geom_path(aes(color = Group, linetype = Method), size=1.5) +
   geom_segment(aes(x = 0, y = 0, xend = 1, yend = 1), 
-                colour='grey',size = 0.75, linetype = 'dotdash') +
-  ggtitle(plot_title1) +
-  scale_color_brewer(palette = plot_palette1) +
-  # scale_fill_brewer(palette = plot_palette1) +
-  theme_bw() + 
-  theme(plot.title = element_text(hjust = 0.5, face = "bold"), 
-  legend.justification=c(1, 0), legend.position=c(.95, .05),
-  legend.title=element_blank(), 
-  legend.background = element_rect(fill=NULL, size=0.5,
-   linetype="solid", colour ="black"), 
-   axis.title = element_text(face = "bold", size = 12)
-)
+                colour='grey',size = 0.75, linetype = 'dotdash') 
+
  print("roc.multinom.make plot")
 
    # multiclass.roc(model_data[,facA]~prob, plot=TRUE, print.auc=TRUE, xlab="Specificity (True Negative)", ylab="Sensitivity (True Positive)", main=main, yaxt="n"); axis(2, las=2)
@@ -1119,11 +1303,28 @@ print("roc.set image parames")
 
  print("roc.binom.make plot")
 
-#pROC::ggroc(  pROC::roc(model_data[,facA]~prob
+   # pROC::ggroc(  pROC::roc(model_data[,facA]~prob
    #, plot=TRUE, print.auc=TRUE, xlab="Specificity (True Negative)", ylab="Sensitivity (True Positive)", main=main, yaxt="n"
    #   ) )
     
   }
+
+a0 <- a0 +
+  ggtitle(plot_title1) +
+  scale_color_brewer(palette = plot_palette1) +
+  # scale_fill_brewer(palette = plot_palette1) +
+  theme_bw() + 
+  theme(plot.title = element_text(size = size_title1, face = 'bold', hjust = 0.5),
+#   legend.title = element_text(face = "bold", size = size_leg),
+    legend.justification=c(1, 0), legend.position=c(.95, .05),
+    legend.title=element_blank(), 
+    legend.background = element_rect(fill=NULL, 
+     size=0.5,linetype="solid", colour ="black"), 
+    axis.title.x = element_text(size = size_xlab1, face = "bold"),
+    axis.title.y = element_text(size = size_ylab1, face = "bold"),
+    axis.text.x = element_text(size = size_xtick1, face = "bold"),
+    axis.text.y = element_text(size = size_ytick1, face = "bold"),
+)
 
   #Generate plot
   Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")

@@ -105,7 +105,8 @@ public class LogisticCABean implements Serializable {
     public void setFileLogModValsPath(String fileLogModValsPath) {
         this.fileLogModValsPath = fileLogModValsPath;
     } 
-    
+
+//-----------------------------------------------------------------------------------------------    
  //  DYNAMIC CHECKBOXES 
   // (PREDICTOR) INDEPENDENT VARIABLE
   //  dzone.com/articles/binding-dynamic-multi-select
@@ -148,6 +149,7 @@ public class LogisticCABean implements Serializable {
 		}
 	}
     
+//-----------------------------------------------------------------------------------------------    
  // (PREDICTOR) INDEPENDENT VARIABLE
     //   (Predictor) Indep. Variable NAMES (Textbox)
 //    private String indInput = "";
@@ -213,7 +215,7 @@ public class LogisticCABean implements Serializable {
     // (Response) Dependent Variable LEVELS (dropdown)
 //    private SelectItem[] columnLevelOpts = null;
     public SelectItem[] getColumnLevelOpts(){
-        String[] columns = CAUtils.GetCatLevelDataColumns(sb, getResponseVar());
+        String[] columns = CAUtils.GetCatLevelDataColumns(sb, responseVar);
         int columnsLen = columns.length;
         columnLevelOpts = new SelectItem[columnsLen];
         List<String> columnNames = Arrays.asList(columns);
@@ -254,7 +256,7 @@ public class LogisticCABean implements Serializable {
         return corrPolyResults;
     }
    
-    
+//-----------------------------------------------------------------------------------------------    
 //ON-PLOT OPTIONS    
     // CHECK BOX for using normalized data (default) or original data
 //    private boolean doOriginal = false;
@@ -343,6 +345,8 @@ public class LogisticCABean implements Serializable {
     public void setCorPlotLegPosOpts(String corPlotLegPosOpts) {
         this.corPlotLegPosOpts = corPlotLegPosOpts;
     }
+    
+//-----------------------------------------------------------------------------------------------    
 //COLOURS    
     //STATIC DROPDOWN for selecting colour:   replaced: corColorOpts : change name from logPaletteOpts to corPaletteOpts, and logColorPaletteOpts to corColorPaletteOpts
 //    private String corPaletteOpts = "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corColorPaletteOpts
@@ -363,7 +367,7 @@ public class LogisticCABean implements Serializable {
     public void setCorPaletteBrewerOpts(String corPaletteBrewerOpts) {
         this.corPaletteBrewerOpts = corPaletteBrewerOpts;
     }    
-    
+//-----------------------------------------------------------------------------------------------
 //PLOT LABELS  
     // TEXT BOX 
 //    private String corPlotTitle = " ";
@@ -394,7 +398,8 @@ public class LogisticCABean implements Serializable {
     public void setCorPlotYlab(String corPlotYlab) {
         this.corPlotYlab = corPlotYlab;
     } 
-
+    
+//-----------------------------------------------------------------------------------------------
 //TEXT SIZE    
     //STATIC DROPDOWN title text size
 //    WAS: corPlotLabelSize; applicaitonbean: corPlotLabSize
@@ -447,8 +452,11 @@ public class LogisticCABean implements Serializable {
         this.corTextSizeYtick = corTextSizeYtick;
     }     
     
+//-----------------------------------------------------------------------------------------------    
         // ACTION BUTTONS //
     public void corrLogBtn1_action() {
+        responseVar = getColumnOpts()[0].getLabel();
+        responseLevelVar = getColumnLevelOpts()[0].getLabel();
         CAUtils.CreateLogisticModel(sb, 
                 responseVar, 
                 getPredictorsSelected(),
@@ -456,14 +464,16 @@ public class LogisticCABean implements Serializable {
                 doOriginal,
                   corModelType, responseLevelVar, indOrder);
         CAUtils.PlotLogisticEffectCA(sb, doOriginal, corModelType, doPlotConfInt,
-                 corPlotTitle, corPlotXlab, corPlotYlab,               
-                doLabelXtickRotate, corPaletteOpts, doPlotLegHoriz, corPlotLegPosOpts,
-//                 corTextSizeTitle, corTextSizeXlab, corTextSizeYlab, corTextSizeXtick, corTextSizeYtick,
+                 doLabelXtickRotate, corPaletteOpts, doPlotLegHoriz, corPlotLegPosOpts,
+                 corPlotTitle, corPlotXlab, corPlotYlab,   
+                 corTextSizeTitle, corTextSizeXlab, corTextSizeYlab, corTextSizeXtick, corTextSizeYtick,
                 sb.getCurrentImage("corr_log_eff"), "png", 72);
     }
     
    // ACTION BUTTONS //
     public void corrLogBtn2_action() {
+        responseVar = getColumnOpts()[0].getLabel();
+        responseLevelVar = getColumnLevelOpts()[0].getLabel();
         CAUtils.CreateLogisticModel(sb,
                responseVar, 
                getPredictorsSelected(),
@@ -473,7 +483,7 @@ public class LogisticCABean implements Serializable {
 //                columnNameA, indInput);
         CAUtils.PlotLogisticROCCA(sb, doOriginal, corModelType,
                corPaletteBrewerOpts, corPlotTitle, 
-//                corTextSizeTitle, corTextSizeXlab, corTextSizeYlab, corTextSizeXtick, corTextSizeYtick,
+                corTextSizeTitle, corTextSizeXlab, corTextSizeYlab, corTextSizeXtick, corTextSizeYtick,
                 sb.getCurrentImage("corr_log_roc"), "png", 72);
     }
     

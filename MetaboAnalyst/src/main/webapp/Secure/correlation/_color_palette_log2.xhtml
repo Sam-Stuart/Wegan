@@ -28,6 +28,40 @@
                 <!--<p:panelGrid></p:panelGrid>-->
 
             </h:panelGrid>
+            
+            <h:panelGrid id="panelGridGraphic2" columns="5" cellpadding="3" columnClasses="colLeftLong,colRight,colLeftLong,colRight, colLast">
+                
+                <h3>Label Size</h3>
+                <p:panelGrid></p:panelGrid>                 
+                
+                <h:outputLabel style="font-weight: bold" value="Title:"/>
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{logCABean.corTextSizeTitle}">
+                    <f:selectItems value="#{applicationBean1.corSizeTitle}" />
+                </p:selectOneMenu> 
+                
+                <h:outputLabel style="font-weight: bold" value="X-Axis Label"/>
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{logCABean.corTextSizeXlab}">
+                    <f:selectItems value="#{applicationBean1.corSizeXlab}" />
+                </p:selectOneMenu> 
+                
+                <h:outputLabel style="font-weight: bold" value="X-Axis Tick"/>
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{logCABean.corTextSizeXtick}">
+                    <f:selectItems value="#{applicationBean1.corSizeXtick}" />
+                </p:selectOneMenu> 
+                
+                <h:outputLabel style="font-weight: bold" value="Y-Axis Label"/>
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{logCABean.corTextSizeYlab}">
+                    <f:selectItems value="#{applicationBean1.corSizeYlab}" />
+                </p:selectOneMenu> 
+                
+                <h:outputLabel style="font-weight: bold" value="Y-Axis Tick"/>
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{logCABean.corTextSizeYtick}">
+                    <f:selectItems value="#{applicationBean1.corSizeYtick}" />
+                </p:selectOneMenu> 
+                       
+                            
+             </h:panelGrid>  
+            
             <h:panelGrid id="panelGrid2" columns="1" cellpadding="5" style="float: right">
                 <p:commandButton value="Update" 
                                  styleClass="updateButton"
