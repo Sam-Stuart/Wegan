@@ -39,7 +39,7 @@
                          onclick="PF('statusDialog').show()"
                          oncomplete="setTimeout(function () {buildBoxPlot('plot_box_chart.json', 'd3_boxplot'); PF('statusDialog').hide()}, 2000)"  
                          update=":ac:form2:boxPane  :cmdPane"
-                         actionListener="#{boxPlotBean.boxplotBtn_action()}"/>
+                         actionListener="#{boxPlotBean.button_action()}"/>
     </h:panelGrid>
     <h:panelGrid class="resultsBar" columns="2">
         <h:panelGroup>

@@ -10,15 +10,15 @@
         <h:panelGrid columns="1" style="width:380px;">
             <h:panelGrid id="panelGrid2" columns="2" cellpadding="5" columnClasses="colBrayLong,colBrayShort">
                 <h:outputLabel style="font-weight: bold; " value="X-Axis Label: "/>
-                <p:inputText style="left: -220px;" value="#{boxPlotBean.xLabel}"></p:inputText>
+                <p:inputText style="left: -220px;" value="#{boxPlotBean.labx}"></p:inputText>
                 <h:outputLabel style="font-weight: bold" value="Y-Axis Label: "/>
-                <p:inputText value="#{boxPlotBean.yLabel}" style="  align-content: left"></p:inputText>  
+                <p:inputText value="#{boxPlotBean.laby}" style="  align-content: left"></p:inputText>  
                 <h:outputLabel style="font-weight: bold" value="Color Pallete:"/>
                 <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{boxPlotBean.color}" style="width: 75%">
                     <f:selectItems value="#{applicationBean1.boxPltColorPaletteOpts}" />
                 </p:selectOneMenu>
                 <h:outputLabel style="font-weight: bold; " value="Plot Title: "/>
-                <p:inputText style="left: -220px;" value="#{boxPlotBean.mainTitle}"></p:inputText>
+                <p:inputText style="left: -220px;" value="#{boxPlotBean.title}"></p:inputText>
 
             </h:panelGrid>
             <h:panelGrid columns="1" cellpadding="5" style="float: right">
@@ -32,7 +32,7 @@
                     onclick="PF('statusDialog').show()"
                     oncomplete="PF('graphApperanceLinear2').hide(); setTimeout(function () {buildBoxPlot('plot_box_chart.json', 'd3_boxplot'); PF('statusDialog').hide();}, 2000)"  
                     update=":ac:form2:boxPane  :cmdPane"
-                    actionListener="#{boxPlotBean.boxplotBtn_action()}"
+                    actionListener="#{boxPlotBean.button_action()}"
                     />
             </h:panelGrid>
         </h:panelGrid>
