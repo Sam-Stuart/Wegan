@@ -27,14 +27,14 @@ import metaboanalyst.utils.DataUtils;
 import org.primefaces.context.RequestContext;
 import org.primefaces.model.DualListModel;
 import org.rosuda.REngine.Rserve.RConnection;
-//import javax.faces.bean.ManagedBean; // added to help customize graph part work
-//import javax.faces.bean.ViewScoped;  // added to help customize graph part work
+import javax.faces.bean.ManagedBean; // added to help customize graph part work
+import javax.faces.bean.ViewScoped;  // added to help customize graph part work
 /**
  *
  * @author jianguox
  */
 @ManagedBean(name = "linearCABean")
-//@ViewScoped
+@ViewScoped
 
 public class LinearCABean implements Serializable {
 
@@ -332,7 +332,8 @@ public class LinearCABean implements Serializable {
 //        corrLin1_Update_action
         
         CAUtils.PlotLinearCA(sb, 
-//                corrColumnNameA, corrColumnNameB, doOriginal, 
+//                corrColumnNameA, corrColumnNameB,
+                doOriginal, 
                 corColorDotsOpts, corColorLineOpts, doPlotConfInt, 
                doPlotEq, doPlotRsq, doPlotRsqAdj,
                corPlotTitle, corPlotXlab, corPlotYlab,
@@ -350,7 +351,8 @@ public class LinearCABean implements Serializable {
 //        corrLin1_Update_action
         
         CAUtils.PlotLinearPredictCA(sb,
-//                corrColumnNameA, corrColumnNameB, doOriginal,
+//                corrColumnNameA, corrColumnNameB, 
+                doOriginal,
                 corColorDotsOpts, corColorLineOpts, doPlotConfInt,
                 doPlotEq, doPlotRsq, doPlotRsqAdj,
                corPlotTitle, corPlotXlab, corPlotYlab,
@@ -367,7 +369,8 @@ public class LinearCABean implements Serializable {
 //        corrLin1_Update_action
         
         CAUtils.PlotLinearNormResidCA(sb, 
-//                corrColumnNameA, corrColumnNameB, doOriginal,
+//                corrColumnNameA, corrColumnNameB, 
+                doOriginal,
                 corColorDotsOpts, corColorLineOpts, 
                corPlotTitle, corPlotXlab, corPlotYlab,
                corTextSizeTitle, corTextSizeXlab, corTextSizeYlab, corTextSizeXtick, corTextSizeYtick,
@@ -383,7 +386,8 @@ public class LinearCABean implements Serializable {
 //        corrLin1_Update_action
         
         CAUtils.PlotLinearResidFitCA(sb, 
-//                corrColumnNameA, corrColumnNameB, doOriginal,
+//                corrColumnNameA, corrColumnNameB, 
+                doOriginal,
                 corColorDotsOpts, corColorLineOpts, 
                corPlotTitle, corPlotXlab, corPlotYlab,
                corTextSizeTitle, corTextSizeXlab, corTextSizeYlab, corTextSizeXtick, corTextSizeYtick,

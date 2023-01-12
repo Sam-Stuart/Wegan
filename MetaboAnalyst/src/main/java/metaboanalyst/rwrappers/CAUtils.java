@@ -60,19 +60,19 @@ public class CAUtils {
     
 
 public static boolean PlotLinearCA(SessionBean1 sb,
-//        String facA, String facB, Boolean data,
+//        String facA, String facB, 
+        Boolean data,
         String col_dots, String col_line, Boolean plot_ci, 
         Boolean plot_eq, Boolean plot_rsq, Boolean plot_rsq_adj, 
         String plot_title, String plot_xlab, String plot_ylab, 
-        String size_title, String size_xlab, String size_ylab, 
-        String size_xtick, String size_ytick, 
+        String size_title, String size_xlab, String size_ylab, String size_xtick, String size_ytick, 
                 String imgName, String format, int dpi) {
     try {
             RConnection RC = sb.getRConnection();
             String rCommand = "lin.reg.plot(NA" + ", \"" 
 //                    + facA + "\", \""
 //                    + facB + "\", \""
-//                    + data + "\", \""
+                    + data + "\", \""
                     + col_dots + "\", \""
                     + col_line + "\", \"" 
                     + plot_ci + "\", \"" 
@@ -100,19 +100,19 @@ public static boolean PlotLinearCA(SessionBean1 sb,
     }    
     
 public static boolean PlotLinearPredictCA(SessionBean1 sb,
-//        String facA, String facB, Boolean data, 
+//        String facA, String facB,
+        Boolean data, 
         String col_dots, String col_line, Boolean plot_ci, 
         Boolean plot_eq, Boolean plot_rsq, Boolean plot_rsq_adj,
         String plot_title, String plot_xlab, String plot_ylab, 
-        String size_title, String size_xlab, String size_ylab, 
-        String size_xtick, String size_ytick, 
+        String size_title, String size_xlab, String size_ylab, String size_xtick, String size_ytick, 
                 String imgName, String format, int dpi) {
     try {
             RConnection RC = sb.getRConnection();
             String rCommand = "lin.pred.plot(NA" + ", \"" 
 //                    + facA + "\", \""
 //                    + facB + "\", \""
-//                    + data + "\", \"" 
+                    + data + "\", \"" 
                     + col_dots + "\", \"" 
                     + col_line + "\", \"" 
                     + plot_ci + "\", \"" 
@@ -141,18 +141,18 @@ public static boolean PlotLinearPredictCA(SessionBean1 sb,
 
    
 public static boolean PlotLinearNormResidCA(SessionBean1 sb,
-//        String facA, String facB, Boolean data, 
+//        String facA, String facB, 
+        Boolean data, 
         String col_dots, String col_line, 
         String plot_title, String plot_xlab, String plot_ylab, 
-        String size_title, String size_xlab, String size_ylab, 
-        String size_xtick, String size_ytick, 
+        String size_title, String size_xlab, String size_ylab, String size_xtick, String size_ytick, 
                 String imgName, String format, int dpi) {
     try {
             RConnection RC = sb.getRConnection();
             String rCommand = "lin.qq.plot(NA" + ", \"" 
 //                    + facA + "\", \""
 //                    + facB + "\", \""
-//                    + data + "\", \"" 
+                    + data + "\", \"" 
                     + col_dots + "\", \"" 
                     + col_line + "\", \"" 
                     + plot_title + "\", \"" 
@@ -176,18 +176,18 @@ public static boolean PlotLinearNormResidCA(SessionBean1 sb,
     }    
 
 public static boolean PlotLinearResidFitCA(SessionBean1 sb,
-//        String facA, String facB, Boolean data, 
+//        String facA, String facB,
+        Boolean data, 
         String col_dots, String col_line, 
         String plot_title, String plot_xlab, String plot_ylab, 
-        String size_title, String size_xlab, String size_ylab, 
-        String size_xtick, String size_ytick, 
+        String size_title, String size_xlab, String size_ylab, String size_xtick, String size_ytick, 
                 String imgName, String format, int dpi) {
     try {
             RConnection RC = sb.getRConnection();
             String rCommand = "lin.resfit.plot(NA" + ", \"" 
 //                    + facA + "\", \""
 //                    + facB + "\", \""
-//                    + data + "\", \"" 
+                    + data + "\", \"" 
                     + col_dots + "\", \"" 
                     + col_line + "\", \"" 
                     + plot_title + "\", \"" 

@@ -275,16 +275,16 @@ lin.reg.anal <- function(mSetObj = NA,
   #GENERATE MODEL, without weights
   # if (is.null(weights) == TRUE) {
     mod <- lm(formula = form, data = input, weights = NULL) #Create linear model, no weights
- #  } else {
- #    weights <- weights #Java upload weights as a vector of numeric values
- #    if (length(weights) == nrow(mSetObj$dataSet$norm)) { #There must be one weight for every row in the data set
- #      mod <- lm(formula=form, data=input, #mSetObj$dataSet$norm,
- # weights=weights) #Create linear model, with weights
- #    } else {
- #      #AddErrMsg("The length of the weights vector does not equal the number of rows in the data set! Check that the weights vector is correct.") #Error msg 
- #      stop("The length of the weights vector does not equal the number of rows in the data set! Check that the weights vector is correct.") #Error msg 
- #    }
- #  }
+  #  } else {
+  #    weights <- weights #Java upload weights as a vector of numeric values
+  #    if (length(weights) == nrow(mSetObj$dataSet$norm)) { #There must be one weight for every row in the data set
+  #      mod <- lm(formula=form, data=input, #mSetObj$dataSet$norm,
+  # weights=weights) #Create linear model, with weights
+  #    } else {
+  #      #AddErrMsg("The length of the weights vector does not equal the number of rows in the data set! Check that the weights vector is correct.") #Error msg 
+  #      stop("The length of the weights vector does not equal the number of rows in the data set! Check that the weights vector is correct.") #Error msg 
+  #    }
+  #  }
  
     
   ## alpha(yint) + beta(slope) * x
@@ -295,13 +295,13 @@ lin.reg.anal <- function(mSetObj = NA,
   covar <- vcov(mod) #PRINT
   conf.int <- confint(mod, level=0.95) #PRINT
   
-  fileName <- paste0("corr_linear_model_summary", ".txt") #File name for summary
-# fileName <- paste0("linear_regression_summary_", facA, "~", facB, ".txt") #File name for summary
+  # fileName <- paste0("corr_linear_model_summary", ".txt") #File name for summary
+  fileName <- paste0("linear_regression_summary_", facA, "-", facB, ".txt") #File name for summary
   coeffs <- summ[["coefficients"]] #Extract model coefficients
   beta <- round(coeffs[2], digits = 2) # slope
   alpha <- round(coeffs[1], digits = 2) # yint
   equation <- paste(facA, " = ",
- paste( paste(beta, facB, sep="*"), alpha, sep=" + ") ) # equation with intercept, coefficient and predictor variable name
+ paste( paste(beta, facB, sep = "*"), alpha, sep = " + ") ) # equation with intercept, coefficient and predictor variable name
   r_sq <- round(summ[["r.squared"]], digits = 2) #Extract R^2
   r_sq_adj <- round(summ[["adj.r.squared"]], digits = 2) #Extract adjusted R^2 value
 
@@ -351,7 +351,7 @@ lin.reg.anal <- function(mSetObj = NA,
          "TEST: ", names(mod_asmp), " (P-Value: ", mod_asmp, ")\n",
          "TRY: ", fix[mod_num < 0.05], "\n", sep = "" ) )
       # "Please be advised that conforming to these assumptions is necessary for use of the linear model. The results of these tests provide an indication as to how appropriately these assumptions are met. If the goal is to visually explore your data, try the Plotting module." 
-    #AddErrMsg(failed)
+    AddErrMsg(failed)
     message(failed)
     } else {
     failed <- ("No model assumption tests failed.")
@@ -454,7 +454,7 @@ lin.reg.anal <- function(mSetObj = NA,
 lin.reg.plot <- function(mSetObj=NA,
   # facA = "NULL", # response, dropdown
   # facB = "NULL", # predictor, dropdown
-  # data = "false", # checkbox
+  data = "false", # checkbox
              
   col_dots = "NULL",
   col_line = "NULL",
@@ -467,11 +467,11 @@ lin.reg.plot <- function(mSetObj=NA,
   plot_ylab = " ",
   plot_xlab = " ",
 
-  size_title = "NULL",
-  size_xlab = "NULL",
-  size_ylab = "NULL",
-  size_xtick = "NULL",
-  size_ytick = "NULL",
+   size_title = "NULL",
+   size_xlab = "NULL",
+   size_ylab = "NULL",
+   size_xtick = "NULL",
+   size_ytick = "NULL",
   
   imgName,
   format = "png",
@@ -596,11 +596,21 @@ lin.reg.plot <- function(mSetObj=NA,
     plot_xlab1 <- plot_xlab
   }
 
+
+# size_base <- theme_bw()$text$size
+# size_leg <- size_base
+# size_title1 <- size_base*1.2
+# size_xlab1 <- size_base
+# size_ylab1 <- size_base
+# size_xtick1 <- size_base*0.8
+# size_ytick1 <- size_base*0.8
+#
 # PLOT TEXT SIZE
 # size_base <- theme_bw()$text$size # 11
 # stackoverflow.com/questions/53560599/how-to-change-the-default-font-size-in-ggplot2-including-geom-text
  size_base <- 12
-  #SET TITLE SIZE
+ size_tick <- size_base * 0.8
+ #SET TITLE SIZE
   size_title1 <-
 				switch(
 					size_title,
@@ -608,7 +618,7 @@ lin.reg.plot <- function(mSetObj=NA,
 					"medium" = size_base,
 					"small" = 0.8*size_base,
 					"extrasmall" = 0.6*size_base,
-                                      "large" = 1.2*size_base,
+                                        "large" = 1.2*size_base,
 					"extralarge" = 1.4*size_base,
 					NULL
 				)
@@ -621,7 +631,7 @@ lin.reg.plot <- function(mSetObj=NA,
 					"medium" = size_base,
 					"small" = 0.8*size_base,
 					"extrasmall" = 0.6*size_base,
-                                      "large" = 1.2*size_base,
+                                        "large" = 1.2*size_base,
 					"extralarge" = 1.4*size_base,
 					NULL
 				)
@@ -633,7 +643,7 @@ lin.reg.plot <- function(mSetObj=NA,
 					"medium" = size_base,
 					"small" = 0.8*size_base,
 					"extrasmall" = 0.6*size_base,
-                                      "large" = 1.2*size_base,
+                                        "large" = 1.2*size_base,
 					"extralarge" = 1.4*size_base,
 					NULL
 				)
@@ -642,12 +652,12 @@ lin.reg.plot <- function(mSetObj=NA,
   size_ytick1 <-
 				switch(
 					size_ytick,
-					"NULL" = size_base,
-					"medium" = size_base,
-					"small" = 0.8*size_base,
-					"extrasmall" = 0.6*size_base,
-                                      "large" = 1.2*size_base,
-					"extralarge" = 1.4*size_base,
+					"NULL" = size_tick,
+					"medium" = size_tick,
+					"small" = 0.8*size_tick,
+					"extrasmall" = 0.6*size_tick,
+                                        "large" = 1.2*size_tick,
+					"extralarge" = 1.4*size_tick,
 					NULL
 				)
 
@@ -655,12 +665,12 @@ lin.reg.plot <- function(mSetObj=NA,
   size_xtick1 <-
 				switch(
 					size_xtick,
-					"NULL" = size_base,
-					"medium" = size_base,
-					"small" = 0.8*size_base,
-					"extrasmall" = 0.6*size_base,
-                                      "large" = 1.2*size_base,
-					"extralarge" = 1.4*size_base,
+					"NULL" = size_tick,
+					"medium" = size_tick,
+					"small" = 0.8*size_tick,
+					"extrasmall" = 0.6*size_tick,
+                                        "large" = 1.2*size_tick,
+					"extralarge" = 1.4*size_tick,
 					NULL
 				)
 
@@ -680,9 +690,7 @@ size_leg <- size_xlab
   # }
 
 # PLOT 
- # THEME 
-#  theme_lineplot <- function(){theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), axis.text = element_text(size=12, colour="black"),    axis.title=element_text(size=12), legend.title=element_text(12), legend.text=element_text(size=12), plot.title=element_text(face='bold',hjust = 0.5)
-#   )}
+ 
   ## NOTE THE .data ARGUMENT; 
   ##  To avoid a note from CMD check about .data, use #' @importFrom rlang .data in any roxygen code block (typically in package documentation as generated by usethis::use_package_doc()) ; ggplot2.tidyverse.org/articles/ggplot2-in-packages.html
    
@@ -696,12 +704,11 @@ size_leg <- size_xlab
      theme_bw() + 
   theme(panel.grid.major = element_blank(), 
         panel.grid.minor = element_blank(),
-        #axis.text = element_text(size = 12, colour = "black"), 
         axis.title.x = element_text(size = size_xlab1),
         axis.title.y = element_text(size = size_ylab1),
         axis.text.x = element_text(size = size_xtick1),
         axis.text.y = element_text(size = size_ytick1),
-        legend.title=element_text(size_leg), #legend.text=element_text(), 
+        legend.title = element_text(size_leg), 
         plot.title = element_text(size = size_title1, face = 'bold', hjust = 0.5)
   )
 
@@ -715,7 +722,7 @@ aj <- ggplot(data = input,
      labs(title = plot_title1) + ylab(plot_ylab1)+ xlab(plot_xlab1) +
      geom_smooth(se = TRUE, color = col_line1, fullrange = TRUE, method = 'lm') +
      geom_point(shape = 16, color = col_dots1) +
-     theme_bw() + theme(panel.grid.major = element_blank(),panel.grid.minor = element_blank(), axis.text = element_text(size = 12, colour = "black"),  axis.title = element_text(size = 12), plot.title = element_text(face = 'bold', hjust = 0.5)  )
+     theme_bw() + theme(panel.grid.major = element_blank(),panel.grid.minor = element_blank(), axis.title.x = element_text(size = size_xlab1),  axis.title.y = element_text(size = size_ylab1), axis.text.x = element_text(size = size_xtick1), axis.text.y = element_text(size = size_ytick1), legend.title = element_text(size = size_leg), plot.title = element_text(size = size_title1, face = 'bold', hjust = 0.5) )
 } 
 
   
@@ -946,7 +953,7 @@ linear_plot_json$bool_rsq_adj <- TRUE
 lin.pred.plot <- function(mSetObj=NA,
   # facA = "NULL", # response, dropdown
   # facB = "NULL", # predictor, dropdown
-  # data = "false", # checkbox
+  data = "false", # checkbox
              
   col_dots = "NULL",
   col_line = "NULL",
@@ -959,10 +966,10 @@ lin.pred.plot <- function(mSetObj=NA,
   plot_xlab = " ",
 
   size_title = "NULL",
-  size_xlab = "NULL",
-  size_ylab = "NULL",
-  size_xtick = "NULL",
-  size_ytick = "NULL",
+   size_xlab = "NULL",
+   size_ylab = "NULL",
+   size_xtick = "NULL",
+   size_ytick = "NULL",
 
   imgName,
   format = "png",
@@ -1099,11 +1106,20 @@ lin.pred.plot <- function(mSetObj=NA,
      plot_xlab1 <- plot_xlab 
    }
  
+# size_base <- theme_bw()$text$size
+# size_leg <- size_base
+# size_title1 <- size_base*1.2
+# size_xlab1 <- size_base
+# size_ylab1 <- size_base
+# size_xtick1 <- size_base*0.8
+# size_ytick1 <- size_base*0.8
+
 # PLOT TEXT SIZE
 # size_base <- theme_bw()$text$size # 11
 # stackoverflow.com/questions/53560599/how-to-change-the-default-font-size-in-ggplot2-including-geom-text
  size_base <- 12
-  #SET TITLE SIZE
+ size_tick <- size_base * 0.8
+ #SET TITLE SIZE
   size_title1 <-
 				switch(
 					size_title,
@@ -1111,7 +1127,7 @@ lin.pred.plot <- function(mSetObj=NA,
 					"medium" = size_base,
 					"small" = 0.8*size_base,
 					"extrasmall" = 0.6*size_base,
-                                      "large" = 1.2*size_base,
+                                        "large" = 1.2*size_base,
 					"extralarge" = 1.4*size_base,
 					NULL
 				)
@@ -1124,7 +1140,7 @@ lin.pred.plot <- function(mSetObj=NA,
 					"medium" = size_base,
 					"small" = 0.8*size_base,
 					"extrasmall" = 0.6*size_base,
-                                      "large" = 1.2*size_base,
+                                        "large" = 1.2*size_base,
 					"extralarge" = 1.4*size_base,
 					NULL
 				)
@@ -1136,7 +1152,7 @@ lin.pred.plot <- function(mSetObj=NA,
 					"medium" = size_base,
 					"small" = 0.8*size_base,
 					"extrasmall" = 0.6*size_base,
-                                      "large" = 1.2*size_base,
+                                        "large" = 1.2*size_base,
 					"extralarge" = 1.4*size_base,
 					NULL
 				)
@@ -1145,12 +1161,12 @@ lin.pred.plot <- function(mSetObj=NA,
   size_ytick1 <-
 				switch(
 					size_ytick,
-					"NULL" = size_base,
-					"medium" = size_base,
-					"small" = 0.8*size_base,
-					"extrasmall" = 0.6*size_base,
-                                      "large" = 1.2*size_base,
-					"extralarge" = 1.4*size_base,
+					"NULL" = size_tick,
+					"medium" = size_tick,
+					"small" = 0.8*size_tick,
+					"extrasmall" = 0.6*size_tick,
+                                        "large" = 1.2*size_tick,
+					"extralarge" = 1.4*size_tick,
 					NULL
 				)
 
@@ -1158,12 +1174,12 @@ lin.pred.plot <- function(mSetObj=NA,
   size_xtick1 <-
 				switch(
 					size_xtick,
-					"NULL" = size_base,
-					"medium" = size_base,
-					"small" = 0.8*size_base,
-					"extrasmall" = 0.6*size_base,
-                                      "large" = 1.2*size_base,
-					"extralarge" = 1.4*size_base,
+					"NULL" = size_tick,
+					"medium" = size_tick,
+					"small" = 0.8*size_tick,
+					"extrasmall" = 0.6*size_tick,
+                                        "large" = 1.2*size_tick,
+					"extralarge" = 1.4*size_tick,
 					NULL
 				)
 
@@ -1189,12 +1205,11 @@ size_leg <- size_xlab
      theme_bw() + 
   theme(panel.grid.major = element_blank(), 
         panel.grid.minor = element_blank(),
-        #axis.text = element_text(size = 12, colour = "black"), 
         axis.title.x = element_text(size = size_xlab1),
         axis.title.y = element_text(size = size_ylab1),
         axis.text.x = element_text(size = size_xtick1),
         axis.text.y = element_text(size = size_ytick1),
-        legend.title=element_text(size_leg), #legend.text=element_text(), 
+        legend.title=element_text(size = size_leg), 
         plot.title = element_text(size = size_title1, face = 'bold', hjust = 0.5)
   )
 
@@ -1223,7 +1238,7 @@ aj <- ggplot(data = dfpred, # data.frame(fpred = prediction, fA = input[,facA]),
      labs(title = plot_title1) + ylab(plot_ylab1)+ xlab(plot_xlab1) +
      geom_smooth(se = TRUE, color = col_line1, fullrange = TRUE, method = 'lm') +
      geom_point(shape = 16, color = col_dots1) +
-     theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), axis.title.x = element_text(size = size_xlab1), axis.title.y = element_text(size = size_ylab1), axis.text.x = element_text(size = size_xtick1), axis.text.y = element_text(size = size_ytick1), legend.title=element_text(size_leg), plot.title = element_text(size = size_title1, face = 'bold', hjust = 0.5) )
+     theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), axis.title.x = element_text(size = size_xlab1), axis.title.y = element_text(size = size_ylab1), axis.text.x = element_text(size = size_xtick1), axis.text.y = element_text(size = size_ytick1), legend.title=element_text(size = size_leg), plot.title = element_text(size = size_title1, face = 'bold', hjust = 0.5) )
 }
 
 build <- ggplot_build(aj)
@@ -1317,7 +1332,7 @@ lin.qq.plot <- function(mSetObj=NA,
 
 #  facA = "NULL", # response, dropdown
 #  facB = "NULL", # predictor, dropdown
-#  data = "false", # checkbox
+  data = "false", # checkbox
              
   col_dots = "NULL",
   col_line = "NULL",
@@ -1326,11 +1341,11 @@ lin.qq.plot <- function(mSetObj=NA,
   plot_ylab = " ",
   plot_xlab = " ",
 
-  size_title = "NULL",
-  size_xlab = "NULL",
-  size_ylab = "NULL",
-  size_xtick = "NULL",
-  size_ytick = "NULL",
+   size_title = "NULL",
+   size_xlab = "NULL",
+   size_ylab = "NULL",
+   size_xtick = "NULL",
+   size_ytick = "NULL",
 
   imgName,
   format = "png",
@@ -1460,11 +1475,20 @@ lin.qq.plot <- function(mSetObj=NA,
     plot_xlab1 <- plot_xlab
   }
  
+# size_base <- theme_bw()$text$size
+# size_leg <- size_base
+# size_title1 <- size_base*1.2
+# size_xlab1 <- size_base
+# size_ylab1 <- size_base
+# size_xtick1 <- size_base*0.8
+# size_ytick1 <- size_base*0.8
+
 # PLOT TEXT SIZE
 # size_base <- theme_bw()$text$size # 11
 # stackoverflow.com/questions/53560599/how-to-change-the-default-font-size-in-ggplot2-including-geom-text
  size_base <- 12
-  #SET TITLE SIZE
+ size_tick <- size_base * 0.8
+ #SET TITLE SIZE
   size_title1 <-
 				switch(
 					size_title,
@@ -1472,7 +1496,7 @@ lin.qq.plot <- function(mSetObj=NA,
 					"medium" = size_base,
 					"small" = 0.8*size_base,
 					"extrasmall" = 0.6*size_base,
-                                      "large" = 1.2*size_base,
+                                        "large" = 1.2*size_base,
 					"extralarge" = 1.4*size_base,
 					NULL
 				)
@@ -1485,7 +1509,7 @@ lin.qq.plot <- function(mSetObj=NA,
 					"medium" = size_base,
 					"small" = 0.8*size_base,
 					"extrasmall" = 0.6*size_base,
-                                      "large" = 1.2*size_base,
+                                        "large" = 1.2*size_base,
 					"extralarge" = 1.4*size_base,
 					NULL
 				)
@@ -1497,7 +1521,7 @@ lin.qq.plot <- function(mSetObj=NA,
 					"medium" = size_base,
 					"small" = 0.8*size_base,
 					"extrasmall" = 0.6*size_base,
-                                      "large" = 1.2*size_base,
+                                        "large" = 1.2*size_base,
 					"extralarge" = 1.4*size_base,
 					NULL
 				)
@@ -1506,12 +1530,12 @@ lin.qq.plot <- function(mSetObj=NA,
   size_ytick1 <-
 				switch(
 					size_ytick,
-					"NULL" = size_base,
-					"medium" = size_base,
-					"small" = 0.8*size_base,
-					"extrasmall" = 0.6*size_base,
-                                      "large" = 1.2*size_base,
-					"extralarge" = 1.4*size_base,
+					"NULL" = size_tick,
+					"medium" = size_tick,
+					"small" = 0.8*size_tick,
+					"extrasmall" = 0.6*size_tick,
+                                        "large" = 1.2*size_tick,
+					"extralarge" = 1.4*size_tick,
 					NULL
 				)
 
@@ -1519,12 +1543,12 @@ lin.qq.plot <- function(mSetObj=NA,
   size_xtick1 <-
 				switch(
 					size_xtick,
-					"NULL" = size_base,
-					"medium" = size_base,
-					"small" = 0.8*size_base,
-					"extrasmall" = 0.6*size_base,
-                                      "large" = 1.2*size_base,
-					"extralarge" = 1.4*size_base,
+					"NULL" = size_tick,
+					"medium" = size_tick,
+					"small" = 0.8*size_tick,
+					"extrasmall" = 0.6*size_tick,
+                                        "large" = 1.2*size_tick,
+					"extralarge" = 1.4*size_tick,
 					NULL
 				)
 
@@ -1564,18 +1588,18 @@ a0 <- ggplot() +
   theme_bw() + 
   theme(panel.grid.major = element_blank(), 
         panel.grid.minor = element_blank(),
-        #axis.text = element_text(size = 12, colour = "black"), 
         axis.title.x = element_text(size = size_xlab1),
         axis.title.y = element_text(size = size_ylab1),
         axis.text.x = element_text(size = size_xtick1),
         axis.text.y = element_text(size = size_ytick1),
-        legend.title=element_text(size_leg), #legend.text=element_text(), 
+        legend.title = element_text(size = size_leg),
         plot.title = element_text(size = size_title1, face = 'bold', hjust = 0.5)
   ) #+ geom_point(aes(x = x, y = y), data = q1_q3,  shape = 3, size = 5,   stroke = 1.1)
 
 
 #STORE IN mset
-  mSetObj$analSet$linReg$plotNorm <- list(plot = a0, title = plot_title1, xlab = plot_xlab1, ylab = plot_ylab1)
+  mSetObj$analSet$linReg$plotNorm <- list(plot = a0, title = plot_title1, xlab = plot_xlab1, ylab = plot_ylab1, 
+ size_title = size_title1, size_xlab = size_xlab1, size_ylab = size_ylab1, size_xtick = size_xtick1, size_ytick = size_ytick1)
 
  #GENERATE PLOT
   Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
@@ -1665,7 +1689,7 @@ lin.resfit.plot <- function(mSetObj=NA,
 
 #  facA = "NULL", # response, dropdown
 #  facB = "NULL", # predictor, dropdown
-#  data = "false", # checkbox
+  data = "false", # checkbox
 
   col_dots = "NULL",
   col_line = "NULL",
@@ -1674,11 +1698,11 @@ lin.resfit.plot <- function(mSetObj=NA,
   plot_ylab = " ",
   plot_xlab = " ",
 
-  size_title = "NULL",
-  size_xlab = "NULL",
-  size_ylab = "NULL",
-  size_xtick = "NULL",
-  size_ytick = "NULL",
+   size_title = "NULL",
+   size_xlab = "NULL",
+   size_ylab = "NULL",
+   size_xtick = "NULL",
+   size_ytick = "NULL",
 
   imgName,
   format = "png",
@@ -1808,11 +1832,20 @@ lin.resfit.plot <- function(mSetObj=NA,
     plot_xlab1 <- plot_xlab
   }
   
+# size_base <- theme_bw()$text$size
+# size_leg <- size_base
+# size_title1 <- size_base*1.2
+# size_xlab1 <- size_base
+# size_ylab1 <- size_base
+# size_xtick1 <- size_base*0.8
+# size_ytick1 <- size_base*0.8
+
 # PLOT TEXT SIZE
 # size_base <- theme_bw()$text$size # 11
 # stackoverflow.com/questions/53560599/how-to-change-the-default-font-size-in-ggplot2-including-geom-text
  size_base <- 12
-  #SET TITLE SIZE
+ size_tick <- size_base * 0.8
+ #SET TITLE SIZE
   size_title1 <-
 				switch(
 					size_title,
@@ -1820,7 +1853,7 @@ lin.resfit.plot <- function(mSetObj=NA,
 					"medium" = size_base,
 					"small" = 0.8*size_base,
 					"extrasmall" = 0.6*size_base,
-                                      "large" = 1.2*size_base,
+                                        "large" = 1.2*size_base,
 					"extralarge" = 1.4*size_base,
 					NULL
 				)
@@ -1833,7 +1866,7 @@ lin.resfit.plot <- function(mSetObj=NA,
 					"medium" = size_base,
 					"small" = 0.8*size_base,
 					"extrasmall" = 0.6*size_base,
-                                      "large" = 1.2*size_base,
+                                        "large" = 1.2*size_base,
 					"extralarge" = 1.4*size_base,
 					NULL
 				)
@@ -1845,7 +1878,7 @@ lin.resfit.plot <- function(mSetObj=NA,
 					"medium" = size_base,
 					"small" = 0.8*size_base,
 					"extrasmall" = 0.6*size_base,
-                                      "large" = 1.2*size_base,
+                                        "large" = 1.2*size_base,
 					"extralarge" = 1.4*size_base,
 					NULL
 				)
@@ -1854,12 +1887,12 @@ lin.resfit.plot <- function(mSetObj=NA,
   size_ytick1 <-
 				switch(
 					size_ytick,
-					"NULL" = size_base,
-					"medium" = size_base,
-					"small" = 0.8*size_base,
-					"extrasmall" = 0.6*size_base,
-                                      "large" = 1.2*size_base,
-					"extralarge" = 1.4*size_base,
+					"NULL" = size_tick,
+					"medium" = size_tick,
+					"small" = 0.8*size_tick,
+					"extrasmall" = 0.6*size_tick,
+                                        "large" = 1.2*size_tick,
+					"extralarge" = 1.4*size_tick,
 					NULL
 				)
 
@@ -1867,19 +1900,17 @@ lin.resfit.plot <- function(mSetObj=NA,
   size_xtick1 <-
 				switch(
 					size_xtick,
-					"NULL" = size_base,
-					"medium" = size_base,
-					"small" = 0.8*size_base,
-					"extrasmall" = 0.6*size_base,
-                                      "large" = 1.2*size_base,
-					"extralarge" = 1.4*size_base,
+					"NULL" = size_tick,
+					"medium" = size_tick,
+					"small" = 0.8*size_tick,
+					"extrasmall" = 0.6*size_tick,
+                                        "large" = 1.2*size_tick,
+					"extralarge" = 1.4*size_tick,
 					NULL
 				)
 
-
-## DON'T USE '1' version of 'size_' vars, must be originals
-if( !isTRUE("NULL" %in% c(size_xlab, size_ylab) )){
-if(!all(c(size_xlab, size_ylab) %in% "NULL")){
+if(any(!c(size_xlab, size_ylab) %in% "NULL")){
+if(all(!c(size_xlab, size_ylab) %in% "NULL")){
 size_leg <- size_xlab
 } else {
 size_leg <- c(size_xlab, size_ylab)[!c(size_xlab, size_ylab) %in% "NULL"]
@@ -1903,17 +1934,19 @@ size_leg <- size_xlab
      theme_bw() + 
      theme(panel.grid.major = element_blank(), 
         panel.grid.minor = element_blank(),
-        #axis.text = element_text(size = 12, colour = "black"), 
         axis.title.x = element_text(size = size_xlab1),
         axis.title.y = element_text(size = size_ylab1),
         axis.text.x = element_text(size = size_xtick1),
         axis.text.y = element_text(size = size_ytick1),
-        legend.title = element_text(size_leg), #legend.text=element_text(), 
+        legend.title = element_text(size = size_leg), 
         plot.title = element_text(size = size_title1, face = 'bold', hjust = 0.5)
   ) 
 
 #STORE IN mset
   mSetObj$analSet$linReg$plotFit <- list(plot = a0, title = plot_title1, xlab = plot_xlab1, ylab = plot_ylab1)
+
+# mSetObj$analSet$linReg$plotFit <- list(plot = a0, title = plot_title1, xlab = plot_xlab1,ylab = plot_ylab1, 
+#size_title = size_title1, size_xlab = size_xlab1, size_ylab = size_ylab1, size_xtick = size_xtick1, size_ytick = size_ytick1)
 
   #GENERATE PLOT
   Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
@@ -2440,7 +2473,7 @@ print("got it")
 # #  theme_lineplot <- theme_bw() + theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank(), axis.text = element_text(size=12, colour="black"),    axis.title=element_text(size=12), legend.title=element_text(12), legend.text=element_text(size=12), plot.title=element_text(face='bold',hjust = 0.5)
 # #   )
 #   ## NOTE THE .data ARGUMENT; 
-#   ##  To avoid a note from CMD check about .data, use #' @importFrom rlang .data in any roxygen code block (typically in package documentation as generated by usethis::use_package_doc()) ; https://ggplot2.tidyverse.org/articles/ggplot2-in-packages.html
+#   ##  To avoid a note from CMD check about .data, use #' @importFrom rlang .data in any roxygen code block (typically in package documentation as generated by usethis::use_package_doc()) ; ggplot2.tidyverse.org/articles/ggplot2-in-packages.html
 #    a0 <- ggplot(data = input,
 #    # aes(x = .data[[facA]], y = .data[[facB]]) ) +
 #     aes_(x = as.name(facA), y = as.name(facB)) )+
@@ -2736,20 +2769,21 @@ lin.reg.columns <- function(mSetObj=NA){
   
   mSetObj <- .get.mSet(mSetObj)
   
-  library("dplyr")
+  # library("dplyr")
   
-  data <- select_if(mSetObj$dataSet$norm, is.numeric)
-# data <- input[,sapply(input, is.numeric), drop = FALSE]
-  count.all.numeric.cols <- ncol(data)
-  name.all.numeric.cols <- colnames(data)
+  # dat <- select_if(mSetObj$dataSet$norm, is.numeric)
+  dat <- mSetObj$dataSet$norm[,sapply(mSetObj$dataSet$norm, is.numeric), drop = FALSE]
+  datnum_names <- colnames(dat) # name was: name.all.numeric.cols
+  # datnum_ncol <- ncol(dat) # name was: count.all.numeric.cols
   
-  num.col.results <- list(
-    count = count.all.numeric.cols,
-    names = name.all.numeric.cols
-  )
+  # num.col.results <- list(
+  #  count = count.all.numeric.cols,
+  #  names = name.all.numeric.cols
+  # )
   
-#  return(num.col.results) # list: count, names 
-  return(name.all.numeric.cols)
+  #  return(num.col.results) # list: count, names 
+
+  return(datnum_names)
   
 }
 

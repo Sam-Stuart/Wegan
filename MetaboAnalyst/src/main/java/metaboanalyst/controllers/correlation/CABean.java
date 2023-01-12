@@ -84,7 +84,8 @@ public class CABean implements Serializable {
         }   
         
         CAUtils.PlotLinearCA(sb, 
-//                 facA, facB, data
+//                 facA, facB, 
+                false,
 //                "NULL", "NULL", false,
 //                point color, line colour, conf int
                  "NULL", "NULL", false,
@@ -95,6 +96,7 @@ public class CABean implements Serializable {
              
         CAUtils.PlotLinearPredictCA(sb,
 //                 facA, facB, data
+                false,
 //                "NULL", "NULL", false, 
 //                point color, line colour, conf int
                 "NULL", "NULL", false,
@@ -106,6 +108,7 @@ public class CABean implements Serializable {
         // NormResid = qqplot
         CAUtils.PlotLinearNormResidCA(sb, 
 //                 facA, facB, data
+                false,
 //                "NULL", "NULL", false,
 //                point color, line colour,                
                 "NULL", "NULL", " ", " "," ",
@@ -115,8 +118,9 @@ public class CABean implements Serializable {
         
         CAUtils.PlotLinearResidFitCA(sb, 
 //                facA, facB, data
+                false,
 //                "NULL", "NULL", false,
-//                point color, line colour,                  
+//                POINT/LINE COLOR                
                 "NULL", "NULL", " ", " "," ",
 //                TEXT SIZE
                 "NULL", "NULL","NULL", "NULL","NULL", 

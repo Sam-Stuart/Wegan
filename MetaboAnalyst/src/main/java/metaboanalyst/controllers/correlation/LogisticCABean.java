@@ -10,7 +10,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import javax.faces.bean.ManagedBean;
 import javax.faces.model.SelectItem;
 import metaboanalyst.controllers.SessionBean1;
 import metaboanalyst.models.User;
@@ -30,6 +29,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.faces.bean.ManagedBean; // added to help customize graph part work
+import javax.faces.bean.ViewScoped;  // added to help customize graph part work
+
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 
@@ -38,7 +40,7 @@ import javax.inject.Named;
  * @author gpsykes
  */
 @ManagedBean(name = "logCABean")
-//@ViewScoped
+@ViewScoped
 public class LogisticCABean implements Serializable {
 
     private final SessionBean1 sb = (SessionBean1) DataUtils.findBean("sessionBean1");

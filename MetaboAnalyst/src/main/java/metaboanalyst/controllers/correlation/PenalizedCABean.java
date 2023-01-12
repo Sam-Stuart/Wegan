@@ -23,11 +23,15 @@ import org.primefaces.context.RequestContext;
 import org.primefaces.model.DualListModel;
 import org.rosuda.REngine.Rserve.RConnection;
 
+import javax.faces.bean.ManagedBean; // added to help customize graph part work
+import javax.faces.bean.ViewScoped;  // added to help customize graph part work
+
 /**
  *
  * @author dnallen
  */
 @ManagedBean(name = "penalCABean")
+@ViewScoped
 public class PenalizedCABean implements Serializable {
 
     private final SessionBean1 sb = (SessionBean1) DataUtils.findBean("sessionBean1");
