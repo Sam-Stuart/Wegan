@@ -23,11 +23,11 @@ import java.util.ArrayList;
 @ManagedBean(name = "piePlotBean")
 @ViewScoped
 public class PiePlotBean extends PlotBean implements Serializable {
+
     private final SelectItem[] aggregateOpts;
-    private ArrayList<SelectItem> numericBoxColumnOpts;
     private String aggregateFunChosen;
 
-    private String facA = getNumericBoxColumnOpts().get(0).getLabel();
+    private String facA = "null";
 
     public PiePlotBean() {
         super();
@@ -37,6 +37,12 @@ public class PiePlotBean extends PlotBean implements Serializable {
         aggregateOpts[2] = new SelectItem("length", "Count");
         aggregateOpts[3] = new SelectItem("min", "Min");
         aggregateOpts[4] = new SelectItem("max", "Max");
+
+        numericBoxColumnOpts = this.getNumericBoxColumnOpts();
+        if (numericBoxColumnOpts.length != 0) {
+            this.facA = numericBoxColumnOpts[0].getLabel();
+        }
+
     }
 
     public String getFacA() {
@@ -47,31 +53,8 @@ public class PiePlotBean extends PlotBean implements Serializable {
         this.facA = facA;
     }
 
-    public void setNumericBoxColumnOpts() {
-        List<String> columns = Arrays.asList(PlottingUtils.GetNumericDataColumnsBoxPlt(sb));
-        this.numericBoxColumnOpts = new ArrayList<>();
-        columns.forEach((e) -> {
-            this.numericBoxColumnOpts.add(new SelectItem(e, e));
-        });
-    }
-
-    public ArrayList<SelectItem> getNumericBoxColumnOpts() {
-        if (this.numericBoxColumnOpts == null) {
-            this.setNumericBoxColumnOpts();
-        }
-        return this.numericBoxColumnOpts;
-    }
-
     public SelectItem[] getAggregateOpts() {
         return aggregateOpts;
-    }
-
-    public SelectItem[] getTextFontSizeOpts() {
-        return textFontSizeOpts;
-    }
-
-    public SelectItem[] getAxisFontSizeOpts() {
-        return axisFontSizeOpts;
     }
 
     public String getAggregateFunChosen() {
@@ -81,7 +64,6 @@ public class PiePlotBean extends PlotBean implements Serializable {
     public void setAggregateFunChosen(String aggregateFunChosen) {
         this.aggregateFunChosen = aggregateFunChosen;
     }
-
 
     @Override
     public void button_action() {

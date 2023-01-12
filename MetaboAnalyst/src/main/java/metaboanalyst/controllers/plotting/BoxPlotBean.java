@@ -11,10 +11,8 @@ import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.model.SelectItem;
-import metaboanalyst.controllers.SessionBean1;
 import metaboanalyst.rwrappers.PlottingUtils;
 import metaboanalyst.rwrappers.RDataUtils;
-import metaboanalyst.utils.DataUtils;
 import org.rosuda.REngine.Rserve.RConnection;
 
 /**
@@ -23,38 +21,28 @@ import org.rosuda.REngine.Rserve.RConnection;
  */
 @ManagedBean(name = "boxPlotBean")
 @ViewScoped
-public class BoxPlotBean extends PlotBean implements Serializable{
+public class BoxPlotBean extends PlotBean implements Serializable {
 
-    private String box_xAxis = "NULL";
-    private String box_yAxis = "NULL";
     private String legendTitle = "NULL";
     private String boxLabels = "NULL";
     private String color = "NULL";
     private SelectItem[] boxColumnOpts = null;
-    private SelectItem[] factorBoxColumnOpts = null;
-    private SelectItem[] numericBoxColumnOpts = null;
-    private String facC = getFactorBoxColumnOpts()[0].getLabel();
-    private String facB = getNumericBoxColumnOpts()[0].getLabel();
+    private String facC = "NULL";
+    private String facB = "NULL";
 
     public BoxPlotBean() {
         super();
-    }
- 
 
-    public String getBox_xAxis() {
-        return box_xAxis;
-    }
+        factorBoxColumnOpts = this.getFactorBoxColumnOpts();
+        numericBoxColumnOpts = this.getNumericBoxColumnOpts();
 
-    public void setBox_xAxis(String box_xAxis) {
-        this.box_xAxis = box_xAxis;
-    }
+        if (factorBoxColumnOpts.length != 0) {
+            this.facC = factorBoxColumnOpts[0].getLabel();
+        }
 
-    public String getBox_yAxis() {
-        return box_yAxis;
-    }
-
-    public void setBox_yAxis(String box_yAxis) {
-        this.box_yAxis = box_yAxis;
+        if (numericBoxColumnOpts.length != 0) {
+            this.facB = numericBoxColumnOpts[0].getLabel();
+        }
     }
 
     public SelectItem[] getBoxColumnOpts() {
@@ -62,40 +50,21 @@ public class BoxPlotBean extends PlotBean implements Serializable{
         int columnsLen = columns.length;
         boxColumnOpts = new SelectItem[columnsLen];
         List<String> columnNames = Arrays.asList(columns);
-        //boxColumnOpts[0] = new SelectItem("All", " ");
         for (int i = 0; i < (columnsLen); i++) {
             boxColumnOpts[i] = new SelectItem(columnNames.get(i), columnNames.get(i));
         }
 
         return boxColumnOpts;
     }
-    
-    public SelectItem[] getFactorBoxColumnOpts() {
-        String[] columns = PlottingUtils.GetFactorDataColumnsBoxPlt(sb);
 
-        if (columns != null) {
-            int columnsLen = columns.length;
-            factorBoxColumnOpts = new SelectItem[columnsLen];
-            List<String> columnNames = Arrays.asList(columns);
-            for (int i = 0; i < (columnsLen); i++) {
-                factorBoxColumnOpts[i] = new SelectItem(columnNames.get(i), columnNames.get(i));
-            }
-            return factorBoxColumnOpts;
+    @Override
+    public void button_action() {
+        if (!PlottingUtils.CreateBoxPlot(sb, facC, facB, facC, color, labx, laby, legendTitle, title, data)) {
+            RConnection RC = sb.getRConnection();
+            sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
+        } else {
+            PlottingUtils.PlotBoxPlot(sb, sb.getNewImage("plot_box_chart"), "png", 72);
         }
-
-        return new SelectItem[0];
-    }
-
-    public SelectItem[] getNumericBoxColumnOpts() {
-        String[] columns = PlottingUtils.GetNumericDataColumnsBoxPlt(sb);
-        int columnsLen = columns.length;
-        numericBoxColumnOpts = new SelectItem[columnsLen];
-        List<String> columnNames = Arrays.asList(columns);
-        for (int i = 0; i < (columnsLen); i++) {
-            numericBoxColumnOpts[i] = new SelectItem(columnNames.get(i), columnNames.get(i));
-        }
-
-        return numericBoxColumnOpts;
     }
 
     public String getFacB() {
@@ -122,7 +91,6 @@ public class BoxPlotBean extends PlotBean implements Serializable{
         this.color = color;
     }
 
-  
     public void setboxLabels(String boxLabels) {
         this.boxLabels = boxLabels;
     }
@@ -137,14 +105,5 @@ public class BoxPlotBean extends PlotBean implements Serializable{
 
     public String getLegendTitle() {
         return legendTitle;
-    }
-
-    public void button_action() {
-        if (!PlottingUtils.CreateBoxPlot(sb, facC, facB, facC, color, labx, laby, legendTitle, title, data)) {
-            RConnection RC = sb.getRConnection();
-            sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
-        } else {
-            PlottingUtils.PlotBoxPlot(sb, sb.getNewImage("plot_box_chart"), "png", 72);
-        }
     }
 }

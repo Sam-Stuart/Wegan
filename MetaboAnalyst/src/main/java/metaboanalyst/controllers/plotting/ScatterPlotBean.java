@@ -28,16 +28,21 @@ public class ScatterPlotBean extends PlotBean implements Serializable {
 
     // Class Necessary Attributes
     private SelectItem[] boxColumnOpts = null;
-    private SelectItem[] numericBoxColumnOpts = null;
     private String legendTitle = "NULL";
     private String boxLabels = "NULL";
     private String lineColor = "NULL";
     private String color = "NULL";
-    private String facA = getNumericBoxColumnOpts()[0].getLabel();
-    private String facB = getNumericBoxColumnOpts()[1].getLabel();
+    private String facA = "NULL";
+    private String facB = "NULL";
 
     public ScatterPlotBean() {
         super();
+        numericBoxColumnOpts = this.getNumericBoxColumnOpts();
+
+        if (numericBoxColumnOpts.length != 0) {
+            this.facA = numericBoxColumnOpts[0].getLabel();
+            this.facB = numericBoxColumnOpts[1].getLabel();
+        }
     }
 //    Get dependant data
 
@@ -56,24 +61,6 @@ public class ScatterPlotBean extends PlotBean implements Serializable {
             this.setBoxColumnOpts();
         }
         return this.boxColumnOpts;
-    }
-//Get independant data
-
-    public void setNumericBoxColumnOpts() {
-        String[] columns = PlottingUtils.GetNumericDataColumnsBoxPlt(sb);
-        int columnsLen = columns.length;
-        this.numericBoxColumnOpts = new SelectItem[columnsLen];
-        List<String> columnNames = Arrays.asList(columns);
-        for (int i = 0; i < (columnsLen); i++) {
-            this.numericBoxColumnOpts[i] = new SelectItem(columnNames.get(i), columnNames.get(i));
-        }
-    }
-
-    public SelectItem[] getNumericBoxColumnOpts() {
-        if (this.numericBoxColumnOpts == null) {
-            this.setNumericBoxColumnOpts();
-        }
-        return this.numericBoxColumnOpts;
     }
 
     public String getFacA() {

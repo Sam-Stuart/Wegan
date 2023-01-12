@@ -13,12 +13,12 @@
     </p>
     <h:panelGrid id="panelGrid" columns="5" cellpadding="5" columnClasses="colLeft,colRight,colLeft,colRight, colLast"> 
         <h:outputLabel  style="font-weight: bold" value="Grouping Data:"/>
-        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{boxPlotBean.box_xAxis}">
+        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{boxPlotBean.facC}">
             <f:selectItems value="#{boxPlotBean.factorBoxColumnOpts}" />
 
         </p:selectOneMenu>
         <h:outputLabel  style="font-weight: bold" value="Numerical Data:"/>
-        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{boxPlotBean.box_yAxis}">
+        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{boxPlotBean.facB}">
             <f:selectItems value="#{boxPlotBean.numericBoxColumnOpts}" />
         </p:selectOneMenu>
         <spacer></spacer>

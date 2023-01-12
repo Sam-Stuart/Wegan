@@ -4,8 +4,11 @@
  */
 package metaboanalyst.controllers.plotting;
 
+import java.util.Arrays;
+import java.util.List;
 import javax.faces.model.SelectItem;
 import metaboanalyst.controllers.SessionBean1;
+import metaboanalyst.rwrappers.PlottingUtils;
 import metaboanalyst.utils.DataUtils;
 
 /**
@@ -22,6 +25,8 @@ public abstract class PlotBean {
     protected String title;
     protected Integer chosenAxisTextSize;
     protected Integer chosenTitleTextSize;
+    protected SelectItem[] factorBoxColumnOpts;
+    protected SelectItem[] numericBoxColumnOpts;
     protected boolean data;
 
     protected PlotBean() {
@@ -35,6 +40,38 @@ public abstract class PlotBean {
 //        Make two clones of this for text and axis
         this.textFontSizeOpts = fontSizeOpts.clone();
         this.axisFontSizeOpts = fontSizeOpts.clone();
+    }
+
+    public SelectItem[] getFactorBoxColumnOpts() {
+        String[] columns = PlottingUtils.GetFactorDataColumnsBoxPlt(sb);
+
+        if (columns != null) {
+            int columnsLen = columns.length;
+            factorBoxColumnOpts = new SelectItem[columnsLen];
+            List<String> columnNames = Arrays.asList(columns);
+            for (int i = 0; i < (columnsLen); i++) {
+                factorBoxColumnOpts[i] = new SelectItem(columnNames.get(i), columnNames.get(i));
+            }
+            return factorBoxColumnOpts;
+        }
+
+        return new SelectItem[0];
+    }
+
+    public SelectItem[] getNumericBoxColumnOpts() {
+        String[] columns = PlottingUtils.GetNumericDataColumnsBoxPlt(sb);
+
+        if (columns != null) {
+            int columnsLen = columns.length;
+            numericBoxColumnOpts = new SelectItem[columnsLen];
+            List<String> columnNames = Arrays.asList(columns);
+            for (int i = 0; i < (columnsLen); i++) {
+                numericBoxColumnOpts[i] = new SelectItem(columnNames.get(i), columnNames.get(i));
+            }
+            return numericBoxColumnOpts;
+        }
+
+        return new SelectItem[0];
     }
 
     public String getLabx() {
