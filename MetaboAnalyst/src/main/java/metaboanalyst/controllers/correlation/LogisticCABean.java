@@ -41,6 +41,7 @@ import javax.inject.Named;
  */
 @ManagedBean(name = "logCABean")
 @ViewScoped
+
 public class LogisticCABean implements Serializable {
 
     private final SessionBean1 sb = (SessionBean1) DataUtils.findBean("sessionBean1");
@@ -116,16 +117,27 @@ public class LogisticCABean implements Serializable {
     private List<String> corrPredictors;//items
   
     String[] predictors = CAUtils.GetDataColumns(sb);
-    List<String> predictorNames = Arrays.asList(predictors);     
-  //fill the check map with the items defaulted to unchecked
-    public Map<String,Boolean> hashmapper(){
-        Map<String,Boolean> checkMap = new HashMap<String,Boolean>();
-            for(String item:predictorNames) {
+    List<String> predictorNames = Arrays.asList(predictors); 
+
+    
+  private Map<String,Boolean> checkMap = new HashMap<String,Boolean>();
+public LogisticCABean() {
+  for(String item:predictorNames) {
 			checkMap.put(item, Boolean.FALSE);
 		}
-            return checkMap;
-        }
-    private Map<String,Boolean> checkMap = hashmapper();    
+	}
+    
+    
+  // AVOID THE CONSTRUCTOR: CALL hasmapper() on .xhtml page    
+  //fill the check map with the items defaulted to unchecked
+//    public Map<String,Boolean> hashmapper(){
+//        Map<String,Boolean> checkMap = new HashMap<String,Boolean>();
+//            for(String item:predictorNames) {
+//			checkMap.put(item, Boolean.FALSE);
+//		}
+//            return checkMap;
+//        }
+//    private Map<String,Boolean> checkMap = hashmapper();    
     
     public List<String> getPredictors() { //items
 //	return corrPredictors; //items

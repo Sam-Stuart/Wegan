@@ -166,11 +166,6 @@ stop(errm)
     predtext <- colnames( input[, !(colnames(input) == facA), drop = FALSE] )[1] #Default is 1st column
   } else {
 
-print(paste0("predtext: ", predtext))
-print(paste0("class predtext: ", class(predtext)))
-print(paste0("mode predtext: ", mode(predtext)))
-print(paste0("typeof predtext: ", typeof(predtext)))
-
     if("list" %in% class(predtext) ){
    predtext1 <- vector(mode = "character",  length = length(predtext) )
     for(i in seq_along(predtext) ){ 
@@ -181,6 +176,11 @@ print(paste0("typeof predtext: ", typeof(predtext)))
        predtext <- paste(predtext, collapse = ",")
   }
 }
+
+print(paste0("predtext: ", predtext))
+print(paste0("class predtext: ", class(predtext)))
+print(paste0("mode predtext: ", mode(predtext)))
+print(paste0("typeof predtext: ", typeof(predtext)))
 
 
  # ## FORMULA SET UP
