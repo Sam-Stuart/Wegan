@@ -24,8 +24,8 @@ library(ggplot2)
 library(vegan)
 
 mSetObj = list()
-data()
-input <- iris
+data(dune)
+input <- dune
 mSetObj$dataSet$orig = input
 mSetObj$dataSet$norm = input
 facA = "NULL"
@@ -60,7 +60,7 @@ barGraph_setup <-
       input <- mSetObj$dataSet$orig
     }
     
-    categorical_data <- select_if(input, is.character)
+    categorical_data <- select_if(input, is.factor)
     numerical_data <- select_if(input, is.numeric)
     
     if (facA == "NULL" & length(as.matrix(categorical_data)) > 0)
@@ -73,6 +73,7 @@ barGraph_setup <-
       aggregate_function = "mean"
     
     if (length(as.matrix(categorical_data)) == 0) {
+      facA <- 'Sites'
       input$Sites <- row.names(input)
       categorical_data <- select_if(input, is.character)
       df <- input
@@ -128,6 +129,7 @@ barGraph_setup <-
         axisTextSize = axisTextSize,
         mainTitle = mainTitle
       )
+    print(mSetObj$analSet$barGraph)
     
     return(.set.mSet(mSetObj))
     
@@ -147,10 +149,10 @@ barGraph_setup <-
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2)
 #'@export
-# imgName = "test"
-# format = "png"
-# dpi = 72
-# width = NA
+imgName = "test"
+format = "png"
+dpi = 72
+width = NA
 
 plotBarGraph <-
   function(mSetObj = NA,
