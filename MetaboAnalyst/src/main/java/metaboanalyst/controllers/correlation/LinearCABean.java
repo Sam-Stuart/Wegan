@@ -56,7 +56,7 @@ public class LinearCABean implements Serializable {
     } 
     
     
-    
+    // GET COLUMN NAMES
     private SelectItem[] corrColumnOpts = null;
     
     public SelectItem[] getCorrColumnOpts(){
@@ -91,7 +91,6 @@ public class LinearCABean implements Serializable {
         this.corrColumnNameB = corrColumnNameB;
     }    
     
-    
 
 //    private List<String> corrLinearResults = null;
 //    
@@ -112,6 +111,8 @@ public class LinearCABean implements Serializable {
     public void setdoOriginal(boolean doOriginal) {
         this.doOriginal = doOriginal;
     }
+    
+    
   // CHECK BOX for adding (default) or omitting equation to plot (at top), see correlation_linear.R 
   // when >1 of rsq, eq, & rsqadj are checked, values are seperated by " | " 
      private boolean doPlotEq = false;
@@ -241,8 +242,9 @@ public class LinearCABean implements Serializable {
 //        corrLin1_Update_action
         
         CAUtils.PlotLinearCA(sb, 
-//                corrColumnNameA, corrColumnNameB, 
-                doOriginal, corColorDotsOpts, corColorLineOpts, 
+                corrColumnNameA, corrColumnNameB, 
+                doOriginal, 
+                corColorDotsOpts, corColorLineOpts, 
                doPlotConfInt, doPlotEq, doPlotRsq, doPlotRsqAdj,
                corPlotTitle, corPlotXlab, corPlotYlab,
 //                 sb.getCurrentImage("corr_linear"),"png", 72);
@@ -257,7 +259,9 @@ public class LinearCABean implements Serializable {
         //CAUtils.CreateLinearModel(sb, "/Users/danaallen/NetBeansProjects/Wegan/MetaboAnalyst/target/MetaboAnalyst-4.34/resources/data/dune_weights.csv");
 //        corrLin1_Update_action
         
-        CAUtils.PlotLinearPredictCA(sb, doOriginal,
+        CAUtils.PlotLinearPredictCA(sb,
+                corrColumnNameA, corrColumnNameB, 
+                doOriginal,
                 corColorDotsOpts, corColorLineOpts, doPlotConfInt,
                 doPlotEq, doPlotRsq, doPlotRsqAdj,
                corPlotTitle, corPlotXlab, corPlotYlab,
@@ -272,7 +276,9 @@ public class LinearCABean implements Serializable {
         //CAUtils.CreateLinearModel(sb, "/Users/danaallen/NetBeansProjects/Wegan/MetaboAnalyst/target/MetaboAnalyst-4.34/resources/data/dune_weights.csv");
 //        corrLin1_Update_action
         
-        CAUtils.PlotLinearNormResidCA(sb, corrColumnNameA, corrColumnNameB, doOriginal,
+        CAUtils.PlotLinearNormResidCA(sb, 
+                corrColumnNameA, corrColumnNameB, 
+                doOriginal,
                 corColorDotsOpts, corColorLineOpts, 
                corPlotTitle, corPlotXlab, corPlotYlab,
           sb.getNewImage("corr_linear_normres"),"png", 72);
@@ -281,11 +287,13 @@ public class LinearCABean implements Serializable {
     }
      
       public void corrLin4Btn_action() {
-        CAUtils.CreateLinearModel(sb, corrColumnNameA, corrColumnNameB, doOriginal);
+         CAUtils.CreateLinearModel(sb, corrColumnNameA, corrColumnNameB, doOriginal);         
+//        CAUtils.CreateLinearModel(sb, "Petal_Width", "Sepal_Length", doOriginal);
         //CAUtils.CreateLinearModel(sb, "/Users/danaallen/NetBeansProjects/Wegan/MetaboAnalyst/target/MetaboAnalyst-4.34/resources/data/dune_weights.csv");
 //        corrLin1_Update_action
         
-        CAUtils.PlotLinearResidFitCA(sb, corrColumnNameA, corrColumnNameB, doOriginal,
+        CAUtils.PlotLinearResidFitCA(sb, 
+                corrColumnNameA, corrColumnNameB, doOriginal,
                 corColorDotsOpts, corColorLineOpts, 
                corPlotTitle, corPlotXlab, corPlotYlab,
           sb.getNewImage("corr_linear_resfit"),"png", 72);

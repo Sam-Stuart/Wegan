@@ -16,8 +16,12 @@
                 <p:tab title ="Effects Plot" titleStyleClass="p-tab-nav">
                     <h:form id="form1">
                         <p style="font-size: 13px">
-                            One dependent variable and one or more independent variables are tested for correlation. The dependent variable must be numeric. The independent variables can be numeric or categorical.
-                            For categorical variables, make sure to use characters and not numbers. For example, if you have levels 1, 2 and 3, change the level labels to I, II and III prior to upload.
+                            One response variable and one or more independent variables are tested for correlation. The independent variables can be numeric or categorical. The dependent variable must be represented as a character. (This means if you have converted your dependent variable to 0's and 1's, make sure the data is input with quotes around the numbers - or better yet, converted back to the original value names in place of the numbers - so it will be recognized).
+                             For categorical independent variables, make sure to use characters and not numbers. For example, if there are levels 1, 2 and 3, change the level labels to I, II and III prior to upload. Independent variables can be indicated using the text box with commas to separate names. 
+                              
+                            Choose model type 'binomial' when there are 2 possible outcomes in the dependent variable. If there are more than 2, choose type 'multinomial'. However, if the dependent variable is also inherently ordered (for example, representing sizes small, medium, and large) use the text box to input the ascending variable order and choose model type 'ordinal'. 
+                            The reference level of a categorical variable (level being a unique value) can be thought of as a variable's baseline (or 'default') observed value. This means that the model results are given relative to this value. To input the reference level, use the given text box (otherwise the first level alphabetically is used).
+                           
                             The train data for model building is 70% of the dataset, while the test data for model testing is 30% of the dataset.
                         </p>
 
@@ -34,36 +38,86 @@
                             <spacer></spacer>
                             <h:outputLabel style="font-weight: bold" value="Indicate independent variables using the column names with commas in between:"/>
                             <p:inputText style="width:400px; height:40px" value="#{logCABean.indInput}"/> 
+                            
+                            <p:panelGrid></p:panelGrid>
+                            
+                             <h:outputLabel style="font-weight: bold" value="Indicate ascending order of dependent variable level names with commas in between:"/>
+                            <p:inputText style="width:400px; height:40px" value="#{logCABean.indInput}"/> 
 
+                            <p:panelGrid></p:panelGrid>
+                            
+                                 <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
+                            <p:selectBooleanCheckbox value ="#{linearCABean.doOriginal}"/>
+                            
+                            <p:panelGrid></p:panelGrid>
+                            
+                            <h:outputLabel style="font-weight: bold" value="Logistic Model Type:"/>
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{logCABean.corModelType}">
+                                <f:selectItems value="#{applicationBean1.corModType}" />
+                            </p:selectOneMenu>
+
+                            <p:panelGrid></p:panelGrid>
+                            
                         </h:panelGrid>
                         <p:panelGrid></p:panelGrid>
-                        <h:panelGrid id="panelGrid1_2" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
-                            <p:commandButton value="Update" 
-                                            style="background: #75bafb; border: 5px #75bafb; color: black"
+                        
+                       <h:panelGrid id="panelGrid1_2" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
+                            <p:commandButton value="Customize"
+                                             styleClass="graphicsButton"
+                                             style="box-shadow: none !important; text-shadow: none !important;"
+                                             actionListener="#{sessionBean1.graphicsLnk_action('corr_log_eff')}" 
+                                            oncomplete="PF('graphApperanceLog').show()"/>  
+                                           
+                            <p:commandButton value=" Update " 
+                                             styleClass="updateButton"
+                                             style="box-shadow: none !important; text-shadow: none !important"
                                             onclick="PF('statusDialog').show()"
                                             oncomplete="PF('statusDialog').hide()"  
-                                            update="logCA:form1:corrLogPane1  :cmdPane" 
-                                            actionListener="#{logCABean.corrLogBtn_action()}"/> 
+                                            update=":logCA:form1:corrLogPane1  :cmdPane" 
+                                            actionListener="#{logCABean.corrLogBtn1_action()}"/> 
+                            
                         </h:panelGrid>
+                        
                         <h:panelGrid class="resultsBar" columns="2">
                             <h:panelGroup>
                                 <h:panelGrid columns="1" style="text-align : left;">
                                     Results
                                 </h:panelGrid>
-                            </h:panelGroup> 
+                            </h:panelGroup>
+                         <h:panelGroup>
                                 <h:panelGrid columns="3" class="resultsImages">
-                                    <i class="fas fa-palette"></i>
-                                    <i class="fa fa-question-circle"></i>
-                                </h:panelGrid>                          
-                        </h:panelGrid> 
-                        <h:panelGrid id="corrLogPane1_2" style="width: 100%;">
+                                    <i id="question" class="fa fa-question-circle" title="Only numeric variables are used in linear correlation. The linear model can be written in the form (y = x * &#946; + &#949;), where y = dependent variable; x = independent variable; &beta; = regression parameter coefficients; and &epsilon; = error values.
+
+The model makes several assumptions, namely linearity, normality, homoscedasticity, independence, and that the model is not disproportionately influenced by outliers. Tests for these assumptions include the RESET for linearity(J.B. Ramsey (1969), Tests for Specification Errors in Classical Linear Least-Squares Regression Analysis. Journal of the Royal Statistical Society, Series B 31, 350--371); Kruskal-Wallis for normality(); Breusch-Pagan for homoscedasticity (T.S. Breusch and A.R. Pagan (1979), A Simple Test for Heteroscedasticity and Random Coefficient Variation. Econometrica 47, 1287--1294); and Durbin-Watson for autocorrelation (J. Durbin and G.S. Watson (1950), Testing for Serial Correlation in Least Squares Regression I. Biometrika 37, 409--428) 
+
+The R &#xb2; value is the fraction of variance explained by the model and is a value from 0 to 1. The adjusted R &#xb2; value is the R &#xb2; value adjusted for the number of predictors in the model. R &#xb2; is used to assess how well a model fits the data, with a higher R &#xb2; value indicating a better model fit. The confidence interval represents the level of certainty about the predicted values; if the same procedure was repeatedly used to make new estimates, the confidence interval would contain the average of all the estimates 95% of the time. https://www.census.gov/programs-surveys/saipe/guidance/confidence-intervals.html "></i>
+                                </h:panelGrid>
+                            </h:panelGroup>   
+                        </h:panelGrid>                     
+                              <!--name was: 'corr_logistic1'-->                       
+                          <h:panelGrid id="corrLogPane1_2" style="width: 100%;"> 
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
+                             <h:outputText escape="false" value="#{logCABean.fileLogModValsPath}"/>
+                                </i>
+                            </h:panelGrid>
+                            
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <p:commandButton value="Export"
+                                    styleClass="exportButton"
+                                    style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                    actionListener="#{sessionBean1.graphicsLnk_action('corr_log_eff')}"
+                                    oncomplete="PF('graphDialog').show()"/>
+                            </h:panelGrid> 
                              <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
-                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_logistic1')}" alt="Logistic image"/>
-                            </h:panelGrid>                           
-                        </h:panelGrid>       
+                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_log_eff')}" alt="corrLogEffects"/>
+                            </h:panelGrid>  
+                            
+                       </h:panelGrid>  
+                        
                     </h:form>
                 </p:tab>
-                <p:tab title ="ROC Curve" titleStyleClass="p-tab-nav">
+                <p:tab title ="ROC Curve Plot" titleStyleClass="p-tab-nav">
                     <h:form id="form2">
                         <p style="font-size: 13px">
                             One dependent variable and one or more independent variables are tested for correlation. The dependent variable must be numeric. The independent variables can be numeric or categorical.
@@ -72,46 +126,108 @@
                         </p>
 
                         <h:panelGrid id="corrLogPane2" columns="3" cellpadding="3" columnClasses="colLeft,colRight,colLast">
-                            <h:outputLabel style="font-weight: bold" value="Dependant Variable:"/>
-                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{svmCABean.columnNameA}">
-                                <f:selectItems value="#{svmCABean.columnOpts}" />
+                           <h:outputLabel style="font-weight: bold" value="Response variable:"/>
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{logCABean.responseVar}">
+                                <f:selectItems value="#{logCABean.columnOpts}" />
                             </p:selectOneMenu>
                             <spacer></spacer>
-                            <h:outputLabel style="font-weight: bold" value="Indicate independent variables using the column names with commas in between:"/>
-                            <p:inputText style="width:400px; height:40px" value="#{svmCABean.indInput}"/> 
+                            
+<!--                            <h:outputLabel style="font-weight: bold" value="Reference level:"/>
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="hash{logCABean.responseLevelVar}">
+                                <f:selectItems value="hash{logCABean.columnLevelOpts}" />
+                            </p:selectOneMenu>-->
+                            <spacer></spacer>
+                            <h:outputLabel style="font-weight: bold" value="Independent variable(s) (use the column names with commas in between):"/>
+                            <p:inputText style="width:400px; height:40px" value="#{logCABean.indInput}"/> 
+                            
+<!--                            <h:outputLabel style="font-weight: bold" value="Indicate ascending order of dependent variable level names with commas in between:"/>
+                            <p:inputText style="width:400px; height:40px" value="hash{logCABean.indInput}"/> -->
+
+ <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
+                            <p:selectBooleanCheckbox value ="#{linearCABean.doOriginal}"/>
+                             <p:panelGrid></p:panelGrid>
+
+                            <h:outputLabel style="font-weight: bold" value="Logistic Model Type:"/>
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{logCABean.corModelType}">
+                                <f:selectItems value="#{applicationBean1.corModType}" />
+                            </p:selectOneMenu>
+
+                            <p:panelGrid></p:panelGrid>
                         </h:panelGrid>
 
                         <p:panelGrid></p:panelGrid>
-                        <h:panelGrid id="panelGrid1_2" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;">                             
-                            <p:commandButton value="Update" 
-                                            style="background: #75bafb; border: 5px #75bafb; color: black"
+                        
+                         <h:panelGrid id="panelGrid1" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;">                   
+                            <p:commandButton value="Customize"
+                                             styleClass="graphicsButton"
+                                             style="box-shadow: none !important; text-shadow: none !important;"
+                                             actionListener="#{sessionBean1.graphicsLnk_action('corr_log_roc')}"
+                                            oncomplete="PF('graphApperanceLog2').show()"/>  
+                              
+                            <p:commandButton value=" Update " 
+                                             styleClass="updateButton"
+                                             style="box-shadow: none !important; text-shadow: none !important"
                                             onclick="PF('statusDialog').show()"
                                             oncomplete="PF('statusDialog').hide()"  
-                                            update="logCA:form2:corrLogPane2  :cmdPane" 
-                                            actionListener="#{svmCABean.corrSVMBtn_action()}"/> 
+                                            update=":logCA:form2:corrLogPane2  :cmdPane" 
+                                            actionListener="#{logCABean.corrLogBtn2_action()}"/>     
+                              
                         </h:panelGrid>
+                        
                         <h:panelGrid class="resultsBar" columns="2">
                             <h:panelGroup>
                                 <h:panelGrid columns="1" style="text-align : left;">
                                     Results
                                 </h:panelGrid>
-                            </h:panelGroup> 
-                            <h:panelGroup>
+                            </h:panelGroup>
+                         <h:panelGroup>
                                 <h:panelGrid columns="3" class="resultsImages">
-                                    <i class="fas fa-palette"></i>
-                                    <i class="fa fa-question-circle"></i>
-                                </h:panelGrid>
+                                    <i id="question" class="fa fa-question-circle" title="Only numeric variables are used in linear correlation. The linear model can be written in the form (y = x * &#946; + &#949;), where y = dependent variable; x = independent variable; &beta; = regression parameter coefficients; and &epsilon; = error values.
 
-                            </h:panelGroup>                            
-                        </h:panelGrid> 
-                        <h:panelGrid id="corrLogPane2_2" style="width: 100%;">
+The model makes several assumptions, namely linearity, normality, homoscedasticity, independence, and that the model is not disproportionately influenced by outliers. Tests for these assumptions include the RESET for linearity(J.B. Ramsey (1969), Tests for Specification Errors in Classical Linear Least-Squares Regression Analysis. Journal of the Royal Statistical Society, Series B 31, 350--371); Kruskal-Wallis for normality(); Breusch-Pagan for homoscedasticity (T.S. Breusch and A.R. Pagan (1979), A Simple Test for Heteroscedasticity and Random Coefficient Variation. Econometrica 47, 1287--1294); and Durbin-Watson for autocorrelation (J. Durbin and G.S. Watson (1950), Testing for Serial Correlation in Least Squares Regression I. Biometrika 37, 409--428) 
+
+The R &#xb2; value is the fraction of variance explained by the model and is a value from 0 to 1. The adjusted R &#xb2; value is the R &#xb2; value adjusted for the number of predictors in the model. R &#xb2; is used to assess how well a model fits the data, with a higher R &#xb2; value indicating a better model fit. The confidence interval represents the level of certainty about the predicted values; if the same procedure was repeatedly used to make new estimates, the confidence interval would contain the average of all the estimates 95% of the time. https://www.census.gov/programs-surveys/saipe/guidance/confidence-intervals.html "></i>
+                                </h:panelGrid>
+                            </h:panelGroup>   
+                        </h:panelGrid>  
+                                                    <!--name was: 'corr_logisticROC'-->                     
+                          <h:panelGrid id="corrLogPane2_2" style="width: 100%;"> 
+<!--                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
+                                    <h:outputText escape="false" value="hash{linearCABean.fileLinModValsPath}"/>
+                                </i>
+                            </h:panelGrid>-->
+                            
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <p:commandButton value="Export"
+                                    styleClass="exportButton"
+                                    style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                    actionListener="#{sessionBean1.graphicsLnk_action('corr_log_eff')}"
+                                    oncomplete="PF('graphDialog').show()"/>
+                            </h:panelGrid> 
                              <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
-                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_logisticROC')}" alt="Logistic image"/>
-                            </h:panelGrid>                           
-                        </h:panelGrid>       
+                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_log_roc')}" alt="corrLogROC"/>
+                            </h:panelGrid>  
+                            
+                       </h:panelGrid>  
+                        
                     </h:form>
                 </p:tab>
             </p:tabView>        
         </h:panelGrid> 
+        
+        <p:dialog modal="true" widgetVar="graphApperanceLog" 
+            style="width: 400px; height:400px;" 
+            appendTo="@(body)" header="Graphics Center"
+            draggable="false" closable="true" resizable="false"> 
+            <ui:include src="_color_palette_log.xhtml" />
+        </p:dialog>
+         <p:dialog modal="true" widgetVar="graphApperanceLog2" 
+            style="width: 400px; height:400px;" 
+            appendTo="@(body)" header="Graphics Center"
+            draggable="false" closable="true" resizable="false"> 
+            <ui:include src="_color_palette_log2.xhtml" />
+        </p:dialog>
+        
     </ui:define>
 </ui:composition>

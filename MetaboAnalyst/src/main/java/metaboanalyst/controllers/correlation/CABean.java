@@ -78,11 +78,14 @@ public class CABean implements Serializable {
             RConnection RC = sb.getRConnection();
             sb.updateMsg("Error", RDataUtils.getErrMsg(RC)); 
         }
-        CAUtils.PlotLinearCA(sb, false, "NULL", "NULL", false,
+        CAUtils.PlotLinearCA(sb,  "NULL", "NULL",
+                false, "NULL", "NULL", false,
                  false, false, false, " "," "," ",
                 sb.getCurrentImage("corr_linear"), "png", 72);
         
-        CAUtils.PlotLinearPredictCA(sb, false, "NULL", "NULL", false,
+        CAUtils.PlotLinearPredictCA(sb, "NULL", "NULL",
+                false, 
+                "NULL", "NULL", false,
                 false, false, false, " ", " "," ",
                 sb.getCurrentImage("corr_linear_pred"), "png", 72);
         
@@ -106,50 +109,94 @@ public class CABean implements Serializable {
 ////                sb.getCurrentImage("corr_linear"));
 //        sb.getCurrentImage("corr_linear"), "png", 72);
 //    }
-
+                       
     private void doDefaultPenalized() {
-        CAUtils.CreatePenalizedModel(sb, "NULL", "NULL", false);
-        CAUtils.PlotPenalizedCA(sb, false, "NULL", "NULL", false," "," "," ",
+        CAUtils.CreatePenalizedModel(sb, "NULL", "NULL");
+        CAUtils.PlotPenalizedCA(sb, "NULL", "NULL",
+                "NULL","NULL",
+                false, " "," "," ",
                 sb.getCurrentImage("corr_penalized"), "png", 72);
-        CAUtils.PlotPenalizedCVCA(sb, false, "NULL", "NULL"," "," "," ",
+        CAUtils.PlotPenalizedCVCA(sb,"NULL", "NULL",
+                "NULL", "NULL",
+                " "," "," ",
                 sb.getCurrentImage("corr_penalized2"), "png", 72);
     }
 
+
     private void doDefaultPolynomial() {
         CAUtils.CreatePolynomialModel(sb, "NULL", "NULL", false);
-        CAUtils.PlotPolynomialCA(sb, "NULL",
+        CAUtils.PlotPolynomialCA(sb, "NULL","NULL", "NULL",
                 false, "NULL", "NULL", false,
                  false, false, false, " "," "," ",
                 sb.getCurrentImage("corr_poly"), "png", 72);
         CAUtils.PlotPolynomialPredictCA(sb,  "NULL",
-                false, "NULL", "NULL", false, " "," "," ",
+                "NULL", "NULL", false, 
+                "NULL", "NULL", false, 
+                " "," "," ",
                 sb.getCurrentImage("corr_poly_pred"), "png", 72);
     }
-
+    
     private void doDefaultMultivariate() {
-        CAUtils.CreateMultivariateModel(sb);
-        CAUtils.PlotMultivariateCA(sb, sb.getCurrentImage("corr_multivariate"), "png", 72);
-        CAUtils.PlotMultivariateCoeffCA(sb, sb.getCurrentImage("corr_multivariate_coeff"), "png", 72);
-        CAUtils.PlotMultivariateRelativeCA(sb, sb.getCurrentImage("corr_multivariate_relative"), "png", 72);
+        CAUtils.CreateMultivariateModel(sb, "NULL", "NULL", false);
+        CAUtils.PlotMultivariateCA(sb, 
+                "NULL", "NULL", false, 
+                "NULL","NULL",  false,
+                 " ", " "," ",
+                sb.getCurrentImage("corr_multi_pred"), "png", 72);
+        CAUtils.PlotMultivariateCoeffCA(sb, 
+                 "NULL", "NULL", false, 
+                "NULL",  false,
+                 " ", " "," ",
+                sb.getCurrentImage("corr_multi_relaimpo"), "png", 72);
+        CAUtils.PlotMultivariateRelativeCA(sb, 
+                 "NULL", "NULL", false, 
+                "NULL",  false,
+                 " ", " "," ",
+                sb.getCurrentImage("corr_multi_relaimpo"), "png", 72);
     }
 
 
     private void doDefaultSVM() {
         CAUtils.CreateSVMModel(sb, "NULL", "NULL");
-        CAUtils.PlotSVMCA(sb, sb.getCurrentImage("corr_svm"), "png", 72);
+        CAUtils.PlotSVMCA(sb,
+                "NULL", "NULL",
+                "NULL","NULL",
+                 " ", " "," ",
+                sb.getCurrentImage("corr_svm_pred"), "png", 72);
     }    
 
     private void doDefaultRF() {
-        CAUtils.CreateRFModel(sb, "NULL", "NULL");
-        CAUtils.PlotRFCA(sb, sb.getCurrentImage("corr_rf"), "png", 72);
-        CAUtils.PlotRFRelativeCA(sb, sb.getCurrentImage("corr_rf_relative"), "png", 72);
-        CAUtils.PlotRFErrorCA(sb, sb.getCurrentImage("corr_rf_error"), "png", 72);
+        CAUtils.CreateRFModel(sb, "NULL", "NULL", false);
+        CAUtils.PlotRFCA(sb,
+                 "NULL", " ", false,
+                "NULL","NULL",  false,
+                 " ", " "," ",
+                sb.getCurrentImage("corr_rf_pred"), "png", 72);
+        CAUtils.PlotRFRelativeCA(sb, 
+                "NULL", "NULL", false, 
+                "NULL",  false,
+                 " ", " "," ",
+                sb.getCurrentImage("corr_rf_relaimpo"), "png", 72);
+        CAUtils.PlotRFErrorCA(sb, 
+                "NULL", "NULL", false, 
+                "NULL",  " ", " "," ",
+                sb.getCurrentImage("corr_rf_error"), "png", 72);
     }  
     
+    
+
     private void doDefaultLogistic() {
-        CAUtils.CreateLogisticModel(sb, "NULL", "NULL");
-        CAUtils.PlotLogisticEffectCA(sb, "multinomial", sb.getCurrentImage("corr_logistic1"), "png", 72);
-        CAUtils.PlotLogisticROCCA(sb, "multinomial", sb.getCurrentImage("corr_logisticROC"), "png", 72);
+        CAUtils.CreateLogisticModel(sb, 
+                "NULL", "NULL", "multinomial","NULL", "NULL");
+//                "NULL", "NULL");
+        CAUtils.PlotLogisticEffectCA(sb, "multinomial",false, 
+//                "NULL", "NULL", false, 
+                " ", " ", " ",
+                false,"NULL", false,
+                "NULL",
+                sb.getCurrentImage("corr_logistic1"), "png", 72);
+        CAUtils.PlotLogisticROCCA(sb, "multinomial", "NULL", " ",
+                sb.getCurrentImage("corr_logisticROC"), "png", 72);
     } 
     
 }
