@@ -123,7 +123,7 @@
 dendro.columns <- function(mSetObj=NA) {
   mSetObj <- .get.mSet(mSetObj)
   data <- mSetObj$dataSet$orig
-  #print(str(mSetObj))
+  print(str(mSetObj))
   name.all.cols <- c("No groupings", colnames(data))
   return(name.all.cols)
 }
