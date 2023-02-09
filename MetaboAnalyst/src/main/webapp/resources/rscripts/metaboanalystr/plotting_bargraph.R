@@ -129,7 +129,7 @@ barGraph_setup <-
         axisTextSize = axisTextSize,
         mainTitle = mainTitle
       )
-    print(mSetObj$analSet$barGraph)
+
     
     return(.set.mSet(mSetObj))
     
