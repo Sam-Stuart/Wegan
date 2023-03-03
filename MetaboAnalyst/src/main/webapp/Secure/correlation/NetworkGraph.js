@@ -18,30 +18,19 @@ d3.json("/MetaboAnalyst" + URL + "/corr_ann_nid.json").then(function (_data) {
             target: _data.edges.target[i],
             color: _data.edges.target[i],
             strokeWidth: _data.edges.weight_line_thickness[i],
+            strokeColor: _data.edges.cols[i],
         };
     });
-
-    const tooltip = d3
-        .select("#my_dataviz")
-        .append("div")
-        .style("opacity", 0)
-        .style("position", "absolute")
-        .attr("class", "tooltip")
-        .style("background-color", "white")
-        .style("border", "solid")
-        .style("border-width", "1px")
-        .style("border-radius", "5px")
-        .style("padding", "10px");
 
     const data = { nodes, links };
     console.log(data);
 
     const svg = ForceGraph(data, {
-        tooltip,
         nodeId: (d) => d.id,
         colors: _data.nodes.cols,
         nodeTitle: (d) => `${d.name}`,
-        linkStrokeWidth: (d) => d.strokeWidth,
+        linkStrokeWidth: (l) => l.strokeWidth,
+        linkStroke: (l) => l.strokeColor,
     });
 
     div.appendChild(svg);
@@ -103,7 +92,6 @@ function ForceGraph(
         width = 640, // outer width, in pixels
         height = 400, // outer height, in pixels
         invalidation, // when this promise resolves, stop the simulation
-        tooltip,
     } = {}
 ) {
     // Compute values.
@@ -152,6 +140,18 @@ function ForceGraph(
         .attr("viewBox", [-width / 2, -height / 2, width, height])
         .attr("style", "max-width: 100%; height: auto; height: intrinsic;");
 
+    const tooltip = d3
+        .select("body")
+        .append("div")
+        .style("opacity", 0)
+        .style("position", "absolute")
+        .attr("class", "tooltip")
+        .style("background-color", "white")
+        .style("border", "solid")
+        .style("border-width", "1px")
+        .style("border-radius", "5px")
+        .style("padding", "10px");
+
     const link = svg
         .append("g")
         .attr("stroke", typeof linkStroke !== "function" ? linkStroke : null)
@@ -173,7 +173,7 @@ function ForceGraph(
 
     const mousemove = function (event, d) {
         tooltip
-            .html(`Character:${T[d.index]}`)
+            .html(`${T[d.index]}`)
             .style("left", event.pageX + 5 + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
             .style("top", event.pageY + "px");
     };
