@@ -1,219 +1,415 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:p="http://primefaces.org/ui"
-                template="/frags/_anal_template.xhtml">
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui"
+    template="/frags/_anal_template.xhtml"
+>
     <ui:define name="metaInfo">
-        <f:event type="preRenderView" listener="#{caBean.performDefaultAnalysis('ANN')}"/> 
+        <f:event
+            type="preRenderView"
+            listener="#{caBean.performDefaultAnalysis('ANN')}"
+        />
+    </ui:define>
+    <ui:define name="myscript">
+        <script src="https://d3js.org/d3.v6.js"></script>
+        <script type="text/javascript" src="./NetworkGraph.js"></script>
     </ui:define>
     <ui:define name="content">
-        <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
+        <h:inputHidden
+            id="mydir"
+            value="#{sessionBean1.currentUser.relativeDir}"
+        />
+        <h:panelGrid
+            style="
+                padding: 4px 20px 20px 20px;
+                font-size: 12px;
+                line-height: 23px;
+                width: 100%;
+            "
+        >
             <h1>Artificial Neural Network Regression:</h1>
-            <p:tabView id="ANNCA" style="border-bottom-color: #8cbd48 !important">
-                <p:tab title ="Neural Interpretation Plot" titleStyleClass="p-tab-nav">
+            <p:tabView
+                id="ANNCA"
+                style="border-bottom-color: #8cbd48 !important"
+            >
+                <p:tab
+                    title="Neural Interpretation Plot"
+                    titleStyleClass="p-tab-nav"
+                >
                     <h:form id="form1">
-                        <p style="text-indent:10px; font-size: 13px">
-                            <!--add a hyperlink: from CaUploadView: /home/gina/Desktop/Wegan/MetaboAnalyst/src/main/webapp/upload/CaUploadView.xhtml : Iris setosa, Iris versicolor, and Iris virginica. Variables are labeled, but samples are not. (<a href="">view data set</a>) (<a href="https:/www.rdocumentation.org/packages/datasets/versions/3.6.2/topics/iris">Becker, R. <i>et al. The New S Language</i>. 1988. </a>)--> 
-                            Artificial Neural Networks (ANN) are made of units called perceptrons (ptrons), arranged in structured layers. The ptrons have one or more inputs, an activation function, and an output. Ptron output is determined by a nonlinear activation function.</p> 
-                      <p style="text-indent:10px; font-size: 13px">The input layer of the network has a ptron for each predictor variable. These feed to ptrons in the hidden layer(s). Output layer ptrons are fed by the final hidden layer.</p>
-                      <p style="text-indent:10px; font-size: 13px">Connections between ptrons are weighted. Weight size relates to how much influence an input has on the receiving ptron. Negative weight means the influence is inhibitory,while positive weights are stimulatory.</p> 
-                      <p style="text-indent:10px; font-size: 13px">The response variable is normalized to fall within a range of [0,1]. Predictors are z-score scaled unless specified to be excluded using the text box.</p>
-                      <p style="text-indent:10px; font-size: 13px">The Neural Interpretation Diagram (NID) shows a network plot of the model. Line thickness represents the connection weight size and direction (black = positive, grey = negative).</p>
-                 <!--Julian D. Olden & Donald A. Jackson (2002). 'Illuminating the ‘‘black box’’: a randomization approach for understanding variable contributions in artificial neural networks' *Ecological Modelling* 154 pp. 135–150. DOI: 10.1016/S0304-3800(02)00064-9-->
-                   <!--(Olden, J. D. & Jackson, D. A. <i> Illuminating the ‘‘black box’’: a randomization approach for understanding variable contributions in artificial neural networks. Ecological Modelling</i>. 2002.)--> 
-                   <!--/oldenlab/wordpress/wp-content/uploads/2013/03/EcologicalModelling_2002.pdf-->
-                        
-                      <!--colLeftLong25 colRightShort30 colRight35 colLeft20 colBrayLong40 colBrayShort15-->
-                      <!--<h:panelGrid id="panelGrid" columns="5" cellpadding="3" columnClasses="colLeft,colRightShort,colLeft,colRightShort, colLast">-->
-                  <!--&nbsp adds whitespace-->
-                      <h:panelGrid id="panelGrid" columns="5" cellpadding="3" columnClasses="colLeftLong,colRight,colLeftLong,colRight, colLast">
-   
-                            <h:outputLabel style="font-weight: bold" value="Dependant Variable:"/>
-                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{rfCABean.columnNameA}">
+                        <p style="text-indent: 10px; font-size: 13px">
+                            <!--add a hyperlink: from CaUploadView: /home/gina/Desktop/Wegan/MetaboAnalyst/src/main/webapp/upload/CaUploadView.xhtml : Iris setosa, Iris versicolor, and Iris virginica. Variables are labeled, but samples are not. (<a href="">view data set</a>) (<a href="https:/www.rdocumentation.org/packages/datasets/versions/3.6.2/topics/iris">Becker, R. <i>et al. The New S Language</i>. 1988. </a>)-->
+                            Artificial Neural Networks (ANN) are made of units
+                            called perceptrons (ptrons), arranged in structured
+                            layers. The ptrons have one or more inputs, an
+                            activation function, and an output. Ptron output is
+                            determined by a nonlinear activation function.
+                        </p>
+                        <p style="text-indent: 10px; font-size: 13px">
+                            The input layer of the network has a ptron for each
+                            predictor variable. These feed to ptrons in the
+                            hidden layer(s). Output layer ptrons are fed by the
+                            final hidden layer.
+                        </p>
+                        <p style="text-indent: 10px; font-size: 13px">
+                            Connections between ptrons are weighted. Weight size
+                            relates to how much influence an input has on the
+                            receiving ptron. Negative weight means the influence
+                            is inhibitory,while positive weights are
+                            stimulatory.
+                        </p>
+                        <p style="text-indent: 10px; font-size: 13px">
+                            The response variable is normalized to fall within a
+                            range of [0,1]. Predictors are z-score scaled unless
+                            specified to be excluded using the text box.
+                        </p>
+                        <p style="text-indent: 10px; font-size: 13px">
+                            The Neural Interpretation Diagram (NID) shows a
+                            network plot of the model. Line thickness represents
+                            the connection weight size and direction (black =
+                            positive, grey = negative).
+                        </p>
+                        <!--Julian D. Olden & Donald A. Jackson (2002). 'Illuminating the ‘‘black box’’: a randomization approach for understanding variable contributions in artificial neural networks' *Ecological Modelling* 154 pp. 135–150. DOI: 10.1016/S0304-3800(02)00064-9-->
+                        <!--(Olden, J. D. & Jackson, D. A. <i> Illuminating the ‘‘black box’’: a randomization approach for understanding variable contributions in artificial neural networks. Ecological Modelling</i>. 2002.)-->
+                        <!--/oldenlab/wordpress/wp-content/uploads/2013/03/EcologicalModelling_2002.pdf-->
+
+                        <!--colLeftLong25 colRightShort30 colRight35 colLeft20 colBrayLong40 colBrayShort15-->
+                        <!--<h:panelGrid id="panelGrid" columns="5" cellpadding="3" columnClasses="colLeft,colRightShort,colLeft,colRightShort, colLast">-->
+                        <!--&nbsp adds whitespace-->
+                        <h:panelGrid
+                            id="panelGrid"
+                            columns="5"
+                            cellpadding="3"
+                            columnClasses="colLeftLong,colRight,colLeftLong,colRight, colLast"
+                        >
+                            <h:outputLabel
+                                style="font-weight: bold"
+                                value="Dependant Variable:"
+                            />
+                            <p:selectOneMenu
+                                styleClass="menu"
+                                panelStyleClass="panel"
+                                value="#{rfCABean.columnNameA}"
+                            >
                                 <f:selectItems value="#{rfCABean.columnOpts}" />
                             </p:selectOneMenu>
-                             <h:panelGrid></h:panelGrid> 
-                             <h:panelGrid></h:panelGrid> 
-                              <h:panelGrid></h:panelGrid> 
-                            <h:outputLabel style="font-weight: bold; margin-right: 50px" value="Independent variables (column names with commas in between):"/>
-                            <p:inputText style="width:400px; height:20px" value="#{rfCABean.indInput}"/> 
- <h:panelGrid></h:panelGrid> 
-  <h:panelGrid></h:panelGrid> 
-                        <h:panelGrid></h:panelGrid> 
-                         <h:panelGrid></h:panelGrid> 
-                            <h:outputLabel style="font-weight: bold" value="Independent variables to exclude from scaling (column names with commas in between):"/>
-                            <p:inputText style="width:400px; height:20px" value="#{rfCABean.indInput}"/>
-                            
-                    </h:panelGrid>                            
-                        <h:panelGrid></h:panelGrid>     
-                        <h:panelGrid id="panelGrid1" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
-                            <p:commandButton value="Customize Graph"
-                                             styleClass="graphicsButton"
-                                             style="box-shadow: none !important; text-shadow: none !important;"
-                                             actionListener="#{sessionBean1.graphicsLnk_action('corr_ann_nid')}" 
-                                            oncomplete="PF('graphApperanceANN').show()"/>  
-                                           
-                            <p:commandButton value="Update" 
-                                             styleClass="updateButton"
-                                             style="box-shadow: none !important; text-shadow: none !important"
-                                            onclick="PF('statusDialog').show()"
-                                            oncomplete="PF('statusDialog').hide()"  
-                                            update=":ANNCA:form1:corrANNPane1  :cmdPane" 
-                                            actionListener="#{rfCABean.corrANNBtn_action()}"/> 
-                            
+                            <h:panelGrid></h:panelGrid>
+                            <h:panelGrid></h:panelGrid>
+                            <h:panelGrid></h:panelGrid>
+                            <h:outputLabel
+                                style="font-weight: bold; margin-right: 50px"
+                                value="Independent variables (column names with commas in between):"
+                            />
+                            <p:inputText
+                                style="width: 400px; height: 20px"
+                                value="#{rfCABean.indInput}"
+                            />
+                            <h:panelGrid></h:panelGrid>
+                            <h:panelGrid></h:panelGrid>
+                            <h:panelGrid></h:panelGrid>
+                            <h:panelGrid></h:panelGrid>
+                            <h:outputLabel
+                                style="font-weight: bold"
+                                value="Independent variables to exclude from scaling (column names with commas in between):"
+                            />
+                            <p:inputText
+                                style="width: 400px; height: 20px"
+                                value="#{rfCABean.indInput}"
+                            />
+                        </h:panelGrid>
+                        <h:panelGrid></h:panelGrid>
+                        <h:panelGrid
+                            id="panelGrid1"
+                            columns="2"
+                            cellpadding="3"
+                            style="float: right; text-shadow: none !important"
+                        >
+                            <p:commandButton
+                                value="Customize Graph"
+                                styleClass="graphicsButton"
+                                style="
+                                    box-shadow: none !important;
+                                    text-shadow: none !important;
+                                "
+                                actionListener="#{sessionBean1.graphicsLnk_action('corr_ann_nid')}"
+                                oncomplete="PF('graphApperanceANN').show()"
+                            />
+
+                            <p:commandButton
+                                value="Update"
+                                styleClass="updateButton"
+                                style="
+                                    box-shadow: none !important;
+                                    text-shadow: none !important;
+                                "
+                                onclick="PF('statusDialog').show()"
+                                oncomplete="PF('statusDialog').hide()"
+                                update=":ANNCA:form1:corrANNPane1  :cmdPane"
+                                actionListener="#{rfCABean.corrANNBtn_action()}"
+                            />
                         </h:panelGrid>
                         <!--<ui:include src="_results_bar_linear.xhtml" />-->
                         <h:panelGrid class="resultsBar" columns="2">
                             <h:panelGroup>
-                                <h:panelGrid columns="1" style="text-align : left;">
+                                <h:panelGrid
+                                    columns="1"
+                                    style="text-align: left"
+                                >
                                     Results
                                 </h:panelGrid>
                             </h:panelGroup>
-                         <h:panelGroup>
+                            <h:panelGroup>
                                 <h:panelGrid columns="3" class="resultsImages">
-                                    <i id="question" class="fa fa-question-circle" title="Only numeric variables are used in linear correlation. The linear model can be written in the form (y = x * &#946; + &#949;), where y = dependent variable; x = independent variable; &beta; = regression parameter coefficients; and &epsilon; = error values.
+                                    <i
+                                        id="question"
+                                        class="fa fa-question-circle"
+                                        title="Only numeric variables are used in linear correlation. The linear model can be written in the form (y = x * &#946; + &#949;), where y = dependent variable; x = independent variable; &beta; = regression parameter coefficients; and &epsilon; = error values.
 
-The model makes several assumptions, namely linearity, normality, homoscedasticity, independence, and that the model is not disproportionately influenced by outliers. Tests for these assumptions include the RESET for linearity(J.B. Ramsey (1969), Tests for Specification Errors in Classical Linear Least-Squares Regression Analysis. Journal of the Royal Statistical Society, Series B 31, 350--371); Kruskal-Wallis for normality(); Breusch-Pagan for homoscedasticity (T.S. Breusch and A.R. Pagan (1979), A Simple Test for Heteroscedasticity and Random Coefficient Variation. Econometrica 47, 1287--1294); and Durbin-Watson for autocorrelation (J. Durbin and G.S. Watson (1950), Testing for Serial Correlation in Least Squares Regression I. Biometrika 37, 409--428) 
+                                       The model makes several assumptions, namely linearity, normality, homoscedasticity, independence, and that the model is not disproportionately influenced by outliers. Tests for these assumptions include the RESET for linearity(J.B. Ramsey (1969), Tests for Specification Errors in Classical Linear Least-Squares Regression Analysis. Journal of the Royal Statistical Society, Series B 31, 350--371); Kruskal-Wallis for normality(); Breusch-Pagan for homoscedasticity (T.S. Breusch and A.R. Pagan (1979), A Simple Test for Heteroscedasticity and Random Coefficient Variation. Econometrica 47, 1287--1294); and Durbin-Watson for autocorrelation (J. Durbin and G.S. Watson (1950), Testing for Serial Correlation in Least Squares Regression I. Biometrika 37, 409--428) 
 
-The R &#xb2; value is the fraction of variance explained by the model and is a value from 0 to 1. The adjusted R &#xb2; value is the R &#xb2; value adjusted for the number of predictors in the model. R &#xb2; is used to assess how well a model fits the data, with a higher R &#xb2; value indicating a better model fit. The confidence interval represents the level of certainty about the predicted values; if the same procedure was repeatedly used to make new estimates, the confidence interval would contain the average of all the estimates 95% of the time. https://www.census.gov/programs-surveys/saipe/guidance/confidence-intervals.html "></i>
+                                       The R &#xb2; value is the fraction of variance explained by the model and is a value from 0 to 1. The adjusted R &#xb2; value is the R &#xb2; value adjusted for the number of predictors in the model. R &#xb2; is used to assess how well a model fits the data, with a higher R &#xb2; value indicating a better model fit. The confidence interval represents the level of certainty about the predicted values; if the same procedure was repeatedly used to make new estimates, the confidence interval would contain the average of all the estimates 95% of the time. https://www.census.gov/programs-surveys/saipe/guidance/confidence-intervals.html "
+                                    ></i>
                                 </h:panelGrid>
-                            </h:panelGroup>   
+                            </h:panelGroup>
                         </h:panelGrid>
-                        
-                        <h:panelGrid id="corrANNPane1" style="width: 100%;"> 
-<!--                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
-                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
-                                    <h:outputText escape="false" value="hash{rfCABean.fileANNModValsPath}"/>
-                                </i>
-                            </h:panelGrid>-->
-                            
-                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
-                                <p:commandButton value="Export"
+
+                        <h:panelGrid id="corrANNPane1" style="width: 100%">
+                            <!--                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                                            <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
+                                                                <h:outputText escape="false" value="hash{rfCABean.fileANNModValsPath}"/>
+                                                            </i>
+                                                        </h:panelGrid>-->
+
+                            <h:panelGrid
+                                columns="1"
+                                style="
+                                    width: 100%;
+                                    line-height: 25px;
+                                    text-align: center;
+                                "
+                            >
+                                <p:commandButton
+                                    value="Export"
                                     styleClass="exportButton"
-                                    style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                    style="
+                                        box-shadow: none !important;
+                                        float: right;
+                                        text-shadow: none !important;
+                                    "
                                     actionListener="#{sessionBean1.graphicsLnk_action('corr_ann_nid')}"
-                                    oncomplete="PF('graphDialog').show()"/>
-                            </h:panelGrid> 
-                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
-                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_ann_nid')}" alt="corrANNnid"/>
-                            </h:panelGrid>  
-                            
-                       </h:panelGrid>  
+                                    oncomplete="PF('graphDialog').show()"
+                                />
+                            </h:panelGrid>
+                            <h:panelGrid
+                                columns="1"
+                                style="
+                                    width: 100%;
+                                    line-height: 25px;
+                                    text-align: center;
+                                "
+                            >
+                                <div id="my_dataviz_title"></div>
+                                <div id="my_dataviz"></div>
+                            </h:panelGrid>
+                        </h:panelGrid>
                     </h:form>
                 </p:tab>
-                
-                <p:tab title ="Predicted vs Actual Plot" titleStyleClass="p-tab-nav">
+
+                <p:tab
+                    title="Predicted vs Actual Plot"
+                    titleStyleClass="p-tab-nav"
+                >
                     <h:form id="form2">
                         <p style="font-size: 13px">
-                            A dependent variable and an independent variable are correlated using a linear model. Predicted values are plotted against actual data, representing a measure of correlation.
+                            A dependent variable and an independent variable are
+                            correlated using a linear model. Predicted values
+                            are plotted against actual data, representing a
+                            measure of correlation.
                         </p>
-                    <h:panelGrid id="panelGrid2" columns="5" cellpadding="3" columnClasses="colLeftLong,colRight,colLeftLong,colRight, colLast"> <!--"colLeft,colRightShort,colLeft,colRightShort, colLast"-->
-                            <h:outputLabel style="font-weight: bold" value="Dependant Variable:"/>
-                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{rfCABean.columnNameA}">
-                                    <f:selectItems value="#{rfCABean.columnOpts}" />
-                                </p:selectOneMenu>
+                        <h:panelGrid
+                            id="panelGrid2"
+                            columns="5"
+                            cellpadding="3"
+                            columnClasses="colLeftLong,colRight,colLeftLong,colRight, colLast"
+                        >
+                            <!--"colLeft,colRightShort,colLeft,colRightShort, colLast"-->
+                            <h:outputLabel
+                                style="font-weight: bold"
+                                value="Dependant Variable:"
+                            />
+                            <p:selectOneMenu
+                                styleClass="menu"
+                                panelStyleClass="panel"
+                                value="#{rfCABean.columnNameA}"
+                            >
+                                <f:selectItems value="#{rfCABean.columnOpts}" />
+                            </p:selectOneMenu>
 
-                            <h:outputLabel style="font-weight: bold" value="Independent variables (type column names with commas in between):"/>
-                            <p:inputText style="width:400px; height:40px" value="#{rfCABean.indInput}"/>
-                             <h:panelGrid></h:panelGrid> 
-                              <h:panelGrid></h:panelGrid> 
-                            <h:outputLabel style="font-weight: bold" value="Independent variables to exclude from Z-score scaling (type column names with commas in between):"/>
-                            <p:inputText style="width:400px; height:40px" value="#{rfCABean.indInput}"/>
-                            
-                     </h:panelGrid>         
-                         <h:panelGrid></h:panelGrid>    
-                        <h:panelGrid id="panelGrid1" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;">                   
-                            <p:commandButton value="Customize Graph"
-                                             styleClass="graphicsButton"
-                                             style="box-shadow: none !important; text-shadow: none !important;"
-                                             actionListener="#{sessionBean1.graphicsLnk_action('corr_ann_pred')}" 
-                                            oncomplete="PF('graphApperanceANN2').show()"/>  
-                              
-                            <p:commandButton value="Update" 
-                                             styleClass="updateButton"
-                                             style="box-shadow: none !important; text-shadow: none !important"
-                                            onclick="PF('statusDialog').show()"
-                                            oncomplete="PF('statusDialog').hide()"  
-                                            update=":ANNCA:form2:corrANNPane2 :cmdPane" 
-                                            actionListener="#{rfCABean.corrANN2Btn_action()}"/>     
-                              
+                            <h:outputLabel
+                                style="font-weight: bold"
+                                value="Independent variables (type column names with commas in between):"
+                            />
+                            <p:inputText
+                                style="width: 400px; height: 40px"
+                                value="#{rfCABean.indInput}"
+                            />
+                            <h:panelGrid></h:panelGrid>
+                            <h:panelGrid></h:panelGrid>
+                            <h:outputLabel
+                                style="font-weight: bold"
+                                value="Independent variables to exclude from Z-score scaling (type column names with commas in between):"
+                            />
+                            <p:inputText
+                                style="width: 400px; height: 40px"
+                                value="#{rfCABean.indInput}"
+                            />
                         </h:panelGrid>
-                        
+                        <h:panelGrid></h:panelGrid>
+                        <h:panelGrid
+                            id="panelGrid1"
+                            columns="2"
+                            cellpadding="3"
+                            style="float: right; text-shadow: none !important"
+                        >
+                            <p:commandButton
+                                value="Customize Graph"
+                                styleClass="graphicsButton"
+                                style="
+                                    box-shadow: none !important;
+                                    text-shadow: none !important;
+                                "
+                                actionListener="#{sessionBean1.graphicsLnk_action('corr_ann_pred')}"
+                                oncomplete="PF('graphApperanceANN2').show()"
+                            />
+
+                            <p:commandButton
+                                value="Update"
+                                styleClass="updateButton"
+                                style="
+                                    box-shadow: none !important;
+                                    text-shadow: none !important;
+                                "
+                                onclick="PF('statusDialog').show()"
+                                oncomplete="PF('statusDialog').hide()"
+                                update=":ANNCA:form2:corrANNPane2 :cmdPane"
+                                actionListener="#{rfCABean.corrANN2Btn_action()}"
+                            />
+                        </h:panelGrid>
+
                         <h:panelGrid class="resultsBar" columns="2">
                             <h:panelGroup>
-                                <h:panelGrid columns="1" style="text-align : left;">
+                                <h:panelGrid
+                                    columns="1"
+                                    style="text-align: left"
+                                >
                                     Results
                                 </h:panelGrid>
-                            </h:panelGroup> 
+                            </h:panelGroup>
                             <h:panelGroup>
                                 <h:panelGrid columns="3" class="resultsImages">
-                                    <i id="question" class="fa fa-question-circle" title="Based on the linear model generated, the predicted response variable is plotted against the actual variable. The linear model can be written in the form (y = x * &#946; + &#949;), where y = dependent variable; x = independent variable; &beta; = regression parameter coefficients; and &epsilon; = error values.                          
-The model makes several assumptions about the error term, namely linearity, normality, homoscedasticity, independence, and that the model is not disproportionately influenced by outliers. 
+                                    <i
+                                        id="question"
+                                        class="fa fa-question-circle"
+                                        title="Based on the linear model generated, the predicted response variable is plotted against the actual variable. The linear model can be written in the form (y = x * &#946; + &#949;), where y = dependent variable; x = independent variable; &beta; = regression parameter coefficients; and &epsilon; = error values.                          
+                                       The model makes several assumptions about the error term, namely linearity, normality, homoscedasticity, independence, and that the model is not disproportionately influenced by outliers. 
 
-The R &#xb2; value is the fraction of variance explained by the model and is a value from 0 to 1. The adjusted R &#xb2; value is the R &#xb2; value adjusted for the number of predictors in the model. R &#xb2; is used to assess how well a model fits the data, with a higher R &#xb2; value indicating a better model fit. The confidence interval represents the level of certainty about the predicted values; if the same procedure was repeatedly used to make new estimates, the confidence interval would contain the average of all the estimates 95% of the time. https://www.census.gov/programs-surveys/saipe/guidance/confidence-intervals.html "></i>
+                                       The R &#xb2; value is the fraction of variance explained by the model and is a value from 0 to 1. The adjusted R &#xb2; value is the R &#xb2; value adjusted for the number of predictors in the model. R &#xb2; is used to assess how well a model fits the data, with a higher R &#xb2; value indicating a better model fit. The confidence interval represents the level of certainty about the predicted values; if the same procedure was repeatedly used to make new estimates, the confidence interval would contain the average of all the estimates 95% of the time. https://www.census.gov/programs-surveys/saipe/guidance/confidence-intervals.html "
+                                    ></i>
                                 </h:panelGrid>
                             </h:panelGroup>
-                          </h:panelGrid>
-                           
-                        <h:panelGrid id="corrANNPane2" style="width: 100%;">
-                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
-                                <p:commandButton value="Export"
+                        </h:panelGrid>
+
+                        <h:panelGrid id="corrANNPane2" style="width: 100%">
+                            <h:panelGrid
+                                columns="1"
+                                style="
+                                    width: 100%;
+                                    line-height: 25px;
+                                    text-align: center;
+                                "
+                            >
+                                <p:commandButton
+                                    value="Export"
                                     styleClass="exportButton"
-                                    style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                    style="
+                                        box-shadow: none !important;
+                                        float: right;
+                                        text-shadow: none !important;
+                                    "
                                     actionListener="#{sessionBean1.graphicsLnk_action('corr_ann_pred')}"
-                                    oncomplete="PF('graphDialog').show()"/>
-                            </h:panelGrid>                               
-                             
-                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
-                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_ann_pred')}" alt="CorrelationANNPredict"/>
-                            </h:panelGrid>                                                   
-<!--                            <h:panelGroup>
-                                <h:panelGrid columns="3" class="resultsImages">
-                                    <i class="fas fa-palette"></i>
-                                                                       <i class="fas fa-table"></i>
-                                   <i class="fas fa-palette"></i>
-                                   <i class="far fa-question-circle"></i>
-                                </h:panelGrid>
-                            </h:panelGroup>                            -->
-<!--                        <h:panelGrid id="corrPolyPane2" style="text-align: center; width: 100%;">
-                            <img onerror='this.style.display="none"' src="hash{sessionBean1.getCurrentImageURL('corr_poly_pred')}" alt="CorrelationPolyPredictimage"/>
-                        </h:panelGrid> -->
-                      </h:panelGrid>
+                                    oncomplete="PF('graphDialog').show()"
+                                />
+                            </h:panelGrid>
+
+                            <h:panelGrid
+                                columns="1"
+                                style="
+                                    width: 100%;
+                                    line-height: 25px;
+                                    text-align: center;
+                                "
+                            >
+                                <img
+                                    onerror='this.style.display="none"'
+                                    src="#{sessionBean1.getCurrentImageURL('corr_ann_pred')}"
+                                    alt="CorrelationANNPredict"
+                                />
+                            </h:panelGrid>
+                            <!--                            <h:panelGroup>
+                                                            <h:panelGrid columns="3" class="resultsImages">
+                                                                <i class="fas fa-palette"></i>
+                                                                                                   <i class="fas fa-table"></i>
+                                                               <i class="fas fa-palette"></i>
+                                                               <i class="far fa-question-circle"></i>
+                                                            </h:panelGrid>
+                                                        </h:panelGroup>                            -->
+                            <!--                        <h:panelGrid id="corrPolyPane2" style="text-align: center; width: 100%;">
+                                                        <img onerror='this.style.display="none"' src="hash{sessionBean1.getCurrentImageURL('corr_poly_pred')}" alt="CorrelationPolyPredictimage"/>
+                                                    </h:panelGrid> -->
+                        </h:panelGrid>
                     </h:form>
                 </p:tab>
- 
-            </p:tabView> 
+            </p:tabView>
         </h:panelGrid>
-<!--        <p:dialog modal="true" widgetVar="exportDialog" style="width:600px; height: 580px" appendTo="@(body)">  
-            <h:outputLabel style="font-size: 13px; font-weight: bold" value="Right click the PNG image to save as your preferred name:"/><br/>
-            <image id="downloadimage"></image>  
-        </p:dialog>  
-        <h:form>
-            <p:remoteCommand name="remoteCall"  
-                             process="@this"
-                             partialSubmit="true"
-                             update=":linCA:form1:corrLinPane1  :cmdPane"
-                             actionListener="HASHTAG{sessionBean1.setCurrentCmpdIndex}" 
-                             />
-        </h:form>-->
-        <p:dialog modal="true" widgetVar="graphApperanceANN" 
-            style="width: 400px; height:400px;" 
-            appendTo="@(body)" header="Graphics Center"
-            draggable="false" closable="true" resizable="false"> 
+        <!--        <p:dialog modal="true" widgetVar="exportDialog" style="width:600px; height: 580px" appendTo="@(body)">  
+                    <h:outputLabel style="font-size: 13px; font-weight: bold" value="Right click the PNG image to save as your preferred name:"/><br/>
+                    <image id="downloadimage"></image>  
+                </p:dialog>  
+                <h:form>
+                    <p:remoteCommand name="remoteCall"  
+                                     process="@this"
+                                     partialSubmit="true"
+                                     update=":linCA:form1:corrLinPane1  :cmdPane"
+                                     actionListener="HASHTAG{sessionBean1.setCurrentCmpdIndex}" 
+                                     />
+                </h:form>-->
+        <p:dialog
+            modal="true"
+            widgetVar="graphApperanceANN"
+            style="width: 400px; height: 400px"
+            appendTo="@(body)"
+            header="Graphics Center"
+            draggable="false"
+            closable="true"
+            resizable="false"
+        >
             <ui:include src="_color_palette_ann.xhtml" />
         </p:dialog>
-         <p:dialog modal="true" widgetVar="graphApperanceANN2" 
-            style="width: 400px; height:400px;" 
-            appendTo="@(body)" header="Graphics Center"
-            draggable="false" closable="true" resizable="false"> 
+        <p:dialog
+            modal="true"
+            widgetVar="graphApperanceANN2"
+            style="width: 400px; height: 400px"
+            appendTo="@(body)"
+            header="Graphics Center"
+            draggable="false"
+            closable="true"
+            resizable="false"
+        >
             <ui:include src="_color_palette_ann2.xhtml" />
         </p:dialog>
-
-        
     </ui:define>
 </ui:composition>
-
-
