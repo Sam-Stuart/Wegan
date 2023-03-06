@@ -44,20 +44,33 @@
                             <h:outputLabel style="font-weight: bold" value="Independent variables (names with commas in between):"/>
                             <p:inputText style="width:400px; height:40px" value="#{logCABean.indInput}"/> 
 
-    <!--dzone.com/articles/binding-dynamic-multi-select-->                           
 <h:form>
-	<h:outputText value="Currently Selected : #{logCABean.getPredictorsSelected()}" />
-	<ui:repeat var="item" value="#{logCABean.getPredictors()}">
-		<h:outputText value="#{item}" />
-		<h:selectBooleanCheckbox value="#{logCABean.checkMap[item]}"/>
+                                <h:outputText value="Currently Selected : #{logCABean.getPredictorsSelected()}" />
+                                <hr></hr>
+                                <ui:repeat var="item" value="#{logCABean.predictors}">
+                                    <h:outputText value="#{item}" />
+                                    <h:selectBooleanCheckbox value="#{logCABean.checkMap[item]}">
+                                        <f:ajax event="click" execute="@form" render="@form" />
+                                    </h:selectBooleanCheckbox>
+                                    <br></br>
+                                </ui:repeat>
+                                <!--<h:commandButton value="Update" action="refresh" />-->
+                            </h:form>                            
+<!--don't need this part, replaced by Hieu's code above                        -->
+    <!--dzone.com/articles/binding-dynamic-multi-select-->                           
+<!--<h:form>
+	<h:outputText value="Currently Selected : hash{logCABean.getPredictorsSelected()}" />
+	<ui:repeat var="item" value="hash{logCABean.getPredictors()}">
+		<h:outputText value="hash{item}" />
+		<h:selectBooleanCheckbox value="hash{logCABean.checkMap[item]}"/>
                 <span></span>
 	</ui:repeat>
-	<!--<h:commandButton value="Update" action="refresh" />-->
-</h:form>
-
-<h:selectBooleanCheckbox value="#{logCABean.checkMap[item]}">
+	<h:commandButton value="Update" action="refresh" />
+</h:form>-->
+<!--<h:selectBooleanCheckbox value="hash{logCABean.checkMap[item]}">
 	<f:ajax event="click" execute="@form" render="@form" />
-</h:selectBooleanCheckbox>
+</h:selectBooleanCheckbox>-->
+<!--end of part not needed replaced by Hieu's code above-->
                             
 <!--                          <h:panelGrid id="listPane">
                             <h:panelGrid style="padding-left:20px;">
