@@ -14,6 +14,8 @@ import org.rosuda.REngine.Rserve.RserveException;
  */
 public class UniVarTests {
 
+// FOLD-CHANGE (FC)    
+    
     public static void InitPairedFC(SessionBean1 sb, double fcThresh, double pairThresh, int cmpType) {
         try {
             RConnection RC = sb.getRConnection();
@@ -87,6 +89,8 @@ public class UniVarTests {
         return null;
     }
 
+// T-TEST
+    
     public static int performTtests(SessionBean1 sb, String nonpar, double pthresh, String paired, String equalVar) {
         try {
             RConnection RC = sb.getRConnection();
@@ -151,6 +155,8 @@ public class UniVarTests {
         return null;
     }
 
+    
+// VOLCANO PLOT      
     public static void performVolcano(SessionBean1 sb, String paired, double fcThresh, int cmpType, double countThresh, String nonpar, double pThresh, String varEqual, String vcPvalType) {
         try {
             RConnection RC = sb.getRConnection();
@@ -225,6 +231,7 @@ public class UniVarTests {
         return false;
     }
 
+// ANOVA    
     public static int performANOVA(SessionBean1 sb, String nonPar, double thresh, String postType) {
         try {
             RConnection RC = sb.getRConnection();
@@ -290,6 +297,8 @@ public class UniVarTests {
         return null;
     }
 
+    
+// PATTERN MATCHING    
     public static String PlotCmpdSummary(SessionBean1 sb, String cmpdName, String format, String dpi) {
         try {
             RConnection RC = sb.getRConnection();
@@ -406,6 +415,8 @@ public class UniVarTests {
         }
     }
 
+    
+// GET FILENAMES    
     public static String GetCorrSigFileName(SessionBean1 sb) {
         try {
             String rCommand = "GetCorrSigFileName(NA)";

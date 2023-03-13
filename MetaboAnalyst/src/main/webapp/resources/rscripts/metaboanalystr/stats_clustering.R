@@ -88,7 +88,9 @@
 #' }
 
 #'Plot Dendrogram 
-#'@description Dendogram
+#'@description Dendrogram
+#' using hierarchical clustering, create a dendrogram (tree) plot
+#' note: abbreviation - (hct) = (hierarchical clustering tree)
 #'@param mSetObj Input name of the created mSet Object
 #'@param imgName Input a name for the plot
 #'@param data Which data set to use, normalized (default) or original
@@ -97,8 +99,8 @@
 #'the default dpi is 72. It is suggested that for high-resolution images, select a dpi of 300.  
 #'@param width Input the width, there are 2 default widths, the first, width = NULL, is 10.5.
 #'The second default is width = 0, where the width is 7.2. Otherwise users can input their own width.  
-#'@param smplDist Method to calculate sample distance, 'euclidean' (default), 'spearman', 'pearson'.
-#'@param clstDist Method to calculate clustering distance, 'ward' (default), 'average', 'complete', 'single'.
+#'@param smplDist Method to calculate sample distance, 'euclidean' (default), 'spearman', 'pearson'; used in {stats} function dist() to calculate distance matrix of data frame rows
+#'@param clstDist Agglomeration method to calculate clustering distance, 'ward' (default), 'average', 'complete', 'single'; used in {stats} function hclust() to create the tree 
 #'@param rotate Default is horizontal, checkbox option for vertical.
 #'@author Jeff Xia\email{jeff.xia@mcgill.ca}
 #'McGill University, Canada
@@ -161,8 +163,11 @@ PlotHCTree <- function(mSetObj=NA,
   
   #colnames(dataset) <- substr(colnames(dataset), 1, 18)  # some names are too long
   
-  # set up distance matrix 
+  # numeric columns only
   input <- select_if(dataset, is.numeric)
+  # input <- dataset[,sapply(dataset, is.numeric), drop = FALSE] # base alternative
+
+ # distance matrix
   if (smplDist == 'euclidean' || smplDist == "NULL"){  # default is 'euclidean'
     smplDist <- 'euclidean'
     dist.mat <- dist(input, method = smplDist);
@@ -196,18 +201,19 @@ PlotHCTree <- function(mSetObj=NA,
           panel.background = element_blank(),
           legend.key = element_blank(),
           legend.position = c("top"))
+
   # Add text labels 
   if (branch_labels == 'true') {
     p <- p + scale_y_continuous(expand = expansion(mult = c(0.2, .05)))
+
     if (length(ddata$labels$label) <= 50){
       text_size <- 3
-    }
-    else if (length(ddata$labels$label) <= 100){
+    } else if (length(ddata$labels$label) <= 100){
       text_size <- 2
-    }
-    else{
+    } else{
       text_size <- 1
     }
+
     if (rotate == 'false'){
       p <- p + geom_text(data = ddata$labels,
                          aes(x = x, y = -(max(ddata$segments$yend)*0.05), label = label),
@@ -218,8 +224,7 @@ PlotHCTree <- function(mSetObj=NA,
                          size = text_size,
                          show.legend = FALSE) +
         coord_flip()
-    }
-    else{
+    } else{
       p <- p + geom_text(data = ddata$labels,
                          aes(x = x, y = -(max(ddata$segments$yend)*0.05), label = label),
                          color = "black",
@@ -230,8 +235,8 @@ PlotHCTree <- function(mSetObj=NA,
                          show.legend = FALSE)
     }
     
-  }
-  else {
+  } else {
+    text_size <- NA
     if (rotate == 'false') {
       p <- p + coord_flip()
     }
@@ -240,8 +245,7 @@ PlotHCTree <- function(mSetObj=NA,
   # Add colorbar and  corresponding legend
   if (colorbar_name == "No groupings" || colorbar_name == "NULL"){
     p <- p
-  }
-  else {
+  } else {
     # # Set up df for color bar option and join df by index values so categorical value aligned properly
     # facA_df <- dataset %>% 
     #   dplyr::mutate(id=row_number(), var = as.factor(dataset[,colorbar_name])) %>% 
@@ -273,8 +277,7 @@ PlotHCTree <- function(mSetObj=NA,
       guides(color=guide_legend(title=plot_legtitle))
     if (plot_palette == "grey"){
       p <- p + scale_colour_grey()
-    }
-    else {
+    } else {
       p <- p + scale_color_viridis(discrete=TRUE, option=plot_palette)
     }
   }
@@ -294,6 +297,7 @@ PlotHCTree <- function(mSetObj=NA,
   
   #Name plot for download
   imgName <- paste(imgName, "dpi", dpi, ".", format, sep="")
+  imgName2 <- paste(imgName, ".json", sep="") # for json object
   mSetObj$imgSet$Plot.NMDS.2D <- imgName
   
   Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
@@ -302,6 +306,26 @@ PlotHCTree <- function(mSetObj=NA,
   
   # Make JSON
   
+  build <- ggplot_build(p)
+  plot_json <- list()
+  
+  plot_json$main <- plot_title #title
+  plot_json$legtitle <- plot_legtitle #legend title
+  plot_json$coords <- build$data[[1]]
+  plot_json$cols <- build$data[[2]] #colours
+  plot_json$grouping <- colorbar_name #colour_bar grouping variable
+  plot_json$branch_labels <- branch_labels #branch labels 
+## or: plot_json$branch_labels <- hc$order  ## stackoverflow.com/questions/43638810/how-to-get-labels-from-hclust-result
+  plot_json$branch_label_size <- text_size #branch label text size 
+
+    
+  json.obj <- RJSONIO::toJSON(plot_json, .na='null')
+  sink(imgName2)
+  cat(json.obj)
+  sink()
+  print(json.obj)
+
+
   #### Making Dendrogram with Cairo
   # Cairo::Cairo(file = imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white");
   # par(cex=0.8, mar=c(4,2,2,8));
@@ -340,6 +364,7 @@ PlotHCTree <- function(mSetObj=NA,
   
   return(.set.mSet(mSetObj));
 }
+
 
 #'SOM analysis
 #'@description SOM analysis

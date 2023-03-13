@@ -7,7 +7,7 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="/frags/_anal_template.xhtml">
     <ui:define name="metaInfo">
-        <f:event type="preRenderView" listener="#{sessionBean1.registerPage('Statistics')}"/> 
+        <!--<f:event type="preRenderView" listener="hash{sessionBean1.registerPage('Statistics')}"/>--> 
     </ui:define>
     <ui:define name="content">
         <h:form>
@@ -56,6 +56,7 @@
                 </h:panelGrid>
             </h:panelGrid> 
         </h:form>
+        
         <h:form>
             <h:panelGrid style="padding:20px 40px 20px 40px; font-size: 13px; line-height: 25px; width:100%">
                 <h2>Select an analysis path to explore :</h2>
@@ -130,5 +131,6 @@
                 </h:panelGrid>
             </h:panelGrid> 
         </h:form>
+        
     </ui:define>
 </ui:composition>

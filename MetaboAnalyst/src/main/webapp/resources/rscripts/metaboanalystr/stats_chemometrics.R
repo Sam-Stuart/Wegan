@@ -1,7 +1,19 @@
+## FUNCTIONS WITHIN:
+# PCA.Anal(mSetObj=NA, origData="false") # Perform PCA analysis, obtain variance explained, store item to PCA object
+# PCA.Flip <- function(mSetObj=NA, axisOpt) # rotate pca analysis; store in pca mset obj axisOpt: "x", "y", "all"
+# PlotPCAPairSummary(mSetObj=NA, imgName, format="png", dpi=72, width=NA, pc.num) # pc.num: num of principle components to display
+# PlotPCAScree(mSetObj=NA, imgName, format="png", dpi=72, width=NA, scree.num) # scree.num = nPC to plot 
+# 2D PCA score plot
+# PlotPCA2DScore(mSetObj=NA, imgName, format="png", dpi=72, width=NA, pcx, pcy, reg = 0.95, show=1, grey.scale = 0) # show =1 show sample names; grey.scale 0 not grey-scale; reg = num, 0-1, 0.95 will display 95% conf regions, 0 will not; pcx = pc on x-axis; pcy=pc on y-axis
+# Louisa updated: PlotPCA2DScore <- function(mSetObj=NA, ellipse="false", var_arrows="false", env_arrows="false", env_cent="false", sampleNames="false", color="NULL", meta_col_color="NULL", noPoints="false", imgName, format="png", dpi=72, width=NA)
+
+
 #'Perform PCA analysis
 #'@description Perform PCA analysis, obtain variance explained, store item to PCA object
+#'@usage PCA.Anal(mSetObj=NA, origData="false") (descr. here added GPS)
 #'@author Jeff Xia\email{jeff.xia@mcgill.ca}
 #'@param mSetObj Input name of the created mSet Object
+#'@param origData whether or not to use normalized data (descr. here added GPS)
 #'McGill University, Canada
 #'License: GNU GPL (>= 2)
 #'@export
@@ -23,9 +35,12 @@ PCA.Anal <- function(mSetObj=NA, origData="false"){
 
   #Obtain categorical data for making dummy variables
   num_data <- select_if(data, is.numeric)
+  # num_data <- data[,sapply(data, is.numeric), drop = FALSE] # base alternative
+
   colNamesNum <- colnames(num_data)
   rowNamesNum <- rownames(num_data)
   char_data <- select_if(data, is.factor) #Any categorical data will be used for grouping
+# char_data <- data[,sapply(data, is.factor), drop = FALSE] # base alternative
 
   #Obtain all data
   all_data <- num_data
@@ -136,18 +151,27 @@ PCA.Anal <- function(mSetObj=NA, origData="false"){
   colnames(scree_data) <- c("PC", "Variance Explained", "Cumulative Variance Explained")
   
   # store the item to the pca object
+# res.pca: prcomp object 
   mSetObj$analSet$pca$res.pca <- res.pca
+# std: standard deviation
   mSetObj$analSet$pca$std <- std.pca
+# variance: var explained by each PC
   mSetObj$analSet$pca$variance <- var.pca
+# cum.var: cumulative variance explained by each PC
   mSetObj$analSet$pca$cum.var <- cum.pca
+# input: input data
   mSetObj$analSet$pca$input <- data
+# var.fit: variables fit to ordination plots
   mSetObj$analSet$pca$var.fit <- var.fit
+## env.fit above is commented out, so here is commented these out:
   #mSetObj$analSet$pca$env.fit <- env.fit
   #mSetObj$analSet$pca$env.fit.char <- env.fit.char
   #mSetObj$analSet$pca$env.fit.num <- env.fit.num
   #mSetObj$analSet$pca$env.scores.char <- env.scores.char
   #mSetObj$analSet$pca$env.scores.num <- env.scores.num
+#metaData: metadata
   mSetObj$analSet$pca$metaData <- metaData1
+# envData: environment data
   mSetObj$analSet$pca$envData <- envData1
   write.csv(scree_data, file="pca_scree_data.csv", row.names=FALSE)
   write.csv(signif(mSetObj$analSet$pca$res.pca$x,5), file="pca_sample_scores.csv", row.names=row.names(data))
@@ -186,10 +210,10 @@ PCA.Anal <- function(mSetObj=NA, origData="false"){
 }
 
 
-#'Rotate PCA analysis
+#'Rotate PCA analysis (after this GPS added:), store in msetobj $pca object
 #'@description Rotate PCA analysis
 #'@param mSetObj Input name of the created mSet Object
-#'@param axisOpt Input the axis option 
+#'@param axisOpt Input the axis option (after this GPS added:) options are "x", "y", "all"
 #'@author Jeff Xia\email{jeff.xia@mcgill.ca}
 #'McGill University, Canada
 #'License: GNU GPL (>= 2)
@@ -271,7 +295,7 @@ PlotPCAPairSummary <- function(mSetObj=NA, color="NULL", imgName, format="png", 
 }
 
 #'Plot PCA scree plot
-#'@description Rotate PCA analysis
+#'@description Rotate PCA analysis (after this, GPS added:) actually not rotating? plot scree plot; scree.num = nPC to plot 
 #'@author Jeff Xia\email{jeff.xia@mcgill.ca}
 #'McGill University, Canada
 #'License: GNU GPL (>= 2)
@@ -1214,10 +1238,10 @@ PlotPLSLoading <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA, 
 }
 
 #'PLS-DA classification and feature selection
-#'@description PLS-DA classification and feature selection
+#'@description PLS-DA classification and feature selection (after this GPS added): using caret::train("pls") and caret::trainControl()
 #'@param mSetObj Input name of the created mSet Object
 #'@param methodName Logical, by default set to TRUE
-#'@param compNum GetDefaultPLSCVComp()
+#'@param compNum GetDefaultPLSCVComp(); #(after this GPS added):  caret::train(tuneLength=compNum); from Get_ fxn:  min(5, nrow(input)-2, ncol(input), min.grp.size)
 #'@param choice Input the choice, by default it is Q2
 #'@author Jeff Xia\email{jeff.xia@mcgill.ca}
 #'McGill University, Canada
@@ -1230,7 +1254,13 @@ PLSDA.CV <- function(mSetObj=NA, methodName="T", compNum=GetDefaultPLSCVComp(), 
   if(.on.public.web){
     load_caret()
   }
-  
+
+## GPS added comments:
+# compNum = compNum=GetDefaultPLSCVComp()
+# from fxn: min(5, dim(input)[1]-2, dim(input)[2], mSetObj$dataSet$min.grp.size)
+#  input <- mSetObj$dataSet$norm
+#   min(5, nrow(input)-2, ncol(input), min.grp.size)
+
   # get classification accuracy using caret
   plsda.cls <- caret::train(mSetObj$dataSet$norm, mSetObj$dataSet$cls, "pls", trControl=caret::trainControl(method=ifelse(methodName == 'L', "LOOCV", 'CV')), tuneLength=compNum);
   
@@ -1450,6 +1480,12 @@ PlotImpVar <- function(mSetObj=NA, imp.vec, xlbl, feat.num=15, color.BW=FALSE){
   
   mSetObj <- .get.mSet(mSetObj);
   
+# GPS ADDED: which is shorter:
+# use length(levels()) vs. nlevels()
+#microbenchmark::microbenchmark(
+#length(levels(as.factor(iris$Species))),
+#nlevels(as.factor(iris$Species))
+#)
   cls.len <- length(levels(mSetObj$dataSet$cls));
   if(cls.len == 2){
     rt.mrg <- 5;

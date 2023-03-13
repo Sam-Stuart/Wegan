@@ -80,6 +80,9 @@ public class UnivBean implements Serializable {
         this.viewOpt = viewOpt;
     }
 
+    // VOLCANO AND FOLD CHANGE:
+   //    UniVarTests.PlotVolcano(sb, imgName, plotLbl, format, dpi) -> calls PlotVolcano() in R
+   //    UniVarTests.performVolcano(sb, paired, fcThresh, cmpType, countThresh, nonpar, pThresh, varEqual, vcPvalType) -> calls Volcano.Anal() in R
     private String fcThresh = "2";
     private String countThresh = "75";
     private int plotLbl = 1;
@@ -121,6 +124,7 @@ public class UnivBean implements Serializable {
         return null;
     }
 
+  // T-tests  
     private String ttPThresh = "0.05";
 
     public String getTtPThresh() {
@@ -151,6 +155,8 @@ public class UnivBean implements Serializable {
         this.equalVar = equalVar;
     }
 
+    // NON-PARAMETRIC T-TEST
+    
     private boolean nonParTt = false;
 
     public boolean isNonParTt() {
@@ -273,7 +279,9 @@ public class UnivBean implements Serializable {
         UniVarTests.PlotVolcano(sb, sb.getNewImage("volcano"), plotLbl, "png", 72);
         return null;
     }
-    
+     
+    // ANOVA
+    //   UniVarTests.performANOVA(sb, nonPar, thresh, postType) calls R: ANOVA.Anal()
     private String aovPThresh = "0.05";
 
     public String getAovPThresh() {
@@ -357,6 +365,7 @@ public class UnivBean implements Serializable {
         this.noClust = noClust;
     }
 
+// Heatmap distance measure    
     private String hmDistMeasure = "pearson";
 
     public String getHmDistMeasure() {
@@ -409,6 +418,8 @@ public class UnivBean implements Serializable {
         RequestContext.getCurrentInstance().scrollTo("form1:corrPane");
     }
 
+    // PATTERN : HEAT MAP / CORRELATION (?)
+    // (ptn) pattern Distance Measure
     private String ptnDistMeasure = "pearson";
 
     public String getPtnDistMeasure() {

@@ -1,3 +1,21 @@
+# FUNCTIONS WITHIN (not the Get functions)
+# FC.Anal.unpaired(mSetObj=NA, fc.thresh=2, cmp.type = 0)
+# FC.Anal.paired(mSetObj=NA, fc.thresh=2, percent.thresh=0.75, cmp.type=0)
+# PlotFC(mSetObj=NA, imgName, format="png", dpi=72, width=NA)
+# GetFC(mSetObj=NA, paired=FALSE, cmpType) used by higher fxns to calc FC
+# Ttests.Anal(mSetObj=NA, nonpar=F, threshp=0.05, paired=FALSE, equal.var=TRUE)
+# PlotTT(mSetObj=NA, imgName, format="png", dpi=72, width=NA) # plot t-test
+# Volcano.Anal(mSetObj=NA, paired=FALSE, fcthresh, cmpType, percent.thresh, nonpar=F, threshp, equal.var=TRUE, pval.type="raw")
+# PlotVolcano(mSetObj=NA, imgName, plotLbl, format="png", dpi=72, width=NA) # Plot Volcano; For labelling interesting points, it is defined by the following rules: need to be signficant (sig.inx) and or 2. top 5 p, or 2. top 5 left, or 3. top 5 right.
+# aof(x, cls) # Perform anova and only return p values and MSres (for Fisher's LSD)
+# kwtest(x, cls) # Kruskall-wallis test
+# FisherLSD(aov.obj, thresh) #Perform  Fisher LSD for ANOVA, used in higher function 
+# parseTukey(tukey, cut.off) # Return only the signicant comparison names, used in higher function 
+# parseFisher(fisher, cut.off) # Return only the signicant comparison names used in higher fxns
+# ANOVA.Anal(mSetObj=NA, nonpar=F, thresh=0.05, post.hoc="fisher") # Perform ANOVA analysis
+# PlotCmpdView(mSetObj=NA, cmpdNm, format="png", dpi=72, width=NA) # Plots a bar-graph of selected compound over groups 
+# PlotANOVA(mSetObj=NA, imgName, format="png", dpi=72, width=NA)
+#
 #'Fold change analysis, unpaired
 #'@description Perform fold change analysis, method can be mean or median
 #'@usage FC.Anal.unpaired(mSetObj, fc.thresh=2, cmp.type = 0)
@@ -1093,10 +1111,12 @@ GetTtestSigFileName <- function(mSetObj=NA){
 
 #'Retrieve T-test p-values
 #'@description Utility method to get p values
+#' (after this GPS added): uses dataset$cls, which is a grouping factor vec of the same length as the nrow of the dataset
+#' (after this GPS added): uses wilcox.test for non-parametric, and for parametric: if ncol >1000, t.test , ncol <1000: genefilter::rowttests 
 #'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
 #'@param paired Default set to FALSE
 #'@param equal.var Default set to TRUE
-#'@param nonpar Use non-parametric tests, default is set to FALSE
+#'@param nonpar Use non-parametric tests (wilcox), default is set to FALSE
 #'@author Jeff Xia\email{jeff.xia@mcgill.ca}
 #'McGill University, Canada
 #'License: GNU GPL (>= 2)
@@ -1104,6 +1124,7 @@ GetTtestRes <- function(mSetObj=NA, paired=FALSE, equal.var=TRUE, nonpar=F){
   
   mSetObj <- .get.mSet(mSetObj);
   
+## NON-PARAMETRIC - uses wilox.test
   if(nonpar){
     inx1 <- which(mSetObj$dataSet$cls==levels(mSetObj$dataSet$cls)[1]);
     inx2 <- which(mSetObj$dataSet$cls==levels(mSetObj$dataSet$cls)[2]);
@@ -1117,7 +1138,9 @@ GetTtestRes <- function(mSetObj=NA, paired=FALSE, equal.var=TRUE, nonpar=F){
       }
     })
     
+## PARAMETRIC (default); t.test
   }else{
+  # LARGE DATASET
     if(ncol(mSetObj$dataSet$norm) < 1000){
       inx1 <- which(mSetObj$dataSet$cls==levels(mSetObj$dataSet$cls)[1]);
       inx2 <- which(mSetObj$dataSet$cls==levels(mSetObj$dataSet$cls)[2]);
@@ -1129,6 +1152,7 @@ GetTtestRes <- function(mSetObj=NA, paired=FALSE, equal.var=TRUE, nonpar=F){
           return(c(tmp$statistic, tmp$p.value));
         }
       })
+  # SMALL DATASET genefilter::rowttests
     }else{ # use fast version
       res <- try(genefilter::rowttests(t(as.matrix(mSetObj$dataSet$norm)), mSetObj$dataSet$cls));
       if(class(res) == "try-error") {
