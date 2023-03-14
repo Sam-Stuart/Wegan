@@ -1,6 +1,7 @@
 // Copyright 2021 Observable, Inc.
 // Released under the ISC license.
 // https://observablehq.com/@d3/force-directed-graph
+
 let URL = document.getElementById("mydir").value;
 d3.json("/MetaboAnalyst" + URL + "/corr_ann_nid.json").then(function (_data) {
     const div = document.getElementById("my_dataviz");
@@ -23,48 +24,21 @@ d3.json("/MetaboAnalyst" + URL + "/corr_ann_nid.json").then(function (_data) {
     });
 
     const data = { nodes, links };
-    console.log(data);
 
     const svg = ForceGraph(data, {
         nodeId: (d) => d.id,
         colors: _data.nodes.cols,
         nodeTitle: (d) => `${d.name}`,
-        linkStrokeWidth: (l) => l.strokeWidth,
+        linkStrokeWidth: (l) => l.strokeWidth * 2,
         linkStroke: (l) => l.strokeColor,
+        nodeRadius: 8,
+        nodeStrength: -1000,
     });
 
     div.appendChild(svg);
 
     d3.select("#my_dataviz_title").html(_data.main);
 });
-// let data;
-// d3.json(link2).then(function (_data) {
-//     data = _data;
-//     data.nodes = data.nodes.map((e, i) => ({ ...e, id: i }));
-//     const div = document.getElementById("my_dataviz");
-//     const tooltip = d3
-//         .select("#my_dataviz")
-//         .append("div")
-//         .style("opacity", 0)
-//         .style("position", "absolute")
-//         .attr("class", "tooltip")
-//         .style("background-color", "white")
-//         .style("border", "solid")
-//         .style("border-width", "1px")
-//         .style("border-radius", "5px")
-//         .style("padding", "10px");
-//     const svg = ForceGraph(data, {
-//         width: div.offsetWidth,
-//         height: 600,
-//         nodeGroup: (d) => d.group,
-//         nodeId: (d) => d.id,
-//         nodeTitle: (d) => `${d.name}\n${d.group}`,
-//         tooltip,
-//     });
-
-//     div.appendChild(svg);
-// });
-
 function ForceGraph(
     {
         nodes, // an iterable of node objects (typically [{id}, …])
