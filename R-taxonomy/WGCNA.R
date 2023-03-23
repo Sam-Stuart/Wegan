@@ -94,7 +94,7 @@ plot(soft_threshcounts$fitIndices[,1], soft_threshcounts$fitIndices[,5],
 text(soft_threshcounts$fitIndices[,1], soft_threshcounts$fitIndices[,5], labels=powers, cex=0.9, col="red")
 dev.off() # An "elbow" exists at 10, which is indicative of a good soft-thresholding power choice. 
 
-# We will go with 10 as our soft-threshold power for the network. 
+# We will go with 10 as our soft-threshold power for the network
 
 # Generate TOM and identify expression modules: 
 # Pair-wise correlation (connectivity) values between genes are calculated using the biweight midcorrelation function, and correlation 
