@@ -8,7 +8,7 @@ library("DESeq2") # For data transformation
 
 # Allow multi-threading within WGCNA: 
 # This function detects the number of threads available and helps speed up certain calculations.
-enableWGCNAThreads()
+WGCNA::enableWGCNAThreads()   
 
 options(stringsAsFactors=FALSE) # Required for WGCNA. 
 
