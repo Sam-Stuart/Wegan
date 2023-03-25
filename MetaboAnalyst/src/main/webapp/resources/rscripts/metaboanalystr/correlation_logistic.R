@@ -642,13 +642,13 @@ facA <- mSetObj$analSet$logRegInfo$response
 # } else {
 #  var_pred <- c(var_viewby1, var_viewby2)
 # }
-
+#
 # if(var_viewby3 == "NULL"){
 #  if(length(predictors) > 2){
 #   var_viewby2 <- predictors[3]
 #   var_pred <- c(var_viewby1, var_viewby2, var_viewby3)
 #  } else {
-# CHECK viewby2 
+### CHECK viewby2 
 # if(var_viewby2 == "NULL"){
 #   var_pred <- var_viewby1
 # }
@@ -708,31 +708,23 @@ if(length(predictors) > 2){
        "breakfast.club" = "breakfast.club",
        "aqua" = "aqua" #contin 
      )
-
+## - ## COLOURS FYI ## - ##
   #  # red bluegrey palecopperbrown black lightyellowlightorange
   # `blambus` = c("#E02E1F", "#5D8191", "#BD772D", "#494949", "#F2DD26"),
-
   #  red lighttealturquise brightgreen orange darkgrey yelloworange lightgrey
   # `metro` = c("#d11141", "#00aedb", "#00b159", "#f37735", "#8c8c8c", "#ffc425", "#cccccc"),
-
   #  red darktealblack palegoldorange palecoralbrown lightsummergreen darkolive
   # `hero` = c("#D2292B", "#165E88", "#E0BD1C", "#D57028", "#A5CB39", "#8D8F70"),
-
   #  violetblack lighttealturquoise darkblackgreen coral lightsummergreen lightmagentapink cadetblue pinksand palelightgreen
   # `ipsum` = c("#3f2d54", "#75b8d1", "#2d543d", "#d18975", "#8fd175", "#d175b8", "#758bd1", "#d1ab75", "#c9d175"),
-
   # red blue yellow maroon navy
   # `circus` = c("#C1241E", "#0664C9", "#EBD90A", "#6F130D", "#111A79"),
-
   #  CONTINUOUS: darkviolet darkteal teal turquoise-green green lightpalegreen yellow
   # `viridis` = c("#440154", "#46337E", "#365C8D", "#277F8E", "#1FA187", "#4AC16D", "#9FDA3A", "#FDE725"),
-  
   #  red blue darkgreen pink palesand
-  # `breakfast club` = c("#b6411a", "#4182dd", "#2d6328", "#eec3d8", "#ecf0c8"),
-
+  # `breakfast club` = c("#b6411a", "#4182dd", "#2d6328", "#eec3d8", "#ecf0c8")
   #  CONTINUOUS: light blue to purple mauve to light pink
   #  `aqua` = c("#BAF5F3", "#46A9BE", "#8B7B88", "#BD7688", "#F2C29E"),
-   
   #  black purpley orangey redbrown light orange yellow
   # `warm` = c("#072835", "#664458", "#C45B46", "#F1B749", "#F8EB85"),
 
@@ -768,6 +760,7 @@ if(length(predictors) > 2){
 # PLOT TEXT SIZE
 # size_base <- theme_bw()$text$size # 11
 # stackoverflow.com/questions/53560599/how-to-change-the-default-font-size-in-ggplot2-including-geom-text
+
  size_base <- 12
   #SET TITLE SIZE
   size_title1 <-
@@ -863,7 +856,7 @@ size_leg <- size_xlab
 ## if var_pred are 2 categorical, the 1st predictor is on x-axis, 2nd is colour variable
 ### ggeffects plot defaults to using continuous x axis, regardless of cat/contin variable: 
 ### to make an errorbar plot for a 1st categorical variable (will use discrete continuous bars)
-
+#
 ## strengejacke.github.io/ggeffects/reference/ggpredict.html
 # use categorical value on x-axis to make error bars
 # data(efc)
@@ -891,7 +884,7 @@ size_leg <- size_xlab
 
 ## if(length(var_preds) == 3){ # if var_viewby3 is set, add shape term
 # aes(shape = facet)}
-
+#
 # error bar plot
 # if(plot_linear == "false"){
 # a0 <- ggplot(ggeffects::ggpredict(mod, terms = var_preds),
