@@ -2,7 +2,7 @@
 # See this webpage for information on how to switch R versions if needed:
 # https://support.rstudio.com/hc/en-us/articles/200486138-Changing-R-versions-for-RStudio-desktop   
 
-library("ggplot2") # For PCA plot
+library("ggplot2") # For PCA plot.
 library("WGCNA") # For network analysis
 library("DESeq2") # For data transformation
 
