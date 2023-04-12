@@ -47,7 +47,6 @@ pieChart_setup <-
            titleTextSize = 12,
            axisTextSize = 12,
            data = "false") {
-    #print("BANANA PIE : This comment is in plotting_pieChart.R");
     mSetObj <- .get.mSet(mSetObj)
     input <- mSetObj$dataSet$norm
     if (data == "false") {
@@ -87,8 +86,6 @@ pieChart_setup <-
     # Label for each bar
     if (barLabels == "NULL")
       barLabels <- colnames(numerical_data)
-    
-    
     
     if (xlab == "NULL")
       xlab <- facA
