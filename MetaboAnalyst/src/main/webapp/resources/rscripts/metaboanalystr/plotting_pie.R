@@ -4,8 +4,8 @@ library(ggplot2)
 library(vegan)
 
 mSetObj = list()
-data()
-input <- iris
+data("dune")
+input <- dune 
 mSetObj$dataSet$orig = input
 mSetObj$dataSet$norm = input
 facA = "NULL"
@@ -66,23 +66,35 @@ pieChart_setup <-
     if (facA == "NULL")
       #Set it to the first column name
       facA <- colnames(numerical_data)[1]
-    
+
     if (length(as.matrix(categorical_data)) == 0) {
-      input$Sites <- row.names(input)
-      categorical_data <- select_if(input, is.character)
-      df <- input
-      md.df <- melt(df, id = c('Sites'))
+      sites_abund <- rowSums(dune, na.rm = TRUE)
+      # Divide each individual abundace by total site abundance
+      dune <- sweep(dune, 1, sites_abund, "/")
+      # Get sites variable from rownames
+      dune_sites <- dune %>% mutate(Site=as.numeric(rownames(dune)))
+      print("Hello1")
+      print(dune_sites %>% pivot_longer(cols = -Site,
+                                        names_to = "variable", 
+                                        values_to = "value")  )
+      # Get Species as variable and name the values as abundance
+      df <- dune_sites %>% pivot_longer(cols = -Site,
+                                        names_to = "variable", 
+                                        values_to = "value") 
+      # Set up colorscheme for more than 12 colors
+      colourCount = length(unique(df$variable))
+      getPalette = colorRampPalette(brewer.pal(12, "Paired"))
     } else {
       # Create aggregate data
       df <-
         aggregate(input[, 1:length(input) - 1],
                   by = categorical_data,
                   FUN = get(aggregate_function))
-      md.df <- melt(df, id = colnames(categorical_data)[1])
+      df <- melt(df, id = colnames(categorical_data)[1])
     }
-    
+  
     #Filter 0 values && only use 1 variable for pie chart
-    md.df <- filter(md.df, value > 0 & variable == facA)
+    md.df <- filter(df, value > 0)
     # Label for each bar
     if (barLabels == "NULL")
       barLabels <- colnames(numerical_data)
@@ -119,7 +131,7 @@ pieChart_setup <-
         barLabels = barLabels,
         titleTextSize = titleTextSize,
         axisTextSize = axisTextSize,
-        
+        colourCount = colourCount,
         mainTitle = mainTitle
       )
     
@@ -157,7 +169,7 @@ plotPieChart <-
     aggregate_function <-
       mSetObj$analSet$pieGraph$aggregate_function
     facA <- mSetObj$analSet$pieGraph$facA
-    
+    colourCount <- mSetObj$analSet$pieGraph$colourCount
     #Set plot dimensions
     if (is.na(width)) {
       w <- 10.5
@@ -182,22 +194,17 @@ plotPieChart <-
       type = format,
       bg = "white"
     )
-    data <- data %>%
-      arrange(desc(Species)) %>%
-      mutate(prop = value / sum(data$value) * 100) %>%
-      mutate(ypos = cumsum(prop) - 0.5 * prop)
-    
-    plot <- ggplot(data, aes(x = "", y = prop, fill = Species)) +
-      geom_bar(stat = "identity",
-               width = 1,
-               color = "white") +
-      coord_polar("y", start = 0) +
-      labs(title = paste(aggregate_function, " ", facA, " of species")) +
-      theme_void(
-        base_size = 13,
-      ) +
-      geom_text(aes(y = ypos, label = value), color = "white", size = 6)
-    
+    # Create bar plot
+    bar <- ggplot(data, aes(x = "", y = value, fill = variable)) +
+      geom_bar(stat = "identity", width=2) +
+      scale_fill_manual(values = getPalette(colourCount)) +
+      theme_classic()
+    # convert bar chart to individual pie charts
+    plot <- bar +
+      coord_polar("y") +
+      facet_wrap(~Site, ncol=4) +
+      theme_minimal()+
+      theme(axis.text.x=element_blank())
     show(plot)
     
     dev.off()
