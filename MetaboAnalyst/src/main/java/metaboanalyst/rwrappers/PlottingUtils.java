@@ -72,7 +72,7 @@ public class PlottingUtils {
             RCenter.recordRCommand(RC, rCommand);
             RC.voidEval(rCommand);
         } catch (RserveException rse) {
-            System.out.println(rse);
+            System.out.println("Problem" + rse.getRequestErrorDescription());
         }
     }
 
@@ -244,7 +244,7 @@ public class PlottingUtils {
             RCenter.recordRCommand(RC, rCommand);
             return RC.eval(rCommand).asStrings();
         } catch (RserveException rse) {
-            System.out.println(rse);
+            System.out.println(rse.getLocalizedMessage());
         } catch (REXPMismatchException ex) {
             Logger.getLogger(CAUtils.class.getName()).log(Level.SEVERE, null, ex);
             /* Currently using CAUtils ..... Need to channnnne to PlottingUtils    */

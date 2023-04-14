@@ -60,7 +60,6 @@ public abstract class PlotBean {
 
     public SelectItem[] getNumericBoxColumnOpts() {
         String[] columns = PlottingUtils.GetNumericDataColumnsBoxPlt(sb);
-
         if (columns != null) {
             int columnsLen = columns.length;
             numericBoxColumnOpts = new SelectItem[columnsLen];
