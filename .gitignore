@@ -6,3 +6,4 @@ output-WGCNA/
 *.csv
 *.Rproj
 rawData-WGCNA/
+rawData-WGCNA/*.csv
