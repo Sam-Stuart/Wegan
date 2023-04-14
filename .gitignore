@@ -1,7 +1,8 @@
-.Rproj.user
-.Rhistory
-.RData
-.Ruserdata
-.csv
+*.Rproj.user
+*.Rhistory
+*.RData
+*.Ruserdata
 output-WGCNA/
 *.csv
+*.Rproj
+rawData-WGCNA/
