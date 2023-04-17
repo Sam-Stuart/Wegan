@@ -2,15 +2,13 @@
 #'@description Plot heatmap to illustrate correlation between modules (engingene)
 #'and clinical trats
 #'@param mSetObj Input name of the created mSet Object
-#'@param datTraits Clinical trait data. Rownames are sample ID and columns are variables 
 #'@param power Soft threshold, default is 6 
-#'@param file Output file name
+#'@param file Image file name
 #'@author Xin (David) Zhao\email{xzhao1@ualberta.ca}
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2)
 #'@export
 plot.moduleTraitHeatmap <- function(mSetObj, 
-                                    datTraits, 
                                     power = 6, 
                                     file) {
     
@@ -19,6 +17,11 @@ plot.moduleTraitHeatmap <- function(mSetObj,
     source('./Func_WGCNA/general_data_utils.R')
     
     mSetObj <- .get.mSet(mSetObj)
+    
+    # Check if it contains the required element 
+    if(is.null(mSetObj$dataSet$exprObj) | is.null(mSetObj$dataSet$traits)) {
+        stop("mSet object does not contain required element for analysis.")
+    }
 
     # Subset clinical traits data frame from mSet object. 
     # In clinical trait data frame, rows are samples and columns are clinical variables  
@@ -28,7 +31,7 @@ plot.moduleTraitHeatmap <- function(mSetObj,
     datExpr <- mSetObj$dataSet$exprObj[[1]]$data
     
     # Match datExpr and traits 
-    traits <- traits[rownames(datTraits) %in% rownames(datExpr), ]  
+    traits <- traits[rownames(traits) %in% rownames(datExpr), ]  
     traitRow <- base::match(rownames(datExpr), rownames(traits))
     traits <- traits[traitRow, ]
     
@@ -67,7 +70,7 @@ plot.moduleTraitHeatmap <- function(mSetObj,
     pdf(file, width = 10, height = 8)
     par(mar = c(6, 8.5, 3, 3))  
     WGCNA::labeledHeatmap(Matrix = moduleTraitCorr,
-                          xLabels = names(datTraits),
+                          xLabels = names(traits),
                           yLabels = names(MEs),
                           ySymbols = names(MEs),
                           colorLabels = FALSE,
@@ -104,9 +107,7 @@ mSetObj$dataSet$traits <- allTraits
 
 
 # debug(plot.moduleTraitHeatmap)
-
 plot.moduleTraitHeatmap(mSetObj = mSetObj,
-                        datTraits = allTraits, 
                         file = "./output-WGCNA/hmModuleTrait.pdf")  
 # undebug(plot.moduleTraitHeatmap)
 
