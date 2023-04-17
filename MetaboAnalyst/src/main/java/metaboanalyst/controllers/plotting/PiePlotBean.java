@@ -31,7 +31,7 @@ public class PiePlotBean extends PlotBean implements Serializable {
 
     public PiePlotBean() {
         super();
-        aggregateOpts = new SelectItem[5]
+        aggregateOpts = new SelectItem[5];
         aggregateOpts[0] = new SelectItem("mean", "Mean");
         aggregateOpts[1] = new SelectItem("sum", "Sum");
         aggregateOpts[2] = new SelectItem("length", "Count");

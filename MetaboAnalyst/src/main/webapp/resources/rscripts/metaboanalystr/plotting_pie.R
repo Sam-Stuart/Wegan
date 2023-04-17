@@ -1,4 +1,5 @@
-library(dplyr)
+library(tidyr)
+library(RColorBrewer)
 library(reshape2)
 library(ggplot2)
 library(vegan)
@@ -73,10 +74,6 @@ pieChart_setup <-
       dune <- sweep(dune, 1, sites_abund, "/")
       # Get sites variable from rownames
       dune_sites <- dune %>% mutate(Site=as.numeric(rownames(dune)))
-      print("Hello1")
-      print(dune_sites %>% pivot_longer(cols = -Site,
-                                        names_to = "variable", 
-                                        values_to = "value")  )
       # Get Species as variable and name the values as abundance
       df <- dune_sites %>% pivot_longer(cols = -Site,
                                         names_to = "variable", 
@@ -132,6 +129,7 @@ pieChart_setup <-
         titleTextSize = titleTextSize,
         axisTextSize = axisTextSize,
         colourCount = colourCount,
+        getPalette = getPalette,
         mainTitle = mainTitle
       )
     
@@ -170,6 +168,7 @@ plotPieChart <-
       mSetObj$analSet$pieGraph$aggregate_function
     facA <- mSetObj$analSet$pieGraph$facA
     colourCount <- mSetObj$analSet$pieGraph$colourCount
+    getPalette <- mSetObj$analSet$pieGraph$getPalette
     #Set plot dimensions
     if (is.na(width)) {
       w <- 10.5
