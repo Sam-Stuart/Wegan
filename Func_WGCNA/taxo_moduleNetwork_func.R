@@ -9,7 +9,11 @@
 #'@export
 plot.eigengenesNetwork <- function(mSetObj = NULL,
                                    custom_norm = NULL,
-                                   power = 6) {
+                                   power = 6,
+                                   imgName = "auto", #  auto(matic) or manual
+                                   format = "png", # png or pdf 
+                                   dpi = 72, 
+                                   width = NA) {
     
     library(WGCNA)
     library(tidyverse) 
@@ -66,41 +70,65 @@ plot.eigengenesNetwork <- function(mSetObj = NULL,
         
         # Add the weight to existing module eigengenes 
         MET <- WGCNA::orderMEs(cbind(MEs, var_df)) 
+
+        # Set image file names 
+        if (imgName == "auto") {
+            file <- paste(var, "Eigengene_network", ".", format, sep = "") 
+        } else {
+            file <- paste(imgName[i], "dpi", dpi, ".", format, sep = "")  
+        }
         
-        # Plot the relationships among the eigengenes and the trait 
-        # sizeGrWindow(5, 7.5)
-        # par(cex = 0.9) 
-        # plotEigengeneNetworks(MET, "", 
-        #                       marDendro = c(0, 4, 1, 2),
-        #                       marHeatmap = c(3, 4, 1, 2),
-        #                       cex.lab = 0.8,
-        #                       xLabelsAngle = 90)
+        # Set plot dimensions 
+        if (is.na(width)) {
+            w <- 480  
+        } else if (width == 0) {
+            w <- 480 
+        } else {
+            w <- width
+        }
+        h <- w # height
         
-        # Split the dendrogram and heatmap plots 
-        # Plot the dendrogram 
-        # sizeGrWindow(6, 6)
-        file = paste(var, "Eigengene_network.pdf", sep = "_") # Define file names 
-        
-        pdf(file, width = 12, height = 8)
-        par(cex = 1.0) 
-        WGCNA::plotEigengeneNetworks(MET, 
-                                    "Eigengene dendrogram",
-                                     marDendro = c(0, 4, 2, 0),
-                                     plotHeatmaps = FALSE) 
-        
-        par(cex = 1.0)
-        WGCNA::plotEigengeneNetworks(MET, 
-                                     "Eigengene adjacency heatmap",
-                                      marHeatmap = c(3, 4, 2, 2),
-                                      plotDendrograms = FALSE,
-                                      xLabelsAngle = 90)
-        
-        dev.off() 
+        # Set up the PDF device 
+        if (format == "png") {
+            png(file, width = w, height = h)
+            par(cex = 1.0) 
+            WGCNA::plotEigengeneNetworks(MET, 
+                                         "Eigengene dendrogram",
+                                         marDendro = c(0, 4, 2, 0),
+                                         plotHeatmaps = FALSE) 
+            
+            par(cex = 1.0)
+            WGCNA::plotEigengeneNetworks(MET, 
+                                         "Eigengene adjacency heatmap",
+                                         marHeatmap = c(3, 4, 2, 2),
+                                         plotDendrograms = FALSE,
+                                         xLabelsAngle = 90)
+            
+            dev.off() 
+            
+        } else {
+            # Default image is FDF format 
+            pdf(file, width = w, height = h)
+            par(cex = 1.0) 
+            WGCNA::plotEigengeneNetworks(MET, 
+                                         "Eigengene dendrogram",
+                                         marDendro = c(0, 4, 2, 0),
+                                         plotHeatmaps = FALSE) 
+            
+            par(cex = 1.0)
+            WGCNA::plotEigengeneNetworks(MET, 
+                                         "Eigengene adjacency heatmap",
+                                         marHeatmap = c(3, 4, 2, 2),
+                                         plotDendrograms = FALSE,
+                                         xLabelsAngle = 90)
+            
+            dev.off() 
+        }
         
         plot_list[i] <- list(file) 
     }
     
-    mSetObj$imgSet <- plot_list
+    mSetObj$imgSet$moduleNetworkPlots <- plot_list  
     
     return(mSetObj)
     
