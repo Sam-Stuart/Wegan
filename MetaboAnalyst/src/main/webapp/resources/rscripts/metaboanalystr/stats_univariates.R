@@ -345,6 +345,7 @@ GetFC <- function(mSetObj=NA, paired=FALSE, cmpType){
 #'@param threshp Numeric, enter the adjusted p-value (FDR) cutoff
 #'@param paired Logical, is data paired (T) or not (F).
 #'@param equal.var Logical, evaluates if the group variance is equal (T) or not (F). 
+#'@param group_name character, column name to use for grouping
 #'@author Jeff Xia\email{jeff.xia@mcgill.ca}
 #'McGill University, Canada
 #'License: GNU GPL (>= 2)
@@ -361,6 +362,8 @@ Ttests.Anal <- function(mSetObj=NA, nonpar=F, threshp=0.05, paired=FALSE, equal.
   
 ### TROUBLESHOOT
 print(paste("Ttests.Anal:", mSetObj$dataSet$cls, collapse = " " ))
+print(paste("Ttests.Anal: ", group_name))
+
 
   res <- GetTtestRes(mSetObj, paired, equal.var, nonpar, group_name);
   t.stat <- res[,1];
@@ -1194,7 +1197,7 @@ fac.names <- function(mSetObj=NA){
   input  <- mSetObj$dataSet$norm
 
  # NO METADATA
-if(!mSetObj$dataSet$origMeta %in% names(mSetObj$dataSet) ){
+if(!"origMeta" %in% names(mSetObj$dataSet) ){
   
   ## no categorical in input:
   if( !any(sapply(input, is.factor) | sapply(input, is.character)) ){
@@ -1269,7 +1272,7 @@ input  <- mSetObj$dataSet$norm
 if(group_name == "NULL"){
 
  # NO METADATA
-if(!mSetObj$dataSet$origMeta %in% names(mSetObj$dataSet) ){
+if(!"origMeta" %in% names(mSetObj$dataSet) ){
   
   ## no categorical in input:
   if( !any(sapply(input, is.factor) | sapply(input, is.character)) ){
@@ -1310,7 +1313,7 @@ if(!mSetObj$dataSet$origMeta %in% names(mSetObj$dataSet) ){
   ## if group_name is not a factor, do not allow - should only be factors
   ## because dropdown provided is only factors
    # NO METADATA, GET FROM INPUT
-   if(!mSetObj$dataSet$origMeta %in% names(mSetObj$dataSet) ){
+   if(!"origMeta" %in% names(mSetObj$dataSet) ){
   cls <- factor( input[,group_name,drop = TRUE] )
    } else{
   # GET FROM METADATA
