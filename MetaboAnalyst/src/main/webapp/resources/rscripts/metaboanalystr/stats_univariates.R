@@ -345,13 +345,15 @@ GetFC <- function(mSetObj=NA, paired=FALSE, cmpType){
 #'@param threshp Numeric, enter the adjusted p-value (FDR) cutoff
 #'@param paired Logical, is data paired (T) or not (F).
 #'@param equal.var Logical, evaluates if the group variance is equal (T) or not (F). 
-#'@param group_name character, column name to use for grouping
+##@param group_name character, column name to use for grouping
 #'@author Jeff Xia\email{jeff.xia@mcgill.ca}
 #'McGill University, Canada
 #'License: GNU GPL (>= 2)
 #'@export
 #'
-Ttests.Anal <- function(mSetObj=NA, nonpar=F, threshp=0.05, paired=FALSE, equal.var=TRUE, group_name = "NULL"){
+Ttests.Anal <- function(mSetObj=NA, nonpar=F, threshp=0.05, paired=FALSE, equal.var=TRUE
+# , group_name = "NULL"
+){
  
 ### XIALAB UPDATED TTESTS:
 ## added params in xialab code:
@@ -362,18 +364,22 @@ Ttests.Anal <- function(mSetObj=NA, nonpar=F, threshp=0.05, paired=FALSE, equal.
   
 ### TROUBLESHOOT
 print(paste("Ttests.Anal:", mSetObj$dataSet$cls, collapse = " " ))
-print(paste("Ttests.Anal: ", group_name))
+# print(paste("Ttests.Anal: ", group_name))
 
 
-  res <- GetTtestRes(mSetObj, paired, equal.var, nonpar, group_name);
+  res <- GetTtestRes(mSetObj, paired, equal.var, nonpar
+  # , group_name
+  );
   t.stat <- res[,1];
   p.value <- res[,2];
   
   names(t.stat) <- names(p.value) <- colnames(mSetObj$dataSet$norm);
   
   p.log <- -log10(p.value);
-  fdr.p <- p.adjust(p.value, "fdr");
+### GPS: comment out this line:
+# fdr.p <- p.adjust(p.value, "fdr");
   
+  fdr.p <- p.value
   inx.imp <- fdr.p <= threshp;
   # if there is no sig cmpds, it will be errors, need to improve
   
@@ -409,7 +415,7 @@ print(paste("Ttests.Anal: ", group_name))
       sig.num = sig.num,
       paired = paired,
       ##added:
-      pval.type = pvalType,
+      # pval.type = pvalType,
       raw.thresh = threshp,
       ## added:
       t.score = t.stat,      
@@ -1250,7 +1256,9 @@ facvars <- colnames(metaData)
 #'@author Jeff Xia\email{jeff.xia@mcgill.ca}
 #'McGill University, Canada
 #'License: GNU GPL (>= 2)
-GetTtestRes <- function(mSetObj=NA, paired=FALSE, equal.var=TRUE, nonpar=F, group_name = "NULL"){
+GetTtestRes <- function(mSetObj=NA, paired=FALSE, equal.var=TRUE, nonpar=F
+  # , group_name = "NULL"
+  ){
   
 ### new code 202304-11
   ### new R code - from xialab updates - added 202304-11
@@ -1269,7 +1277,7 @@ paste( names(mSetObj$dataSet), collapse = " ")  ))
 input  <- mSetObj$dataSet$norm
 
 ### IF NOT GROUP NAME IS PROVIDED:
-if(group_name == "NULL"){
+# if(group_name == "NULL"){
 
  # NO METADATA
 if(!"origMeta" %in% names(mSetObj$dataSet) ){
@@ -1309,18 +1317,18 @@ if(!"origMeta" %in% names(mSetObj$dataSet) ){
       
 }
   ## group_name IS PRESENT (NOT 'NULL')
-} else{
-  ## if group_name is not a factor, do not allow - should only be factors
-  ## because dropdown provided is only factors
-   # NO METADATA, GET FROM INPUT
-   if(!"origMeta" %in% names(mSetObj$dataSet) ){
-  cls <- factor( input[,group_name,drop = TRUE] )
-   } else{
-  # GET FROM METADATA
-  cls <- factor( mSetObj$dataSet$origMeta[,group_name,drop = TRUE] )
-   }
-  
-}
+# } else{
+#   ## if group_name is not a factor, do not allow - should only be factors
+#   ## because dropdown provided is only factors
+#    # NO METADATA, GET FROM INPUT
+#    if(!"origMeta" %in% names(mSetObj$dataSet) ){
+#   cls <- factor( input[,group_name,drop = TRUE] )
+#    } else{
+#   # GET FROM METADATA
+#   cls <- factor( mSetObj$dataSet$origMeta[,group_name,drop = TRUE] )
+#    }
+#   
+# }
 
  mSetObj$dataSet$cls <- cls
 

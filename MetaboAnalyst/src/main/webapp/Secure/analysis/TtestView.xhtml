@@ -61,10 +61,10 @@
                             <h:outputLabel style="font-weight: bold" value="Adjusted P-value (FDR) cutoff:"/>
                             <p:inputText style="width:50px" value="#{univBean.ttPThresh}"/> 
                             <!--Added this here-->
-                            <h:outputLabel style="font-weight: bold" value="Group Variable:"/>
-                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{univBean.statGroupName}">
-                                <f:selectItems value="#{univBean.statGroupNameOpts}" />
-                            </p:selectOneMenu>
+<!--                            <h:outputLabel style="font-weight: bold" value="Group Variable:"/>
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="hash{univBean.statGroupName}">
+                                <f:selectItems value="hash{univBean.statGroupNameOpts}" />
+                            </p:selectOneMenu>-->
                             <!--Finish adding-->           
                         </h:panelGrid>
                         <h:panelGrid style="padding-left: 20px">

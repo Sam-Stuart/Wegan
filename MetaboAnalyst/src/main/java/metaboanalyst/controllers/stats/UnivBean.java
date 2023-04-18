@@ -23,8 +23,8 @@ import org.primefaces.model.chart.LineChartSeries;
 import org.rosuda.REngine.Rserve.RConnection;
 
 // import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+//import java.util.Arrays;
+//import java.util.List;
 
 
 // for Stats module (rwrapper: UniVarTests, controller: UnivBean)
@@ -135,29 +135,29 @@ public class UnivBean implements Serializable {
     // GPS ADDED 
     
      // GET COLUMN NAMES
-    private SelectItem[] statGroupNameOpts = null;
-    
-    public SelectItem[] getStatGroupNameOpts(){
-        String[] columns = UniVarTests.GetFacColumns(sb);
-        int columnsLen = columns.length;
-        statGroupNameOpts = new SelectItem[columnsLen];
-        List<String> columnNames = Arrays.asList(columns);
-        for (int i = 0; i < columnsLen; i++) {
-            statGroupNameOpts[i] = new SelectItem(columnNames.get(i), columnNames.get(i));
-        }
-        //List<String> columnNames = Arrays.asList(columns);
-        return statGroupNameOpts;
-    }
-    
-    private String statGroupName = getStatGroupNameOpts()[0].getLabel();
-    
-    public String getStatGroupName() {
-        return statGroupName;
-    }
-
-    public void setStatGroupName(String statGroupName) {
-        this.statGroupName = statGroupName;
-    }
+//    private SelectItem[] statGroupNameOpts = null;
+//    
+//    public SelectItem[] getStatGroupNameOpts(){
+//        String[] columns = UniVarTests.GetFacColumns(sb);
+//        int columnsLen = columns.length;
+//        statGroupNameOpts = new SelectItem[columnsLen];
+//        List<String> columnNames = Arrays.asList(columns);
+//        for (int i = 0; i < columnsLen; i++) {
+//            statGroupNameOpts[i] = new SelectItem(columnNames.get(i), columnNames.get(i));
+//        }
+//        //List<String> columnNames = Arrays.asList(columns);
+//        return statGroupNameOpts;
+//    }
+//    
+//    private String statGroupName = getStatGroupNameOpts()[0].getLabel();
+//    
+//    public String getStatGroupName() {
+//        return statGroupName;
+//    }
+//
+//    public void setStatGroupName(String statGroupName) {
+//        this.statGroupName = statGroupName;
+//    }
     
     
     private String ttPThresh = "0.05";
@@ -208,7 +208,9 @@ public class UnivBean implements Serializable {
         if (nonParTt) {
             nonpar = "T";
         }
-        int res = UniVarTests.performTtests(sb, nonpar, thresh, pairedTtAnal, equalVar, statGroupName);
+        int res = UniVarTests.performTtests(sb, nonpar, thresh, pairedTtAnal, equalVar
+//                , statGroupName
+        );
         if (res == 0) {
             sb.setTtSig(false);
         } else {
