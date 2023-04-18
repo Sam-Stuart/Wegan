@@ -69,11 +69,11 @@ pieChart_setup <-
       facA <- colnames(numerical_data)[1]
 
     if (length(as.matrix(categorical_data)) == 0) {
-      sites_abund <- rowSums(dune, na.rm = TRUE)
+      sites_abund <- rowSums(input, na.rm = TRUE)
       # Divide each individual abundace by total site abundance
-      dune <- sweep(dune, 1, sites_abund, "/")
+      input <- sweep(input, 1, sites_abund, "/")
       # Get sites variable from rownames
-      dune_sites <- dune %>% mutate(Site=as.numeric(rownames(dune)))
+      dune_sites <- input %>% mutate(Site=as.numeric(rownames(input)))
       # Get Species as variable and name the values as abundance
       df <- dune_sites %>% pivot_longer(cols = -Site,
                                         names_to = "variable", 
@@ -203,7 +203,7 @@ plotPieChart <-
       coord_polar("y") +
       facet_wrap(~Site, ncol=4) +
       theme_minimal()+
-      theme(axis.text.x=element_blank())
+      theme(axis.text.x = element_blank(), legend.position = "bottom")
     show(plot)
     
     dev.off()
