@@ -16,8 +16,8 @@ plot.eigengenesNetwork <- function(mSetObj = NULL,
                                    power = 6,
                                    imgName = "auto", #  auto or manual modes
                                    format = "png", # png or pdf 
-                                   dpi = 72, # Image resolution 
-                                   width = NA) {
+                                   dpi = 72, # Image resolution, dot per inch
+                                   width = NA) {  # Image dimension, inches 
     
     library(WGCNA)
     library(tidyverse) 
@@ -86,15 +86,15 @@ plot.eigengenesNetwork <- function(mSetObj = NULL,
         if (is.na(width)) {
             w <- 480  
         } else if (width == 0) {
-            w <- 480 
+            w <- 480
         } else {
             w <- width
         }
-        h <- w # height
+        #h <- w # height
         
         # Set up the PDF device 
         if (format == "png") {
-            png(file, width = w, height = h)
+            png(file, width = w, units = "px", res = dpi)
             par(cex = 1.0) 
             WGCNA::plotEigengeneNetworks(MET, 
                                          "Eigengene dendrogram",
@@ -164,6 +164,7 @@ mSetObj$dataSet$traits <- allTraits
 plot.eigengenesNetwork(mSetObj = mSetObj) 
 
 # undebug(plot.eigengenesNetwork) 
+
 
 
 
