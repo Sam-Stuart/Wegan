@@ -14,9 +14,9 @@
 plot.eigengenesNetwork <- function(mSetObj = NULL,
                                    custom_norm = NULL,
                                    power = 6,
-                                   imgName = "auto", #  auto(matic) or manual
+                                   imgName = "auto", #  auto or manual modes
                                    format = "png", # png or pdf 
-                                   dpi = 72, 
+                                   dpi = 72, # Image resolution 
                                    width = NA) {
     
     library(WGCNA)
