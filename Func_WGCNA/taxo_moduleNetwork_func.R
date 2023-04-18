@@ -3,6 +3,10 @@
 #'@param mSetObj Input name of the created mSet Object
 #'@param custom_norm Allow users to load customized normalized data 
 #'@param power Soft threshold, default is 6 
+#'@param imgName Image names either automatically generated or manually set 
+#'@param format PNG or PDF 
+#'@param dpi Default is 72 
+#'@param width Image width 
 #'@author Xin (David) Zhao\email{xzhao1@ualberta.ca}
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2)
