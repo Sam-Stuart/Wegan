@@ -8,6 +8,14 @@ import metaboanalyst.controllers.SessionBean1;
 import org.rosuda.REngine.Rserve.RConnection;
 import org.rosuda.REngine.Rserve.RserveException;
 
+
+// GPS ADDED:
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.rosuda.REngine.REXPMismatchException;
+
+// for Stats module (rwrapper: UniVarTests, controller: UnivBean)
+
 /**
  *
  * @author Jeff
@@ -91,10 +99,15 @@ public class UniVarTests {
 
 // T-TEST
     
-    public static int performTtests(SessionBean1 sb, String nonpar, double pthresh, String paired, String equalVar) {
+    public static int performTtests(SessionBean1 sb, String nonpar, double pthresh, String paired, String equalVar, String group_name) {
         try {
             RConnection RC = sb.getRConnection();
-            String rCommand = "Ttests.Anal(NA" + ", " + nonpar + ", " + pthresh + ", " + paired + ", " + equalVar + ")"; //"p" or "u"
+            String rCommand = "Ttests.Anal(NA" + ", " 
+                    + nonpar + ", " 
+                    + pthresh + ", " 
+                    + paired + ", " 
+                    + equalVar + ", " 
+                    + group_name + ")"; //"p" or "u"
             RCenter.recordRCommand(RC, rCommand);
             return RC.eval(rCommand).asInteger();
         } catch (Exception rse) {
@@ -102,6 +115,26 @@ public class UniVarTests {
             return 0;
         }
     }
+    
+    
+    // from CAUtiles ; Correlation helper functions
+    // based on GetDataColumns (using lin.reg.columns(NA) from correlation_linear.R
+    
+    // correlation_linear.R
+    public static String[] GetFacColumns(SessionBean1 sb){
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "fac.names(NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            return RC.eval(rCommand).asStrings();
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        } catch (REXPMismatchException ex) {
+            Logger.getLogger(UniVarTests.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
 
     public static void PlotT(SessionBean1 sb, String imgName, String format, int dpi) {
         try {

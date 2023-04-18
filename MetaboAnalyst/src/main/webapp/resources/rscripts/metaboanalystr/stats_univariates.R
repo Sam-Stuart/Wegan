@@ -1,4 +1,5 @@
 # FUNCTIONS WITHIN (not the Get functions)
+#  *R FUNCTIONS*: for Stats module (rwrapper: UniVarTests, controller: UnivBean)
 # FC.Anal.unpaired(mSetObj=NA, fc.thresh=2, cmp.type = 0)
 # FC.Anal.paired(mSetObj=NA, fc.thresh=2, percent.thresh=0.75, cmp.type=0)
 # PlotFC(mSetObj=NA, imgName, format="png", dpi=72, width=NA)
@@ -7,7 +8,7 @@
 # PlotTT(mSetObj=NA, imgName, format="png", dpi=72, width=NA) # plot t-test
 # Volcano.Anal(mSetObj=NA, paired=FALSE, fcthresh, cmpType, percent.thresh, nonpar=F, threshp, equal.var=TRUE, pval.type="raw")
 # PlotVolcano(mSetObj=NA, imgName, plotLbl, format="png", dpi=72, width=NA) # Plot Volcano; For labelling interesting points, it is defined by the following rules: need to be signficant (sig.inx) and or 2. top 5 p, or 2. top 5 left, or 3. top 5 right.
-# aof(x, cls) # Perform anova and only return p values and MSres (for Fisher's LSD)
+# aof(x, cls) # PerformTtest anova and only return p values and MSres (for Fisher's LSD)
 # kwtest(x, cls) # Kruskall-wallis test
 # FisherLSD(aov.obj, thresh) #Perform  Fisher LSD for ANOVA, used in higher function 
 # parseTukey(tukey, cut.off) # Return only the signicant comparison names, used in higher function 
@@ -16,6 +17,49 @@
 # PlotCmpdView(mSetObj=NA, cmpdNm, format="png", dpi=72, width=NA) # Plots a bar-graph of selected compound over groups 
 # PlotANOVA(mSetObj=NA, imgName, format="png", dpi=72, width=NA)
 #
+#
+#
+#
+#
+#  for Stats module (rwrapper: UniVarTests, controller: UnivBean)
+# Rfxn, Rwrapper, controller
+#
+# FC.Anal.unpaired(mSetObj=NA, fc.thresh=2, cmp.type = 0)
+## InitUnpairedFC(SessionBean1 sb, double fcThresh, int cmpType) {
+# FC.Anal.paired(mSetObj=NA, fc.thresh=2, percent.thresh=0.75, cmp.type=0)
+## InitPairedFC(SessionBean1 sb, double fcThresh, double pairThresh, int cmpType)
+### setPairedFcAnal(String pairedAnal) 
+# PlotFC(mSetObj=NA, imgName, format="png", dpi=72, width=NA)
+## PlotFC(SessionBean1 sb, String imgName, String format, int dpi) 
+# GetFC(mSetObj=NA, paired=FALSE, cmpType) used by higher fxns to calc FC
+# Ttests.Anal(mSetObj=NA, nonpar=F, threshp=0.05, paired=FALSE, equal.var=TRUE)
+## performTtests(SessionBean1 sb, String nonpar, double pthresh, String paired, String equalVar) 
+# PlotTT(mSetObj=NA, imgName, format="png", dpi=72, width=NA) # plot t-test
+## PlotT(SessionBean1 sb, String imgName, String format, int dpi)
+# Volcano.Anal(mSetObj=NA, paired=FALSE, fcthresh, cmpType, percent.thresh, nonpar=F, threshp, equal.var=TRUE, pval.type="raw")
+##  performVolcano(SessionBean1 sb, String paired, double fcThresh, int cmpType, double countThresh, String nonpar, double pThresh, String varEqual, String vcPvalType) 
+# PlotVolcano(mSetObj=NA, imgName, plotLbl, format="png", dpi=72, width=NA) # Plot Volcano; For labelling interesting points, it is defined by the following rules: need to be signficant (sig.inx) and or 2. top 5 p, or 2. top 5 left, or 3. top 5 right.
+## PlotVolcano(SessionBean1 sb, String imgName, int plotLbl, String format, int dpi)
+# ANOVA.Anal(mSetObj=NA, nonpar=F, thresh=0.05, post.hoc="fisher") # Perform ANOVA analysis
+## performANOVA(SessionBean1 sb, String nonPar, double thresh, String postType)
+# PlotCmpdView(mSetObj=NA, cmpdNm, format="png", dpi=72, width=NA) # Plots a bar-graph of selected compound over groups 
+## PlotCmpdView(RConnection RC, String cmpdName, String format, String dpi)
+# PlotANOVA(mSetObj=NA, imgName, format="png", dpi=72, width=NA)
+## PlotAOV(SessionBean1 sb, String imgName, String format, int dpi)
+
+## higher order fxns:
+# aof(x, cls) # Perform anova and only return p values and MSres (for Fisher's LSD)
+# kwtest(x, cls) # Kruskall-wallis test
+# FisherLSD(aov.obj, thresh) #Perform  Fisher LSD for ANOVA, used in higher function 
+# parseTukey(tukey, cut.off) # Return only the signicant comparison names, used in higher function 
+# parseFisher(fisher, cut.off) # Return only the signicant comparison names used in higher fxns
+
+
+#'Fold change analysis, unpaired
+#'@description Perform fold change analysis, method can be mean or median
+#'@usage FC.Anal.unpaired(mSetObj, fc.thresh=2, cmp.type = 0)
+#'@param mSetObj Input the name of
+
 #'Fold change analysis, unpaired
 #'@description Perform fold change analysis, method can be mean or median
 #'@usage FC.Anal.unpaired(mSetObj, fc.thresh=2, cmp.type = 0)
@@ -306,11 +350,19 @@ GetFC <- function(mSetObj=NA, paired=FALSE, cmpType){
 #'License: GNU GPL (>= 2)
 #'@export
 #'
-Ttests.Anal <- function(mSetObj=NA, nonpar=F, threshp=0.05, paired=FALSE, equal.var=TRUE){
+Ttests.Anal <- function(mSetObj=NA, nonpar=F, threshp=0.05, paired=FALSE, equal.var=TRUE, group_name = "NULL"){
  
+### XIALAB UPDATED TTESTS:
+## added params in xialab code:
+## @param pvalType pvalType, can be "fdr" etc.
+## @param all_results Logical, if TRUE, returns T-Test analysis results for all compounds. 
+
   mSetObj <- .get.mSet(mSetObj);
   
-  res <- GetTtestRes(mSetObj, paired, equal.var, nonpar);
+### TROUBLESHOOT
+print(paste("Ttests.Anal:", mSetObj$dataSet$cls, collapse = " " ))
+
+  res <- GetTtestRes(mSetObj, paired, equal.var, nonpar, group_name);
   t.stat <- res[,1];
   p.value <- res[,2];
   
@@ -348,30 +400,42 @@ Ttests.Anal <- function(mSetObj=NA, nonpar=F, threshp=0.05, paired=FALSE, equal.
     }
     write.csv(sig.mat, file=file.nm);
     
-    tt <- list (
+ tt <- list (
       tt.nm = tt.nm,
       sig.nm = file.nm,
       sig.num = sig.num,
       paired = paired,
+      ##added:
+      pval.type = pvalType,
       raw.thresh = threshp,
+      ## added:
+      t.score = t.stat,      
+      ## here the p.value is sorted, xialab code pvalue is not sorted
       p.value = sort(p.value),
       p.log = p.log,
+      ### thresh is not in xialab code
       thresh = -log10(threshp), # only used for plot threshold line
       inx.imp = inx.imp,
       sig.mat = sig.mat
     );
   }else{
-    tt <- list (
+      tt <- list (
       sig.num = sig.num,
       paired = paired,
+      ## added:
+      # pval.type = pvalType,
       raw.thresh = threshp,
+      ### added:
+      t.score = t.stat,
+      ### here is pvalue is sorted, not sorted inxialab code
       p.value = sort(p.value),
       p.log = p.log,
+      ## not in xialab code
       thresh = -log10(threshp), # only used for plot threshold line
       inx.imp = inx.imp
     );
   }
-  
+
   mSetObj$analSet$tt <- tt;
   
   if(.on.public.web){
@@ -1109,61 +1173,249 @@ GetTtestSigFileName <- function(mSetObj=NA){
   mSetObj$analSet$tt$sig.nm;
 }
 
+
+#### GPS-UTILITIES ####
+#'Determine names of character/factor variables; look first in metadata, then in input; if none are found, all metadata colnames are returned
+#'@description Java will use the results to enable user options for selecting the dependent variable
+#'@param mSetObj Input name of the created mSetObject 
+#'@author Louisa Normington\email{normingt@ualberta.ca}
+#'University of Alberta, Canada
+#'License: GNU GPL (>= 2)
+#'@export
+
+fac.names <- function(mSetObj=NA){
+  
+  mSetObj <- .get.mSet(mSetObj)
+  
+  #install.packages("dplyr")
+  # library("dplyr")
+  # name.all.numeric.cols <- colnames( dplyr::select_if(mSetObj$dataSet$norm, is.numeric) )
+
+  input  <- mSetObj$dataSet$norm
+
+ # NO METADATA
+if(!mSetObj$dataSet$origMeta %in% names(mSetObj$dataSet) ){
+  
+  ## no categorical in input:
+  if( !any(sapply(input, is.factor) | sapply(input, is.character)) ){
+
+     warning("No categorical variables (required as group variable); all varnames in input provided; did you input your categorical variables as numbers (for example, as hot-one coded)? ")
+facvars <- colnames(input)
+
+  } else{
+    # GET CATEGORICAL COLUMNS FROM INPUT DATAFRAME
+   facvars <- colnames( input[,sapply(input, is.factor) | sapply(input, is.character), drop = FALSE] )
+  }
+  
+  ### GET FROM METADATA
+} else{
+  
+  metaData <- mSetObj$dataSet$origMeta
+    ## NO CATEGORICAL IN metaData:
+    if( !any(sapply(metaData, is.factor) | sapply(metaData, is.character)) ){
+      ## NO CATEGORICAL IN INPUT
+      if( !any(sapply(input, is.factor) | sapply(input, is.character)) ){
+    warning("No categorical variables (required as group variable); all varnames in metadata provided; did you input your categorical variables as numbers (for example, as hot-one coded)? ")
+facvars <- colnames(metaData)
+  } else{
+    # GET CATEGORICAL COLUMNS FROM INPUT
+   facvars <- colnames( input[,sapply(input, is.factor) | sapply(input, is.character), drop = FALSE] )
+  }
+      
+    } else{
+      ## CATEGORICAL FROM METADATA  
+   facvars <- colnames (metaData[,sapply(metaData, is.factor) | sapply(metaData, is.character), drop = FALSE] )
+  } 
+}
+  
+  return(facvars)
+  
+}
+
+
+
 #'Retrieve T-test p-values
-#'@description Utility method to get p values
 #' (after this GPS added): uses dataset$cls, which is a grouping factor vec of the same length as the nrow of the dataset
 #' (after this GPS added): uses wilcox.test for non-parametric, and for parametric: if ncol >1000, t.test , ncol <1000: genefilter::rowttests 
+#'@description Utility method to get p values
 #'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
 #'@param paired Default set to FALSE
 #'@param equal.var Default set to TRUE
-#'@param nonpar Use non-parametric tests (wilcox), default is set to FALSE
+#'@param nonpar Use non-parametric tests, default is set to FALSE
+#'@param group_name Column name, containing the class label 
+
 #'@author Jeff Xia\email{jeff.xia@mcgill.ca}
 #'McGill University, Canada
 #'License: GNU GPL (>= 2)
-GetTtestRes <- function(mSetObj=NA, paired=FALSE, equal.var=TRUE, nonpar=F){
+GetTtestRes <- function(mSetObj=NA, paired=FALSE, equal.var=TRUE, nonpar=F, group_name = "NULL"){
   
-  mSetObj <- .get.mSet(mSetObj);
+### new code 202304-11
+  ### new R code - from xialab updates - added 202304-11
   
-## NON-PARAMETRIC - uses wilox.test
-  if(nonpar){
-    inx1 <- which(mSetObj$dataSet$cls==levels(mSetObj$dataSet$cls)[1]);
-    inx2 <- which(mSetObj$dataSet$cls==levels(mSetObj$dataSet$cls)[2]);
-    
-    res <- apply(as.matrix(mSetObj$dataSet$norm), 2, function(x) {
-      tmp <- try(wilcox.test(x[inx1], x[inx2], paired = paired));
-      if(class(tmp) == "try-error") {
-        return(c(NA, NA));
-      }else{
-        return(c(tmp$statistic, tmp$p.value));
-      }
-    })
-    
-## PARAMETRIC (default); t.test
-  }else{
-  # LARGE DATASET
-    if(ncol(mSetObj$dataSet$norm) < 1000){
-      inx1 <- which(mSetObj$dataSet$cls==levels(mSetObj$dataSet$cls)[1]);
-      inx2 <- which(mSetObj$dataSet$cls==levels(mSetObj$dataSet$cls)[2]);
-      res <- apply(as.matrix(mSetObj$dataSet$norm), 2, function(x) {
-        tmp <- try(t.test(x[inx1], x[inx2], paired = paired, var.equal = equal.var));
-        if(class(tmp) == "try-error") {
-          return(c(NA, NA));
-        }else{
-          return(c(tmp$statistic, tmp$p.value));
-        }
-      })
-  # SMALL DATASET genefilter::rowttests
-    }else{ # use fast version
-      res <- try(genefilter::rowttests(t(as.matrix(mSetObj$dataSet$norm)), mSetObj$dataSet$cls));
-      if(class(res) == "try-error") {
-        res <- c(NA, NA);
-      }else{
-        res <- t(cbind(res$statistic, res$p.value));
-      }
-    }
+  mSetObj <- .get.mSet(mSetObj);  
+
+### TROUBLESHOOTING:
+print( c("names mSetObj: ", 
+paste( names(mSetObj), collapse = " ")  ))
+
+print( c("names mSetObj$dataSet: ", 
+paste( names(mSetObj$dataSet), collapse = " ")  ))
+
+### type design.type cls.type format paired orig type.cls.lbl cls orig.cls facA.type facA orig.facA facA.lbl facB.type facB orig.facB facB.lbl cmpd origEnv small.smpl.size cls.num min.grp.size minConc preproc proc.cls prenorm.cls bestnorm row.norm use.ratio norm rownorm.method trans.method scale.method combined.method
+
+input  <- mSetObj$dataSet$norm
+
+### IF NOT GROUP NAME IS PROVIDED:
+if(group_name == "NULL"){
+
+ # NO METADATA
+if(!mSetObj$dataSet$origMeta %in% names(mSetObj$dataSet) ){
+  
+  ## no categorical in input:
+  if( !any(sapply(input, is.factor) | sapply(input, is.character)) ){
+    ## cls <-   factor( input[,1,drop=TRUE] )
+    AddErrMsg("No categorical variables (required as group variable); did you input your categorical variables as numbers (for example, as hot-one coded)? Alternatively, try splitting a numeric variable of interest into categories.")
+  } else{
+    # GET CATEGORICAL COLUMNS FROM INPUT DATAFRAME
+   facdata <- input[,sapply(input, is.factor) | sapply(input, is.character), drop = FALSE]
+   cls <- factor(facdata[,1, drop = TRUE])
   }
-  return(t(res));
+  
+  ### GET FROM METADATA
+} else{
+  
+  metaData <- mSetObj$dataSet$origMeta
+    ## NO CATEGORICAL IN metaData:
+    if( !any(sapply(metaData, is.factor) | sapply(metaData, is.character)) ){
+      ## NO CATEGORICAL IN INPUT
+      if( !any(sapply(input, is.factor) | sapply(input, is.character)) ){
+    # cls <-   factor( input[,1,drop=TRUE] )
+    AddErrMsg("No categorical variables (required as group variable); did you input your categorical variables as numbers (for example, as hot-one coded)? Alternatively, try splitting a numeric variable of interest into categories.")
+  } else{
+    # GET CATEGORICAL COLUMNS FROM INPUT
+   facdata <- input[,sapply(input, is.factor) | sapply(input, is.character), drop = FALSE]
+   cls <- factor(facdata[,1, drop = TRUE])
+  }
+      
+    } else{
+      ## CATEGORICAL FROM METADATA  
+   facdata <- metaData[,sapply(metaData, is.factor) | sapply(metaData, is.character), drop = FALSE]
+   cls <- factor(facdata[,1, drop = TRUE])
+      
+  } 
+      
 }
+  ## group_name IS PRESENT (NOT 'NULL')
+} else{
+  ## if group_name is not a factor, do not allow - should only be factors
+  ## because dropdown provided is only factors
+   # NO METADATA, GET FROM INPUT
+   if(!mSetObj$dataSet$origMeta %in% names(mSetObj$dataSet) ){
+  cls <- factor( input[,group_name,drop = TRUE] )
+   } else{
+  # GET FROM METADATA
+  cls <- factor( mSetObj$dataSet$origMeta[,group_name,drop = TRUE] )
+   }
+  
+}
+
+ mSetObj$dataSet$cls <- cls
+
+  inx1 <- which(mSetObj$dataSet$cls==levels(mSetObj$dataSet$cls)[1]);
+  inx2 <- which(mSetObj$dataSet$cls==levels(mSetObj$dataSet$cls)[2]);
+  if(length(inx1) ==1 || length(inx2) == 1){
+    equal.var <- TRUE; # overwrite use option if one does not have enough replicates
+  }
+    data <- as.matrix(mSetObj$dataSet$norm);
+    if(!exists("mem.tt")){
+        require("memoise");
+        mem.tt <<- memoise(.get.ttest.res);
+    }
+    return(mem.tt(data, inx1, inx2, paired, equal.var, nonpar));
+}
+
+.get.ttest.res <- function(data, inx1, inx2, paired=FALSE, equal.var=TRUE, nonpar=F){
+
+  ## new R code - from xialab updates - added 202304-11
+   print("Performing regular t-tests ....");
+   univ.test <- function(x){t.test(x[inx1], x[inx2], paired = paired, var.equal = equal.var)};
+   ## NON-PARAMETRIC - uses wilox.test
+   if(nonpar){
+     univ.test <- function(x){wilcox.test(x[inx1], x[inx2], paired = paired)};
+   }
+   ## PARAMETRIC (default); t.test
+   my.fun <- function(x) {
+     tmp <- try(univ.test(x));
+     if(class(tmp) == "try-error") {
+       return(c(NA, NA));
+     }else{
+       return(c(tmp$statistic, tmp$p.value));
+     }
+   }
+   res <- apply(data, 2, my.fun);
+   return(t(res));
+}
+
+
+
+# #'Retrieve T-test p-values
+# #'@description Utility method to get p values
+# #' (after this GPS added): uses dataset$cls, which is a grouping factor vec of the same length as the nrow of the dataset
+# #' (after this GPS added): uses wilcox.test for non-parametric, and for parametric: if ncol >1000, t.test , ncol <1000: genefilter::rowttests 
+# #'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
+# #'@param paired Default set to FALSE
+# #'@param equal.var Default set to TRUE
+# #'@param nonpar Use non-parametric tests (wilcox), default is set to FALSE
+# #'@author Jeff Xia\email{jeff.xia@mcgill.ca}
+# #'McGill University, Canada
+# #'License: GNU GPL (>= 2)
+# # GetTtestRes <- function(mSetObj=NA, paired=FALSE, equal.var=TRUE, nonpar=F){
+#   
+#   mSetObj <- .get.mSet(mSetObj);
+#   
+# ### TROUBLESHOOT
+# print(paste("GetTtestRes:", mSetObj$dataSet$cls ))
+# 
+# ## NON-PARAMETRIC - uses wilox.test
+#   if(nonpar){
+#     inx1 <- which(mSetObj$dataSet$cls==levels(mSetObj$dataSet$cls)[1]);
+#     inx2 <- which(mSetObj$dataSet$cls==levels(mSetObj$dataSet$cls)[2]);
+#     
+#     res <- apply(as.matrix(mSetObj$dataSet$norm), 2, function(x) {
+#       tmp <- try(wilcox.test(x[inx1], x[inx2], paired = paired));
+#       if(class(tmp) == "try-error") {
+#         return(c(NA, NA));
+#       }else{
+#         return(c(tmp$statistic, tmp$p.value));
+#       }
+#     })
+#     
+# ## PARAMETRIC (default); t.test
+#   }else{
+#   # LARGE DATASET
+#     if(ncol(mSetObj$dataSet$norm) < 1000){
+#       inx1 <- which(mSetObj$dataSet$cls==levels(mSetObj$dataSet$cls)[1]);
+#       inx2 <- which(mSetObj$dataSet$cls==levels(mSetObj$dataSet$cls)[2]);
+#       res <- apply(as.matrix(mSetObj$dataSet$norm), 2, function(x) {
+#         tmp <- try(t.test(x[inx1], x[inx2], paired = paired, var.equal = equal.var));
+#         if(class(tmp) == "try-error") {
+#           return(c(NA, NA));
+#         }else{
+#           return(c(tmp$statistic, tmp$p.value));
+#         }
+#       })
+#   # SMALL DATASET genefilter::rowttests
+#     }else{ # use fast version
+#       res <- try(genefilter::rowttests(t(as.matrix(mSetObj$dataSet$norm)), mSetObj$dataSet$cls));
+#       if(class(res) == "try-error") {
+#         res <- c(NA, NA);
+#       }else{
+#         res <- t(cbind(res$statistic, res$p.value));
+#       }
+#     }
+#   }
+#   return(t(res));
+# }
 
 #'Utility method to perform the univariate analysis automatically
 #'@description The approach is computationally expensive,and fails more often 

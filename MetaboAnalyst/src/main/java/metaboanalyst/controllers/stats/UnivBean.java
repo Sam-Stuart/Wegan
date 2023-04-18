@@ -22,6 +22,13 @@ import org.primefaces.model.chart.LineChartModel;
 import org.primefaces.model.chart.LineChartSeries;
 import org.rosuda.REngine.Rserve.RConnection;
 
+// import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+
+// for Stats module (rwrapper: UniVarTests, controller: UnivBean)
+
 /**
  *
  * @author jianguox
@@ -124,7 +131,35 @@ public class UnivBean implements Serializable {
         return null;
     }
 
-  // T-tests  
+  // T-tests
+    // GPS ADDED 
+    
+     // GET COLUMN NAMES
+    private SelectItem[] statGroupNameOpts = null;
+    
+    public SelectItem[] getStatGroupNameOpts(){
+        String[] columns = UniVarTests.GetFacColumns(sb);
+        int columnsLen = columns.length;
+        statGroupNameOpts = new SelectItem[columnsLen];
+        List<String> columnNames = Arrays.asList(columns);
+        for (int i = 0; i < columnsLen; i++) {
+            statGroupNameOpts[i] = new SelectItem(columnNames.get(i), columnNames.get(i));
+        }
+        //List<String> columnNames = Arrays.asList(columns);
+        return statGroupNameOpts;
+    }
+    
+    private String statGroupName = getStatGroupNameOpts()[1].getLabel();
+    
+    public String getStatGroupName() {
+        return statGroupName;
+    }
+
+    public void setStatGroupName(String statGroupName) {
+        this.statGroupName = statGroupName;
+    }
+    
+    
     private String ttPThresh = "0.05";
 
     public String getTtPThresh() {
@@ -173,7 +208,7 @@ public class UnivBean implements Serializable {
         if (nonParTt) {
             nonpar = "T";
         }
-        int res = UniVarTests.performTtests(sb, nonpar, thresh, pairedTtAnal, equalVar);
+        int res = UniVarTests.performTtests(sb, nonpar, thresh, pairedTtAnal, equalVar, statGroupName);
         if (res == 0) {
             sb.setTtSig(false);
         } else {
