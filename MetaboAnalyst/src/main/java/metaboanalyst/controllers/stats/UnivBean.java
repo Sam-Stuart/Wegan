@@ -149,7 +149,7 @@ public class UnivBean implements Serializable {
         return statGroupNameOpts;
     }
     
-    private String statGroupName = getStatGroupNameOpts()[1].getLabel();
+    private String statGroupName = getStatGroupNameOpts()[0].getLabel();
     
     public String getStatGroupName() {
         return statGroupName;
