@@ -3,6 +3,10 @@
 library(WGCNA)
 options(stringsAsFactors = FALSE)
 
+load("./wgcna_dataInputClean.RData")
+load("./femaleLiver-networkConstruct-auto.RData") 
+load("./output-WGCNA/consensusDataInput.RData")
+
 
 #===============================================================================
 
@@ -11,10 +15,14 @@ options(stringsAsFactors = FALSE)
 #===============================================================================
 
 # Define numbers of genes and samples 
-datExpr <- multiExpr.rm[[1]]$data # female liver expression data 
+datExpr <- multiExpr[[1]]$data # female liver expression data 
 
 nGenes <- ncol(datExpr)
 nSamples <- nrow(datExpr)
+
+# Define clinical traits data 
+datTraits <- Traits[[1]]$data
+datTraits <- datTraits[rownames(datTraits) %in% rownames(datExpr), ] 
 
 # Calculate topological overlap anew 
 dissTOM <- 1 - TOMsimilarityFromExpr(datExpr, power = 6)
@@ -49,6 +57,7 @@ sizeGrWindow(9, 9)
 
 plotDiss <- selectTOM^7 
 diag(plotDiss) <- NA 
+
 TOMplot(plotDiss, selectTree, selectColors, 
         main = "Netwrok heatmap plot, selected genes")
 
@@ -77,7 +86,6 @@ plotEigengeneNetworks(MET, "",
                       marHeatmap = c(3, 4, 1, 2),
                       cex.lab = 0.8,
                       xLabelsAngle = 90)
-
 
 # Split the dendrogram and heatmap plots 
 # Plot the dendrogram 
