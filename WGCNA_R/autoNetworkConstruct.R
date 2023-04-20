@@ -3,6 +3,7 @@
 
 library(WGCNA)
 library(tidyverse)
+library(gridExtra) # Layout multiple ggplot figures 
 
 options(stringsAsFactors = FALSE)
 lnames <- load(file = "./WGCNA_output/consensusDataInput.RData")
@@ -82,6 +83,7 @@ df_fitIndices <- sft$fitIndices
 # Create a new column for y-axis in the first plot  
 df_fitIndices <- df_fitIndices %>% 
         dplyr::mutate(plot1_y = -sign(slope)*SFT.R.sq) 
+        
 
 plot1 <- ggplot2::ggplot(df_fitIndices, 
                         aes(x = Power, y = plot1_y)) +
@@ -95,6 +97,31 @@ plot1 <- ggplot2::ggplot(df_fitIndices,
                 theme_classic()
         
 print(plot1) 
+
+
+# Mean connectivity  
+plot2 <- ggplot2::ggplot(df_fitIndices,
+                         aes(x = Power, y = mean.k.)) + 
+                geom_point() + 
+                geom_label(aes(label = Power),
+                           position = "nudge") +
+                labs(x = "Soft power thresholds",
+                     y = "Mean connectivity") + 
+                theme_classic() 
+
+print(plot2)
+
+# Arrange two plots side-by-side on one page 
+
+
+
+
+
+
+
+
+
+
 
 
  
