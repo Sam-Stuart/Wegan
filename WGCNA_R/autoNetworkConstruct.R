@@ -5,9 +5,7 @@ library(WGCNA)
 library(tidyverse)
 
 options(stringsAsFactors = FALSE)
-
-lnames <- load(file = "./output-WGCNA/consensusDataInput.RData")
-
+lnames <- load(file = "./WGCNA_output/consensusDataInput.RData")
 lnames 
 
 # Choose the soft-threshold power: analysis of network topology 
@@ -72,8 +70,31 @@ save(MEs, moduleLabels, moduleColors, geneTree,
 
 
 
+#===============================================================================
 
+# Reproduce base R plots using ggplot2 
 
+#===============================================================================
+# Scale-free topology fit index vs Soft-threshold power
+library(ggplot2) 
+# Input data for plotting 
+df_fitIndices <- sft$fitIndices 
+# Create a new column for y-axis in the first plot  
+df_fitIndices <- df_fitIndices %>% 
+        dplyr::mutate(plot1_y = -sign(slope)*SFT.R.sq) 
+
+plot1 <- ggplot2::ggplot(df_fitIndices, 
+                        aes(x = Power, y = plot1_y)) +
+                geom_point() + 
+                geom_text(aes(label = Power),
+                          nudge_x = 0.02, nudge_y = 0.025, # Shift texts along axis
+                          check_overlap = TRUE) +
+                labs(x = "Soft power thresholds",
+                     y = "Scale-free topology fit index") + 
+                scale_y_continuous(limits = c(0, 1)) + 
+                theme_classic()
+        
+print(plot1) 
 
 
  
