@@ -13,7 +13,7 @@ make.exprSet <- function(mSetObj = NA,
     # Load WGCNA library 
     library(WGCNA) 
     library(tidyverse)
-    source("./Func_WGCNA/general_data_utils.R") 
+    source("./WGCNA_functions/taxo_00_generalDataUtils.R")  
     
     # Source the file, general_data_utils.R 
     mSetObj <- .get.mSet(mSetObj)
@@ -39,14 +39,14 @@ make.exprSet <- function(mSetObj = NA,
 
 #===============================================================================
 # # Load the toy data 
-# load("./mSet_example.RData")
+load("./WGCNA_data/mSet_example.RData")
 # 
 # # Call my function 
-# .on.public.web <- FALSE 
+.on.public.web <- FALSE
 # 
-# mSetObj <- make.exprSet(mSetObj = mSetObj_example)  
+mSetObj <- make.exprSet(mSetObj = mSetObj_example)
 # 
-# str(mSetObj) 
+str(mSetObj)
 
 
 
