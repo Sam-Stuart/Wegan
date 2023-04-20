@@ -41,38 +41,7 @@ findSoftThreshold <- function(mSetObj = NA,
     sft <- WGCNA::pickSoftThreshold(datExpr, 
                                     powerVector = powers, 
                                     verbose = 5)
-    
-    # Plot for visual investigation of soft thresholds 
-    pdf(file) # PDF device 
-    par(mfrow = c(1, 2)) # Layout of two plots
-    cex1 <- 0.9 # Point size 
-    # Scale-free topology fit index vs Soft-threshold power 
-    plot(sft$fitIndices[, 1], 
-         -sign(sft$fitIndices[, 3])*sft$fitIndices[, 2], 
-         type = "n") # for no plotting 
-    text(sft$fitIndices[, 1], 
-         -sign(sft$fitIndices[, 3])*sft$fitIndices[, 2],
-        labels = powers, 
-        cex = cex1, # Point size 
-        col = "red") 
-    abline(h = 0.90, 
-           col = "red") 
-    
-    # Mean connectivity vs Soft-threshold power 
-    plot(sft$fitIndices[, 1], 
-         sft$fitIndices[, 5],
-        xlab = "Soft threshold (power)", 
-        ylab = "Mean connectivity", 
-        type = "n", # for no plotting 
-        main = paste("Mean connectivity")) 
-    text(sft$fitIndices[, 1], 
-         sft$fitIndices[, 5], 
-         labels = powers, 
-         cex = cex1, 
-         col = "red") 
-    
-    dev.off()
-    
+
     # Reproduce plots using ggplot2
     # Input data for plotting 
     df_fitIndices <- sft$fitIndices 
@@ -100,11 +69,11 @@ findSoftThreshold <- function(mSetObj = NA,
              y = "Mean connectivity") + 
         theme_classic() 
     # Arrange two plots side-by-side on one page 
+    pdf(file = file)
     mergePlots <- gridExtra::grid.arrange(plot1, 
                                           plot2, 
                                           nrow = 1)
-    # Export the resulting plots 
-    save(mergePlots, file = file) 
+    dev.off() 
     
     # Save the resulting figure file name to mSet object 
     mSetObj$imgSet$softThreshold <- file
