@@ -40,6 +40,15 @@
 # parseTukey(tukey, cut.off) # Return only the signicant comparison names, used in higher function 
 # parseFisher(fisher, cut.off) # Return only the signicant comparison names used in higher fxns
 #
+#
+### T-TEST TROUBLESHOOTING NOTES 202304
+## MODIFIED THESE TTEST FXNS: (need to download {memoise} package)
+# Ttest.Anal
+# GetTtestRes
+## ADDED THESE FXNS: 
+# fac.columns
+# get.ttest.res
+#
 ### ---------------------------------------------------------------- 
 
 #'Fold change analysis, unpaired
@@ -1250,7 +1259,7 @@ GetTtestRes <- function(mSetObj=NA, paired=FALSE, equal.var=TRUE, nonpar=F
    , group_name = 'defa'#"NULL"
   ){
   
-### new code 202304-11
+  ### new code 202304-11
   ### new R code - from xialab updates - added 202304-11
   
   mSetObj <- .get.mSet(mSetObj);  
