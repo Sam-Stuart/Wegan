@@ -120,9 +120,7 @@ public class AnalysisBean implements Serializable {
 
     // t-test default added group_name (last parameter) default GPS
     private void doDefaultTT() {
-        int res = UniVarTests.performTtests(sb, "F", 0.05, "FALSE", "TRUE"
-        //        , "NULL"
-        );//default not paired and unequal variance
+        int res = UniVarTests.performTtests(sb, "F", 0.05, "FALSE", "TRUE", "howdy"); //default not paired and unequal variance
         if (res == 0) {
             sb.setTtSig(false);
         } else {

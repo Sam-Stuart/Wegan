@@ -1,28 +1,14 @@
-# FUNCTIONS WITHIN (not the Get functions)
-#  *R FUNCTIONS*: for Stats module (rwrapper: UniVarTests, controller: UnivBean)
-# FC.Anal.unpaired(mSetObj=NA, fc.thresh=2, cmp.type = 0)
-# FC.Anal.paired(mSetObj=NA, fc.thresh=2, percent.thresh=0.75, cmp.type=0)
-# PlotFC(mSetObj=NA, imgName, format="png", dpi=72, width=NA)
-# GetFC(mSetObj=NA, paired=FALSE, cmpType) used by higher fxns to calc FC
-# Ttests.Anal(mSetObj=NA, nonpar=F, threshp=0.05, paired=FALSE, equal.var=TRUE)
-# PlotTT(mSetObj=NA, imgName, format="png", dpi=72, width=NA) # plot t-test
-# Volcano.Anal(mSetObj=NA, paired=FALSE, fcthresh, cmpType, percent.thresh, nonpar=F, threshp, equal.var=TRUE, pval.type="raw")
-# PlotVolcano(mSetObj=NA, imgName, plotLbl, format="png", dpi=72, width=NA) # Plot Volcano; For labelling interesting points, it is defined by the following rules: need to be signficant (sig.inx) and or 2. top 5 p, or 2. top 5 left, or 3. top 5 right.
-# aof(x, cls) # PerformTtest anova and only return p values and MSres (for Fisher's LSD)
-# kwtest(x, cls) # Kruskall-wallis test
-# FisherLSD(aov.obj, thresh) #Perform  Fisher LSD for ANOVA, used in higher function 
-# parseTukey(tukey, cut.off) # Return only the signicant comparison names, used in higher function 
-# parseFisher(fisher, cut.off) # Return only the signicant comparison names used in higher fxns
-# ANOVA.Anal(mSetObj=NA, nonpar=F, thresh=0.05, post.hoc="fisher") # Perform ANOVA analysis
-# PlotCmpdView(mSetObj=NA, cmpdNm, format="png", dpi=72, width=NA) # Plots a bar-graph of selected compound over groups 
-# PlotANOVA(mSetObj=NA, imgName, format="png", dpi=72, width=NA)
+### STATISTICS MODULE FILES
+### *R FUNCTIONS*: stats_univariates.R 
+### Java, rwrapper: UniVarTests.java 
+### Java, controller: UnivBean.java (getters, setters, action button)
+### Java, controller: AnalysisBean.java (doDefault)
+### xHTML : TtestView.xhtml 
+#### NB: sessionBean used more often than other modules in the html file; 
+#### NB UnivBean includes LineChartModel (LineChartSeries)
 #
 #
-#
-#
-#
-#  for Stats module (rwrapper: UniVarTests, controller: UnivBean)
-# Rfxn, Rwrapper, controller
+### R FUNCTIONS (#) & associated RWRAPPER (##)
 #
 # FC.Anal.unpaired(mSetObj=NA, fc.thresh=2, cmp.type = 0)
 ## InitUnpairedFC(SessionBean1 sb, double fcThresh, int cmpType) {
@@ -46,14 +32,15 @@
 ## PlotCmpdView(RConnection RC, String cmpdName, String format, String dpi)
 # PlotANOVA(mSetObj=NA, imgName, format="png", dpi=72, width=NA)
 ## PlotAOV(SessionBean1 sb, String imgName, String format, int dpi)
-
-## higher order fxns:
+#
+### higher order fxns:
 # aof(x, cls) # Perform anova and only return p values and MSres (for Fisher's LSD)
 # kwtest(x, cls) # Kruskall-wallis test
 # FisherLSD(aov.obj, thresh) #Perform  Fisher LSD for ANOVA, used in higher function 
 # parseTukey(tukey, cut.off) # Return only the signicant comparison names, used in higher function 
 # parseFisher(fisher, cut.off) # Return only the signicant comparison names used in higher fxns
-
+#
+### ---------------------------------------------------------------- 
 
 #'Fold change analysis, unpaired
 #'@description Perform fold change analysis, method can be mean or median
@@ -352,7 +339,7 @@ GetFC <- function(mSetObj=NA, paired=FALSE, cmpType){
 #'@export
 #'
 Ttests.Anal <- function(mSetObj=NA, nonpar=F, threshp=0.05, paired=FALSE, equal.var=TRUE
-# , group_name = "NULL"
+, group_name = 'defa'#"NULL"
 ){
  
 ### XIALAB UPDATED TTESTS:
@@ -364,22 +351,25 @@ Ttests.Anal <- function(mSetObj=NA, nonpar=F, threshp=0.05, paired=FALSE, equal.
   
 ### TROUBLESHOOT
 print(paste("Ttests.Anal:", mSetObj$dataSet$cls, collapse = " " ))
-# print(paste("Ttests.Anal: ", group_name))
+print(paste("Ttests.Anal: "))
+print(group_name)
+print( "class:" )
+print(  class(group_name)  )
+print( "typeof:" )
+print(  typeof(group_name)  )
 
 
-  res <- GetTtestRes(mSetObj, paired, equal.var, nonpar
-  # , group_name
-  );
+  res <- GetTtestRes(mSetObj, paired, equal.var, nonpar, group_name);
   t.stat <- res[,1];
   p.value <- res[,2];
   
   names(t.stat) <- names(p.value) <- colnames(mSetObj$dataSet$norm);
   
   p.log <- -log10(p.value);
-### GPS: comment out this line:
-# fdr.p <- p.adjust(p.value, "fdr");
+  ### GPS: comment out this line: maybe problem caused bc no pvalues are passing FDR? try just returning pvalues
+  ## fdr.p <- p.adjust(p.value, "fdr");
   
-  fdr.p <- p.value
+  fdr.p <- p.value;
   inx.imp <- fdr.p <= threshp;
   # if there is no sig cmpds, it will be errors, need to improve
   
@@ -1209,7 +1199,7 @@ if(!"origMeta" %in% names(mSetObj$dataSet) ){
   if( !any(sapply(input, is.factor) | sapply(input, is.character)) ){
 
      warning("No categorical variables (required as group variable); all varnames in input provided; did you input your categorical variables as numbers (for example, as hot-one coded)? ")
-facvars <- colnames(input)
+   facvars <- colnames(input)
 
   } else{
     # GET CATEGORICAL COLUMNS FROM INPUT DATAFRAME
@@ -1225,15 +1215,15 @@ facvars <- colnames(input)
       ## NO CATEGORICAL IN INPUT
       if( !any(sapply(input, is.factor) | sapply(input, is.character)) ){
     warning("No categorical variables (required as group variable); all varnames in metadata provided; did you input your categorical variables as numbers (for example, as hot-one coded)? ")
-facvars <- colnames(metaData)
+      facvars <- colnames(metaData)
   } else{
     # GET CATEGORICAL COLUMNS FROM INPUT
-   facvars <- colnames( input[,sapply(input, is.factor) | sapply(input, is.character), drop = FALSE] )
+      facvars <- colnames( input[,sapply(input, is.factor) | sapply(input, is.character), drop = FALSE] )
   }
       
     } else{
       ## CATEGORICAL FROM METADATA  
-   facvars <- colnames (metaData[,sapply(metaData, is.factor) | sapply(metaData, is.character), drop = FALSE] )
+      facvars <- colnames (metaData[,sapply(metaData, is.factor) | sapply(metaData, is.character), drop = FALSE] )
   } 
 }
   
@@ -1257,7 +1247,7 @@ facvars <- colnames(metaData)
 #'McGill University, Canada
 #'License: GNU GPL (>= 2)
 GetTtestRes <- function(mSetObj=NA, paired=FALSE, equal.var=TRUE, nonpar=F
-  # , group_name = "NULL"
+   , group_name = 'defa'#"NULL"
   ){
   
 ### new code 202304-11
@@ -1266,25 +1256,35 @@ GetTtestRes <- function(mSetObj=NA, paired=FALSE, equal.var=TRUE, nonpar=F
   mSetObj <- .get.mSet(mSetObj);  
 
 ### TROUBLESHOOTING:
+
+print("GetTtestRes: ")
+print( group_name  )
+print( "class: ")
+print(  class(group_name)  )
+print( "typeof: ")
+print(  typeof(group_name)  )
+
+
 print( c("names mSetObj: ", 
-paste( names(mSetObj), collapse = " ")  ))
+  paste( names(mSetObj), collapse = " ")  ))
 
 print( c("names mSetObj$dataSet: ", 
-paste( names(mSetObj$dataSet), collapse = " ")  ))
+  paste( names(mSetObj$dataSet), collapse = " ")  ))
 
+### FYI the names of the mSetObj$dataSet:
 ### type design.type cls.type format paired orig type.cls.lbl cls orig.cls facA.type facA orig.facA facA.lbl facB.type facB orig.facB facB.lbl cmpd origEnv small.smpl.size cls.num min.grp.size minConc preproc proc.cls prenorm.cls bestnorm row.norm use.ratio norm rownorm.method trans.method scale.method combined.method
 
 input  <- mSetObj$dataSet$norm
 
 ### IF NOT GROUP NAME IS PROVIDED:
-# if(group_name == "NULL"){
+ if(group_name == 'defa'){#"NULL"){
 
  # NO METADATA
 if(!"origMeta" %in% names(mSetObj$dataSet) ){
   
   ## no categorical in input:
   if( !any(sapply(input, is.factor) | sapply(input, is.character)) ){
-    ## cls <-   factor( input[,1,drop=TRUE] )
+     cls <-   factor( input[,1,drop=TRUE] )
     AddErrMsg("No categorical variables (required as group variable); did you input your categorical variables as numbers (for example, as hot-one coded)? Alternatively, try splitting a numeric variable of interest into categories.")
   } else{
     # GET CATEGORICAL COLUMNS FROM INPUT DATAFRAME
@@ -1300,8 +1300,8 @@ if(!"origMeta" %in% names(mSetObj$dataSet) ){
     if( !any(sapply(metaData, is.factor) | sapply(metaData, is.character)) ){
       ## NO CATEGORICAL IN INPUT
       if( !any(sapply(input, is.factor) | sapply(input, is.character)) ){
-    # cls <-   factor( input[,1,drop=TRUE] )
-    AddErrMsg("No categorical variables (required as group variable); did you input your categorical variables as numbers (for example, as hot-one coded)? Alternatively, try splitting a numeric variable of interest into categories.")
+     cls <-   factor( input[,1,drop=TRUE] )
+    AddErrMsg("No categorical variables (required as group variable); did you input your categorical variables as numbers (for example, as hot-one coded)? Alternatively, try splitting a numeric variable of interest into categories")
   } else{
     # GET CATEGORICAL COLUMNS FROM INPUT
    facdata <- input[,sapply(input, is.factor) | sapply(input, is.character), drop = FALSE]
@@ -1317,18 +1317,18 @@ if(!"origMeta" %in% names(mSetObj$dataSet) ){
       
 }
   ## group_name IS PRESENT (NOT 'NULL')
-# } else{
-#   ## if group_name is not a factor, do not allow - should only be factors
-#   ## because dropdown provided is only factors
-#    # NO METADATA, GET FROM INPUT
-#    if(!"origMeta" %in% names(mSetObj$dataSet) ){
-#   cls <- factor( input[,group_name,drop = TRUE] )
-#    } else{
-#   # GET FROM METADATA
-#   cls <- factor( mSetObj$dataSet$origMeta[,group_name,drop = TRUE] )
-#    }
-#   
-# }
+} else{
+  ## if group_name is not a factor, do not allow - should only be factors
+  ## because dropdown provided is only factors
+   # NO METADATA, GET FROM INPUT
+   if(!"origMeta" %in% names(mSetObj$dataSet) ){
+  cls <- factor( input[,group_name,drop = TRUE] )
+   } else{
+  # GET FROM METADATA
+  cls <- factor( mSetObj$dataSet$origMeta[,group_name,drop = TRUE] )
+   }
+
+}
 
  mSetObj$dataSet$cls <- cls
 
@@ -1344,6 +1344,7 @@ if(!"origMeta" %in% names(mSetObj$dataSet) ){
     }
     return(mem.tt(data, inx1, inx2, paired, equal.var, nonpar));
 }
+
 
 .get.ttest.res <- function(data, inx1, inx2, paired=FALSE, equal.var=TRUE, nonpar=F){
 

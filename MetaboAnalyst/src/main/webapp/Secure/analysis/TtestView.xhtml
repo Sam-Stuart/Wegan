@@ -60,12 +60,12 @@
                             <p:selectBooleanCheckbox value ="#{univBean.nonParTt}"/>
                             <h:outputLabel style="font-weight: bold" value="Adjusted P-value (FDR) cutoff:"/>
                             <p:inputText style="width:50px" value="#{univBean.ttPThresh}"/> 
-                            <!--Added this here-->
+                            <!-- GPS added - where 'hash' is below insert  octothorpe (number sign) bc it screws up run if not removed -->
 <!--                            <h:outputLabel style="font-weight: bold" value="Group Variable:"/>
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="hash{univBean.statGroupName}">
                                 <f:selectItems value="hash{univBean.statGroupNameOpts}" />
                             </p:selectOneMenu>-->
-                            <!--Finish adding-->           
+                            <!--Finish adding-->
                         </h:panelGrid>
                         <h:panelGrid style="padding-left: 20px">
                             <p:commandButton value="Submit" update=":ttPane  :cmdPane" 
