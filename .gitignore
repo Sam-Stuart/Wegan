@@ -1,0 +1,11 @@
+*.Rproj.user
+*.Rhistory
+*.RData
+*.Ruserdata
+*.csv
+*.Rproj
+.Rproj.user
+WGCNA_output/
+WGCNA_rawData/
+
+
