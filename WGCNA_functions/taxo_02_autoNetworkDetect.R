@@ -17,6 +17,8 @@ findSoftThreshold <- function(mSetObj = NA,
     
     library(WGCNA) 
     library(tidyverse) 
+    library(ggplot2) # Load ggplot2 
+    library(gridExtra) # Layout multiple ggplot figures 
     source("./WGCNA_functions/taxo_00_generalDataUtils.R")  
     
     mSetObj <- .get.mSet(mSetObj) 
@@ -40,11 +42,10 @@ findSoftThreshold <- function(mSetObj = NA,
                                     powerVector = powers, 
                                     verbose = 5)
     
-    
     # Plot for visual investigation of soft thresholds 
     pdf(file) # PDF device 
     par(mfrow = c(1, 2)) # Layout of two plots
-    cex1 <- 0.9 
+    cex1 <- 0.9 # Point size 
     # Scale-free topology fit index vs Soft-threshold power 
     plot(sft$fitIndices[, 1], 
          -sign(sft$fitIndices[, 3])*sft$fitIndices[, 2], 
@@ -52,7 +53,7 @@ findSoftThreshold <- function(mSetObj = NA,
     text(sft$fitIndices[, 1], 
          -sign(sft$fitIndices[, 3])*sft$fitIndices[, 2],
         labels = powers, 
-        cex = cex1, 
+        cex = cex1, # Point size 
         col = "red") 
     abline(h = 0.90, 
            col = "red") 
@@ -72,19 +73,45 @@ findSoftThreshold <- function(mSetObj = NA,
     
     dev.off()
     
-    # ggplot - scatter plots side-by-side 
+    # Reproduce plots using ggplot2
+    # Input data for plotting 
+    df_fitIndices <- sft$fitIndices 
+    # Create a new column for y-axis in the first plot  
+    df_fitIndices <- df_fitIndices %>% 
+        dplyr::mutate(plot1_y = -sign(slope)*SFT.R.sq) 
     
+    # Scale-free topology fit index 
+    plot1 <- ggplot2::ggplot(df_fitIndices, 
+                             aes(x = Power, y = plot1_y)) +
+        geom_point() + 
+        geom_label(aes(label = Power),
+                   position = "nudge") +
+        labs(x = "Soft power thresholds",
+             y = "Scale-free topology fit index") + 
+        scale_y_continuous(limits = c(0, 1)) + 
+        theme_classic()
+    # Mean connectivity  
+    plot2 <- ggplot2::ggplot(df_fitIndices,
+                             aes(x = Power, y = mean.k.)) + 
+        geom_point() + 
+        geom_label(aes(label = Power),
+                   position = "nudge") +
+        labs(x = "Soft power thresholds",
+             y = "Mean connectivity") + 
+        theme_classic() 
+    # Arrange two plots side-by-side on one page 
+    mergePlots <- gridExtra::grid.arrange(plot1, 
+                                          plot2, 
+                                          nrow = 1)
+    # Export the resulting plots 
+    save(mergePlots, file = file) 
     
-    
-    
-    
-    # Save the resulting figure file name to mSet obejct 
+    # Save the resulting figure file name to mSet object 
     mSetObj$imgSet$softThreshold <- file
     
     .set.mSet(mSetObj)
 
 } 
-
 
 # To code for module-detection function after obtaining optimal soft threshold ...
 
