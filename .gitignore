@@ -2,7 +2,10 @@
 *.Rhistory
 *.RData
 *.Ruserdata
-output-WGCNA/
 *.csv
 *.Rproj
-rawData-WGCNA/
+.Rproj.user
+WGCNA_output/
+WGCNA_rawData/
+
+
