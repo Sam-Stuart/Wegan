@@ -86,11 +86,10 @@ df_fitIndices <- df_fitIndices %>%
         
 
 plot1 <- ggplot2::ggplot(df_fitIndices, 
-                        aes(x = Power, y = plot1_y)) +
+                         aes(x = Power, y = plot1_y)) +
                 geom_point() + 
-                geom_text(aes(label = Power),
-                          nudge_x = 0.02, nudge_y = 0.025, # Shift texts along axis
-                          check_overlap = TRUE) +
+                geom_label(aes(label = Power),
+                           position = "nudge") +
                 labs(x = "Soft power thresholds",
                      y = "Scale-free topology fit index") + 
                 scale_y_continuous(limits = c(0, 1)) + 
@@ -112,7 +111,10 @@ plot2 <- ggplot2::ggplot(df_fitIndices,
 print(plot2)
 
 # Arrange two plots side-by-side on one page 
-
+mergePlots <- gridExtra::grid.arrange(plot1, 
+                                      plot2, 
+                                      nrow = 1, 
+                                      name = "Soft Power Thresdholding")
 
 
 
