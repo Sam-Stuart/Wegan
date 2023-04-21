@@ -56,18 +56,24 @@ plot.moduleTraitHeatmap <- function(mSetObj,
     
     MEs0 <- WGCNA::moduleEigengenes(datExpr, moduleColors)$eigengenes 
     MEs <- WGCNA::orderMEs(MEs0) # Similar eigengenes are next to each other 
-    
-    moduleTraitCorr <- WGCNA::cor(MEs, traits, use = "p") 
-    moduleTraitPvalue <- WGCNA::corPvalueStudent(moduleTraitCorr, numSamples) 
+    # Fast calculation of Pearson correlation 
+    moduleTraitCorr <- WGCNA::cor(MEs, 
+                                  traits, 
+                                  use = "p", # aka. pairwise.complete.obs 
+                                  method = "pearson") 
+    # Calculate student asymptotic p-value for given correlations 
+    moduleTraitPvalue <- WGCNA::corPvalueStudent(moduleTraitCorr, 
+                                                 numSamples) 
     
     # Plot a heatmap to illustrate relationship between modules and clinical traits
-    textMatrix <- paste(signif(moduleTraitCorr, 2), "\n(",
-                        signif(moduleTraitPvalue, 1), ")", sep = "") 
+    textMatrix <- paste(signif(moduleTraitCorr, 2), 
+                        "\n(", signif(moduleTraitPvalue, 1), ")", 
+                        sep = "") 
     dim(textMatrix) <- dim(moduleTraitCorr) 
     
-    
     # Display the correlation values within a heatmap plot 
-    pdf(file, width = 10, height = 8)
+    pdf(file, width = 10, height = 8)  
+    
     par(mar = c(6, 8.5, 3, 3))  
     WGCNA::labeledHeatmap(Matrix = moduleTraitCorr,
                           xLabels = names(traits),
