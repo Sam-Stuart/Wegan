@@ -95,9 +95,9 @@ plot.moduleTraitHeatmap <- function(mSetObj,
 
 #===============================================================================
 
-load('./mSet_example.RData')
-load("./clinicalTrait_example.RData")
-source("./Func_WGCNA/dataInputClean_fun.R")
+load('./WGCNA_data/mSet_example.RData')
+load("./WGCNA_data/clinicalTrait_example.RData")
+source("./WGCNA_functions/taxo_01_dataInputClean.R") 
 
 .on.public.web <- FALSE  
 
@@ -105,10 +105,9 @@ mSetObj <- make.exprSet(mSetObj = mSetObj_example)
 
 mSetObj$dataSet$traits <- allTraits 
 
-
 # debug(plot.moduleTraitHeatmap)
 plot.moduleTraitHeatmap(mSetObj = mSetObj,
-                        file = "./output-WGCNA/hmModuleTrait.pdf")  
+                        file = "./WGCNA_output/hmModuleTrait.pdf")  
 # undebug(plot.moduleTraitHeatmap)
 
 
