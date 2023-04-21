@@ -71,22 +71,80 @@ plot.moduleTraitHeatmap <- function(mSetObj,
                         sep = "") 
     dim(textMatrix) <- dim(moduleTraitCorr) 
     
+ 
+    # Main input data 
+    df_moduleTraitCor <- as.data.frame(moduleTraitCorr) 
+    
+    # Reorder modules according to the correlation matrix 
+    dist_moduleTraitCor <- dist(moduleTraitCorr, method = 'euclidean')
+    # Hierarchical clustering of modules based on correlation matrix  
+    hc_moduleTrait <- stats::hclust(dist_moduleTraitCor, method = 'average') 
+    
+    # Reorder traits according to the correlation matrix 
+    dist_moduleTraitCor_t <- dist(t(moduleTraitCorr), method = 'euclidean')   
+    # Hierarchical clustering of modules based on correlation matrix  
+    hc_moduleTrait_t <- stats::hclust(dist_moduleTraitCor_t, method = 'average') 
+    
+    
+    # Re-order by column 
+    df_moduleTraitCor <- df_moduleTraitCor[hc_moduleTrait$order, hc_moduleTrait_t$order]
+    
+    # y-axis labels 
+    label_yaxis <- rownames(df_moduleTraitCor)
+    # x-axis labels 
+    label_xaxis <- colnames(df_moduleTraitCor) 
+    
+    
+    df_moduleTraitCor2 <- df_moduleTraitCor %>%
+        rownames_to_column("modulecolor") %>% 
+        tidyr::gather(key = "trait", value = "rho", -modulecolor) 
+    
+    # Text 
+    df_textMatrix <- as.data.frame(textMatrix) 
+    colnames(df_textMatrix) <- colnames(moduleTraitCorr)  # rename columns 
+    rownames(df_textMatrix) <- rownames(moduleTraitCorr)  # rename rows 
+    
+    df_textMatrix2 <- df_textMatrix %>% 
+        rownames_to_column("modulecolor") %>% 
+        tidyr::gather(key = "trait", value = "rho_pval", -modulecolor)
+    
+    # Add text to the main input data 
+    df_moduleTraitCor3 <- df_moduleTraitCor2 %>% 
+        left_join(df_textMatrix2, 
+                  by = c("trait", "modulecolor"))
+    
+    
+    
     # Display the correlation values within a heatmap plot 
-    pdf(file, width = 10, height = 8)  
-    
-    par(mar = c(6, 8.5, 3, 3))  
-    WGCNA::labeledHeatmap(Matrix = moduleTraitCorr,
-                          xLabels = names(traits),
-                          yLabels = names(MEs),
-                          ySymbols = names(MEs),
-                          colorLabels = FALSE,
-                          colors = blueWhiteRed(50),
-                          textMatrix = textMatrix,
-                          setStdMargins = FALSE,
-                          cex.text = 0.5,
-                          zlim = c(-1, 1),
-                          main = paste("Module-trait relationships"))
-    
+    png(file, width = 16, height = 12, units = "in", res = 120)   
+    # Plot a heatmap using geom_tile()  
+    ht_moduleTrait <- ggplot(df_moduleTraitCor3, 
+                             aes(x = trait, 
+                                 y = modulecolor, 
+                                 fill = rho)) + 
+                      geom_tile(color = "grey") + # heat map 
+                      ggplot2::geom_text(aes(label = rho_pval),
+                                             color = "white",
+                                             check_overlap = TRUE,
+                                             inherit.aes = TRUE,
+                                             size = 3) +
+                      scale_fill_gradient2(low = "#075AFF",
+                                           mid = "#FFFFCC",
+                                           high = "#FF0000",
+                                           midpoint = 0,
+                                           limit = c(-1, 1),
+                                           name = "Pearson\nCorrelation") +
+                      labs(x = "Traits",
+                           y = "Modules",
+                           color = "Correlation n\ coefficient") +
+                      theme(axis.text.x = element_text(angle = 45, 
+                                                       hjust = 1, 
+                                                       vjust = 1,
+                                                       size = 10),
+                           axis.text.y = element_text(size = 10)) +
+                      scale_x_discrete(limits = label_xaxis) +
+                      scale_y_discrete(limits = label_yaxis)
+    print(ht_moduleTrait)
     dev.off()
 
     mSetObj$imgSet$modTraitHeatmap <- file # Store image file name into mSet object  
@@ -113,11 +171,8 @@ mSetObj$dataSet$traits <- allTraits
 
 # debug(plot.moduleTraitHeatmap)
 plot.moduleTraitHeatmap(mSetObj = mSetObj,
-                        file = "./WGCNA_output/hmModuleTrait.pdf")  
+                        file = "./WGCNA_output/ggplotModuleTrait.png")  
 # undebug(plot.moduleTraitHeatmap)
-
-
-
 
 
 
