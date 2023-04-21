@@ -14,7 +14,7 @@ plot.moduleTraitHeatmap <- function(mSetObj,
     
     library(WGCNA)
     library(tidyverse)
-    source('./Func_WGCNA/general_data_utils.R')
+    source('./WGCNA_functions/taxo_00_generalDataUtils.R') 
     
     mSetObj <- .get.mSet(mSetObj)
     
@@ -55,7 +55,7 @@ plot.moduleTraitHeatmap <- function(mSetObj,
     moduleColors <- WGCNA::labels2colors(net$colors)
     
     MEs0 <- WGCNA::moduleEigengenes(datExpr, moduleColors)$eigengenes 
-    MEs <- WGCNA::orderMEs(MEs0)
+    MEs <- WGCNA::orderMEs(MEs0) # Similar eigengenes are next to each other 
     
     moduleTraitCorr <- WGCNA::cor(MEs, traits, use = "p") 
     moduleTraitPvalue <- WGCNA::corPvalueStudent(moduleTraitCorr, numSamples) 
