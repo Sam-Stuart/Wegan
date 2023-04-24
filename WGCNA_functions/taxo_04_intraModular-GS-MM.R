@@ -1,20 +1,16 @@
-# This self-defined function identifies particular genes strongly associated with
-# modules membership (MM) and clinical traits (GS = Gene significance)
-
 #'Identify genes highly associated with module membership and clinical traits 
 #'@description Output a table of genes and their coefficients corresponding to statistical associations with module membership and clinical traits 
 #'@param mSetObj Input name of the created mSet Object
 #'@param power Soft threshold, default is 6 
-#'@param file  Output file name
+#'@param file  Output file name in the csv format 
 #'@author Xin (David) Zhao\email{xzhao1@ualberta.ca}
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2)
 #'@export
 tabulate.intraModule <- function(mSetObj = NULL, power = 6, file) {
-    
     library(WGCNA)
     library(tidyverse) 
-    source("./WGCNA_functions/generalDataUtils.R") # Source util function for the testing purpose
+    source("./WGCNA_functions/taxo_00_generalDataUtils.R") # Source util function for the testing purpose
     
     mSetObj <- .set.mSet(mSetObj) 
     
@@ -132,23 +128,16 @@ tabulate.intraModule <- function(mSetObj = NULL, power = 6, file) {
 
 #===============================================================================
 
-load('./mSet_example.RData')
-load("./clinicalTrait_example.RData")
-load("./net_example.RData")
-source("./Func_WGCNA/dataInputClean_fun.R")
+load('./WGCNA_data/mSet_example.RData') 
+load("./WGCNA_data/clinicalTrait_example.RData")
+source("./WGCNA_functions/taxo_01_dataInputClean.R")
 
 .on.public.web <- FALSE  
-
 mSetObj <- make.exprSet(mSetObj = mSetObj_example)
-
 mSetObj$dataSet$traits <- allTraits 
 
-
-
 # debug(tabulate.intraModule)
-
-testing <- tabulate.intraModule(mSetObj, net = net)
-
+testing <- tabulate.intraModule(mSetObj, file = "./WGCNA_output/genesGSMM.csv")
 # undebug(tabulate.intraModule)
 
 
