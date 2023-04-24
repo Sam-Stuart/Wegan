@@ -2,7 +2,7 @@
 #'@description Exports network data in the format readable by VisANT or Cytoscape 
 #'@param mSetObj Input name of the created mSet Object
 #'@param custom_norm Customized normalization provided by users 
-#'@param power Soft threshold, dafault value is 6 
+#'@param power Soft threshold, default value is 6 
 #'@param file The image file name 
 #'@param method The method to calculate hierarchical structure
 #'@param nSelect Gene number showing in the network  
