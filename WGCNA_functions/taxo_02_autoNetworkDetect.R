@@ -102,8 +102,6 @@ findSoftThreshold <- function(mSetObj = NA,
 
 } 
 
-# To code for module-detection function after obtaining optimal soft threshold ...
-
 
 #===============================================================================
 
