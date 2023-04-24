@@ -3,10 +3,9 @@
 library(WGCNA)
 options(stringsAsFactors = FALSE)
 
-load("./wgcna_dataInputClean.RData")
-load("./femaleLiver-networkConstruct-auto.RData") 
-load("./output-WGCNA/consensusDataInput.RData")
-
+load("./WGCNA_data/wgcna_dataInputClean.RData")
+load("./WGCNA_data/femaleLiver-networkConstruct-auto.RData") 
+load("./WGCNA_data/consensusDataInput.RData") 
 
 #===============================================================================
 
