@@ -19,7 +19,7 @@ plot.geneNetwork <- function(mSetObj = NULL,
     
     library(WGCNA)
     library(tidyverse) 
-    source("./Func_WGCNA/general_data_utils.R") 
+    source("./WGCNA_functions/taxo_00_generalDataUtils.R")  
     
     if(!is.null(custom_norm)){
         datExpr <- custom_norm 
@@ -100,10 +100,9 @@ plot.geneNetwork <- function(mSetObj = NULL,
 
 #===============================================================================
 
-load('./mSet_example.RData') 
-load("./clinicalTrait_example.RData")
-load("./net_example.RData")
-source("./Func_WGCNA/dataInputClean_fun.R")
+load('./WGCNA_data/mSet_example.RData')  
+load("./WGCNA_data/clinicalTrait_example.RData")
+source("./WGCNA_functions/taxo_01_dataInputClean.R")
 
 .on.public.web <- FALSE  
 
