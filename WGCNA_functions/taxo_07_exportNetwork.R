@@ -260,13 +260,10 @@ export.networkToExternal <- function(mSetObj = NULL,
 load('./WGCNA_data/mSet_example.RData')   
 load("./WGCNA_data/clinicalTrait_example.RData")
 source("./WGCNA_functions/taxo_01_dataInputClean.R")
-
 # Read in gene annotation file 
 annot <- read.csv("./WGCNA_rawData/GeneAnnotation.csv")  
 
-
 .on.public.web <- FALSE  
-
 mSetObj <- make.exprSet(mSetObj = mSetObj_example)
 
 # Store annotation data into mSet object 
@@ -275,7 +272,6 @@ mSetObj$dataSet$annotation <- annot
 
 # Test the function 
 # args(export.networkToExternal) 
-
 export.networkToExternal(mSetObj = mSetObj,
                          file = "./networkExport.txt",
                          module = "brown")
