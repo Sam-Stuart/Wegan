@@ -5,7 +5,7 @@
 #'@description Output a table of genes and their coefficients corresponding to statistical associations with module membership and clinical traits 
 #'@param mSetObj Input name of the created mSet Object
 #'@param power Soft threshold, default is 6 
-#'@param file Image file name
+#'@param file  Output file name
 #'@author Xin (David) Zhao\email{xzhao1@ualberta.ca}
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2)
