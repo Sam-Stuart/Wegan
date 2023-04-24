@@ -3,7 +3,6 @@
 #'@param mSetObj Input name of the created mSet Object
 #'@param custom_norm Customized normalization provided by users 
 #'@param powerVector Vector of soft threshold values
-#'@param file String indicates image file name
 #'@param imgName Image name 
 #'@param format Select the image format, "png" or "pdf". Default is "png" 
 #'@param dpi Define the resolution. If the image format is "pdf", users do not need define the dpi. For "png" format, the default dpi is 72. It is suggested that for high-resolution images, choose a dpi of 300. 
@@ -16,7 +15,6 @@
 findSoftThreshold <- function(mSetObj = NA, 
                               custom_norm = NA, 
                               powerVector = NULL,
-                              file,
                               imgName, # Image name 
                               format, # Select image format, "png" or "pdf", default is "png 
                               dpi = 72, # Define image resolution for png, high-res dpi 300 
