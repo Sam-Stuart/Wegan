@@ -2,8 +2,12 @@
 #'@description Assist users graphically in finding optimal soft threshold for network co-expression analysis based on relationship between free-scale topology, mean connectivity and soft thresholds 
 #'@param mSetObj Input name of the created mSet Object
 #'@param custom_norm Customized normalization provided by users 
-#'@param powerVector vector of soft threshold values
-#'@param file string indicates image file name
+#'@param powerVector Vector of soft threshold values
+#'@param file String indicates image file name
+#'@param imgName Image name 
+#'@param format Select the image format, "png" or "pdf". Default is "png" 
+#'@param dpi Define the resolution. If the image format is "pdf", users do not need define the dpi. For "png" format, the default dpi is 72. It is suggested that for high-resolution images, choose a dpi of 300. 
+#'@param width Define image sizes, there 2 default widths. The first, width = NULL, is 10.5. The second default is width = 0, where the width is 7.2. Otherwise, users can customize widths on their own   
 #'@param verbose parameter in function WGCNA::pickSoftThreshold() 
 #'@author Xin (David) Zhao\email{xzhao1@ualberta.ca}
 #'University of Alberta, Canada
@@ -13,6 +17,10 @@ findSoftThreshold <- function(mSetObj = NA,
                               custom_norm = NA, 
                               powerVector = NULL,
                               file,
+                              imgName, # Image name 
+                              format, # Select image format, "png" or "pdf", default is "png 
+                              dpi = 72, # Define image resolution for png, high-res dpi 300 
+                              width = NULL, # Define image size, default 10.5 or 7.2 (inches)
                               verbose = NULL){
     
     library(WGCNA) 
