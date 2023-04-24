@@ -93,7 +93,6 @@ plot.geneNetwork <- function(mSetObj = NULL,
 }
 
 
-
 #===============================================================================
 
 # Validate the above function 
