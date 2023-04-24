@@ -55,6 +55,15 @@ findSoftThreshold <- function(mSetObj = NA,
     df_fitIndices <- df_fitIndices %>% 
         dplyr::mutate(plot1_y = -sign(slope)*SFT.R.sq) 
     
+    # Define sizes for the final plot 
+    if(is.null((width))) {
+        w <- 10.5 
+    } else if (width == 0) {
+        w <- 7.2 
+    } else {
+        w <- width
+    }
+    
     # Scale-free topology fit index 
     plot1 <- ggplot2::ggplot(df_fitIndices, 
                              aes(x = Power, y = plot1_y)) +
@@ -76,13 +85,18 @@ findSoftThreshold <- function(mSetObj = NA,
         theme_classic() 
     # Arrange two plots side-by-side on one page 
     gridExtra::grid.arrange(plot1, plot2, nrow = 1)
+
     ggplot2::ggsave(paste("./WGCNA_output/", imgName, ".", format, sep = ""),
                     width = w, 
                     units = "inches",
                     dpi = dpi)
-
+    
+    # Name plot for download 
+    imgName_json <- paste(imgName, ".json", sep = "")
+    
+    imgName_export <- paste(imgName, "dpi", dpi, ".", format, sep = "")
     # Save the resulting figure file name to mSet object 
-    mSetObj$imgSet$softThreshold <- file
+    mSetObj$imgSet$softThreshold <- imgName_export 
     
     .set.mSet(mSetObj)
 
@@ -102,12 +116,11 @@ source("./WGCNA_functions/taxo_01_dataInputClean.R")
 
 # Call my function 
 .on.public.web <- FALSE 
-
 mSetObj <- make.exprSet(mSetObj = mSetObj_example)  
 
 # Call the new function 
 # debug(findSoftThreshold)
-findSoftThreshold(mSetObj = mSetObj, file = "./WGCNA_output/softhreshold.pdf")  
+findSoftThreshold(mSetObj = mSetObj)  
 # undebug(findSoftThreshold)
 
 
