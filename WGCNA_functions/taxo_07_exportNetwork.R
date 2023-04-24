@@ -1,6 +1,15 @@
-# This R function exports a gene network to external visualization 
-# software (VisANT and Cytoscape) using WGCNA package
-
+#'Export gene network data 
+#'@description Exports network data in the format readable by VisANT or Cytoscape 
+#'@param mSetObj Input name of the created mSet Object
+#'@param custom_norm Customized normalization provided by users 
+#'@param power Soft threshold, dafault value is 6 
+#'@param file The image file name 
+#'@param method The method to calculate hierarchical structure
+#'@param nSelect Gene number showing in the network  
+#'@author Xin (David) Zhao\email{xzhao1@ualberta.ca}
+#'University of Alberta, Canada
+#'License: GNU GPL (>= 2)
+#'@export
 export.networkToExternal <- function(mSetObj = NULL,
                                      custom_norm = NULL,
                                      power = 6,
@@ -11,6 +20,8 @@ export.networkToExternal <- function(mSetObj = NULL,
                                      ) {
     
     library(WGCNA)
+    
+    source("./WGCNA_functions/taxo_00_generalDataUtils.R") 
     
     mSetObj <- .get.mSet(mSetObj) 
     
