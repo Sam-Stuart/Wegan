@@ -10,7 +10,7 @@
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2)
 #'@export
-tabulate.intraModule <- function(mSetObj = NULL, power = 6, net) {
+tabulate.intraModule <- function(mSetObj = NULL, power = 6, file) {
     
     library(WGCNA)
     library(tidyverse) 
@@ -118,7 +118,7 @@ tabulate.intraModule <- function(mSetObj = NULL, power = 6, net) {
         geneInfo_list[i] <- list(geneInfo)
         
         # Export the output 
-        write.csv(geneInfo, file = "./WGCNA_output/geneInfo.csv")
+        write.csv(geneInfo, file = file)
     }
     
     return(geneInfo_list)
