@@ -104,6 +104,19 @@ plotEigengeneNetworks(MET,
 
 
 
+#===============================================================================
+
+# Reproduce base-R plots with ggplot2 
+
+#===============================================================================
+
+# Dendrogram using ggdendro package which extract plot data from dendrogram and draw the dendrogram using ggplot2 
+
+
+
+
+
+
 
 
 
