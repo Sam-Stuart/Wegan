@@ -75,12 +75,12 @@ findSoftThreshold <- function(mSetObj = NA,
              y = "Mean connectivity") + 
         theme_classic() 
     # Arrange two plots side-by-side on one page 
-    pdf(file = file)
-    mergePlots <- gridExtra::grid.arrange(plot1, 
-                                          plot2, 
-                                          nrow = 1)
-    dev.off() 
-    
+    gridExtra::grid.arrange(plot1, plot2, nrow = 1)
+    ggplot2::ggsave(paste("./WGCNA_output/", imgName, ".", format, sep = ""),
+                    width = w, 
+                    units = "inches",
+                    dpi = dpi)
+
     # Save the resulting figure file name to mSet object 
     mSetObj$imgSet$softThreshold <- file
     
