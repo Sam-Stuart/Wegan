@@ -99,7 +99,6 @@ findSoftThreshold <- function(mSetObj = NA,
     mSetObj$imgSet$softThreshold <- imgName_export 
     
     .set.mSet(mSetObj)
-
 } 
 
 
