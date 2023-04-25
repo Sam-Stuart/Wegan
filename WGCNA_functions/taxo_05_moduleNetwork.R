@@ -97,37 +97,34 @@ plot.eigengenesNetwork <- function(mSetObj = NULL,
         h <- w # height 
         
         if (format == "png") {
-            png(file, res = dpi) 
-            par(cex = 1.0, mfrow  = c(1, 2)) 
+            png(paste("dendrogram", "_", file, sep = ""), res = dpi)  
             WGCNA::plotEigengeneNetworks(MET, 
                                          "Eigengene dendrogram",
                                          marDendro = c(0, 4, 2, 0),
-                                         plotHeatmaps = FALSE) 
-            
-            par(cex = 1.0)
-            WGCNA::plotEigengeneNetworks(MET, 
-                                         "Eigengene adjacency heatmap",
-                                         marHeatmap = c(3, 4, 2, 2),
-                                         plotDendrograms = FALSE,
-                                         xLabelsAngle = 90)
-            
+                                         plotHeatmaps = FALSE)  
             dev.off() 
             
+            png(paste("heatmap", "_", file, sep = ""), res = dpi)
+            WGCNA::plotEigengeneNetworks(MET,
+                                         "Eigengene adjacency heatmap",
+                                         marHeatmap = c(3, 4, 2, 2),
+                                         plotDendrograms = FALSE,
+                                         xLabelsAngle = 90)
+            dev.off() 
         } else {
-            pdf(file, width = w, units = "cm")
-            par(cex = 1.0) 
+            pdf(file)
+            
+            par(mfrow = c(1, 2))
             WGCNA::plotEigengeneNetworks(MET, 
                                          "Eigengene dendrogram",
                                          marDendro = c(0, 4, 2, 0),
                                          plotHeatmaps = FALSE) 
             
-            par(cex = 1.0)
             WGCNA::plotEigengeneNetworks(MET, 
                                          "Eigengene adjacency heatmap",
                                          marHeatmap = c(3, 4, 2, 2),
                                          plotDendrograms = FALSE,
-                                         xLabelsAngle = 90)
-            
+                                         xLabelsAngle = 90) 
             dev.off() 
         }
         
@@ -160,11 +157,8 @@ mSetObj$dataSet$traits <- allTraits
 # args(plot.eigengenesNetwork)
 
 # debug(plot.eigengenesNetwork) 
-plot.eigengenesNetwork(mSetObj = mSetObj) 
+plot.eigengenesNetwork(mSetObj = mSetObj, format = "png")  
 # undebug(plot.eigengenesNetwork) 
-
-
-
 
 
 
