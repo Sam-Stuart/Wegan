@@ -1,16 +1,22 @@
 #'Link modules and clinical traits 
 #'@description Plot heatmap to illustrate correlation between modules (engingene)
-#'and clinical trats
+#'and clinical traits
 #'@param mSetObj Input name of the created mSet Object
 #'@param power Soft threshold, default is 6 
-#'@param file Image file name
+#'@param imgName Image name
+#'@param format Select the image format, "png" or "pdf". Default is "png" 
+#'@param dpi Define the resolution. If the image format is "pdf", users do not need define the dpi. For "png" format, the default dpi is 72. It is suggested that for high-resolution images, choose a dpi of 300
+#'@param width Define image sizes, there 2 default widths. The first, width = NULL, is 10.5. The second default is width = 0, where the width is 7.2. Otherwise, users can customize widths on their own   
 #'@author Xin (David) Zhao\email{xzhao1@ualberta.ca}
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2)
 #'@export
 plot.moduleTraitHeatmap <- function(mSetObj, 
                                     power = 6, 
-                                    file) {
+                                    imgName, 
+                                    format = "png", 
+                                    dpi = 72, 
+                                    width = NULL) {
     
     library(WGCNA)
     library(tidyverse)
@@ -113,10 +119,16 @@ plot.moduleTraitHeatmap <- function(mSetObj,
         left_join(df_textMatrix2, 
                   by = c("trait", "modulecolor"))
     
-    
-    
-    # Display the correlation values within a heatmap plot 
-    png(file, width = 16, height = 12, units = "in", res = 120)   
+    # Define sizes for the final plot 
+    if(is.null((width))) {
+        w <- 10.5 
+    } else if (width == 0) {
+        w <- 7.2 
+    } else {
+        w <- width
+    }
+    h <- w # height 
+   
     # Plot a heatmap using geom_tile()  
     ht_moduleTrait <- ggplot(df_moduleTraitCor3, 
                              aes(x = trait, 
@@ -127,7 +139,7 @@ plot.moduleTraitHeatmap <- function(mSetObj,
                                              color = "white",
                                              check_overlap = TRUE,
                                              inherit.aes = TRUE,
-                                             size = 3) +
+                                             size = 1.5) +
                       scale_fill_gradient2(low = "#075AFF",
                                            mid = "#FFFFCC",
                                            high = "#FF0000",
@@ -144,13 +156,25 @@ plot.moduleTraitHeatmap <- function(mSetObj,
                            axis.text.y = element_text(size = 10)) +
                       scale_x_discrete(limits = label_xaxis) +
                       scale_y_discrete(limits = label_yaxis)
-    print(ht_moduleTrait)
-    dev.off()
-
-    mSetObj$imgSet$modTraitHeatmap <- file # Store image file name into mSet object  
-
-    .set.mSet(mSetObj) 
-
+    
+    # Export plots 
+    ggplot2::ggsave(filename = paste("./WGCNA_output/", imgName, ".", format, sep = ""),
+                    plot = ht_moduleTrait, # Plot to export 
+                    device = format,
+                    scale = 1,
+                    width = w,
+                    # height = h,
+                    units = "cm",
+                    dpi = dpi)  
+    
+    # Name plot for download 
+    imgName_json <- paste(imgName, ".json", sep = "")
+    
+    imgName_export <- paste(imgName, "dpi", dpi, ".", format, sep = "")
+    # Save the resulting figure file name to mSet object 
+    mSetObj$imgSet$modTraitHeatmap <- imgName_export 
+    
+    .set.mSet(mSetObj)
 } 
 
 #===============================================================================
@@ -171,12 +195,10 @@ mSetObj$dataSet$traits <- allTraits
 
 # debug(plot.moduleTraitHeatmap)
 plot.moduleTraitHeatmap(mSetObj = mSetObj,
-                        file = "./WGCNA_output/ggplotModuleTrait.png")  
+                        imgName = "ggModuleTrait",
+                        dpi = 300,
+                        width = 20)  
 # undebug(plot.moduleTraitHeatmap)
-
-
-
-
 
 
 
