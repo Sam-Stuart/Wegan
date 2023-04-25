@@ -99,14 +99,18 @@ plot.geneNetwork <- function(mSetObj = NULL,
     h <- w # height 
     
     if (format == "png") {
-        png(file, width = w, res = dpi)
+        png(paste(imgName, ".", format, sep = ""), 
+            # width = w, 
+            # units = "cm", 
+            res = dpi)
+        
         WGCNA::TOMplot(plotDiss, 
                        selectTree, 
                        selectColors, 
                        main = "Netwrok heatmap plot, selected genes") 
         dev.off()
     } else {
-        pdf(file, width = w)
+        pdf(paste(imgName, ".", format, sep = "")) 
         WGCNA::TOMplot(plotDiss, 
                        selectTree, 
                        selectColors, 
@@ -131,7 +135,7 @@ plot.geneNetwork <- function(mSetObj = NULL,
 
 #===============================================================================
 
-load('./WGCNA_data/mSet_example.RData')  
+load('./WGCNA_data/mSet_example.RData')   
 load("./WGCNA_data/clinicalTrait_example.RData")
 source("./WGCNA_functions/taxo_01_dataInputClean.R")
 
@@ -143,9 +147,6 @@ args(plot.geneNetwork)
 
 
 plot.geneNetwork(mSetObj = mSetObj,
-                 file = "./output-WGCNA/heatmap-geneNetwork.pdf",
+                 imgName = "geneNetworkplots",
                  nSelect = 500) 
-
-
-
 
