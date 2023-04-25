@@ -145,7 +145,6 @@ mSetObj <- make.exprSet(mSetObj = mSetObj_example)
 
 args(plot.geneNetwork)
 
-
 plot.geneNetwork(mSetObj = mSetObj,
                  imgName = "geneNetworkplots",
                  nSelect = 500) 
