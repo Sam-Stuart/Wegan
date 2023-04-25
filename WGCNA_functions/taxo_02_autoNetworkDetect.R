@@ -15,8 +15,8 @@
 findSoftThreshold <- function(mSetObj = NA, 
                               custom_norm = NA, 
                               powerVector = NULL,
-                              imgName, # Image name 
-                              format, # Select image format, "png" or "pdf", default is "png 
+                              imgName, # Image name, a string 
+                              format = "png", # Select image format, "png" or "pdf" 
                               dpi = 72, # Define image resolution for png, high-res dpi 300 
                               width = NULL, # Define image size, default 10.5 or 7.2 (inches)
                               verbose = NULL){
@@ -63,6 +63,7 @@ findSoftThreshold <- function(mSetObj = NA,
     } else {
         w <- width
     }
+    h <- w # height 
     
     # Scale-free topology fit index 
     plot1 <- ggplot2::ggplot(df_fitIndices, 
@@ -84,13 +85,18 @@ findSoftThreshold <- function(mSetObj = NA,
              y = "Mean connectivity") + 
         theme_classic() 
     # Arrange two plots side-by-side on one page 
-    gridExtra::grid.arrange(plot1, plot2, nrow = 1)
-
-    ggplot2::ggsave(paste("./WGCNA_output/", imgName, ".", format, sep = ""),
-                    width = w, 
-                    units = "inches",
-                    dpi = dpi)
+    plots_merged <- gridExtra::grid.arrange(plot1, plot2, nrow = 1) 
     
+    # Export plots 
+    ggplot2::ggsave(filename = paste("./WGCNA_output/", imgName, ".", format, sep = ""),
+                    plot = plots_merged, # Plot to export 
+                    device = format,
+                    scale = 1,
+                    width = w,
+                    height = h,
+                    units = "cm",
+                    dpi = dpi) 
+
     # Name plot for download 
     imgName_json <- paste(imgName, ".json", sep = "")
     
@@ -108,7 +114,7 @@ findSoftThreshold <- function(mSetObj = NA,
 
 #===============================================================================
 
-load("./WGCNA_data/mSet_example.RData")
+load("./WGCNA_data/mSet_example.RData") 
 source("./WGCNA_functions/taxo_01_dataInputClean.R") 
 
 # Call my function 
@@ -117,7 +123,7 @@ mSetObj <- make.exprSet(mSetObj = mSetObj_example)
 
 # Call the new function 
 # debug(findSoftThreshold)
-findSoftThreshold(mSetObj = mSetObj)  
+findSoftThreshold(mSetObj = mSetObj, imgName = "softThresholdggPlots")   
 # undebug(findSoftThreshold)
 
 
