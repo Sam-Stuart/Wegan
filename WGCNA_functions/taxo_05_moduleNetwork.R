@@ -86,7 +86,6 @@ plot.eigengenesNetwork <- function(mSetObj = NULL,
             imgName_js <- paste(imgName[i], ".json", sep = "") 
         }
         
-        
         # Define sizes for the final plot 
         if(is.null((width))) {
             w <- 10.5 
@@ -97,10 +96,9 @@ plot.eigengenesNetwork <- function(mSetObj = NULL,
         }
         h <- w # height 
         
-        # Set up the PDF device 
         if (format == "png") {
-            png(file, width = w, units = "cm", res = dpi) 
-            par(cex = 1.0) 
+            png(file, res = dpi) 
+            par(cex = 1.0, mfrow  = c(1, 2)) 
             WGCNA::plotEigengeneNetworks(MET, 
                                          "Eigengene dendrogram",
                                          marDendro = c(0, 4, 2, 0),
@@ -116,8 +114,7 @@ plot.eigengenesNetwork <- function(mSetObj = NULL,
             dev.off() 
             
         } else {
-            # Default image is FDF format 
-            pdf(file, width = w, height = h, units = "cm")
+            pdf(file, width = w, units = "cm")
             par(cex = 1.0) 
             WGCNA::plotEigengeneNetworks(MET, 
                                          "Eigengene dendrogram",
@@ -161,7 +158,6 @@ mSetObj <- make.exprSet(mSetObj = mSetObj_example)
 mSetObj$dataSet$traits <- allTraits 
 
 # args(plot.eigengenesNetwork)
-
 
 # debug(plot.eigengenesNetwork) 
 plot.eigengenesNetwork(mSetObj = mSetObj) 
