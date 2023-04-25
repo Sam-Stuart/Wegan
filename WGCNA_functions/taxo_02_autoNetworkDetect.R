@@ -125,6 +125,3 @@ mSetObj <- make.exprSet(mSetObj = mSetObj_example)
 # debug(findSoftThreshold)
 findSoftThreshold(mSetObj = mSetObj, imgName = "softThresholdggPlots")   
 # undebug(findSoftThreshold)
-
-
-
