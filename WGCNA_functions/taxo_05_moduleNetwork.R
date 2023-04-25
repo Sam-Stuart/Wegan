@@ -3,10 +3,10 @@
 #'@param mSetObj Input name of the created mSet Object
 #'@param custom_norm Allow users to load customized normalized data 
 #'@param power Soft threshold, default is 6 
-#'@param imgName Image names either automatically generated or manually set 
-#'@param format PNG or PDF 
-#'@param dpi Default is 72 
-#'@param width Image width 
+#'@param imgName Image name, "auto" or "manual", default is "auto"
+#'@param format Select the image format, "png" or "pdf". Default is "png" 
+#'@param dpi Define the resolution. If the image format is "pdf", users do not need define the dpi. For "png" format, the default dpi is 72. It is suggested that for high-resolution images, choose a dpi of 300. 
+#'@param width Define image sizes, there 2 default widths. The first, width = NULL, is 10.5. The second default is width = 0, where the width is 7.2. Otherwise, users can customize widths on their own 
 #'@author Xin (David) Zhao\email{xzhao1@ualberta.ca}
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2)
@@ -17,7 +17,7 @@ plot.eigengenesNetwork <- function(mSetObj = NULL,
                                    imgName = "auto", #  auto or manual modes
                                    format = "png", # png or pdf 
                                    dpi = 72, # Image resolution, dot per inch
-                                   width = NA) {  # Image dimension, inches 
+                                   width = NULL) {  # Image dimension, inches 
     
     library(WGCNA)
     library(tidyverse) 
@@ -77,24 +77,29 @@ plot.eigengenesNetwork <- function(mSetObj = NULL,
 
         # Set image file names 
         if (imgName == "auto") {
-            file <- paste(var, "Eigengene_network", ".", format, sep = "") 
+            file <- paste(var, "Eigengene_network", ".", format, sep = "")
+            # Name plot for download 
+            imgName_js <- paste(var, ".json", sep = "") 
         } else {
-            file <- paste(imgName[i], "dpi", dpi, ".", format, sep = "")  
+            file <- paste(imgName[i], "dpi", dpi, ".", format, sep = "") 
+            # Name plot for download 
+            imgName_js <- paste(imgName[i], ".json", sep = "") 
         }
         
-        # Set plot dimensions 
-        if (is.na(width)) {
-            w <- 480  
+        
+        # Define sizes for the final plot 
+        if(is.null((width))) {
+            w <- 10.5 
         } else if (width == 0) {
-            w <- 480
+            w <- 7.2 
         } else {
             w <- width
         }
-        #h <- w # height
+        h <- w # height 
         
         # Set up the PDF device 
         if (format == "png") {
-            png(file, width = w, units = "px", res = dpi)
+            png(file, width = w, units = "cm", res = dpi) 
             par(cex = 1.0) 
             WGCNA::plotEigengeneNetworks(MET, 
                                          "Eigengene dendrogram",
@@ -112,7 +117,7 @@ plot.eigengenesNetwork <- function(mSetObj = NULL,
             
         } else {
             # Default image is FDF format 
-            pdf(file, width = w, height = h)
+            pdf(file, width = w, height = h, units = "cm")
             par(cex = 1.0) 
             WGCNA::plotEigengeneNetworks(MET, 
                                          "Eigengene dendrogram",
@@ -130,11 +135,13 @@ plot.eigengenesNetwork <- function(mSetObj = NULL,
         }
         
         plot_list[i] <- list(file) 
+        imgName_json <- list(imgName_js)  
     }
     
+    # Save the resulting figure file name to mSet object 
     mSetObj$imgSet$moduleNetworkPlots <- plot_list  
     
-    return(mSetObj)
+    .set.mSet(mSetObj)
     
 }
 
