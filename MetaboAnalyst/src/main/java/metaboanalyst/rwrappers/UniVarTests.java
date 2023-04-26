@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 import org.rosuda.REngine.REXPMismatchException;
 
 // for Stats module (rwrapper: UniVarTests, controller: UnivBean)
-// have group_name added to them : InitPairedFC, InitUnpairedFC, performTtests,   performVolcano, performANOVA, PlotCmpdView
+// have group_name added to : InitPairedFC, InitUnpairedFC, performTtests,   performVolcano, performANOVA, PlotCmpdView
 
 /**
  *
@@ -383,12 +383,12 @@ public class UniVarTests {
     }
 
     public static String PlotCmpdView(RConnection RC, String cmpdName,
-            String group_name,
+//            String group_name,
             String format, String dpi) {
         try {
             String rCommand = "PlotCmpdView(NA" + ", \"" 
                     + cmpdName + "\", \"" 
-                    + group_name + "\", \"" 
+//                    + group_name + "\", \"" 
                     + format + "\", " 
                     + dpi + ", width=NA)";
             RCenter.recordRCommand(RC, rCommand);

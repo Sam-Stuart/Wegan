@@ -1153,7 +1153,7 @@ PlotANOVA <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA){
 #'
 
 PlotCmpdView <- function(mSetObj=NA, cmpdNm, 
- group_name = "NULL",
+# group_name = "NULL",
 format="png", dpi=72, width=NA
 ){
   
@@ -1176,63 +1176,63 @@ print( c("names mSetObj: ",
 print( c("names mSetObj$dataSet: ", 
   paste( names(mSetObj$dataSet), collapse = " ")  ))
 
-input <- data
-
-### IF NOT GROUP NAME IS PROVIDED:
-# if(group_name == 'defa'){#"NULL"){
-
- # NO METADATA
-if(!"origMeta" %in% names(mSetObj$dataSet) ){
-  
-  ## no categorical in input:
-  if( !any(sapply(data, is.factor) | sapply(input, is.character)) ){
-     cls <-   factor( input[,1,drop=TRUE] )
-    AddErrMsg("No categorical variables (required as group variable); did you input your categorical variables as numbers (for example, as hot-one coded)? Alternatively, try splitting a numeric variable of interest into categories.")
-  } else{
-    # GET CATEGORICAL COLUMNS FROM INPUT DATAFRAME
-   facdata <- input[,sapply(input, is.factor) | sapply(input, is.character), drop = FALSE]
-   cls <- factor(facdata[,1, drop = TRUE])
-  }
-  
-  ### GET FROM METADATA
-} else{
-  
-  metaData <- mSetObj$dataSet$origMeta
-    ## NO CATEGORICAL IN metaData:
-    if( !any(sapply(metaData, is.factor) | sapply(metaData, is.character)) ){
-      ## NO CATEGORICAL IN INPUT
-      if( !any(sapply(input, is.factor) | sapply(input, is.character)) ){
-     cls <-   factor( input[,1,drop=TRUE] )
-    AddErrMsg("No categorical variables (required as group variable); did you input your categorical variables as numbers (for example, as hot-one coded)? Alternatively, try splitting a numeric variable of interest into categories")
-  } else{
-    # GET CATEGORICAL COLUMNS FROM INPUT
-   facdata <- input[,sapply(input, is.factor) | sapply(input, is.character), drop = FALSE]
-   cls <- factor(facdata[,1, drop = TRUE])
-  }
-      
-    } else{
-      ## CATEGORICAL FROM METADATA  
-   facdata <- metaData[,sapply(metaData, is.factor) | sapply(metaData, is.character), drop = FALSE]
-   cls <- factor(facdata[,1, drop = TRUE])
-      
-  } 
-      
-}
-  ## group_name IS PRESENT (NOT 'NULL')
-# } else{
-#   ## if group_name is not a factor, do not allow - should only be factors
-#   ## because dropdown provided is only factors
-#    # NO METADATA, GET FROM INPUT
-#    if(!"origMeta" %in% names(mSetObj$dataSet) ){
-#   cls <- factor( input[,group_name,drop = TRUE] )
-#    } else{
-#   # GET FROM METADATA
-#   cls <- factor( mSetObj$dataSet$origMeta[,group_name,drop = TRUE] )
-#    }
+# input <- data
 # 
+# ### IF NOT GROUP NAME IS PROVIDED:
+# # if(group_name == 'defa'){#"NULL"){
+# 
+# # NO METADATA
+# if(!"origMeta" %in% names(mSetObj$dataSet) ){
+#   
+#   ## no categorical in input:
+#   if( !any(sapply(data, is.factor) | sapply(input, is.character)) ){
+#     cls <-   factor( input[,1,drop=TRUE] )
+#     AddErrMsg("No categorical variables (required as group variable); did you input your categorical variables as numbers (for example, as hot-one coded)? Alternatively, try splitting a numeric variable of interest into categories.")
+#   } else{
+#     # GET CATEGORICAL COLUMNS FROM INPUT DATAFRAME
+#     facdata <- input[,sapply(input, is.factor) | sapply(input, is.character), drop = FALSE]
+#     cls <- factor(facdata[,1, drop = TRUE])
+#   }
+#   
+#   ### GET FROM METADATA
+# } else{
+#   
+#   metaData <- mSetObj$dataSet$origMeta
+#   ## NO CATEGORICAL IN metaData:
+#   if( !any(sapply(metaData, is.factor) | sapply(metaData, is.character)) ){
+#     ## NO CATEGORICAL IN INPUT
+#     if( !any(sapply(input, is.factor) | sapply(input, is.character)) ){
+#       cls <-   factor( input[,1,drop=TRUE] )
+#       AddErrMsg("No categorical variables (required as group variable); did you input your categorical variables as numbers (for example, as hot-one coded)? Alternatively, try splitting a numeric variable of interest into categories")
+#     } else{
+#       # GET CATEGORICAL COLUMNS FROM INPUT
+#       facdata <- input[,sapply(input, is.factor) | sapply(input, is.character), drop = FALSE]
+#       cls <- factor(facdata[,1, drop = TRUE])
+#     }
+#     
+#   } else{
+#     ## CATEGORICAL FROM METADATA  
+#     facdata <- metaData[,sapply(metaData, is.factor) | sapply(metaData, is.character), drop = FALSE]
+#     cls <- factor(facdata[,1, drop = TRUE])
+#     
+#   } 
+#   
 # }
-
- mSetObj$dataSet$cls <- cls
+# ## group_name IS PRESENT (NOT 'NULL')
+# # } else{
+# #   ## if group_name is not a factor, do not allow - should only be factors
+# #   ## because dropdown provided is only factors
+# #    # NO METADATA, GET FROM INPUT
+# #    if(!"origMeta" %in% names(mSetObj$dataSet) ){
+# #   cls <- factor( input[,group_name,drop = TRUE] )
+# #    } else{
+# #   # GET FROM METADATA
+# #   cls <- factor( mSetObj$dataSet$origMeta[,group_name,drop = TRUE] )
+# #    }
+# # 
+# # }
+# 
+# mSetObj$dataSet$cls <- cls
  ### new code 202304-11 END --------
 
 
