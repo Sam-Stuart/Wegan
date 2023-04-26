@@ -38,6 +38,12 @@
                             <p:inputText style="width:50px" disabled ="#{!sessionBean1.paired}" value="#{univBean.countThresh}"/> 
                             <p:outputLabel value=" %"/> 
                         </h:panelGroup>
+                                                    <!-- GPS added - where 'hash' is below insert  octothorpe (number sign) bc it screws up run if not removed -->
+                            <h:outputLabel style="font-weight: bold" value="Group Variable:"/>
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{univBean.statGroupName}">
+                                <f:selectItems value="#{univBean.statGroupNameOpts}" />
+                            </p:selectOneMenu>
+                            <!--Finish adding-->      
                     </h:panelGrid>
                     <p:commandButton value="Submit" update="form1:fcPane  :cmdPane" actionListener="#{univBean.fcButton_action()}"/>   
                 </h:panelGrid>

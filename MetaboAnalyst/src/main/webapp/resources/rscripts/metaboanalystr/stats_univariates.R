@@ -8,6 +8,9 @@
 #### NB UnivBean includes LineChartModel (LineChartSeries)
 #
 #
+## r FXN WRAPPAGE CHAINS:
+FC.Anal.unpaired( GetFC() ), FC.Anal.paired(GetFC()) , Ttests.Anal(GetTtestRes(get.ttest.res)), Volcano.Anal(GetFC(),GetTtestRes() ), ANOVA.Anal(parseTukey(), parseFisher(), kwtest(), aof() ), PlotCmpdView
+
 ### R FUNCTIONS (#) & associated RWRAPPER (##)
 #
 # FC.Anal.unpaired(mSetObj=NA, fc.thresh=2, cmp.type = 0)
@@ -49,6 +52,8 @@
 # fac.columns
 # get.ttest.res
 #
+## TROUBLESHOOTING ALL FXNS: ADDED GRP_NAME TO THE FOLLOWING FXNS:
+FC.Anal.unpaired, FC.Anal.paired, GetFC, Ttests.Anal, Volcano.Anal, ANOVA.Anal, PlotCmpdView, GetTtestRes 
 ### ---------------------------------------------------------------- 
 
 #'Fold change analysis, unpaired
@@ -56,19 +61,22 @@
 #'@usage FC.Anal.unpaired(mSetObj, fc.thresh=2, cmp.type = 0)
 #'@param mSetObj Input the name of
 
-#'Fold change analysis, unpaired
+#'Fold change analysis, unpaired - wraps GetFC()
 #'@description Perform fold change analysis, method can be mean or median
 #'@usage FC.Anal.unpaired(mSetObj, fc.thresh=2, cmp.type = 0)
 #'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
 #'@param fc.thresh Fold-change threshold, numeric input
 #'@param cmp.type Comparison type, 0 for group 1 minus group 2, and 1 for group 
 #'1 minus group 2
+##@param group_name character, column name to use for grouping
 #'@author Jeff Xia\email{jeff.xia@mcgill.ca}
 #'McGill University, Canada
 #'License: GNU GPL (>= 2)
 #'@export
 #'
-FC.Anal.unpaired <- function(mSetObj=NA, fc.thresh=2, cmp.type = 0){
+FC.Anal.unpaired <- function(mSetObj=NA, fc.thresh=2, cmp.type = 0
+, group_name = 'defa'#"NULL"
+){
   
   mSetObj <- .get.mSet(mSetObj);
   
@@ -77,7 +85,9 @@ FC.Anal.unpaired <- function(mSetObj=NA, fc.thresh=2, cmp.type = 0){
   max.thresh = fc.thresh;
   min.thresh = 1/fc.thresh;
   
-  res <- GetFC(mSetObj, F, cmp.type);
+  res <- GetFC(mSetObj, F, cmp.type
+     , group_name 
+     );
   fc.all <- res$fc.all;
   fc.log <- res$fc.log;
   
@@ -106,18 +116,21 @@ FC.Anal.unpaired <- function(mSetObj=NA, fc.thresh=2, cmp.type = 0){
   return(.set.mSet(mSetObj));
 }
 
-#'Fold change analysis, paired
+#'Fold change analysis, paired - wraps GetFC()
 #'@description Perform paired fold change analysis
 #'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
 #'@param fc.thresh Fold-change threshold, numeric input
 #'@param percent.thresh Numeric input, from 0 to 1 to indicate the significant count threshold
 #'@param cmp.type Comparison type, 0 for group 1 minus group 2, and 1 for group 
+##@param group_name character, column name to use for grouping
 #'@author Jeff Xia\email{jeff.xia@mcgill.ca}
 #'McGill University, Canada
 #'License: GNU GPL (>= 2)
 #'@export
 #'
-FC.Anal.paired <- function(mSetObj=NA, fc.thresh=2, percent.thresh=0.75, cmp.type=0){
+FC.Anal.paired <- function(mSetObj=NA, fc.thresh=2, percent.thresh=0.75, cmp.type=0
+, group_name = 'defa'#"NULL"
+){
   
   mSetObj <- .get.mSet(mSetObj);
   
@@ -126,7 +139,9 @@ FC.Anal.paired <- function(mSetObj=NA, fc.thresh=2, percent.thresh=0.75, cmp.typ
   max.thresh = fc.thresh;
   min.thresh = 1/fc.thresh;
   
-  fc.mat <- GetFC(mSetObj, T, cmp.type);
+  fc.mat <- GetFC(mSetObj, T, cmp.type
+ , group_name 
+);
   
   count.thresh <- round(nrow(mSetObj$dataSet$norm)/2*percent.thresh);
   mat.up <- fc.mat >= log(max.thresh,2);
@@ -272,22 +287,102 @@ PlotFC <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA){
 #'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
 #'@param paired Logical, true of false
 #'@param cmpType Numeric, 0 or 1
+##@param group_name character, column name to use for grouping
 #'@author Jeff Xia\email{jeff.xia@mcgill.ca}
 #'McGill University, Canada
 #'License: GNU GPL (>= 2)
 #'@export
 #'
-GetFC <- function(mSetObj=NA, paired=FALSE, cmpType){
+GetFC <- function(mSetObj=NA, paired=FALSE, cmpType
+, group_name = "NULL"
+){
   
   mSetObj <- .get.mSet(mSetObj);
-  
+
   if(paired){
     if(mSetObj$dataSet$combined.method){
       data <- mSetObj$dataSet$norm;
     }else{
       data <- log(mSetObj$dataSet$row.norm,2);
+    } 
+
+
+ ### new code 202304-11
+ ### new R code - from xialab updates - added 202304-11
+ ### TROUBLESHOOTING:
+
+print("GetFC: ")
+#print( group_name  )
+print( "class: ")
+#print(  class(group_name)  )
+print( "typeof: ")
+#print(  typeof(group_name)  )
+
+print( c("names mSetObj: ", 
+  paste( names(mSetObj), collapse = " ")  ))
+
+print( c("names mSetObj$dataSet: ", 
+  paste( names(mSetObj$dataSet), collapse = " ")  ))
+
+input <- data
+
+### IF NOT GROUP NAME IS PROVIDED:
+ if(group_name == "NULL"){
+
+ # NO METADATA
+if(!"origMeta" %in% names(mSetObj$dataSet) ){
+  
+  ## no categorical in input:
+  if( !any(sapply(data, is.factor) | sapply(input, is.character)) ){
+     cls <-   factor( input[,1,drop=TRUE] )
+    AddErrMsg("No categorical variables (required as group variable); did you input your categorical variables as numbers (for example, as hot-one coded)? Alternatively, try splitting a numeric variable of interest into categories.")
+  } else{
+    # GET CATEGORICAL COLUMNS FROM INPUT DATAFRAME
+   facdata <- input[,sapply(input, is.factor) | sapply(input, is.character), drop = FALSE]
+   cls <- factor(facdata[,1, drop = TRUE])
+  }
+  
+  ### GET FROM METADATA
+} else{
+  
+  metaData <- mSetObj$dataSet$origMeta
+    ## NO CATEGORICAL IN metaData:
+    if( !any(sapply(metaData, is.factor) | sapply(metaData, is.character)) ){
+      ## NO CATEGORICAL IN INPUT
+      if( !any(sapply(input, is.factor) | sapply(input, is.character)) ){
+     cls <-   factor( input[,1,drop=TRUE] )
+    AddErrMsg("No categorical variables (required as group variable); did you input your categorical variables as numbers (for example, as hot-one coded)? Alternatively, try splitting a numeric variable of interest into categories")
+  } else{
+    # GET CATEGORICAL COLUMNS FROM INPUT
+   facdata <- input[,sapply(input, is.factor) | sapply(input, is.character), drop = FALSE]
+   cls <- factor(facdata[,1, drop = TRUE])
+  }
+      
+    } else{
+      ## CATEGORICAL FROM METADATA  
+   facdata <- metaData[,sapply(metaData, is.factor) | sapply(metaData, is.character), drop = FALSE]
+   cls <- factor(facdata[,1, drop = TRUE])
+      
+  } 
+      
+}
+  ## group_name IS PRESENT (NOT 'NULL')
+ } else{
+   ## if group_name is not a factor, do not allow - should only be factors
+   ## because dropdown provided is only factors
+    # NO METADATA, GET FROM INPUT
+    if(!"origMeta" %in% names(mSetObj$dataSet) ){
+   cls <- factor( input[,group_name,drop = TRUE] )
+    } else{
+   # GET FROM METADATA
+   cls <- factor( mSetObj$dataSet$origMeta[,group_name,drop = TRUE] )
     }
-    
+ 
+ }
+
+ mSetObj$dataSet$cls <- cls
+ ### new code 202304-11 END --------
+
     G1 <- data[which(mSetObj$dataSet$cls==levels(mSetObj$dataSet$cls)[1]), ]
     G2 <- data[which(mSetObj$dataSet$cls==levels(mSetObj$dataSet$cls)[2]), ]
     
@@ -334,7 +429,7 @@ GetFC <- function(mSetObj=NA, paired=FALSE, cmpType){
   }
 }
 
-#'Perform t-test analysis
+#'Perform t-test analysis - wraps GetTtestRes()
 #'@description This function is used to perform t-test analysis.
 #'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
 #'@param nonpar Logical, use a non-parametric test, T or F. False is default. 
@@ -348,7 +443,7 @@ GetFC <- function(mSetObj=NA, paired=FALSE, cmpType){
 #'@export
 #'
 Ttests.Anal <- function(mSetObj=NA, nonpar=F, threshp=0.05, paired=FALSE, equal.var=TRUE
-, group_name = 'defa'#"NULL"
+, group_name = "NULL"
 ){
  
 ### XIALAB UPDATED TTESTS:
@@ -361,14 +456,16 @@ Ttests.Anal <- function(mSetObj=NA, nonpar=F, threshp=0.05, paired=FALSE, equal.
 ### TROUBLESHOOT
 print(paste("Ttests.Anal:", mSetObj$dataSet$cls, collapse = " " ))
 print(paste("Ttests.Anal: "))
-print(group_name)
+# print(group_name)
 print( "class:" )
-print(  class(group_name)  )
+# print(  class(group_name)  )
 print( "typeof:" )
-print(  typeof(group_name)  )
+#print(  typeof(group_name)  )
 
 
-  res <- GetTtestRes(mSetObj, paired, equal.var, nonpar, group_name);
+  res <- GetTtestRes(mSetObj, paired, equal.var, nonpar
+   , group_name
+);
   t.stat <- res[,1];
   p.value <- res[,2];
   
@@ -493,7 +590,7 @@ PlotTT <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA){
   return(.set.mSet(mSetObj));
 }
 
-#'Perform Volcano Analysis
+#'Perform Volcano Analysis - wraps GetTtestRes(), GetFC()
 #'@description Perform volcano analysis
 #'@usage Volcano.Anal(mSetObj=NA, paired=FALSE, fcthresh, cmpType, percent.thresh, nonpar=F, threshp, equal.var=TRUE, pval.type="raw")
 #'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
@@ -505,17 +602,22 @@ PlotTT <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA){
 #'@param threshp Numeric, indicate the p-value threshold
 #'@param equal.var Logical, indicates if the group variance is equal (T) or unequal (F)
 #'@param pval.type To indicate raw p-values, use "raw". To indicate FDR-adjusted p-values, use "fdr".  
+##@param group_name character, column name to use for grouping
 #'@author Jeff Xia\email{jeff.xia@mcgill.ca}
 #'McGill University, Canada
 #'License: GNU GPL (>= 2)
 #'@export
 #'
-Volcano.Anal <- function(mSetObj=NA, paired=FALSE, fcthresh, cmpType, percent.thresh, nonpar=F, threshp, equal.var=TRUE, pval.type="raw"){
+Volcano.Anal <- function(mSetObj=NA, paired=FALSE, fcthresh, cmpType, percent.thresh, nonpar=F, threshp, equal.var=TRUE, pval.type="raw"
+, group_name = "NULL"
+){
   
   mSetObj <- .get.mSet(mSetObj);
   
   #### t-tests
-  t.res <- GetTtestRes(mSetObj, paired, equal.var, nonpar);
+  t.res <- GetTtestRes(mSetObj, paired, equal.var, nonpar
+    , group_name = "NULL"
+    );
   p.value <- t.res[,2];
   if(pval.type == "fdr"){
     p.value <- p.adjust(p.value, "fdr");
@@ -529,7 +631,9 @@ Volcano.Anal <- function(mSetObj=NA, paired=FALSE, fcthresh, cmpType, percent.th
   max.xthresh <- log(fcthresh,2);
   min.xthresh <- log(1/fcthresh,2);
   
-  res <- GetFC(mSetObj, F, cmpType);
+  res <- GetFC(mSetObj, F, cmpType
+   , group_name = "NULL"
+   );
   
   # create a named matrix of sig vars for display
   fc.log <- res$fc.log;
@@ -539,7 +643,9 @@ Volcano.Anal <- function(mSetObj=NA, paired=FALSE, fcthresh, cmpType, percent.th
   inx.down <- fc.log < min.xthresh;
   
   if(paired){
-    res <- GetFC(mSetObj, T, cmpType);
+    res <- GetFC(mSetObj, T, cmpType
+    , group_name = "NULL"
+     );
     count.thresh<-round(nrow(mSetObj$dataSet$norm)/2*percent.thresh);
     mat.up <- res >= max.xthresh;
     mat.down <- res <= min.xthresh;
@@ -766,22 +872,102 @@ parseFisher <- function(fisher, cut.off){
   paste(rownames(fisher)[inx], collapse="; ");
 }
 
-#'Perform ANOVA analysis
+#'Perform ANOVA analysis - uses internal fxns aof(), kwtest(),FisherLSD,  parseTukey(), parseFisher()
 #'@description ANOVA analysis
 #'@usage ANOVA.Anal(mSetObj=NA, nonpar=F, thresh=0.05, post.hoc="fisher")
 #'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
 #'@param nonpar Logical, use a non-parametric test (T) or not (F)
 #'@param thresh Numeric, from 0 to 1, indicate the p-value threshold
 #'@param post.hoc Input the name of the post-hoc test, "fisher" or "tukey"
+##@param group_name character, column name to use for grouping
 #'@author Jeff Xia\email{jeff.xia@mcgill.ca}
 #'McGill University, Canada
 #'License: GNU GPL (>= 2)
 #'@export
 #'
-ANOVA.Anal<-function(mSetObj=NA, nonpar=F, thresh=0.05, post.hoc="fisher"){
-  
+ANOVA.Anal<-function(mSetObj=NA, nonpar=F, thresh=0.05, post.hoc="fisher"
+, group_name = "NULL"
+){
+ 
   mSetObj <- .get.mSet(mSetObj);
+
+ ### new code 202304-11
+ ### new R code - from xialab updates - added 202304-11
+ ### TROUBLESHOOTING:
+
+print("ANOVA.Anal: ")
+#print( group_name  )
+print( "class: ")
+#print(  class(group_name)  )
+print( "typeof: ")
+#print(  typeof(group_name)  )
+
+print( c("names mSetObj: ", 
+  paste( names(mSetObj), collapse = " ")  ))
+
+print( c("names mSetObj$dataSet: ", 
+  paste( names(mSetObj$dataSet), collapse = " ")  ))
+
+input <- data
+
+### IF NOT GROUP NAME IS PROVIDED:
+if(group_name == "NULL"){
+
+ # NO METADATA
+if(!"origMeta" %in% names(mSetObj$dataSet) ){
   
+  ## no categorical in input:
+  if( !any(sapply(data, is.factor) | sapply(input, is.character)) ){
+     cls <-   factor( input[,1,drop=TRUE] )
+    AddErrMsg("No categorical variables (required as group variable); did you input your categorical variables as numbers (for example, as hot-one coded)? Alternatively, try splitting a numeric variable of interest into categories.")
+  } else{
+    # GET CATEGORICAL COLUMNS FROM INPUT DATAFRAME
+   facdata <- input[,sapply(input, is.factor) | sapply(input, is.character), drop = FALSE]
+   cls <- factor(facdata[,1, drop = TRUE])
+  }
+  
+  ### GET FROM METADATA
+} else{
+  
+  metaData <- mSetObj$dataSet$origMeta
+    ## NO CATEGORICAL IN metaData:
+    if( !any(sapply(metaData, is.factor) | sapply(metaData, is.character)) ){
+      ## NO CATEGORICAL IN INPUT
+      if( !any(sapply(input, is.factor) | sapply(input, is.character)) ){
+     cls <-   factor( input[,1,drop=TRUE] )
+    AddErrMsg("No categorical variables (required as group variable); did you input your categorical variables as numbers (for example, as hot-one coded)? Alternatively, try splitting a numeric variable of interest into categories")
+  } else{
+    # GET CATEGORICAL COLUMNS FROM INPUT
+   facdata <- input[,sapply(input, is.factor) | sapply(input, is.character), drop = FALSE]
+   cls <- factor(facdata[,1, drop = TRUE])
+  }
+      
+    } else{
+      ## CATEGORICAL FROM METADATA  
+   facdata <- metaData[,sapply(metaData, is.factor) | sapply(metaData, is.character), drop = FALSE]
+   cls <- factor(facdata[,1, drop = TRUE])
+      
+  } 
+      
+}
+  ## group_name IS PRESENT (NOT 'NULL')
+ } else{
+   ## if group_name is not a factor, do not allow - should only be factors
+   ## because dropdown provided is only factors
+    # NO METADATA, GET FROM INPUT
+    if(!"origMeta" %in% names(mSetObj$dataSet) ){
+   cls <- factor( input[,group_name,drop = TRUE] )
+    } else{
+   # GET FROM METADATA
+   cls <- factor( mSetObj$dataSet$origMeta[,group_name,drop = TRUE] )
+    }
+ 
+ }
+
+ mSetObj$dataSet$cls <- cls
+ ### new code 202304-11 END --------
+
+
   sig.num <- 0;
   if(nonpar){
     aov.nm <- "Kruskal Wallis Test";
@@ -958,17 +1144,98 @@ PlotANOVA <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA){
 #'@param dpi Input the dpi. If the image format is "pdf", users need not define the dpi. For "png" images, 
 #'the default dpi is 72. It is suggested that for high-resolution images, select a dpi of 300.  
 #'@param width Input the width, there are 2 default widths, the first, width = NULL, is 10.5.
-#'The second default is width = 0, where the width is 7.2. Otherwise users can input their own width.   
+#'The second default is width = 0, where the width is 7.2. Otherwise users can input their own width. 
+##@param group_name character, column name to use for grouping  
 #'@author Jeff Xia\email{jeff.xia@mcgill.ca}
 #'McGill University, Canada
 #'License: GNU GPL (>= 2)
 #'@export
 #'
 
-PlotCmpdView <- function(mSetObj=NA, cmpdNm, format="png", dpi=72, width=NA){
+PlotCmpdView <- function(mSetObj=NA, cmpdNm, 
+ group_name = "NULL",
+format="png", dpi=72, width=NA
+){
   
   mSetObj <- .get.mSet(mSetObj);
   
+ ### new code 202304-11
+ ### new R code - from xialab updates - added 202304-11
+ ### TROUBLESHOOTING:
+
+print("PlotCmpdView: ")
+#print( group_name  )
+print( "class: ")
+#print(  class(group_name)  )
+print( "typeof: ")
+#print(  typeof(group_name)  )
+
+print( c("names mSetObj: ", 
+  paste( names(mSetObj), collapse = " ")  ))
+
+print( c("names mSetObj$dataSet: ", 
+  paste( names(mSetObj$dataSet), collapse = " ")  ))
+
+input <- data
+
+### IF NOT GROUP NAME IS PROVIDED:
+# if(group_name == 'defa'){#"NULL"){
+
+ # NO METADATA
+if(!"origMeta" %in% names(mSetObj$dataSet) ){
+  
+  ## no categorical in input:
+  if( !any(sapply(data, is.factor) | sapply(input, is.character)) ){
+     cls <-   factor( input[,1,drop=TRUE] )
+    AddErrMsg("No categorical variables (required as group variable); did you input your categorical variables as numbers (for example, as hot-one coded)? Alternatively, try splitting a numeric variable of interest into categories.")
+  } else{
+    # GET CATEGORICAL COLUMNS FROM INPUT DATAFRAME
+   facdata <- input[,sapply(input, is.factor) | sapply(input, is.character), drop = FALSE]
+   cls <- factor(facdata[,1, drop = TRUE])
+  }
+  
+  ### GET FROM METADATA
+} else{
+  
+  metaData <- mSetObj$dataSet$origMeta
+    ## NO CATEGORICAL IN metaData:
+    if( !any(sapply(metaData, is.factor) | sapply(metaData, is.character)) ){
+      ## NO CATEGORICAL IN INPUT
+      if( !any(sapply(input, is.factor) | sapply(input, is.character)) ){
+     cls <-   factor( input[,1,drop=TRUE] )
+    AddErrMsg("No categorical variables (required as group variable); did you input your categorical variables as numbers (for example, as hot-one coded)? Alternatively, try splitting a numeric variable of interest into categories")
+  } else{
+    # GET CATEGORICAL COLUMNS FROM INPUT
+   facdata <- input[,sapply(input, is.factor) | sapply(input, is.character), drop = FALSE]
+   cls <- factor(facdata[,1, drop = TRUE])
+  }
+      
+    } else{
+      ## CATEGORICAL FROM METADATA  
+   facdata <- metaData[,sapply(metaData, is.factor) | sapply(metaData, is.character), drop = FALSE]
+   cls <- factor(facdata[,1, drop = TRUE])
+      
+  } 
+      
+}
+  ## group_name IS PRESENT (NOT 'NULL')
+# } else{
+#   ## if group_name is not a factor, do not allow - should only be factors
+#   ## because dropdown provided is only factors
+#    # NO METADATA, GET FROM INPUT
+#    if(!"origMeta" %in% names(mSetObj$dataSet) ){
+#   cls <- factor( input[,group_name,drop = TRUE] )
+#    } else{
+#   # GET FROM METADATA
+#   cls <- factor( mSetObj$dataSet$origMeta[,group_name,drop = TRUE] )
+#    }
+# 
+# }
+
+ mSetObj$dataSet$cls <- cls
+ ### new code 202304-11 END --------
+
+
   if(mSetObj$dataSet$type.cls.lbl=="integer"){
     cls <- as.factor(as.numeric(levels(mSetObj$dataSet$cls))[mSetObj$dataSet$cls]);
   }else{
@@ -1256,22 +1523,21 @@ if(!"origMeta" %in% names(mSetObj$dataSet) ){
 #'McGill University, Canada
 #'License: GNU GPL (>= 2)
 GetTtestRes <- function(mSetObj=NA, paired=FALSE, equal.var=TRUE, nonpar=F
-   , group_name = 'defa'#"NULL"
+#   , group_name = 'defa'#"NULL"
   ){
-  
-  ### new code 202304-11
-  ### new R code - from xialab updates - added 202304-11
   
   mSetObj <- .get.mSet(mSetObj);  
 
-### TROUBLESHOOTING:
+  ### new code 202304-11
+  ### new R code - from xialab updates - added 202304-11
+  ### TROUBLESHOOTING:
 
 print("GetTtestRes: ")
-print( group_name  )
+#print( group_name  )
 print( "class: ")
-print(  class(group_name)  )
+#print(  class(group_name)  )
 print( "typeof: ")
-print(  typeof(group_name)  )
+#print(  typeof(group_name)  )
 
 
 print( c("names mSetObj: ", 
@@ -1286,7 +1552,7 @@ print( c("names mSetObj$dataSet: ",
 input  <- mSetObj$dataSet$norm
 
 ### IF NOT GROUP NAME IS PROVIDED:
- if(group_name == 'defa'){#"NULL"){
+# if(group_name == 'defa'){#"NULL"){
 
  # NO METADATA
 if(!"origMeta" %in% names(mSetObj$dataSet) ){
@@ -1326,20 +1592,21 @@ if(!"origMeta" %in% names(mSetObj$dataSet) ){
       
 }
   ## group_name IS PRESENT (NOT 'NULL')
-} else{
-  ## if group_name is not a factor, do not allow - should only be factors
-  ## because dropdown provided is only factors
-   # NO METADATA, GET FROM INPUT
-   if(!"origMeta" %in% names(mSetObj$dataSet) ){
-  cls <- factor( input[,group_name,drop = TRUE] )
-   } else{
-  # GET FROM METADATA
-  cls <- factor( mSetObj$dataSet$origMeta[,group_name,drop = TRUE] )
-   }
-
-}
+# } else{
+#   ## if group_name is not a factor, do not allow - should only be factors
+#   ## because dropdown provided is only factors
+#    # NO METADATA, GET FROM INPUT
+#    if(!"origMeta" %in% names(mSetObj$dataSet) ){
+#   cls <- factor( input[,group_name,drop = TRUE] )
+#    } else{
+#   # GET FROM METADATA
+#   cls <- factor( mSetObj$dataSet$origMeta[,group_name,drop = TRUE] )
+#    }
+# 
+# }
 
  mSetObj$dataSet$cls <- cls
+### new code 202304-11 END --------
 
   inx1 <- which(mSetObj$dataSet$cls==levels(mSetObj$dataSet$cls)[1]);
   inx2 <- which(mSetObj$dataSet$cls==levels(mSetObj$dataSet$cls)[2]);

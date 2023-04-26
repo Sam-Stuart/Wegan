@@ -41,6 +41,39 @@ public class UnivBean implements Serializable {
     private final ApplicationBean1 ab = (ApplicationBean1) DataUtils.findBean("applicationBean1");
     private final SessionBean1 sb = (SessionBean1) DataUtils.findBean("sessionBean1");
 
+    
+  // GROUP NAME SELECTION
+    // GPS ADDED 
+    
+     // GET COLUMN NAMES
+    private SelectItem[] statGroupNameOpts = null;
+    
+    public SelectItem[] getStatGroupNameOpts(){
+        String[] columns = UniVarTests.GetFacColumns(sb);
+        int columnsLen = columns.length;
+        statGroupNameOpts = new SelectItem[columnsLen];
+        List<String> columnNames = Arrays.asList(columns);
+        for (int i = 0; i < columnsLen; i++) {
+            statGroupNameOpts[i] = new SelectItem(columnNames.get(i), columnNames.get(i));
+        }
+        //List<String> columnNames = Arrays.asList(columns);
+        return statGroupNameOpts;
+    }
+    
+    private String statGroupName = getStatGroupNameOpts()[0].getLabel();
+//  TROUBLESHOOT:  overwrite to troubleshoot dequoted pass off to R of group_name arg
+//    private String statGroupName = "howdy";
+    
+    
+    public String getStatGroupName() {
+        return statGroupName;
+    }
+
+    public void setStatGroupName(String statGroupName) {
+        this.statGroupName = statGroupName;
+    }    
+    
+    
     private String pairedFcAnal = "FALSE";
 
     public String getPairedFcAnal() {
@@ -90,7 +123,7 @@ public class UnivBean implements Serializable {
 
     // VOLCANO AND FOLD CHANGE:
    //    UniVarTests.PlotVolcano(sb, imgName, plotLbl, format, dpi) -> calls PlotVolcano() in R
-   //    UniVarTests.performVolcano(sb, paired, fcThresh, cmpType, countThresh, nonpar, pThresh, varEqual, vcPvalType) -> calls Volcano.Anal() in R
+   //    UniVarTests.performVolcano(sb, paired, fcThresh, cmpType, countThresh, nonpar, pThresh, varEqual, vcPvalType, group_name) -> calls Volcano.Anal() in R
     private String fcThresh = "2";
     private String countThresh = "75";
     private int plotLbl = 1;
@@ -123,46 +156,20 @@ public class UnivBean implements Serializable {
         double fc = Double.parseDouble(fcThresh);
         if (pairedFcAnal.equals("TRUE")) {
             double pairThresh = Double.parseDouble(countThresh) / 100;
-            UniVarTests.InitPairedFC(sb, fc, pairThresh, cmpType);
+             // sb, double fcThresh,double pairThresh, int cmpType, String group_name
+            UniVarTests.InitPairedFC(sb, fc, pairThresh, cmpType
+            ,statGroupName
+            );
         } else {
-            UniVarTests.InitUnpairedFC(sb, fc, cmpType);
+            // sb, double fcThresh, int cmpType, String group_name
+            UniVarTests.InitUnpairedFC(sb, fc, cmpType
+            ,statGroupName
+            );
         }
         UniVarTests.PlotFC(sb, sb.getNewImage("fc"), "png", 72);
         RequestContext.getCurrentInstance().scrollTo("form1:fcPane");
         return null;
     }
-
-  // T-tests
-    // GPS ADDED 
-    
-     // GET COLUMN NAMES
-    private SelectItem[] statGroupNameOpts = null;
-    
-    public SelectItem[] getStatGroupNameOpts(){
-        String[] columns = UniVarTests.GetFacColumns(sb);
-        int columnsLen = columns.length;
-        statGroupNameOpts = new SelectItem[columnsLen];
-        List<String> columnNames = Arrays.asList(columns);
-        for (int i = 0; i < columnsLen; i++) {
-            statGroupNameOpts[i] = new SelectItem(columnNames.get(i), columnNames.get(i));
-        }
-        //List<String> columnNames = Arrays.asList(columns);
-        return statGroupNameOpts;
-    }
-    
-//    private String statGroupName = getStatGroupNameOpts()[0].getLabel();
-//  TROUBLESHOOT:  overwrite to troubleshoot dequoted pass off to R of group_name arg
-    private String statGroupName = "howdy";
-    
-    
-    public String getStatGroupName() {
-        return statGroupName;
-    }
-
-    public void setStatGroupName(String statGroupName) {
-        this.statGroupName = statGroupName;
-    }
-    
     
     private String ttPThresh = "0.05";
 
@@ -313,7 +320,10 @@ public class UnivBean implements Serializable {
         }
 
         double countVal = vcCountThresh / 100;
-        UniVarTests.performVolcano(sb, pairedVC, vcFcThresh, cmpType, countVal, nonpar, vcPThresh, equalVar, vcPvalType);
+//        sb, String paired, double fcThresh, int cmpType, double countThresh, String nonpar, double pThresh, String varEqual, String vcPvalType,String group_name
+        UniVarTests.performVolcano(sb, pairedVC, vcFcThresh, cmpType, countVal, nonpar, vcPThresh, equalVar, vcPvalType
+        ,statGroupName
+        );
         if (pairedVC.equals("FALSE")) {
             updateVolcanoModel();
         }
@@ -322,7 +332,7 @@ public class UnivBean implements Serializable {
     }
      
     // ANOVA
-    //   UniVarTests.performANOVA(sb, nonPar, thresh, postType) calls R: ANOVA.Anal()
+    //   UniVarTests.performANOVA(sb, nonPar, thresh, postType, group_name) calls R: ANOVA.Anal()
     private String aovPThresh = "0.05";
 
     public String getAovPThresh() {
@@ -360,7 +370,9 @@ public class UnivBean implements Serializable {
         if (nonParam) {
             nonPar = "T";
         }
-        int res = UniVarTests.performANOVA(sb, nonPar, sigThresh, posthocType);
+        int res = UniVarTests.performANOVA(sb, nonPar, sigThresh, posthocType
+         ,statGroupName
+        );
         if (res == 0) {
             sb.setAnovaSig(false);
         } else {
@@ -761,7 +773,9 @@ public class UnivBean implements Serializable {
     public void setupVolcano() {
         if (!sb.isAnalInit("Volcano plot")) {
             sb.registerPage("Volcano plot");
-            UniVarTests.performVolcano(sb, "FALSE", 2, 0, 0.75, "F", 0.1, "TRUE", "raw");
+            UniVarTests.performVolcano(sb, "FALSE", 2, 0, 0.75, "F", 0.1, "TRUE", "raw"
+             ,statGroupName
+            );
             UniVarTests.PlotVolcano(sb, sb.getCurrentImage("volcano"), 1, "png", 72);
         }
         updateVolcanoModel();

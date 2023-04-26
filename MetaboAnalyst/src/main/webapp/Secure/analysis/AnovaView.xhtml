@@ -37,7 +37,7 @@
         </script>
 
         
-        <!--
+        
         <h:panelGrid style="padding:10px 20px 20px 30px; font-size: 12px; line-height: 23px; width:100%">
             <h2>
                 One-way ANOVA &amp; post-hoc Tests
@@ -58,7 +58,13 @@
                             <f:selectItems value="#{applicationBean1.posthocOpts}" />
                         </p:selectOneMenu>
                         <h:outputLabel style="font-weight: bold" value="Non-parametric ANOVA:"/>
-                        <p:selectBooleanCheckbox value ="#{univBean.nonParam}"/>
+                        <p:selectBooleanCheckbox value ="#{univBean.nonParam}"/>                    
+                                                    <!-- GPS added - where 'hash' is below insert  octothorpe (number sign) bc it screws up run if not removed -->
+                            <h:outputLabel style="font-weight: bold" value="Group Variable:"/>
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{univBean.statGroupName}">
+                                <f:selectItems value="#{univBean.statGroupNameOpts}" />
+                            </p:selectOneMenu>
+                            <!--Finish adding-->                       
                     </h:panelGrid>
                     <h:panelGrid style="text-align: center; width:360px">
                         <p:commandButton value="Submit" update=":aovPane :cmdPane" 
@@ -94,7 +100,7 @@
             </h:panelGrid>  
         </h:panelGrid> 
         
-        -->
+        
         
         
         

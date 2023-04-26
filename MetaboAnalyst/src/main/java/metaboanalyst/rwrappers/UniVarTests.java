@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 import org.rosuda.REngine.REXPMismatchException;
 
 // for Stats module (rwrapper: UniVarTests, controller: UnivBean)
+// have group_name added to them : InitPairedFC, InitUnpairedFC, performTtests,   performVolcano, performANOVA, PlotCmpdView
 
 /**
  *
@@ -22,11 +23,18 @@ import org.rosuda.REngine.REXPMismatchException;
 public class UniVarTests {
 
 // FOLD-CHANGE (FC)    
-    
-    public static void InitPairedFC(SessionBean1 sb, double fcThresh, double pairThresh, int cmpType) {
+   
+    public static void InitPairedFC(SessionBean1 sb, double fcThresh, double pairThresh, int cmpType
+             , String group_name
+    ) {
         try {
             RConnection RC = sb.getRConnection();
-            String rCommand = "FC.Anal.paired(NA" + ", " + fcThresh + ", " + pairThresh + ", " + cmpType + ")";
+            String rCommand = "FC.Anal.paired(NA" + ", " 
+                    + fcThresh + ", " 
+                    + pairThresh + ", " 
+                    + cmpType + ", \"" 
+                    + group_name + "\" )";
+//                    + cmpType + ")";
             RCenter.recordRCommand(RC, rCommand);
             RC.voidEval(rCommand);
         } catch (RserveException rse) {
@@ -34,10 +42,16 @@ public class UniVarTests {
         }
     }
 
-    public static void InitUnpairedFC(SessionBean1 sb, double fcThresh, int cmpType) {
+    public static void InitUnpairedFC(SessionBean1 sb, double fcThresh, int cmpType
+               , String group_name
+    ) {
         try {
             RConnection RC = sb.getRConnection();
-            String rCommand = "FC.Anal.unpaired(NA" + ", " + fcThresh + ", " + cmpType + ")";
+            String rCommand = "FC.Anal.unpaired(NA" + ", " 
+                    + fcThresh + ", "
+                    + cmpType + ", \"" 
+                    + group_name + "\" )";
+//                    + cmpType + ")";
             RCenter.recordRCommand(RC, rCommand);
             RC.voidEval(rCommand);
         } catch (RserveException rse) {
@@ -97,7 +111,7 @@ public class UniVarTests {
     }
 
 // T-TEST
-    
+ 
     public static int performTtests(SessionBean1 sb, String nonpar, double pthresh, String paired, String equalVar
             , String group_name
     ) {
@@ -108,8 +122,8 @@ public class UniVarTests {
                     + pthresh + ", " 
                     + paired + ", " 
 //                    + equalVar + ")";
-                    + equalVar + ", " 
-                    + group_name + ")"; //"p" or "u"
+                    + equalVar + ", \"" 
+                    + group_name + "\" )";//"p" or "u"
             RCenter.recordRCommand(RC, rCommand);
             return RC.eval(rCommand).asInteger();
         } catch (Exception rse) {
@@ -191,12 +205,24 @@ public class UniVarTests {
         return null;
     }
 
-    
+
 // VOLCANO PLOT      
-    public static void performVolcano(SessionBean1 sb, String paired, double fcThresh, int cmpType, double countThresh, String nonpar, double pThresh, String varEqual, String vcPvalType) {
+    public static void performVolcano(SessionBean1 sb, String paired, double fcThresh, int cmpType, double countThresh, String nonpar, double pThresh, String varEqual, String vcPvalType
+    ,String group_name
+    ) {
         try {
             RConnection RC = sb.getRConnection();
-            String rCommand = "Volcano.Anal(NA" + ", " + paired + ", " + fcThresh + ", " + cmpType + ", " + countThresh + "," + nonpar + ", " + pThresh + ", " + varEqual + ", \"" + vcPvalType + "\")";
+            String rCommand = "Volcano.Anal(NA" + ", " 
+                    + paired + ", " 
+                    + fcThresh + ", " 
+                    + cmpType + ", " 
+                    + countThresh + "," 
+                    + nonpar + ", " 
+                    + pThresh + ", " 
+                    + varEqual + ", \"" 
+                    + vcPvalType + ", \"" 
+                    + group_name + "\" )";        
+//                    + vcPvalType + "\")";
             RCenter.recordRCommand(RC, rCommand);
             RC.voidEval(rCommand);
         } catch (RserveException rse) {
@@ -268,10 +294,17 @@ public class UniVarTests {
     }
 
 // ANOVA    
-    public static int performANOVA(SessionBean1 sb, String nonPar, double thresh, String postType) {
+    public static int performANOVA(SessionBean1 sb, String nonPar, double thresh, String postType
+    , String group_name
+    ) {
         try {
             RConnection RC = sb.getRConnection();
-            String rCommand = "ANOVA.Anal(NA" + ", " + nonPar + ", " + thresh + ", \"" + postType + "\")";
+            String rCommand = "ANOVA.Anal(NA" + ", " 
+                    + nonPar + ", " 
+                    + thresh + ", \"" 
+                    + postType + ", \"" 
+                    + group_name + "\" )";        
+//                  + postType + "\")";    
             RCenter.recordRCommand(RC, rCommand);
             return RC.eval(rCommand).asInteger();
         } catch (Exception rse) {
@@ -349,9 +382,15 @@ public class UniVarTests {
         return null;
     }
 
-    public static String PlotCmpdView(RConnection RC, String cmpdName, String format, String dpi) {
+    public static String PlotCmpdView(RConnection RC, String cmpdName,
+            String group_name,
+            String format, String dpi) {
         try {
-            String rCommand = "PlotCmpdView(NA" + ", \"" + cmpdName + "\", \"" + format + "\", " + dpi + ", width=NA)";
+            String rCommand = "PlotCmpdView(NA" + ", \"" 
+                    + cmpdName + "\", \"" 
+                    + group_name + "\", \"" 
+                    + format + "\", " 
+                    + dpi + ", width=NA)";
             RCenter.recordRCommand(RC, rCommand);
             String imgName = RC.eval(rCommand).asString();
             return imgName;

@@ -102,9 +102,11 @@ public class AnalysisBean implements Serializable {
             }
         }
     }
-  
+  // String nonPar, double thresh, String postType, String group_name
     private void doDefaultANOVA() {
-        int res = UniVarTests.performANOVA(sb, "F", 0.05, "fisher");
+        int res = UniVarTests.performANOVA(sb, "F", 0.05, "fisher"
+                , "NULL"
+        );
         if (res == 0) {
             sb.setAnovaSig(false);
         } else {
@@ -114,13 +116,17 @@ public class AnalysisBean implements Serializable {
     }
 
     private void doDefaultFC() {
-        UniVarTests.InitUnpairedFC(sb, 2, 0);
+        // sb, double fcThresh, int cmpType, String group_name
+        UniVarTests.InitUnpairedFC(sb, 2, 0, "NULL");
         UniVarTests.PlotFC(sb, sb.getCurrentImage("fc"), "png", 72);
     }
 
     // t-test default added group_name (last parameter) default GPS
     private void doDefaultTT() {
-        int res = UniVarTests.performTtests(sb, "F", 0.05, "FALSE", "TRUE", "howdy"); //default not paired and unequal variance
+//        sb, String nonpar, double pthresh, String paired, String equalVar, String group_name
+        int res = UniVarTests.performTtests(sb, "F", 0.05, "FALSE", "TRUE"
+                , "NULL"
+        ); //default not paired and unequal variance
         if (res == 0) {
             sb.setTtSig(false);
         } else {
@@ -130,7 +136,10 @@ public class AnalysisBean implements Serializable {
     }
 
     private void doDefaultVC() {
-        UniVarTests.performVolcano(sb, "FALSE", 2, 0, 0.75, "F", 0.1, "TRUE", "raw");
+//        sb, String paired, double fcThresh, int cmpType, double countThresh, String nonpar, double pThresh, String varEqual, String vcPvalType,String group_name
+        UniVarTests.performVolcano(sb, "FALSE", 2, 0, 0.75, "F", 0.1, "TRUE", "raw"
+        , "NULL"
+        );
         UniVarTests.PlotVolcano(sb, sb.getCurrentImage("volcano"), 1, "png", 72);
     }
 
@@ -212,7 +221,7 @@ public class AnalysisBean implements Serializable {
         SigVarSelect.PlotEBAM_A0(sb, sb.getCurrentImage("ebam_view"), "png", 72);
         double a0 = SigVarSelect.GetEBAMSuggestedA0(sb);
         SigVarSelect.InitEBAM_Cmpd(sb, "z.ebam", a0, "FALSE", "TRUE");
-        SigVarSelect.PlotEBAM_Cmpd(sb, sb.getCurrentImage("ebam_imp"), "png", 72, 0.9);
+        SigVarSelect.PlotEBAM_Cmpd(sb, sb.getCurrentImage("ebam_imp"), "ping", 72, 0.9);
     }
 
     private void doDefaultDendrogram() {
