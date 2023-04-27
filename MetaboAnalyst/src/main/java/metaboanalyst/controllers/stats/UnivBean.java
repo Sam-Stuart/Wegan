@@ -60,9 +60,9 @@ public class UnivBean implements Serializable {
         return statGroupNameOpts;
     }
     
-    private String statGroupName = getStatGroupNameOpts()[0].getLabel();
+//    private String statGroupName = getStatGroupNameOpts()[0].getLabel();
 //  TROUBLESHOOT:  overwrite to troubleshoot dequoted pass off to R of group_name arg
-//    private String statGroupName = "howdy";
+    private String statGroupName = "howdy";
     
     
     public String getStatGroupName() {
@@ -121,9 +121,7 @@ public class UnivBean implements Serializable {
         this.viewOpt = viewOpt;
     }
 
-    // VOLCANO AND FOLD CHANGE:
-   //    UniVarTests.PlotVolcano(sb, imgName, plotLbl, format, dpi) -> calls PlotVolcano() in R
-   //    UniVarTests.performVolcano(sb, paired, fcThresh, cmpType, countThresh, nonpar, pThresh, varEqual, vcPvalType, group_name) -> calls Volcano.Anal() in R
+    // FOLD CHANGE:
     private String fcThresh = "2";
     private String countThresh = "75";
     private int plotLbl = 1;
@@ -171,6 +169,7 @@ public class UnivBean implements Serializable {
         return null;
     }
     
+//    T-TEST
     private String ttPThresh = "0.05";
 
     public String getTtPThresh() {
@@ -233,6 +232,9 @@ public class UnivBean implements Serializable {
         sb.updateMsg("OK", msg);
     }
 
+//    VOLCANO
+//    UniVarTests.PlotVolcano(sb, imgName, plotLbl, format, dpi) -> calls PlotVolcano() in R
+//    UniVarTests.performVolcano(sb, paired, fcThresh, cmpType, countThresh, nonpar, pThresh, varEqual, vcPvalType, group_name) -> calls Volcano.Anal() in R
     private String corDirection = "col";
 
     public String getCorDirection() {
@@ -570,6 +572,7 @@ public class UnivBean implements Serializable {
         return null;
     }
 
+//    LINECHART: T-TEST OR ANOVA OR VOLCANO
     private LineChartModel lineModel, vcModel;
 
     public LineChartModel getLineModel() {

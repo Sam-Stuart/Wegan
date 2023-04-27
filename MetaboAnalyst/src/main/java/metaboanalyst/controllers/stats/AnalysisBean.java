@@ -125,7 +125,8 @@ public class AnalysisBean implements Serializable {
     private void doDefaultTT() {
 //        sb, String nonpar, double pthresh, String paired, String equalVar, String group_name
         int res = UniVarTests.performTtests(sb, "F", 0.05, "FALSE", "TRUE"
-                , "NULL"
+//                , "NULL"
+                 , "howdy"
         ); //default not paired and unequal variance
         if (res == 0) {
             sb.setTtSig(false);
