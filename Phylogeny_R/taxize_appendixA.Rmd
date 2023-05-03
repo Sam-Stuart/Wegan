@@ -1,0 +1,201 @@
+---
+title: "taxize_appendixA"
+author: "Xin (David) Zhao"
+date: "2023-05-01"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Appendix A. A complete reproducible workflow, from a species list to a phylogeny, and distribution map 
+
+This markdown R file demonstrates the workflow introduced in the paper, "taxize: taxonomic search and retrieval in R (2013)"
+
+The [website](https://docs.ropensci.org/taxize/articles/infotable.html) provide up-to-date detailed instruction of taxize (version 0.9.100)
+
+### Load the package 
+```{r}
+# Install the package 
+install.packages("taxize")
+# install.packages("remotes") 
+
+# Load the library  
+# library(taxize) 
+# remove.packages("taxize")
+
+library(plyr)
+library(remotes) # Enable installing older versions of packages 
+
+# Install taxize (version 0.5.2)
+# remotes::install_version("taxize", "< 0.5.2")  
+# library(Taxonstand)
+
+# install.packages('~/Downloads/taxize_0.5.2.tar.gz', repos=NULL, type='source') 
+library(taxize)
+
+
+```
+
+### Resolve taxonomy names 
+
+Create a species list. Note that each of the names is spelled incorrectly. 
+```{r}
+
+splist_error <- c("Helanthus annuus", 
+                  "Pinos contorta",
+                  "Collomia grandiflorra",
+                  "Rosa california",
+                  "Mimulus bicolour",
+                  "Nicotiana glauca",
+                  "Maddia sativa") 
+
+splist_temp <- taxize::gnr_resolve(splist_error)
+
+head(splist_temp)
+
+
+# Create a new vector that contains species names without errors 
+split_resolved <- c("Helianthus annuus",
+                    "Pinus contorta",
+                    "Collomia grandiflora",
+                    "Rosa californica",
+                    "Mimulus bicolor",
+                    "Nicotiana glauca",
+                    "Madia sativa") 
+
+```
+The GNR service provides data from a variety of data sources. The user may trust a specific data source, thus may want to use the names from that data source. 
+
+
+```{r}
+# Retrieve the taxonomic serial number (TSN) in ITIS for a search term 
+tsns <- taxize::get_tsn(sci_com = split_resolved,
+                        accepted = FALSE)  
+
+# Retrieve accepted TSN and name 
+lapply(tsns, taxize::itis_acceptname)
+```
+
+```{r}
+# Retrieve common names 
+comnames <- base::lapply(split_resolved, # scientific (species) names 
+                         taxize::sci2comm, # Retrieve common names based on species names
+                         db = "itis", 
+                         simplify = TRUE) 
+
+# Convert the list to a vector 
+comnames_vec <- sapply(comnames, function(x) as.vector(unlist(x))[1])  
+
+# Combine scientific names and common names 
+allnames <- data.frame(spname = split_resolved, # sci names 
+                       comname = comnames_vec) # common names 
+
+```
+
+
+### Retrieve higher taxonomic names 
+
+Another task biologists often face is getting higher taxonomic names for a taxa list. 
+- Enable users to put into context the relationships of their species list 
+- Aggregate/ standardize data to a specific taxonomic level easily 
+- Match data to other databases with different taxonomic resolution (e.g., trait databases)
+
+We use data sources, NCBI and ITIS for demonstration below. 
+
+```{r}
+
+# class_list <- taxize::classification(tsns)
+
+# sapply(class_list, nrow) 
+# 
+# get.theirName <- function(x) {
+#     temp <- x[, c("rank", "name")]
+#     values <- data.frame(t(temp[, 2])) 
+#     names(values) <- temp[, 1]
+#     return(values) 
+# }
+# 
+# class_df <- ldply(class_list, get.theirName)
+# 
+# # Merge taxonomic names at all ranks 
+# allnames_df <- merge(allnames, class_df, by.x = "spname", by.y = "species") 
+# 
+# # View first rows 
+# head(allnames_df, 5) 
+
+
+speciesList <- c("Abies procera", "Pinus contorta") 
+
+# ITIS data source 
+taxize::classification(speciesList, db = "itis")
+
+# NCBI data source
+taxize::classification(speciesList, db = "ncbi")
+
+# Specify the rank to retrieve from NCBI 
+taxize::tax_name("lactobacillus reuteri", get = "family", db = "ncbi")
+
+
+```
+
+
+### Get phylogeny via the web service, Phylomatic 
+
+Unfortunately, `phylomatic_tree()` is no longer functional in taxize package. Alternatively, the R package `brranching` has a function `phylomatic()` that implements the same function. 
+
+The [website](https://www.rdocumentation.org/packages/brranching/versions/0.7.0/topics/phylomatic) for brranching provides more detailed information. 
+
+```{r}
+
+# Fetch phylogeny from Phylomatic - phylomatic_tree() refuncts 
+# phylogeny <- phylomatic_tree(taxa = as.character(allnames$spname),
+#                              taxnames = TRUE,
+#                              get = "POST",
+#                              informat = "newick",
+#                              method = "phylomatic",
+#                              storedtree = "R20120829",
+#                              taxaformat = "slashpath",
+#                              outformat = "newick",
+#                              clean = "true",
+#                              parallel = TRUE) 
+
+```
+
+### Interactive name selection 
+
+```{r}
+
+sp_interactiveNameSelect <- c("annona cherimola",
+                              "annona muricata",
+                              "quercus robur") 
+
+get_tsn(sp_interactiveNameSelect, searchtype = "scientific")
+
+```
+
+```{r}
+
+get_nbnid_("Poa annua", rows = 1:10)
+
+
+```
+
+
+### Coerce numeric/ alphanumerics to taxon IDs 
+
+
+
+### What taxa are downstream of my taxon of interest?
+
+### Direct children 
+
+### Get NCBI ID from GenBank IDs 
+
+### Match species tables with different taxonomic resolution  
+
+
+
+
+
