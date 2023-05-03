@@ -176,24 +176,105 @@ get_tsn(sp_interactiveNameSelect, searchtype = "scientific")
 ```
 
 ```{r}
+# Select the first row which means there is no interactive component
+taxize::get_nbnid("Poa annua", rows = 1)
 
-get_nbnid_("Poa annua", rows = 1:10)
-
+# Get all data back with functions of the form, e.g. get_tsn_(), and likewise for other data sources
+out <- taxize::get_nbnid_("Poa annua")  
+nrow(out$"Poa anua") 
 
 ```
 
 
 ### Coerce numeric/ alphanumerics to taxon IDs 
 
+Coerce numerics and alphanumerics to taxonomic ID classes that are usually only retrieved via `get_*()` functions. 
+
+```{r}
+
+# Already a uid, returns the same 
+taxize::as.gbifid(taxize::get_gbifid("Poa annua"), 
+                  check = FALSE) # Runs faster when making check off 
+
+
+```
 
 
 ### What taxa are downstream of my taxon of interest?
 
+taxize provides an easy way to programmatically search for downstream taxa for the Integrated Taxonomic Information System. 
+
+```{r}
+
+# ID for Apis, fetched beforehand to save time here 
+apis_itis_id <- 154395 
+
+# Retrieve children for a given taxon name or ID
+taxize::downstream(apis_itis_id, # Vector of taxa names (string) or IDS (string or num)
+                   downto = "species", # The taxonomic rank to go down to 
+                   db = "itis") # string, database to query  
+
+```
 ### Direct children 
+
+`taxize` helps get the DIRECT children with methods for ITIS and NCBI. 
+
+```{r, include=FALSE} 
+
+# Retrieve immediate children taxa for a given taxon name or ID 
+taxize::children("lactobacillus", # Vector of taxa names (string) or IDs (string or num)
+                 db = "ncbi",
+                 rows = 10) # Note that this argument is ignored if ID is passed! 
+
+```
 
 ### Get NCBI ID from GenBank IDs 
 
+```{r}
+
+# With accession numbers
+taxize::genbank2uid(id = "AJ748748") 
+
+# With gi numbers 
+taxize::genbank2uid(id = 62689767) 
+
+```
+
 ### Match species tables with different taxonomic resolution  
+
+Biologists may want to merge two data tables, say abundance data and trait data. However, those two data tables contain species information on different taxonomic levels and possibly data must be aggregated to a joint taxonomic level, so that the data is merge-able. 
+
+Luckily, `taxize` can help in this data-cleaning step, providing a reproducible workflow:
+
+Use `classification`-function to retrieve the taxonomic hierarchy and then search the hierarchies up- and downwards for matches. 
+
+Here is an example to match a species with names  on three different taxonomic levels. 
+
+```{r}
+
+A <- "gammarus roeseli"
+
+B1 <- "gammarus roeseli" 
+B2 <- "gammarus" 
+B3 <- "gammaridae" 
+
+A_class <- taxize::classification(A, db = "ncbi") 
+B1_class <- taxize::classification(B1, db = "ncbi") 
+B2_class <- taxize::classification(B2, db = "ncbi") 
+B3_class <- taxize::classification(B3, db = "ncbi")
+
+B1[base::match(A, B1)] 
+
+A_class[[1]]$rank[tolower(A_class[[1]]$name) %in% B2] # A matches B2 on genus level 
+
+A_class[[1]]$rank[tolower(A_class[[1]]$name) %in% B3] # A matches B3 on family level 
+
+```
+
+
+
+
+
 
 
 
