@@ -35,8 +35,10 @@ library(remotes) # Enable installing older versions of packages
 
 # install.packages('~/Downloads/taxize_0.5.2.tar.gz', repos=NULL, type='source') 
 library(taxize)
-library(brranching) # R client to fetch phylogenies from many places 
+library(brranching) # Allows users to query phylogenetic data (from Phylomatic) using taxonomic names 
 
+library(ape)
+library(phylocomr)
 ```
 
 ### Resolve taxonomy names 
@@ -167,14 +169,34 @@ The [website](https://www.rdocumentation.org/packages/brranching/versions/0.7.0/
 ```{r query-phylogenetic-tree}
 
 
+# Try phylomatic in brranching package 
+# taxa <- c("Poa annua", "Phlox diffusa", "Helianthus annuus")
+# tree <- brranching::phylomatic(taxa=taxa, get = 'POST')
+# plot(tree, no.margin=TRUE)
 
 
+# Try phylocomr R package as an alternative 
+# taxa_file <- system.file("examples/taxa", package = "phylocomr")  
+# phylo_file <- system.file("examples/phylo", package = "phylocomr") 
+# taxa_str <- readLines(taxa_file)
+# Phylogeny as a newick string 
+# phylo_str <- readLines(phylo_file) 
+
+# Help documetion of ph_phylomatic provides more useful information 
+# ph_tree <- ph_phylomatic(taxa = taxa_str, phylo = phylo_str) 
+# plot(read.tree(text = ph_tree)) # Success! 
+
+
+# Try taxize 
+spnames <- c('Quercus robur', 'Iris oratoria', 'Arachis paraguariensis',
+ 'Helianthus annuus','Madia elegans','Lupinus albicaulis',
+ 'Pinus lambertiana')
+out <- taxize::classification(spnames, db='itis') 
+tr <- taxize::class2tree(out)
+plot(tr)
 
 
 ```
-
-
-
 
 ### Interactive name selection 
 
