@@ -188,9 +188,13 @@ The [website](https://www.rdocumentation.org/packages/brranching/versions/0.7.0/
 
 
 # Try taxize 
-spnames <- c('Quercus robur', 'Iris oratoria', 'Arachis paraguariensis',
- 'Helianthus annuus','Madia elegans','Lupinus albicaulis',
- 'Pinus lambertiana')
+spnames <- c('Quercus robur', 
+             'Iris oratoria', 
+             'Arachis paraguariensis',
+             'Helianthus annuus',
+             'Madia elegans',
+             'Lupinus albicaulis',
+             'Pinus lambertiana')
 out <- taxize::classification(spnames, db='itis') 
 tr <- taxize::class2tree(out)
 plot(tr)
