@@ -18,8 +18,9 @@ The [website](https://docs.ropensci.org/taxize/articles/infotable.html) provide 
 ### Load the package 
 ```{r}
 # Install the package 
-install.packages("taxize")
+# install.packages("taxize")
 # install.packages("remotes") 
+# devtools::install_github("ropensci/brranching")
 
 # Load the library  
 # library(taxize) 
@@ -34,7 +35,7 @@ library(remotes) # Enable installing older versions of packages
 
 # install.packages('~/Downloads/taxize_0.5.2.tar.gz', repos=NULL, type='source') 
 library(taxize)
-
+library(brranching) # R client to fetch phylogenies from many places 
 
 ```
 
@@ -140,12 +141,11 @@ taxize::tax_name("lactobacillus reuteri", get = "family", db = "ncbi")
 
 ```
 
-
-### Get phylogeny via the web service, Phylomatic 
+### Get phylogeny via the web service, `Phylomatic` 
 
 Unfortunately, `phylomatic_tree()` is no longer functional in taxize package. Alternatively, the R package `brranching` has a function `phylomatic()` that implements the same function. 
 
-The [website](https://www.rdocumentation.org/packages/brranching/versions/0.7.0/topics/phylomatic) for brranching provides more detailed information. 
+The [website](https://www.rdocumentation.org/packages/brranching/versions/0.7.0/topics/phylomatic) for brranching provides more detailed information. In addition, its GitHub repo provides a [vignette](https://github.com/ropensci/brranching) 
 
 ```{r}
 
@@ -163,6 +163,19 @@ The [website](https://www.rdocumentation.org/packages/brranching/versions/0.7.0/
 
 ```
 
+
+```{r query-phylogenetic-tree}
+
+
+
+
+
+
+```
+
+
+
+
 ### Interactive name selection 
 
 ```{r}
@@ -176,10 +189,11 @@ get_tsn(sp_interactiveNameSelect, searchtype = "scientific")
 ```
 
 ```{r}
+
 # Select the first row which means there is no interactive component
 taxize::get_nbnid("Poa annua", rows = 1)
 
-# Get all data back with functions of the form, e.g. get_tsn_(), and likewise for other data sources
+# Return all results in a data frame 
 out <- taxize::get_nbnid_("Poa annua")  
 nrow(out$"Poa anua") 
 
@@ -187,7 +201,6 @@ nrow(out$"Poa anua")
 
 
 ### Coerce numeric/ alphanumerics to taxon IDs 
-
 Coerce numerics and alphanumerics to taxonomic ID classes that are usually only retrieved via `get_*()` functions. 
 
 ```{r}
