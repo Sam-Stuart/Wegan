@@ -73,9 +73,9 @@ pieChart_setup <-
       # Divide each individual abundace by total site abundance
       input <- sweep(input, 1, sites_abund, "/")
       # Get sites variable from rownames
-      dune_sites <- input %>% mutate(Site=as.numeric(rownames(input)))
+      input_sites <- input %>% mutate(Site=as.numeric(rownames(input)))
       # Get Species as variable and name the values as abundance
-      df <- dune_sites %>% pivot_longer(cols = -Site,
+      df <- input_sites %>% pivot_longer(cols = -Site,
                                         names_to = "variable", 
                                         values_to = "value") 
       # Set up colorscheme for more than 12 colors
@@ -120,6 +120,7 @@ pieChart_setup <-
     mSetObj$analSet$pieGraph <-
       list(
         md.df = md.df,
+        dune_like = length(as.matrix(categorical_data)) == 0,
         aggregate_function = aggregate_function,
         facA = facA,
         barColor = colors,
@@ -164,6 +165,7 @@ plotPieChart <-
            width = NA) {
     mSetObj <- .get.mSet(mSetObj)
     data <- mSetObj$analSet$pieGraph$md.df
+    dune_like <- mSetObj$analSet$pieGraph$dune_like
     aggregate_function <-
       mSetObj$analSet$pieGraph$aggregate_function
     facA <- mSetObj$analSet$pieGraph$facA
@@ -193,17 +195,38 @@ plotPieChart <-
       type = format,
       bg = "white"
     )
-    # Create bar plot
-    bar <- ggplot(data, aes(x = "", y = value, fill = variable)) +
-      geom_bar(stat = "identity", width=2) +
-      scale_fill_manual(values = getPalette(colourCount)) +
-      theme_classic()
-    # convert bar chart to individual pie charts
-    plot <- bar +
-      coord_polar("y") +
-      facet_wrap(~Site, ncol=4) +
-      theme_minimal()+
-      theme(axis.text.x = element_blank(), legend.position = "bottom")
+    if (dune_like) {
+      # Create bar plot
+      bar <- ggplot(data, aes(x = "", y = value, fill = variable)) +
+        geom_bar(stat = "identity", width=2) +
+        scale_fill_manual(values = getPalette(colourCount)) +
+        theme_classic()
+      # convert bar chart to individual pie charts
+      plot <- bar +
+        coord_polar("y") +
+        facet_wrap(~Site, ncol=4) +
+        theme_minimal()+
+        theme(axis.text.x = element_blank(), legend.position = "bottom")
+    } else {
+      # iris-like
+      data <- data %>%
+        arrange(desc(Species)) %>%
+        mutate(prop = value / sum(data$value) * 100) %>%
+        mutate(ypos = cumsum(prop) - 0.5 * prop)
+      print(data)
+      
+      plot <- ggplot(data, aes(x = "", y = prop, fill = Species)) +
+        geom_bar(stat = "identity",
+                 width = 1,
+                 color = "white") +
+        coord_polar("y", start = 0) +
+        labs(title = paste(aggregate_function, " ", facA, " of species")) +
+        theme_void(
+          base_size = 13,
+        ) +
+        geom_text(aes(y = ypos, label = value), color = "white", size = 6)
+    }
+   
     show(plot)
     
     dev.off()

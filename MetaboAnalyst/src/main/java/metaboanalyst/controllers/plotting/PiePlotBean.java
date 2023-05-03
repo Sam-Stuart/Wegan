@@ -37,11 +37,11 @@ public class PiePlotBean extends PlotBean implements Serializable {
         aggregateOpts[2] = new SelectItem("length", "Count");
         aggregateOpts[3] = new SelectItem("min", "Min");
         aggregateOpts[4] = new SelectItem("max", "Max");
-//
-//        numericBoxColumnOpts = this.getNumericBoxColumnOpts();
-//        if (numericBoxColumnOpts.length != 0) {
-//            this.facA = numericBoxColumnOpts[0].getLabel();
-//        }
+
+        numericBoxColumnOpts = this.getNumericBoxColumnOpts();
+        if (numericBoxColumnOpts.length != 0) {
+            this.facA = numericBoxColumnOpts[0].getLabel();
+        }
 
     }
 
