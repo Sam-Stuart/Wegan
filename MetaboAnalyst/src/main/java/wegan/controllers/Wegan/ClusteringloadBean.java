@@ -8,6 +8,7 @@ package wegan.controllers.Wegan;
 import metaboanalyst.controllers.stats.*;
 import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
 import metaboanalyst.controllers.ApplicationBean1;
 import metaboanalyst.controllers.SessionBean1;
 import metaboanalyst.models.User;
@@ -23,6 +24,7 @@ import org.rosuda.REngine.Rserve.RserveException;
  * @author jianguox
  */
 @ManagedBean(name = "Clusterload")
+@ViewScoped
 public class ClusteringloadBean implements Serializable {
 
     private final ApplicationBean1 ab = (ApplicationBean1) DataUtils.findBean("applicationBean1");
