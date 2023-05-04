@@ -7,6 +7,7 @@ package metaboanalyst.controllers.stats;
 
 import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
 import metaboanalyst.controllers.ApplicationBean1;
 import metaboanalyst.controllers.SessionBean1;
 import metaboanalyst.rwrappers.RDataUtils;
@@ -19,6 +20,7 @@ import org.rosuda.REngine.Rserve.RConnection;
  * @author jianguox
  */
 @ManagedBean(name = "uploader")
+@ViewScoped
 public class UploadBean implements Serializable {
 
     private final ApplicationBean1 ab = (ApplicationBean1) DataUtils.findBean("applicationBean1");

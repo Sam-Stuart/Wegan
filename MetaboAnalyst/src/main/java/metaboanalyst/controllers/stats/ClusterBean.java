@@ -31,6 +31,7 @@ import metaboanalyst.rwrappers.OAUtils;
  * @author jianguox
  */
 @ManagedBean(name = "clusterBean")
+@ViewScoped
 public class ClusterBean implements Serializable{
 
     private final ApplicationBean1 ab = (ApplicationBean1) DataUtils.findBean("applicationBean1");
