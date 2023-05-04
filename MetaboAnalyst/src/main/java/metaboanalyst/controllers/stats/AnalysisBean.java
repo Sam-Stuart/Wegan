@@ -7,6 +7,7 @@ package metaboanalyst.controllers.stats;
 
 import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import metaboanalyst.controllers.SessionBean1;
 import metaboanalyst.rwrappers.CAUtils;
@@ -27,6 +28,7 @@ import metaboanalyst.utils.DataUtils;
  * @author jianguox
  */
 @ManagedBean(name = "analBean")
+@ViewScoped
 public class AnalysisBean implements Serializable {
 
     private final SessionBean1 sb = (SessionBean1) DataUtils.findBean("sessionBean1");
