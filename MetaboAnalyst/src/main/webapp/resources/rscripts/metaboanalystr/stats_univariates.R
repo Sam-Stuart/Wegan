@@ -673,10 +673,8 @@ Ttests.Anal <-
            nonpar = F,
            threshp = 0.05,
            paired = FALSE,
-           equal.var = TRUE
-           #, group_name = "NULL"
-           ,group_name = "howdy"
-) {
+           equal.var = TRUE,
+           group_name = "howdy") {
     ### XIALAB UPDATED TTESTS:
     ## added params in xialab code:
     ## @param pvalType pvalType, can be "fdr" etc.
