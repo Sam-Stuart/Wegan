@@ -22,6 +22,7 @@ Develop the following R scripts by following the instruction step by step in the
 # install.packages("metacoder")
 library(metacoder)
 library(taxa)
+library(tidyverse)
 
 ```
 
@@ -103,18 +104,22 @@ Use the function `calc_obs_props` to divide each sample's counts by the total nu
 
 ```{r}
 
-obj$data$tax_data <- metacoder::calc_obs_props(obj, "tax_data") 
+# Calculate proportions from observation counts 
+# obj$data$tax_data <- metacoder::calc_obs_props(obj, "tax_data") 
 
 ```
+
 #### Get per-taxon information 
 
 To get information on the taxa, we sum the abundance per-taxon and add the results to the `taxmap` object in a new table. 
+
+Use the newly created data-set, `tax_abund` for visualization of stacked bar plot and pie chart. 
 
 ```{r} 
 
 # Sum observation values for each taxon 
 obj$data$tax_abund <- metacoder::calc_taxon_abund(obj, # taxmap object 
-                                                  "tax_data", # The name of a table in obj$data 
+                                                  "tax_data", # The table in obj$data 
                                                   cols = hmp_samples$sample_id) # The columns in data to use 
 
 
@@ -240,7 +245,84 @@ metacoder::heat_tree_matrix(obj,
 The grey tree on the lower left functions as a key for the unlabeled trees.
 
 
+#### Pie chart at the specified taxonomic rank 
 
+Prepare data sets for plotting with ggplot2 
+
+```{r}
+# Data sets included in obj 
+names(obj$data)
+
+obj$data$
+
+# Extract tax_abund (proportion per taxon) 
+countPerTaxon <- obj$data$tax_abund 
+
+colSums(countPerTaxon[,-1]) # Sum by columns 
+
+# Merge taxonomy rank table with the above data table by the column, taxon_id 
+taxaRank <- obj$data$class_data 
+taxaRank_distinct <- distinct(taxaRank, taxon_id, .keep_all = TRUE) 
+
+countPerTaxon_Rank <- countPerTaxon %>% 
+    dplyr::left_join(taxaRank_distinct, 
+                     by = "taxon_id") %>% 
+    select(-input_index)
+
+dim(countPerTaxon_Rank) 
+
+head(countPerTaxon_Rank)
+
+countPerTaxon_Rank_long <- countPerTaxon_Rank %>% 
+    gather(key = "sample_id", value = "counts", -taxon_id) %>% 
+    inner_join(hmp_samples, by = "sample_id") 
+
+# Pie chart: proportion based on counts per taxon by env groups 
+
+stat_countPerTaxa_byGroup <- countPerTaxon_Rank_long %>% 
+    mutate(counts = as.numeric(counts)) %>% 
+    group_by(sex, taxon_id) %>% 
+    summarise(counts = sum(counts), .groups = "drop") 
+
+stat_countPerTaxa_byGroup2 <- stat_countPerTaxa_byGroup %>% 
+                                                group_by(sex) %>% 
+                                                summarise(total_by_group = sum(counts))  
+
+stat_countPerTaxa_byGroup3 <- stat_countPerTaxa_byGroup %>% 
+    left_join(stat_countPerTaxa_byGroup2, by = "sex") %>% 
+    mutate(prop =  counts/ total_by_group)
+
+stat_countPerTaxa_byGroup4 <- stat_countPerTaxa_byGroup3 %>% 
+    left_join(taxaRank_distinct, by = "taxon_id")
+
+# Subset phlumn level 
+phylumByGroup <- stat_countPerTaxa_byGroup4 %>% 
+    filter(tax_rank == "p_")
+```
+
+Create the pie chart with ggplot2 
+
+```{r }
+# Customize legend labels 
+breaks <- phylumByGroup %>% 
+    filter(sex == "female") %>% 
+    pull(taxon_id)
+    
+labels <- phylumByGroup %>% 
+    filter(sex == "female") %>% 
+    pull(tax_name)
+
+ggplot(phylumByGroup, 
+       aes(x = "", y = prop, fill = taxon_id)) +
+  geom_bar(stat = "identity", width = 1) +
+  coord_polar("y", start = 0) + 
+    scale_fill_discrete(name = "Taxonomy",
+                         breaks = breaks,
+                         labels = labels) + 
+    facet_grid(cols = vars(sex)) + 
+    theme_void()
+
+```
 
 
 
