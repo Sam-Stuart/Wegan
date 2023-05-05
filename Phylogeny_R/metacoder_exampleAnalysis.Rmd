@@ -28,36 +28,59 @@ library(tidyverse)
 
 ```{r}
 
+# Load in the OTU table included in the metacoder package 
+data("hmp_otus") 
+
 # Abundance matrix included in metacoder package 
-head(hmp_otus)
+# head(hmp_otus) 
 
 ```
 In `hmp_otus`, columns are samples and rows are OTUs. 
 
 ```{r}
 
+# Load covariables dataset included in the metacoder package 
+data("hmp_samples") 
+
 # Load sample data table 
-head(hmp_samples)
+# head(hmp_samples)
 
 ```
 In `hmp_samples`, columns are clinical variables and rows are samples. 
 
-Process the abundance matrix and parse the taxonomic information in the mean time. 
 
+Process the abundance matrix and parse the taxonomic information in the mean time. 
 ```{r}
+
 obj <- metacoder::parse_tax_data(hmp_otus,
-                                 class_cols = "lineage", # The column contains taxonomic information 
-                                 class_sep = ";", # The character separating taxa in the lineage 
-                                 class_regex = "^(.+)_(.+)$", # Regex identifying where the string for each taxon is   
-                                 class_key = c(tax_rank = "info", # A key describing each regex capture group 
+                                 class_cols = "lineage", 
+                                 class_sep = ";", 
+                                 class_regex = "^(.+)_(.+)$", 
+                                 class_key = c(tax_rank = "info", 
                                                tax_name = "taxon_name"))  
+
+# Distribution of mixed taxonomic ranks 
+# table(obj$data$class_data[ ,3]) 
+
+species_table <- obj$data$class_data 
+
+
+# 1000 unique OTUs 
+unique(species_table$input_index) %>% length()
+
+names(species_table)
+
+species_table2 <- species_table %>%
+    select(-c(4:5)) %>% 
+    spread(tax_rank, taxon_id) 
+
 
 ```
 
 ```{r}
 
 # View the obj, a taxmap object 
-print(obj)
+# print(obj) 
 
 ```
 
@@ -96,6 +119,7 @@ obj <- metacoder::filter_obs(obj,
 # print(obj)
 
 ```
+
 #### Accounting for un-even sampling
 
 In practice, some samples may have more reads than others due to imperfect sequencing technologies. Typically, people work with rarefied counts or proportions to try to avoid the possibility fo sampling depth biasing the results. 
@@ -105,7 +129,33 @@ Use the function `calc_obs_props` to divide each sample's counts by the total nu
 ```{r}
 
 # Calculate proportions from observation counts 
-# obj$data$tax_data <- metacoder::calc_obs_props(obj, "tax_data") 
+obj$data$tax_data_prop <- metacoder::calc_obs_props(obj = obj, 
+                                                    data = "tax_data",
+                                                    cols = hmp_samples$sample_id) 
+
+# Different OTU may have the same taxon ID 
+# dim(obj$data$tax_data_prop)
+
+# table(obj$data$tax_data_prop[,1]) 
+
+
+# I want to write a function to calculate relative abundance (proportion) at different 
+# taxonomic ranks 
+
+
+taxa_data_df <- obj$data$tax_data 
+
+
+taxa_data_df1 <- taxa_data_df %>% 
+    rownames_to_column("input_index") %>% 
+    mutate(input_index = as.integer(input_index)) %>% 
+    left_join(species_table2, by = "input_index") 
+
+names(taxa_data_df1) %in% "c_"
+
+taxa_data_df1_long <- taxa_data_df1 %>% 
+    gather(key = "tax_rank", value = "tax_name", -c(1:54))  
+
 
 ```
 
@@ -120,8 +170,10 @@ Use the newly created data-set, `tax_abund` for visualization of stacked bar plo
 # Sum observation values for each taxon 
 obj$data$tax_abund <- metacoder::calc_taxon_abund(obj, # taxmap object 
                                                   "tax_data", # The table in obj$data 
-                                                  cols = hmp_samples$sample_id) # The columns in data to use 
+                                                  cols = hmp_samples$sample_id) 
 
+# 174 unique taxon IDs 
+dim(obj$data$tax_abund)
 
 ```
 
@@ -253,7 +305,6 @@ Prepare data sets for plotting with ggplot2
 # Data sets included in obj 
 names(obj$data)
 
-obj$data$
 
 # Extract tax_abund (proportion per taxon) 
 countPerTaxon <- obj$data$tax_abund 
@@ -289,15 +340,24 @@ stat_countPerTaxa_byGroup2 <- stat_countPerTaxa_byGroup %>%
                                                 summarise(total_by_group = sum(counts))  
 
 stat_countPerTaxa_byGroup3 <- stat_countPerTaxa_byGroup %>% 
-    left_join(stat_countPerTaxa_byGroup2, by = "sex") %>% 
-    mutate(prop =  counts/ total_by_group)
+    left_join(stat_countPerTaxa_byGroup2, 
+              by = "sex") %>% 
+    mutate(prop =  counts/ total_by_group) # Calculate relative abundance 
 
 stat_countPerTaxa_byGroup4 <- stat_countPerTaxa_byGroup3 %>% 
     left_join(taxaRank_distinct, by = "taxon_id")
 
-# Subset phlumn level 
+# Subset phylum level 
 phylumByGroup <- stat_countPerTaxa_byGroup4 %>% 
     filter(tax_rank == "p_")
+
+# As taxonomy levels are mixed, I aggregate lower taxonomic levels to 
+# a highest one, phylum 
+
+
+
+
+
 ```
 
 Create the pie chart with ggplot2 
@@ -323,6 +383,66 @@ ggplot(phylumByGroup,
     theme_void()
 
 ```
+
+#### Stacked bar plot 
+
+First, reproduce the above pie chart with stacked bar plot. 
+
+```{r}
+
+ 
+
+phylum_sumCount <- taxa_data_df1_long %>% 
+    dplyr::filter(tax_rank == "p_") %>% 
+    gather(key = "sample_id", 
+           value = "count", 
+           -c(1:4, 55:56)) %>% 
+    group_by(sample_id, 
+             tax_name) %>% 
+    summarise(count_perTaxon =  sum(count), 
+              .groups = "drop") 
+
+# Stack bar plot at phylum level 
+ggplot(phylum_sumCount, 
+       aes(x = sample_id,
+           y = count_perTaxon, 
+           fill = tax_name)) +
+    geom_bar(position = "fill",
+             stat = "identity") +
+    theme(axis.text.x = element_blank(),
+          axis.ticks = element_blank())
+
+
+```
+
+Secondly, show fine distribution of taxa per sample at specified taxonomic rank; gather samples by environmental groupings, such as sex and body sites. This visualization looks elegant only if number of samples is reasonable; otherwise visualization gets messy. 
+
+```{r}
+
+
+
+
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
