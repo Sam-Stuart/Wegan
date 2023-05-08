@@ -62,14 +62,13 @@ obj <- metacoder::parse_tax_data(hmp_otus,
 # Distribution of mixed taxonomic ranks 
 # table(obj$data$class_data[ ,3]) 
 
+# Extract taxoonmy names 
 species_table <- obj$data$class_data 
-
 
 # 1000 unique OTUs 
 unique(species_table$input_index) %>% length()
 
-names(species_table)
-
+# Create a table with rows representing unique OTU and columns taxonomy names 
 species_table2 <- species_table %>%
     select(-c(4:5)) %>% 
     spread(tax_rank, taxon_id) 
@@ -138,25 +137,20 @@ obj$data$tax_data_prop <- metacoder::calc_obs_props(obj = obj,
 
 # table(obj$data$tax_data_prop[,1]) 
 
-
-# I want to write a function to calculate relative abundance (proportion) at different 
-# taxonomic ranks 
-
-
+# Extract OTU counts table from obj 
 taxa_data_df <- obj$data$tax_data 
 
-
+# Merge OTU count table with taxonomy data 
 taxa_data_df1 <- taxa_data_df %>% 
     rownames_to_column("input_index") %>% 
     mutate(input_index = as.integer(input_index)) %>% 
-    left_join(species_table2, by = "input_index") 
+    left_join(species_table2, by = "input_index")  
 
-names(taxa_data_df1) %in% "c_"
-
+# Reshape table for the following plotting purpose 
 taxa_data_df1_long <- taxa_data_df1 %>% 
-    gather(key = "tax_rank", value = "tax_name", -c(1:54))  
-
-
+    gather(key = "tax_rank", 
+           value = "tax_name", 
+           -c(1:54))  
 ```
 
 #### Get per-taxon information 
@@ -351,18 +345,12 @@ stat_countPerTaxa_byGroup4 <- stat_countPerTaxa_byGroup3 %>%
 phylumByGroup <- stat_countPerTaxa_byGroup4 %>% 
     filter(tax_rank == "p_")
 
-# As taxonomy levels are mixed, I aggregate lower taxonomic levels to 
-# a highest one, phylum 
-
-
-
-
 
 ```
 
 Create the pie chart with ggplot2 
 
-```{r }
+```{r pie chart}
 # Customize legend labels 
 breaks <- phylumByGroup %>% 
     filter(sex == "female") %>% 
@@ -388,27 +376,26 @@ ggplot(phylumByGroup,
 
 First, reproduce the above pie chart with stacked bar plot. 
 
-```{r}
+```{r stacked bar plot}
 
- 
-
+# Subset phylum level, and add up count per taxon (instead of per sample)
 phylum_sumCount <- taxa_data_df1_long %>% 
     dplyr::filter(tax_rank == "p_") %>% 
     gather(key = "sample_id", 
            value = "count", 
            -c(1:4, 55:56)) %>% 
-    group_by(sample_id, 
+    group_by(sample_id, # Aggregate counts per taxon 
              tax_name) %>% 
     summarise(count_perTaxon =  sum(count), 
               .groups = "drop") 
 
-# Stack bar plot at phylum level 
+# Stacked bar plot at phylum level with percentage labels 
 ggplot(phylum_sumCount, 
        aes(x = sample_id,
-           y = count_perTaxon, 
+           y = count_perTaxon, # Use count as y-values 
            fill = tax_name)) +
-    geom_bar(position = "fill",
-             stat = "identity") +
+    geom_bar(position = "fill", # Stack elements and normalize height
+             stat = "identity") + # Tell ggplot2 the y-values 
     theme(axis.text.x = element_blank(),
           axis.ticks = element_blank())
 
