@@ -23,6 +23,7 @@ Develop the following R scripts by following the instruction step by step in the
 library(metacoder)
 library(taxa)
 library(tidyverse)
+library(scales)
 
 ```
 
@@ -125,7 +126,7 @@ In practice, some samples may have more reads than others due to imperfect seque
 
 Use the function `calc_obs_props` to divide each sample's counts by the total number of counts observed for each sample, resulting in a proportion.  
 
-```{r}
+```{r process count data}
 
 # Calculate proportions from observation counts 
 obj$data$tax_data_prop <- metacoder::calc_obs_props(obj = obj, 
@@ -152,6 +153,7 @@ taxa_data_df1_long <- taxa_data_df1 %>%
            value = "tax_name", 
            -c(1:54))  
 ```
+
 
 #### Get per-taxon information 
 
@@ -323,7 +325,6 @@ countPerTaxon_Rank_long <- countPerTaxon_Rank %>%
     inner_join(hmp_samples, by = "sample_id") 
 
 # Pie chart: proportion based on counts per taxon by env groups 
-
 stat_countPerTaxa_byGroup <- countPerTaxon_Rank_long %>% 
     mutate(counts = as.numeric(counts)) %>% 
     group_by(sex, taxon_id) %>% 
@@ -341,9 +342,9 @@ stat_countPerTaxa_byGroup3 <- stat_countPerTaxa_byGroup %>%
 stat_countPerTaxa_byGroup4 <- stat_countPerTaxa_byGroup3 %>% 
     left_join(taxaRank_distinct, by = "taxon_id")
 
-# Subset phylum level 
-phylumByGroup <- stat_countPerTaxa_byGroup4 %>% 
-    filter(tax_rank == "p_")
+# # Subset phylum level 
+# phylumByGroup <- stat_countPerTaxa_byGroup4 %>% 
+#     filter(tax_rank == "p_")
 
 
 ```
@@ -389,16 +390,113 @@ phylum_sumCount <- taxa_data_df1_long %>%
     summarise(count_perTaxon =  sum(count), 
               .groups = "drop") 
 
+
+# Merge the above table with environmental variables by sample_id 
+phylum_sumCount2 <- phylum_sumCount %>% 
+    left_join(hmp_samples, by = "sample_id") 
+    
+phylum_sumCount3 <- phylum_sumCount2 %>% 
+    mutate(sex = str_replace(sex, "^male", "Male")) %>%  # Replace male with Male 
+    mutate(sex = str_replace(sex, "female", "Female")) %>% # Replace Female with female 
+    filter(!is.na(tax_name)) 
+    
+topTaxon <- phylum_sumCount3 %>% 
+    group_by(tax_name) %>% 
+    summarise(averageCount = ave(count_perTaxon),
+              .groups = "drop") %>%
+    arrange(desc(averageCount)) %>% 
+    distinct(tax_name, .keep_all = T) %>% 
+    head(1) %>% # the top taxon with the most average counts across samples 
+    pull(tax_name)
+
+# Extract re-ordered taxa names 
+taxa_oder <- phylum_sumCount3 %>% 
+    group_by(tax_name) %>% 
+    summarise(averageCount = ave(count_perTaxon),
+              .groups = "drop") %>%
+    arrange(desc(averageCount)) %>% 
+    distinct(tax_name, .keep_all = TRUE) %>% 
+    filter(!is.na(tax_name)) %>% 
+    pull(tax_name)
+
+# Reorder sample_id by counts of "af" 
+afCount_df <- phylum_sumCount3 %>% 
+    filter(tax_name == "af") %>% 
+    select(sample_id, af_count = count_perTaxon) 
+
+# Descending order 
+phylum_sumCount4 <- phylum_sumCount3 %>% 
+    left_join(afCount_df, by = "sample_id") %>% 
+    arrange(desc(af_count)) 
+
+# Extract re-ordered sample_id 
+level_order <- phylum_sumCount4 %>% 
+    group_by(sample_id) %>% 
+    summarise(af_perc = af_count/sum(count_perTaxon), .groups = "drop") %>% 
+    distinct(sample_id, .keep_all = TRUE)  %>%
+    arrange(desc(af_perc)) %>%
+    pull(sample_id)
+
+# Re-order stacking element in each bar 
+phylum_sumCount3$tax_name <- factor(phylum_sumCount3$tax_name,
+                                     levels = taxa_oder) 
+
+
 # Stacked bar plot at phylum level with percentage labels 
-ggplot(phylum_sumCount, 
-       aes(x = sample_id,
+stackBarPlot<- ggplot(phylum_sumCount3, 
+       aes(x = factor(sample_id, level = level_order),
            y = count_perTaxon, # Use count as y-values 
            fill = tax_name)) +
     geom_bar(position = "fill", # Stack elements and normalize height
-             stat = "identity") + # Tell ggplot2 the y-values 
+             stat = "identity") + # Tell ggplot2 the y-values
+    facet_wrap(vars(sex),
+               dir = "h",
+               labeller = label_value, 
+               scales = "free_x") +  # Facet samples by environmental factor 
     theme(axis.text.x = element_blank(),
-          axis.ticks = element_blank())
+          axis.ticks = element_blank()) 
 
+stackBarPlot # Print ggplot 
+
+
+# Change legend labels 
+# names(species_table) 
+
+legendTax_df <- species_table %>% 
+    filter(taxon_id %in% taxa_oder) %>% 
+    distinct(taxon_id, .keep_all = TRUE) # Drop repeated names 
+
+legendTax_df2 <- legendTax_df[match(legendTax_df$taxon_id, taxa_oder), ] 
+
+# Extract legend values 
+legendVal <- taxa_oder 
+
+# Extract legend labels mapping to the above values 
+legendLab <- legendTax_df2$tax_name 
+
+
+# Modify the legend 
+stackBarPlot1 <- stackBarPlot +
+    scale_fill_discrete(breaks = c(legendVal),
+                        labels = c(legendLab)) +
+    labs(fill = "") +
+    theme(legend.position="bottom",
+          # legend.title = element_text(color = "black", size = 10),
+          legend.text = element_text(color = "black", size = 8),
+          panel.background = element_rect(fill = "white"), # Panel background 
+          axis.ticks.y = element_line(linewidth = 0.3)) + # y-axis tick width 
+    xlab("") +
+    ylab("") +
+    scale_y_continuous(labels = scales::percent)  # Axis label include % sign
+    
+stackBarPlot1 # Print plot
+
+# Export ggplot 
+ggsave("./ggPlotStackBarPlot_phylumLevel.pdf", stackBarPlot1,
+       device = "pdf",
+       width = 12,
+       height = 8,
+       units = "in") 
 
 ```
 
