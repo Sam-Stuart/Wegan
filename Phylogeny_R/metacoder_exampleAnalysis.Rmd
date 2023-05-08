@@ -293,86 +293,6 @@ metacoder::heat_tree_matrix(obj,
 The grey tree on the lower left functions as a key for the unlabeled trees.
 
 
-#### Pie chart at the specified taxonomic rank 
-
-Prepare data sets for plotting with ggplot2 
-
-```{r}
-# Data sets included in obj 
-names(obj$data)
-
-
-# Extract tax_abund (proportion per taxon) 
-countPerTaxon <- obj$data$tax_abund 
-
-colSums(countPerTaxon[,-1]) # Sum by columns 
-
-# Merge taxonomy rank table with the above data table by the column, taxon_id 
-taxaRank <- obj$data$class_data 
-taxaRank_distinct <- distinct(taxaRank, taxon_id, .keep_all = TRUE) 
-
-countPerTaxon_Rank <- countPerTaxon %>% 
-    dplyr::left_join(taxaRank_distinct, 
-                     by = "taxon_id") %>% 
-    select(-input_index)
-
-dim(countPerTaxon_Rank) 
-
-head(countPerTaxon_Rank)
-
-countPerTaxon_Rank_long <- countPerTaxon_Rank %>% 
-    gather(key = "sample_id", value = "counts", -taxon_id) %>% 
-    inner_join(hmp_samples, by = "sample_id") 
-
-# Pie chart: proportion based on counts per taxon by env groups 
-stat_countPerTaxa_byGroup <- countPerTaxon_Rank_long %>% 
-    mutate(counts = as.numeric(counts)) %>% 
-    group_by(sex, taxon_id) %>% 
-    summarise(counts = sum(counts), .groups = "drop") 
-
-stat_countPerTaxa_byGroup2 <- stat_countPerTaxa_byGroup %>% 
-                                                group_by(sex) %>% 
-                                                summarise(total_by_group = sum(counts))  
-
-stat_countPerTaxa_byGroup3 <- stat_countPerTaxa_byGroup %>% 
-    left_join(stat_countPerTaxa_byGroup2, 
-              by = "sex") %>% 
-    mutate(prop =  counts/ total_by_group) # Calculate relative abundance 
-
-stat_countPerTaxa_byGroup4 <- stat_countPerTaxa_byGroup3 %>% 
-    left_join(taxaRank_distinct, by = "taxon_id")
-
-# # Subset phylum level 
-# phylumByGroup <- stat_countPerTaxa_byGroup4 %>% 
-#     filter(tax_rank == "p_")
-
-
-```
-
-Create the pie chart with ggplot2 
-
-```{r pie chart}
-# Customize legend labels 
-breaks <- phylumByGroup %>% 
-    filter(sex == "female") %>% 
-    pull(taxon_id)
-    
-labels <- phylumByGroup %>% 
-    filter(sex == "female") %>% 
-    pull(tax_name)
-
-ggplot(phylumByGroup, 
-       aes(x = "", y = prop, fill = taxon_id)) +
-  geom_bar(stat = "identity", width = 1) +
-  coord_polar("y", start = 0) + 
-    scale_fill_discrete(name = "Taxonomy",
-                         breaks = breaks,
-                         labels = labels) + 
-    facet_grid(cols = vars(sex)) + 
-    theme_void()
-
-```
-
 #### Stacked bar plot 
 
 First, reproduce the above pie chart with stacked bar plot. 
@@ -461,7 +381,6 @@ stackBarPlot # Print ggplot
 
 # Change legend labels 
 # names(species_table) 
-
 legendTax_df <- species_table %>% 
     filter(taxon_id %in% taxa_oder) %>% 
     distinct(taxon_id, .keep_all = TRUE) # Drop repeated names 
@@ -473,7 +392,6 @@ legendVal <- taxa_oder
 
 # Extract legend labels mapping to the above values 
 legendLab <- legendTax_df2$tax_name 
-
 
 # Modify the legend 
 stackBarPlot1 <- stackBarPlot +
@@ -511,9 +429,84 @@ Secondly, show fine distribution of taxa per sample at specified taxonomic rank;
 
 ```
 
+Prepare data sets for plotting with ggplot2 
+
+```{r}
+# Data sets included in obj 
+names(obj$data)
 
 
+# Extract tax_abund (proportion per taxon) 
+countPerTaxon <- obj$data$tax_abund 
 
+colSums(countPerTaxon[,-1]) # Sum by columns 
+
+# Merge taxonomy rank table with the above data table by the column, taxon_id 
+taxaRank <- obj$data$class_data 
+taxaRank_distinct <- distinct(taxaRank, taxon_id, .keep_all = TRUE) 
+
+countPerTaxon_Rank <- countPerTaxon %>% 
+    dplyr::left_join(taxaRank_distinct, 
+                     by = "taxon_id") %>% 
+    select(-input_index)
+
+dim(countPerTaxon_Rank) 
+
+head(countPerTaxon_Rank)
+
+```
+
+```{r}
+# Pie chart: proportion based on counts per taxon by env groups 
+stat_countPerTaxa_byGroup <- phylum_sumCount3 %>% 
+    group_by(sex, tax_name) %>% 
+    summarise(counts = sum(count_perTaxon), .groups = "drop") 
+
+stat_countPerTaxa_byGroup2 <- stat_countPerTaxa_byGroup %>% 
+                                                group_by(sex) %>% 
+                                                summarise(total_by_group = sum(counts))  
+
+stat_countPerTaxa_byGroup3 <- stat_countPerTaxa_byGroup %>% 
+    left_join(stat_countPerTaxa_byGroup2, 
+              by = "sex") %>% 
+    mutate(prop =  counts/ total_by_group) # Calculate relative abundance 
+
+stat_countPerTaxa_byGroup4 <- stat_countPerTaxa_byGroup3 %>% 
+    left_join(taxaRank_distinct, by = "tax_name")
+
+
+# Subset phylum level
+phylumByGroup <- stat_countPerTaxa_byGroup4 %>%
+    select(-taxon_id, -input_index)
+
+
+```
+
+Create the pie chart with ggplot2 
+
+```{r pie chart}
+
+ggPie <- ggplot(phylumByGroup, 
+       aes(x = "", y = prop, fill = tax_name)) +
+  geom_bar(stat = "identity", width = 1) +
+  coord_polar("y", start = 0) +  # Polar coordination 
+    scale_fill_discrete(name = "",
+                        breaks = legendVal,
+                        labels = legendLab) + 
+    facet_grid(cols = vars(sex)) + 
+    theme_void() + 
+    theme(legend.position = "bottom") 
+
+ggPie # Print
+
+# Export pie chart 
+ggsave("./ggPlotPie_phylum.pdf",
+       ggPie,
+       width = 12,
+       height = 8,
+       units = "in")
+
+```
 
 
 
