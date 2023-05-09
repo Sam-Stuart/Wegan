@@ -122,7 +122,7 @@
 # Get column names from user dataset
 dendro.columns <- function(mSetObj=NA) {
   mSetObj <- .get.mSet(mSetObj)
-  data <- mSetObj$dataSet$orig
+  data <- mSetObj$dataSet$origMeta
   print(str(mSetObj))
   name.all.cols <- c("No groupings", colnames(data))
   return(name.all.cols)
@@ -259,7 +259,7 @@ PlotHCTree <- function(mSetObj=NA,
     
     # Set up df for color bar option and join df by index values so categorical value aligned properly
     facA_df <- mSetObj$dataSet$origMeta %>%
-      dplyr::mutate(id=row_number(), var = as.factor(mSetObj$dataSet$orig[,colorbar_name])) %>%
+      dplyr::mutate(id=row_number(), var = as.factor(mSetObj$dataSet$origMeta[,colorbar_name])) %>%
       dplyr::select(c(var, id));
     ddata$labels <- ddata$labels %>% mutate(id=hc$order) %>% left_join(facA_df, by='id');
     p <- p + geom_point(data = ddata$labels,
@@ -525,7 +525,7 @@ PlotSubHeatMap <- function(mSetObj=NA, imgName, format="png", dpi=72,
   
   mSetObj <- .get.mSet(mSetObj);
   print(mSetObj$dataSet$cls)
-  mSetObj$dataSet$cls <- as.factor(mSetObj$dataSet$norm[[grpName]])
+  mSetObj$dataSet$cls <- as.factor(mSetObj$dataSet$origMeta[,1])
   print(mSetObj$dataSet$cls)
   var.nms = colnames(mSetObj$dataSet$norm);
   
@@ -819,7 +819,7 @@ PlotSubHeatMap <- function(mSetObj=NA, imgName, format="png", dpi=72,
 # Get column names from user dataset
 heatmap.columns <- function(mSetObj = NA){
   mSetObj <- .get.mSet(mSetObj)
-  data <- mSetObj$dataSet$orig
+  data <- mSetObj$dataSet$origMeta
   fac.dat <- select(data, !where(is.numeric))
   name.fac.cols <- c("No groupings", colnames(fac.dat))
   return(name.fac.cols)
@@ -856,6 +856,12 @@ PlotHeatMap <- function(mSetObj=NA, imgName, format="png", dpi=72, width=NA,
     my.data <- mSetObj$dataSet$orig;
   }
   
+  #if (grpName == "NULL"){
+  #  my.data <- my.data
+  #} else {
+  #  my.data <- cbind(mSetObj$dataSet$origMeta[grpName], my.data)
+  #}
+
   #Obtain numeric data 
   num.dat <- select(my.data, where(is.numeric))
   
