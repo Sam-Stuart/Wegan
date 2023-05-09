@@ -22,6 +22,12 @@ plot.geneNetwork <- function(mSetObj = NULL,
                              width = NULL, 
                              method = "average", # Hierarchical method 
                              nSelect = 400) { 
+      
+                             ## mSetObj = NULL  # Doesn't correspond to an input because it uses msetobject
+                             ## custom_norm = NULL  # Check box
+                             ## power = 6 # Text box
+                             ## method = "average" # Static dropdown
+                             ## nSelect = 400 # Static dropdown
     
     library(WGCNA)
     library(tidyverse) 
