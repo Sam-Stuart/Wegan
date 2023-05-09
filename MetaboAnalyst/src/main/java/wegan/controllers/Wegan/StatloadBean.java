@@ -154,13 +154,13 @@ public class StatloadBean implements Serializable {
                 if (fileName == null) {
                     return null;
                 }
-                if (fileNameMeta != null){
-                    RDataUtils.readTextDataMeta(RC, fileNameMeta, metaFormat, "disc", metaNames);
-                }
                 if (fileNameEnv != null){
                     RDataUtils.readTextDataEnv(RC, fileNameEnv, envFormat, "disc", envNames);
                 }
                 if (RDataUtils.readTextData(RC, fileName, dataFormat, "disc", dataNames)) {
+                    if (fileNameMeta != null){
+                    RDataUtils.readTextDataMeta(RC, fileNameMeta, metaFormat, "disc", metaNames);
+                    }
                     sb.setDataUploaded(true);
                     sb.updateMsg("Error", "Data Uploaded successfully");
                     return "Data check";
