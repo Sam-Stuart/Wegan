@@ -529,6 +529,7 @@ Read.TextDataMeta <- function(mSetObj=NA, filePath, metaFormat="rowu", lbl.type=
   write.csv(orig.meta, file="data_grouping.csv", row.names=FALSE);
   # Adding cls re-write to first column of origMeta
   mSetObj$dataSet$cls <- as.factor(as.character(mSetObj$dataSet$origMeta[,1]));
+  mSetObj$dataSet$orig.cls <- as.factor(as.character(mSetObj$dataSet$origMeta[,1]));
 
   return(.set.mSet(mSetObj));
 }
