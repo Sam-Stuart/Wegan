@@ -12,8 +12,8 @@ make.exprSet <- function(mSetObj = NA,
                          nSets = 1){ 
     # Load WGCNA library 
     library(WGCNA) 
-    library(tidyverse)
-    source("./WGCNA_functions/taxo_00_generalDataUtils.R")  
+    # library(tidyverse)
+    # source("./WGCNA_functions/taxo_00_generalDataUtils.R")  
     
     # Source the file, general_data_utils.R 
     mSetObj <- .get.mSet(mSetObj)
