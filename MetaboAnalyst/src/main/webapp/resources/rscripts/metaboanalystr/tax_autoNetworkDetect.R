@@ -14,12 +14,16 @@
 #'@export
 findSoftThreshold <- function(mSetObj = NA, 
                               custom_norm = NA, 
-                              powerVector = NULL,
-                              imgName, # Image name, a string 
-                              format = "png", # Select image format, "png" or "pdf" 
-                              dpi = 72, # Define image resolution for png, high-res dpi 300 
-                              width = NULL, # Define image size, default 10.5 or 7.2 (inches)
+                              powerVector = NULL, 
+                              imgName, 
+                              format = "png", 
+                              dpi = 72, 
+                              width = NULL, 
                               verbose = NULL){
+                              ## mSetObj = NA # Doesn't correspond to any input type as it uses mSetObj 
+                              ## custom_norm = NA # Text box 
+                              ## powerVector = NULL # Text box
+                              ## verbose = NULL # Static dropdown 
     
     library(WGCNA) 
     library(tidyverse) 
