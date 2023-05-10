@@ -7,5 +7,10 @@
 .Rproj.user
 WGCNA_output/
 WGCNA_rawData/
+*.png
+*.pdf
+*.png_heatmap 
+*.png_dendrogram
+*.txt 
 
 

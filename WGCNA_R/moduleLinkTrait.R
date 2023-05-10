@@ -12,8 +12,8 @@ options(stringsAsFactors = FALSE)
 #===============================================================================
 
 # Load saved data from previous sessions 
-load("./output-WGCNA/consensusDataInput.RData")
-load("./femaleLiver-networkConstruct-auto.RData") 
+load("./WGCNA_data/consensusDataInput.RData")
+load("./WGCNA_data/femaleLiver-networkConstruct-auto.RData") 
 
 # Define numbers of genes and samples 
 datExpr <- multiExpr.rm[[1]]$data # female liver expression data 
@@ -51,7 +51,7 @@ labeledHeatmap(Matrix = moduleTraitCor,
                 textMatrix = textMatrix,
                 setStdMargins = FALSE,
                 cex.text = 0.5,
-                zlim = c(-1, 1),
+                zlim = c(-1, 1), 
                 main = paste("Module-trait relationships"))
 
 
@@ -165,8 +165,81 @@ write.csv(geneInfo0, file = "./output-WGCNA/geneInfo.csv")
 
 
 
+#===============================================================================
+
+# Reproduce base-R plot using ggplot2 
+
+#===============================================================================
+
+# Main input data 
+df_moduleTraitCor <- as.data.frame(moduleTraitCor) 
+
+# Reorder modules according to the correlation matrix 
+dist_moduleTraitCor <- dist(moduleTraitCor, method = 'euclidean')
+# Hierarchical clustering of modules based on correlation matrix  
+hc_moduleTrait <- stats::hclust(dist_moduleTraitCor, method = 'average') 
+
+# Reorder traits according to the correlation matrix 
+dist_moduleTraitCor_t <- dist(t(moduleTraitCor), method = 'euclidean')   
+# Hierarchical clustering of modules based on correlation matrix  
+hc_moduleTrait_t <- stats::hclust(dist_moduleTraitCor_t, method = 'average') 
 
 
+# Re-order by column 
+df_moduleTraitCor <- df_moduleTraitCor[hc_moduleTrait$order, hc_moduleTrait_t$order]
+
+# y-axis labels 
+label_yaxis <- rownames(df_moduleTraitCor)
+# x-axis labels 
+label_xaxis <- colnames(df_moduleTraitCor) 
+
+
+df_moduleTraitCor2 <- df_moduleTraitCor %>%
+    rownames_to_column("modulecolor") %>% 
+    tidyr::gather(key = "trait", value = "rho", -modulecolor) 
+
+# Text 
+df_textMatrix <- as.data.frame(textMatrix) 
+colnames(df_textMatrix) <- colnames(moduleTraitCor)  # rename columns 
+rownames(df_textMatrix) <- rownames(moduleTraitCor)  # rename rows 
+
+df_textMatrix2 <- df_textMatrix %>% 
+    rownames_to_column("modulecolor") %>% 
+    tidyr::gather(key = "trait", value = "rho_pval", -modulecolor)
+
+# Add text to the main input data 
+df_moduleTraitCor3 <- df_moduleTraitCor2 %>% 
+    left_join(df_textMatrix2, 
+              by = c("trait", "modulecolor"))
+
+
+# Plot a heatmap using geom_tile()  
+ggplot(df_moduleTraitCor3, 
+       aes(x = trait, 
+           y = modulecolor, 
+           fill = rho)) + 
+    geom_tile(color = "black") + # heat map 
+    ggplot2::geom_text(aes(label = rho_pval),
+                       color = "white",
+                       check_overlap = TRUE,
+                       inherit.aes = TRUE,
+                       size = 2) +
+    scale_fill_gradient2(low = "#075AFF",
+                         mid = "#FFFFCC",
+                         high = "#FF0000",
+                         midpoint = 0,
+                         limit = c(-1, 1),
+                         name = "Pearson\nCorrelation") +
+    labs(x = "Traits",
+         y = "Modules",
+         color = "Correlation n\ coefficient") +
+    theme(axis.text.x = element_text(angle = 45, 
+                                     hjust = 1, 
+                                     vjust = 1,
+                                     size = 10),
+          axis.text.y = element_text(size = 10)) +
+    scale_x_discrete(limits = label_xaxis) +
+    scale_y_discrete(limits = label_yaxis)
 
 
 

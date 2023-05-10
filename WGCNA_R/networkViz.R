@@ -3,10 +3,9 @@
 library(WGCNA)
 options(stringsAsFactors = FALSE)
 
-load("./wgcna_dataInputClean.RData")
-load("./femaleLiver-networkConstruct-auto.RData") 
-load("./output-WGCNA/consensusDataInput.RData")
-
+load("./WGCNA_data/wgcna_dataInputClean.RData")
+load("./WGCNA_data/femaleLiver-networkConstruct-auto.RData") 
+load("./WGCNA_data/consensusDataInput.RData") 
 
 #===============================================================================
 
@@ -90,18 +89,28 @@ plotEigengeneNetworks(MET, "",
 # Split the dendrogram and heatmap plots 
 # Plot the dendrogram 
 sizeGrWindow(6, 6)
-par(cex = 1.0) 
+# par(cex = 1.0) 
 plotEigengeneNetworks(MET, 
                       "Eigengene dendrogram",
                       marDendro = c(0, 4, 2, 0),
                       plotHeatmaps = FALSE) 
-
-par(cex = 1.0)
+# par(cex = 1.0)
 plotEigengeneNetworks(MET, 
                       "Eigengene adjacency heatmap",
                       marHeatmap = c(3, 4, 2, 2),
                       plotDendrograms = FALSE,
                       xLabelsAngle = 90)
+
+#===============================================================================
+
+# Reproduce base-R plots with ggplot2 
+
+#===============================================================================
+
+# Dendrogram using ggdendro package which extract plot data from dendrogram and draw the dendrogram using ggplot2 
+
+
+
 
 
 

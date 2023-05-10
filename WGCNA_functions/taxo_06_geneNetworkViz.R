@@ -3,7 +3,10 @@
 #'@param mSetObj Input name of the created mSet Object
 #'@param custom_norm Customized normalization provided by users 
 #'@param power Soft threshold, dafault value is 6 
-#'@param file The image file name 
+#'@param imgName Image name, "auto" or "manual", default is "auto"
+#'@param format Select the image format, "png" or "pdf". Default is "png" 
+#'@param dpi Define the resolution. If the image format is "pdf", users do not need define the dpi. For "png" format, the default dpi is 72. It is suggested that for high-resolution images, choose a dpi of 300. 
+#'@param width Define image sizes, there 2 default widths. The first, width = NULL, is 10.5. The second default is width = 0, where the width is 7.2. Otherwise, users can customize widths on their own 
 #'@param method The method to calculate hierarchical structure
 #'@param nSelect Gene number showing in the network  
 #'@author Xin (David) Zhao\email{xzhao1@ualberta.ca}
@@ -11,15 +14,18 @@
 #'License: GNU GPL (>= 2)
 #'@export
 plot.geneNetwork <- function(mSetObj = NULL, 
-                             custom_norm = NULL, # Allow users load customized normalized data 
+                             custom_norm = NULL, # Allow users load customized normalized data
                              power = 6,
-                             file, # image file name 
+                             imgName,   
+                             format = "png", # png or pdf 
+                             dpi = 72, # Image resolution, dot per inch
+                             width = NULL, 
                              method = "average", # Hierarchical method 
-                             nSelect = 400) { # Gene number visible in the network 
+                             nSelect = 400) { 
     
     library(WGCNA)
     library(tidyverse) 
-    source("./Func_WGCNA/general_data_utils.R") 
+    source("./WGCNA_functions/taxo_00_generalDataUtils.R")  
     
     if(!is.null(custom_norm)){
         datExpr <- custom_norm 
@@ -78,20 +84,49 @@ plot.geneNetwork <- function(mSetObj = NULL,
     
     selectColors <- moduleColors[select] 
     
-    # sizeGrWindow(9, 9) 
-    
     plotDiss <- selectTOM^7 
     # Set diagonal to NA for a nicer plot 
     base::diag(plotDiss) <- NA  
     
-    pdf(file, width = 10, height = 10)
-    WGCNA::TOMplot(plotDiss, 
-                   selectTree, 
-                   selectColors, 
-                   main = "Netwrok heatmap plot, selected genes") 
-    dev.off()
+    # Define sizes for the final plot 
+    if(is.null((width))) {
+        w <- 10.5 
+    } else if (width == 0) {
+        w <- 7.2 
+    } else {
+        w <- width
+    }
+    h <- w # height 
+    
+    if (format == "png") {
+        png(paste(imgName, ".", format, sep = ""), 
+            # width = w, 
+            # units = "cm", 
+            res = dpi)
+        
+        WGCNA::TOMplot(plotDiss, 
+                       selectTree, 
+                       selectColors, 
+                       main = "Netwrok heatmap plot, selected genes") 
+        dev.off()
+    } else {
+        pdf(paste(imgName, ".", format, sep = "")) 
+        WGCNA::TOMplot(plotDiss, 
+                       selectTree, 
+                       selectColors, 
+                       main = "Netwrok heatmap plot, selected genes") 
+        dev.off()
+    }
+    
+    # Name plot for download 
+    imgName_json <- paste(imgName, ".json", sep = "")
+    
+    imgName_export <- paste(imgName, "dpi", dpi, ".", format, sep = "")
+    # Save the resulting figure file name to mSet object 
+    mSetObj$imgSet$geneNetwork <- imgName_export 
+    
+    .set.mSet(mSetObj)
 }
-
 
 
 #===============================================================================
@@ -100,10 +135,9 @@ plot.geneNetwork <- function(mSetObj = NULL,
 
 #===============================================================================
 
-load('./mSet_example.RData') 
-load("./clinicalTrait_example.RData")
-load("./net_example.RData")
-source("./Func_WGCNA/dataInputClean_fun.R")
+load('./WGCNA_data/mSet_example.RData')   
+load("./WGCNA_data/clinicalTrait_example.RData")
+source("./WGCNA_functions/taxo_01_dataInputClean.R")
 
 .on.public.web <- FALSE  
 
@@ -111,11 +145,7 @@ mSetObj <- make.exprSet(mSetObj = mSetObj_example)
 
 args(plot.geneNetwork)
 
-
 plot.geneNetwork(mSetObj = mSetObj,
-                 file = "./output-WGCNA/heatmap-geneNetwork.pdf",
+                 imgName = "geneNetworkplots",
                  nSelect = 500) 
-
-
-
 
