@@ -38,7 +38,7 @@ public class TAXBean implements Serializable {
             if (!FacesContext.getCurrentInstance().isPostback()) {
                 //sb.registerPage(pageID);
                 switch (pageID) {
-                    case "NMDS":
+                    case "WGCNA":
                         doDefaultWGCNA();
                         break;
                    
@@ -47,14 +47,13 @@ public class TAXBean implements Serializable {
 
         }
     }
-
+//        OAUtils.PlotNMDS2DOrdination(sb, false, false, false, false, false, "NULL", "NULL", sb.getCurrentImage("ord_nmds_2D"), "png", 72);
+//        OAUtils.PlotNMDS3DOrdination(sb, "NULL", false, "NULL", sb.getCurrentImage("ord_nmds_3D"));
+//        OAUtils.PlotNMDSstressOrdination(sb, "NULL", sb.getCurrentImage("ord_nmds_stress"), "png", 72);
+//        OAUtils.PlotNMDSscreeOrdination(sb, "NULL", sb.getCurrentImage("ord_nmds_scree"), "png", 72);
     private void doDefaultWGCNA() {
         TaxonomyUtils.MakeWGCNAData(sb, false, 1);
-        TaxonomyUtils.PlotWGCNAGeneNetwork(sb, Boolean.TRUE, 0, imgName, format, 0, method, 0, 0);
-        OAUtils.PlotNMDS2DOrdination(sb, false, false, false, false, false, "NULL", "NULL", sb.getCurrentImage("ord_nmds_2D"), "png", 72);
-        OAUtils.PlotNMDS3DOrdination(sb, "NULL", false, "NULL", sb.getCurrentImage("ord_nmds_3D"));
-        OAUtils.PlotNMDSstressOrdination(sb, "NULL", sb.getCurrentImage("ord_nmds_stress"), "png", 72);
-        OAUtils.PlotNMDSscreeOrdination(sb, "NULL", sb.getCurrentImage("ord_nmds_scree"), "png", 72);
+        TaxonomyUtils.PlotWGCNAGeneNetwork(sb, false, 6, sb.getCurrentImage("tax_wgcna_net"), "png", 72, "average", 400);
     }
    
 }
