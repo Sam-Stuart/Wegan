@@ -6,20 +6,20 @@
 package metaboanalyst.controllers.correlation;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+//import java.util.ArrayList;
+//import java.util.Arrays;
+//import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
-import javax.faces.model.SelectItem;
+//import javax.faces.model.SelectItem;
 import metaboanalyst.controllers.SessionBean1;
 import metaboanalyst.rwrappers.UniVarTests;
 import metaboanalyst.rwrappers.CAUtils;
 import metaboanalyst.rwrappers.RDataUtils;
 
 import metaboanalyst.utils.DataUtils;
-import org.primefaces.context.RequestContext;
-import org.primefaces.model.DualListModel;
+//import org.primefaces.context.RequestContext;
+//import org.primefaces.model.DualListModel;
 import org.rosuda.REngine.Rserve.RConnection;
 
 /**
@@ -57,6 +57,9 @@ public class CABean implements Serializable {
                     case "RF":
                         doDefaultRF();
                         break;
+                    case "ANN":
+                        doDefaultANN();
+                        break;
                     case "Logistic":
                         doDefaultLogistic();
                         break;
@@ -72,6 +75,7 @@ public class CABean implements Serializable {
         UniVarTests.PlotCorrHeatMap(sb, sb.getCurrentImage("corr"), "png", 72, "col", "pearson", "bwm", "overview", "F", "F", "F", 100);
     }
 
+//    UNIVARIATE REGRESSION (CORRELATION)
     private void doDefaultLinear() {
         
         if (!CAUtils.CreateLinearModel(sb, "NULL", "NULL", false)){
@@ -81,20 +85,28 @@ public class CABean implements Serializable {
         CAUtils.PlotLinearCA(sb,  "NULL", "NULL",
                 false, "NULL", "NULL", false,
                  false, false, false, " "," "," ",
+//                 TEXT SIZE
+                 "NULL", "NULL","NULL", "NULL","NULL", 
                 sb.getCurrentImage("corr_linear"), "png", 72);
         
         CAUtils.PlotLinearPredictCA(sb, "NULL", "NULL",
                 false, 
                 "NULL", "NULL", false,
                 false, false, false, " ", " "," ",
+//                TEXT SIZE
+                "NULL", "NULL","NULL", "NULL","NULL", 
                 sb.getCurrentImage("corr_linear_pred"), "png", 72);
         
         CAUtils.PlotLinearNormResidCA(sb, "NULL", "NULL", false,
                 "NULL", "NULL", " ", " "," ",
+//                TEXT SIZE
+                "NULL", "NULL","NULL", "NULL","NULL", 
                 sb.getCurrentImage("corr_linear_normres"), "png", 72);
         
         CAUtils.PlotLinearResidFitCA(sb, "NULL", "NULL", false,
                 "NULL", "NULL", " ", " "," ",
+//                TEXT SIZE
+                "NULL", "NULL","NULL", "NULL","NULL", 
                 sb.getCurrentImage("corr_linear_resfit"), "png", 72);
 //        CAUtils.ConvertLinearJSONCA(sb, "NULL");
         
@@ -109,19 +121,21 @@ public class CABean implements Serializable {
 ////                sb.getCurrentImage("corr_linear"));
 //        sb.getCurrentImage("corr_linear"), "png", 72);
 //    }
-                       
-    private void doDefaultPenalized() {
-        CAUtils.CreatePenalizedModel(sb, "NULL", "NULL", false);
-        CAUtils.PlotPenalizedCA(sb, 
-                false,"NULL", "NULL",
-                false," "," "," ",
-                sb.getCurrentImage("corr_penalized"), "png", 72);
-        CAUtils.PlotPenalizedCVCA(sb,
-                false, "NULL", "NULL"," "," "," ",
-                sb.getCurrentImage("corr_penalized2"), "png", 72);
-    }
+      
+//    PENALIZED REGRESSION (CORRELATION)
+     private void doDefaultPenalized() {
+       CAUtils.CreatePenalizedModel(sb, "NULL", "NULL");
+        CAUtils.PlotPenalizedCA(sb, "NULL", "NULL",
+                "NULL","NULL",
+                 " "," "," ",
+                 sb.getCurrentImage("corr_penalized"), "png", 72);
+        CAUtils.PlotPenalizedCVCA(sb,"NULL", "NULL",
+                "NULL", "NULL",
+                " "," "," ",
+                 sb.getCurrentImage("corr_penalized2"), "png", 72);
+     }
 
-
+//    POLYNOMIAL REGRESSION (CORRELATION)
     private void doDefaultPolynomial() {
         CAUtils.CreatePolynomialModel(sb, "NULL", "NULL", false);
         CAUtils.PlotPolynomialCA(sb, "NULL","NULL", "NULL",
@@ -134,7 +148,7 @@ public class CABean implements Serializable {
                 " "," "," ",
                 sb.getCurrentImage("corr_poly_pred"), "png", 72);
     }
-    
+//    MULTIVARIATE REGRESSION (CORRELATION)
     private void doDefaultMultivariate() {
         CAUtils.CreateMultivariateModel(sb, "NULL", "NULL", false);
         CAUtils.PlotMultivariateCA(sb, 
@@ -154,48 +168,64 @@ public class CABean implements Serializable {
                 sb.getCurrentImage("corr_multi_relaimpo"), "png", 72);
     }
 
-
+//   SUPPORT VECTOR MACHINE 
     private void doDefaultSVM() {
-        CAUtils.CreateSVMModel(sb, "NULL", "NULL", false);
+        CAUtils.CreateSVMModel(sb, "NULL", "NULL");
         CAUtils.PlotSVMCA(sb,
-                "NULL", "NULL", false,
-                "NULL","NULL",  false,
+                "NULL", "NULL",
+                "NULL","NULL",
+                "NULL", "NULL",
                  " ", " "," ",
                 sb.getCurrentImage("corr_svm_pred"), "png", 72);
     }    
-
+//    RANDOM FOREST
     private void doDefaultRF() {
-        CAUtils.CreateRFModel(sb, "NULL", "NULL", false);
+        CAUtils.CreateRFModel(sb, "NULL", "", false);
         CAUtils.PlotRFCA(sb,
-                 "NULL", "NULL", false,
+                 "NULL", "", false,
                 "NULL","NULL",  false,
                  " ", " "," ",
                 sb.getCurrentImage("corr_rf_pred"), "png", 72);
         CAUtils.PlotRFRelativeCA(sb, 
-                "NULL", "NULL", false, 
+                "NULL", "", false, 
                 "NULL",  false,
                  " ", " "," ",
                 sb.getCurrentImage("corr_rf_relaimpo"), "png", 72);
         CAUtils.PlotRFErrorCA(sb, 
-                "NULL", "NULL", false, 
+                "NULL", "", false, 
                 "NULL",  " ", " "," ",
                 sb.getCurrentImage("corr_rf_error"), "png", 72);
     }  
     
-    
-
+//    ARTIFICIAL NEURAL NETWORK
+    private void doDefaultANN() {
+        CAUtils.CreateANNModel(sb, "NULL","", "");
+        CAUtils.PlotANNCA(sb,
+                "NULL", "","","NULL",
+                "NULL","NULL","NULL"," ", 
+                 sb.getCurrentImage("corr_ann_nid"), "png", 72);       
+   
+        CAUtils.PlotANNPredictCA(sb,
+                "NULL", "", "", 
+                "NULL", "NULL", 
+                "NULL"," ", " ", " ", 
+                sb.getCurrentImage("corr_ann_pred"), "png", 72);
+}
+//    LOGISTICS
     private void doDefaultLogistic() {
         CAUtils.CreateLogisticModel(sb, 
-                "NULL", "NULL", "multinomial","NULL", "NULL");
+                "NULL", "NULL", false,"NULL", "NULL", "NULL");
 //                "NULL", "NULL");
-        CAUtils.PlotLogisticEffectCA(sb, "multinomial",false, 
+        CAUtils.PlotLogisticEffectCA(sb, false,
+                "NULL", false, 
 //                "NULL", "NULL", false, 
                 " ", " ", " ",
                 false,"NULL", false,
                 "NULL",
-                sb.getCurrentImage("corr_logistic1"), "png", 72);
-        CAUtils.PlotLogisticROCCA(sb, "multinomial", "NULL", " ",
-                sb.getCurrentImage("corr_logisticROC"), "png", 72);
+                sb.getCurrentImage("corr_log_eff"), "png", 72);
+        CAUtils.PlotLogisticROCCA(sb, false,
+                "NULL", "NULL", " ",
+                sb.getCurrentImage("corr_log_roc"), "png", 72);
     } 
     
 }

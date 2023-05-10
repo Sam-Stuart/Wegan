@@ -189,18 +189,18 @@ public class PenalizedCABean implements Serializable {
 // ACTION BUTTONS //
     public void penalizedUpdate_action() {
         System.out.println(corrFunctionMethods);
-        CAUtils.CreatePenalizedModel(sb, corrFunctionMethods, columnNameA, doOriginal);
-        CAUtils.PlotPenalizedCA(sb, doOriginal, 
-                 corColorDotsOpts, corColorLineOpts, doPlotConfInt,
+        CAUtils.CreatePenalizedModel(sb, columnNameA, corrFunctionMethods);
+        CAUtils.PlotPenalizedCA(sb,columnNameA, 
+                 corrFunctionMethods, corColorDotsOpts, corColorLineOpts,
                corPlotTitle, corPlotXlab, corPlotYlab,
                 sb.getNewImage("corr_penalized"), "png", 72);
     }
     
     public void penalizedUpdate2_action() {
         System.out.println(corrFunctionMethods);
-        CAUtils.CreatePenalizedModel(sb, corrFunctionMethods, columnNameA, doOriginal);
-        CAUtils.PlotPenalizedCVCA(sb, doOriginal,
-                corColorDotsOpts, corColorLineOpts,
+        CAUtils.CreatePenalizedModel(sb, columnNameA, corrFunctionMethods);
+        CAUtils.PlotPenalizedCVCA(sb, columnNameA,
+                corrFunctionMethods, corColorDotsOpts, corColorLineOpts,
                corPlotTitle, corPlotXlab, corPlotYlab,
                 sb.getNewImage("corr_penalized2"), "png", 72);
     }

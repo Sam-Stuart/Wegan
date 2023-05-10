@@ -19,29 +19,6 @@
                 <h:panelGrid style="width:100%; background-color: white; "></h:panelGrid>
                 <h:panelGrid style="width:100%; background-color: #75bafb;"></h:panelGrid>
                 <h:panelGrid style="width:100%; background-color: white; "></h:panelGrid>
-<!--<<<<<<< HEAD
-                
-                <h:panelGrid style="border: none; width: 100%; padding: 15px 20px 10px 25px; background-color: #8cbd4830; font-size: 14px;">
-                    <h2 style="margin-top: 10px; margin-bottom: 4px">Data table: Plain text file (.csv, .tsv or .txt)</h2>
-                    <h:panelGrid columns="2" style="padding: 10px">
-                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Format:"/>
-                        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="NULL">
-                            <f:selectItems value="#{applicationBean1.corrMethodsOpts}" />
-                        </p:selectOneMenu> 
-                    </h:panelGrid>
-                    
-                    <h:panelGrid columns="2" style="padding: 10px">
-                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Data File:"/>
-                        <p:fileUpload value="#{Plottingload.dataFile}" mode="simple"/>
-                    </h:panelGrid>
-                    <h:panelGrid columns="4" columnClasses="colLeft,colRight" style="padding: 10px">
-                        <h:outputLabel style="font-weight: bold" value="Row Names:"/>
-                            <p:selectBooleanCheckbox value ="NULL"/> 
-                        <h:outputLabel style="font-weight: bold" value="Column Names:"/>
-                            <p:selectBooleanCheckbox value ="NULL"/> 
-                    </h:panelGrid>
-                    
-=======-->
 
                 <h:panelGrid style="border: none; width: 100%; padding: 15px 20px 10px 25px; background-color: #8cbd4830; font-size: 14px;">
                     <h2 style="margin-top: 10px; margin-bottom: 4px">Data table: Plain text file (.csv or .txt)</h2>
@@ -61,7 +38,6 @@
                             <f:selectItems value="#{applicationBean1.dataNamesOpts}" />
                         </p:selectOneMenu> 
                     </h:panelGrid>                  
-<!-->>>>>>> 6d2a238d3aaa5638d6a34c5d8864a89f961edc0f-->
                     <h:panelGrid style="padding: 10px; float:right">
                         <p:commandButton value="Submit" 
                                          styleClass="updateButton"
@@ -72,38 +48,7 @@
                                          action="#{Plottingload.handleFileUpload()}"/>   
                         
                     </h:panelGrid>
-<!--<<<<<<< HEAD
-                    
-                    <h2 style="margin-top: 10px; margin-bottom: 4px">Zipped Files (.zip):</h2>
-                    <h:panelGrid columns="2" style="padding: 10px">
-                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Format:"/>
-                        <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="NULL">
-                            <f:selectItems value="#{applicationBean1.corrMethodsOpts}" />
-                        </p:selectOneMenu> 
-                    </h:panelGrid>
-                    <h:panelGrid columns="2" style="padding: 10px">
-                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Data File:"/>
-                        <p:fileUpload value="#{Plottingload.dataFile}" mode="simple"/>
-                    </h:panelGrid>
-                    <h:panelGrid columns="4" columnClasses="colLeft,colRight" style="padding: 10px">
-                        <h:outputLabel style="font-weight: bold" value="Row Names:"/>
-                            <p:selectBooleanCheckbox value ="NULL"/> 
-                        <h:outputLabel style="font-weight: bold" value="Column Names:"/>
-                            <p:selectBooleanCheckbox value ="NULL"/> 
-                    </h:panelGrid>
 
-                    <h:panelGrid style="padding: 10px; float:right">
-                        <p:commandButton value="Submit"
-                                         styleClass="updateButton"
-                                         style="box-shadow: none !important; text-shadow: none !important"
-                                         ajax="false" 
-                                         onclick="PF('statusDialog').show()" 
-                                         oncomplete="PF('statusDialog').hide()"                                         
-                                         action=""/>                      
-                    </h:panelGrid>
-=======-->
-
-<!-->>>>>>> 6d2a238d3aaa5638d6a34c5d8864a89f961edc0f-->
                 </h:panelGrid>
                 
                 <p:spacer style="width: 30px"/>
@@ -147,25 +92,6 @@
                                          oncomplete="PF('statusDialog').hide()"                                         
                                          action="#{Plottingload.handlePlottingTestFileUpload}"/>                      
                     </h:panelGrid>
-<!--<<<<<<< HEAD
-                    <p:radioButton for="customRadio" itemIndex="11"/>
-                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Iris"/>
-                        <h:panelGrid>
-                            Iris Data Set(insert citation here)                                       
-                        </h:panelGrid>
-                    </h:panelGrid>
-                    <h:panelGrid style="float:right">
-                        <p:commandButton value="Submit"
-                                         styleClass="updateButton"
-                                         style="box-shadow: none !important; text-shadow: none !important"
-                                         ajax="false" 
-                                         onclick="PF('statusDialog').show()" 
-                                         oncomplete="PF('statusDialog').hide()"                                         
-                                         action="{Plottingload.handleFileUpload}"/>                      
-                    </h:panelGrid>
-=======-->
-<!--
->>>>>>> 6d2a238d3aaa5638d6a34c5d8864a89f961edc0f-->
 
                 </h:panelGrid>
             </h:panelGrid>          

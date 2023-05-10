@@ -46,7 +46,7 @@
                                              style="box-shadow: none !important; text-shadow: none !important"
                                             onclick="PF('statusDialog').show()"
                                             oncomplete="PF('statusDialog').hide()"  
-                                            update=":RFCA:form1:rfPane1  :cmdPane" 
+                                            update=":RFCA:form1:corrRFPane1  :cmdPane" 
                                             actionListener="#{RFCABean.corrRFBtn_action()}"/> 
                             
                             </h:panelGrid>
@@ -62,12 +62,18 @@
                          <h:panelGroup>
                                 <h:panelGrid columns="3" class="resultsImages">
                                     <i id="question" class="fa fa-question-circle" title="
-                                      Preprocessing note for Random Forest: Decorrelating predictors may not help improve performance. However, fewer correlated predictors can improve the estimation of variance importance scores (see Fig. 11.4 of M. Kuhn and Johnson (2020)). Essentially, the selection of highly correlated predictors is almost random. https://bookdown.org/max/FES/recursive-feature-elimination.html#fig:greedy-rf-imp (from :https://www.tmwr.org/pre-proc-table.html )--- Only numeric variables are used in linear correlation. The R &#xb2; value is the fraction of variance explained by the model and is a value from 0 to 1. The adjusted R &#xb2; value is the R &#xb2; value adjusted for the number of predictors in the model. R &#xb2; is used to assess how well a model fits the data, with a higher R &#xb2; value indicating a better model fit.  The confidence interval represents the level of certainty about the predicted values; if the same procedure was repeatedly used to make new estimates, the confidence interval would contain the average of all the estimates 95% of the time. https://www.census.gov/programs-surveys/saipe/guidance/confidence-intervals.html "></i>
+                                      Random forests is based on a series of decision trees. It is important to scale variables, so it is not influenced by variables being reported in different units for example. (eg.Preprocessing note for Random Forest: Decorrelating predictors may not help improve performance. However, fewer correlated predictors can improve the estimation of variance importance scores (see Fig. 11.4 of M. Kuhn and Johnson (2020)). Essentially, the selection of highly correlated predictors is almost random. https://bookdown.org/max/FES/recursive-feature-elimination.html#fig:greedy-rf-imp (from :https://www.tmwr.org/pre-proc-table.html )--- Only numeric variables are used in linear correlation. The R &#xb2; value is the fraction of variance explained by the model and is a value from 0 to 1. The adjusted R &#xb2; value is the R &#xb2; value adjusted for the number of predictors in the model. R &#xb2; is used to assess how well a model fits the data, with a higher R &#xb2; value indicating a better model fit.  The confidence interval represents the level of certainty about the predicted values; if the same procedure was repeatedly used to make new estimates, the confidence interval would contain the average of all the estimates 95% of the time. https://www.census.gov/programs-surveys/saipe/guidance/confidence-intervals.html "></i>
                                 </h:panelGrid>
                             </h:panelGroup>   
                         </h:panelGrid> 
                         
-                         <h:panelGrid id="corrRFPane1" style="width: 100%;">     
+                         <h:panelGrid id="corrRFPane1" style="width: 100%;">   
+                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
+                                    <h:outputText escape="false" value="#{rfCABean.fileRFSummaryPath}"/>
+                                </i>
+                            </h:panelGrid>
+                             
                         <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
                                 <p:commandButton value="Export"
                                     styleClass="exportButton"
@@ -75,7 +81,7 @@
                                     actionListener="#{sessionBean1.graphicsLnk_action('corr_rf_pred')}"
                                     oncomplete="PF('graphDialog').show()"/>
                             </h:panelGrid>    
-                        <h:panelGrid id="RFPane1" style="text-align: center; width: 100%;">
+                         <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
                             <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_rf_pred')}" alt="RFPlot"/>
                         </h:panelGrid>
                       </h:panelGrid>
@@ -117,7 +123,7 @@
                                              style="box-shadow: none !important; text-shadow: none !important"
                                             onclick="PF('statusDialog').show()"
                                             oncomplete="PF('statusDialog').hide()"  
-                                            update=":RFCA:form2:rfPane2  :cmdPane" 
+                                            update=":RFCA:form2:corrRFPane2  :cmdPane" 
                                             actionListener="#{RFCABean.corrRFBtn2_action()}"/> 
                             
                             </h:panelGrid>
@@ -145,7 +151,7 @@
                                     actionListener="#{sessionBean1.graphicsLnk_action('corr_rf_relaimpo')}"
                                     oncomplete="PF('graphDialog').show()"/>
                             </h:panelGrid>    
-                        <h:panelGrid id="rfPane2" style="text-align: center; width: 100%;">
+                         <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
                             <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_rf_relaimpo')}" alt="RFRelaimpoPlot"/>
                         </h:panelGrid>
                       </h:panelGrid>     
@@ -224,5 +230,25 @@ The R &#xb2; value is the fraction of variance explained by the model and is a v
                 
             </p:tabView> 
         </h:panelGrid> 
+ 
+        <p:dialog modal="true" widgetVar="graphApperanceRF" 
+            style="width: 400px; height:400px;" 
+            appendTo="@(body)" header="Graphics Center"
+            draggable="false" closable="true" resizable="false"> 
+            <ui:include src="_color_palette_rf.xhtml" />
+        </p:dialog>
+         <p:dialog modal="true" widgetVar="graphApperanceRF2" 
+            style="width: 400px; height:400px;" 
+            appendTo="@(body)" header="Graphics Center"
+            draggable="false" closable="true" resizable="false"> 
+            <ui:include src="_color_palette_rf2.xhtml" />
+        </p:dialog>
+         <p:dialog modal="true" widgetVar="graphApperanceRF3" 
+            style="width: 400px; height:400px;" 
+            appendTo="@(body)" header="Graphics Center"
+            draggable="false" closable="true" resizable="false"> 
+            <ui:include src="_color_palette_rf3.xhtml" />
+        </p:dialog>        
+        
     </ui:define>
 </ui:composition>

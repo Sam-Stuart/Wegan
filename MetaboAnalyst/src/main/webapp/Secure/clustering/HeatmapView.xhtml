@@ -32,6 +32,8 @@
                         </div>
                         <p:spacer style="width:180px; height: 1px"/><p:spacer style="width:180px; height: 1px"/>
                         <h:panelGrid id="panelGrid" columns="4" cellpadding="3" columnClasses="colLeft,colRight,colLeft,colRight">
+                            <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
+                            <p:selectBooleanCheckbox value ="#{clusterBean.doData}" />
                             <h:outputLabel style="font-weight: bold" value="Distance Measure:"/>
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{clusterBean.hmDistOpt}">
                                 <f:selectItem itemLabel="Euclidean" itemValue="euclidean"/> 
@@ -45,18 +47,62 @@
                             <h:outputLabel style="font-weight: bold" value="Color Contrast:"/>
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{clusterBean.hmColorOpt}">
                                 <f:selectItems value="#{applicationBean1.colorContrastOpts}" />
-                            </p:selectOneMenu>
-                            <h:outputLabel style="font-weight: bold" value="Data Source:"/>
-                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{clusterBean.dataOpt}">
-                                <f:selectItem itemLabel="Normalized data" itemValue="norm"/> 
-                                <f:selectItem itemLabel="Original data" itemValue="raw"/> 
-                            </p:selectOneMenu>
+                            </p:selectOneMenu> 
                             <h:outputLabel style="font-weight: bold" value="Standardization:"/>
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{clusterBean.scaleOpt}">
                                 <f:selectItem itemLabel="Autoscale features" itemValue="row"/> 
                                 <f:selectItem itemLabel="Autoscale samples" itemValue="column"/> 
                                 <f:selectItem itemLabel="None" itemValue="none"/> 
                             </p:selectOneMenu>
+                            <h:outputLabel style="font-weight: bold" value="Colour Pallette:"/>
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:50%;" value="#{clusterBean.hmSmplColorOpts}">
+                                <f:selectItems value="#{applicationBean1.dendroPalletteOpts}" />
+                             </p:selectOneMenu> 
+                            <!-- Will be part of graphics center once fixed. Using here for testing. JP -->
+                            <h:outputLabel style="font-weight: bold" value="View Mode :"/>
+                            <p:selectOneRadio value="#{clusterBean.viewOpt}">
+                                <f:selectItem itemLabel="Overview" itemValue="overview" /> 
+                                <f:selectItem itemLabel="Detail View (&lt; 2000 features)" itemValue="detail" /> 
+                            </p:selectOneRadio>
+                            <spacer></spacer>
+                            <h:outputLabel style="font-weight: bold" value="View Options:"/>
+                                <p:selectBooleanCheckbox value ="#{clusterBean.noReorg}"/>
+                                <h:outputLabel style="font-weight: bold" value="Do not reorganize:"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel"  value="#{clusterBean.noOrgOpt}">
+                                    <f:selectItem itemLabel="Samples" itemValue="row" /> 
+                                    <f:selectItem itemLabel="Features" itemValue="col" /> 
+                                    <f:selectItem itemLabel="Both" itemValue="both" />                                 
+                                </p:selectOneMenu>
+                                <spacer></spacer>
+                                <spacer></spacer>
+                                <p:selectBooleanCheckbox value ="#{clusterBean.useTopFeature}"/>
+                                <h:panelGroup>
+                                    <h:outputLabel style="font-weight: bold" value="Use top:"/>
+                                    <p:inputText style="width:50px" value="#{clusterBean.topThresh}"/>
+                                </h:panelGroup>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{clusterBean.selectMethodOpt}">
+                                    <f:selectItem itemLabel="T-test / ANOVA" itemValue="tanova" /> 
+                                    <f:selectItem itemLabel="PLS-DA VIP" itemValue="vip" /> 
+                                    <f:selectItem itemLabel="Random Forest" itemValue="rf" />     
+                                </p:selectOneMenu>
+                                <spacer></spacer>
+                                <p:selectBooleanCheckbox value="#{clusterBean.drawBorders}" /> 
+                                <h:outputLabel style="font-weight: bold" value="Show cell borders"/>
+                                <p:spacer/>
+                                <spacer></spacer>
+                                <p:selectBooleanCheckbox value="#{clusterBean.grpAves}" /> 
+                                <h:outputLabel style="font-weight: bold" value="Show only group averages"/>
+                                <h:outputLabel style="font-weight: bold" value="Grouping Variable:"/>
+                                <spacer></spacer>
+                                <spacer></spacer>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:50%;" value="#{clusterBean.hmColumnName}">
+                                    <f:selectItems value="#{clusterBean.hmColumnOpts}" />
+                                </p:selectOneMenu>
+                                <h:outputLabel style="font-weight: bold" value="Sample Font Size"/>
+                                <p:inputText style="width:50px" value="#{clusterBean.hmFontSizeCol}"/>
+                                <h:outputLabel style="font-weight: bold" value="Feature Font Size"/>
+                                <p:inputText style="width:50px" value="#{clusterBean.hmFontSizeRow}"/>
+                    <!-- End of Graphics Center -->
                         </h:panelGrid>
                         <h:panelGrid columns="2" cellpadding="3" style="float: right"> 
                             <p:commandButton value="Customize Graph"

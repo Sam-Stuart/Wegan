@@ -8,13 +8,10 @@
     xmlns:p="http://primefaces.org/ui"
 >
     <h:form id="linGraph">
-        <h:panelGrid columns="1" style="width: 380px">
-            <h:panelGrid
-                id="panelGrid1"
-                columns="2"
-                cellpadding="5"
-                columnClasses="colBrayLong,colBrayShort"
-            >
+
+        <h:panelGrid columns="1" style="width:380px;">
+            <h:panelGrid id="panelGridGraphic1" columns="2" cellpadding="5" columnClasses="colBrayLong,colBrayShort">
+                
                 <h3>On-Plot Display Options</h3>
                 <p:panelGrid></p:panelGrid>
 
@@ -39,6 +36,7 @@
                 <h3>Line and Point Options</h3>
                 <p:panelGrid></p:panelGrid>
 
+<<<<<<< HEAD
                 <h:outputLabel style="font-weight: bold" value="Point Color:" />
                 <p:selectOneMenu
                     styleClass="menu"
@@ -49,6 +47,34 @@
                         value="#{applicationBean1.corLinColorDotsOpts}"
                     />
                 </p:selectOneMenu>
+=======
+                <h:outputLabel style="font-weight: bold" value="Point Color:"/>
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linearCABean.corColorDotsOpts}">
+                    <f:selectItems value="#{applicationBean1.corLinColorDotsOpts}" />
+                </p:selectOneMenu> 
+                
+                <h:outputLabel style="font-weight: bold" value="Line Color:"/>
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linearCABean.corColorLineOpts}">
+                    <f:selectItems value="#{applicationBean1.corLinColorLineOpts}" />
+                </p:selectOneMenu>  
+                                
+                <h:outputLabel style="font-weight: bold" value="Show 95% Confidence Interval:"/>
+                <p:selectBooleanCheckbox value ="#{linearCABean.doPlotConfInt}"/> 
+                
+                <h3>Titles</h3>
+                <p:panelGrid></p:panelGrid>                 
+                
+                <h:outputLabel style="font-weight: bold" value="Plot Title:"/>
+                <p:inputText value = "#{linearCABean.corPlotTitle}"/> 
+                
+                <h:outputLabel style="font-weight: bold" value="X-Axis Label"/>
+                <p:inputText value = "#{linearCABean.corPlotXlab}"/> 
+                
+                 <h:outputLabel style="font-weight: bold" value="Y-Axis Label"/>
+                <p:inputText value = "#{linearCABean.corPlotYlab}"/> 
+
+                <!--<p:panelGrid></p:panelGrid>-->
+>>>>>>> upstream/taxonomy-master
 
                 <h:outputLabel style="font-weight: bold" value="Line Color:" />
                 <p:selectOneMenu
@@ -83,6 +109,7 @@
 
                 <!--<p:panelGrid></p:panelGrid>-->
             </h:panelGrid>
+<<<<<<< HEAD
             <h:panelGrid
                 id="panelGrid2"
                 columns="1"
@@ -101,6 +128,50 @@
                     update=":linCA:form1:corrLinPane1  :cmdPane"
                     actionListener="#{linearCABean.corrLin1Btn_action()}"
                 />
+=======
+            
+            <h:panelGrid id="panelGridGraphic2" columns="5" cellpadding="3" columnClasses="colLeftLong,colRight,colLeftLong,colRight, colLast">
+                
+                <h3>Label Size</h3>
+                <p:panelGrid></p:panelGrid>                 
+                
+                <h:outputLabel style="font-weight: bold" value="Title:"/>
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linearCABean.corTextSizeTitle}">
+                    <f:selectItems value="#{applicationBean1.corSizeTitle}" />
+                </p:selectOneMenu> 
+                
+                <h:outputLabel style="font-weight: bold" value="X-Axis Label"/>
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linearCABean.corTextSizeXlab}">
+                    <f:selectItems value="#{applicationBean1.corSizeXlab}" />
+                </p:selectOneMenu> 
+                
+                <h:outputLabel style="font-weight: bold" value="X-Axis Tick"/>
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linearCABean.corTextSizeXtick}">
+                    <f:selectItems value="#{applicationBean1.corSizeXtick}" />
+                </p:selectOneMenu> 
+                
+                <h:outputLabel style="font-weight: bold" value="Y-Axis Label"/>
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linearCABean.corTextSizeYlab}">
+                    <f:selectItems value="#{applicationBean1.corSizeYlab}" />
+                </p:selectOneMenu> 
+                
+                <h:outputLabel style="font-weight: bold" value="Y-Axis Tick"/>
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linearCABean.corTextSizeYtick}">
+                    <f:selectItems value="#{applicationBean1.corSizeYtick}" />
+                </p:selectOneMenu> 
+                       
+                            
+             </h:panelGrid>   
+            
+            <h:panelGrid id="panelGridGraphic3" columns="1" cellpadding="5" style="float: right">
+                <p:commandButton value="Update" 
+                                 styleClass="updateButton"
+                                 style="box-shadow: none !important; text-shadow: none !important"
+                                onclick="PF('statusDialog').show()"
+                                oncomplete="PF('graphApperanceLinear').hide(); PF('statusDialog').hide(); setTimeout(render, 2000)"  
+                                update=":linCA:form1:corrLinPane1  :cmdPane"
+                                actionListener="#{linearCABean.corrLin1Btn_action()}"/>
+>>>>>>> upstream/taxonomy-master
             </h:panelGrid>
         </h:panelGrid>
     </h:form>
