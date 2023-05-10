@@ -26,7 +26,7 @@ import org.rosuda.REngine.Rserve.RConnection;
 
 /**
  *
- * @author Louisa Normington
+ * @author Xin (David) Zhao
  */
 @ManagedBean(name = "taxBean")
 public class TAXBean implements Serializable {
