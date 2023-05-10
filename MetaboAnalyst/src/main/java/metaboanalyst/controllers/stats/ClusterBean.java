@@ -7,13 +7,24 @@ package metaboanalyst.controllers.stats;
 
 import java.io.File;
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.List;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+import javax.faces.model.SelectItem;
 import metaboanalyst.controllers.ApplicationBean1;
 import metaboanalyst.controllers.SessionBean1;
 import metaboanalyst.rwrappers.Clustering;
+import metaboanalyst.rwrappers.DiversityUtils;
 import metaboanalyst.rwrappers.RDataUtils;
 import metaboanalyst.utils.DataUtils;
 import org.primefaces.context.RequestContext;
+import java.util.Arrays;
+import java.util.List;
+import javax.faces.model.SelectItem;
+import metaboanalyst.controllers.DownloadBean;
+import metaboanalyst.models.User;
+import metaboanalyst.rwrappers.OAUtils;
 
 /**
  *
@@ -24,9 +35,12 @@ public class ClusterBean implements Serializable{
 
     private final ApplicationBean1 ab = (ApplicationBean1) DataUtils.findBean("applicationBean1");
     private final SessionBean1 sb = (SessionBean1) DataUtils.findBean("sessionBean1");
+    
+    private User usr = sb.getCurrentUser();
+    private String usrName = usr.getName();
 
-    private String clustMethodOpt;
-    private String clustDistOpt;
+    private String clustMethodOpt = "ward.D";
+    private String clustDistOpt  = "euclidean";
     private String scaleOpt = "row";
 
     public String getScaleOpt() {
@@ -72,11 +86,102 @@ public class ClusterBean implements Serializable{
     public void setViewOpt(String viewOpt) {
         this.viewOpt = viewOpt;
     }
+    
+        //CHECKBOX
+    private boolean doData = false; 
+    
+    public boolean isDoData() {
+        return doData;
+    }
+    
+    public void setDoData(boolean doData) {
+        this.doData = doData;
+    }
+        //CHECKBOX
+    private boolean doRotate = false; 
+    
+    public boolean isDoRotate() {
+        return doRotate;
+    }
+    
+    public void setDoRotate(boolean doRotate) {
+        this.doRotate = doRotate;
+    }
+            //CHECKBOX
+    private boolean doBranchLabels = false; 
+    
+    public boolean isDoBranchLabels() {
+        return doBranchLabels;
+    }
+    
+    public void setDoBranchLabels(boolean doBranchLabels) {
+        this.doBranchLabels = doBranchLabels;
+    }
+    
+            //STATIC DROPDOWN 
+    private String dendroColorOpts = "NULL"; 
+    
+    public String getDendroColorOpts() {
+        return dendroColorOpts;
+    }
 
+    public void setDendroColorOpts(String dendroColorOpts) {
+        this.dendroColorOpts = dendroColorOpts;
+    }
+    
+        //TEXT BOX  
+    private String dendroLegendTitle = " ";
+        
+    public String getDendroLegendTitle() {
+        return dendroLegendTitle;
+    }
+
+    public void setDendroLegendTitle(String dendroLegendTitle) {
+        this.dendroLegendTitle = dendroLegendTitle;
+    } 
+    
+            //TEXT BOX  
+    private String dendroPlotTitle = " ";
+        
+    public String getDendroPlotTitle() {
+        return dendroPlotTitle;
+    }
+
+    public void setDendroPlotTitle(String dendroPlotTitle) {
+        this.dendroPlotTitle = dendroPlotTitle;
+    }
+    
+    //DYNAMIC DROPDOWN 
+    private SelectItem[] dendroColumnOpts = null;
+    
+    public SelectItem[] getDendroColumnOpts(){
+        String[] columns = Clustering.dendroColNames(sb);
+        int columnsLen = columns.length;
+        dendroColumnOpts = new SelectItem[columnsLen];
+        List<String> columnNames = Arrays.asList(columns);
+        for (int i = 0; i < columnsLen; i++) {
+            dendroColumnOpts[i] = new SelectItem(columnNames.get(i), columnNames.get(i));
+        }
+        return dendroColumnOpts;
+    }
+    
+    private String dendroColumnName = getDendroColumnOpts()[0].getLabel();
+    
+    public String getDendroColumnName() {
+        return dendroColumnName;
+    }
+
+    public void setDendroColumnName(String dendroColumnName) {
+        this.dendroColumnName = dendroColumnName;
+    }
+    
     public String treeButton_action() {
-        String imgName = sb.getNewImage("tree");
-        Clustering.PlotClustTree(sb, imgName, "png", 72, clustDistOpt, clustMethodOpt);
-        RequestContext.getCurrentInstance().scrollTo("form1:treePane");
+        //String imgName = sb.getNewImage("tree");
+            Clustering.PlotClustTree(sb, doData, sb.getNewImage("tree"),  "png", 72, clustDistOpt,
+                clustMethodOpt, doRotate, doBranchLabels, dendroColorOpts,
+                dendroLegendTitle, dendroPlotTitle, dendroColumnName);
+            //RequestContext.getCurrentInstance().scrollTo("form1:treePane");
+            //RequestContext.getCurrentInstance().scrollTo("treeGraph:panelGrid1");
         return null;
     }
 
@@ -88,6 +193,8 @@ public class ClusterBean implements Serializable{
     private int topThresh = 25;
     private String selectMethodOpt;
     private String noOrgOpt;
+    private int hmFontSizeCol = 8;
+    private int hmFontSizeRow = 8;
 
     public String getSelectMethodOpt() {
         return selectMethodOpt;
@@ -152,7 +259,58 @@ public class ClusterBean implements Serializable{
     public void setHmColorOpt(String hmColorOpt) {
         this.hmColorOpt = hmColorOpt;
     }
+    
+    //STATIC DROPDOWN 
+    private String hmSmplColorOpts = "NULL"; 
+    
+    public String getHmSmplColorOpts() {
+        return hmSmplColorOpts;
+    }
 
+    public void setHmSmplColorOpts(String hmSmplColorOpts) {
+        this.hmSmplColorOpts = hmSmplColorOpts;
+    }
+
+    //DYNAMIC DROPDOWN 
+    private SelectItem[] hmColumnOpts = null;
+    
+    public SelectItem[] getHmColumnOpts(){
+        String[] columns = Clustering.hmColNames(sb);
+        int columnsLen = columns.length;
+        hmColumnOpts = new SelectItem[columnsLen];
+        List<String> columnNames = Arrays.asList(columns);
+        for (int i = 0; i < columnsLen; i++) {
+            hmColumnOpts[i] = new SelectItem(columnNames.get(i), columnNames.get(i));
+        }
+        return hmColumnOpts;
+    }
+    
+    private String hmColumnName = getHmColumnOpts()[0].getLabel();
+    
+    public String getHmColumnName() {
+        return hmColumnName;
+    }
+
+    public void setHmColumnName(String hmColumnName) {
+        this.hmColumnName = hmColumnName;
+    }
+    
+    public int getHmFontSizeCol() {
+        return hmFontSizeCol;
+    }
+
+    public void setHmFontSizeCol(int hmFontSizeCol) {
+        this.hmFontSizeCol = hmFontSizeCol;
+    }
+    
+    public int getHmFontSizeRow() {
+        return hmFontSizeRow;
+    }
+
+    public void setHmFontSizeRow(int hmFontSizeRow) {
+        this.hmFontSizeRow = hmFontSizeRow;
+    }
+    
     public String hmButton_action() {
 
         String rowV = "T";
@@ -180,9 +338,15 @@ public class ClusterBean implements Serializable{
         }
         
         if (useTopFeature) {
-            Clustering.PlotSubHeatMap(sb, sb.getNewImage("heatmap"), "png", 72, dataOpt, scaleOpt, hmDistOpt, hmMethodOpt, hmColorOpt, selectMethodOpt, topThresh, viewOpt, rowV, colV, (drawBorders) ? "T" : "F", (grpAves) ? "T" : "F");
+            Clustering.PlotSubHeatMap(sb, sb.getNewImage("heatmap"), "png", 72, 
+                    doData, scaleOpt, hmDistOpt, hmMethodOpt, hmColorOpt, 
+                    selectMethodOpt, topThresh, viewOpt, rowV, colV, (drawBorders) ? "T" : "F", (grpAves) ? "T" : "F", 
+                    hmSmplColorOpts, hmColumnName, hmFontSizeCol, hmFontSizeRow);
         } else {
-            Clustering.PlotHeatMap(sb, sb.getNewImage("heatmap"), "png", 72, dataOpt, scaleOpt, hmDistOpt, hmMethodOpt, hmColorOpt, viewOpt, rowV, colV, (drawBorders) ? "T" : "F", (grpAves) ? "T" : "F");
+            Clustering.PlotHeatMap(sb, sb.getNewImage("heatmap"), "png", 72, 
+                    doData, scaleOpt, hmDistOpt, hmMethodOpt, 
+                    hmColorOpt, viewOpt, rowV, colV, (drawBorders) ? "T" : "F", (grpAves) ? "T" : "F", 
+                    hmSmplColorOpts, hmColumnName, hmFontSizeCol, hmFontSizeRow);
         }
         RequestContext.getCurrentInstance().scrollTo("form1:hmPane");
         return null;
@@ -301,4 +465,347 @@ public class ClusterBean implements Serializable{
         str = str + "</table>";
         return str;
     }
+    
+
+    private boolean doOriginal = false; 
+    
+    public boolean isdoOriginal() {
+        return doOriginal;
+    }
+    
+    public void setdoOriginal(boolean doOriginal) {
+        this.doOriginal = doOriginal;
+    }
+     
+   // check box 
+    private boolean doEle = false;
+    
+    public boolean isdoEle() {
+        return doEle;
+    }
+
+    public void setdoEle(boolean doEle) {
+        this.doEle = doEle;
+    }
+    
+    private boolean doUni_point = false;
+    
+    public boolean isdoUni_point() {
+        return doUni_point;
+    }
+
+    public void setdoUni_point(boolean doUni_point) {
+        this.doUni_point = doUni_point;
+    }
+    
+    
+    // textbox 
+    private String zoom = "";
+    
+    public String getZoom() {
+        return zoom;
+    }
+
+    public void setZoom(String zoom) {
+        this.zoom = zoom;
+    }
+    
+    private String rangeA = "";
+    
+    public String getRangeA() {
+        return rangeA;
+    }
+
+    public void setRangeA(String rangeA) {
+        this.rangeA = rangeA;
+    }
+     
+    private String crs_txt = "";
+    
+    public String getCrs_txt() {
+        return crs_txt;
+    }
+
+    public void setCrs_txt(String crs_txt) {
+        this.crs_txt = crs_txt;
+    }
+    
+    private String point_size = "";
+    
+    public String getPoint_size() {
+        return point_size;
+    }
+
+    public void setPoint_size(String point_size) {
+        this.point_size = point_size;
+    }
+    
+    private String path_size = "";
+    
+    public String getPath_size() {
+        return path_size;
+    }
+
+    public void setPath_size(String path_size) {
+        this.path_size = path_size;
+    }
+        
+    // static dropdown
+    private SelectItem[] pointColOpts = null;
+    
+    public SelectItem[] getPointColOpts(){
+        String[] columns = Clustering.colorColumn(sb);
+        int columnsLen = columns.length;
+        pointColOpts = new SelectItem[columnsLen];
+        List<String> columnNames = Arrays.asList(columns);
+        for (int i = 0; i < columnsLen; i++) {
+            pointColOpts[i] = new SelectItem(columnNames.get(i), columnNames.get(i));
+        }
+        return pointColOpts;
+    }
+    
+    private String pointColName = getPointColOpts()[0].getLabel();
+    
+    public String getPointColName() {
+        return pointColName;
+    }
+
+    public void setPointColName(String pointColName) {
+        this.pointColName = pointColName;
+    }
+    
+    
+    private SelectItem[] polygonColOpts = null;
+    
+    public SelectItem[] getPolygonColOpts(){
+        String[] columns = Clustering.varColumn(sb);
+        int columnsLen = columns.length;
+        polygonColOpts = new SelectItem[columnsLen];
+        List<String> columnNames = Arrays.asList(columns);
+        for (int i = 0; i < columnsLen; i++) {
+            polygonColOpts[i] = new SelectItem(columnNames.get(i), columnNames.get(i));
+        }
+        return polygonColOpts;
+    }
+    
+    private String polygonColName = getPolygonColOpts()[0].getLabel();
+    
+    public String getPolygonColName() {
+        return polygonColName;
+    }
+
+    public void setPolygonColName(String polygonColName) {
+        this.polygonColName = polygonColName;
+    }
+    
+    
+    private SelectItem[] pathColOpts = null;
+    
+    public SelectItem[] getPathColOpts(){
+        String[] columns = Clustering.lineColumn(sb);
+        int columnsLen = columns.length;
+        pathColOpts = new SelectItem[columnsLen];
+        List<String> columnNames = Arrays.asList(columns);
+        for (int i = 0; i < columnsLen; i++) {
+            pathColOpts[i] = new SelectItem(columnNames.get(i), columnNames.get(i));
+        }
+        return pathColOpts;
+    }
+    
+    private String pathColName = getPathColOpts()[0].getLabel();
+    
+    public String getPathColName() {
+        return pathColName;
+    }
+
+    public void setPathColName(String pathColName) {
+        this.pathColName = pathColName;
+    }
+    
+    
+    private final SelectItem[] source;
+    private String sourcechosen = "NULL";
+    
+    public SelectItem[] getSource() {
+        return source;
+    }
+    
+    public String getSourcechosen() {
+        return sourcechosen;
+    } 
+
+    public void setSourcechosen(String sourcechosen) {
+        this.sourcechosen = sourcechosen;
+    }
+        
+    
+    private final SelectItem[] maptype;
+    private String maptypechosen = "NULL";
+    
+    public SelectItem[] getMaptype() {
+        return maptype;
+    }
+    
+    public String getMaptypechosen() {
+        return maptypechosen;
+    } 
+
+    public void setMaptypechosen(String maptypechosen) {
+        this.maptypechosen = maptypechosen;
+    }
+    
+    
+    private final SelectItem[] crs_option;
+    private String crs_optionchosen = "NULL";
+    
+    public SelectItem[] getCrs_option() {
+        return crs_option;
+    }
+    
+    public String getCrs_optionchosen() {
+        return crs_optionchosen;
+    } 
+
+    public void setCrs_optionchosen(String crs_optionchosen) {
+        this.crs_optionchosen = crs_optionchosen;
+    }
+    
+    
+    private final SelectItem[] border_col;
+    private String border_colchosen = "NULL";
+    
+    public SelectItem[] getBorder_col() {
+        return border_col;
+    }
+    
+    public String getBorder_colchosen() {
+        return border_colchosen;
+    } 
+
+    public void setBorder_colchosen(String border_colchosen) {
+        this.border_colchosen = border_colchosen;
+    }
+    
+    
+    private final SelectItem[] color_point;
+    private String color_pointchosen = "NULL";
+    
+    public SelectItem[] getColor_point() {
+        return color_point;
+    }
+    
+    public String getColor_pointchosen() {
+        return color_pointchosen;
+    } 
+
+    public void setColor_pointchosen(String color_pointchosen) {
+        this.color_pointchosen = color_pointchosen;
+    }
+    
+    
+    private final SelectItem[] proj;
+    private String projchosen = "NULL";
+    
+    public SelectItem[] getProj() {
+        return proj;
+    }
+    
+    public String getProjchosen() {
+        return projchosen;
+    } 
+
+    public void setProjchosen(String projchosen) {
+        this.projchosen = projchosen;
+    }
+    
+    
+    private final SelectItem[] datum;
+    private String datumchosen = "NULL";
+    
+    public SelectItem[] getDatum() {
+        return datum;
+    }
+    
+    public String getDatumchosen() {
+        return datumchosen;
+    } 
+
+    public void setDatumchosen(String datumchosen) {
+        this.datumchosen = datumchosen;
+    }
+    
+    
+    private String fileeleresult = "Elevation.csv";
+    private String fileeleresultpath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileeleresult + "\">" + fileeleresult + "</a>";
+    //removed "usrname" cause it is not defined in clutering bean?
+    public String getFileeleresultpath() {
+        return fileeleresultpath;
+    }
+
+    public void setFileeleresultpath(String fileeleresultpath) {
+        this.fileeleresultpath = fileeleresultpath;
+    }
+    
+    public ClusterBean() {
+        proj = new SelectItem[2];
+        proj[0] = new SelectItem("NULL", "Coodinates");
+        proj[1] = new SelectItem("UTM", "UTM");
+        
+        datum = new SelectItem[2];
+        datum[0] = new SelectItem("NULL", "WGS84");
+        datum[1] = new SelectItem("NAD83", "NAD83");
+        
+        source = new SelectItem[2];
+        source[0] = new SelectItem("NULL", "Stamen");
+        source[1] = new SelectItem("google", "Google");
+        
+        crs_option = new SelectItem[3];
+        crs_option[0] = new SelectItem("NULL", "Not require conversion");
+        crs_option[1] = new SelectItem("10TM", "10TM");
+        crs_option[2] = new SelectItem("Manual", "Manually fill in CRS code");
+        
+        border_col = new SelectItem[6];
+        border_col[0] = new SelectItem("NULL", "Skyblue");
+        border_col[1] = new SelectItem("green", "Green");
+        border_col[2] = new SelectItem("turquoise", "Turquoise");
+        border_col[3] = new SelectItem("steelblue", "Steelblue");
+        border_col[4] = new SelectItem("peach", "Peach");
+        border_col[5] = new SelectItem("wheat", "Wheat");
+        
+        color_point = new SelectItem[6];
+        color_point[0] = new SelectItem("NULL", "Blue");
+        color_point[1] = new SelectItem("green", "Green");
+        color_point[2] = new SelectItem("turquoise", "Turquoise");
+        color_point[3] = new SelectItem("steelblue", "Steelblue");
+        color_point[4] = new SelectItem("peach", "Peach");
+        color_point[5] = new SelectItem("wheat", "Wheat");
+        
+        maptype = new SelectItem[16];
+        maptype[0] = new SelectItem("NULL", "Terrain");
+        maptype[1] = new SelectItem("terrain-background", "Terrain-background");
+        maptype[2] = new SelectItem("satellite", "Satellite");
+        maptype[3] = new SelectItem("roadmap", "Roadmap");
+        maptype[4] = new SelectItem("hybrid", "Hybrid");
+        maptype[5] = new SelectItem("toner", "Toner");
+        maptype[6] = new SelectItem("watercolor", "Watercolor");
+        maptype[7] = new SelectItem("terrain-labels", "Terrain-labels");
+        maptype[8] = new SelectItem("terrain-lines", "Terrain-lines");
+        maptype[9] = new SelectItem("toner-2010", "Toner-2010");
+        maptype[10] = new SelectItem("toner-2011", "Toner-2011");
+        maptype[11] = new SelectItem("toner-background", "Toner-background");
+        maptype[12] = new SelectItem("toner-hybrid", "Toner-hybrid");
+        maptype[13] = new SelectItem("toner-labels", "Toner-labels");
+        maptype[14] = new SelectItem("toner-lines", "Toner-lines");
+        maptype[15] = new SelectItem("toner-lite", "Toner-lite");
+
+    }
+    
+    
+    // ACTION BUTTON // 
+    public void spatialvisUpdate_action() {
+        Clustering.CreateSpatialvis(sb, doOriginal, projchosen, crs_txt, crs_optionchosen, datumchosen, zoom, maptypechosen, sourcechosen, 
+                rangeA, doEle, border_colchosen, color_pointchosen, point_size, path_size, pointColName, polygonColName, pathColName, doUni_point,  
+                sb.getNewImage("ggmap"), "png", 72, "false"); 
+    }
+
 }

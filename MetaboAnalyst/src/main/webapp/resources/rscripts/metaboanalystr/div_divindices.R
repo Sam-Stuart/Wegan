@@ -1,5 +1,5 @@
 #'Extract column names from numeric variables-- used by ResidPlot()
-#'@usage AssupCol(mSetObj = NA)
+#'@usage IndiceCol(mSetObj = NA)
 #'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
 #'@export
 IndiceCol <- function(mSetObj = NA) {
@@ -33,14 +33,13 @@ IndiceCol <- function(mSetObj = NA) {
 #'@param mSetObj Input name of the created mSet Object
 #'@param data Boolean for which data set to use, normalized (default) or original
 #'@param group Input the selected grouping variable, textbox default is ""
-#'@param margin Input the index is computed, drop down options are "1" (default) or "2" 
 #'@author Shiyang Zhao\email{shiyang1@ualberta.ca}
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2) ######
 #'@export
 
 
-div_index <- function(mSetObj = NA, data = "false", group = "NULL", margin = "NULL") {
+div_index <- function(mSetObj = NA, data = "false", group = "NULL", method = "NULL") {
   
   print("start model")
   options(errors = traceback)   
@@ -68,29 +67,24 @@ div_index <- function(mSetObj = NA, data = "false", group = "NULL", margin = "NU
   } else { #original data as input
     input <- mSetObj$dataSet$orig
   }
-  print("input")
+  print(input)
 
-  # MARGIN = 1, data in rows; MARGIN = 2, data in columns
-  if (margin == "NULL") { 
-    margin1 <- 1
-  } else {
-    margin1 <- 2
-  }
-  print(margin1)
   print(colnames(metaData))
 
   if (group == "NULL") {
      print(group)
      group1 <- metaData[,2]
+     group.name <- colnames(metaData[2])
      print("1")
   } else {
      B.frame <- metaData%>%
         select(all_of(group))
      group1 <- B.frame[,1]
+     group.name <- colnames(B.frame[1])
   }
   #group1 <- colnames(metaData[,2])
   print(group1)   
-  print(metaData[,2]) 
+  print(group.name) 
   
   cat("Alpha, beta and gamma diversity analysis works on numeric data only")
   input.2 <- input
@@ -101,69 +95,57 @@ div_index <- function(mSetObj = NA, data = "false", group = "NULL", margin = "NU
   print(Site)
   
 
-  H.shannon <- diversity(input.2, index = "shannon", MARGIN = MARGIN1, base = exp(1))
+  H.shannon <- diversity(input.2, index = "shannon", base = exp(1))
   H.shannon1 <- as.data.frame(cbind(Site, "shannon", H.shannon))
   colnames(H.shannon1) <- c("Site", "Index", "ShannonIndices")
-  print(H.shannon1)
+  print("H.shannon1")
    
-  H.simpson <- diversity(input.2, index = "simpson", MARGIN = MARGIN1)
+  H.simpson <- diversity(input.2, index = "simpson")
   H.simpson1 <- as.data.frame(cbind(Site, "simpson", H.simpson))
   colnames(H.simpson1) <- c("Site", "Index", "SimpsonIndices")
-  print(H.simpson1)  
+  print("H.simpson1")  
     
-  H.invsimpson <- diversity(input.2, index = "invsimpson", MARGIN = MARGIN1)
+  H.invsimpson <- diversity(input.2, index = "invsimpson")
   H.invsimpson1 <- as.data.frame(cbind(Site, "invsimpson", H.invsimpson))
   colnames(H.invsimpson1) <- c("Site", "Index", "InvsimpsonIndices")
-  print(H.invsimpson1) 
+  print("H.invsimpson1") 
     
-  Fisher.alpha <- fisher.alpha(input.2, MARGIN = MARGIN1)
+  Fisher.alpha <- fisher.alpha(input.2)
   fisher.alpha1 <- as.data.frame(cbind(Site, "fisher.alpha", Fisher.alpha))
   colnames(fisher.alpha1) <- c("Site", "Index", "fisherAlphaIndices")
-  print(fisher.alpha1)
+  print("fisher.alpha1")
   
-  richness <- specnumber(input.2, MARGIN = MARGIN1)
+  richness <- specnumber(input.2)
   richness1 <- as.data.frame(cbind(Site, richness, metaData))
   #colnames(richness1[1:2,]) <- c("Site", "Richness")
-  print(richness1)
+  print("richness1")
   
-  
-  
-  #print(metaData[2,]) 
+  richness_g <- specnumber(input.2, groups = group1)
+  richness_g1 <- as.data.frame(richness_g)
+  richness_g1 <- cbind(rownames(richness_g1), richness_g)
+  colnames(richness_g1) <- c("Group", "Richness")
 
-#  if (group == "") {
-#group1 = 2
-     richness_g <- specnumber(input.2, groups = group1, MARGIN = MARGIN1)
-     richness_g1 <- as.data.frame(richness_g)
-     richness_g1 <- cbind(rownames(richness_g1), richness_g)
-     colnames(richness_g1) <- c("Group", "Richness")
-#  } else {
-#     group1 <- as.numeric(group)
-#     richness_g <- specnumber(input.2, groups = metaData[,group1], MARGIN = MARGIN1)
-#     richness_g1 <- as.data.frame(richness_g)
-#     richness_g1 <- cbind(rownames(richness_g1), richness_g)
-#     colnames(richness_g1) <- c(colnames(metaData[group1]), "Richness")
-#  }
   print(group1)
   print(richness_g1)
 
   Evenness.shannon <- H.shannon/log(richness)
   Evenness.shannon1 <- as.data.frame(cbind(Site, Evenness.shannon))
   colnames(Evenness.shannon1) <- c("Site", "Evenness(Shannon)")
-  print(Evenness.shannon1)
+  print("Evenness.shannon1")
   
   Evenness.simpson <- H.simpson/log(richness) 
   Evenness.simpson1 <- as.data.frame(cbind(Site, Evenness.simpson))
   colnames(Evenness.simpson1) <- c("Site", "Evenness(Simpson)")
-  print(Evenness.simpson1)
+  print("Evenness.simpson1")
   
   Evenness.invsimpson <- H.invsimpson/log(richness)
   Evenness.invsimpson1 <- as.data.frame(cbind(Site, Evenness.invsimpson))
   colnames(Evenness.invsimpson1) <- c("Site", "Evenness(Invsimpson)")
-  print(Evenness.invsimpson1)
+  print("Evenness.invsimpson1")
     
   ShannonIndices <- as.data.frame(cbind(Site, richness, Evenness.shannon, Evenness.simpson, Evenness.invsimpson, 
                        H.shannon, H.simpson, H.invsimpson, Fisher.alpha))
-  print(ShannonIndices)
+  print("ShannonIndices")
   
   print("ready for alpha")
   alpha <- with(metaData, tapply(specnumber(input.2), group1, mean))
@@ -194,6 +176,30 @@ div_index <- function(mSetObj = NA, data = "false", group = "NULL", margin = "NU
   print(beta)
   print(beta.frame)  
 
+  if (method == "NULL") {
+    method1 <- "total"
+  } else if (method == "max") { 
+    method1 <- "max"
+  } else if (method == "freq") { 
+    method1 <- "freq"
+  } else if (method == "normalize") { 
+    method1 <- "normalize"
+  } else if (method == "range") { 
+    method1 <- "range"
+  } else if (method == "standardize") { 
+    method1 <- "standardize"
+  } else if (method == "pa") { 
+    method1 <- "pa"
+  } else if (method == "chi.square") { 
+    method1 <- "chi.square"
+  } else if (method == "hellinger") { 
+    method1 <- "hellinger"
+  } else if (method == "log") { 
+    method1 <- "log"
+  } 
+
+  relativeAbun <- decostand(input.2, method = method1)
+
   mSetObj$analSet$result$H_shannon <- H.shannon1
   print("1")
   mSetObj$analSet$result$H_simpson <- H.simpson1
@@ -220,14 +226,17 @@ div_index <- function(mSetObj = NA, data = "false", group = "NULL", margin = "NU
   print("12")  
   mSetObj$analSet$result$gamma <- gamma1
   print("13")   
-  #mSetObj$analSet$result$group <- metaData[,group1]
+  #mSetObj$analSet$result$group <- metaData[group1]
   mSetObj$analSet$result$group <- group1
+  mSetObj$analSet$result$group.name <- group.name
   print("14")  
   mSetObj$analSet$input <- input.2
   print("15")    
   mSetObj$analSet$metaData <- metaData
   print("16")
-  
+  mSetObj$analSet$relaAbun <- relativeAbun
+  print("17")
+
   write.csv(mSetObj$analSet$result$H_shannon, "Shannon diversity indices.csv")
   print("17")
   write.csv(mSetObj$analSet$result$H_simpson, "Simpson diversity indices.csv")
@@ -252,6 +261,8 @@ div_index <- function(mSetObj = NA, data = "false", group = "NULL", margin = "NU
   print("27")  
   write.csv(mSetObj$analSet$result$gamma, "Gamma diversity.csv")
   print("28")
+  write.csv(mSetObj$analSet$relaAbun, "Relative abundance.csv")
+  print("29")
 
   return(.set.mSet(mSetObj))
 }
@@ -290,7 +301,9 @@ AlphaPlot <- function(mSetObj=NA, color="NULL", imgName, format="png", dpi=72, w
   print(Richness)  
   Group <- mSetObj$analSet$result$group
   print(Group)  
-  
+  group.name <- mSetObj$analSet$result$group.name
+  print(group.name)
+
   #Alpha <- as.numeric(alpha_p$Alpha)
   #Group <- as.factor(alpha_p$Group)
   #metaData <- mSetObj$analSet$metaData
@@ -333,7 +346,7 @@ AlphaPlot <- function(mSetObj=NA, color="NULL", imgName, format="png", dpi=72, w
   Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
   
   boxplot(Richness~Group, yaxt = "n",  
-          xlab = "Group", ylab = "Alpha", col = color1, ylim = c(0, m))
+          xlab = group.name, ylab = "Alpha", col = color1, ylim = c(0, m))
   #axis(1, at = c(1:n), labels = Group)
   axis(2, las = 2)
   #at = seq(0,m), 
@@ -373,6 +386,8 @@ BetaPlot <- function(mSetObj=NA, colorb="NULL", imgName, format="png", dpi=72, w
   Group <- as.data.frame(beta_p$group)
   Distance <- beta_p$distances
   Group <- as.character(factor(beta_p$group))
+  group.name <- mSetObj$analSet$result$group.name
+  print(group.name)
   levels(Group)
   
   #User option to set color
@@ -405,7 +420,7 @@ BetaPlot <- function(mSetObj=NA, colorb="NULL", imgName, format="png", dpi=72, w
   
   Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
   
-  boxplot(Distance~Group, yaxt = "n", xlab = "Group", ylab = "Beta", col = colorb1)
+  boxplot(Distance~Group, yaxt = "n", xlab = group.name, ylab = "Beta", col = colorb1)
   axis(2, las = 2)
   #axis(1, at = 1:4, label = levels(Group))
   

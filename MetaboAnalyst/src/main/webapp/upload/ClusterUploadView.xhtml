@@ -19,6 +19,10 @@
                 <h:panelGrid style="width:100%; background-color: #75bafb;"></h:panelGrid>
                 <h:panelGrid style="width:100%; background-color: white; "></h:panelGrid>
 
+<!--            <h:panelGrid style="padding: 20px 20px 20px 40px; font-size:12px;">
+                <h2 style="margin-top: 10px; margin-bottom: 4px">1) Upload your data</h2>-->
+                 
+
                 <h:panelGrid style="border: none; width: 100%; padding: 15px 20px 10px 25px; background-color: #8cbd4830; font-size: 14px;">
                     <h2 style="margin-top: 10px; margin-bottom: 4px">Data table: Plain text file (.csv or .txt)</h2>
                     <h:panelGrid columns="2" style="padding: 10px">
@@ -36,7 +40,42 @@
                         <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:210px" value="#{Clusterload.dataNames}">
                             <f:selectItems value="#{applicationBean1.dataNamesOpts}" />
                         </p:selectOneMenu> 
-                    </h:panelGrid>                  
+                    </h:panelGrid>
+                    <h:panelGrid></h:panelGrid>
+                    <h:panelGrid columns="2">
+                        <p:selectBooleanCheckbox value="#{Clusterload.checkboxValue}">
+                            <f:ajax event="change" render="suppPanel"/>
+                        </p:selectBooleanCheckbox>
+                        <h:outputLabel style="font-size:16px; font-weight: bold" value="Supplemental data tables (optional): Plain text files (.csv or .txt)"/>
+                    </h:panelGrid>
+
+                    <h:panelGroup id="suppPanel">
+                        <h:panelGroup rendered="#{Clusterload.checkboxValue}">
+                        <h:panelGrid>
+                            Including supplemental data tables will enable more interesting and informative plots for certain analyses.
+                            <b>Grouping data</b> assigns categories to each sample to group one or more samples together. 
+                            <b>Constraining data</b> assigns external conditions to each sample. One common example is environmental data.
+                            Note that constraining data is required for Co-Inertia Analysis and Analysis of Similarities. 
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" style="padding: 10px">
+                            <p:outputLabel style="font-size:14px; font-weight: bold" value="Grouping Data File:"/>
+                            <p:fileUpload value="#{Clusterload.dataFileMeta}" mode="simple"/>
+                        </h:panelGrid>   
+                        <h:panelGrid columns="2" style="padding: 10px; margin-left: 40px">
+                            <p:outputLabel style="font-size:12px; font-weight: bold" value="Format:"/>
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:210px" value="#{Clusterload.metaFormat}">
+                                <f:selectItems value="#{applicationBean1.metaFormatOpts}" />
+                            </p:selectOneMenu> 
+                        </h:panelGrid> 
+                        <h:panelGrid columns="2" style="padding: 10px; margin-left: 40px">
+                            <p:outputLabel style="font-size:12px; font-weight: bold" value="Labels:"/>
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:210px" value="#{Clusterload.metaNames}">
+                                <f:selectItems value="#{applicationBean1.metaNamesOpts}" />
+                            </p:selectOneMenu> 
+                        </h:panelGrid>
+                    </h:panelGroup>
+                    </h:panelGroup>
+                    <h:panelGrid></h:panelGrid>
                     <h:panelGrid style="padding: 10px; float:right">
                         <p:commandButton value="Submit" 
                                          styleClass="updateButton"
@@ -47,7 +86,9 @@
                                          action="#{Clusterload.handleFileUpload()}"/>   
                         
                     </h:panelGrid>
+                    
                 </h:panelGrid>
+
                 
                 <p:spacer style="width: 30px"/>
                 
@@ -64,7 +105,7 @@
                         Iris flower measurements with species data. Data consists of 4 measurements (petal width, petal length, sepal width, sepal length) and species groupings (variables/columns) for 150 iris flowers (samples/rows). There are 50 flowers from each of 3 species of iris: Iris setosa, Iris versicolor, and Iris virginica. Variables are labeled, but iris flowers are not. (<a href="https://www.rdocumentation.org/packages/datasets/versions/3.6.2/topics/iris">ref.</a>)                                           
                     </h:panelGrid>
                         <p:radioButton for="customRadio" itemIndex="5"/>
-                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Pit latrine"/>
+                        <p:outputLabel style="font-size:12px; font-weight: bold" value="Pitlatrine"/>
                         <h:panelGrid>
                             Microbial species counts in pit latrines from Tanzania and Vietnam. Data was generated by metagenomic 16SrRNA sequencing of samples taken at different depths. Data consists of 52 species (variables/rows) and 81 depths (samples/columns). Both species and sampling depths are labeled. (<a href="https://sfamjournals.onlinelibrary.wiley.com/doi/10.1111/1751-7915.12334">ref.</a>)          
                         </h:panelGrid>

@@ -1,18 +1,20 @@
 # This script should be called by server to load actual scripts
 # based on the modules user selected
 general_files <- c("general_data_utils","general_misc_utils","general_load_libs");
+
 general_stat_files <- c("general_norm_utils","general_proc_utils", "general_data_assumption");
 stats_files <- c("stats_chemometrics","stats_classification","stats_clustering", "stats_correlations", "stats_sigfeatures","stats_univariates");
 correlation_files <- c("correlation_linear", "correlation_penalized", "correlation_polynomial", "correlation_ml", "correlation_multivariate", "correlation_SVM", "correlation_RF", "correlation_logistic");
 dispersal_files <- c("dispersal");
-plotting_files <- c("plotting", "plotting_pie", "plot_bar", "plot_box", "plot_scatter");
+plotting_files <- c("plotting", "plotting_pie", "plotting_bargraph", "plotting_boxplot");
 ordination_files <- c("ord_nmds", "ord_pcoa", "ord_cia", "ord_dca", "ord_anosim", "ord_rda", "ord_bray", "ord_cca", "ord_ca", "ord_dca");
 
 diversity_files <- c("div_divindices","div_rarefaction", "div_abundance_dist", "div_accumulation_model", "div_taxonomic", "div_fd", "div_unseen");
 
-taxonomy_files <- c();
+taxonomy_files <- c("tax_dataInputClean","tax_geneNetworkViz");
 cluster_files <- c();
 general_anot_files <- "general_anot_utils";
+
 enrich_files <- c("enrich_graphics","enrich_mset","enrich_name_match","enrich_stats");
 pathway_files <- c("enrich_mset","enrich_stats","enrich_name_match","enrich_path_graphics","enrich_path_kegg","enrich_path_stats")
 integmex_files <- c("enrich_integ","enrich_path_kegg","enrich_stats","enrich_name_match")
@@ -23,6 +25,7 @@ metaanal_files <- c("meta_methods", "meta_data_utils");
 network_files <- c("networks", "enrich_integ", "enrich_name_match", "gene_fun_utils", "enrich_path_kegg");
 other_files <- c("others_batch_check", "others_lipomics", "enrich_name_match");
 nmds_files <- c("test-Vegan", "dispersal", "plotting");
+
 nmds_files <- c("test-Vegan","Dispersal");
 LoadScripts <- function(module.nm = "nmds"){
     file.sources <- "";

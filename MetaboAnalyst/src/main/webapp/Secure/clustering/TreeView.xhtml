@@ -1,0 +1,89 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_anal_template.xhtml">
+    <ui:define name="metaInfo">
+        <f:event type="preRenderView" listener="#{analBean.performDefaultAnalysis('Dendrogram')}"/> 
+    </ui:define>
+    <ui:define name="content">
+        <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
+            <p:tabView id="overviewTree">
+                <p:tab title ="Overview" titleStyleClass="p-tab-nav">
+                    <h:form id="form1">
+                        <p>
+                            A dendrogram shows the hierarchical relationship between objects using hierarchical clustering. The nodes link to 
+                        the same brunch having similar characteristics/closer relationship. Adjusting "Distance Measure" and "Clustering Algorithm" 
+                        to adjust the dendrogram.
+                        </p> 
+                        <h:panelGrid id="panelGrid" columns="5" cellpadding="3" columnClasses="colLeft,colRight,colLeft,colRight, colLast">
+                            <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
+                            <p:selectBooleanCheckbox value ="#{clusterBean.doData}" /> 
+                            
+                            <h:outputLabel style="font-weight: bold" value="Distance Measure:"/>
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style= "width:50%;" value="#{clusterBean.clustDistOpt}">
+                                <f:selectItems value="#{applicationBean1.clustDistOpts}" />
+                            </p:selectOneMenu>
+                            
+                            <spacer></spacer>
+                            
+                            <h:outputLabel style="font-weight: bold" value="Clustering Algorithm:"/>
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:50%" value="#{clusterBean.clustMethodOpt}">
+                                <f:selectItems value="#{applicationBean1.clustMethodOpts}" />
+                            </p:selectOneMenu>
+                            
+                            <h:outputLabel style="font-weight: bold" value="Grouping Variable:"/>
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:50%;" value="#{clusterBean.dendroColumnName}">
+                                <f:selectItems value="#{clusterBean.dendroColumnOpts}" />
+                            </p:selectOneMenu>
+
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" cellpadding="3" style="float: right">    
+                            <p:commandButton value="Customize Graph"
+                                             styleClass="graphicsButton"
+                                             style="box-shadow: none !important; text-shadow: none !important;"
+                                             actionListener="#{sessionBean1.graphicsLnk_action('tree')}" 
+                                            oncomplete="PF('graphApperanceTree').show()"/>
+                            
+                            <p:commandButton value="Update" 
+                                             styleClass="updateButton"
+                                             style="box-shadow: none !important; text-shadow: none !important"
+                                            onclick="PF('statusDialog').show()"
+                                            oncomplete="PF('statusDialog').hide()"  
+                                            update=":overviewTree:form1:treePane1  :cmdPane" 
+                                            actionListener="#{clusterBean.treeButton_action()}"/>                          
+                        </h:panelGrid>
+                        <h:panelGrid class="resultsBar" columns="2">
+                            <h:panelGroup>
+                                <h:panelGrid columns="1" style="text-align : left;">
+                                    Results
+                                </h:panelGrid>
+                            </h:panelGroup> 
+                            <h:panelGroup>
+                                <h:panelGrid columns="3" class="resultsImages">
+                                    <i class="fa fa-question-circle"></i>
+                                </h:panelGrid>
+                            </h:panelGroup>                            
+                        </h:panelGrid>
+                        <h:panelGrid id="treePane1" style="width: 100%;">
+
+                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('tree')}" alt="Dendogram"/>
+                            </h:panelGrid>                           
+
+                        </h:panelGrid>
+                    </h:form>
+                </p:tab>
+            </p:tabView>
+        </h:panelGrid>
+        <p:dialog modal="true" widgetVar="graphApperanceTree" 
+                    style="width: 400px; height:400px;" 
+                    appendTo="@(body)" header="Graphics Center"
+                    draggable="false" closable="true" resizable="false"> 
+                    <ui:include src="_color_palette_tree.xhtml" />
+        </p:dialog>
+    </ui:define>
+</ui:composition>

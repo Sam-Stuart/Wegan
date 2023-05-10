@@ -126,6 +126,21 @@ public class TaxodivBean implements Serializable {
     public void setColorchosen(String colorchosen) {
         this.colorchosen = colorchosen;
     }
+    
+    private final SelectItem[] plotD;
+    private String plotDchosen = "NULL";
+    
+    public SelectItem[] getPlotD() {
+        return plotD;
+    }
+    
+    public String getPlotDchosen() {
+        return plotDchosen;
+    } 
+
+    public void setPlotDchosen(String plotDchosen) {
+        this.plotDchosen = plotDchosen;
+    }
         
     
     private final SelectItem[] colorc;
@@ -226,7 +241,13 @@ public class TaxodivBean implements Serializable {
         color = new SelectItem[3];
         color[0] = new SelectItem("NULL", "Grayscale");
         color[1] = new SelectItem("blue", "Bluescale");
-        color[2] = new SelectItem("red", "Redscale");    
+        color[2] = new SelectItem("red", "Redscale");
+        
+        plotD = new SelectItem[4];
+        plotD[0] = new SelectItem("NULL", "Delta+");
+        plotD[1] = new SelectItem("Delta", "Delta");
+        plotD[2] = new SelectItem("Delta*", "Delta*");
+        plotD[3] = new SelectItem("Lambda+", "Lambda+");
         
         colorc = new SelectItem[3];
         colorc[0] = new SelectItem("NULL", "Black");
@@ -243,10 +264,18 @@ public class TaxodivBean implements Serializable {
     
 
     // ACTION BUTTON // 
-    public void taxodivUpdate_action() {
+    public void taxodivTreeUpdate_action() {
         DiversityUtils.CreateTaxoDiv(sb, doOriginal, dischosen, doMatch_force, doVarstep, aggmechosen, doCheck);       
         DiversityUtils.PlotTaxaTree(sb, colorchosen, sb.getNewImage("Taxa_Tree_Plot"), "png", 72, "false");
-        DiversityUtils.PlotTaxonScatter(sb, colorcchosen, sb.getNewImage("Taxa_Scatter_Plot"), "png", 72, "false");
+    }
+    
+    public void taxodivScatUpdate_action() {
+        DiversityUtils.CreateTaxoDiv(sb, doOriginal, dischosen, doMatch_force, doVarstep, aggmechosen, doCheck);       
+        DiversityUtils.PlotTaxonScatter(sb, plotDchosen, colorcchosen, sb.getNewImage("Taxa_Scatter_Plot"), "png", 72, "false");
+    }
+    
+    public void taxodivHeatUpdate_action() {
+        DiversityUtils.CreateTaxoDiv(sb, doOriginal, dischosen, doMatch_force, doVarstep, aggmechosen, doCheck);       
         DiversityUtils.PlotTaxonHeatmap(sb, colordchosen, sb.getNewImage("Taxa_Heatmap_Plot"), "png", 72, "false");
     }
     

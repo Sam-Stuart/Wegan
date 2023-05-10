@@ -9,7 +9,12 @@
     <ui:define name="metaInfo">
         <f:event type="preRenderView" listener="#{caBean.performDefaultAnalysis('Linear')}"/> 
     </ui:define>
+    <ui:define name="myscript">
+        <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/jscripts/d3.min.js"></script>
+        <script type="text/javascript" src="./LinearCorrelation.js"></script>
+    </ui:define>
     <ui:define name="content">
+                 <h:inputHidden id="mydir" value="#{sessionBean1.currentUser.relativeDir}" />
         <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
             <h1>Linear Regression:</h1>
             <p:tabView id="linCA" style="border-bottom-color: #8cbd48 !important">
@@ -44,13 +49,13 @@
                                              styleClass="graphicsButton"
                                              style="box-shadow: none !important; text-shadow: none !important;"
                                              actionListener="#{sessionBean1.graphicsLnk_action('corr_linear')}" 
-                                            oncomplete="PF('graphApperanceLinear').show()"/>  
+                                            oncomplete="PF('graphApperanceLinear').show();"/>  
                                            
                             <p:commandButton value="Update" 
                                              styleClass="updateButton"
                                              style="box-shadow: none !important; text-shadow: none !important"
                                             onclick="PF('statusDialog').show()"
-                                            oncomplete="PF('statusDialog').hide()"  
+                                            oncomplete="PF('statusDialog').hide();"  
                                             update=":linCA:form1:corrLinPane1  :cmdPane" 
                                             actionListener="#{linearCABean.corrLin1Btn_action()}"/> 
                             
@@ -88,7 +93,7 @@ The R &#xb2; value is the fraction of variance explained by the model and is a v
                                     oncomplete="PF('graphDialog').show()"/>
                             </h:panelGrid> 
                              <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
-                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('corr_linear')}" alt="corrLinear"/>
+                                 <div id="my_dataviz"></div>
                             </h:panelGrid>  
                             
                        </h:panelGrid>  

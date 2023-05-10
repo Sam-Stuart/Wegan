@@ -20,8 +20,8 @@ AccumulationModel <- function(mSetObj = NA, data = "false", permutations = "", c
 
   #library("ade4")
   #library("adegraphics")
-  library(plyr)
-  library(dplyr)
+  #library(plyr)
+  #library(dplyr)
   library(vegan)
 
   mSetObj <- .get.mSet(mSetObj)
@@ -85,10 +85,12 @@ AccumulationModel <- function(mSetObj = NA, data = "false", permutations = "", c
   
   sp.exact <- specaccum(input.2, method = "exact", gamma = gamma1, conditioned = conditioned1)
   sp.collector <- specaccum(input.2, method = "collector", gamma = gamma1)
-  sp.random <- specaccum(input.2, method = "random", gamma = gamma1, permutations = permutations1)
+  sp.random <- specaccum(input.2, method = "random", gamma = gamma1) #, permutations = permutations1
+  print(sp.random)
   sp.coleman <- specaccum(input.2, method = "coleman", gamma = gamma1)
   sp.rarefaction <- specaccum(input.2, method = "rarefaction", gamma = gamma1, permutations = permutations1)
   
+
   if (object == "NULL") {
     object1 = sp.exact
   } else if (object == "random") {
@@ -346,7 +348,7 @@ AccumCurve <- function(mSetObj=NA, type = "NULL", color = "NULL", ci.color="NULL
   
   
   if (pch == "") {
-    pch1 = "+"
+    pch1 = 19
   } else {
     pch1 = as.numeric(pch)
   }
@@ -364,10 +366,10 @@ AccumCurve <- function(mSetObj=NA, type = "NULL", color = "NULL", ci.color="NULL
   
   #windows(height = h, width = w)
   
-  plot(plot_data, axes = F, ci.type = ci.type1, col = color1, lwd = 3, ci.lty = 0, 
+  plot(plot_data, ci.type = ci.type1, col = color1, lwd = 3, ci.lty = 0, 
        ci.col = ci.color1, lty = 1, xaxt = "n", yaxt = "n", ylab = "Number of species", xlab = "Sites", cex.axis = 1, cex.lab = 1.2)
   legend("bottomright", legend = c(type1, "nonlinear selfstarting", "prediction"), col = c(color1, line.color1, pred.color1),
-         lty = 1:3, cex = 1, box.lty = 0) 
+         lty = 1:3, cex = 1.2, lwd = 2, bty = "n") 
   axis(1, labels = T, at = 0:n)
   axis(2, las = 2)
   boxplot(box_data, col = box.color1, add = TRUE, pch = pch1)

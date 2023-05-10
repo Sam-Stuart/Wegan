@@ -13,142 +13,15 @@ import org.rosuda.REngine.Rserve.RserveException;
 
 
 public class DiversityUtils {
-        
-    public static boolean CreateAlpha(SessionBean1 sb) {
-        try {
-            RConnection RC = sb.getRConnection();
-            String rCommand = "ord.cca(NA)";
-            RCenter.recordRCommand(RC, rCommand);
-            RC.voidEval(rCommand);
-            return true;
-        } catch (RserveException rse) {
-            System.out.println(rse);
-            return false;
-        }
-    }
-     
-    public static void PlotAlpha(SessionBean1 sb) {
-        try {
-            RConnection RC = sb.getRConnection();
-            String rCommand = "Plot.CCA.biplot(NA)";
-            RCenter.recordRCommand(RC, rCommand);
-            sb.addGraphicsCMD("div_alpha", rCommand);
-            RC.voidEval(rCommand);
-        } catch (RserveException rse) {
-            System.out.println(rse);
-        }
-    }
-
-    public static boolean CreateBeta(SessionBean1 sb) {
-        try {
-            RConnection RC = sb.getRConnection();
-            String rCommand = "ord.cca(NA)";
-            RCenter.recordRCommand(RC, rCommand);
-            RC.voidEval(rCommand);
-            return true;
-        } catch (RserveException rse) {
-            System.out.println(rse);
-            return false;
-        }
-    }
-     
-    public static void PlotBeta(SessionBean1 sb) {
-        try {
-            RConnection RC = sb.getRConnection();
-            String rCommand = "Plot.CCA.biplot(NA)";
-            RCenter.recordRCommand(RC, rCommand);
-            sb.addGraphicsCMD("div_alpha", rCommand);
-            RC.voidEval(rCommand);
-        } catch (RserveException rse) {
-            System.out.println(rse);
-        }
-    }
-    public static boolean CreateGamma(SessionBean1 sb) {
-        try {
-            RConnection RC = sb.getRConnection();
-            String rCommand = "ord.cca(NA)";
-            RCenter.recordRCommand(RC, rCommand);
-            RC.voidEval(rCommand);
-            return true;
-        } catch (RserveException rse) {
-            System.out.println(rse);
-            return false;
-        }
-    }
-     
-    public static void PlotGamma(SessionBean1 sb) {
-        try {
-            RConnection RC = sb.getRConnection();
-            String rCommand = "Plot.CCA.biplot(NA)";
-            RCenter.recordRCommand(RC, rCommand);
-            sb.addGraphicsCMD("div_alpha", rCommand);
-            RC.voidEval(rCommand);
-        } catch (RserveException rse) {
-            System.out.println(rse);
-        }
-    }
-    public static boolean CreateSpecies(SessionBean1 sb) {
-        try {
-            RConnection RC = sb.getRConnection();
-            String rCommand = "ord.cca(NA)";
-            RCenter.recordRCommand(RC, rCommand);
-            RC.voidEval(rCommand);
-            return true;
-        } catch (RserveException rse) {
-            System.out.println(rse);
-            return false;
-        }
-    }
-     
-    public static void PlotSpecies(SessionBean1 sb) {
-        try {
-            RConnection RC = sb.getRConnection();
-            String rCommand = "Plot.CCA.biplot(NA)";
-            RCenter.recordRCommand(RC, rCommand);
-            sb.addGraphicsCMD("div_alpha", rCommand);
-            RC.voidEval(rCommand);
-        } catch (RserveException rse) {
-            System.out.println(rse);
-        }
-    }
-    
-    
-    
-    public static boolean CreateTestTutorial(SessionBean1 sb) {
-        try {
-            RConnection RC = sb.getRConnection(); //Start R connection
-            String rCommand = "lin.reg.anal.one(NA)"; // Creates R command
-            RCenter.recordRCommand(RC, rCommand); // records r command
-            RC.voidEval(rCommand); // tells you want your r script returns  
-            return true;
-        } catch (RserveException rse) {
-            System.out.println(rse);
-            return false;
-        }
-    }
-    
-    public static void PlotTestTutorial(SessionBean1 sb, String imgName, String format, int dpi) {
-        try {
-            RConnection RC = sb.getRConnection();
-//            String rCommand = "plot.linReg1(NA)";
-            String rCommand = "plot.linReg1(NA" + ", \"" + imgName + "\", \"" + format + "\", " + dpi + ", width=NA)";
-            RCenter.recordRCommand(RC, rCommand);
-            sb.addGraphicsCMD("div_alpha", rCommand);
-            RC.voidEval(rCommand);
-        } catch (RserveException rse) {
-            System.out.println(rse);
-        }
-    }
-    
-    
-    public static boolean CreateIndicesDiv(SessionBean1 sb, boolean data, String groupColName, String margin) {
+       
+    public static boolean CreateIndicesDiv(SessionBean1 sb, boolean data, String groupColName, String method) {
         try {
             System.out.print("R RAREFACTION");
             RConnection RC = sb.getRConnection(); //Start R connection
             String rCommand = "div_index(NA"
                                                  + ", \"" + data
                                                  + "\", \"" + groupColName
-                                                 + "\", \""  + margin                                                 
+                                                 + "\", \"" + method
                                                  + "\")";
             RCenter.recordRCommand(RC, rCommand); // records r command
             RC.voidEval(rCommand); // tells you want your r script returns  
@@ -194,7 +67,7 @@ public class DiversityUtils {
     }
     
     
-    public static boolean CreateRarefactionDiv(SessionBean1 sb, boolean data, String type, String sample, boolean se, String margin) {
+    public static boolean CreateRarefactionDiv(SessionBean1 sb, boolean data, String type, String sample, boolean se) {
         try {
             System.out.print("R RAREFACTION");
             RConnection RC = sb.getRConnection(); //Start R connection
@@ -202,8 +75,7 @@ public class DiversityUtils {
                                                  + ", \"" + data
                                                  + "\", \"" + type
                                                  + "\", \"" + sample
-                                                 + "\", \""  + se
-                                                 + "\", \""  + margin                                                 
+                                                 + "\", \""  + se                                            
                                                  + "\")";
             RCenter.recordRCommand(RC, rCommand); // records r command
             RC.voidEval(rCommand); // tells you want your r script returns  
@@ -213,6 +85,26 @@ public class DiversityUtils {
             return false;
         }
     }	//mSet<-Rarefaction_div(mSet, "NULL, ", "false", "NULL" , "false")
+    
+//    public static boolean PlotRarefactionCurveDiversity(SessionBean1 sb, String step, String color, String imgName, String format, int dpi, String width) {
+//        try {
+//            System.out.print("R RAREFACTION");
+//            RConnection RC = sb.getRConnection(); //Start R connection
+//            String rCommand = "RarefactionCurve(NA" 
+//                                                 + ", \"" + step
+//                                                 + "\", \""  + color
+//                                                 + "\", \"" + imgName 
+//                                                 + "\", \"" + format 
+//                                                 + "\", " + dpi 
+//                                                 + ", width=NA)";
+//            RCenter.recordRCommand(RC, rCommand); // records r command
+//            RC.voidEval(rCommand); // tells you want your r script returns  
+//            return true;
+//        } catch (RserveException rse) {
+//            System.out.println(rse);
+//            return false;
+//        }
+//    }	
     
     public static void PlotRarefactionCurveDiversity(SessionBean1 sb, String step, String color, String imgName, String format, int dpi, String width) {
         try {
@@ -249,15 +141,49 @@ public class DiversityUtils {
         }
     }
 
-    public static boolean CreateAbundDistDiv(SessionBean1 sb, boolean data, String community, boolean tiesplit, String truncate) {
+    public static boolean CreateAbundFisherDistDiv(SessionBean1 sb, boolean data, String communityFisher) {
         try {
             System.out.print("R Abundancedist");
             RConnection RC = sb.getRConnection(); //Start R connection
-            String rCommand = "AbundanceModel(NA"
+            String rCommand = "AbundanceFisherModel(NA"
                                                  + ", \"" + data
-                                                 + "\", \"" + community
+                                                 + "\", \"" + communityFisher                                         
+                                                 + "\")";
+            RCenter.recordRCommand(RC, rCommand); // records r command
+            RC.voidEval(rCommand); // tells you want your r script returns  
+            return true;
+        } catch (RserveException rse) {
+            System.out.println(rse);
+            return false;
+        }
+    }
+    
+    public static boolean CreateAbundPresDistDiv(SessionBean1 sb, boolean data, String communityPres, boolean tiesplit, String truncate) {
+        try {
+            System.out.print("R Abundancedist");
+            RConnection RC = sb.getRConnection(); //Start R connection
+            String rCommand = "AbundancePrestonModel(NA"
+                                                 + ", \"" + data
+                                                 + "\", \"" + communityPres
                                                  + "\", \"" + tiesplit
                                                  + "\", \"" + truncate                                           
+                                                 + "\")";
+            RCenter.recordRCommand(RC, rCommand); // records r command
+            RC.voidEval(rCommand); // tells you want your r script returns  
+            return true;
+        } catch (RserveException rse) {
+            System.out.println(rse);
+            return false;
+        }
+    }
+    
+    public static boolean CreateAbundRankDistDiv(SessionBean1 sb, boolean data, String communityRank) {
+        try {
+            System.out.print("R Abundancedist");
+            RConnection RC = sb.getRConnection(); //Start R connection
+            String rCommand = "AbundanceRankModel(NA"
+                                                 + ", \"" + data
+                                                 + "\", \"" + communityRank                                        
                                                  + "\")";
             RCenter.recordRCommand(RC, rCommand); // records r command
             RC.voidEval(rCommand); // tells you want your r script returns  
@@ -393,63 +319,62 @@ public class DiversityUtils {
         }
     }
     
-    public static boolean PlotTaxaTree(SessionBean1 sb, String color, String imgName, String format, int dpi, String width) {
+        
+    
+    public static void PlotTaxaTree(SessionBean1 sb, String color, String imgName, String format, int dpi, String width) {
         try {
-            System.out.print("Taxo");
-            RConnection RC = sb.getRConnection(); //Start R connection
+            RConnection RC = sb.getRConnection();
             String rCommand = "taxa_tree(NA"
                                                  + ", \"" + color
                                                  + "\", \"" + imgName 
                                                  + "\", \"" + format 
                                                  + "\", " + dpi 
                                                  + ", width=NA)";
-            RCenter.recordRCommand(RC, rCommand); // records r command
-            RC.voidEval(rCommand); // tells you want your r script returns  
-            return true;
+            RCenter.recordRCommand(RC, rCommand);
+            sb.addGraphicsCMD("Taxa_Tree_Plot", rCommand);
+            RC.voidEval(rCommand);
         } catch (RserveException rse) {
             System.out.println(rse);
-            return false;
         }
     }
     
-    public static boolean PlotTaxonScatter(SessionBean1 sb, String colorc, String imgName, String format, int dpi, String width) {
+    
+    
+    public static void PlotTaxonScatter(SessionBean1 sb, String plotD, String colorc, String imgName, String format, int dpi, String width) {
         try {
-            System.out.print("Taxo");
-            RConnection RC = sb.getRConnection(); //Start R connection
+            RConnection RC = sb.getRConnection();
             String rCommand = "taxon_scatter(NA"
-                                                 + ", \"" + colorc
+                                                 + ", \"" + plotD
+                                                 + "\", \"" + colorc
                                                  + "\", \"" + imgName 
                                                  + "\", \"" + format 
                                                  + "\", " + dpi 
                                                  + ", width=NA)";
-            RCenter.recordRCommand(RC, rCommand); // records r command
-            RC.voidEval(rCommand); // tells you want your r script returns  
-            return true;
+            RCenter.recordRCommand(RC, rCommand);
+            sb.addGraphicsCMD("Taxa_Scatter_Plot", rCommand);
+            RC.voidEval(rCommand);
         } catch (RserveException rse) {
             System.out.println(rse);
-            return false;
         }
-    }
+    }       
     
-    public static boolean PlotTaxonHeatmap(SessionBean1 sb, String colord, String imgName, String format, int dpi, String width) {
+    
+    public static void PlotTaxonHeatmap(SessionBean1 sb, String colord, String imgName, String format, int dpi, String width) {
         try {
-            System.out.print("Taxo");
-            RConnection RC = sb.getRConnection(); //Start R connection
+            RConnection RC = sb.getRConnection();
             String rCommand = "taxon_heatmap(NA"
                                                  + ", \"" + colord
                                                  + "\", \"" + imgName 
                                                  + "\", \"" + format 
                                                  + "\", " + dpi 
                                                  + ", width=NA)";
-            RCenter.recordRCommand(RC, rCommand); // records r command
-            RC.voidEval(rCommand); // tells you want your r script returns  
-            return true;
+            RCenter.recordRCommand(RC, rCommand);
+            sb.addGraphicsCMD("Taxa_Heatmap_Plot", rCommand);
+            RC.voidEval(rCommand);
         } catch (RserveException rse) {
             System.out.println(rse);
-            return false;
         }
-        
-    }//boolean calc_FDiv, boolean calc_FRic, boolean calc_CWM,
+    }       
 
         public static boolean CreateFdDiv(SessionBean1 sb, boolean data, String w_text, String corr, boolean w_abun, boolean stand_x, String m,  boolean stand_FRic, boolean print_pco, boolean messages, String asym_bin, String ord) {
         try {
@@ -480,40 +405,36 @@ public class DiversityUtils {
         }
     }
     
-    public static boolean PlotFdTree(SessionBean1 sb, String color, String imgName, String format, int dpi, String width) {
+    public static void PlotFdTree(SessionBean1 sb, String color, String imgName, String format, int dpi, String width) {
         try {
-            System.out.print("FD");
-            RConnection RC = sb.getRConnection(); //Start R connection
+            RConnection RC = sb.getRConnection();
             String rCommand = "FD_cluster_plot(NA"
                                                  + ", \"" + color
                                                  + "\", \"" + imgName 
                                                  + "\", \"" + format 
                                                  + "\", " + dpi 
                                                  + ", width=NA)";
-            RCenter.recordRCommand(RC, rCommand); // records r command
-            RC.voidEval(rCommand); // tells you want your r script returns  
-            return true;
+            RCenter.recordRCommand(RC, rCommand);
+            sb.addGraphicsCMD("Cluster_Plot", rCommand);
+            RC.voidEval(rCommand);
         } catch (RserveException rse) {
             System.out.println(rse);
-            return false;
         }
     }
+           
     
-    public static boolean CreateUnseenDiv(SessionBean1 sb, boolean data, String pool, boolean smallsample, String index, String permutations, String minsize,  String parallel) {
+    public static boolean CreateUnseenDiv(SessionBean1 sb, boolean data, String poolColName, boolean smallsample, String index, String permutations, String minsize,  String parallel) {
         try {
-            System.out.print("FD");
+            System.out.print("UD");
             RConnection RC = sb.getRConnection(); //Start R connection
             String rCommand = "sp_pool(NA"
                                                  + ", \"" + data
-                                                 + "\", \"" + pool
+                                                 + "\", \"" + poolColName
                                                  + "\", \"" + smallsample
                                                  + "\", \"" + index
                                                  + "\", \"" + permutations
                                                  + "\", \"" + minsize
-//                                                 + "\", \"" + calc_FDiv
-//                                                 + "\", \"" + calc_FRic
                                                  + "\", \"" + parallel
-//                                                 + "\", \"" + calc_CWM
                                                  + "\")";
             RCenter.recordRCommand(RC, rCommand); // records r command
             RC.voidEval(rCommand); // tells you want your r script returns  
@@ -525,51 +446,96 @@ public class DiversityUtils {
     }
     
     
-    public static boolean PlotPoolBoxplot(SessionBean1 sb, String plot_data, String box_color, String xlab,
-                                          String ylab, String border_col, String imgName, String format, int dpi, String width) {
+    public static void PlotPoolBoxplot(SessionBean1 sb, String plotdata, String box_color, String border_col, String imgName, String format, int dpi, String width) {
         try {
-            System.out.print("FD");
-            RConnection RC = sb.getRConnection(); //Start R connection
+            RConnection RC = sb.getRConnection();
             String rCommand = "pool_boxplot(NA"
-                                                 + ", \"" + plot_data
-                                                 //+ "\", \"" + fac_data
+                                                 + ", \"" + plotdata
                                                  + "\", \"" + box_color
-                                                 + "\", \"" + xlab
-                                                 + "\", \"" + ylab
                                                  + "\", \"" + border_col
                                                  + "\", \"" + imgName 
                                                  + "\", \"" + format 
                                                  + "\", " + dpi 
                                                  + ", width=NA)";
-            RCenter.recordRCommand(RC, rCommand); // records r command
-            RC.voidEval(rCommand); // tells you want your r script returns  
-            return true;
+            RCenter.recordRCommand(RC, rCommand);
+            sb.addGraphicsCMD("boxplot_richness", rCommand);
+            RC.voidEval(rCommand);
         } catch (RserveException rse) {
             System.out.println(rse);
-            return false;
         }
     }
+
     
-    public static boolean PlotUnseenCurve(SessionBean1 sb, String color, String imgName, String format, int dpi, String width) {
+    public static void PlotUnseenCurve(SessionBean1 sb, String imgName, String format, int dpi, String width) {
         try {
-            System.out.print("FD");
-            RConnection RC = sb.getRConnection(); //Start R connection
-            String rCommand = "rich_est_curve(NA"
-                                                 + ", \"" + color
-                                                 + "\", \"" + imgName 
+            RConnection RC = sb.getRConnection();
+            String rCommand = "RichEstCurve(NA" 
+                                                 + ", \"" + imgName 
                                                  + "\", \"" + format 
                                                  + "\", " + dpi 
                                                  + ", width=NA)";
-            RCenter.recordRCommand(RC, rCommand); // records r command
-            RC.voidEval(rCommand); // tells you want your r script returns  
-            return true;
+            RCenter.recordRCommand(RC, rCommand);
+            sb.addGraphicsCMD("plot_matrices", rCommand);
+            RC.voidEval(rCommand);
         } catch (RserveException rse) {
             System.out.println(rse);
-            return false;
         }
     }
     
- 
+    
+//    public static void CreateSpatialvis(SessionBean1 sb, boolean data, boolean datum, boolean proj, String crs_txt, String crs_option, String source, String maptype, String zoom, String varColName, 
+//            String rangeA, String colorColName, boolean ele, String lineB, boolean polygon, boolean path, String imgName, String format, int dpi, String width) {
+//        try {
+//            System.out.print("UD");
+//            RConnection RC = sb.getRConnection(); //Start R connection
+//            String rCommand = "Raster_data(NA"
+//                                                 + ", \"" + data
+//                                                 + "\", \"" + datum
+//                                                 + "\", \"" + proj
+//                                                 + "\", \"" + crs_txt
+//                                                 + "\", \"" + crs_option
+//                                                 + "\", \"" + source
+//                                                 + "\", \"" + maptype
+//                                                 + "\", \"" + zoom
+//                                                 + "\", \"" + varColName
+//                                                 + "\", \"" + rangeA
+//                                                 + "\", \"" + colorColName
+//                                                 + "\", \"" + ele
+//                                                 + "\", \"" + lineB
+//                                                 + "\", \"" + polygon
+//                                                 + "\", \"" + path
+//                                                 + "\", \"" + imgName 
+//                                                 + "\", \"" + format 
+//                                                 + "\", " + dpi 
+//                                                 + ", width=NA)";
+//            RCenter.recordRCommand(RC, rCommand);
+//            sb.addGraphicsCMD("ggmap", rCommand);
+//            RC.voidEval(rCommand);
+//        } catch (RserveException rse) {
+//            System.out.println(rse);
+//        }
+//    }
+    
+    
+//    public static void PlotSpatialmap(SessionBean1 sb, boolean polygon, boolean path, String imgName, String format, int dpi, String width) {
+//        try {
+//            RConnection RC = sb.getRConnection();
+//            String rCommand = "Raster_map(NA"
+//                                                 + "\", \"" + polygon
+//                                                 + "\", \"" + path
+//                                                 + "\", \"" + imgName 
+//                                                 + "\", \"" + format 
+//                                                 + "\", " + dpi 
+//                                                 + ", width=NA)";
+//            RCenter.recordRCommand(RC, rCommand);
+//            sb.addGraphicsCMD("ggmap", rCommand);
+//            RC.voidEval(rCommand);
+//        } catch (RserveException rse) {
+//            System.out.println(rse);
+//        }
+//    }
+    
+    
     public static String[] IndiceColumn(SessionBean1 sb){
         try {
             RConnection RC = sb.getRConnection();
@@ -583,7 +549,65 @@ public class DiversityUtils {
         }
         return null;
     }
-
+    
+    
+    public static String[] poolColumn(SessionBean1 sb){
+        try {
+            RConnection RC = sb.getRConnection();
+            String rCommand = "PoolCol(NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            return RC.eval(rCommand).asStrings();
+        } catch (RserveException rse) {
+            System.out.println(rse);
+        } catch (REXPMismatchException ex) {
+            Logger.getLogger(DiversityUtils.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+  
+//    public static String[] varColumn(SessionBean1 sb){
+//        try {
+//            RConnection RC = sb.getRConnection();
+//            String rCommand = "VarCol(NA)";
+//            RCenter.recordRCommand(RC, rCommand);
+//            return RC.eval(rCommand).asStrings();
+//        } catch (RserveException rse) {
+//            System.out.println(rse);
+//        } catch (REXPMismatchException ex) {
+//            Logger.getLogger(DiversityUtils.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        return null;
+//    }
+//    
+//    public static String[] colorColumn(SessionBean1 sb){
+//        try {
+//            RConnection RC = sb.getRConnection();
+//            String rCommand = "ColorCol(NA)";
+//            RCenter.recordRCommand(RC, rCommand);
+//            return RC.eval(rCommand).asStrings();
+//        } catch (RserveException rse) {
+//            System.out.println(rse);
+//        } catch (REXPMismatchException ex) {
+//            Logger.getLogger(DiversityUtils.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        return null;
+//    }
+//    
+//
+//    public static String[] lineColumn(SessionBean1 sb){
+//        try {
+//            RConnection RC = sb.getRConnection();
+//            String rCommand = "LineCol(NA)";
+//            RCenter.recordRCommand(RC, rCommand);
+//            return RC.eval(rCommand).asStrings();
+//        } catch (RserveException rse) {
+//            System.out.println(rse);
+//        } catch (REXPMismatchException ex) {
+//            Logger.getLogger(DiversityUtils.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        return null;
+//    }
     
     /////// ------------ Diversity helper functions --------------- //////////////
 

@@ -225,6 +225,18 @@ public class CAloadBean implements Serializable {
         if (testDataOpt == null) {                   
             sb.updateMsg("Error", "No data set is selected!");
             return null;
+
+        }
+        else if (testDataOpt.equals("Dune")) {
+            
+            System.out.println("DUNE DATASET");
+            dataType = "Dune";
+            testFile = ab.getTestDune();
+            testFileWeight = ab.getTestWeightDune();
+            
+//            testWeightFile = ab.getTestWeightDune();
+            dataFormat = "rowu";
+
             
         } else if (testDataOpt.equals("Iris")) {
             dataType = "Iris";

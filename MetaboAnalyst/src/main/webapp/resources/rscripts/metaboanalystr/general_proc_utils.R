@@ -12,7 +12,7 @@
 #'@export
 #'
 SanityCheckData <- function(mSetObj=NA){
-  
+  print("SanityCheckData")
   load_dplyr()
   mSetObj <- .get.mSet(mSetObj);
   
@@ -256,6 +256,7 @@ SanityCheckData <- function(mSetObj=NA){
 #'@export
 #'
 ReplaceMin <- function(mSetObj=NA){
+  print("ReplaceMin")
 #THIS ACTION WAS DESIGNED TO OCCUR AUTOMATICALLY. IT WAS REMOVED FOR WEGAN.
   mSetObj <- .get.mSet(mSetObj);
 
@@ -305,7 +306,7 @@ ReplaceMin <- function(mSetObj=NA){
 #'@export
 #'
 RemoveMissingPercent <- function(mSetObj=NA, percent=perct){
-  
+  print("RemoveMissingPercent")
   mSetObj <- .get.mSet(mSetObj);
   
   if(!.on.public.web){
@@ -359,7 +360,7 @@ RemoveMissingPercent <- function(mSetObj=NA, percent=perct){
 #'@export
 #'
 ImputeVar <- function(mSetObj=NA, method="min"){
-  
+  print("ImputeVar")
   mSetObj <- .get.mSet(mSetObj);
   
   if(!is.null(mSetObj$dataSet$norm)){ # if normalization performed first
@@ -442,6 +443,7 @@ ImputeVar <- function(mSetObj=NA, method="min"){
 #'@export
 #'
 ClearNegatives <- function(mSetObj=NA, method="abs"){
+  print("ClearNegatives")
   mSetObj <- .get.mSet(mSetObj);
   int.mat <- as.matrix(mSetObj$dataSet$procr)
   
@@ -485,7 +487,7 @@ ClearNegatives <- function(mSetObj=NA, method="abs"){
 #'@export
 
 FilterVariable <- function(mSetObj=NA, filter, qcFilter, rsd){
-  
+  print("FilterVariable")
   mSetObj <- .get.mSet(mSetObj);
   
   int.mat <- as.matrix(mSetObj$dataSet$procr);

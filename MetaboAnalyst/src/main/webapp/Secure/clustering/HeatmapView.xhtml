@@ -1,0 +1,145 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_anal_template.xhtml">
+    <ui:define name="metaInfo">
+        <f:event type="preRenderView" listener="#{analBean.performDefaultAnalysis('Heatmap')}"/> 
+    </ui:define>
+    <ui:define name="content">
+        <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
+            <p:tabView id="overviewHeat">
+                <p:tab title ="Overview" titleStyleClass="p-tab-nav">
+                    <h:form id="form1">
+                        <div>
+                            A heatmap provides intuitive visualization of a data table. Each colored cell on the map corresponds to 
+                            a concentration value in your data table, with samples in rows and features/compounds in columns. 
+                            You can use a heatmap to identify samples/features that are unusually high/low. 
+                           
+                        </div>
+                        <div>
+                            <u>Tip 1: choose <b>Do not re-organize samples/rows</b> to show the natural contrast among groups (with 
+                                each group a block).
+                            </u>
+                        </div>
+                        <div>
+                            <u>Tip 2: choose <b>Display top # of features ranked by t-tests</b> to retain the most 
+                                contrasting patterns
+                            </u>
+                        </div>
+                        <p:spacer style="width:180px; height: 1px"/><p:spacer style="width:180px; height: 1px"/>
+                        <h:panelGrid id="panelGrid" columns="4" cellpadding="3" columnClasses="colLeft,colRight,colLeft,colRight">
+                            <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
+                            <p:selectBooleanCheckbox value ="#{clusterBean.doData}" />
+                            <h:outputLabel style="font-weight: bold" value="Distance Measure:"/>
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{clusterBean.hmDistOpt}">
+                                <f:selectItem itemLabel="Euclidean" itemValue="euclidean"/> 
+                                <f:selectItem itemLabel="Pearson" itemValue="correlation"/> 
+                                <f:selectItem itemLabel="Minkowski" itemValue="minkowski"/> 
+                            </p:selectOneMenu>
+                            <h:outputLabel style="font-weight: bold" value="Clustering Algorithm:"/>
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{clusterBean.hmMethodOpt}">
+                                <f:selectItems value="#{applicationBean1.clustMethodOpts}" />
+                            </p:selectOneMenu>
+                            <h:outputLabel style="font-weight: bold" value="Color Contrast:"/>
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{clusterBean.hmColorOpt}">
+                                <f:selectItems value="#{applicationBean1.colorContrastOpts}" />
+                            </p:selectOneMenu> 
+                            <h:outputLabel style="font-weight: bold" value="Standardization:"/>
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{clusterBean.scaleOpt}">
+                                <f:selectItem itemLabel="Autoscale features" itemValue="row"/> 
+                                <f:selectItem itemLabel="Autoscale samples" itemValue="column"/> 
+                                <f:selectItem itemLabel="None" itemValue="none"/> 
+                            </p:selectOneMenu>
+                            <h:outputLabel style="font-weight: bold" value="Colour Pallette:"/>
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:50%;" value="#{clusterBean.hmSmplColorOpts}">
+                                <f:selectItems value="#{applicationBean1.dendroPalletteOpts}" />
+                             </p:selectOneMenu> 
+                            <!-- Will be part of graphics center once fixed. Using here for testing. JP -->
+                            <h:outputLabel style="font-weight: bold" value="View Mode :"/>
+                            <p:selectOneRadio value="#{clusterBean.viewOpt}">
+                                <f:selectItem itemLabel="Overview" itemValue="overview" /> 
+                                <f:selectItem itemLabel="Detail View (&lt; 2000 features)" itemValue="detail" /> 
+                            </p:selectOneRadio>
+                            <spacer></spacer>
+                            <h:outputLabel style="font-weight: bold" value="View Options:"/>
+                                <p:selectBooleanCheckbox value ="#{clusterBean.noReorg}"/>
+                                <h:outputLabel style="font-weight: bold" value="Do not reorganize:"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel"  value="#{clusterBean.noOrgOpt}">
+                                    <f:selectItem itemLabel="Samples" itemValue="row" /> 
+                                    <f:selectItem itemLabel="Features" itemValue="col" /> 
+                                    <f:selectItem itemLabel="Both" itemValue="both" />                                 
+                                </p:selectOneMenu>
+                                <spacer></spacer>
+                                <spacer></spacer>
+                                <p:selectBooleanCheckbox value ="#{clusterBean.useTopFeature}"/>
+                                <h:panelGroup>
+                                    <h:outputLabel style="font-weight: bold" value="Use top:"/>
+                                    <p:inputText style="width:50px" value="#{clusterBean.topThresh}"/>
+                                </h:panelGroup>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{clusterBean.selectMethodOpt}">
+                                    <f:selectItem itemLabel="T-test / ANOVA" itemValue="tanova" /> 
+                                    <f:selectItem itemLabel="PLS-DA VIP" itemValue="vip" /> 
+                                    <f:selectItem itemLabel="Random Forest" itemValue="rf" />     
+                                </p:selectOneMenu>
+                                <spacer></spacer>
+                                <p:selectBooleanCheckbox value="#{clusterBean.drawBorders}" /> 
+                                <h:outputLabel style="font-weight: bold" value="Show cell borders"/>
+                                <p:spacer/>
+                                <spacer></spacer>
+                                <p:selectBooleanCheckbox value="#{clusterBean.grpAves}" /> 
+                                <h:outputLabel style="font-weight: bold" value="Show only group averages"/>
+                                <h:outputLabel style="font-weight: bold" value="Grouping Variable:"/>
+                                <spacer></spacer>
+                                <spacer></spacer>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" style="width:50%;" value="#{clusterBean.hmColumnName}">
+                                    <f:selectItems value="#{clusterBean.hmColumnOpts}" />
+                                </p:selectOneMenu>
+                                <h:outputLabel style="font-weight: bold" value="Sample Font Size"/>
+                                <p:inputText style="width:50px" value="#{clusterBean.hmFontSizeCol}"/>
+                                <h:outputLabel style="font-weight: bold" value="Feature Font Size"/>
+                                <p:inputText style="width:50px" value="#{clusterBean.hmFontSizeRow}"/>
+                    <!-- End of Graphics Center -->
+                        </h:panelGrid>
+                        <h:panelGrid columns="2" cellpadding="3" style="float: right"> 
+                            <p:commandButton value="Customize Graph"
+                                             styleClass="graphicsButton"
+                                             style="box-shadow: none !important; text-shadow: none !important;"
+                                             actionListener="#{sessionBean1.graphicsLnk_action('pca_pair')}" 
+                                            oncomplete="PF('graphApperanceHeat').show()"/>  
+                            <p:commandButton value="Update" 
+                                             styleClass="updateButton"
+                                             style="box-shadow: none !important; text-shadow: none !important"
+                                            onclick="PF('statusDialog').show()"
+                                            oncomplete="PF('statusDialog').hide()"  
+                                            update=":overviewHeat:form1:heatPane1  :cmdPane" 
+                                            actionListener="#{clusterBean.hmButton_action()}"/>                          
+                        </h:panelGrid>
+                        <h:panelGrid class="resultsBar" columns="2">
+                            <h:panelGroup>
+                                <h:panelGrid columns="1" style="text-align : left;">
+                                    Results
+                                </h:panelGrid>
+                            </h:panelGroup>                          
+                        </h:panelGrid>
+                        <h:panelGrid id="heatPane1" style="width: 100%;">
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('heatmap')}" alt="HeatMapimage"/>
+                            </h:panelGrid>                           
+
+                        </h:panelGrid>
+                    </h:form>
+                </p:tab>
+            </p:tabView>
+            <p:dialog modal="true" widgetVar="graphApperanceHeat" 
+                style="width: 400px; height:400px;" 
+                appendTo="@(body)" header="Graphics Center"
+                draggable="false" closable="true" resizable="false"> 
+                <ui:include src="_color_palette_heat.xhtml" />
+            </p:dialog>
+        </h:panelGrid>
+    </ui:define>
+</ui:composition>

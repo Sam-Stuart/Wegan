@@ -82,20 +82,20 @@ public class IndicesBean implements Serializable {
 
     
     // static dropdown
-    private final SelectItem[] margin; // in the view, need to present the options //application bean 
-    private String marginchosen = "NULL";
-            
-    public SelectItem[] getMargin() {
-        return margin;
-    }
-    
-    public String getMarginchosen() {
-        return marginchosen;
-    } 
-
-    public void setMarginchosen(String marginchosen) {
-        this.marginchosen = marginchosen;
-    }
+//    private final SelectItem[] margin; // in the view, need to present the options //application bean 
+//    private String marginchosen = "NULL";
+//            
+//    public SelectItem[] getMargin() {
+//        return margin;
+//    }
+//    
+//    public String getMarginchosen() {
+//        return marginchosen;
+//    } 
+//
+//    public void setMarginchosen(String marginchosen) {
+//        this.marginchosen = marginchosen;
+//    }
        
     
     private final SelectItem[] color;
@@ -111,6 +111,21 @@ public class IndicesBean implements Serializable {
 
     public void setColorchosen(String colorchosen) {
         this.colorchosen = colorchosen;
+    }
+    
+    private final SelectItem[] method;
+    private String methodchosen = "NULL";
+    
+    public SelectItem[] getMethod() {
+        return method;
+    }
+    
+    public String getMethodchosen() {
+        return methodchosen;
+    } 
+
+    public void setMethodchosen(String methodchosen) {
+        this.methodchosen = methodchosen;
     }
         
     
@@ -262,12 +277,19 @@ public class IndicesBean implements Serializable {
         this.filegammaresultpath = filegammaresultpath;
     }  
     
+    private String filerelativeresult = "Relative abundance.csv";
+    private String filerelativeresultpath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + filerelativeresult + "\">" + filerelativeresult + "</a>";
+    
+    public String getFilerelativeresultpath() {
+        return filerelativeresultpath;
+    }
+
+    public void setFilerelativeresultpath(String filerelativeresultpath) {
+        this.filerelativeresultpath = filerelativeresultpath;
+    }  
+    
    
-    public IndicesBean() {      
-        margin = new SelectItem[2];
-        margin[0] = new SelectItem("NULL", "1");
-        margin[1] = new SelectItem("2", "2");
-        
+    public IndicesBean() {    
         color = new SelectItem[6];
         color[0] = new SelectItem("NULL", "Skyblue");
         color[1] = new SelectItem("gray", "Gray");
@@ -283,17 +305,29 @@ public class IndicesBean implements Serializable {
         colorb[3] = new SelectItem("slateblue", "Slateblue");
         colorb[4] = new SelectItem("seagreen", "Seagreen");
         colorb[5] = new SelectItem("wheat", "Wheat");
+        
+        method = new SelectItem[10];
+        method[0] = new SelectItem("NULL", "Total");
+        method[1] = new SelectItem("max", "Max");
+        method[2] = new SelectItem("freq", "Frequence of non-zero items");
+        method[3] = new SelectItem("normalize", "Normalize");
+        method[4] = new SelectItem("range", "Range");
+        method[5] = new SelectItem("standardize", "Standardize");
+        method[6] = new SelectItem("pa", "Presence/absence scale");
+        method[7] = new SelectItem("chi.square", "Chi square");
+        method[8] = new SelectItem("hellinger", "Square root of 'total'");
+        method[9] = new SelectItem("log", "Logarithmic tranformation'");
     }
     
     
     // ACTION BUTTON // 
     public void indicesAlphaUpdate_action() {
-        DiversityUtils.CreateIndicesDiv(sb, doOriginal, groupColName, marginchosen);       
+        DiversityUtils.CreateIndicesDiv(sb, doOriginal, groupColName, methodchosen);       
         DiversityUtils.PlotAlphaDiversity(sb, colorchosen, sb.getNewImage("Alpha_Plot"), "png", 72, "false");
     }
     
     public void indicesBetaUpdate_action() {
-        DiversityUtils.CreateIndicesDiv(sb, doOriginal, groupColName, marginchosen);               
+        DiversityUtils.CreateIndicesDiv(sb, doOriginal, groupColName, methodchosen);               
         DiversityUtils.PlotBetaDiversity(sb, colorbchosen, sb.getNewImage("Beta_Plot"), "png", 72, "false");
     }
     

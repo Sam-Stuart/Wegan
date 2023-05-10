@@ -14,8 +14,10 @@
                 <p:panelGrid></p:panelGrid>
 
                 <h:outputLabel style="font-weight: bold" value="Point Color:"/>
-                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{svmCABean.corColorDotsOpts}">
-                    <f:selectItems value="#{applicationBean1.corLinColorDotsOpts}" />
+
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="has{polyCABean.corColorDotsOpts}">
+                    <f:selectItems value="hash{applicationBean1.corLinColorDotsOpts}" />
+
                 </p:selectOneMenu> 
                 
                 <h:outputLabel style="font-weight: bold" value="Line Color:"/>

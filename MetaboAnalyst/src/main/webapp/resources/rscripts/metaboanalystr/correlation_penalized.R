@@ -204,73 +204,78 @@
       ##fileName <- "ridge_regression_summary.txt" 
       #CROSS VALIDATION FOR PLOTTING
       cv <- glmnet::cv.glmnet(x = as.matrix(predictors_train), y = as.matrix(response_train), alpha=bestAlpha)
-      print("ridge: cv")
-     }
-     
-  # } else {
-  #   weights <- weights #Java upload weights as a vector of numeric values
-  #   
-  #   if (length(weights) == nrow(data)) { #There must be one weight for every row in the data set
-  #     if (method == "elastic net") {
-  #       
-  #       #Build model
-  #       params <- train(x=predictors_train, y=response_train, weights=weights, method="glmnet", 
-  #                       trControl=trainControl("cv", number=10), tuneLength=5) #testing variour parameters
-  #       model <- glmnet(as.matrix(predictors_train), as.matrix(response_train), alpha=params$bestTune$alpha, lambda=params$bestTune$lambda, 
-  #                       weights=weights, family="gaussian") #Build model with "best" parameters
-  #       bestLambda <- params$bestTune$lambda #Extract best parameters
-  #       bestAlpha <- params$bestTune$alpha
-  #       method <- "Elastic Net Regression"
-  #       
-  #       #File name for summary download
-  #       fileName <- "elastic_net_regression_summary.txt"
-  #       
-  #       #Cross validation results for plotting
-  #       cv <- cv.glmnet(x=as.matrix(predictors_train), y=as.matrix(response_train), alpha=bestAlpha)
-  #       
-  #     } else if (method == "lasso") {
-  #       
-  #       #Build model
-  #       lambda <- 10^seq(-3, 3, length = 100)
-  #       params <- train(predictors_train, response_train, weights=weights, method="glmnet", 
-  #                       trControl=trainControl("cv", number=10),
-  #                       tuneGrid = expand.grid(alpha=1, lambda=lambda)) #testing variour parameters
-  #       model <- glmnet(as.matrix(predictors_train), as.matrix(response_train), alpha=params$bestTune$alpha, lambda=params$bestTune$lambda, 
-  #                       weights=weights, family="gaussian") #Build model with "best" parameters
-  #       bestAlpha <- 1
-  #       bestLambda <- params$bestTune$lambda #Extract best parameter
-  #       method <- "Lasso Regression"
-  #       
-  #       #File name for summary download
-  #       fileName <- "lasso_regression_summary.txt"
-  #       
-  #       #Cross validation results for plotting
-  #       cv <- cv.glmnet(x=as.matrix(predictors_train), y=as.matrix(response_train), alpha=bestAlpha)
-  #       
-  #     } else {
-  #       
-  #       #Build model for ridge regression
-  #       lambda <- 10^seq(-3, 3, length = 100)
-  #       params <- train(predictors_train, response_train, weights=weights, method="glmnet", 
-  #                       trControl=trainControl("cv", number=10),
-  #                       tuneGrid = expand.grid(alpha=0, lambda=lambda)) #testing variour parameters
-  #       model <- glmnet(as.matrix(predictors_train), as.matrix(response_train), alpha=params$bestTune$alpha, lambda=params$bestTune$lambda, 
-  #                       weights=weights, family="gaussian")#Build model with "best" parameters
-  #       bestAlpha <- 0
-  #       bestLambda <- params$bestTune$lambda #Extract best parameter
-  #       method <- "Ridge Regression"
-  #       
-  #       #File name for summary download
-  #       fileName <- "ridge_regression_summary.txt" 
-  #       
-  #       #Cross validation results for plotting
-  #       cv <- cv.glmnet(x=as.matrix(predictors_train), y=as.matrix(response_train), alpha=bestAlpha)
-  #       
-  #     }
-  #   } else {
-  #     stop("The length of the weights vector does not equal the number of rows in the data set! Check that the weights vector is correct.") #Error msg 
-  #   }
-  # }
+      
+    }
+    
+  #} else {
+  #  weights <- weights #Java upload weights as a vector of numeric values
+  #  print(nrow(weights))
+  #  print(nrow(data))
+  #  if (nrow(weights) == nrow(data)) { #There must be one weight for every row in the data set
+  #    if (method == "elastic net") {
+  #      
+  #      #Build model
+  #      params <- train(x=predictors_train, y=response_train, weights=weights, method="glmnet", 
+  #                      trControl=trainControl("cv", number=10), tuneLength=5) #testing variour parameters
+  #      model <- glmnet(as.matrix(predictors_train), as.matrix(response_train), alpha=params$bestTune$alpha, lambda=params$bestTune$lambda, 
+  #                      weights=weights, family="gaussian") #Build model with "best" parameters
+  #      bestLambda <- params$bestTune$lambda #Extract best parameters
+  #     bestAlpha <- params$bestTune$alpha
+  #      method <- "Elastic Net Regression"
+  #      
+  #      #File name for summary download
+  #      fileName <- "elastic_net_regression_summary.txt"
+  #      
+  #      #Cross validation results for plotting
+  #      cv <- cv.glmnet(x=as.matrix(predictors_train), y=as.matrix(response_train), alpha=bestAlpha)
+  #      
+  #    } else if (method == "lasso") {
+  #      
+  #      #Build model
+  #      lambda <- 10^seq(-3, 3, length = 100)
+  #      params <- train(predictors_train, response_train, weights=weights, method="glmnet", 
+  #                      trControl=trainControl("cv", number=10),
+  #                      tuneGrid = expand.grid(alpha=1, lambda=lambda)) #testing variour parameters
+  #      model <- glmnet(as.matrix(predictors_train), as.matrix(response_train), alpha=params$bestTune$alpha, lambda=params$bestTune$lambda, 
+  #                      weights=weights, family="gaussian") #Build model with "best" parameters
+  #      bestAlpha <- 1
+  #      bestLambda <- params$bestTune$lambda #Extract best parameter
+  #      method <- "Lasso Regression"
+  #      
+  #      #File name for summary download
+  #      fileName <- "lasso_regression_summary.txt"
+  #      
+  #      #Cross validation results for plotting
+  #      cv <- cv.glmnet(x=as.matrix(predictors_train), y=as.matrix(response_train), alpha=bestAlpha)
+  #      
+  #    } else {
+  #      print("ridge")
+  #      #Build model for ridge regression
+  #      lambda <- 10^seq(-3, 3, length = 100)
+  #      params <- train(predictors_train, response_train, weights=weights, method="glmnet", 
+  #                      trControl=trainControl("cv", number=10),
+  #                      tuneGrid = expand.grid(alpha=0, lambda=lambda)) #testing variour parameters
+  #      print("after param")
+  #      model <- glmnet(as.matrix(predictors_train), as.matrix(response_train), alpha=params$bestTune$alpha, lambda=params$bestTune$lambda, 
+  #                      weights=weights, family="gaussian")#Build model with "best" parameters
+  #      print("after model")
+  #      bestAlpha <- 0
+  #      bestLambda <- params$bestTune$lambda #Extract best parameter
+  #      method <- "Ridge Regression"
+  #      
+  #      #File name for summary download
+  #      fileName <- "ridge_regression_summary.txt" 
+  #      
+  #      #Cross validation results for plotting
+  #      cv <- cv.glmnet(x=as.matrix(predictors_train), y=as.matrix(response_train), alpha=bestAlpha)
+  #      
+  #    }
+  #  } else {
+  #    stop("The length of the weights vector does not equal the number of rows in the data set! Check that the weights vector is correct.") #Error msg 
+  #  }
+  #}
+
+
   
   cat("The", method1, " model was optimized using alpha = ", bestAlpha, " and lambda = ", bestLambda, ".", sep="") #Text will be visible to user.
 

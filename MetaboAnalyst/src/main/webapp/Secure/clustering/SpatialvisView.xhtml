@@ -1,0 +1,142 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_anal_template.xhtml">
+    <ui:define name="metaInfo">
+        <f:event type="preRenderView" listener="#{analBean.performDefaultAnalysis('Spatialvis')}"/> 
+        <f:event type="preRenderView" listener="#{downloader.setupDownloadTable()}"/>
+    </ui:define>
+    <ui:define name="content">
+        <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
+            <p:tabView id="spatialvis">
+                <p:tab title ="Spatial Visualization" titleStyleClass="p-tab-nav">
+                    <h:form id="form1">
+                        <p>
+                            Retrieve raster map tiles from Stamen or Google map services based on uploaded spatial data. Click "return elevation" 
+                        to retrieve elevation of each spatial data point. Fill in zooming in and mapping range scale to adjust available mapping tiles.
+                        When zoom in and mapping range scale increase, the map loading time increases as well as more information is required and needs to be downloaded from online map service. 
+                        </p>
+                        <p>
+                            If the uploaded spatial data is in Universal Transverse Mercator coordinate system, please 1. select "UTM" in the "Is your data recorded as longitude and latitude" option; 
+                        2. select "Manually fill in CRS code" in "Which UTM zone was your data collected?" or select "10TM" if your data was collected in Alberta 10TM zone (Alberta, Canada); 
+                        3. type in the specific epsg code matching to the UTM zone which your data were collected in "Fill in espg code of one UTM zone", or leave "Fill in espg code of one UTM zone" blank,
+                        if your data was collected in Alberta 10TM.
+                        </p> 
+                        <p>
+                            To fit raster map tiles from Stamen and Google map services, the reference coordinate system of the uploaded spatial data has to be written in World Geodetic System (WGS84). 
+                        If your data is recorded as longitude and latitude but written in North American Datum of 1983 (NAD83), select "NAD83" in "Is your data recorded in WGS84?"
+                        </p>
+                        <p>
+                            Both categorical and numerical variables can be plotted on the map tiles. Please select designated variable name to be plotted as 1. point; 2. polygon and 3. path on the map.
+                        </p>
+                        <p>
+                            Point size, path width, point and polygon border color can be adjusted using "Customize Graph" button.
+                        </p>                   
+                        <h:panelGrid id="panelGrid" columns="4" cellpadding="0" columnClasses="colLeft, colRight">
+                            <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
+                            <p:selectBooleanCheckbox value ="#{clusterBean.doOriginal}"/>
+                            <h:outputLabel style="font-weight: bold" value="Return elevation:"/>
+                            <p:selectBooleanCheckbox value ="#{clusterBean.doEle}"/>
+                            <h:outputLabel style="font-weight: bold" value="Fill in zooming in scale:"/>
+                            <p:inputText value = "#{clusterBean.zoom}"/>
+                            <h:outputLabel style="font-weight: bold" value="Fill in mapping range scale:"/>
+                            <p:inputText value = "#{clusterBean.rangeA}"/>
+                            <h:outputLabel style="font-weight: bold" value="Fill in espg code of one UTM zone:"/>
+                            <p:inputText value = "#{clusterBean.crs_txt}"/>
+                            <h:outputLabel style="font-weight: bold" value="Is your data recorded as longitude and latitude?"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{clusterBean.projchosen}">
+                                    <f:selectItems value="#{clusterBean.proj}"/>
+                                </p:selectOneMenu> 
+                            <h:outputLabel style="font-weight: bold" value="Is your data recorded in WGS84?"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{clusterBean.datumchosen}">
+                                    <f:selectItems value="#{clusterBean.datum}"/>
+                                </p:selectOneMenu> 
+                            <h:outputLabel style="font-weight: bold" value="Which UTM zone was your data collected?"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{clusterBean.crs_optionchosen}">
+                                    <f:selectItems value="#{clusterBean.crs_option}"/>
+                                </p:selectOneMenu> 
+                            <h:outputLabel style="font-weight: bold" value="Select map source:"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{clusterBean.sourcechosen}">
+                                    <f:selectItems value="#{clusterBean.source}"/>
+                                </p:selectOneMenu> 
+                            <h:outputLabel style="font-weight: bold" value="Select map type:"/>
+                                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{clusterBean.maptypechosen}">
+                                    <f:selectItems value="#{clusterBean.maptype}"/>
+                                </p:selectOneMenu>                            
+                            <h:outputLabel style="font-weight: bold" value="Select a particular variable to be presented as point on map:"/>
+                                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{clusterBean.pointColName}">
+                                        <f:selectItems value="#{clusterBean.pointColOpts}" />
+                                    </p:selectOneMenu>
+                            <h:outputLabel style="font-weight: bold" value="Select a particular variable to be presented as polygon on map:"/>
+                                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{clusterBean.polygonColName}">
+                                        <f:selectItems value="#{clusterBean.polygonColOpts}" />
+                                    </p:selectOneMenu>
+                            <h:outputLabel style="font-weight: bold" value="Select a particular variable to be presented as path on map:"/>
+                                    <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{clusterBean.pathColName}">
+                                        <f:selectItems value="#{clusterBean.pathColOpts}" />
+                                    </p:selectOneMenu>
+                            
+                        </h:panelGrid>  
+                        <h:panelGrid id="panelGrid4" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
+                            <p:commandButton value="Update" 
+                                             styleClass="updateButton"
+                                             style="box-shadow: none !important; text-shadow: none !important"
+                                            onclick="PF('statusDialog').show()"
+                                            oncomplete="PF('statusDialog').hide()"  
+                                            update=":spatialvis:form1:spatialvisPane1  :cmdPane" 
+                                            actionListener="#{clusterBean.spatialvisUpdate_action()}"/>                          
+                            <p:commandButton value="Customize Graph"
+                                             styleClass="graphicsButton"
+                                             style="box-shadow: none !important; text-shadow: none !important;"
+                                             actionListener="#{sessionBean1.graphicsLnk_action('pca_pair')}" 
+                                             oncomplete="PF('graphApperanceSpatialvis').show()"/> 
+                        </h:panelGrid>
+                        <h:panelGrid class="resultsBar" columns="2">
+                            <h:panelGroup>
+                                <h:panelGrid columns="1" style="text-align : left;">
+                                    Results
+                                </h:panelGrid>
+                            </h:panelGroup> 
+                            <h:panelGroup>
+                                <h:panelGrid columns="3" class="resultsImages">
+                                    <i class="fa fa-question-circle"></i>
+                                </h:panelGrid>
+                            </h:panelGroup>                            
+                        </h:panelGrid>
+                        <h:panelGrid id="spatialvisPane1" style="width: 100%;">
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
+                                    <h:outputText escape="false" value="#{clusterBean.fileeleresultpath}"/>
+                                </i>
+<!--                                // padding  -->
+                            </h:panelGrid>
+                            <p>
+                            </p>
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <p:commandButton value="Export"
+                                    styleClass="exportButton"
+                                    style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                    actionListener="#{sessionBean1.graphicsLnk_action('ggmap')}"
+                                    oncomplete="PF('graphDialog').show()"/>
+                            </h:panelGrid> 
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('ggmap')}" alt="TestPlot"/>
+                            </h:panelGrid>                            
+                        </h:panelGrid> 
+                    </h:form>
+                </p:tab>
+            </p:tabView>
+            <p:dialog modal="true" widgetVar="graphApperanceSpatialvis" 
+                style="width: 400px; height:400px;" 
+                appendTo="@(body)" header="Graphics Center"
+                draggable="false" closable="true" resizable="false"> 
+                <ui:include src="_color_palette_spatialvis.xhtml" />
+           </p:dialog>
+        </h:panelGrid>
+        
+    </ui:define>
+</ui:composition>

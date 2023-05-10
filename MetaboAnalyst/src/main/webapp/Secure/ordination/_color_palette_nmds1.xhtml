@@ -23,7 +23,7 @@
                     <f:selectItems value="#{ordNMDSBean.nmdsMetaColumnOpts}" />
                 </p:selectOneMenu> 
                 
-                <h:outputLabel style="font-weight: bold" value="Color Palette:"/>
+                <h:outputLabel style="font-weight: bold" value="Color Pallet:"/>
                 <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordNMDSBean.ordColorOpts}">
                     <f:selectItems value="#{applicationBean1.ordColorPaletteOpts}" />
                 </p:selectOneMenu> 
@@ -47,8 +47,8 @@
             </h:panelGrid>
             <h:panelGrid id="panelGrid2" columns="1" cellpadding="5" style="float: right">
                 <p:commandButton value="Update" 
-                                 styleClass="updateButton"
-                                 style="box-shadow: none !important; text-shadow: none !important"
+                                styleClass="updateButton"
+                                style="box-shadow: none !important; text-shadow: none !important"
                                 onclick="PF('statusDialog').show()"
                                 oncomplete="PF('graphApperanceNMDS').hide(); PF('statusDialog').hide()"  
                                 update=":NMDS:form1:nmdsPane1  :cmdPane" 

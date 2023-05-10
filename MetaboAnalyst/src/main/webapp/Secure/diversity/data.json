@@ -1,0 +1,25 @@
+[{    
+    "name": "HTML5/CSS3",    
+    "Vote": 65,    
+    "rating": 2    
+},    
+{    
+    "name": "JavaScript",     
+    "Vote": 60,    
+    "rating": 3    
+},    
+{    
+    "name": "Java",     
+    "Vote": 60,    
+    "rating": 4    
+},     
+{    
+    "name": "C#",     
+    "Vote": 80,    
+    "rating": 1    
+},     
+{    
+    "name": "SQL",    
+    "Vote": 55,    
+    "rating": 5    
+}]

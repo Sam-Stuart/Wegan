@@ -19,6 +19,7 @@ import metaboanalyst.rwrappers.SigVarSelect;
 import metaboanalyst.rwrappers.UniVarTests;
 import metaboanalyst.rwrappers.Ordiantion;
 import metaboanalyst.rwrappers.DispersalUtils;
+import metaboanalyst.rwrappers.DiversityUtils;
 import metaboanalyst.utils.DataUtils;
 
 /**
@@ -83,12 +84,20 @@ public class AnalysisBean implements Serializable {
                     case "SVM":
                         doDefaultSVM();
                         break;
-                    case "DCA":
-                        doDefaultDCA();
-                        break; 
-                    case "Diversity":
-                        doDefaultDiversity();
-                    break; 
+                    case "Spatialvis":
+                        doDefaultSpatialvis();
+                    break;
+
+//                    case "DCA":
+//                        doDefaultDCA();
+//                        break; 
+//                    case "Diversity":
+//                        doDefaultDiversity();
+//                        break; 
+//                    case "Ggmap":
+//                        doDefaultGgmap();
+//                        break;
+
                 }
             }
         }
@@ -139,7 +148,7 @@ public class AnalysisBean implements Serializable {
 //        ChemoMetrics.PlotPCALoading(sb, sb.getCurrentImage("pca_loading"), "png", 72, 1, 2, "scatter", 1);  // setLoadingTable(pcImpInx);
 //        ChemoMetrics.PlotPCABiplot(sb, sb.getCurrentImage("pca_biplot"), "png", 72, 1, 2);
         // ChemoMetrics.PlotPCA3DScore(sb, sb.getCurrentImage("pca_score3d"), "png", 72, 1, 2, 3, 40);
-        ChemoMetrics.PlotPCA3DScore(sb, sb.getCurrentImage("pca_score3d"), "json", 72, 1, 2, 3);
+        ChemoMetrics.PlotPCA3DScore(sb, sb.getCurrentImage("pca_score3d"), "json", "NULL", "NULL");
     }
 
     //--------------------------------------------------------------------------------------------------
@@ -206,11 +215,17 @@ public class AnalysisBean implements Serializable {
     }
 
     private void doDefaultDendrogram() {
-        Clustering.PlotClustTree(sb, sb.getCurrentImage("tree"), "png", 72, "euclidean", "ward.D");
+        Clustering.PlotClustTree(sb, false, sb.getCurrentImage("tree"), 
+                                "png", 72, "euclidean", "ward.D",
+                                false, false, "NULL", 
+                                " ", " ", "NULL");
     }
 
     private void doDefaultHmClust() {
-        Clustering.PlotHeatMap(sb, sb.getCurrentImage("heatmap"), "png", 72, "norm", "row", "euclidean", "ward.D", "bwm", "overview", "T", "T", "T", "F");
+        Clustering.PlotHeatMap(sb, sb.getCurrentImage("heatmap"), "png", 
+                                72, false, "row", "euclidean", 
+                                "ward.D", "bwm", "overview", "T", 
+                                "T", "T", "F", "NULL", "NULL", 8, 8);
     }
 
     private void doDefaultKmeanClust() {
@@ -220,7 +235,13 @@ public class AnalysisBean implements Serializable {
     private void doDefaultSOMClust() {
         Clustering.PlotSOM(sb, sb.getCurrentImage("som"), "png", 72, 1, 3, "linear", "gaussian");
     }
-
+    
+    private void doDefaultSpatialvis(){
+        System.out.print("INSIDE FD"); 
+        Clustering.CreateSpatialvis(sb, false, "NULL", "", "NULL", "NULL", "", "NULL", "NULL", "", false, "NULL", "NULL", "", "", "NULL", "NULL", "NULL", false, sb.getCurrentImage("ggmap"), "png", 72, "false");
+        System.out.print("AFTER FD");
+    }
+    
     private void doDefaultRF() {
         Classifying.InitRF(sb, 500, 7, 1);
         Classifying.PlotRFClassication(sb, sb.getCurrentImage("rf_cls"), "png", 72);
@@ -234,18 +255,17 @@ public class AnalysisBean implements Serializable {
         Classifying.PlotSVMSigCmpds(sb, sb.getCurrentImage("svm_imp"), "png", 72);
     }
     
-    private void doDefaultDCA() {       
-        
-        Ordiantion.InitDCA(sb);
-        
-    }
-    
-    private void doDefaultDiversity() {       
-        
-        Ordiantion.InitDiversity(sb);
-        
-    }
     
     
+    
+//    private void doDefaultGgmap(){
+////        if (!DiversityUtils.CreateRarefactionDiv(sb, false, "test", "test", false, "test")){
+////            RConnection RC = sb.getRConnection();
+////            sb.updateMsg("Error", RDataUtils.getErrMsg(RC));
+////        }
+//        System.out.print("INSIDE FD"); 
+//        Clustering.CreateGGMap(sb, false, "NULL", "NULL", "", "NULL", "", "NULL", false, sb.getCurrentImage("ggmap"), "png", 72, "false");
+//        System.out.print("AFTER FD");
+//    }
     
 }

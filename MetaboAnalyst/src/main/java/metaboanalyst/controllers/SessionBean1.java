@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.util.Map;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -114,6 +115,7 @@ public class SessionBean1 implements Serializable {
     public String getPath2() {
         String y = ab.getRootContext() + getCurrentUser().getRelativeDir();
         //String x = ab.getRootContext();
+        
         return y;
         //return usualPath + tmpPath;
     }

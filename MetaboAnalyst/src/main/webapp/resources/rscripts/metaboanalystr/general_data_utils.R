@@ -344,8 +344,10 @@ GetRCommandHistory <- function(mSetObj=NA){
 #}
 
 Read.TextData <- function(mSetObj=NA, filePath, dataFormat="rowu", lbl.type="disc", dataNames="colOnly"){
-load_dplyr()  
-mSetObj <- .get.mSet(mSetObj);
+
+  load_dplyr()  
+  mSetObj <- .get.mSet(mSetObj);
+
   mSetObj$dataSet$cls.type <- lbl.type;
   mSetObj$dataSet$format <- dataFormat;
 
@@ -374,14 +376,19 @@ mSetObj <- .get.mSet(mSetObj);
   if(substring(dataFormat,1,3)=="row"){ # sample in row
     msg<-c(msg, paste0("&emsp;&emsp;&emsp;&emsp;", "- Samples in rows and variables in columns."));
     smpl.nms <- rownames(dat);
+    print(smpl.nms)
     all.nms <- colnames(dat);
+    print(all.nms)
     cls.lbl <- smpl.nms;
     facA <- dat[,1];
+    print(facA)
     facA.lbl <- all.nms[1];
     facB <- dat[,2];
+    print(facB)
     facB.lbl <- all.nms[2];
     var.nms <- all.nms;
     dat1 <- dat;
+    print(dat1)
   }else{ # sample in col
     msg<-c(msg, paste0("<ul>", "- Samples in columns and variables in rows.", "</ul>"));
     all.nms <- rownames(dat);
@@ -524,6 +531,47 @@ Read.TextDataMeta <- function(mSetObj=NA, filePath, metaFormat="rowu", lbl.type=
   return(.set.mSet(mSetObj));
 }
 
+
+#'
+Read.TextDataTax <- function(mSetObj=NA, filePath, taxFormat="rowu", lbl.type="disc", taxNames="colOnly"){
+  mSetObj <- .get.mSet(mSetObj);
+  
+  if (taxNames=="colOnly") { #yes column names, no row names
+    dat <- .readTaxDataTable(filePath, taxNames="colOnly");
+  } else if (taxNames=="rowOnly") { #no col names, yes row names
+    dat <- .readTaxDataTable(filePath, taxNames="rowOnly"); 
+  } else if (taxNames=="bothNames") { #yes col names, yes row names
+    dat <- .readTaxDataTable(filePath, taxNames="bothNames");
+  } else { #no col names, no row names
+    dat <- .readTaxDataTable(filePath, taxNames="noNames");
+  }
+
+  if(class(dat) == "try-error" || ncol(dat) == 0){
+    AddErrMsg("Data format error. Failed to read in the data!
+                /nMake sure the data table is saved in tab separated values (.txt) or comma separated values (.csv) format.
+                /nPlease also check the following:
+                /n/tBoth sample and variable names must in UTF-8 encoding.
+                /n/tMake sure sample names and variable names are unique.
+                /n/tMissing values should be blank or NA without quote.");
+    return(0);
+  }
+
+  if(substring(taxFormat,1,3)=="row"){ # sample in row
+    dat1 <- dat;
+  }else{ # sample in col
+    dat1<-as.data.frame(t(dat));
+  }
+  
+  mSetObj$dataSet$origTax <- dat1;
+  lbls.tax <- as.data.frame(c(1:nrow(mSetObj$dataSet$origTax)))
+  colnames(lbls.tax) <- c("Sample")
+  orig.tax<-cbind(lbls.tax, mSetObj$dataSet$origTax);
+  write.csv(orig.tax, file="data_grouping.csv", row.names=FALSE); 
+
+  return(.set.mSet(mSetObj));
+}
+
+
 #'
 Read.TextDataEnv <- function(mSetObj=NA, filePath, envFormat="rowu", lbl.type="disc", envNames="colOnly"){
   mSetObj <- .get.mSet(mSetObj);
@@ -563,6 +611,14 @@ Read.TextDataEnv <- function(mSetObj=NA, filePath, envFormat="rowu", lbl.type="d
   return(.set.mSet(mSetObj));
 }
 
+Read.TextDataWeight <- function(mSetObj=NA, filePath, format="colu", lbl.type="disc"){
+  
+  mSetObj <- .get.mSet(mSetObj);
+  dat <- .readDataTable(filePath);
+  mSetObj$dataSet$origWeight <- dat; # copy to be processed in the downstream
+  dat <- NULL;
+  return(.set.mSet(mSetObj));
+}
 
 #'Read peak list files
 #'@description This function reads peak list files and fills the data into a dataSet object.  

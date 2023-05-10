@@ -25,6 +25,7 @@ PCA.Anal <- function(mSetObj=NA, origData="false"){
   num_data <- select_if(data, is.numeric)
   colNamesNum <- colnames(num_data)
   rowNamesNum <- rownames(num_data)
+  char_data <- select_if(data, is.factor) #Any categorical data will be used for grouping
 
   #Obtain all data
   all_data <- num_data
@@ -35,8 +36,16 @@ PCA.Anal <- function(mSetObj=NA, origData="false"){
 
   #meta data, used to group samples using colors
   if (is.data.frame(metaData)==FALSE) { #No user uploaded meta data
-    metaData1 <- "NA" #If species data had no categorical columns, meta data is NULL
-    print("No grouping variables were uploaded!")  
+    if (ncol(char_data) >= 1) { #If species data had at least one categorical column, call it meta data
+      metaData1 <- as.data.frame(char_data)
+      for(i in 1:ncol(metaData1)) {
+        metaData1[,i] <- as.factor(metaData1[,i]) #Make sure all columns are read as factors
+      }
+    } else {
+      metaData1 <- "NA" #If species data had no categorical columns, meta data is NA
+      #AddErrMsg("No groupings columns were detected. If this is a mistake, make sure that groupings columns use characters and not numbers. For example, instead ofgrouping data using 1, 2, and 3, use I, II and III.")
+      print("No groupings columns were detected! If this is a mistake, make sure that groupings columns use characters and not numbers. For example, instead of grouping data using 1, 2, and 3, use I, II and III.")
+    }
   } else {  #User uploaded meta data
     metaData1 <- metaData #User uploaded like weights in correlation module
     if (nrow(metaData1)!=nrow(data)) {
@@ -525,47 +534,56 @@ PlotPCA2DScore <- function(mSetObj=NA, ellipse="false", var_arrows="false", env_
 #'@param inx3 Numeric, indicate the number of the principal component for the z-axis of the loading plot.
 #'@export
 #'
-PlotPCA3DScore <- function(mSetObj=NA, imgName, format="json", inx1, inx2, inx3){
-  options(error=traceback)
-  print("INSIDE")
+PlotPCA3DScore <- function(mSetObj=NA, imgName, format="json", color="NULL", meta_col_color="NULL"){
   library("RJSONIO")
-  mSetObj <- .get.mSet(mSetObj);
+  mSetObj <- .get.mSet(mSetObj)
+  
+  metaData <- mSetObj$analSet$pca$metaData
+
+  if (is.data.frame(metaData)==FALSE || meta_col_color=="No groupings" || color=="none") { #no metaData or no metaData groupings
+    cols <- rep("#000000", nrow(mSetObj$dataSet$norm))
+    colorData <- data.frame(V1=rep(NA, nrow(mSetObj$dataSet$norm)), color=cols)
+  } else {
+    #Set up meta data column to use for colors
+    if (meta_col_color=="NULL") { 
+      meta_col_color_data_frame <- as.data.frame(as.factor(metaData[,1])) #Default meta data column for labeling with color is the first
+      meta_col_color_data <- as.factor(metaData[,1])
+      meta_col_color_name <- colnames(metaData)[1]
+    } else {
+      meta_col_color_data_frame <- as.data.frame(as.factor(metaData[,meta_col_color])) #User inputted meta data column for labeling with colors, options given to java using function meta.columns() below
+      meta_col_color_data <- as.factor(metaData[,meta_col_color])
+      meta_col_color_name <- meta_col_color
+    }
+    
+    #Color options
+    n <- length(levels(meta_col_color_data)) #Determine how many different colors are needed based on the levels of the meta data
+    if (color=="NULL") {
+      colors <- viridis(n)#Assign a color to each level using the viridis pallete (viridis package)
+    } else if (color=="plasma") {
+      colors <- plasma(n+1)#Assign a color to each level using the plasma pallete (viridis package)
+    } else if (color=="grey") {
+      colors <- grey.colors(n, start=0.1, end=0.75) #Assign a grey color to each level (grDevices package- automatically installed)
+    } 
+    assignment <- data.frame(color = colors, meta_col_name = levels(meta_col_color_data))
+    colnames(meta_col_color_data_frame) <- meta_col_color_name
+    colorData <- merge(meta_col_color_data_frame, assignment, by.x = meta_col_color_name, by.y="meta_col_name")
+    cols <- colorData$color
+  }
   
   pca <-  mSetObj$analSet$pca$res.pca;
   pca3d <- list();
-  pca3d$score$axis <- paste("PC", c(inx1, inx2, inx3), " (", 100*round( mSetObj$analSet$pca$variance[c(inx1, inx2, inx3)], 3), "%)", sep="");
-  coords <- data.frame(t(signif(pca$x[,c(inx1, inx2, inx3)], 5)));
-  colnames(coords) <- NULL;
-  pca3d$score$xyz <- coords;
-  pca3d$score$name <- rownames(mSetObj$dataSet$norm);
-  
-  if(mSetObj$dataSet$type.cls.lbl=="integer"){
-    cls <- as.character(sort(as.factor(as.numeric(levels(mSetObj$dataSet$cls))[mSetObj$dataSet$cls])));
-  }else{
-    cls <- as.character(mSetObj$dataSet$cls);
-  }
-  
-  if(all.numeric(cls)){
-    cls <- paste("Group", cls);
-  }
-  
-  pca3d$score$facA <- cls;
-  #print(pca3d$score$facA)
-  # now set color for each group
-  cols <- unique(GetColorSchema(mSetObj));
-  #print(cols)
-  rgbcols <- col2rgb(cols);
-  cols <- apply(rgbcols, 2, function(x){paste("rgb(", paste(x, collapse=","), ")", sep="")})
-  pca3d$score$colors <- cols;
-  #print(pca3d$score$colors)
+  pca3d$main <- "Principal Component Analysis" #title
+  pca3d$axis <- paste("PC", c(1, 2, 3), " (", 100*round( mSetObj$analSet$pca$variance[c(1, 2, 3)], 3), "%)", sep=""); #axis titles
+  pca3d$points$coords <- data.frame(signif(pca$x[,c(1, 2, 3)], 5)); #data points (PC1=x dimension, PC2=y dimension, PC3=z dimension)
+  pca3d$points$cols <- cols #colors
+  pca3d$points$names <- rownames(mSetObj$dataSet$norm) #sample names
+  pca3d$points$categories <- colorData[,1] #grouping categories
+
   imgName = paste(imgName, ".", format, sep="");
-  print("BEFORE JSON")
   json.obj <- RJSONIO::toJSON(pca3d, .na='null');
   sink(imgName);
   cat(json.obj);
   sink();
-
-  print("AFTER JSON OBJECT")
   
   if(!.on.public.web){
     return(.set.mSet(mSetObj));

@@ -71,8 +71,32 @@ public class RDataUtils {
             System.out.println(rse);
             return false;
         }
+    }
+
+    public static boolean readTextDataWeight(RConnection RC, String filePath, String format, String lblType) {
+        try {
+            String rCommand = "Read.TextDataWeight(NA, \"" + filePath + "\", \"" + format + "\", \"" + lblType + "\");";
+            String rCommand2 = "Read.TextDataWeight(NA, \"" + "Replacing_with_your_file_path" + "\", \"" + format + "\", \"" + lblType + "\");";
+            RCenter.recordRCommand(RC, rCommand2);
+            return (RC.eval(rCommand).asInteger() == 1);
+        } catch (Exception rse) {
+            System.out.println(rse);
+            return false;
+        }
     }    
 
+    public static boolean readTextDataTax(RConnection RC, String filePath, String taxFormat, String lblType, String taxNames) {
+        try {
+            String rCommand = "Read.TextDataTax(NA, \"" + filePath + "\", \"" + taxFormat + "\", \"" + lblType + "\", \"" + taxNames + "\");";
+            String rCommand2 = "Read.TextDataTax(NA, \"" + "Replacing_with_your_file_path" + "\", \"" + taxFormat + "\", \"" + lblType + "\", \"" + taxNames + "\");";
+            RCenter.recordRCommand(RC, rCommand2);
+            return (RC.eval(rCommand).asInteger() == 1);
+        } catch (Exception rse) {
+            System.out.println(rse);
+            return false;
+        }
+    } 
+        
     public static boolean readTextDataEnv(RConnection RC, String filePath, String envFormat, String lblType, String envNames) {
         try {
             String rCommand = "Read.TextDataEnv(NA, \"" + filePath + "\", \"" + envFormat + "\", \"" + lblType + "\", \"" + envNames + "\");";
@@ -84,6 +108,7 @@ public class RDataUtils {
             return false;
         }
     }
+
     
     //should be in the same directory format specify sample in row or column
     public static boolean readPeakListData(RConnection RC, String filePath) {
@@ -418,6 +443,19 @@ public class RDataUtils {
     public static String autoNormalize(RConnection RC) {
         try {
             String rCommand = "BestNormalize(NA)";
+            RCenter.recordRCommand(RC, rCommand);
+            return RC.eval(rCommand).asString();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    
+    
+    //retrieve best noramlization method name
+    public static String extractBestNormName(RConnection RC) {
+        try {
+            String rCommand = "extractBestNorm(NA)";
             RCenter.recordRCommand(RC, rCommand);
             return RC.eval(rCommand).asString();
         } catch (Exception e) {
