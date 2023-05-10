@@ -176,17 +176,18 @@ The [website](https://www.rdocumentation.org/packages/brranching/versions/0.7.0/
 
 
 # Try phylocomr R package as an alternative 
-# taxa_file <- system.file("examples/taxa", package = "phylocomr")  
-# phylo_file <- system.file("examples/phylo", package = "phylocomr") 
-# taxa_str <- readLines(taxa_file)
+taxa_file <- system.file("examples/taxa", package = "phylocomr")
+phylo_file <- system.file("examples/phylo", package = "phylocomr")
+taxa_str <- readLines(taxa_file)
 # Phylogeny as a newick string 
-# phylo_str <- readLines(phylo_file) 
+phylo_str <- readLines(phylo_file)
 
 # Help documetion of ph_phylomatic provides more useful information 
-# ph_tree <- ph_phylomatic(taxa = taxa_str, phylo = phylo_str) 
-# plot(read.tree(text = ph_tree)) # Success! 
+ph_tree <- ph_phylomatic(taxa = taxa_str, phylo = phylo_str)
+plot(read.tree(text = ph_tree)) # Success!
+```
 
-
+```{r}
 # Try taxize 
 spnames <- c('Quercus robur', 
              'Iris oratoria', 
@@ -198,7 +199,6 @@ spnames <- c('Quercus robur',
 out <- taxize::classification(spnames, db='itis') 
 tr <- taxize::class2tree(out)
 plot(tr)
-
 
 ```
 

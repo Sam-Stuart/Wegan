@@ -145,13 +145,13 @@ taxa_data_df <- obj$data$tax_data
 taxa_data_df1 <- taxa_data_df %>% 
     rownames_to_column("input_index") %>% 
     mutate(input_index = as.integer(input_index)) %>% 
-    left_join(species_table2, by = "input_index")  
+    left_join(species_table2, by = "input_index") 
 
 # Reshape table for the following plotting purpose 
 taxa_data_df1_long <- taxa_data_df1 %>% 
     gather(key = "tax_rank", 
            value = "tax_name", 
-           -c(1:54))  
+           -c(1:52))  
 ```
 
 
@@ -301,16 +301,20 @@ First, reproduce the above pie chart with stacked bar plot.
 
 # Subset phylum level, and add up count per taxon (instead of per sample)
 phylum_sumCount <- taxa_data_df1_long %>% 
-    dplyr::filter(tax_rank == "p_") %>% 
-    gather(key = "sample_id", 
+  dplyr::filter(tax_rank == "p_") %>% 
+  gather(key = "sample_id", 
            value = "count", 
-           -c(1:4, 55:56)) %>% 
-    group_by(sample_id, # Aggregate counts per taxon 
-             tax_name) %>% 
-    summarise(count_perTaxon =  sum(count), 
-              .groups = "drop") 
+           -c(1:2, 53:54),
+           na.rm = TRUE) %>% 
+  group_by(sample_id, # Aggregate counts per taxon 
+           tax_name) %>% 
+  summarise(count_perTaxon = sum(count), 
+            .groups = "drop") 
+    
+```
 
 
+```{r}
 # Merge the above table with environmental variables by sample_id 
 phylum_sumCount2 <- phylum_sumCount %>% 
     left_join(hmp_samples, by = "sample_id") 
@@ -361,7 +365,17 @@ level_order <- phylum_sumCount4 %>%
 phylum_sumCount3$tax_name <- factor(phylum_sumCount3$tax_name,
                                      levels = taxa_oder) 
 
+# Define levels of the environmental groups 
+phylum_sumCount3 <- phylum_sumCount3 %>% 
+  mutate(sex = as.factor(sex)) 
 
+# Sample sizes of faceted plots (environmental groupings, eg sex)
+sampleSize_df <- table(phylum_sumCount3$sex) %>% as.data.frame()
+
+
+```
+
+```{r}
 # Stacked bar plot at phylum level with percentage labels 
 stackBarPlot<- ggplot(phylum_sumCount3, 
        aes(x = factor(sample_id, level = level_order),
@@ -406,6 +420,9 @@ stackBarPlot1 <- stackBarPlot +
     xlab("") +
     ylab("") +
     scale_y_continuous(labels = scales::percent)  # Axis label include % sign
+
+# labels <- c(Female = "Women", Male = "Men")
+# sp + facet_grid(. ~ sex, labeller=labeller(sex = labels))
     
 stackBarPlot1 # Print plot
 
