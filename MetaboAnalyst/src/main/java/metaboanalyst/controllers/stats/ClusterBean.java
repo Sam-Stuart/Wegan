@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
 import javax.faces.model.SelectItem;
 import metaboanalyst.controllers.ApplicationBean1;
 import metaboanalyst.controllers.SessionBean1;
@@ -38,8 +39,8 @@ public class ClusterBean implements Serializable{
     private User usr = sb.getCurrentUser();
     private String usrName = usr.getName();
 
-    private String clustMethodOpt;
-    private String clustDistOpt;
+    private String clustMethodOpt = "ward.D";
+    private String clustDistOpt  = "euclidean";
     private String scaleOpt = "row";
 
     public String getScaleOpt() {
@@ -85,11 +86,102 @@ public class ClusterBean implements Serializable{
     public void setViewOpt(String viewOpt) {
         this.viewOpt = viewOpt;
     }
+    
+        //CHECKBOX
+    private boolean doData = false; 
+    
+    public boolean isDoData() {
+        return doData;
+    }
+    
+    public void setDoData(boolean doData) {
+        this.doData = doData;
+    }
+        //CHECKBOX
+    private boolean doRotate = false; 
+    
+    public boolean isDoRotate() {
+        return doRotate;
+    }
+    
+    public void setDoRotate(boolean doRotate) {
+        this.doRotate = doRotate;
+    }
+            //CHECKBOX
+    private boolean doBranchLabels = false; 
+    
+    public boolean isDoBranchLabels() {
+        return doBranchLabels;
+    }
+    
+    public void setDoBranchLabels(boolean doBranchLabels) {
+        this.doBranchLabels = doBranchLabels;
+    }
+    
+            //STATIC DROPDOWN 
+    private String dendroColorOpts = "NULL"; 
+    
+    public String getDendroColorOpts() {
+        return dendroColorOpts;
+    }
 
+    public void setDendroColorOpts(String dendroColorOpts) {
+        this.dendroColorOpts = dendroColorOpts;
+    }
+    
+        //TEXT BOX  
+    private String dendroLegendTitle = " ";
+        
+    public String getDendroLegendTitle() {
+        return dendroLegendTitle;
+    }
+
+    public void setDendroLegendTitle(String dendroLegendTitle) {
+        this.dendroLegendTitle = dendroLegendTitle;
+    } 
+    
+            //TEXT BOX  
+    private String dendroPlotTitle = " ";
+        
+    public String getDendroPlotTitle() {
+        return dendroPlotTitle;
+    }
+
+    public void setDendroPlotTitle(String dendroPlotTitle) {
+        this.dendroPlotTitle = dendroPlotTitle;
+    }
+    
+    //DYNAMIC DROPDOWN 
+    private SelectItem[] dendroColumnOpts = null;
+    
+    public SelectItem[] getDendroColumnOpts(){
+        String[] columns = Clustering.dendroColNames(sb);
+        int columnsLen = columns.length;
+        dendroColumnOpts = new SelectItem[columnsLen];
+        List<String> columnNames = Arrays.asList(columns);
+        for (int i = 0; i < columnsLen; i++) {
+            dendroColumnOpts[i] = new SelectItem(columnNames.get(i), columnNames.get(i));
+        }
+        return dendroColumnOpts;
+    }
+    
+    private String dendroColumnName = getDendroColumnOpts()[0].getLabel();
+    
+    public String getDendroColumnName() {
+        return dendroColumnName;
+    }
+
+    public void setDendroColumnName(String dendroColumnName) {
+        this.dendroColumnName = dendroColumnName;
+    }
+    
     public String treeButton_action() {
-        String imgName = sb.getNewImage("tree");
-        Clustering.PlotClustTree(sb, imgName, "png", 72, clustDistOpt, clustMethodOpt);
-        RequestContext.getCurrentInstance().scrollTo("form1:treePane");
+        //String imgName = sb.getNewImage("tree");
+            Clustering.PlotClustTree(sb, doData, sb.getNewImage("tree"),  "png", 72, clustDistOpt,
+                clustMethodOpt, doRotate, doBranchLabels, dendroColorOpts,
+                dendroLegendTitle, dendroPlotTitle, dendroColumnName);
+            //RequestContext.getCurrentInstance().scrollTo("form1:treePane");
+            //RequestContext.getCurrentInstance().scrollTo("treeGraph:panelGrid1");
         return null;
     }
 
@@ -101,6 +193,8 @@ public class ClusterBean implements Serializable{
     private int topThresh = 25;
     private String selectMethodOpt;
     private String noOrgOpt;
+    private int hmFontSizeCol = 8;
+    private int hmFontSizeRow = 8;
 
     public String getSelectMethodOpt() {
         return selectMethodOpt;
@@ -165,7 +259,58 @@ public class ClusterBean implements Serializable{
     public void setHmColorOpt(String hmColorOpt) {
         this.hmColorOpt = hmColorOpt;
     }
+    
+    //STATIC DROPDOWN 
+    private String hmSmplColorOpts = "NULL"; 
+    
+    public String getHmSmplColorOpts() {
+        return hmSmplColorOpts;
+    }
 
+    public void setHmSmplColorOpts(String hmSmplColorOpts) {
+        this.hmSmplColorOpts = hmSmplColorOpts;
+    }
+
+    //DYNAMIC DROPDOWN 
+    private SelectItem[] hmColumnOpts = null;
+    
+    public SelectItem[] getHmColumnOpts(){
+        String[] columns = Clustering.hmColNames(sb);
+        int columnsLen = columns.length;
+        hmColumnOpts = new SelectItem[columnsLen];
+        List<String> columnNames = Arrays.asList(columns);
+        for (int i = 0; i < columnsLen; i++) {
+            hmColumnOpts[i] = new SelectItem(columnNames.get(i), columnNames.get(i));
+        }
+        return hmColumnOpts;
+    }
+    
+    private String hmColumnName = getHmColumnOpts()[0].getLabel();
+    
+    public String getHmColumnName() {
+        return hmColumnName;
+    }
+
+    public void setHmColumnName(String hmColumnName) {
+        this.hmColumnName = hmColumnName;
+    }
+    
+    public int getHmFontSizeCol() {
+        return hmFontSizeCol;
+    }
+
+    public void setHmFontSizeCol(int hmFontSizeCol) {
+        this.hmFontSizeCol = hmFontSizeCol;
+    }
+    
+    public int getHmFontSizeRow() {
+        return hmFontSizeRow;
+    }
+
+    public void setHmFontSizeRow(int hmFontSizeRow) {
+        this.hmFontSizeRow = hmFontSizeRow;
+    }
+    
     public String hmButton_action() {
 
         String rowV = "T";
@@ -193,9 +338,15 @@ public class ClusterBean implements Serializable{
         }
         
         if (useTopFeature) {
-            Clustering.PlotSubHeatMap(sb, sb.getNewImage("heatmap"), "png", 72, dataOpt, scaleOpt, hmDistOpt, hmMethodOpt, hmColorOpt, selectMethodOpt, topThresh, viewOpt, rowV, colV, (drawBorders) ? "T" : "F", (grpAves) ? "T" : "F");
+            Clustering.PlotSubHeatMap(sb, sb.getNewImage("heatmap"), "png", 72, 
+                    doData, scaleOpt, hmDistOpt, hmMethodOpt, hmColorOpt, 
+                    selectMethodOpt, topThresh, viewOpt, rowV, colV, (drawBorders) ? "T" : "F", (grpAves) ? "T" : "F", 
+                    hmSmplColorOpts, hmColumnName, hmFontSizeCol, hmFontSizeRow);
         } else {
-            Clustering.PlotHeatMap(sb, sb.getNewImage("heatmap"), "png", 72, dataOpt, scaleOpt, hmDistOpt, hmMethodOpt, hmColorOpt, viewOpt, rowV, colV, (drawBorders) ? "T" : "F", (grpAves) ? "T" : "F");
+            Clustering.PlotHeatMap(sb, sb.getNewImage("heatmap"), "png", 72, 
+                    doData, scaleOpt, hmDistOpt, hmMethodOpt, 
+                    hmColorOpt, viewOpt, rowV, colV, (drawBorders) ? "T" : "F", (grpAves) ? "T" : "F", 
+                    hmSmplColorOpts, hmColumnName, hmFontSizeCol, hmFontSizeRow);
         }
         RequestContext.getCurrentInstance().scrollTo("form1:hmPane");
         return null;

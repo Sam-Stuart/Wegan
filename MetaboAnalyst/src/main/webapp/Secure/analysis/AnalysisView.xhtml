@@ -51,8 +51,31 @@
                     <h:panelGrid>
                         <h2>Machine Learning Analysis: </h2>
                         <h:commandLink style="margin-left: 25px" action="SVMCorrelation" onclick="PF('statusDialog').show()" value="Support Vector Machine (SVM) Regression"/>
-                        <h:commandLink style="margin-left: 25px" action="SVMCorrelation" onclick="PF('statusDialog').show()" value="Random Forest Regression"/>
+                        <h:commandLink style="margin-left: 25px" action="RFCorrelation" onclick="PF('statusDialog').show()" value="Random Forest Regression"/>
+                        <h:commandLink style="margin-left: 25px" action="ANNCorrelation" onclick="PF('statusDialog').show()" value="Artificial Neural Network (ANN) Regression"/>
                     </h:panelGrid>
+                    
+                    <h:outputLabel style="font-weight: bold" value="Cluster Analysis"/>
+                    <h:panelGrid style="padding-left: 20px; padding-bottom: 6px">
+                        <h:panelGrid columns="5">
+                            <h:outputLabel value="Hierarchical Clustering:"/>
+                            <p:spacer style="width: 2px"/>
+                            <h:commandLink action="Dendrogram" onclick="PF('statusDialog').show()" value="Dendrogram"/>
+                            <p:spacer style="width: 4px"/>
+                            <h:commandLink action="Heatmap" onclick="PF('statusDialog').show()" value="Heatmaps"/>
+                        </h:panelGrid>    
+                        <h:panelGrid columns="5">
+                            <h:outputLabel value="Partitional Clustering:"/>
+                            <p:spacer style="width: 2px"/>
+                            <h:commandLink action="K-means" onclick="PF('statusDialog').show()" value="K-means"/>
+                        </h:panelGrid>
+                    </h:panelGrid>                    
+                    <h:outputLabel style="font-weight: bold" value="Classification &amp; Feature Selection"/>
+                    <h:panelGrid style="padding-left: 20px; padding-bottom: 6px">
+                        <h:commandLink action="RandomForest" onclick="PF('statusDialog').show()" value="Random Forest"/>
+                        <h:commandLink action="SVM"  disabled="#{sessionBean1.multiGroup}" onclick="PF('statusDialog').show()" value="Support Vector Machine (SVM)"/>
+                    </h:panelGrid>
+                    
                 </h:panelGrid>
             </h:panelGrid> 
         </h:form>

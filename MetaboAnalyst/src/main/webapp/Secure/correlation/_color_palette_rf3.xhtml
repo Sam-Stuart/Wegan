@@ -7,7 +7,7 @@
                 xmlns:p="http://primefaces.org/ui">
 
 
-    <h:form id="RFGraph">
+    <h:form id="RFGraph3">
         <h:panelGrid columns="1" style="width:380px;">
             <h:panelGrid id="panelGrid1" columns="2" cellpadding="5" columnClasses="colBrayLong,colBrayShort">
                <!--Error rate vs Forest Size Line Plot-->
@@ -40,7 +40,7 @@
                                  style="box-shadow: none !important; text-shadow: none !important"
                                 onclick="PF('statusDialog').show()"
                                 oncomplete="PF('graphApperanceRF3').hide(); PF('statusDialog').hide()"  
-                                update=":RFCA:form3:rfPane3  :cmdPane"
+                                update=":RFCA:form3:corrRFPane3  :cmdPane"
                                 actionListener="#{rfCABean.corrRFBtn3_action()}"/>
             </h:panelGrid>
         </h:panelGrid>

@@ -46,7 +46,16 @@ public class UploadBean implements Serializable {
     public void setDataFormat(String dataFormat) {
         this.dataFormat = dataFormat;
     }
+    private String metaFormat = "rowu";
 
+    public String getMetaFormat() {
+        return metaFormat;
+    }
+
+    public void setMetaFormat(String metaFormat) {
+        this.metaFormat = metaFormat;
+    }
+    
     private UploadedFile dataFile;
 
     public UploadedFile getDataFile() {
@@ -56,7 +65,16 @@ public class UploadBean implements Serializable {
     public void setDataFile(UploadedFile dataFile) {
         this.dataFile = dataFile;
     }
+    
+    private UploadedFile dataFileMeta;
 
+    public UploadedFile getDataFileMeta() {
+        return dataFileMeta;
+    }
+
+    public void setDataFileMeta(UploadedFile dataFileMeta) {
+        this.dataFileMeta = dataFileMeta;
+    }
     private String dataNames = "colOnly";
 
     public String getDataNames() {
@@ -67,6 +85,15 @@ public class UploadBean implements Serializable {
         this.dataNames = dataNames;
     }
     
+    private String metaNames = "colOnly";
+
+    public String getMetaNames() {
+        return metaNames;
+    }
+
+    public void setMetaNames(String metaNames) {
+        this.metaNames = metaNames;
+    }
     /*
     Data upload for statistics module
      */
@@ -81,10 +108,15 @@ public class UploadBean implements Serializable {
             try {
                 RConnection RC = sb.getRConnection();
                 String fileName = DataUtils.uploadFile(dataFile, sb, null, ab.isOnPublicServer());
+                String fileNameMeta = DataUtils.uploadFile(dataFileMeta, sb, null, ab.isOnPublicServer());
                 if (fileName == null) {
                     return null;
                 }
-
+                
+                 if (fileNameMeta != null){
+                    RDataUtils.readTextDataMeta(RC, fileNameMeta, metaFormat, "disc", metaNames);
+                }
+                 
                 if (RDataUtils.readTextData(RC, fileName, dataFormat, "disc", dataNames)) {
                     sb.setDataUploaded(true);
                     return "Data check";

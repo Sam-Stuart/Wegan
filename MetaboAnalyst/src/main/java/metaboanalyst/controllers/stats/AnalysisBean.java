@@ -215,11 +215,17 @@ public class AnalysisBean implements Serializable {
     }
 
     private void doDefaultDendrogram() {
-        Clustering.PlotClustTree(sb, sb.getCurrentImage("tree"), "png", 72, "euclidean", "ward.D");
+        Clustering.PlotClustTree(sb, false, sb.getCurrentImage("tree"), 
+                                "png", 72, "euclidean", "ward.D",
+                                false, false, "NULL", 
+                                " ", " ", "NULL");
     }
 
     private void doDefaultHmClust() {
-        Clustering.PlotHeatMap(sb, sb.getCurrentImage("heatmap"), "png", 72, "norm", "row", "euclidean", "ward.D", "bwm", "overview", "T", "T", "T", "F");
+        Clustering.PlotHeatMap(sb, sb.getCurrentImage("heatmap"), "png", 
+                                72, false, "row", "euclidean", 
+                                "ward.D", "bwm", "overview", "T", 
+                                "T", "T", "F", "NULL", "NULL", 8, 8);
     }
 
     private void doDefaultKmeanClust() {

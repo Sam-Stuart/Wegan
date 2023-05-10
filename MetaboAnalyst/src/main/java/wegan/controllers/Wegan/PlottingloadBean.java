@@ -317,23 +317,6 @@ public class PlottingloadBean implements Serializable {
         else if (testDataOpt.equals("BCI")) {
             dataType = "main";
             testFile = ab.getTestBCI();
-//<<<<<<< HEAD
-//            format = "rowu";
-//        } else if (testDataOpt.equals("Iris")) {
-//            dataType = "Dune";
-//            testFile = ab.getTestIris();
-//            format = "rowu";            
-//        
-//        } else if (testDataOpt.equals("Linear")) {
-//            //System.out.print(" Linear Data selected");
-//            dataType = "Linear";
-//            //sb.updateMsg("Error", "Dune data selected");
-//
-//            testFile = ab.getTestLinear();
-//            format = "rowu";
-//            
-//        }else {
-//=======
             dataFormat = "rowu";
             dataNames = "colOnly";
         }
@@ -346,7 +329,6 @@ public class PlottingloadBean implements Serializable {
         } 
         
         else {
-//>>>>>>> 6d2a238d3aaa5638d6a34c5d8864a89f961edc0f
             sb.updateMsg("Error", "Unknown data selected?");
             return null;
         }
@@ -374,13 +356,6 @@ public class PlottingloadBean implements Serializable {
 //        }
 
         sb.setDataUploaded(true);
-//<<<<<<< HEAD
-////        return "Data check";  // Change back to 'Data check'    
-////    }
-////    
-////    public boolean runDCaR(String inputData,String ext){
-//=======
-//>>>>>>> 6d2a238d3aaa5638d6a34c5d8864a89f961edc0f
         RConnection RC = sb.getRConnection();
 
 //        try {

@@ -7,12 +7,12 @@ package metaboanalyst.controllers.correlation;
 
 import java.io.File;
 import java.io.Serializable;
-import java.util.ArrayList;
+//import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 // added:
-import javax.faces.context.FacesContext; 
+//import javax.faces.context.FacesContext; 
 import javax.faces.model.SelectItem;
 import metaboanalyst.controllers.SessionBean1;
 //addded:
@@ -43,9 +43,27 @@ public class LinearCABean implements Serializable {
     private String usrName = usr.getName();
     
     
-    private String fileLinModVals = "corr_linear_model_summary.txt";
-//            getSummaryLinDownload();
-    private String fileLinModValsPath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileLinModVals + "\">" + fileLinModVals + "</a>";
+//    private List<String> corrLinearResults = null;
+//    
+//    public List<String> getCorrLinearResults(){
+//        String[] results = CAUtils.GetLinearCAResults(sb);
+//        corrLinearResults = Arrays.asList(results);
+//        
+//        return corrLinearResults;
+//    }
+//            getSummaryLinDownload();  
+   
+ 
+//    FILE NAME FOR SUMMARY TXT CREATED   
+  //    private String fileLinModVals = "corr_linear_model_summary.txt";
+
+//    DYNAMIC FILENAME (variables of model included)
+    private String fileLinModVals[] = null;
+    public void getCorrLinearResults(){
+        this.fileLinModVals = CAUtils.GetLinearCAResults(sb);
+    }  
+    
+    private String fileLinModValsPath = "<a target='_blank' href = \"/MetaboAnalyst/resources/users/" + usrName + File.separator + fileLinModVals[0] + "\">" + fileLinModVals[0] + "</a>";
  
     public String getFileLinModValsPath() {
         return fileLinModValsPath;
@@ -57,8 +75,20 @@ public class LinearCABean implements Serializable {
     
     
     // GET COLUMN NAMES
-    private SelectItem[] corrColumnOpts = null;
+//    try to get it with cleaner, variable replacing way (didn't work (202211-15
+//    public SelectItem[] getCorrColumnOpts(SelectItem[] nameofvar){
+//        String[] columns = CAUtils.GetDataColumns(sb);
+//        int columnsLen = columns.length;
+//        nameofvar = new SelectItem[columnsLen];
+//        List<String> columnNames = Arrays.asList(columns);
+//        for (int i = 0; i < columnsLen; i++) {
+//            nameofvar[i] = new SelectItem(columnNames.get(i), columnNames.get(i));
+//        }
+//        //List<String> columnNames = Arrays.asList(columns);
+//        return nameofvar;
+//    }
     
+     private SelectItem[] corrColumnOpts = null;
     public SelectItem[] getCorrColumnOpts(){
         String[] columns = CAUtils.GetDataColumns(sb);
         int columnsLen = columns.length;
@@ -92,14 +122,7 @@ public class LinearCABean implements Serializable {
     }    
     
 
-//    private List<String> corrLinearResults = null;
-//    
-//    public List<String> getCorrLinearResults(){
-//        String[] results = CAUtils.GetLinearCAResults(sb);
-//        corrLinearResults = Arrays.asList(results);
-//        
-//        return corrLinearResults;
-//    }
+
     
   // CHECK BOX for using normalized data (default) or original data
     private boolean doOriginal = false;
@@ -214,6 +237,65 @@ public class LinearCABean implements Serializable {
         this.corPlotYlab = corPlotYlab;
     }   
      
+    
+//TEXT SIZE    
+       //STATIC DROPDOWN title text size
+//    WAS: corPlotLabelSize; applicaitonbean: corPlotLabSize
+    private String corTextSizeTitle= "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corSizeTitle
+
+    public String getCorTextSizeTitle() {
+        return corTextSizeTitle;
+    }
+
+    public void setCorTextSizeTitle(String corTextSizeTitle) {
+        this.corTextSizeTitle = corTextSizeTitle;
+    }  
+    
+       //STATIC DROPDOWN title text size
+    private String corTextSizeXlab= "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corSizeXlab
+
+    public String getCorTextSizeXlab() {
+        return corTextSizeXlab;
+    }
+
+    public void setCorTextSizeXlab(String corTextSizeXlab) {
+        this.corTextSizeXlab = corTextSizeXlab;
+    }  
+    
+       //STATIC DROPDOWN title text size
+    private String corTextSizeYlab= "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corSizeYlab
+
+    public String getCorTextSizeYlab() {
+        return corTextSizeYlab;
+    }
+
+    public void setCorTextSizeYlab(String corTextSizeYlab) {
+        this.corTextSizeYlab = corTextSizeYlab;
+    }  
+    
+       //STATIC DROPDOWN title text size
+    private String corTextSizeXtick= "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corSizeXtick
+
+    public String getCorTextSizeXtick() {
+        return corTextSizeXtick;
+    }
+
+    public void setCorTextSizeXtick(String corTextSizeXtick) {
+        this.corTextSizeXtick = corTextSizeXtick;
+    } 
+    
+       //STATIC DROPDOWN title text size
+    private String corTextSizeYtick= "NULL"; //FUNCTION CORRESPONDS WITH applicationBean1.corSizeYtick
+
+    public String getCorTextSizeYtick() {
+        return corTextSizeYtick;
+    }
+
+    public void setCorTextSizeYtick(String corTextSizeYtick) {
+        this.corTextSizeYtick = corTextSizeYtick;
+    } 
+    
+    
 //    private String corPlotLinearWhich = "NULL";
 // 
 //    public String getCorPlotLinearWhich() {
@@ -247,6 +329,7 @@ public class LinearCABean implements Serializable {
                 corColorDotsOpts, corColorLineOpts, 
                doPlotConfInt, doPlotEq, doPlotRsq, doPlotRsqAdj,
                corPlotTitle, corPlotXlab, corPlotYlab,
+               corTextSizeTitle, corTextSizeXlab, corTextSizeYlab, corTextSizeXtick, corTextSizeYtick,
 //                 sb.getCurrentImage("corr_linear"),"png", 72);
           sb.getNewImage("corr_linear"),"png", 72); 
 //        CAUtils.ConvertLinearJSONCA(sb, corPlotLinearWhich);
@@ -265,6 +348,7 @@ public class LinearCABean implements Serializable {
                 corColorDotsOpts, corColorLineOpts, doPlotConfInt,
                 doPlotEq, doPlotRsq, doPlotRsqAdj,
                corPlotTitle, corPlotXlab, corPlotYlab,
+               corTextSizeTitle, corTextSizeXlab, corTextSizeYlab, corTextSizeXtick, corTextSizeYtick,
           sb.getNewImage("corr_linear_pred"),"png", 72);
 //         CAUtils.ConvertLinearJSONCA(sb, corPlotLinearWhich);        
 
@@ -281,6 +365,7 @@ public class LinearCABean implements Serializable {
                 doOriginal,
                 corColorDotsOpts, corColorLineOpts, 
                corPlotTitle, corPlotXlab, corPlotYlab,
+               corTextSizeTitle, corTextSizeXlab, corTextSizeYlab, corTextSizeXtick, corTextSizeYtick,
           sb.getNewImage("corr_linear_normres"),"png", 72);
 //         CAUtils.ConvertLinearJSONCA(sb, corPlotLinearWhich);                 
 
@@ -296,6 +381,7 @@ public class LinearCABean implements Serializable {
                 corrColumnNameA, corrColumnNameB, doOriginal,
                 corColorDotsOpts, corColorLineOpts, 
                corPlotTitle, corPlotXlab, corPlotYlab,
+               corTextSizeTitle, corTextSizeXlab, corTextSizeYlab, corTextSizeXtick, corTextSizeYtick,
           sb.getNewImage("corr_linear_resfit"),"png", 72);
 //        CAUtils.ConvertLinearJSONCA(sb, corPlotLinearWhich);              
 

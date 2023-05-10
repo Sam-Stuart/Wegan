@@ -1,9 +1,9 @@
 #'Perform SVM Regression'
 #'@description Use SVM for regression analysis
-#'@usage reg.rf.anal(mSetObj=NA, facA=NULL)
+#'@usage svm.reg.anal(mSetObj=NA, facA="NULL", predtext="NULL")
 #'@param mSetObj Input the name of the created mSetObj
 #'@param facA Input the name of the response column (java uses numeric.columns() to give user options)
-#'@param pred.text Input predictor column names (java uses text box to obtain string)
+#'@param predtext Input predictor column names (java uses text box to obtain string)
 #'@author Louisa Normington\email{normingt@ualberta.ca}
 #'University of Alberta, Canada
 #'License: GNU GPL (>= 2)
@@ -11,32 +11,33 @@
 
 svm.reg.anal <- function(mSetObj=NA, 
 facA="NULL",
- predtext="NULL",
-data="false") {
+predtext="NULL"#,data="false"
+) {
 
   #install.packages(c("e1071", "Metrics"))
+  # library("assertr")
   library("e1071")
   library("Metrics")
 
   mSetObj <- .get.mSet(mSetObj)
- 
+    print("svm.anal: data input set")
 ### SET DATA (whether to use original data or not)
-  if (data == "false") {
+#  if (data == "false") {
     input <- mSetObj$dataSet$norm #default use norm
-  } else {
-    input <- mSetObj$dataSet$orig
-  }
+#  } else {
+#    input <- mSetObj$dataSet$orig
+#  }
 
  # input <- input[order(as.numeric(rownames(input)),,drop=FALSE),]
  # print(input)
-  #Text should be visable to user
-  cat("One dependent variable and one or more independent variables will be tested for correlation. The dependent variable must be numeric. The independent variables can be numeric or categorical.")
+#Text should be visible to user
+ #  cat("One dependent variable and one or more independent variables will be tested for correlation. The dependent variable must be numeric. The independent variables can be numeric or categorical.")
   cat("For categorical independent variables, make sure to use characters for the levels and not numbers. For example, if you have levels 1, 2 and 3, change the level labels to I, II and III prior to upload.")
   
   #Set dependent (response) variable name
   if (facA == "NULL") {
-    for (i in 1:ncol(input)) {
-      if (is.factor(input[,i])==FALSE) {
+    for (i in seq_along(colnames(input)) ) {
+      if (is.factor(input[,i])==FALSE || is.character(input[,i])==FALSE) {
         facA <- colnames(input)[i]# Default is to choose the first numeric column as response column
         break
       }
@@ -44,29 +45,36 @@ data="false") {
   } else {
     facA <- facA #User selected, java uses function numeric.columns() to provide options in drop down menu (only numeric columns are available)
   }
-  
-  #Text box instructions for selecting predictor variables. Text box should be interactive, meaning any change in text alters the result in real time. Default pred.text is second column.
-  cat("Indicate independent variables using the column names with commas in between.")
+    print("svm.anal: response var set")  
+
+  #Text box instructions for selecting predictor variables. Text box should be interactive, meaning any change in text alters the result in real time. Default predtext is second column. 
+  # cat("Indicate independent variables using the column names with commas in between.")
   
   #Set right side of formula with predictor variables
+    data <- input[,colnames(input) != facA, drop = FALSE]
+
   if (predtext == "NULL") {
     #resp.col.num <- which(colnames(input) == facA); data <- input[,-resp.col.num]
-    data <- input[,colnames(input) != facA]
-    predtext <- colnames(data)[1] #Default is the first potential predictor column
+   predtext <- colnames( input[, !(colnames(input) == facA), drop = FALSE] )[1] 
+   # predtext <- colnames(data)[1] #Default is the 1st potential predictor column
   } else {
-    predtext <- pred.text #taken from text box by java, fed as string into R code
+    predtext <- predtext #taken from text box by java, fed as string into R code
   }
   
-  #Currate right side of formula, and extract character vector of predictors
-  pred.text <- gsub("\n", "", predtext, fixed=TRUE) #fixed=TRUE means we are dealing with one string, versus a vector of strings (fixed=FALSE)
+    print("svm.anal: predictor var set")
+    predtext1 <- predtext
+
+  #PREDICTORS: Curate formula right side, and extract predictors character vector
+  predtext <- gsub("\n", "", predtext, fixed=TRUE) #fixed=TRUE means we are dealing with one string, versus a vector of strings (fixed=FALSE)
   predtext <- gsub(",", "+", predtext, fixed=TRUE) 
   predtext <- gsub(";", "+", predtext, fixed=TRUE)
   predtext <- gsub(" ", "", predtext, fixed=TRUE)
   predtext <- gsub(":", "+", predtext, fixed=TRUE)
   predtext <- gsub("*", "+", predtext, fixed=TRUE)
   
-  #Generate formula
-  formula <- as.formula(paste(facA, "~", predtext))
+  #GENERATE FORMULA
+### 202210-25 changed 'formula' variable name to 'form' because it also exists as a function, namespace weirdness, overlap problems
+  form <- as.formula(paste(facA, "~", predtext))
   #Text should be visible to user
   cat(paste0("You have created this formula for model building: ", facA, " ~ ", predtext))
   #cat("The L hand side is the dependent variable. The R hand side is the independent variable(s). If there is >1 independent variable, plus signs indicate the variables are evaluated on their own; colons indicate an interaction between the variables is evaluated.")
@@ -76,82 +84,80 @@ data="false") {
   predictors2 <- unlist(strsplit(predtext, "+", fixed = TRUE), use.names = FALSE)
   #predictors2 <- unlist(strsplit(predictors1, ":", fixed = TRUE), use.names = FALSE)
   
- if(any(!colnames(data) %in% predictors2)){
-   stop(paste0( "'", predictors[!predictors2 %in% colnames(data)],
+ #  data %>% assertr::verify(assertr::has_all_names(predictors2), error_fun = justwarn)
+
+  if(!all(predictors2 %in% colnames(data)) ){
+   warning(paste0("THIS_is_1st_function_", "'", predictors2[!predictors2 %in% colnames(data)],
   "' not found in data variables ('",
   paste(colnames(data), collapse = "', '"),
   "'): check spelling of text box input."))
 }
 
-  pred_data <- input[,which(colnames(input) %in% predictors2)]
-  model_data <- data.frame(input[,facA], pred_data)
+  pred_data <- input[,which(colnames(input) %in% predictors2), drop = FALSE]
+  model_data <- data.frame(input[,facA, drop = TRUE], pred_data)
   colnames(model_data) <- c(paste0(facA), predictors2)
   
   #GENERATE TEST AND TRAIN
   set.seed(37) #Ensures same selection of data each time
   index <- sample(1:nrow(model_data), 0.7*nrow(model_data)) #Select 70% of dataset (this will be for train)
 
-  train_data <- model_data[index,] #70% of dataset
-  test_data <- model_data[-index,] #30% of dataset
+  train_data <- model_data[index,, drop = FALSE] #70% of dataset
+  test_data <- model_data[-index,,drop = FALSE] #30% of dataset
 
-predictors_train <- model.matrix(train_data[,1] ~ ., train_data)[,-1] # Train predictor variables, creating dummy variables for categorical variables
+  predictors_train <- model.matrix(train_data[,1] ~ ., train_data)[,-1] # Train predictor variables, creating dummy variables for categorical variables
   predictors_test <- model.matrix(test_data[,1] ~ ., test_data)[,-1] # Test predictor variables, creating dummy variables for categorical variables
-  response_train_name <- colnames(input)[1] #response_train variable name
-  predictors_train_name <- colnames(predictors_train)[-1] #response_train variable name
 
-  response_train <- train_data[,facA] # response data for train dataset
-  response_test <- test_data[,facA] # response data for test dataset
+  response_train <- train_data[,facA, drop=TRUE] # response data for train dataset
+  response_test <- test_data[,facA, drop=TRUE] # response data for test dataset
+print("svm.anal: train/test set made")
 
   # cat("The train data for model building is 70% of the dataset, while the test data for model testing is 30% of the dataset.") #Text will be visible to user.
  
-  
 #BUILD MODEL, PREDICT
-    model <- e1071::tune(e1071::svm, formula,  data = as.data.frame(predictors_train), ranges = list(epsilon = seq(0,1,0.1), cost = 2^(seq(0.5,8,.5))))
-    tunedModel <- model$best.model
+    mod <- e1071::tune(e1071::svm, form,  data = as.data.frame(predictors_train), ranges = list(epsilon = seq(0,1,0.1), cost = 2^(seq(0.5,8,.5))))
+    tunedModel <- mod$best.model
     model_name <- "SVM Regression"
+  print("svm.anal: model built")
     prediction <- predict(tunedModel, newdata = as.matrix(predictors_test)) #Need to create loop for when family="multinomial"
+  print("svm.anal: after predicting model 1")
 
- #Store results for plotting
-    mSetObj$analSet$svmReg$meth <- model_name
-    mSetObj$analSet$svmReg$pred <- prediction
-    mSetObj$analSet$svmReg$test <- test_data
-
-  #Generate and download summary of parameter testing and write to txt document
-  summary <- summary(tunedModel) 
-  residuals <- residuals(tunedModel)
+  #GENERATE AND DOWNLOAD SUMMARY OF PARAMETER TESTING, WRITE TO TXT DOC 
+  summ <- summary(tunedModel) 
+  resid <- residuals(tunedModel)
   decision_values <- tunedModel[["decision.values"]]
-  fitted <- predict(tunedModel)
- # train_rmse <- Metrics::rmse(response_train, fitted)
-svm_RMSE <- Metrics::rmse(predictors_train[,1], fitted)
-  fileName <- "SVM_regression_summary.txt"
+  fitt <- predict(tunedModel)
+  print("svm.anal: after predicting model train")
+  train_rmse <- Metrics::rmse(response_train, fitt)
+  # svm_RMSE <- Metrics::rmse(predictors_train[,1], fitt)
+  fileName <- "svm_regression_summary.txt"
   
   #Obtain test RMSE for plotting # not in the original not ml.R file function
   test_prediction <- predict(tunedModel, newdata=test_data)
   test_rmse <- Metrics::rmse(response_test, test_prediction)
-  
-  #Store results
-  mSetObj$analSet$rfReg$res <- list(summary=summary, response=facA, predictors=pred_data, pred.text=pred.text, predicted.values=fitted, train.RMSE=train_rmse, test.prediction=test_prediction, test.RMSE=test_rmse, train_data=train_data, test_data=test_data, method=model_name, fileName=fileName)       
-  mSetObj$analSet$rfReg$mod <- list(model_name=model_name, model=model, response=facA, predictors=predictors2)
-  mSetObj$analSet$rfReg$res$test_this <- test_data
+ print("after predicting model test")  
+
+  #STORE REMAINING RESULTS
+  mSetObj$analSet$svmReg$res <- list(summary = summ, response = facA, predictors = predictors2, predtext = predtext1, pred.data = pred_data, predicted.values = fitt, train.RMSE = train_rmse, test.prediction = test_prediction, test.RMSE = test_rmse, train.data = train_data, test.data = test_data, method = model_name, fileName=fileName)
+  mSetObj$analSet$svmReg$mod <- list(model_name = model_name, model = mod, final.model = tunedModel, formula = form, response = facA, predictors = predictors2)
 
     ##Store results FROM ML.R FILE:
-    ##mSetObj$analSet$svmReg$res <- list(summary = summary, predicted.values = fitted, residuals = residuals, decision.values = decision_values, RSME = svm_RMSE, fileName = fileName)       
-    ##mSetObj$analSet$svmReg$mod <- list(model_name = model_name, model = model, response = response_train_name, predictor = predictors_train_name)
+    ##mSetObj$analSet$svmReg$res <- list(summary = summ, predicted.values = fitt, residuals = resid, decision.values = decision_values, RSME = svm_RMSE, fileName = fileName)       
+    ##mSetObj$analSet$svmReg$mod <- list(model_name = model_name, model = mod, response = response_train_name, predictor = predictors_train_name)
 
   
-#Download text document containing the results, called the fileName. Document goes into the working directory and should be accessible to the user as part of the report.
+#DOWNLOAD TEXT DOC: containing the results, called the fileName. Document goes into the working directory and should be accessible to the user as part of the report.
   sink(fileName) 
   cat("Formula:\n")
-  print(formula)
+  print(form)
   # cat("\nReference category:\n")
   # cat(paste0(reference))
-  print(summary)
+  print(summ)
   cat("Residuals:\n")
-  print(residuals)
+  print(resid)
   cat("\nDecision values:\n")
   print(decision_values)
   cat("\nPredicted values:\n")
-  print(fitted)
+  print(fitt)
   cat("\nModel RMSE:\n")
   #cat(paste0(svm_RMSE))
   sink()
@@ -163,7 +169,14 @@ svm_RMSE <- Metrics::rmse(predictors_train[,1], fitted)
 
 #'Plot svm predicted vs actual data plot with line of best fit
 #'@description Scatter plot where response variable is y and predictor variable is x
-#'@usage plot.pred.svmReg(mSetObj, method=method, imgName, format="png", dpi=72, width=NA)
+#'@usage svm.pred.plot(mSetObj, facA="NULL", predtext = "NULL", col_dots="NULL", col_line="NULL", plot_title=" ", plot_ylab=" ", plot_xlab=" ",imgName, format="png", dpi=72, width=NA)
+#'@param col_dots point color
+#'@param col_line line color
+#'@param plot_metric one of: NULL (for no plot annotation), RMSE (for root mean squared error)
+#'@param plot_text_size 
+#'@param plot_title Input the name of the title (default: "SVM Regression: Predicted vs Actual"), textbox
+#'@param plot_ylab Input the name of the y axis label, textbox
+#'@param plot_xlab Input the name of the x axis label, textbox
 #'@param mSetObj Input the name of the created mSetObj (see InitDataObjects)
 #'@param imgName Input the image name
 #'@param format Select the image format, "png" or "pdf", default is "png" 
@@ -176,120 +189,168 @@ svm_RMSE <- Metrics::rmse(predictors_train[,1], fitted)
 #'License: GNU GPL (>= 2)
 #'@export
 
+## 202210-04 remove plot_ci, comment out data arg
+
 svm.pred.plot <- function(mSetObj=NA, 
 facA = "NULL", 
 predtext ="NULL",
- data="false",
-  
+# data="false",
+
   col_dots="NULL",
   col_line="NULL", 
-  plot_ci="false",
+
+  plot_metric = "NULL",  # added 202212-05
+  plot_text_size = "NULL", # added 202212-05
+
   plot_title=" ",
   plot_ylab=" ",
   plot_xlab=" ",
 imgName, format="png", dpi=72, width=NA){
-  # plot.pred.svmReg
+  # name used to be: plot.pred.svmReg
+
+#  library("assertr")
+#  library("e1071")
+  library("Metrics")
+  library("ggplot2")
+#  library("RJSONIO")
+
 
   #Extract necessary objects from mSetObj
   mSetObj <- .get.mSet(mSetObj)
 
 ### SET DATA (whether to use original data or not)
-  if (data == "false") {
+#  if (data == "false") {
     input <- mSetObj$dataSet$norm #default use norm
-  } else {
-    input <- mSetObj$dataSet$orig
-  }
+#  } else {
+#    input <- mSetObj$dataSet$orig
+#  }
+print("svm.pred: set data")
 
- # method <- mSetObj$analSet$rfReg$res$method
- # prediction <- mSetObj$analSet$rfReg$res$test.prediction
- #test_data <- mSetObj$analSet$rfReg$res$test_this
- # facA <- mSetObj$analSet$rfReg$res$response
-  
+
+
 ## wasthis:
   #facA <- mSetObj$analSet$svmReg$mod$response
-  #method <- mSetObj$analSet$svmReg$meth
+  #method <- mSetObj$analSet$svmReg$res$method
   #prediction <- mSetObj$analSet$svmReg$predicted.values
-  #test_data <- mSetObj$analSet$svmReg$test
+  #test_data <- mSetObj$analSet$svmReg$res$test.data
   #input <- test_data
     
 ### GET FACA AND PREDTEXT
 
 ##### WITH facA and predtext options
-  ##### [CRUNCH]
+  ##### [COLLAPSE]
   ##### 
   ##### iF VARIABLES ARE SET
   #SET RESPONSE (DEPENDENT) VARIABLE
-  if (facA == "NULL") { 
-    if("res" %in% names(mSetObj$analSet$svmReg) ){ #if there is a results made already, take that response
-        facA <- mSetObj$analSet$svmReg$res$response
-     } else {
-    for (i in seq_along(colnames(input)) ) {
-      if (is.factor(input[,i]) == FALSE) {
-        facA <- colnames(input)[i]# Default is to choose the 1st numeric column as response column
-        break
-      }
-    }
- }
-} else {
-    facA <- facA #User selected, java uses function numeric.columns() to provide options in drop down menu
-  }
-
+facA <- mSetObj$analSet$svmReg$res$response
+print("svm.pred: response var set")
+#  if (facA == "NULL") { 
+#    if("res" %in% names(mSetObj$analSet$svmReg) ){ #if there is a results made already, take that response
+#        facA <- mSetObj$analSet$svmReg$res$response
+#     } else {
+#    num.data <- dplyr::select_if(input, is.numeric)
+#    facA <- colnames(num.data)[1] 
+#    for (i in seq_along(colnames(input)) ) {
+#      if (is.factor(input[,i]) == FALSE || is.character(input[,i])==FALSE) {
+#        facA <- colnames(input)[i]# Default is to choose the 1st numeric column as response column
+#        break
+#      }
+#    }
+# }
+#} else {
+#    facA <- facA #User selected, java uses function numeric.columns() to provide options in drop down menu
+#  }
+#
   #SET FORMULA RIGHT SIDE WITH PREDICTORS (Default = 2nd column)
-  if (predtext == "NULL") {
-    if("res" %in% names(mSetObj$analSet$svmReg) ){#if there is a results made already, take that predictor
-        predtext <- mSetObj$analSet$svmReg$res$predictor
-     } else {
-    dat <- input[ , colnames(input) != facA] #drop=FALSE means it will be a df
-    num.data <- dplyr::select_if(dat, is.numeric)
-    predtext <- colnames(num.data)[1] #Default is the 1st potential predictor column
- } 
-    } else {
-    predtext <- predtext #taken from text box by java, fed as string into R code
-  }
+   data <- input[ , colnames(input) != facA, drop = FALSE] 
+# predtext <- mSetObj$analSet$svmReg$res$predtext
+predictors2 <- mSetObj$analSet$svmReg$res$predictors
+print("svm.pred: predictor vars set")
+#  if (predtext == "") {
+#    if("res" %in% names(mSetObj$analSet$svmReg) ){#if there are results made already, use the predictor(s)
+#        predtext <- mSetObj$analSet$svmReg$res$predtext
+#     } else {
+#    predtext <- colnames(data)[1] #Default is the 1st potential predictor column
+#    # predtext <- paste0(predtext, ",")
+# } 
+#   } else {
+#    predtext <- predtext #taken from text box by java, fed as string into R code
+#  }
   
-  #CURATE FORUMLA RIGHT SIDE, EXTRACT CHAR VEC OF PREDICTORS 
-  predtext <- gsub("\n", "", predtext, fixed = TRUE)
-  predtext <- gsub(",", "+", predtext, fixed = TRUE) 
-  predtext <- gsub(";", "+", predtext, fixed = TRUE)
-  predtext <- gsub(" ", "", predtext, fixed = TRUE)
-  predtext <- gsub(":", "+", predtext, fixed = TRUE)
-  predtext <- gsub("*", "+", predtext, fixed = TRUE)
-   
-  #GENERATE FORMULA #formula <- as.formula(paste(facA, "~", predtext))
-   ### CHECK: are all input predictor names in data
-  predictors1 <- unlist(strsplit(predtext, "+", fixed = TRUE), use.names = FALSE)
-  predictors2 <- unlist(strsplit(predictors1, ":", fixed = TRUE), use.names = FALSE)
- if(any(!colnames(data) %in% predictors2)){
-   stop(paste0( "'", predictors[!predictors2 %in% colnames(data)],
-  "' not found in data variables ('",
-  paste(colnames(data), collapse = "', '"),
-  "'): check spelling of text box input."))
-}
+#CHECK PREDTEXT FOR COMMAS  
+#  if( !any(grepl(",", predtext, fixed = TRUE)) ){ # if there are no commas in input predictor name(s)
+#    if(ncol( input[ , colnames(input) != facA, drop=FALSE] ) > 1){ # can't be >1 other cols to use, so if there is, error
+#warning("Check your predictor variables; Have you separated them by a comma? Are they spelled as they are in your input data?")
+#    } }
+#
+#  #CURATE FORUMLA RIGHT SIDE, EXTRACT CHAR VEC OF PREDICTORS 
+#  predtext <- gsub("\n", "", predtext, fixed = TRUE)
+#  predtext <- gsub(",", "+", predtext, fixed = TRUE) 
+#  predtext <- gsub(";", "+", predtext, fixed = TRUE)
+#  predtext <- gsub(" ", "", predtext, fixed = TRUE)
+#  predtext <- gsub(":", "+", predtext, fixed = TRUE)
+#  predtext <- gsub("*", "+", predtext, fixed = TRUE)
+#   
+  #GENERATE FORMULA #
+# form <- as.formula(paste(facA, "~", predtext))
+#   ### CHECK: are all input predictor names in data
+#  predictors2 <- unlist(strsplit(predtext, "+", fixed = TRUE), use.names = FALSE)
+#  #predictors2 <- unlist(strsplit(predictors1, ":", fixed = TRUE), use.names = FALSE)
+# 
 
+#   data %>% assertr::verify(assertr::has_all_names(predictors2), error_fun = justwarn)
+
+#  if(!all(predictors2 %in% colnames(data)) ){
+#   warning(paste0("THIS_is_2nd_function_", "'", predictors2[!predictors2 %in% colnames(data)],
+#  "' not found in data variables ('",
+#  paste(colnames(data), collapse = "', '"),
+#  "'): check spelling of text box input."))
+# }
+#
+#
   #SUBSET DATA USING PREDICTOR COLUMN NAMES
-  pred_data <- as.data.frame(input[ ,colnames(input) %in% predictors2])
-  model_data <- data.frame(input[,facA], pred_data)
-  colnames(model_data) <- c(paste0(facA), predictors2)
-  
+# pred_data <- mSetObj$analSet$svmReg$res$pred.data
+#   pred_data <- input[,which(colnames(input) %in% predictors2), drop = FALSE]
+# model_data <- data.frame(input[,facA], pred_data)
+#  colnames(model_data) <- c(paste0(facA), predictors2)
+#  
   #GENERATE TEST AND TRAIN
-  set.seed(37) #Ensures same selection of data each time
-  index <- sample(1:nrow(model_data), 0.7*nrow(model_data)) #Select 70% of dataset (this will be for train)
-  train_data <- model_data[index,] #70% of dataset
-  test_data <- model_data[-index,] #30% of dataset
-  # PREDICTOR
-  predictors_train <- model.matrix(train_data[,1] ~ ., train_data)[,-1] # Train predictor variables, creating dummy variables for categorical variables
-  predictors_test <- model.matrix(test_data[,1] ~ ., test_data)[,-1] # Test predictor variables, creating dummy variables for categorical variables
- 
+#  set.seed(37) #Ensures same selection of data each time
+#  index <- sample(1:nrow(model_data), 0.7*nrow(model_data)) #Select 70% of dataset (this will be for train)
+#  train_data <- model_data[index,,drop=FALSE] #70% of dataset
+#  test_data <- model_data[-index,,drop=FALSE] #30% of dataset
+#  # PREDICTOR
+#  predictors_train <- model.matrix(train_data[,1] ~ ., train_data)[,-1] # Train predictor variables, creating dummy variables for categorical variables
+#  predictors_test <- model.matrix(test_data[,1] ~ ., test_data)[,-1] # Test predictor variables, creating dummy variables for categorical variables
+# RESPONSE
+# response_train <- train_data[,facA, drop=TRUE] # response data for train dataset
+# response_test <- test_data[,facA, drop=TRUE] # response data for test dataset
+ #
 #BUILD MODEL, get predicted
-    model <- e1071::tune(e1071::svm, formula,  data = as.data.frame(predictors_train), ranges = list(epsilon = seq(0,1,0.1), cost = 2^(seq(0.5,8,.5))))
-    tunedModel <- model$best.model
-    #model_name <- "SVM Regression"
-    prediction <- predict(tunedModel, newdata = as.matrix(predictors_test)) #Need to create loop for when family="multinomial"
+# print("PLOT: before model making")
+#    mod <- e1071::tune(e1071::svm, form,  data = as.data.frame(predictors_train), ranges = list(epsilon = seq(0,1,0.1), cost = 2^(seq(0.5,8,.5))))
+#print("PLOT: after model making")
+#    tunedModel <- mod$best.model
+#    prediction <- predict(tunedModel, newdata = as.matrix(predictors_test)) #Need to create loop for when family="multinomial" making
+#print("PLOT: after predicting")
+#
 
 ###### 
-###### [CRUNCH DONE]
+###### [COLLAPSE FINISH]
 
-  dfpred <- data.frame(fpred = prediction, fA = input[,facA])
+# mod <- mSetObj$analSet$svmReg$mod$model
+tunedModel <- mod$final.model
+test_data <- mSetObj$analSet$svmReg$res$test.data
+prediction <- mSetObj$analSet$svmReg$res$test.prediction
+#test_rmse <- mSetObj$analSet$svmReg$res$test.RMSE
+
+##### THINGS TO PLOT: 
+## REGRESSION TYPE: https://stats.stackexchange.com/questions/94118/difference-between-ep-svr-and-nu-svr-and-least-squares-svr
+## EPSILON, NU 
+## epsilon value, cost value, gamma value, number of support vectors
+## plot_cost <- tunedModel$cost; plot_gamma <- tunedModel$gamma ; plot_nsv <- tunedModel$tot.nSV
+    
+  dfpred <- data.frame(fpred = prediction, fA = test_data[,facA])
   formula2 <- as.formula("fA ~ fpred")
   model2 <- lm(formula = formula2, data = dfpred)
     
@@ -300,7 +361,7 @@ imgName, format="png", dpi=72, width=NA){
   imgName <- paste(imgName, "dpi", dpi, ".", format, sep="")
   mSetObj$imgSet$plot.pred.svmReg <- imgName
     
-    
+
  ### TROUBLESHOOTING:
   ##   col_dots1<-"blue"
   ##   col_line1<-"red"
@@ -308,7 +369,53 @@ imgName, format="png", dpi=72, width=NA){
   ##   plot_title1 <- paste0("Predicted vs Actual\n(", as.expression(formula), ")")
   ##   plot_ylab1 <- "Actual"
   ##   plot_xlab1<- "Predicted"
-  
+  ##  plot_label_size1 <- 3.88*0.9
+  ##  plot_text_size1 <-  12*0.9  
+  ## plot_metric1 <- "RMSE : 0.5"
+
+ # PLOT METRIC
+if(plot_metric == "NULL"){
+plot_metric1 <- ""
+} else  if(plot_metric == "rmse"){
+plot_metric1 <- paste0("RMSE = ", round(mSetObj$analSet$svmReg$res$test.RMSE, 2))
+} else  if(plot_metric == "cost"){
+plot_metric1 <- paste0("Cost = ", round(tunedModel$cost, 2) )
+} else  if(plot_metric == "gamma"){
+plot_metric1 <- paste0("Gamma = ", round(tunedModel$gamma, 2) )
+} else  if(plot_metric == "epsilon"){
+plot_metric1 <- paste0("Epsilon = ", round(tunedModel$epsilon, 2) )
+} else {
+plot_metric1 <- ""
+}
+
+# PLOT TEXT SIZE
+# plot_base_size <- theme_bw()$text$size # 11 
+# https://stackoverflow.com/questions/53560599/how-to-change-the-default-font-size-in-ggplot2-including-geom-text
+ plot_label_size <- GeomLabel$default_aes$size #3.88
+ plot_base_size <- 12
+    #SET TEXT SIZE
+  plot_text_size1 <- 
+				switch(
+					plot_text_size,
+					"NULL" = plot_base_size,
+					"medium" = plot_base_size,
+					"small" = 0.8*plot_base_size,
+					"extrasmall" = 0.6*plot_base_size,
+                                        "large" = 1.2*plot_base_size,
+					"extralarge" = 1.4*plot_base_size,
+					NULL
+				)
+ plot_label_size1 <- 
+				switch(
+					plot_text_size,
+					"NULL" = plot_label_size,
+					"medium" = plot_label_size,
+					"small" = 0.9*plot_label_size,
+					"extrasmall" = 0.8*plot_label_size,
+                                        "large" = 1.1*plot_label_size,
+					"extralarge" = 1.15*plot_label_size,
+					NULL
+				)
   
     #SET POINT COLOR
   col_dots1 <- 
@@ -332,18 +439,11 @@ imgName, format="png", dpi=72, width=NA){
 					"grey" = "grey",
 					NULL
 				)
-
-  #SET WHETHER TO ADD 95% CONF INT
-  if (plot_ci == "false") {
-      plot_ci1 <- FALSE # default
-    } else {
-      plot_ci1 <- TRUE
-    }
   
   # PLOT TITLE
   if(plot_title == " "){ 
-    #plot_title1 <- paste0("Predicted vs Actual\n(", as.expression(formula), ")")
-    plot_title1 <- paste0("Predicted vs Actual")
+    #plot_title1 <- paste0("Predicted vs Actual\n(", as.expression(form), ")")
+    plot_title1 <- paste0("Predicted vs Actual (Test Data)")
   } else {
     plot_title1 <- plot_title
   }
@@ -375,21 +475,41 @@ imgName, format="png", dpi=72, width=NA){
     h <- w
   # plot(x=prediction, y=model_data[,facA], xlab=paste0("Predicted ", facA), ylab=paste0("Actual ", facA), main=model_name, yaxt="n"); axis(2, las=2); abline(a=0,b=1)
   
+  line_slope <- function(x, y){
+    sum((x - mean(x))*(y-mean(y))) /  sum((x - mean(x))^2)
+  }
+
   ## MAKE PLOT  
    a0 <- ggplot(data =  dfpred, aes(x = fpred, y = fA)) +
     labs(title = plot_title1) +
      ylab(plot_ylab1)+ xlab(plot_xlab1) +
-     geom_smooth(se = plot_ci1, color = col_line1, fullrange = TRUE) +#, formula = formula2) +
+     geom_smooth(se = FALSE, 
+                 color = col_line1, fullrange = TRUE) +#, formula = formula2) +
      geom_point(shape = 16, color = col_dots1) +
-     theme_bw() + 
+     # theme_bw() +
+     theme_bw(base_size = plot_text_size1) + 
   theme(panel.grid.major = element_blank(), 
         panel.grid.minor = element_blank(),
-        axis.text = element_text(size = 12, colour = "black"), 
-        axis.title = element_text(size = 12),
-        # legend.title=element_text(12), legend.text=element_text(size=12), 
+        axis.text = element_text(size=plot_text_size1, colour = "black"), 
+        axis.title = element_text(colour = "black"),
+        # legend.title=element_text(plot_text_size1), legend.text=element_text(size=plot_text_size1), 
         plot.title = element_text(face = 'bold', hjust = 0.5)
   )
-  
+
+  ## if slope is negative, line goes top L to bottom R
+  ##### want annotation to go top R 
+  ## if slope is positive, line goes bottom L to top R
+  #### want annotation to go top L 
+   
+## https://stackoverflow.com/questions/22488563/ggplot2-annotate-layer-position-in-r#22492191
+   if(line_slope(dfpred$fpred, dfpred$fA) > 0){
+   a0 <- a0 +
+      annotate("text",x=min(dfpred$fpred),y=max(dfpred$fA), hjust=.2, label=plot_metric1, size = plot_label_size1)
+   } else {
+    a0 <- a0 +   annotate("text",x=max(dfpred$fpred),y=max(dfpred$fA), hjust=.2, label=plot_metric1, label = plot_label_size1)
+   }
+  print("svm.pred: PLOT: made plot")
+
   #GENERATE PLOT
     Cairo::Cairo(file=imgName, unit="in", dpi=dpi, width=w, height=h, type=format, bg="white")
     print(a0)
@@ -397,7 +517,7 @@ imgName, format="png", dpi=72, width=NA){
     dev.off()
       
    # STORE IN mSET
-  mSetObj$analSet$svmReg$plotpred <- list(plot = a0, title = plot_title1, xlab = plot_xlab1, ylab = plot_ylab1)
+  mSetObj$analSet$svmReg$plotpred <- list(plot = a0, title = plot_title1, xlab = plot_xlab1, ylab = plot_ylab1, metric = plot_metric1)
 
   
  #JSON OBJECT MAKING
@@ -413,25 +533,10 @@ imgName, format="png", dpi=72, width=NA){
   linear_plot_json$points$shape <- build_points[,c("group")]#[,5]
   linear_plot_json$points$size <- build_points[,c("size")]#[,7]
   linear_plot_json$lines$cols <- build_line[,grepl("col",colnames(build_line))]
-  # linear_plot_json$label <- build$data[[3]][,c("label")]
-  # linear_plot_json$lines$ci <- build$data[[1]][,c("se")]
-  
-  if(any(grepl("ymin", colnames(build_line))) && any(grepl("ymax", colnames(build_line))) ){
-   ci<- build_line[,c("x","y", "ymin", "ymax")] 
-   colnames(ci) <- c("x","y","CI_down", "CI_up")
-   linear_plot_json$lines$ci <- ci # build$data[[1]][,c("ymin", "ymax")]
- } else{
-    linear_plot_json$lines$ci <- data.frame(x = build_line[,c("x")], y = build_line[,c("y")], CI_down = 0, CI_up = 0)
- }   
-  
-  ## BOOLEANS
-  if(plot_ci1 == TRUE){
-    linear_plot_json$bool_ci <- TRUE
-   } else{
-    linear_plot_json$bool_ci <- FALSE
-   }
 
-  
+
+  linear_plot_json$metric <- plot_metric1
+
   linear_plot_json$model$r_sq <-
    summary(model2)[["r.squared"]] #Extract R^2
   linear_plot_json$model$r_sq_adj <-

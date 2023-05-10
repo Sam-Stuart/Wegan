@@ -15,39 +15,57 @@
             <p:tabView id="logCA" style="width:100%; border: none; background: none; font-size: 13px;">
                 <p:tab title ="Effects Plot" titleStyleClass="p-tab-nav">
                     <h:form id="form1">
-                        <p style="font-size: 13px">
-                            One response variable and one or more independent variables are tested for correlation. The independent variables can be numeric or categorical. The dependent variable must be represented as a character. (This means if you have converted your dependent variable to 0's and 1's, make sure the data is input with quotes around the numbers - or better yet, converted back to the original value names in place of the numbers - so it will be recognized).
-                             For categorical independent variables, make sure to use characters and not numbers. For example, if there are levels 1, 2 and 3, change the level labels to I, II and III prior to upload. Independent variables can be indicated using the text box with commas to separate names. 
-                              
-                            Choose model type 'binomial' when there are 2 possible outcomes in the dependent variable. If there are more than 2, choose type 'multinomial'. However, if the dependent variable is also inherently ordered (for example, representing sizes small, medium, and large) use the text box to input the ascending variable order and choose model type 'ordinal'. 
-                            The reference level of a categorical variable (level being a unique value) can be thought of as a variable's baseline (or 'default') observed value. This means that the model results are given relative to this value. To input the reference level, use the given text box (otherwise the first level alphabetically is used).
-                           
-                            The train data for model building is 70% of the dataset, while the test data for model testing is 30% of the dataset.
+                        <p style="text-indent:10px; font-size: 13px">
+                            One response variable and one or more independent variables are tested for correlation. The independent variables can be numeric or categorical. The dependent variable must be represented as a character. (This means if you have converted your dependent variable to 0's and 1's, make sure the data is input with quotes around the numbers - or better yet, converted back to the original value names in place of the numbers - so it will be recognized).</p>
+                        <p style="text-indent:10px; font-size: 13px">For categorical independent variables, make sure to use characters and not numbers. For example, if there are levels 1, 2 and 3, change the level labels to I, II and III prior to upload. Independent variables can be indicated using the text box with commas to separate names. </p>
+                       <p style="text-indent:10px; font-size: 13px">Choose model type 'binomial' when there are 2 possible outcomes in the dependent variable. If there are more than 2, choose type 'multinomial'. However, if the dependent variable is also inherently ordered (for example, representing sizes small, medium, and large) use the text box to input the ascending variable order and choose model type 'ordinal'.</p> 
+                       <p style="text-indent:10px; font-size: 13px">The reference level of a categorical variable (level being a unique value) can be thought of as a variable's baseline (or 'default') observed value. This means that the model results are given relative to this value. To input the reference level, use the given text box (otherwise the first level alphabetically is used).</p>
+                         <p style="text-indent:10px; font-size: 13px">The train data for model building is 70% of the dataset, while the test data for model testing is 30% of the dataset.
                         </p>
 
-                        <h:panelGrid id="corrLogPane1" columns="3" cellpadding="3" columnClasses="colLeft,colRight,colLast">
+                        <h:panelGrid id="panelGrid1_1" columns="3" cellpadding="3" columnClasses="colLeft,colRight,colLast">
                             <h:outputLabel style="font-weight: bold" value="Response variable:"/>
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{logCABean.responseVar}">
                                 <f:selectItems value="#{logCABean.columnOpts}" />
                             </p:selectOneMenu>
-                            <spacer></spacer>
+                            <p:panelGrid>></p:panelGrid>
+                            
                             <h:outputLabel style="font-weight: bold" value="Reference level:"/>
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{logCABean.responseLevelVar}">
                                 <f:selectItems value="#{logCABean.columnLevelOpts}" />
                             </p:selectOneMenu>
-                            <spacer></spacer>
-                            <h:outputLabel style="font-weight: bold" value="Indicate independent variables using the column names with commas in between:"/>
-                            <p:inputText style="width:400px; height:40px" value="#{logCABean.indInput}"/> 
-                            
                             <p:panelGrid></p:panelGrid>
                             
-                             <h:outputLabel style="font-weight: bold" value="Indicate ascending order of dependent variable level names with commas in between:"/>
+                            <h:outputLabel style="font-weight: bold" value="Independent variables (names with commas in between):"/>
                             <p:inputText style="width:400px; height:40px" value="#{logCABean.indInput}"/> 
+  
+<!--                          <h:panelGrid id="listPane">
+                            <h:panelGrid style="padding-left:20px;">
+                            <p:inputTextarea  autoResize="false" value="hash{pathLoader.pathOraList}" rows="16" cols="40" />
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" style="width:360px; padding-top: 5px;">
+                                <p:outputLabel style="font-size:13px; font-weight: bold" value="Input Type: "/>
+                               
+                            </h:panelGrid>
+                        </h:panelGrid>    -->
+                            
+                        <!--<h:panelGrid columns="2">-->
+                            <!--<p:selectBooleanCheckbox value="hash{pathLoader.usePathListExample}">-->
+                  <!--<p:ajax update=":form1:listPane" event="change" listener="hash{pathLoader.updatePathListArea()}"/>-->
+                <!--<p:ajax update=":form1:listPane" event="change" listener="hash{logCABean.corrFillColumnNames()}"/>-->
+                            <!--</p:selectBooleanCheckbox>-->  
+                            <!--<p:outputLabel style="font-size:13px; font-weight: bold" value="Use our example data"/>-->
+                        <!--</h:panelGrid>-->
+                                    
+                            <p:panelGrid></p:panelGrid>
+                            
+                            <h:outputLabel style="font-weight: bold" value="Increasing order of reference levels (names with commas in between):"/>
+                            <p:inputText style="width:400px; height:40px" value="#{logCABean.indOrder}"/> 
 
                             <p:panelGrid></p:panelGrid>
                             
                                  <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
-                            <p:selectBooleanCheckbox value ="#{linearCABean.doOriginal}"/>
+                            <p:selectBooleanCheckbox value ="#{logCABean.doOriginal}"/>
                             
                             <p:panelGrid></p:panelGrid>
                             
@@ -86,7 +104,7 @@
                             </h:panelGroup>
                          <h:panelGroup>
                                 <h:panelGrid columns="3" class="resultsImages">
-                                    <i id="question" class="fa fa-question-circle" title="Only numeric variables are used in linear correlation. The linear model can be written in the form (y = x * &#946; + &#949;), where y = dependent variable; x = independent variable; &beta; = regression parameter coefficients; and &epsilon; = error values.
+                                    <i id="question" class="fa fa-question-circle" title="Only numeric variables are used in linear correlation. The generalized linear model can be written in the form (y = x * &#946; + &#949;), where y = dependent variable; x = independent variable; &beta; = regression parameter coefficients; and &epsilon; = error values.
 
 The model makes several assumptions, namely linearity, normality, homoscedasticity, independence, and that the model is not disproportionately influenced by outliers. Tests for these assumptions include the RESET for linearity(J.B. Ramsey (1969), Tests for Specification Errors in Classical Linear Least-Squares Regression Analysis. Journal of the Royal Statistical Society, Series B 31, 350--371); Kruskal-Wallis for normality(); Breusch-Pagan for homoscedasticity (T.S. Breusch and A.R. Pagan (1979), A Simple Test for Heteroscedasticity and Random Coefficient Variation. Econometrica 47, 1287--1294); and Durbin-Watson for autocorrelation (J. Durbin and G.S. Watson (1950), Testing for Serial Correlation in Least Squares Regression I. Biometrika 37, 409--428) 
 
@@ -95,7 +113,7 @@ The R &#xb2; value is the fraction of variance explained by the model and is a v
                             </h:panelGroup>   
                         </h:panelGrid>                     
                               <!--name was: 'corr_logistic1'-->                       
-                          <h:panelGrid id="corrLogPane1_2" style="width: 100%;"> 
+                          <h:panelGrid id="corrLogPane1" style="width: 100%;"> 
                             <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
                                 <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
                              <h:outputText escape="false" value="#{logCABean.fileLogModValsPath}"/>
@@ -119,13 +137,13 @@ The R &#xb2; value is the fraction of variance explained by the model and is a v
                 </p:tab>
                 <p:tab title ="ROC Curve Plot" titleStyleClass="p-tab-nav">
                     <h:form id="form2">
-                        <p style="font-size: 13px">
-                            One dependent variable and one or more independent variables are tested for correlation. The dependent variable must be numeric. The independent variables can be numeric or categorical.
-                            For categorical variables, make sure to use characters and not numbers. For example, if you have levels 1, 2 and 3, change the level labels to I, II and III prior to upload.
-                            The train data for model building is 70% of the dataset, while the test data for model testing is 30% of the dataset.
+                        <p style="text-indent:10px; font-size: 13px">
+                        One dependent variable and one or more independent variables are tested for correlation. The dependent variable must be numeric. The independent variables can be numeric or categorical.</p>
+                        <p style="text-indent:10px; font-size: 13px">For categorical variables, make sure to use characters and not numbers. For example, if you have levels 1, 2 and 3, change the level labels to I, II and III prior to upload.</p>
+                            <p style="text-indent:10px; font-size: 13px">The train data for model building is 70% of the dataset, while the test data for model testing is 30% of the dataset.
                         </p>
 
-                        <h:panelGrid id="corrLogPane2" columns="3" cellpadding="3" columnClasses="colLeft,colRight,colLast">
+                        <h:panelGrid id="panelGrid2_1" columns="3" cellpadding="3" columnClasses="colLeft,colRight,colLast">
                            <h:outputLabel style="font-weight: bold" value="Response variable:"/>
                             <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{logCABean.responseVar}">
                                 <f:selectItems value="#{logCABean.columnOpts}" />
@@ -144,7 +162,7 @@ The R &#xb2; value is the fraction of variance explained by the model and is a v
                             <p:inputText style="width:400px; height:40px" value="hash{logCABean.indInput}"/> -->
 
  <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
-                            <p:selectBooleanCheckbox value ="#{linearCABean.doOriginal}"/>
+                            <p:selectBooleanCheckbox value ="#{logCABean.doOriginal}"/>
                              <p:panelGrid></p:panelGrid>
 
                             <h:outputLabel style="font-weight: bold" value="Logistic Model Type:"/>
@@ -157,7 +175,7 @@ The R &#xb2; value is the fraction of variance explained by the model and is a v
 
                         <p:panelGrid></p:panelGrid>
                         
-                         <h:panelGrid id="panelGrid1" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;">                   
+                         <h:panelGrid id="panelGrid2_2" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;">                   
                             <p:commandButton value="Customize"
                                              styleClass="graphicsButton"
                                              style="box-shadow: none !important; text-shadow: none !important;"
@@ -191,7 +209,7 @@ The R &#xb2; value is the fraction of variance explained by the model and is a v
                             </h:panelGroup>   
                         </h:panelGrid>  
                                                     <!--name was: 'corr_logisticROC'-->                     
-                          <h:panelGrid id="corrLogPane2_2" style="width: 100%;"> 
+                          <h:panelGrid id="corrLogPane2" style="width: 100%;"> 
 <!--                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
                                 <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
                                     <h:outputText escape="false" value="hash{linearCABean.fileLinModValsPath}"/>
@@ -202,7 +220,7 @@ The R &#xb2; value is the fraction of variance explained by the model and is a v
                                 <p:commandButton value="Export"
                                     styleClass="exportButton"
                                     style="box-shadow: none !important; float:right; text-shadow: none !important;"
-                                    actionListener="#{sessionBean1.graphicsLnk_action('corr_log_eff')}"
+                                    actionListener="#{sessionBean1.graphicsLnk_action('corr_log_roc')}"
                                     oncomplete="PF('graphDialog').show()"/>
                             </h:panelGrid> 
                              <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">

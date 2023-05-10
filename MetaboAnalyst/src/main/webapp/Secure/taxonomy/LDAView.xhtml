@@ -1,0 +1,384 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/frags/_anal_template.xhtml">
+    <ui:define name="metaInfo">
+        <f:event type="preRenderView" listener="#{oaBean.performDefaultAnalysis('PCOA')}"/> 
+    </ui:define>
+    <ui:define name="myscript">
+        <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/jscripts/canvasXpress.min.js"></script>
+        <script type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/jscripts/graphics.js"></script>
+    </ui:define>
+    <ui:define name="content">
+        <h:inputHidden id="mydir" value="#{sessionBean1.getJsonDir('pcoa_score3d')}" />
+<!--        <script type="text/javascript">
+            // for scatter plot
+            function addBind() {
+                mychart = $("[id='ac:chart']");
+                mychart.unbind('jqplotDataClick');
+                mychart.bind('jqplotDataClick',
+                        function (ev, seriesIndex, pointIndex, data) {
+                            //note, we use the internal index, not point index 
+                            remoteCall([{name: 'cmpdIndex', value: data[0]}]);
+                        });
+            }
+
+            function ext() {
+                this.cfg.seriesDefaults = {
+                    lineWidth: 1.0,
+                    linePattern: 'dashed',
+                    showMarker: false,
+                    markerOptions: {
+                        color: 'rgba(128, 0, 128, 0.5)'
+                    },
+                    shadow: false
+                };
+                this.cfg.axes = {
+                    yaxis: {
+                        showLabel: true,
+                        tickOptions: {
+                            formatString: "%#.2f"
+                        }
+                    },
+                    xaxis: {
+                        showLabel: true,
+                        tickOptions: {
+                            formatString: "%#.2f"
+                        }
+                    }
+                };
+            }
+        </script>-->
+        <h:panelGrid style="padding:4px 20px 20px 20px; font-size: 12px; line-height: 23px; width:100%">
+            <h1>Principal Coordinate Analysis:</h1>            
+            <p:tabView id="PCOA">
+                <p:tab title ="2D Ordination Plot" titleStyleClass="p-tab-nav">
+                    <h:form id="form1">
+                        <p>
+                            Represent the pairwise dissimilarity between data points using a specified distance metric, and view results in a two dimensional plot. The more similar their variable values, the closer the samples are to one another. 
+                            <a href=" " style="color:blue"  title="Data is Presence/Absence: Click checkbox if you have binary presence/absence data. Perform Relative Abundance Transformation: Click checkbox if you have community data and want to apply a relative abundance transformation where each value is divded by the sum of the variable." >
+                                help?
+                            </a> 
+                        </p>
+
+                        <h:panelGrid id="panelGrid1" columns="5" cellpadding="3" columnClasses="colNMDSLong,colNMDSShort,colNMDSLong,colNMDSShort, colLast">
+                                
+                            <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
+                            <p:selectBooleanCheckbox value ="#{ordPCOABean.doOriginal}"/> 
+                            
+                            <h:outputLabel style="font-weight: bold" value="Data Is Presence/Absence:"/>
+                            <p:selectBooleanCheckbox value ="#{ordPCOABean.doBinary}"/> 
+                            <spacer></spacer>
+                            <h:outputLabel style="font-weight: bold" value="Perform Relative Abundance Transformation:"/>
+                            <p:selectBooleanCheckbox value ="#{ordPCOABean.doAbundance}"/> 
+                            
+                            <h:outputLabel style="font-weight: bold" value="Distance Metric for Measuring Dissimilarity:"/>
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordPCOABean.vegdistOpts}">
+                                <f:selectItems value="#{applicationBean1.vegdistMeasureOpts}" />
+                            </p:selectOneMenu> 
+                            <spacer></spacer>
+
+                        </h:panelGrid>
+                        <h:panelGrid></h:panelGrid>
+                        <h:panelGrid id="panelGrid1_2" columns="2" cellpadding="3" style="float: right; text-shadow: none !important;"> 
+                            
+                            <p:commandButton value="Customize Graph"
+                                             styleClass="graphicsButton"
+                                             style="box-shadow: none !important; text-shadow: none !important;"
+                                             actionListener="#{sessionBean1.graphicsLnk_action('ord_pcoa_2D')}" 
+                                            oncomplete="PF('graphApperancePCOA').show()"/>  
+                                           
+                            <p:commandButton value="Update" 
+                                             styleClass="updateButton"
+                                             style="box-shadow: none !important; text-shadow: none !important"
+                                            onclick="PF('statusDialog').show()"
+                                            oncomplete="PF('statusDialog').hide()"  
+                                            update=":PCOA:form1:pcoaPane1  :cmdPane" 
+                                            actionListener="#{ordPCOABean.pcoa_2D_Update_action()}"/>                          
+                        </h:panelGrid>
+                        
+                        <h:panelGrid class="resultsBar" columns="2">
+                            <h:panelGroup>
+                                <h:panelGrid columns="1" style="text-align : left;">
+                                    Results
+                                </h:panelGrid>
+                            </h:panelGroup> 
+                            <h:panelGroup>
+                                <h:panelGrid columns="3" class="resultsImages">
+                                    <i id="question" class="fa fa-question-circle" title="The use of data groupings and constraining data will create more interesting plots. Load grouping and constraining data separately, where each row aligns with the rows in your main data set. The position of variable arrows and constraining variables indicate which factors have the greatest impact on the relative position of the samples."></i>
+                                </h:panelGrid>
+                            </h:panelGroup>                            
+                        </h:panelGrid>
+                        <h:panelGrid id="pcoaPane1" style="width: 100%;">
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
+                                    <h:outputText escape="false" value="#{ordPCOABean.file2DSampleScoresPath}"/>
+                                </i>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
+                                    <h:outputText escape="false" value="#{ordPCOABean.file2DColScoresPath}"/>
+                                </i>    
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
+                                    <h:outputText style="padding-left: 6px" escape="false" value="#{ordPCOABean.file2DEnvScoresPath}"/>
+                                </i>
+                            </h:panelGrid> 
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <p:commandButton value="Export"
+                                    styleClass="exportButton"
+                                    style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                    actionListener="#{sessionBean1.graphicsLnk_action('ord_pcoa_2D')}"
+                                    oncomplete="PF('graphDialog').show()"/>
+                            </h:panelGrid> 
+                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('ord_pcoa_2D')}" alt="pcoa2D"/>
+                            </h:panelGrid>                            
+                        </h:panelGrid> 
+                    </h:form>
+                </p:tab>
+                
+                <p:tab title ="3D Scores Plot" titleStyleClass="p-tab-nav">
+                    <h:form id="form2">
+                        <p>
+                            Represent the pairwise dissimilarity between data points using a specified distance metric, and view results in a three dimensional plot. 
+                            <a href=" " style="color:blue"  title="Data is Presence/Absence: Click checkbox if you have binary presence/absence data. Perform Relative Abundance Transformation: Click checkbox if you have community data and want to apply a relative abundance transformation where each value is divded by the sum of the variable." >
+                                help?
+                            </a> 
+                        </p>
+                        <h:panelGrid id="panelGrid2" columns="5" cellpadding="3" columnClasses="colNMDSLong,colNMDSShort,colNMDSLong,colNMDSShort, colLast">
+                                
+                            <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
+                            <p:selectBooleanCheckbox value ="#{ordPCOABean.doOriginal}"/> 
+                            
+                            <h:outputLabel style="font-weight: bold" value="Data Is Presence/Absence:"/>
+                            <p:selectBooleanCheckbox value ="#{ordPCOABean.doBinary}"/> 
+                            <spacer></spacer>
+
+                            <h:outputLabel style="font-weight: bold" value="Perform Relative Abundance Transformation:"/>
+                            <p:selectBooleanCheckbox value ="#{ordPCOABean.doAbundance}"/> 
+                            
+                            <h:outputLabel style="font-weight: bold" value="Distance Metric for Measuring Dissimilarity:"/>
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordPCOABean.vegdistOpts}">
+                                <f:selectItems value="#{applicationBean1.vegdistMeasureOpts}" />
+                            </p:selectOneMenu> 
+
+                            <spacer></spacer>
+                                
+                        </h:panelGrid>
+                        <h:panelGrid></h:panelGrid>
+
+                        <h:panelGrid columns="1" cellpadding="3" style="float: right">    
+                            <p:commandButton value="Update" 
+                                             styleClass="updateButton"
+                                             style="box-shadow: none !important; text-shadow: none !important"
+                                            onclick="PF('statusDialog').show()"
+                                            oncomplete="PF('statusDialog').hide()"  
+                                            update=":PCOA:form2:pcoaPane2  :cmdPane" 
+                                            actionListener="#{ordPCOABean.pcoa_3D_Update_action()}"/>                           
+                        </h:panelGrid>
+                        <h:panelGrid class="resultsBar" columns="2">
+                            <h:panelGroup>
+                                <h:panelGrid columns="1" style="text-align : left;">
+                                    Results
+                                </h:panelGrid>
+                            </h:panelGroup> 
+                            <h:panelGroup>
+                                <h:panelGrid columns="3" class="resultsImages">
+                                    <i id="question" class="fa fa-question-circle" title="TO DO: Help with plot"></i>
+                                </h:panelGrid>
+                            </h:panelGroup>                            
+                        </h:panelGrid>
+                                                
+                        <h:panelGrid id="pcoaPane2" style="width: 100%;">
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
+                                    <h:outputText escape="false" value="#{ordPCOABean.file3DSampleScoresPath}"/>
+                                </i>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
+                                    <h:outputText escape="false" value="#{ordPCOABean.file3DColScoresPath}"/>
+                                </i>    
+                            </h:panelGrid>
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <p:commandButton value="Export"
+                                    styleClass="exportButton"
+                                    style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                    actionListener="#{sessionBean1.graphicsLnk_action('ord_pcoa_3D')}"
+                                    oncomplete="PF('graphDialog').show()"/>
+                            </h:panelGrid> 
+                            <h:panelGrid style="width: 100%; text-align: center">
+                                <canvas id='canvasPCOA' width='670px' height='630px'/>
+                            </h:panelGrid> 
+                        </h:panelGrid> 
+                    </h:form>
+                </p:tab> 
+                
+                <p:tab title ="Scree Plot" titleStyleClass="p-tab-nav">
+                    <h:form id="form3">
+                        <p>
+                            Calculate the proportion of variance explained by each dimension using eigenvalues. The green line on top shows the accumulated variance explained; the blue line underneath shows the variance explained by individual dimensions.
+                            <a href=" " style="color:blue"  title="Data is Presence/Absence: Click checkbox if you have binary presence/absence data. Perform Relative Abundance Transformation: Click checkbox if you have community data and want to apply a relative abundance transformation where each value is divded by the sum of the variable." >
+                                help?
+                            </a> 
+                        </p>
+                        <h:panelGrid id="panelGrid3" columns="5" cellpadding="3" columnClasses="colNMDSLong,colNMDSShort,colNMDSLong,colNMDSShort, colLast">
+                                
+                            <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
+                            <p:selectBooleanCheckbox value ="#{ordPCOABean.doOriginal}"/> 
+                                                        
+                            <h:outputLabel style="font-weight: bold" value="Data Is Presence/Absence:"/>
+                            <p:selectBooleanCheckbox value ="#{ordPCOABean.doBinary}"/> 
+                            <spacer></spacer>
+
+                            <h:outputLabel style="font-weight: bold" value="Perform Relative Abundance Transformation:"/>
+                            <p:selectBooleanCheckbox value ="#{ordPCOABean.doAbundance}"/> 
+                            
+                            <h:outputLabel style="font-weight: bold" value="Distance Metric for Measuring Dissimilarity:"/>
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordPCOABean.vegdistOpts}">
+                                <f:selectItems value="#{applicationBean1.vegdistMeasureOpts}" />
+                            </p:selectOneMenu> 
+
+                            <spacer></spacer>
+                                
+                            <h:outputLabel style="font-weight: bold" value="Number of Dimensions:"/>
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordPCOABean.pcoaScreeDimNum}">
+                                <f:selectItems value="#{ordPCOABean.pcoaScreeDimOpts}" />
+                            </p:selectOneMenu> 
+                        </h:panelGrid>
+                        <h:panelGrid></h:panelGrid>
+
+                        <h:panelGrid columns="1" cellpadding="3" style="float: right">    
+                            <p:commandButton value="Update" 
+                                             styleClass="updateButton"
+                                             style="box-shadow: none !important; text-shadow: none !important"
+                                            onclick="PF('statusDialog').show()"
+                                            oncomplete="PF('statusDialog').hide()"                                            
+                                            update=":PCOA:form3:pcoaPane3  :cmdPane" 
+                                            actionListener="#{ordPCOABean.pcoa_scree_Update_action()}"/>                          
+                        </h:panelGrid>
+                        <h:panelGrid class="resultsBar" columns="2">
+                            <h:panelGroup>
+                                <h:panelGrid columns="1" style="text-align : left;">
+                                    Results
+                                </h:panelGrid>
+                            </h:panelGroup> 
+<!--                            <h:panelGroup>
+                                <h:panelGrid columns="3" class="resultsImages">
+                                    <i id="question" class="fa fa-question-circle" title="Use Oringinal Data: Click checkbox if you would like to perform analysis on data before normalization. Data is Presence/Absence: Click checkbox if you have binary presence/absence data. Perform Relative Abundance Transformation: Click checkbox if you have community data and want to apply a relative abundance transformation. This is the value divded by the sum of the variable. Distance Metric for Measuring Dissimilarity: Select the desired distance for calculating dissimilarity. Number of Principal Components: Select the number of dimensions to plot."></i>
+                                </h:panelGrid>
+                            </h:panelGroup> -->
+                        </h:panelGrid>
+                        <h:panelGrid id="pcoaPane3" style="width: 100%;">
+                            <h:panelGrid columns="2" style="width: 100%; line-height: 25px; border-bottom: 2px solid #8cbd48">
+                                <i class="fa fa-download fa-2x" style="align: middle; width: 1px; padding-right: 1px">
+                                    <h:outputText escape="false" value="#{ordPCOABean.fileScreePath}"/>
+                                </i>
+                            </h:panelGrid>
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <p:commandButton value="Export"
+                                    styleClass="exportButton"
+                                    style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                    actionListener="#{sessionBean1.graphicsLnk_action('ord_pcoa_scree')}"
+                                    oncomplete="PF('graphDialog').show()"/>
+                            </h:panelGrid>                        
+                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('ord_pcoa_scree')}" alt="pcoascree"/>
+                            </h:panelGrid>                           
+                            
+                        </h:panelGrid>  
+                       
+                    </h:form>
+                </p:tab>    
+                
+                <p:tab title ="Shepard Plot" titleStyleClass="p-tab-nav">
+                    <h:form id="form4">
+                        <p>
+                            Plot the pairwise dissimilarity between data points against the ordination distance calculated by the PCoA. When data points swarm around the red line, the PCoA was successful in representing the data in lower dimensions. 
+                            <a href=" " style="color:blue"  title="Data is Presence/Absence: Click checkbox if you have binary presence/absence data. Perform Relative Abundance Transformation: Click checkbox if you have community data and want to apply a relative abundance transformation where each value is divded by the sum of the variable." >
+                                help?
+                            </a> 
+                        </p>
+                        <h:panelGrid id="panelGrid4" columns="5" cellpadding="3" columnClasses="colNMDSLong,colNMDSShort,colNMDSLong,colNMDSShort, colLast">
+                                
+                            <h:outputLabel style="font-weight: bold" value="Use Original (Non-Normalized) Data:"/>
+                            <p:selectBooleanCheckbox value ="#{ordPCOABean.doOriginal}"/> 
+                                                        
+                            <h:outputLabel style="font-weight: bold" value="Data Is Presence/Absence:"/>
+                            <p:selectBooleanCheckbox value ="#{ordPCOABean.doBinary}"/> 
+                            <spacer></spacer>
+
+                            <h:outputLabel style="font-weight: bold" value="Perform Relative Abundance Transformation:"/>
+                            <p:selectBooleanCheckbox value ="#{ordPCOABean.doAbundance}"/> 
+                            
+                            <h:outputLabel style="font-weight: bold" value="Distance Metric for Measuring Dissimilarity:"/>
+                            <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{ordPCOABean.vegdistOpts}">
+                                <f:selectItems value="#{applicationBean1.vegdistMeasureOpts}" />
+                            </p:selectOneMenu> 
+                            <spacer></spacer>
+                                
+                        </h:panelGrid>
+                        <h:panelGrid></h:panelGrid>
+
+                        <h:panelGrid columns="1" cellpadding="3" style="float: right">    
+                            <p:commandButton value="Update" 
+                                             styleClass="updateButton"
+                                             style="box-shadow: none !important; text-shadow: none !important"
+                                            onclick="PF('statusDialog').show()"
+                                            oncomplete="PF('statusDialog').hide()"  
+                                            update=":PCOA:form4:pcoaPane4  :cmdPane" 
+                                            actionListener="#{ordPCOABean.pcoa_stress_Update_action()}"/>                          
+                        </h:panelGrid>
+                        <h:panelGrid class="resultsBar" columns="2">
+                            <h:panelGroup>
+                                <h:panelGrid columns="1" style="text-align : left;">
+                                    Results
+                                </h:panelGrid>
+                            </h:panelGroup> 
+<!--                            <h:panelGroup>
+                                <h:panelGrid columns="3" class="resultsImages">
+                                    <i id="question" class="fa fa-question-circle" title="Use Oringinal Data: Click checkbox if you would like to perform analysis on data before normalization. Data is Presence/Absence: Click checkbox if you have binary presence/absence data. Perform Relative Abundance Transformation: Click checkbox if you have community data and want to apply a relative abundance transformation. This is the value divded by the sum of the variable. Distance Metric for Measuring Dissimilarity: Select the desired distance for calculating dissimilarity."></i>
+                                </h:panelGrid>
+                            </h:panelGroup> -->
+                        </h:panelGrid>
+                        
+                        <h:panelGrid id="pcoaPane4" style="width: 100%;">
+                            <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <p:commandButton value="Export"
+                                    styleClass="exportButton"
+                                    style="box-shadow: none !important; float:right; text-shadow: none !important;"
+                                    actionListener="#{sessionBean1.graphicsLnk_action('ord_pcoa_stress')}"
+                                    oncomplete="PF('graphDialog').show()"/>
+                            </h:panelGrid>                               
+                             <h:panelGrid columns="1" style="width: 100%; line-height: 25px; text-align: center">
+                                <img onerror='this.style.display="none"' src="#{sessionBean1.getCurrentImageURL('ord_pcoa_stress')}" alt="pcoastress"/>
+                            </h:panelGrid>                           
+                        </h:panelGrid>  
+                       
+                    </h:form>
+                </p:tab>
+                
+            </p:tabView>
+        </h:panelGrid>
+        <p:dialog modal="true" widgetVar="graphApperancePCOA" 
+            style="width: 400px; height:400px;" 
+            appendTo="@(body)" header="Graphics Center"
+            draggable="false" closable="true" resizable="false"> 
+            <ui:include src="_color_palette_pcoa.xhtml" />
+        </p:dialog>
+<!--        <script type="text/javascript">
+            showPCOA3DScore();
+            $("[id='ac:chart']").bind('jqplotDataClick',
+                    function (ev, seriesIndex, pointIndex, data) {
+                        //note, we use the internal index, not point index 
+                        remoteCall([{name: 'cmpdIndex', value: data[0]}]);
+                    });
+        </script>-->
+    </ui:define>
+</ui:composition>

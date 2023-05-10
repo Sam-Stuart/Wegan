@@ -33,7 +33,7 @@
                         <h:commandLink id="poly" style="margin-left: 25px" action="Polynomial" onclick="PF('statusDialog').show()" value="Polynomial Regression"/>
                         <p:tooltip for="poly" style="font-size: 11px;" value="TO DO: Add hover." />
                     </h:panelGrid>
-                    
+
                     <h:panelGrid>
                         <h2>Multivariate Analysis:</h2>
                         <h:commandLink id="multi" style="margin-left: 25px; color: rgb(66, 133, 244)" action="MultivariateLinear" onclick="PF('statusDialog').show()" value="Multivariate Linear Regression"/>
@@ -50,6 +50,8 @@
                         <p:tooltip for="svm" style="font-size: 11px;" value="TO DO: Add hover." />
                         <h:commandLink id="rf" style="margin-left: 25px" action="RFCorrelation" onclick="PF('statusDialog').show()" value="Random Forest Regression"/>
                         <p:tooltip for="rf" style="font-size: 11px;" value="TO DO: Add hover." />
+                        <h:commandLink id="ann" style="margin-left: 25px" action="ANNCorrelation" onclick="PF('statusDialog').show()" value="Artificial Neural Network (ANN) Regression"/>
+                        <p:tooltip for="ann" style="font-size: 11px;" value="TO DO: Add hover." />
                     </h:panelGrid>
                 </h:panelGrid>
             </h:panelGrid> 

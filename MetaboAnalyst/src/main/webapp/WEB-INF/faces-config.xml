@@ -443,6 +443,7 @@
             <to-view-id>/Secure/correlation/CorrelationView.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
+        <!--CORRELATION FUNCTIONS--> 
         <navigation-case>
             <from-outcome>Linear</from-outcome>
             <to-view-id>/Secure/correlation/LinearView.xhtml</to-view-id>
@@ -466,6 +467,11 @@
         <navigation-case>
             <from-outcome>RFCorrelation</from-outcome>
             <to-view-id>/Secure/correlation/RFCorrelationView.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+       <navigation-case>
+            <from-outcome>ANNCorrelation</from-outcome>
+            <to-view-id>/Secure/correlation/ANNCorrelationView.xhtml</to-view-id>
             <redirect/>
         </navigation-case>
         <navigation-case>
