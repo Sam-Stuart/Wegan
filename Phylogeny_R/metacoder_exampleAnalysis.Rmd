@@ -1,0 +1,247 @@
+---
+title: "metacoder_exampleAnalysis"
+author: "Xin (David) Zhao"
+date: "2023-05-02"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Example analysis 
+
+This R Markdown file demonstrate basic workflow to plot the heat tree using `metacoder` package. 
+
+Develop the following R scripts by following the instruction step by step in the metacoder [website](https://grunwaldlab.github.io/metacoder_documentation/example.html)
+
+### Reading data 
+
+```{r, message=FALSE}
+
+# install.packages("metacoder")
+library(metacoder)
+library(taxa)
+
+```
+
+```{r}
+
+# Abundance matrix included in metacoder package 
+head(hmp_otus)
+
+```
+In `hmp_otus`, columns are samples and rows are OTUs. 
+
+```{r}
+
+# Load sample data table 
+head(hmp_samples)
+
+```
+In `hmp_samples`, columns are clinical variables and rows are samples. 
+
+Process the abundance matrix and parse the taxonomic information in the mean time. 
+
+```{r}
+obj <- metacoder::parse_tax_data(hmp_otus,
+                                 class_cols = "lineage", # The column contains taxonomic information 
+                                 class_sep = ";", # The character separating taxa in the lineage 
+                                 class_regex = "^(.+)_(.+)$", # Regex identifying where the string for each taxon is   
+                                 class_key = c(tax_rank = "info", # A key describing each regex capture group 
+                                               tax_name = "taxon_name"))  
+
+```
+
+```{r}
+
+# View the obj, a taxmap object 
+print(obj)
+
+```
+
+### Abundance matrix manipulation 
+#### Remove low-abundance counts 
+
+The low-abundance sequences might be the results of sequencing error, so typically we remove any counts/ OTUs with less than some number of reads. In this example analysis, set all counts with less than 5 reads to zero, overwriting the original table. 
+
+```{r}
+
+obj$data$tax_data <- metacoder::zero_low_counts(obj, 
+                                                data = "tax_data", 
+                                                min_count = 5)
+
+```
+Check OTUs that no longer contain any observations after setting low-abundance to zero. 
+
+```{r}
+
+no_reads <- base::rowSums(obj$data$tax_data[, hmp_samples$sample_id]) == 0 
+
+# Print 211 OTUs that has zero reads 
+sum(no_reads)
+
+```
+
+Remove 211 OTUs and their associated taxa with `filter_obs` from `taxa` package. 
+
+```{r}
+
+obj <- metacoder::filter_obs(obj, 
+                             data = "tax_data",
+                             !no_reads,
+                             drop_taxa = TRUE) 
+
+# print(obj)
+
+```
+#### Accounting for un-even sampling
+
+In practice, some samples may have more reads than others due to imperfect sequencing technologies. Typically, people work with rarefied counts or proportions to try to avoid the possibility fo sampling depth biasing the results. 
+
+Use the function `calc_obs_props` to divide each sample's counts by the total number of counts observed for each sample, resulting in a proportion.  
+
+```{r}
+
+obj$data$tax_data <- metacoder::calc_obs_props(obj, "tax_data") 
+
+```
+#### Get per-taxon information 
+
+To get information on the taxa, we sum the abundance per-taxon and add the results to the `taxmap` object in a new table. 
+
+```{r} 
+
+# Sum observation values for each taxon 
+obj$data$tax_abund <- metacoder::calc_taxon_abund(obj, # taxmap object 
+                                                  "tax_data", # The name of a table in obj$data 
+                                                  cols = hmp_samples$sample_id) # The columns in data to use 
+
+
+```
+
+Calculate the number of samples that have reads for each taxon. 
+
+```{r}
+
+# Count the number of samples 
+obj$data$tax_occ <- metacoder::calc_n_samples(obj, # A taxmp object
+                                              "tax_abund", 
+                                              groups = hmp_samples$body_site, # Group columns per treatment/group
+                                              cols = hmp_samples$sample_id) 
+
+
+print(obj$data$tax_occ)
+
+```
+
+### Plot taxonomic tree (also known as heat tree)
+
+The node below plots the number of "Nose" samples that have reads for each taxon as the size of each each taxon. It also plots the number of OTUs assigned to each taxon in the overall dataset as color. 
+```{r}
+
+set.seed(1) # This makes the plot appear the same every time it is generated 
+
+metacoder::heat_tree(obj, # A taxmap object 
+                     node_label = taxon_names, 
+                     node_size = n_obs,
+                     node_color = Nose, # Non-standard evaluation (NSE) 
+                     node_size_axis_label = "OTU count",
+                     node_color_axis_label = "Sample with reads",
+                     layout = "davidson-harel", # The primary layout algorithm 
+                     initial_layout = "reingold-tilford") # The layout algorithm that initializes node locations 
+
+```
+#### Compare two treatments/ groups 
+
+```{r, warning=FALSE}
+
+obj$data$diff_table <- metacoder::compare_groups(obj,
+                                                 data = "tax_abund",
+                                                 cols = hmp_samples$sample_id, # What columns of samples data to use 
+                                                 groups = hmp_samples$sex) # What category each sample is assigned to 
+
+print(obj$data$diff_table)
+
+```
+
+Correct for multiple comparisons. 
+
+```{r}
+
+# FDR method 
+obj$data$diff_table$wilcox_p_value <- p.adjust(obj$data$diff_table$wilcox_p_value, 
+                                               method = "fdr")
+
+# View the distribution of p-values 
+range(obj$data$diff_table$wilcox_p_value, finite = TRUE)
+
+```
+There is no significant difference. 
+
+
+For each taxon, a Wilcoxon Rank Sum test was used to test for difference between the median abundances of samples in each treatment. We use this information to create what we call a differential heat tree, which indicates which taxa are more abundant in each treatment. 
+
+```{r}
+
+set.seed(999) 
+metacoder::heat_tree(obj,
+                     node_label = taxon_names,
+                     node_size = n_obs, # n_obs in a function that calculates the number of OTUs per taxon 
+                     node_color = log2_median_ratio, # A column from 'obj$data$diff_table' 
+                     node_color_interval = c(-2, 2), # The range of 'log2_median_ratio' to display 
+                     node_color_range = c("cyan", "gray", "tan"), # The color palette used 
+                     node_size_axis_label = "OTU count",
+                     node_color_axis_label = "Log 2 ratio of median proportion",
+                     layout = "davidson-harel", # The primary layout algorithm
+                     initial_layout = "reingold-tilford") # The layout algorithm 
+
+```
+
+#### Compare multiple treatments/ groups 
+
+To compare more than two groups, we can make a matrix of heat trees, one for each pairwise comparison of treatments 
+
+```{r, warning=FALSE}
+
+obj$data$diff_table <- metacoder::compare_groups(obj,
+                                                 data = "tax_abund",
+                                                 cols = hmp_samples$sample_id,
+                                                 groups = hmp_samples$body_site) # What category each sample is assigned to
+
+
+print(obj$data$diff_table)
+
+```
+
+A special function `heat_tree_matrix` to plot this type of data 
+
+```{r} 
+
+set.seed(1) 
+
+metacoder::heat_tree_matrix(obj,
+                            data = "diff_table",
+                            node_size = n_obs,
+                            node_label = taxon_names,
+                            node_color = log2_median_ratio,
+                            node_color_range = diverging_palette(),
+                            node_color_trans = "linear",
+                            node_color_interval = c(-3, 3),
+                            edge_color_interval = c(-3, 3),
+                            node_size_axis_label = "Number of OTUs",
+                            node_color_axis_label = "Log2 ratio median proportions",
+                            layout = "davidson-harel",
+                            initial_layout = "reingold-tilford",
+                            output_file = "./Phylogeny_output.pdf") 
+
+
+```
+The grey tree on the lower left functions as a key for the unlabeled trees.
+
+
+
+
+
+
+

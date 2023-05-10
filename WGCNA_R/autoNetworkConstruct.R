@@ -3,11 +3,10 @@
 
 library(WGCNA)
 library(tidyverse)
+library(gridExtra) # Layout multiple ggplot figures 
 
 options(stringsAsFactors = FALSE)
-
-lnames <- load(file = "./output-WGCNA/consensusDataInput.RData")
-
+lnames <- load(file = "./WGCNA_output/consensusDataInput.RData")
 lnames 
 
 # Choose the soft-threshold power: analysis of network topology 
@@ -69,6 +68,57 @@ geneTree <- net$dendrograms[[1]]
 
 save(MEs, moduleLabels, moduleColors, geneTree,
      file = "./output-WGCNA/femaleLiver-networkConstruct-auto.RData")
+
+
+
+#===============================================================================
+
+# Reproduce base R plots using ggplot2 
+
+#===============================================================================
+# Scale-free topology fit index vs Soft-threshold power
+library(ggplot2) 
+# Input data for plotting 
+df_fitIndices <- sft$fitIndices 
+# Create a new column for y-axis in the first plot  
+df_fitIndices <- df_fitIndices %>% 
+        dplyr::mutate(plot1_y = -sign(slope)*SFT.R.sq) 
+        
+
+plot1 <- ggplot2::ggplot(df_fitIndices, 
+                         aes(x = Power, y = plot1_y)) +
+                geom_point() + 
+                geom_label(aes(label = Power),
+                           position = "nudge") +
+                labs(x = "Soft power thresholds",
+                     y = "Scale-free topology fit index") + 
+                scale_y_continuous(limits = c(0, 1)) + 
+                theme_classic()
+        
+print(plot1) 
+
+
+# Mean connectivity  
+plot2 <- ggplot2::ggplot(df_fitIndices,
+                         aes(x = Power, y = mean.k.)) + 
+                geom_point() + 
+                geom_label(aes(label = Power),
+                           position = "nudge") +
+                labs(x = "Soft power thresholds",
+                     y = "Mean connectivity") + 
+                theme_classic() 
+
+print(plot2)
+
+# Arrange two plots side-by-side on one page 
+mergePlots <- gridExtra::grid.arrange(plot1, 
+                                      plot2, 
+                                      nrow = 1, 
+                                      name = "Soft Power Thresdholding")
+
+
+
+
 
 
 
