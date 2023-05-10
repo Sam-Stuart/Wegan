@@ -1,0 +1,60 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+
+    <h:form id="ANNGraph">
+        <h:panelGrid columns="1" style="width:380px;">
+            <h:panelGrid id="panelGrid1" columns="2" cellpadding="5" columnClasses="colBrayLong,colBrayShort">
+
+                <h3>Node Colors</h3>
+                <p:panelGrid></p:panelGrid>
+
+                <h:outputLabel style="font-weight: bold" value="Input Node Color:"/>
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{rfCABean.corPaletteNonPredictors}">
+                    <f:selectItems value="#{applicationBean1.corColorPaletteNonPredictors}" />
+                </p:selectOneMenu> 
+                
+                <h:outputLabel style="font-weight: bold" value="Remaining Nodes Color:"/>
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{rfCABean.corPalettePredictors}">
+                    <f:selectItems value="#{applicationBean1.corColorPalettePredictors}" />
+                </p:selectOneMenu>  
+                
+                <h3> Plot Options </h3>
+                <p:panelGrid></p:panelGrid>
+                <h:outputLabel style="font-weight: bold" value="Text Size:"/>
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{rfCABean.corTextSizeOpts}">
+                    <f:selectItems value="#{applicationBean1.corLinTextSizeOpts}" />
+                </p:selectOneMenu>  
+
+                <h:outputLabel style="font-weight: bold" value="Squish Plot:"/>
+                <p:panelGrid></p:panelGrid>
+                <p style="font-size: 10px">
+                            Higher numbers mean bring elements closer and make plot narrower.
+                </p>
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{rfCABean.corNarrowWidthOpts}">
+                    <f:selectItems value="#{applicationBean1.corPlotNarrowWidthOpts}" />
+                </p:selectOneMenu>  
+                
+                <h:outputLabel style="font-weight: bold" value="Plot Title:"/>
+                <p:inputText value = "#{rfCABean.corPlotTitle}"/> 
+                
+                <!--<p:panelGrid></p:panelGrid>-->
+
+            </h:panelGrid>
+            <h:panelGrid id="panelGrid2" columns="1" cellpadding="5" style="float: right">
+                <p:commandButton value="Update" 
+                                 styleClass="updateButton"
+                                 style="box-shadow: none !important; text-shadow: none !important"
+                                onclick="PF('statusDialog').show()"
+                                oncomplete="PF('graphApperanceANN').hide(); PF('statusDialog').hide()"  
+                                update=":ANNCA:form1:corrANNPane1  :cmdPane"
+                                actionListener="#{rfCABean.corrANNBtn_action()}"/>
+            </h:panelGrid>
+        </h:panelGrid>
+    </h:form>
+</ui:composition>

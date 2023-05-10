@@ -9,7 +9,7 @@
 
     <h:form id="linGraph">
         <h:panelGrid columns="1" style="width:380px;">
-            <h:panelGrid id="panelGrid1" columns="2" cellpadding="5" columnClasses="colBrayLong,colBrayShort">
+            <h:panelGrid id="panelGridGraphic1" columns="2" cellpadding="5" columnClasses="colBrayLong,colBrayShort">
                 
                 <h3>On-Plot Display Options</h3>
                 <p:panelGrid></p:panelGrid>                
@@ -50,11 +50,45 @@
                 
                  <h:outputLabel style="font-weight: bold" value="Y-Axis Label"/>
                 <p:inputText value = "#{linearCABean.corPlotYlab}"/> 
-                
+
                 <!--<p:panelGrid></p:panelGrid>-->
 
             </h:panelGrid>
-            <h:panelGrid id="panelGrid2" columns="1" cellpadding="5" style="float: right">
+            
+            <h:panelGrid id="panelGridGraphic2" columns="5" cellpadding="3" columnClasses="colLeftLong,colRight,colLeftLong,colRight, colLast">
+                
+                <h3>Label Size</h3>
+                <p:panelGrid></p:panelGrid>                 
+                
+                <h:outputLabel style="font-weight: bold" value="Title:"/>
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linearCABean.corTextSizeTitle}">
+                    <f:selectItems value="#{applicationBean1.corSizeTitle}" />
+                </p:selectOneMenu> 
+                
+                <h:outputLabel style="font-weight: bold" value="X-Axis Label"/>
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linearCABean.corTextSizeXlab}">
+                    <f:selectItems value="#{applicationBean1.corSizeXlab}" />
+                </p:selectOneMenu> 
+                
+                <h:outputLabel style="font-weight: bold" value="X-Axis Tick"/>
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linearCABean.corTextSizeXtick}">
+                    <f:selectItems value="#{applicationBean1.corSizeXtick}" />
+                </p:selectOneMenu> 
+                
+                <h:outputLabel style="font-weight: bold" value="Y-Axis Label"/>
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linearCABean.corTextSizeYlab}">
+                    <f:selectItems value="#{applicationBean1.corSizeYlab}" />
+                </p:selectOneMenu> 
+                
+                <h:outputLabel style="font-weight: bold" value="Y-Axis Tick"/>
+                <p:selectOneMenu styleClass="menu" panelStyleClass="panel" value="#{linearCABean.corTextSizeYtick}">
+                    <f:selectItems value="#{applicationBean1.corSizeYtick}" />
+                </p:selectOneMenu> 
+                       
+                            
+             </h:panelGrid>   
+            
+            <h:panelGrid id="panelGridGraphic3" columns="1" cellpadding="5" style="float: right">
                 <p:commandButton value="Update" 
                                  styleClass="updateButton"
                                  style="box-shadow: none !important; text-shadow: none !important"

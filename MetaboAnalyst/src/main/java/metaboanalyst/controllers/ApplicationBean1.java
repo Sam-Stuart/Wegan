@@ -9,6 +9,8 @@ import metaboanalyst.models.User;
 import metaboanalyst.utils.DataUtils;
 import java.io.File;
 import java.io.Serializable;
+//import java.util.Arrays;
+//import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
@@ -143,7 +145,19 @@ public class ApplicationBean1 implements Serializable {
     private final SelectItem[] corLinColorLineOpts; 
     private final SelectItem[] corModType;
     private final SelectItem[] corLegPosOpts;  
+    private final SelectItem[] corColorPalettePredictors;    
+    private final SelectItem[] corColorPaletteNonPredictors;   
+    private final SelectItem[] corLinTextSizeOpts;   
+    private final SelectItem[] corPlotNarrowWidthOpts; 
     private final SelectItem[] corColorPaletteOpts;
+    private final SelectItem[] corBrewerPaletteOpts;
+    private final SelectItem[] corPlotMetricOpts;
+    private final SelectItem[] corPlotLabSize; 
+    private final SelectItem[] corSizeTitle;
+    private final SelectItem[] corSizeXlab;
+    private final SelectItem[] corSizeYlab;
+    private final SelectItem[] corSizeXtick;
+    private final SelectItem[] corSizeYtick;
     private final SelectItem[] ordColorPaletteOpts;
     private final SelectItem[] pcaPairsColorPaletteOpts;
     private final SelectItem[] boxPltColorPaletteOpts;
@@ -172,6 +186,8 @@ public class ApplicationBean1 implements Serializable {
     private final SelectItem[] ciaTypeOpts;
     private final SelectItem[] plottingDataOpts;
     private final SelectItem[] betadisperDataOpts;
+//    private final SelectItem[] columnOptsFill = null;
+   
     
     //Wegan variables begin here (currently ot used, regulat TestDataOpt is used
     
@@ -195,6 +211,8 @@ public class ApplicationBean1 implements Serializable {
     private final String testORA = "Acetoacetic acid\nBeta-Alanine\nCreatine\nDimethylglycine\nFumaric acid\nGlycine\nHomocysteine\nL-Cysteine\n"
             + "L-Isolucine\nL-Phenylalanine\nL-Serine\nL-Threonine\nL-Tyrosine\nL-Valine\nPhenylpyruvic acid\nPropionic acid\nPyruvic acid\nSarcosine";
 
+    
+   
     public ApplicationBean1() {
 
         domain_url = ((HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRe‌​quest()).getRequestURL().toString();
@@ -346,23 +364,58 @@ public class ApplicationBean1 implements Serializable {
         ciaDataSetOpts[1] = new SelectItem("env", "Constraining Data Set");
                 
         corLinColorDotsOpts = new SelectItem[5];
-        corLinColorDotsOpts[0] = new SelectItem("NULL", "black");
+        corLinColorDotsOpts[0] = new SelectItem("NULL", "Black");
         corLinColorDotsOpts[1] = new SelectItem("blue", "Blue");
         corLinColorDotsOpts[2] = new SelectItem("red", "Red");
         corLinColorDotsOpts[3] = new SelectItem("green", "Green");
         corLinColorDotsOpts[4] = new SelectItem("grey", "Grey");
 
         corLinColorLineOpts = new SelectItem[5];
-        corLinColorLineOpts[0] = new SelectItem("NULL", "black");
+        corLinColorLineOpts[0] = new SelectItem("NULL", "Black");
         corLinColorLineOpts[1] = new SelectItem("blue", "Blue");
         corLinColorLineOpts[2] = new SelectItem("red", "Red");
         corLinColorLineOpts[3] = new SelectItem("green", "Green");
         corLinColorLineOpts[4] = new SelectItem("grey", "Grey");
+
+//        lightpink = hashFFB6C1, lightblue = hashADD8E6, orchid = hashDA70D6, palegreen = hash98FB98
+        corColorPalettePredictors = new SelectItem[5];
+        corColorPalettePredictors[0] = new SelectItem("NULL", "Pink");
+        corColorPalettePredictors[1] = new SelectItem("lightblue", "Blue");
+        corColorPalettePredictors[2] = new SelectItem("orchid", "Purple");
+        corColorPalettePredictors[3] = new SelectItem("palegreen", "Green");
+        corColorPalettePredictors[4] = new SelectItem("grey", "Grey");        
+
+//        lightpink = hashFFB6C1, lightblue = hashADD8E6, orchid = hashDA70D6, palegreen = hash98FB98
+        corColorPaletteNonPredictors = new SelectItem[5];
+        corColorPaletteNonPredictors[0] = new SelectItem("NULL", "Blue");
+        corColorPaletteNonPredictors[1] = new SelectItem("lightpink", "Pink");
+        corColorPaletteNonPredictors[2] = new SelectItem("orchid", "Purple");
+        corColorPaletteNonPredictors[3] = new SelectItem("palegreen", "Green");
+        corColorPaletteNonPredictors[4] = new SelectItem("grey", "Grey");  
         
-        corModType = new SelectItem[3];
-        corModType[0] = new SelectItem("NULL", "Binomial");
-        corModType[1] = new SelectItem("multinomial", "Multinomial");
-        corModType[2] = new SelectItem("ordinal", "Ordinal");
+        corLinTextSizeOpts = new SelectItem[9];
+        corLinTextSizeOpts[0] = new SelectItem("NULL", "1");
+        corLinTextSizeOpts[1] = new SelectItem("1", "1");
+        corLinTextSizeOpts[2] = new SelectItem("2", "2");
+        corLinTextSizeOpts[3] = new SelectItem("3", "3");
+        corLinTextSizeOpts[4] = new SelectItem("4", "4");
+        corLinTextSizeOpts[5] = new SelectItem("5", "5");
+        corLinTextSizeOpts[5] = new SelectItem("6", "6");
+        corLinTextSizeOpts[5] = new SelectItem("7", "7");
+        corLinTextSizeOpts[5] = new SelectItem("8", "8"); 
+ 
+        corPlotNarrowWidthOpts = new SelectItem[5];
+        corPlotNarrowWidthOpts[0] = new SelectItem("NULL", "1");
+        corPlotNarrowWidthOpts[1] = new SelectItem("1", "1");
+        corPlotNarrowWidthOpts[2] = new SelectItem("2", "2");
+        corPlotNarrowWidthOpts[3] = new SelectItem("3", "3");
+        corPlotNarrowWidthOpts[4] = new SelectItem("4", "4");
+        
+        corModType = new SelectItem[4];
+        corModType[0] = new SelectItem("NULL", "Select");
+        corModType[1] = new SelectItem("binomial", "Binomial");
+        corModType[2] = new SelectItem("multinomial", "Multinomial");
+        corModType[3] = new SelectItem("ordinal", "Ordinal");
         
         corLegPosOpts = new SelectItem[4];
         corLegPosOpts[0] = new SelectItem("NULL", "Bottom");
@@ -379,6 +432,64 @@ public class ApplicationBean1 implements Serializable {
         corColorPaletteOpts[5] = new SelectItem("viridis", "Virdis");
         corColorPaletteOpts[6] = new SelectItem("breakfast.club", "Breakfast Club");
         corColorPaletteOpts[7] = new SelectItem("aqua", "Aqua");
+        
+        corBrewerPaletteOpts = new SelectItem[5];
+        corBrewerPaletteOpts[0] = new SelectItem("NULL", "Dark2");
+        corBrewerPaletteOpts[1] = new SelectItem("Set2", "Set2");
+        corBrewerPaletteOpts[2] = new SelectItem("RdYlBu", "Red Yellow Blue");
+        corBrewerPaletteOpts[3] = new SelectItem("PiYG", "Pink Yellow Green");
+        corBrewerPaletteOpts[4] = new SelectItem("BrBG", "Brown Blue Green");
+        
+        corPlotLabSize = new SelectItem[5];
+        corPlotLabSize[0] = new SelectItem("NULL", "Medium");
+        corPlotLabSize[1] = new SelectItem("sm", "Small");
+        corPlotLabSize[2] = new SelectItem("med", "Medium");
+        corPlotLabSize[3] = new SelectItem("lg", "Large");
+        corPlotLabSize[4] = new SelectItem("lgs", "Larger");
+        
+        corSizeTitle = new SelectItem[6];
+        corSizeTitle[0] = new SelectItem("NULL", "Medium");
+        corSizeTitle[1] = new SelectItem("extrasmall", "Extra Small");        
+        corSizeTitle[2] = new SelectItem("small", "Small");
+        corSizeTitle[3] = new SelectItem("medium", "Medium");
+        corSizeTitle[4] = new SelectItem("large", "Large");
+        corSizeTitle[5] = new SelectItem("extralarge", "Extra Large");
+        
+        corSizeXlab = new SelectItem[6];
+        corSizeXlab[0] = new SelectItem("NULL", "Medium");
+        corSizeXlab[1] = new SelectItem("extrasmall", "Extra Small");        
+        corSizeXlab[2] = new SelectItem("small", "Small");
+        corSizeXlab[3] = new SelectItem("medium", "Medium");
+        corSizeXlab[4] = new SelectItem("large", "Large");
+        corSizeXlab[5] = new SelectItem("extralarge", "Extra Large");
+        
+        corSizeYlab = new SelectItem[6];
+        corSizeYlab[0] = new SelectItem("NULL", "Medium");
+        corSizeYlab[1] = new SelectItem("extrasmall", "Extra Small");        
+        corSizeYlab[2] = new SelectItem("small", "Small");
+        corSizeYlab[3] = new SelectItem("medium", "Medium");
+        corSizeYlab[4] = new SelectItem("large", "Large");
+        corSizeYlab[5] = new SelectItem("extralarge", "Extra Large");
+        
+        corSizeXtick = new SelectItem[6];
+        corSizeXtick[0] = new SelectItem("NULL", "Medium");
+        corSizeXtick[1] = new SelectItem("extrasmall", "Extra Small");        
+        corSizeXtick[2] = new SelectItem("small", "Small");
+        corSizeXtick[3] = new SelectItem("medium", "Medium");
+        corSizeXtick[4] = new SelectItem("large", "Large");
+        corSizeXtick[5] = new SelectItem("extralarge", "Extra Large");
+        
+        corSizeYtick = new SelectItem[6];
+        corSizeYtick[0] = new SelectItem("NULL", "Medium");
+        corSizeYtick[1] = new SelectItem("extrasmall", "Extra Small");        
+        corSizeYtick[2] = new SelectItem("small", "Small");
+        corSizeYtick[3] = new SelectItem("medium", "Medium");
+        corSizeYtick[4] = new SelectItem("large", "Large");
+        corSizeYtick[5] = new SelectItem("extralarge", "Extra Large");
+
+        corPlotMetricOpts = new SelectItem[2];
+        corPlotMetricOpts[0] = new SelectItem("NULL", "None");
+        corPlotMetricOpts[1] = new SelectItem("rmse", "RMSE");
         
         ordColorPaletteOpts = new SelectItem[4];
         ordColorPaletteOpts[0] = new SelectItem("NULL", "Viridis");
@@ -1032,6 +1143,26 @@ public class ApplicationBean1 implements Serializable {
         return ordStressDimensionOpts;
     }
 
+//    public SelectItem[] getColumnOptsFill() {
+//        return columnOptsFill;
+//    } 
+    
+     public SelectItem[] getCorPlotNarrowWidthOpts() {
+        return corPlotNarrowWidthOpts;
+    } 
+    
+    public SelectItem[] getCorLinTextSizeOpts() {
+        return corLinTextSizeOpts;
+    }      
+    
+    public SelectItem[] getCorColorPaletteNonPredictors() {
+        return corColorPaletteNonPredictors;
+    }  
+    
+    public SelectItem[] getCorColorPalettePredictors() {
+        return corColorPalettePredictors;
+    }  
+    
     public SelectItem[] getCorLinColorDotsOpts() {
         return corLinColorDotsOpts;
     }
@@ -1048,8 +1179,40 @@ public class ApplicationBean1 implements Serializable {
         return corColorPaletteOpts;
     }
     
+    public SelectItem[] getCorBrewerPaletteOpts(){
+        return corBrewerPaletteOpts;
+    }
+    
     public SelectItem[] getCorModType() {
         return corModType;
+    }
+    
+    public SelectItem[] corPlotMetricOpts() {
+        return corPlotMetricOpts;
+    }
+    
+    public SelectItem[] corPlotLabSize() {
+        return corPlotLabSize;
+    }
+    
+    public SelectItem[] corSizeTitle() {
+        return corSizeTitle;
+    }
+    
+    public SelectItem[] corSizeXlab() {
+        return corSizeXlab;
+    }
+
+    public SelectItem[] corSizeYlab() {
+        return corSizeYlab;
+    }
+    
+    public SelectItem[] corSizeXtick() {
+        return corSizeXtick;
+    }
+    
+    public SelectItem[] corSizeYtick() {
+        return corSizeYtick;
     }
     
     public SelectItem[] getOrdColorPaletteOpts() {

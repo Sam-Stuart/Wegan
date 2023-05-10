@@ -191,7 +191,7 @@ public class PenalizedCABean implements Serializable {
         System.out.println(corrFunctionMethods);
         CAUtils.CreatePenalizedModel(sb, columnNameA, corrFunctionMethods);
         CAUtils.PlotPenalizedCA(sb,columnNameA, 
-                 corrFunctionMethods, corColorDotsOpts, corColorLineOpts, doPlotConfInt,
+                 corrFunctionMethods, corColorDotsOpts, corColorLineOpts,
                corPlotTitle, corPlotXlab, corPlotYlab,
                 sb.getNewImage("corr_penalized"), "png", 72);
     }

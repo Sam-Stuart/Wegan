@@ -14,6 +14,7 @@ import org.rosuda.REngine.Rserve.RserveException;
 
 public class TaxonomyUtils {
 
+
 // make.exprSet <- function(mSetObj = NA, 
 //                          custom_norm = "false", # Check box 
 //                          nSets = 1) # Static drop-down 
@@ -39,6 +40,7 @@ public class TaxonomyUtils {
                                         + "\", \"" + nSets
                                         + "\")";
             RCenter.recordRCommand(RC, rCommand);
+
             RC.voidEval(rCommand);
         } catch (RserveException rse) {
             System.out.println(rse);
@@ -69,10 +71,13 @@ public class TaxonomyUtils {
             RCenter.recordRCommand(RC, rCommand);
             sb.addGraphicsCMD("ord_nmds_2D", // What is plot name?
                               rCommand);
+
             RC.voidEval(rCommand);
         } catch (RserveException rse) {
             System.out.println(rse);
         }
     }
+
+  
 }
 
