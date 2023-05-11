@@ -58,6 +58,7 @@ pieChart_setup <-
     
     categorical_data <- select_if(input, is.character)
     numerical_data <- select_if(input, is.numeric)
+    dune_like <- length(as.matrix(categorical_data)) == 0
     
     # Create a hash table of aggregate functions
     if (aggregate_function == "NULL")
@@ -68,7 +69,7 @@ pieChart_setup <-
       #Set it to the first column name
       facA <- colnames(numerical_data)[1]
 
-    if (length(as.matrix(categorical_data)) == 0) {
+    if (dune_like) {
       sites_abund <- rowSums(input, na.rm = TRUE)
       # Divide each individual abundace by total site abundance
       input <- sweep(input, 1, sites_abund, "/")
@@ -81,6 +82,8 @@ pieChart_setup <-
       # Set up colorscheme for more than 12 colors
       colourCount = length(unique(df$variable))
       getPalette = colorRampPalette(brewer.pal(12, "Paired"))
+      #Filter 0 values 
+      md.df <- filter(df, value > 0)
     } else {
       # Create aggregate data
       df <-
@@ -88,10 +91,11 @@ pieChart_setup <-
                   by = categorical_data,
                   FUN = get(aggregate_function))
       df <- melt(df, id = colnames(categorical_data)[1])
+      #Filter 0 values && only use 1 variable for pie chart
+      md.df <- filter(df, value > 0 & variable == facA)
     }
   
-    #Filter 0 values && only use 1 variable for pie chart
-    md.df <- filter(df, value > 0)
+    
     # Label for each bar
     if (barLabels == "NULL")
       barLabels <- colnames(numerical_data)
@@ -213,7 +217,6 @@ plotPieChart <-
         arrange(desc(Species)) %>%
         mutate(prop = value / sum(data$value) * 100) %>%
         mutate(ypos = cumsum(prop) - 0.5 * prop)
-      print(data)
       
       plot <- ggplot(data, aes(x = "", y = prop, fill = Species)) +
         geom_bar(stat = "identity",
